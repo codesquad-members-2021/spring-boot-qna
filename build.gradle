@@ -1,6 +1,6 @@
 buildscript {
     ext {
-        springBootVersion = '2.0.3.RELEASE'
+        springBootVersion = '2.1.0.RELEASE'
     }
     repositories {
         mavenCentral()
@@ -22,14 +22,14 @@ repositories {
     mavenCentral()
 }
 
-
 dependencies {
     compile('org.springframework.boot:spring-boot-starter-data-jpa')
     compile('org.springframework.boot:spring-boot-starter-web')
     compile('org.hibernate:hibernate-java8')
-    compile('pl.allegro.tech.boot:handlebars-spring-boot-starter:0.3.0')
+    compile('pl.allegro.tech.boot:handlebars-spring-boot-starter:0.3.1')
     runtime('com.h2database:h2')
     runtime('net.rakugakibox.spring.boot:logback-access-spring-boot-starter:2.7.1')
     testCompile('org.springframework.boot:spring-boot-starter-test')
     testCompile('org.assertj:assertj-core:3.10.0')
+    testCompile('org.apache.httpcomponents:httpclient:4.5.6')
 }
