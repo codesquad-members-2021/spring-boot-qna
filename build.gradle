@@ -1,35 +1,33 @@
-buildscript {
-    ext {
-        springBootVersion = '2.1.0.RELEASE'
-    }
-    repositories {
-        mavenCentral()
-    }
-    dependencies {
-        classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
-    }
+plugins {
+	id 'org.springframework.boot' version '2.2.4.RELEASE'
+	id 'io.spring.dependency-management' version '1.0.9.RELEASE'
+	id 'java'
 }
 
-apply plugin: 'java'
-apply plugin: 'eclipse'
-apply plugin: 'org.springframework.boot'
-apply plugin: 'io.spring.dependency-management'
+group = 'com.codessquad'
+version = '0.0.1-SNAPSHOT'
+sourceCompatibility = '1.8'
 
-version = '1.0.0'
-sourceCompatibility = 1.8
+configurations {
+	developmentOnly
+	runtimeClasspath {
+		extendsFrom developmentOnly
+	}
+}
 
 repositories {
-    mavenCentral()
+	mavenCentral()
 }
 
 dependencies {
-    compile('org.springframework.boot:spring-boot-starter-data-jpa')
-    compile('org.springframework.boot:spring-boot-starter-web')
-    compile('org.hibernate:hibernate-java8')
-    compile('pl.allegro.tech.boot:handlebars-spring-boot-starter:0.3.1')
-    runtime('com.h2database:h2')
-    runtime('net.rakugakibox.spring.boot:logback-access-spring-boot-starter:2.7.1')
-    testCompile('org.springframework.boot:spring-boot-starter-test')
-    testCompile('org.assertj:assertj-core:3.10.0')
-    testCompile('org.apache.httpcomponents:httpclient:4.5.6')
+	implementation 'org.springframework.boot:spring-boot-starter-web'
+	developmentOnly 'org.springframework.boot:spring-boot-devtools'
+	compile 'pl.allegro.tech.boot:handlebars-spring-boot-starter:0.3.0'
+	testImplementation('org.springframework.boot:spring-boot-starter-test') {
+		exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
+	}
+}
+
+test {
+	useJUnitPlatform()
 }
