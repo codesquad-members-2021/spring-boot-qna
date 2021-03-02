@@ -1,6 +1,7 @@
 package com.codessquad.qna.domain;
 
 public class Question {
+    private long index;
     private String writer;
     private String title;
     private String contents;
@@ -10,6 +11,14 @@ public class Question {
         this.writer = writer;
         this.title = title;
         this.contents = contents;
+    }
+
+    public long getIndex() {
+        return index;
+    }
+
+    public void setIndex(long index) {
+        this.index = index;
     }
 
     public String getWriter() {
@@ -47,7 +56,8 @@ public class Question {
     @Override
     public String toString() {
         return "Question{" +
-                "writer='" + writer + '\'' +
+                "index=" + index +
+                ", writer='" + writer + '\'' +
                 ", title='" + title + '\'' +
                 ", contents='" + contents + '\'' +
                 ", date='" + date + '\'' +
