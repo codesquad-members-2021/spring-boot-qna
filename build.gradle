@@ -17,6 +17,8 @@ dependencies {
 	developmentOnly 'org.springframework.boot:spring-boot-devtools'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	compile 'pl.allegro.tech.boot:handlebars-spring-boot-starter:0.3.2'
+	// https://mvnrepository.com/artifact/org.assertj/assertj-core
+	testImplementation group: 'org.assertj', name: 'assertj-core', version: '3.18.1'
 }
 
 test {
