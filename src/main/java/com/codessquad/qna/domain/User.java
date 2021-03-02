@@ -1,13 +1,13 @@
 package com.codessquad.qna.domain;
 
 public class User {
-    private String userID;
+    private String userId;
     private String password;
     private String name;
     private String email;
 
-    public String getUserID() {
-        return userID;
+    public String getUserId() {
+        return userId;
     }
 
     public String getPassword() {
@@ -22,8 +22,8 @@ public class User {
         return email;
     }
 
-    public void setUserID(String userID) {
-        this.userID = userID;
+    public void setUserId(String userId) {
+        this.userId = userId;
     }
 
     public void setPassword(String password) {
@@ -36,5 +36,15 @@ public class User {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "userId='" + userId + '\'' +
+                ", password='" + password + '\'' +
+                ", name='" + name + '\'' +
+                ", email='" + email + '\'' +
+                '}';
     }
 }
