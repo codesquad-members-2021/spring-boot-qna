@@ -1,7 +1,7 @@
 package com.codessquad.qna.user;
 
 public class User {
-    private long userId;
+    private String userId;
     private String password;
     private String name;
     private String email;
@@ -9,18 +9,18 @@ public class User {
     public User() {
     }
 
-    public User(long userId, String password, String name, String email) {
+    public User(String userId, String password, String name, String email) {
         this.userId = userId;
         this.password = password;
         this.name = name;
         this.email = email;
     }
 
-    public long getUserId() {
+    public String getUserId() {
         return userId;
     }
 
-    public void setUserId(long userId) {
+    public void setUserId(String userId) {
         this.userId = userId;
     }
 
@@ -51,7 +51,7 @@ public class User {
     @Override
     public String toString() {
         return "User{" +
-                "id='" + userId + '\'' +
+                "userId='" + userId + '\'' +
                 ", password='" + password + '\'' +
                 ", name='" + name + '\'' +
                 ", email='" + email + '\'' +
