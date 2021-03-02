@@ -27,4 +27,6 @@ public class UserService {
 
     public void removeUser(String userId) {userRepository.remove(userId);}
 
+    public int contOfUsers() {return userRepository.size();}
+
 }

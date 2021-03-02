@@ -14,4 +14,5 @@ public interface UserRepository {
 
     public void remove(String userId);
 
+    public int size();
 }
