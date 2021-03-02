@@ -40,7 +40,7 @@ public class UserController {
     @GetMapping("/users")
     public String getUsers(Model model) {
         model.addAttribute("users", userService.getUsers());
-        return "list";
+        return "user/list";
     }
 
     @GetMapping("/users/{id}")
@@ -48,6 +48,7 @@ public class UserController {
         User user = userService.getUser(id);
         model.addAttribute("name", user.getName());
         model.addAttribute("email", user.getEmail());
-        return "profile";
+        return "user/profile";
     }
+
 }
