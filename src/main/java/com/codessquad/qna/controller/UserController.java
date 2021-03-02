@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
 @Controller
@@ -42,4 +43,11 @@ public class UserController {
         return "list";
     }
 
+    @GetMapping("/users/{id}")
+    public String getUserProfile(@PathVariable String id, Model model) {
+        User user = userService.getUser(id);
+        model.addAttribute("name", user.getName());
+        model.addAttribute("email", user.getEmail());
+        return "profile";
+    }
 }
