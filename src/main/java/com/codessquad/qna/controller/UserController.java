@@ -56,4 +56,34 @@ public class UserController {
         return "user/profile";
     }
 
+    /**
+     * 유저 프로필 수정이 가능한 창으로 이동합니다.
+     * @param id
+     * @param model
+     * @return
+     */
+    @GetMapping("/users/{id}/form")
+    public String updateUserProfileForm(@PathVariable String id, Model model) {
+        User user = userService.getUser(id);
+        model.addAttribute("user", user);
+        return "user/updateForm";
+    }
+
+    /**
+     * 유저 프로필을 해당 매개변수로 온 값으로 업데이트 합니다.
+     * @param id
+     * @param userId
+     * @param password
+     * @param name
+     * @param email
+     * @return
+     */
+    @PostMapping("/user/{id}/update")
+    public String updateUserProfile(@PathVariable String id, String userId, String password, String name, String email) {
+        userService.removeUser(id);
+        User ChangeUser = new User(userId, password, name, email);
+        userService.save(ChangeUser);
+        return "redirect:/users";
+    }
+
 }
