@@ -32,4 +32,14 @@ public class UserController {
         return "redirect:/users";
     }
 
+    /**
+     * @param model
+     * @return All User Accounts to List
+     */
+    @GetMapping("/users")
+    public String getUsers(Model model) {
+        model.addAttribute("users", userService.getUsers());
+        return "list";
+    }
+
 }
