@@ -2,17 +2,16 @@ package com.codessquad.qna.service;
 
 import com.codessquad.qna.entity.User;
 import com.codessquad.qna.repository.UserRepository;
-import com.codessquad.qna.repository.UserRepositoryMap;
+import com.codessquad.qna.repository.UserRepositoryImpl;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
 @Service
 public class UserService {
 
-    private final UserRepository userRepository = new UserRepositoryMap(new HashMap<>());
+    private final UserRepository userRepository = new UserRepositoryImpl(new HashMap<>());
 
     public void save(User user) {
         userRepository.save(user);

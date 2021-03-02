@@ -43,6 +43,11 @@ public class UserController {
         return "user/list";
     }
 
+    /**
+     * @param id
+     * @param model
+     * @return only for users with the same id
+     */
     @GetMapping("/users/{id}")
     public String getUserProfile(@PathVariable String id, Model model) {
         User user = userService.getUser(id);

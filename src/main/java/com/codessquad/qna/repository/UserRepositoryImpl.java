@@ -8,11 +8,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-public class UserRepositoryMap implements UserRepository{
+public class UserRepositoryImpl implements UserRepository{
 
     private final Map<String, User> users;
 
-    public UserRepositoryMap(Map<String, User> users) {
+    public UserRepositoryImpl(Map<String, User> users) {
         this.users = users;
     }
 
