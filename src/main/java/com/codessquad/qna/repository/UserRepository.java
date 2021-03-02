@@ -16,10 +16,15 @@ public class UserRepository {
         return userStorage;
     }
 
-    public User getOne(String userId) {
+    public User getOne(String targetId) {
         return userStorage.stream()
-                .filter(user -> user.getUserId().equals(userId))
+                .filter(user -> user.getUserId().equals(targetId))
                 .findAny()
                 .get();
+    }
+
+    public boolean isRedundant(String targetId) {
+        return userStorage.stream()
+                .anyMatch(user -> user.getUserId().equals(targetId));
     }
 }
