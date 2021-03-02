@@ -13,12 +13,12 @@
     public class UserController {
         UserRepository userRepository = new UserRepository();
 
-        @GetMapping("/user/form")
+        @GetMapping("/users/form")
         public String createForm() {
             return "users/form";
         }
 
-        @PostMapping("/user/create")
+        @PostMapping("/users/create")
         public String createUser(User user){
             Logger logger = LoggerFactory.getLogger(UserController.class);
             User userForRegister = new User();
@@ -33,4 +33,10 @@
             logger.info("User in UserRepository: " + user.toString());
             return "redirect:/users";
         }
+
+        @GetMapping("/users")
+        public String createUserList() {
+            return "users/list";
+        }
+
     }
