@@ -41,13 +41,11 @@ public class UserController {
 
     @GetMapping("user/profile/{userId}")
     public String getProfile(@PathVariable("userId") String userId, Model model) {
-        System.out.println("ADF@@@@@@@@@@@@@@@@@@s");
         for (User user : users) {
             if (user.getUserId().equals(userId)) {
                 model.addAttribute("user", user);
                 return "/user/profile";
             }
-
         }
         return  "redirect:user/list";
     }
