@@ -4,6 +4,7 @@ import com.codessquad.qna.user.User;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -19,7 +20,7 @@ public class UserController {
     @GetMapping()
     public String userList(Model model) {
         model.addAttribute("users", users);
-        return "user/list";
+        return "users/list";
     }
 
     @PostMapping()
@@ -27,5 +28,19 @@ public class UserController {
         users.add(user);
         return "redirect:/users";
     }
+
+    @GetMapping("/{userId}")
+    public String userProfile(@PathVariable("userId") String userId, Model model) {
+        for (User user : users) {
+            if (userId.equals(user.getUserId())) {
+                model.addAttribute("name", user.getName());
+                model.addAttribute("email", user.getEmail());
+                return "users/profile";
+            }
+        }
+        return "redirect:/users";
+    }
+
+
 
 }
