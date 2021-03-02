@@ -13,14 +13,14 @@ public class UserController {
 
     private List<User> userList = new ArrayList<>();
 
-    @PostMapping("user/create")
+    @PostMapping("users")
     public String onRegister(String userId, String password, String name, String email) {
         User createdUser = new User(userId, password, name, email);
         userList.add(createdUser);
-        return "redirect:/user/list";
+        return "redirect:/users";
     }
 
-    @GetMapping("user/list")
+    @GetMapping("users")
     public String onList(Model model) {
         model.addAttribute("users", userList);
         return "user/list";
