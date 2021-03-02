@@ -11,4 +11,7 @@ public interface UserRepository {
     public List<User> getUsers();
 
     public User getUser(String userId);
+
+    public void remove(String userId);
+
 }
