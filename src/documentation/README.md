@@ -11,6 +11,20 @@
 ## 유저 정보
 ![유저 정보](img/img_2.png)
 
+## 유저 정보 수정
+
+![img.png](img/updateProfile.png)
+
+## 수정 전 / 수정 후
+
+1. 수정 전
+
+![img.png](img.png)
+
+2. 수정 후
+
+![img_1.png](img_1.png)
+
 # Post
 
 ## 게시글 등록
