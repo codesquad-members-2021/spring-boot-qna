@@ -6,6 +6,7 @@ import org.slf4j.Logger;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import pl.allegro.tech.boot.autoconfigure.handlebars.HandlebarsHelper;
 
@@ -36,5 +37,18 @@ public class UserController {
     public String list(Model model) {
         model.addAttribute("users", users);
         return "/user/list";
+    }
+
+    @GetMapping("user/list/profile/{userId}")
+    public String getProfile(@PathVariable("userId") String userId, Model model) {
+        System.out.println("ADF@@@@@@@@@@@@@@@@@@s");
+        for (User user : users) {
+            if (user.getUserId().equals(userId)) {
+                model.addAttribute("user", user);
+                return "/user/profile";
+            }
+
+        }
+        return  "redirect:user/list";
     }
 }
