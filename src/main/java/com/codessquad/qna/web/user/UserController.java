@@ -3,6 +3,8 @@ package com.codessquad.qna.web.user;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import java.util.ArrayList;
@@ -23,6 +25,12 @@ public class UserController {
         userList.add(createdUser);
         logger.info("userList.size()" + userList.size());
 
-        return "index.html";
+        return "redirect:/user/list";
+    }
+
+    @GetMapping("user/list")
+    public String onList(Model model) {
+        model.addAttribute("users", userList);
+        return "user/list";
     }
 }
