@@ -18,7 +18,7 @@
             return "users/form";
         }
 
-        @PostMapping("/users/create")
+        @PostMapping("/users")
         public String createUser(User user){
             Logger logger = LoggerFactory.getLogger(UserController.class);
             User userForRegister = new User();
