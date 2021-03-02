@@ -10,5 +10,5 @@ public interface UserRepository {
 
     public List<User> getUsers();
 
-    public User getUser(int id);
+    public User getUser(String userId);
 }
