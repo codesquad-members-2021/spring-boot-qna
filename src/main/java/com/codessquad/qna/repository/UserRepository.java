@@ -6,9 +6,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class UserRepository {
-    List<User> userStorage = new ArrayList<>();
+    private final List<User> userStorage = new ArrayList<>();
 
     public void save(User user){
         userStorage.add(user);
+    }
+
+    public List<User> getAll(){
+        return userStorage;
     }
 }

@@ -9,6 +9,8 @@
     import org.springframework.web.bind.annotation.GetMapping;
     import org.springframework.web.bind.annotation.PostMapping;
 
+    import java.util.List;
+
     @Controller
     public class UserController {
         UserRepository userRepository = new UserRepository();
@@ -35,7 +37,12 @@
         }
 
         @GetMapping("/users")
-        public String createUserList() {
+        public String createUserList(Model model) {
+            Logger logger = LoggerFactory.getLogger(UserController.class);
+            List<User> users = userRepository.getAll();
+
+            logger.info("All Users in UserRepository: " + users.toString());
+            model.addAttribute("users", users);
             return "users/list";
         }
 
