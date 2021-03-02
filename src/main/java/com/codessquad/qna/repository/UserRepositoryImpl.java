@@ -27,6 +27,11 @@ public class UserRepositoryImpl implements UserRepository{
     }
 
     @Override
+    public void remove(String userId) {
+        users.remove(userId);
+    }
+
+    @Override
     public List<User> getUsers() {
         return new ArrayList<>(users.values());
     }

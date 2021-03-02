@@ -25,4 +25,6 @@ public class UserService {
         return userRepository.getUser(userId);
     }
 
+    public void removeUser(String userId) {userRepository.remove(userId);}
+
 }
