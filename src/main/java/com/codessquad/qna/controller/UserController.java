@@ -39,7 +39,7 @@ public class UserController {
         return "/user/list";
     }
 
-    @GetMapping("user/list/profile/{userId}")
+    @GetMapping("user/profile/{userId}")
     public String getProfile(@PathVariable("userId") String userId, Model model) {
         System.out.println("ADF@@@@@@@@@@@@@@@@@@s");
         for (User user : users) {
