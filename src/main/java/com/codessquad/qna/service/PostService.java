@@ -20,7 +20,7 @@ public class PostService {
     }
 
     public Post getPost(int id) {
-        return postRepository.getPost(id);
+        return postRepository.getPost(id-1);
     }
 
     public List<Post> getPosts() {

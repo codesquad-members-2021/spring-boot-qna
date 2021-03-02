@@ -49,7 +49,7 @@ public class PostController {
      */
     @GetMapping("/questions/{id}")
     public String getPost(@PathVariable int id, Model model) {
-        model.addAttribute("post", postService.getPost(id-1));
+        model.addAttribute("post", postService.getPost(id));
         return "qna/show";
     }
 
