@@ -7,6 +7,7 @@
     import org.springframework.stereotype.Controller;
     import org.springframework.ui.Model;
     import org.springframework.web.bind.annotation.GetMapping;
+    import org.springframework.web.bind.annotation.PathVariable;
     import org.springframework.web.bind.annotation.PostMapping;
 
     import java.util.List;
@@ -44,6 +45,16 @@
             logger.info("All Users in UserRepository: " + users.toString());
             model.addAttribute("users", users);
             return "users/list";
+        }
+
+        @GetMapping("/users/{userId}")
+        public String createProfile(@PathVariable(name = "userId") String targetId, Model model) {
+            Logger logger = LoggerFactory.getLogger(UserController.class);
+
+            User targetUser = userRepository.getOne(targetId);
+            model.addAttribute("user", targetUser);
+            logger.info("The User in detail: " + targetUser.toString());
+            return "users/profile";
         }
 
     }
