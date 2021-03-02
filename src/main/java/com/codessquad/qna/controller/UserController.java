@@ -8,14 +8,13 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import pl.allegro.tech.boot.autoconfigure.handlebars.HandlebarsHelper;
 
 import java.util.ArrayList;
 import java.util.List;
 
-@HandlebarsHelper
 @Controller
 public class UserController {
+
     Logger logger = LoggerFactory.getLogger(UserController.class);
 
     private List<User> users = new ArrayList<>();
