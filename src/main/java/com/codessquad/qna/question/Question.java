@@ -8,6 +8,7 @@ public class Question {
     private String title;
     private String contents;
     private LocalDateTime time;
+    private int point;
 
     public Question(QuestionRequest questionRequest) {
         writer = questionRequest.getWriter();
@@ -21,6 +22,10 @@ public class Question {
 
     public void setTime(LocalDateTime time) {
         this.time = time;
+    }
+
+    public void setPoint(int point) {
+        this.point = point;
     }
 
     public int getId() {
@@ -42,4 +47,9 @@ public class Question {
     public LocalDateTime getTime() {
         return time;
     }
+
+    public int getPoint() {
+        return point;
+    }
+
 }

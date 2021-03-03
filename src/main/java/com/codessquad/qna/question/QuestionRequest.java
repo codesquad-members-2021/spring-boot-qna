@@ -29,12 +29,4 @@ public class QuestionRequest {
         return contents;
     }
 
-    @Override
-    public String toString() {
-        return "Question{" +
-                "writer='" + writer + '\'' +
-                ", title='" + title + '\'' +
-                ", contents='" + contents + '\'' +
-                '}';
-    }
 }
