@@ -26,6 +26,7 @@ public class UserController {
 
     @PostMapping("user/signUp")
     public String signUp(User user) {
+        user.setId(users.size() + 1);
         users.add(user);
         logger.info(user.toString());
 
@@ -46,6 +47,13 @@ public class UserController {
                 return "/user/profile";
             }
         }
-        return  "redirect:user/list";
+        return "redirect:user/list";
+    }
+
+    @GetMapping("user/{id}/updateForm")
+    public String getUpdateForm(@PathVariable("id") long id, Model model) {
+        User user = users.get((int) id - 1);
+        model.addAttribute("user", user);
+        return "/user/updateForm";
     }
 }
