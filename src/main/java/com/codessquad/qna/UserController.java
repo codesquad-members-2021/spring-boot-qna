@@ -3,6 +3,7 @@ package com.codessquad.qna;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 
@@ -24,6 +25,11 @@ public class UserController {
         userList.add(user);
         logger.info(user.toString());
         return "redirect:/users";
+    }
+    @GetMapping("/users")
+    private String getMemberList(Model model){
+        model.addAttribute("users",userList);
+        return "user/list";
     }
 
 }
