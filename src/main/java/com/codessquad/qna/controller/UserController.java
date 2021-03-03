@@ -39,8 +39,10 @@ public class UserController {
         return "user/list";
     }
 
-    @GetMapping("/profile")
-    public String renderProfile() {
+    @GetMapping("/{userId}")
+    public String renderProfile(@PathVariable String userId, Model model) {
+        User getUser = userRepository.findUserById(userId);
+        model.addAttribute("user",getUser);
         return "user/profile";
     }
 
