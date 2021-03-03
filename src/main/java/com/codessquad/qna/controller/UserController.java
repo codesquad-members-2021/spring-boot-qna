@@ -53,9 +53,15 @@ public class UserController {
     }
 
     @PostMapping("user/{id}/update")
-    public String updateUser(@PathVariable("id") long id, User user) {
-        logger.info(user.toString());
-        users.set((int) id - 1, user);
+    public String updateUser(
+            @PathVariable("id") long id, User userWithUpdatedInfo, String currentPassword) {
+        User targetUser = users.get((int) id - 1);
+        if (!targetUser.getPassword().equals(currentPassword)) {
+            logger.warn("비밀번호가 일치하지 않습니다.");
+            return "redirect:../list";
+        }
+        logger.info(userWithUpdatedInfo.toString());
+        users.set((int) id - 1, userWithUpdatedInfo);
         return "redirect:../list";
     }
 }

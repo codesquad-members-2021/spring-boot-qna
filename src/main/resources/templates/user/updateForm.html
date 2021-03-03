@@ -8,16 +8,20 @@
                     <input class="form-control" id="userId" name="userId" value="{{user.userId}}" readonly>
                 </div>
                 <div class="form-group">
-                    <label for="password">비밀번호</label>
-                    <input type="password" class="form-control" id="password" name="password" placeholder="Password">
+                    <label for="password">현재 비밀번호</label>
+                    <input type="currentPassword" class="form-control" id="currentPassword" name="currentPassword" placeholder="Current Password">
+                </div>
+                <div class="form-group">
+                    <label for="password">새 비밀번호</label>
+                    <input type="password" class="form-control" id="password" name="password" placeholder="New Password">
                 </div>
                 <div class="form-group">
                     <label for="name">이름</label>
-                    <input class="form-control" id="name" name="name" value="{{user.name}}">
+                    <input class="form-control" id="name" name="name" placeholder="Name" value="{{user.name}}">
                 </div>
                 <div class="form-group">
                     <label for="email">이메일</label>
-                    <input type="email" class="form-control" id="email" name="email" value="{{user.email}}">
+                    <input type="email" class="form-control" id="email" name="email" placeholder="Email" value="{{user.email}}">
                 </div>
                 <button type="submit" class="btn btn-success clearfix pull-right">수정</button>
                 <div class="clearfix"/>
