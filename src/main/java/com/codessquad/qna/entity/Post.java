@@ -5,20 +5,19 @@ import java.util.Date;
 
 public class Post {
 
+    private static final SimpleDateFormat ISO8601 = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
     private int postId;
     private String title;
     private String author;
     private String body;
-    private int comment = 0; // default value
-    private final SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm");
-    private String date;
+    private final String date;
 
 
     public Post(String title, String author, String body) {
         this.title = title;
         this.author = author;
         this.body = body;
-        this.date = simpleDateFormat.format(new Date());
+        this.date = ISO8601.format(new Date());
     }
 
     public int getPostId() {
@@ -51,14 +50,6 @@ public class Post {
 
     public void setBody(String body) {
         this.body = body;
-    }
-
-    public int getComment() {
-        return comment;
-    }
-
-    public void setComment(int comment) {
-        this.comment = comment;
     }
 
     public String getDate() {
