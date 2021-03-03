@@ -15,6 +15,6 @@ public class UserController {
     public String create(User user) {
         System.out.println("user: " + user.toString());
         userList.add(user);
-        return "welcome";
+        return "redirect:/user/list.html";
     }
 }
