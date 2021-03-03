@@ -1,30 +1,36 @@
 package com.codessquad.qna.web.qna;
 
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 
 public class Question {
-    private String writer;
+    private int id;
+    private String writerId;
     private String title;
     private String contents;
     private Date reportingDate;
-    private List<Comment> commentList;
 
-    public Question(String writer, String title, String contents) {
-        this.writer = writer;
+    public Question(int id, String writerId, String title, String contents) {
+        this.id = id;
+        this.writerId = writerId;
         this.title = title;
         this.contents = contents;
         this.reportingDate = new Date();
-        commentList = new ArrayList<>();
     }
 
-    public String getWriter() {
-        return writer;
+    public int getId() {
+        return id;
     }
 
-    public void setWriter(String writer) {
-        this.writer = writer;
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public String getWriterId() {
+        return writerId;
+    }
+
+    public void setWriterId(String writerId) {
+        this.writerId = writerId;
     }
 
     public String getTitle() {
@@ -49,51 +55,5 @@ public class Question {
 
     public void setReportingDate(Date reportingDate) {
         this.reportingDate = reportingDate;
-    }
-
-    class Comment {
-        private String commentId;
-        private Date reportingDate;
-        private String writer;
-        private String contents;
-
-        public Comment(String commentId, Date reportingDate, String writer, String contents) {
-            this.commentId = commentId;
-            this.reportingDate = reportingDate;
-            this.writer = writer;
-            this.contents = contents;
-        }
-
-        public String getCommentId() {
-            return commentId;
-        }
-
-        public void setCommentId(String commentId) {
-            this.commentId = commentId;
-        }
-
-        public Date getReportingDate() {
-            return reportingDate;
-        }
-
-        public void setReportingDate(Date reportingDate) {
-            this.reportingDate = reportingDate;
-        }
-
-        public String getWriter() {
-            return writer;
-        }
-
-        public void setWriter(String writer) {
-            this.writer = writer;
-        }
-
-        public String getContents() {
-            return contents;
-        }
-
-        public void setContents(String contents) {
-            this.contents = contents;
-        }
     }
 }
