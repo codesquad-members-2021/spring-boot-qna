@@ -26,7 +26,7 @@ class UserServiceTest {
     void save() {
         User user = new User("roach", "1234", "roach", "dev0jsh@gmail.com");
         userService.save(user);
-        assertThat(userService.getUser("roach")).isEqualTo(user);
+        assertThat(userService.getUser("roach").get()).isEqualTo(user);
     }
 
     @Test
@@ -49,7 +49,7 @@ class UserServiceTest {
         User honux = new User("honux", "12345", "honux", "1234@naver.com");
         userService.save(user);
         userService.save(honux);
-        assertThat(userService.getUser("roach")).isEqualTo(user);
+        assertThat(userService.getUser("roach").get()).isEqualTo(user);
     }
 
     @Test
