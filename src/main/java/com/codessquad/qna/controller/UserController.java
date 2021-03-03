@@ -45,14 +45,14 @@ public class UserController {
 
     @GetMapping("/{userId}")
     public String renderProfile(@PathVariable String userId, Model model) {
-        User getUser = userRepository.findUserById(userId);
+        User getUser = userRepository.findById(userId);
         model.addAttribute("user", getUser);
         return "user/profile";
     }
 
     @GetMapping("/{userId}/form")
     public String renderUpdateForm(@PathVariable String userId, Model model) {
-        User getUser = userRepository.findUserById(userId);
+        User getUser = userRepository.findById(userId);
         model.addAttribute("user", getUser);
         return "user/userUpdateForm";
     }
