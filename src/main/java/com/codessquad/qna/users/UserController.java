@@ -11,7 +11,7 @@ import java.util.*;
 @Controller
 @RequestMapping("/users")
 public class UserController {
-    private final List<User> users = new ArrayList<>();
+    private final List<User> users = Collections.synchronizedList(new ArrayList<>());
     @GetMapping()
     String getUsers(Model model){
         model.addAttribute("users",users);
