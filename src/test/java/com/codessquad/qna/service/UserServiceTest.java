@@ -1,24 +1,25 @@
 package com.codessquad.qna.service;
 
+import com.codessquad.qna.MvcConfig;
 import com.codessquad.qna.entity.User;
-import com.codessquad.qna.repository.UserRepository;
-import com.codessquad.qna.repository.UserRepositoryImpl;
+import com.codessquad.qna.exception.CanNotFindUserException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.Assertions;
-
-import java.util.HashMap;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
 import static org.assertj.core.api.Assertions.*;
 
 class UserServiceTest {
 
+    ApplicationContext applicationContext = new AnnotationConfigApplicationContext(MvcConfig.class);
     UserService userService;
 
     @BeforeEach
     void rollback() {
-        userService = new UserService();
+        userService = applicationContext.getBean("userService", UserService.class);
     }
 
     @Test
@@ -26,7 +27,7 @@ class UserServiceTest {
     void save() {
         User user = new User("roach", "1234", "roach", "dev0jsh@gmail.com");
         userService.save(user);
-        assertThat(userService.getUser("roach").get()).isEqualTo(user);
+        assertThat(userService.getUser("roach")).isEqualTo(user);
     }
 
     @Test
@@ -49,7 +50,15 @@ class UserServiceTest {
         User honux = new User("honux", "12345", "honux", "1234@naver.com");
         userService.save(user);
         userService.save(honux);
-        assertThat(userService.getUser("roach").get()).isEqualTo(user);
+        assertThat(userService.getUser("roach")).isEqualTo(user);
+    }
+
+    @Test
+    @DisplayName("유저가 없을시 CanNotFindUserException 을 리턴하는지 확인한다.")
+    void failGetUser() {
+        assertThatExceptionOfType(CanNotFindUserException.class)
+                .isThrownBy(() -> userService.getUser("Xxxx"))
+                .withMessage("해당 유저가 존재하지 않습니다.");
     }
 
     @Test
