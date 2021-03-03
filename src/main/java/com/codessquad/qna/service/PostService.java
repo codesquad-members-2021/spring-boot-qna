@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class PostService {
@@ -20,7 +21,7 @@ public class PostService {
         postRepository.add(post);
     }
 
-    public Post getPost(int id) {
+    public Optional<Post> getPost(int id) {
         return postRepository.getPost(id-1);
     }
 

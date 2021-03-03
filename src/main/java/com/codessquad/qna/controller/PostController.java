@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.util.Optional;
+
 @Controller
 public class PostController {
 
@@ -49,7 +51,8 @@ public class PostController {
      */
     @GetMapping("/questions/{id}")
     public String getPost(@PathVariable int id, Model model) {
-        model.addAttribute("post", postService.getPost(id));
+        Optional<Post> post = postService.getPost(id);
+        post.ifPresent(value -> model.addAttribute("post", value));
         return "qna/show";
     }
 

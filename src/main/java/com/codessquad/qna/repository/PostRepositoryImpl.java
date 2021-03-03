@@ -5,6 +5,7 @@ import com.codessquad.qna.entity.Post;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 public class PostRepositoryImpl implements PostRepository{
 
@@ -20,8 +21,9 @@ public class PostRepositoryImpl implements PostRepository{
     }
 
     @Override
-    public Post getPost(int postId) {
-        return posts.get(postId);
+    public Optional<Post> getPost(int postId) {
+        Optional<Post> post = Optional.ofNullable(posts.get(postId));
+        return post;
     }
 
     @Override
