@@ -16,25 +16,25 @@ public class UserController {
     private List<User> userList = new ArrayList<>();
 
     @GetMapping("/form")
-    public String form() {
+    public String getUserFormPage() {
         return "user/form";
     }
 
     @PostMapping("")
-    public String create(User user) {
+    public String createUser(User user) {
         System.out.println("user: " + user);
         userList.add(user);
         return "redirect:/users";
     }
 
     @GetMapping("")
-    public String list(Model model) {
+    public String getUserList(Model model) {
         model.addAttribute("userList", userList);
         return "user/list";
     }
 
     @GetMapping("/{userId}")
-    public String profile(@PathVariable String userId, Model model) {
+    public String getUserProfile(@PathVariable String userId, Model model) {
         for (User user : userList) {
             if(user.matchId(userId)) {
                 model.addAttribute("user", user);
