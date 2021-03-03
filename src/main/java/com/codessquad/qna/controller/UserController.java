@@ -2,6 +2,8 @@ package com.codessquad.qna.controller;
 
 import com.codessquad.qna.domain.User;
 import com.codessquad.qna.repository.UserRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -14,6 +16,8 @@ import java.util.List;
 @Controller
 @RequestMapping("/user")
 public class UserController {
+
+    Logger logger = LoggerFactory.getLogger(UserController.class);
 
     private UserRepository userRepository;
 
@@ -42,7 +46,7 @@ public class UserController {
     @GetMapping("/{userId}")
     public String renderProfile(@PathVariable String userId, Model model) {
         User getUser = userRepository.findUserById(userId);
-        model.addAttribute("user",getUser);
+        model.addAttribute("user", getUser);
         return "user/profile";
     }
 
@@ -61,7 +65,7 @@ public class UserController {
             return "/";
         }
 
-        return "user/updateForm";
+        return "user/userUpdateForm";
     }
 
 
