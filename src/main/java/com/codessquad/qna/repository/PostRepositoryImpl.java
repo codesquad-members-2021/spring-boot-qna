@@ -24,7 +24,7 @@ public class PostRepositoryImpl implements PostRepository{
     }
 
     @Override
-    public Optional<Post> getPost(int postId) {
+    public Optional<Post> find(int postId) {
         Optional<Post> post = Optional.empty();
         try{
             post = Optional.ofNullable(posts.get(postId));
@@ -35,7 +35,7 @@ public class PostRepositoryImpl implements PostRepository{
     }
 
     @Override
-    public List<Post> getPosts() {
+    public List<Post> findAll() {
         return Collections.unmodifiableList(posts);
     }
 

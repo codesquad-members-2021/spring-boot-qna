@@ -22,7 +22,7 @@ public class UserRepositoryImpl implements UserRepository{
     }
 
     @Override
-    public Optional<User> getUser(String userId) {
+    public Optional<User> find(String userId) {
         Optional<User> user = Optional.ofNullable(users.get(userId));
         return user;
     }
@@ -33,7 +33,7 @@ public class UserRepositoryImpl implements UserRepository{
     }
 
     @Override
-    public List<User> getUsers() {
+    public List<User> findAll() {
         return new ArrayList<>(users.values());
     }
 

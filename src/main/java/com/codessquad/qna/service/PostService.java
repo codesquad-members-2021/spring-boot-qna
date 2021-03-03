@@ -26,12 +26,12 @@ public class PostService {
     }
 
     public Post getPost(int id) {
-        final Optional<Post> post = postRepository.getPost(id - 1);
+        final Optional<Post> post = postRepository.find(id - 1);
         return post.get();
     }
 
     public List<Post> getPosts() {
-        return postRepository.getPosts();
+        return postRepository.findAll();
     }
 
 }

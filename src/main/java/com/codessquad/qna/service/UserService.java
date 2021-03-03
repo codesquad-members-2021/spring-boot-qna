@@ -24,11 +24,11 @@ public class UserService {
     }
 
     public List<User> getUsers() {
-        return userRepository.getUsers();
+        return userRepository.findAll();
     }
 
     public User getUser(String userId) {
-        Optional<User> user = userRepository.getUser(userId);
+        Optional<User> user = userRepository.find(userId);
         if(!user.isPresent()){
             throw new CanNotFindUserException();
         }

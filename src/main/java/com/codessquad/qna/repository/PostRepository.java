@@ -10,9 +10,9 @@ public interface PostRepository {
 
     public void save(Post post);
 
-    public Optional<Post> getPost(int postId);
+    public Optional<Post> find(int postId);
 
-    public List<Post> getPosts();
+    public List<Post> findAll();
 
     public int size();
 
