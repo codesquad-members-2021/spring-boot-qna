@@ -3,6 +3,7 @@ package com.codessquad.qna.controller;
 import com.codessquad.qna.domain.User;
 import com.codessquad.qna.service.UserService;
 import java.util.List;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -12,37 +13,43 @@ import org.springframework.web.bind.annotation.PostMapping;
 @Controller
 public class UserController {
 
-    private final UserService userService = new UserService();
+    private final UserService userService;
 
-    @GetMapping("/user/form")
+    @Autowired
+    public UserController(UserService userService) {
+        this.userService = userService;
+    }
+
+    @GetMapping("/users/form")
     public String userForm() {
         return "user/form";
     }
 
-    @PostMapping("user/form")
+    @PostMapping("/users")
     public String createUser(User user) {
         try {
             userService.join(user);
         } catch (IllegalStateException e) {
             User.serialCode -= 1;
-            return "redirect:join_failed";
+            return "redirect:/users/join_failed";
         }
-        return "redirect:list";
+        return "redirect:/users/list";
     }
 
-    @GetMapping("/user/list")
+    @GetMapping("/users/list")
     public String userList(Model model) {
         List<User> users = userService.findUserAll();
+        System.out.println("123");
         model.addAttribute("users", users);
         return "user/list";
     }
 
-    @GetMapping("/user/join_failed")
+    @GetMapping("/users/join_failed")
     public String failToJoin() {
         return "user/join_failed";
     }
 
-    @GetMapping("/user/{userId}")
+    @GetMapping("/users/{userId}")
     public String userProfile(@PathVariable String userId, Model model) {
         User user = userService.findUserByUserId(userId);
         model.addAttribute("user", user);
