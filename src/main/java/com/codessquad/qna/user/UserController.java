@@ -4,6 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
@@ -28,6 +29,12 @@ public class UserController {
         return new ModelAndView("/user/list", "users", users);
     }
 
+    @GetMapping("/{id}")
+    public ModelAndView getUser(@PathVariable int id) {
+        logger.debug("id : " + id);
+        return new ModelAndView("/user/profile", "user", users.get(id));
+    }
+
     @GetMapping("/form")
     public String getForm() {
         return "/user/form";
@@ -36,6 +43,7 @@ public class UserController {
     @PostMapping
     public String createUser(User user) {
         logger.debug(user.toString());
+        //TODO: userId는 중복되면 안됨 map과 같은 구조 이용하여 개선 고려
         users.add(user);
 
         return "redirect:/users";
