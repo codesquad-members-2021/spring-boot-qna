@@ -47,31 +47,29 @@ public class UserController {
     }
 
     /**
+     * 해당 유저의 프로파일로 이동합니다.
+     * 만약 해당 유저를 찾을 수 없다면 CanNotFindUserException 을 리턴합니다.
      * @param id
      * @param model
+     * @throws CanNotFindUserException
      * @return only for users with the same id
      */
     @GetMapping("/users/{id}")
     public String getUserProfile(@PathVariable String id, Model model) {
-        User user = userService.getUser(id);
-        model.addAttribute("user", user);
+        getUsetIfExist(id, model);
         return "user/profile";
     }
 
     /**
      * 유저 프로필 수정이 가능한 창으로 이동합니다.
+     * 만약 해당 유저를 찾을 수 없다면 CanNotFindUserException 을 리턴합니다.
      * @param id
      * @param model
      * @return
      */
     @GetMapping("/users/{id}/form")
     public String updateUserProfileForm(@PathVariable String id, Model model) {
-        try{
-            User user = userService.getUser(id);
-            model.addAttribute("user", user);
-        }catch (CanNotFindUserException e){
-            logger.error(e.getMessage());
-        }
+        getUsetIfExist(id, model);
         return "user/updateForm";
     }
 
@@ -90,6 +88,15 @@ public class UserController {
         User ChangeUser = new User(userId, password, name, email);
         userService.save(ChangeUser);
         return "redirect:/users";
+    }
+
+    private void getUsetIfExist(@PathVariable String id, Model model) {
+        try {
+            User user = userService.getUser(id);
+            model.addAttribute("user", user);
+        } catch (CanNotFindUserException e) {
+            logger.error(e.getMessage());
+        }
     }
 
 }
