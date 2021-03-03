@@ -20,15 +20,24 @@ public class UserController {
 
     @PostMapping("user/form")
     public String createUser(User user) {
-        userService.join(user);
+        try {
+            userService.join(user);
+        } catch (IllegalStateException e) {
+            User.serialCode -= 1;
+            return "redirect:join_failed";
+        }
         return "redirect:list";
     }
 
     @GetMapping("/user/list")
     public String userList(Model model) {
         List<User> users = userService.findUserAll();
-        System.out.println("1");
         model.addAttribute("users", users);
         return "user/list";
+    }
+
+    @GetMapping("/user/join_failed")
+    public String failToJoin() {
+        return "user/join_failed";
     }
 }
