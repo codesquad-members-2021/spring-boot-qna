@@ -48,7 +48,8 @@ public class UsersController {
     }
 
     @PostMapping("users/modify")
-    public String onModifyUserProfile(String userId, String prevPassword, String newPassword, String name, String email) {
+    public String onModifyUserProfile(String userId, String prevPassword, String newPassword,
+                                      String name, String email) {
         User foundUser = getUserById(userId);
         if (foundUser != null && foundUser.getPassword().equals(prevPassword)) {
             foundUser.setPassword(newPassword);
