@@ -2,8 +2,7 @@ package com.codessquad.qna.service;
 
 
 import com.codessquad.qna.repository.JpaUserRepository;
-import com.codessquad.qna.repository.MemoryUserRepository;
-import com.codessquad.qna.repository.UserRepostiory;
+import com.codessquad.qna.repository.UserRepository;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -23,7 +22,7 @@ public class SpringConfig {
     }
 
     @Bean
-    public UserRepostiory userRepostiory() {
+    public UserRepository userRepostiory() {
         return new JpaUserRepository(entityManager);
     }
 }

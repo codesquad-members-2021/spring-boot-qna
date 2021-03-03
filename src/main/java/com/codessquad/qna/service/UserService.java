@@ -1,8 +1,7 @@
 package com.codessquad.qna.service;
 
 import com.codessquad.qna.domain.User;
-import com.codessquad.qna.repository.UserRepostiory;
-import org.springframework.stereotype.Service;
+import com.codessquad.qna.repository.UserRepository;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
@@ -12,9 +11,9 @@ import java.util.Optional;
 @Transactional
 public class UserService {
 
-    private final UserRepostiory userRepostiory;
+    private final UserRepository userRepostiory;
 
-    public UserService(UserRepostiory userRepostiory) {
+    public UserService(UserRepository userRepostiory) {
         this.userRepostiory = userRepostiory;
     }
 
@@ -26,7 +25,8 @@ public class UserService {
         return userRepostiory.findAll();
     }
 
-    public Optional<User> findUser(Long userId) {
-        return userRepostiory.findById(userId);
+    public Optional<User> findUser(Long id) {
+        return userRepostiory.findById(id);
     }
+
 }

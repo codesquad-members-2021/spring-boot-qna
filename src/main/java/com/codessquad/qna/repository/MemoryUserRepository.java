@@ -1,11 +1,10 @@
 package com.codessquad.qna.repository;
 
 import com.codessquad.qna.domain.User;
-import org.springframework.stereotype.Repository;
 
 import java.util.*;
 
-public class MemoryUserRepository implements UserRepostiory {
+public class MemoryUserRepository implements UserRepository {
     private static Map<Long, User> store = new HashMap<>();
     private static long sequence = 0L;
 

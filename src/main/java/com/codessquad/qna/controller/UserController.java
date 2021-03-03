@@ -6,9 +6,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import java.util.List;
+import java.util.Optional;
 
 @Controller
 public class UserController {
@@ -35,5 +37,15 @@ public class UserController {
         List<User> users = userService.findUsers();
         model.addAttribute("users", users);
         return "user/list";
+    }
+
+    @GetMapping("/users/{id}")
+    public String profile(@PathVariable Long id, Model model) {
+        Optional<User> user = userService.findUser(id);
+        if (!user.isPresent()) {
+            return "redirect:/users";
+        }
+        model.addAttribute(user.get());
+        return "user/profile";
     }
 }

@@ -6,7 +6,7 @@ import javax.persistence.EntityManager;
 import java.util.List;
 import java.util.Optional;
 
-public class JpaUserRepository implements UserRepostiory {
+public class JpaUserRepository implements UserRepository {
     private final EntityManager entityManager;
 
     public JpaUserRepository(EntityManager entityManager) {
@@ -24,6 +24,7 @@ public class JpaUserRepository implements UserRepostiory {
         User user = entityManager.find(User.class, id);
         return Optional.ofNullable(user);
     }
+
 
     @Override
     public Optional<User> findByName(String name) {
