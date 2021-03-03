@@ -3,10 +3,7 @@ package com.codessquad.qna.repository;
 import com.codessquad.qna.domain.User;
 import org.springframework.stereotype.Repository;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 @Repository
 public class MemoryUserRepository implements UserRepostiory {
@@ -22,21 +19,18 @@ public class MemoryUserRepository implements UserRepostiory {
 
     @Override
     public Optional<User> findById(Long id) {
-        return Optional.empty();
+        return Optional.ofNullable(store.get(id));
     }
 
     @Override
     public Optional<User> findByName(String name) {
-        return Optional.empty();
+        return store.values().stream()
+                .filter(user -> user.getName().equals(name))
+                .findAny();
     }
-
-    @Override
-    public Optional<User> findByEmail(String email) {
-        return Optional.empty();
-    }
-
+    
     @Override
     public List<User> findAll() {
-        return null;
+        return new ArrayList<>(store.values());
     }
 }

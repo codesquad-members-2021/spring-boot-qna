@@ -13,7 +13,6 @@ public interface UserRepostiory {
 
     Optional<User> findByName(String name);
 
-    Optional<User> findByEmail(String email);
 
     List<User> findAll();
 }
