@@ -44,10 +44,23 @@ public class UserController {
         return "user/profile";
     }
 
-    @GetMapping("/{userId}")
-    public String renderProfileById(@PathVariable String userId, Model model) {
+    @GetMapping("/{userId}/form")
+    public String renderUpdateForm(@PathVariable String userId, Model model) {
         User getUser = userRepository.findUserById(userId);
         model.addAttribute("user", getUser);
-        return "user/profile";
+        return "user/userUpdateForm";
     }
+
+    @GetMapping("/update")
+    public String userUpdate(User user, String newPassword) {
+
+        if (userRepository.checkPassword(user)) {
+            userRepository.updateUserInfo(user, newPassword);
+            return "/";
+        }
+
+        return "user/updateForm";
+    }
+
+
 }
