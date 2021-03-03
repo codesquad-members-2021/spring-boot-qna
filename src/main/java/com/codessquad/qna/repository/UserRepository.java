@@ -20,4 +20,11 @@ public class UserRepository {
     public List<User> findAll() {
         return Collections.unmodifiableList(users);
     }
+
+    public User findUserById(String userId) {
+        return users.stream()
+                .filter(user -> userId.equals(userId))
+                .findAny()
+                .orElse(null);
+    }
 }
