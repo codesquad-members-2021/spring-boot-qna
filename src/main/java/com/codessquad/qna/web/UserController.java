@@ -32,4 +32,16 @@ public class UserController {
         model.addAttribute("userList", userList);
         return "user/list";
     }
+
+    @GetMapping("/{userId}")
+    public String profile(@PathVariable String userId, Model model) {
+        for (User user : userList) {
+            if(user.matchId(userId)) {
+                model.addAttribute("user", user);
+            }
+            System.out.println(user);
+        }
+
+        return "user/profile";
+    }
 }
