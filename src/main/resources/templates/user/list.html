@@ -23,7 +23,7 @@
                 <tbody>
                 {{#userList}}
                 <tr>
-                    <th scope="row">1</th>
+                    <th scope="row">{{rowNumber @index}}</th>
                     <td><a href="/users/{{userId}}">{{userId}}</a></td>
                     <td>{{name}}</td>
                     <td>{{email}}</td>
