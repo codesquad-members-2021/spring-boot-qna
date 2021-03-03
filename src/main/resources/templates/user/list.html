@@ -9,20 +9,17 @@
             <table class="table table-hover">
                 <thead>
                 <tr>
-                    <th>#</th>
-                    <th>사용자 아이디</th>
-                    <th>이름</th>
-                    <th>이메일</th>
-                    <th></th>
+                    <th>#</th> <th>사용자 아이디</th> <th>이름</th> <th>이메일</th><th></th>
                 </tr>
                 </thead>
                 <tbody>
                 {{#users}}
                 <tr>
-                    <th scope="row">{{@index}}</th>
-                    <td onclick="location.href='/users/{{userId}}'">{{userId}}</td>
+                    <th scope="row"></th>
+                    <td>{{userId}}</td>
                     <td>{{name}}</td>
                     <td>{{email}}</td>
+                    <td><a href="/users/{{userId}}" class="btn btn-success" role="button">수정</a></td>
                 </tr>
                 {{/users}}
                 </tbody>
@@ -32,8 +29,6 @@
 </div>
 
 <!-- script references -->
-<script src="../js/jquery-2.2.0.min.js"></script>
-<script src="../js/bootstrap.min.js"></script>
-<script src="../js/scripts.js"></script>
+{{> partial/script}}
 </body>
 </html>
