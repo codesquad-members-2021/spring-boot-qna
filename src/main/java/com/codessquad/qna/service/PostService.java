@@ -6,12 +6,13 @@ import com.codessquad.qna.repository.PostRepositoryImpl;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 @Service
 public class PostService {
 
-    PostRepository postRepository = new PostRepositoryImpl(new ArrayList<>());
+    PostRepository postRepository = new PostRepositoryImpl(Collections.synchronizedList(new ArrayList<>()));
 
     public void addPost(Post post) {
         int index = postRepository.size() + 1;
