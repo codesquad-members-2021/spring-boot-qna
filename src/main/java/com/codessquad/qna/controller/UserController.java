@@ -56,4 +56,11 @@ public class UserController {
         model.addAttribute("user", user);
         return "/user/updateForm";
     }
+
+    @PostMapping("user/{id}/update")
+    public String updateUser(@PathVariable("id") long id, User user) {
+        logger.info(user.toString());
+        users.set((int) id - 1, user);
+        return "redirect:../list";
+    }
 }
