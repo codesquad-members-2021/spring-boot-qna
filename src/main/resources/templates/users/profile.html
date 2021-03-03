@@ -1,9 +1,4 @@
-<!DOCTYPE html>
-<html lang="kr">
-{{> components/head}}
-<body>
-{{> components/navbar}}
-{{> components/subnav}}
+{{#partial "content"}}
 <div class="container" id="main">
     <div class="col-md-6 col-md-offset-3">
         <div class="panel panel-default">
@@ -26,8 +21,6 @@
         </div>
     </div>
 </div>
+{{/partial}}
 
-<!-- script references -->
-{{> components/script}}
-	</body>
-</html>
+{{> components/base}}
