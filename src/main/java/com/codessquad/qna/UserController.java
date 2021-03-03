@@ -14,6 +14,11 @@ import java.util.stream.Collectors;
 public class UserController {
     private List<User> users = new ArrayList<>();
 
+    @GetMapping("/user/create")
+    public String signUp(){
+        return "/user/form";
+    }
+
     @PostMapping("/user/create")
     public String create(User user) {
         System.out.println("user : " + user);
