@@ -50,8 +50,10 @@ public class PostController {
 
     /**
      * 매개변수로 오는 id 값을 기반으로 해당 포스트를 불러옵니다.
+     * 만약 해당 유저가 없다면 CanNotFindPostException를 리턴합니다.
      * @param id
      * @param model
+     * @throws CanNotFindPostException
      * @return
      */
     @GetMapping("/questions/{id}")
