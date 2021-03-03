@@ -18,4 +18,12 @@ public class UserController {
         userList.add(user);
         return "redirect:/list";
     }
+
+    @GetMapping("/list")
+    public String list(Model model) {
+        model.addAttribute("users", userList);
+        return "user/list";
+    }
+
+
 }
