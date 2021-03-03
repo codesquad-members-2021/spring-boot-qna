@@ -24,7 +24,7 @@ public class UserController {
     @PostMapping("/user/create")
     public String create(UserForm form) {
         User user = new User();
-        user.setUserId(form.getUserId());
+        user.setUserId(form.getUserId()); // wrapper method로 /생성자, 팩토리 메서드
         user.setPassword(form.getPassword());
         user.setName(form.getName());
         user.setEmail(form.getEmail());

@@ -25,7 +25,6 @@ public class JpaUserRepository implements UserRepository {
         return Optional.ofNullable(user);
     }
 
-
     @Override
     public Optional<User> findByName(String name) {
         List<User> result = entityManager.createQuery("select user from User user where user.name = :name", User.class)

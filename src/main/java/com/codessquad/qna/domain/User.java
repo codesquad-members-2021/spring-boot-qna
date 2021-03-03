@@ -4,7 +4,7 @@ import javax.persistence.*;
 
 @Entity
 public class User {
-
+// setter를 없애주는게 좋다.
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
