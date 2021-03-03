@@ -24,11 +24,6 @@ public class QuestionController {
         return Collections.unmodifiableList(questions);
     }
 
-    @GetMapping("questions/form")
-    public String getQuestionForm() {
-        return "/qna/form";
-    }
-
     @PostMapping("questions/ask")
     public String askQuestion(Question question) {
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm");

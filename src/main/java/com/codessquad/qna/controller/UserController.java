@@ -19,11 +19,6 @@ public class UserController {
 
     private List<User> users = new ArrayList<>();
 
-    @GetMapping("user/form")
-    public String getSignUpPage() {
-        return "/user/form";
-    }
-
     @PostMapping("user/signUp")
     public String signUp(User user) {
         user.setId(users.size() + 1);
