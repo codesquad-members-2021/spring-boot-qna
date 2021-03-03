@@ -4,13 +4,20 @@ import java.text.SimpleDateFormat;
 
 public class Question {
 
-    String writer;
-    String title;
-    String contents;
-    String time;
+    private static int serialCode = 1;
+    private int id;
+    private String writer;
+    private String title;
+    private String contents;
+    private String time;
 
     public Question() {
         this.time = formatTime(System.currentTimeMillis());
+        this.id = serialCode++;
+    }
+
+    public int getId() {
+        return id;
     }
 
     public String getWriter() {

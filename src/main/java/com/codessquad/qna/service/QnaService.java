@@ -19,4 +19,8 @@ public class QnaService {
     public List<Question> findAll() {
         return qnaRepository.findAll();
     }
+
+    public Question findQuestionById(int index) {
+        return qnaRepository.findQuestionById(index);
+    }
 }

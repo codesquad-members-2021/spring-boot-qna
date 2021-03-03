@@ -16,4 +16,9 @@ public class MemoryQnaRepository implements QnaRepository{
     public List<Question> findAll() {
         return questions;
     }
+
+    @Override
+    public Question findQuestionById(int index) {
+        return questions.get(index-1);
+    }
 }

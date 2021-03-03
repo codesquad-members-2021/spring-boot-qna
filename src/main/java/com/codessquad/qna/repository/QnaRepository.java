@@ -8,4 +8,6 @@ public interface QnaRepository {
     void save(Question question);
 
     List<Question> findAll();
+
+    Question findQuestionById(int index);
 }
