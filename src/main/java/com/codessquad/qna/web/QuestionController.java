@@ -15,7 +15,7 @@ public class QuestionController {
     List<Question> questionList = new ArrayList<>();
 
     @GetMapping("/questions/form")
-    public String form() {
+    public String getQuestionFormPage() {
         return "qna/form";
     }
 
@@ -32,7 +32,7 @@ public class QuestionController {
     }
 
     @GetMapping("/")
-    public String questionList(Model model) {
+    public String getQuestionListPage(Model model) {
         model.addAttribute("questionList", questionList);
         return "home";
     }
