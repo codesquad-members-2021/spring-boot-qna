@@ -1,10 +1,21 @@
 package com.codessquad.qna.domain;
 
+import java.time.LocalDateTime;
+
 public class Question {
     private Long id;
     private String writer;
     private String title;
     private String contents;
+    private LocalDateTime writeTime;
+
+    public LocalDateTime getWriteTime() {
+        return writeTime;
+    }
+
+    public void setWriteTime(LocalDateTime writeTime) {
+        this.writeTime = writeTime;
+    }
 
     public Long getId() {
         return id;

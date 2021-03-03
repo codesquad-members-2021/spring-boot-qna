@@ -3,6 +3,7 @@ package com.codessquad.qna.repository;
 import com.codessquad.qna.domain.Question;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -14,6 +15,7 @@ public class QuestionRepository {
 
     public void save(Question question) {
         question.setId((long) (questions.size() + 1));
+        question.setWriteTime(LocalDateTime.now());
         questions.add(question);
     }
 
