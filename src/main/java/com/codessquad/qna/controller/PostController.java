@@ -1,7 +1,10 @@
 package com.codessquad.qna.controller;
 
 import com.codessquad.qna.entity.Post;
+import com.codessquad.qna.exception.CanNotFindPostException;
 import com.codessquad.qna.service.PostService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -14,6 +17,8 @@ import java.util.Optional;
 
 @Controller
 public class PostController {
+
+    private Logger logger = LoggerFactory.getLogger(PostController.class);
 
     @Autowired
     PostService postService;
@@ -51,8 +56,12 @@ public class PostController {
      */
     @GetMapping("/questions/{id}")
     public String getPost(@PathVariable int id, Model model) {
-        Optional<Post> post = postService.getPost(id);
-        post.ifPresent(value -> model.addAttribute("post", value));
+        try{
+            Post post = postService.getPost(id);
+            model.addAttribute("post", post);
+        }catch (CanNotFindPostException e){
+            logger.error(e.getMessage());
+        }
         return "qna/show";
     }
 

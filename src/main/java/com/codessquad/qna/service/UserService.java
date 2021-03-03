@@ -1,18 +1,23 @@
 package com.codessquad.qna.service;
 
 import com.codessquad.qna.entity.User;
+import com.codessquad.qna.exception.CanNotFindUserException;
 import com.codessquad.qna.repository.UserRepository;
-import com.codessquad.qna.repository.UserRepositoryImpl;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.concurrent.ConcurrentHashMap;
 
 @Service
 public class UserService {
 
-    private final UserRepository userRepository = new UserRepositoryImpl(new ConcurrentHashMap<>());
+    private final UserRepository userRepository;
+
+    @Autowired
+    public UserService(UserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
 
     public void save(User user) {
         userRepository.save(user);
@@ -22,8 +27,12 @@ public class UserService {
         return userRepository.getUsers();
     }
 
-    public Optional<User> getUser(String userId) {
-        return userRepository.getUser(userId);
+    public User getUser(String userId) {
+        Optional<User> user = userRepository.getUser(userId);
+        if(!user.isPresent()){
+            throw new CanNotFindUserException();
+        }
+        return user.get();
     }
 
     public void removeUser(String userId) {userRepository.remove(userId);}

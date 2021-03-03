@@ -1,6 +1,7 @@
 package com.codessquad.qna.repository;
 
 import com.codessquad.qna.entity.User;
+import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -10,13 +11,10 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 import java.util.stream.Collectors;
 
+@Repository
 public class UserRepositoryImpl implements UserRepository{
 
-    private final ConcurrentMap<String, User> users;
-
-    public UserRepositoryImpl(ConcurrentMap<String, User> users) {
-        this.users = users;
-    }
+    private final ConcurrentMap<String, User> users = new ConcurrentHashMap<>();
 
     @Override
     public void save(User user) {

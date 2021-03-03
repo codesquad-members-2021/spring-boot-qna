@@ -1,6 +1,7 @@
 package com.codessquad.qna.controller;
 
 import com.codessquad.qna.entity.User;
+import com.codessquad.qna.exception.CanNotFindUserException;
 import com.codessquad.qna.service.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -11,14 +12,14 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
-import java.util.Optional;
-
 @Controller
 public class UserController {
 
+    private Logger logger = LoggerFactory.getLogger(UserController.class);
+
     @Autowired
     private UserService userService;
-    private Logger logger = LoggerFactory.getLogger(UserController.class);
+
 
     /**
      * @param userId
@@ -52,11 +53,8 @@ public class UserController {
      */
     @GetMapping("/users/{id}")
     public String getUserProfile(@PathVariable String id, Model model) {
-        Optional<User> user = userService.getUser(id);
-        if(user.isPresent()) {
-            model.addAttribute("name", user.get().getName());
-            model.addAttribute("email", user.get().getEmail());
-        }
+        User user = userService.getUser(id);
+        model.addAttribute("user", user);
         return "user/profile";
     }
 
@@ -68,9 +66,11 @@ public class UserController {
      */
     @GetMapping("/users/{id}/form")
     public String updateUserProfileForm(@PathVariable String id, Model model) {
-        Optional<User> user = userService.getUser(id);
-        if(user.isPresent()){
+        try{
+            User user = userService.getUser(id);
             model.addAttribute("user", user);
+        }catch (CanNotFindUserException e){
+            logger.error(e.getMessage());
         }
         return "user/updateForm";
     }
