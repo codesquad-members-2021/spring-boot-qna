@@ -5,14 +5,15 @@ import com.codessquad.qna.entity.User;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 import java.util.stream.Collectors;
 
 public class UserRepositoryImpl implements UserRepository{
 
-    private final Map<String, User> users;
+    private final ConcurrentMap<String, User> users;
 
-    public UserRepositoryImpl(Map<String, User> users) {
+    public UserRepositoryImpl(ConcurrentMap<String, User> users) {
         this.users = users;
     }
 

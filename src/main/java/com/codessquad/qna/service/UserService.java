@@ -5,13 +5,13 @@ import com.codessquad.qna.repository.UserRepository;
 import com.codessquad.qna.repository.UserRepositoryImpl;
 import org.springframework.stereotype.Service;
 
-import java.util.HashMap;
 import java.util.List;
+import java.util.concurrent.ConcurrentHashMap;
 
 @Service
 public class UserService {
 
-    private final UserRepository userRepository = new UserRepositoryImpl(new HashMap<>());
+    private final UserRepository userRepository = new UserRepositoryImpl(new ConcurrentHashMap<>());
 
     public void save(User user) {
         userRepository.save(user);
