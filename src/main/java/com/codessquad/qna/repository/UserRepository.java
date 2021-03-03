@@ -27,4 +27,19 @@ public class UserRepository {
                 .findAny()
                 .orElse(null);
     }
+
+    public boolean checkPassword(User user) {
+        User getUser = findUserById(user.getUserId());
+
+        return getUser.getPassword().equals(user.getPassword());
+    }
+
+    public String updateUserInfo(User user, String newPassword) {
+        User getUser = findUserById(user.getUserId());
+        getUser.setName(user.getName());
+        getUser.setPassword(newPassword);
+        getUser.setEmail(user.getEmail());
+
+        return getUser.getUserId();
+    }
 }
