@@ -14,4 +14,9 @@ public class MemoryUserRepository implements UserRepository{
     public void save(User user) {
         users.add(user);
     }
+
+    @Override
+    public List<User> findUserALl() {
+        return users;
+    }
 }
