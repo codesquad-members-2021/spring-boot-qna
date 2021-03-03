@@ -6,6 +6,7 @@ import com.codessquad.qna.repository.UserRepositoryImpl;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 
 @Service
@@ -21,7 +22,7 @@ public class UserService {
         return userRepository.getUsers();
     }
 
-    public User getUser(String userId) {
+    public Optional<User> getUser(String userId) {
         return userRepository.getUser(userId);
     }
 

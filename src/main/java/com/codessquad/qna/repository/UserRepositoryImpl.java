@@ -5,6 +5,7 @@ import com.codessquad.qna.entity.User;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 import java.util.stream.Collectors;
@@ -23,8 +24,9 @@ public class UserRepositoryImpl implements UserRepository{
     }
 
     @Override
-    public User getUser(String userId) {
-        return users.get(userId);
+    public Optional<User> getUser(String userId) {
+        Optional<User> user = Optional.ofNullable(users.get(userId));
+        return user;
     }
 
     @Override

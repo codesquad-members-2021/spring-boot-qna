@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
+import java.util.Optional;
+
 @Controller
 public class UserController {
 
@@ -50,9 +52,11 @@ public class UserController {
      */
     @GetMapping("/users/{id}")
     public String getUserProfile(@PathVariable String id, Model model) {
-        User user = userService.getUser(id);
-        model.addAttribute("name", user.getName());
-        model.addAttribute("email", user.getEmail());
+        Optional<User> user = userService.getUser(id);
+        if(user.isPresent()) {
+            model.addAttribute("name", user.get().getName());
+            model.addAttribute("email", user.get().getEmail());
+        }
         return "user/profile";
     }
 
@@ -64,8 +68,10 @@ public class UserController {
      */
     @GetMapping("/users/{id}/form")
     public String updateUserProfileForm(@PathVariable String id, Model model) {
-        User user = userService.getUser(id);
-        model.addAttribute("user", user);
+        Optional<User> user = userService.getUser(id);
+        if(user.isPresent()){
+            model.addAttribute("user", user);
+        }
         return "user/updateForm";
     }
 
