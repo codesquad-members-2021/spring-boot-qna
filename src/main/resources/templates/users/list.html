@@ -16,7 +16,7 @@
               <tbody>
                 {{#users}}
                 <tr>
-                  <th scope="row">{{rowNumber @index}}</th> <td>{{userId}}</td> <td><a href="/users/{{userId}}">{{name}}</a></td> <td>{{email}}</td><td><a href="#" class="btn btn-success" role="button">수정</a></td>
+                  <th scope="row">{{rowNumber @index}}</th> <td>{{userId}}</td> <td><a href="/users/{{userId}}">{{name}}</a></td> <td>{{email}}</td><td><a href="/users/{{userId}}/form" class="btn btn-success" role="button">수정</a></td>
                 </tr>
                 {{/users}}
               </tbody>

@@ -1,9 +1,9 @@
 package com.codessquad.qna.user;
 
-public class User {
-
+public class UpdateUserRequest {
     private String userId;
-    private String password;
+    private String oldPassword;
+    private String newPassword;
     private String name;
     private String email;
 
@@ -15,12 +15,20 @@ public class User {
         this.userId = userId;
     }
 
-    public String getPassword() {
-        return password;
+    public String getOldPassword() {
+        return oldPassword;
     }
 
-    public void setPassword(String password) {
-        this.password = password;
+    public void setOldPassword(String oldPassword) {
+        this.oldPassword = oldPassword;
+    }
+
+    public String getNewPassword() {
+        return newPassword;
+    }
+
+    public void setNewPassword(String newPassword) {
+        this.newPassword = newPassword;
     }
 
     public String getName() {
@@ -38,5 +46,4 @@ public class User {
     public void setEmail(String email) {
         this.email = email;
     }
-
 }
