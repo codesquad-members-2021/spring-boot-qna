@@ -1,6 +1,7 @@
 package com.codessquad.qna.web;
 
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 
@@ -12,13 +13,15 @@ public class UserController {
     private List<User> users = new ArrayList<>();
 
     @PostMapping("/users")
-    public String create(User user) {
+    public String createUser(User user) {
         users.add(user);
-        return "redirect:/list";
+        return "redirect:/users";
     }
 
-    @GetMapping("/list")
-    public String list() {
-        return "list";
+    @GetMapping("/users")
+    public String getUsers(Model model) {
+        model.addAttribute("users", users);
+        System.out.println(users.get(0).getEmail());
+        return "/user/list";
     }
 }
