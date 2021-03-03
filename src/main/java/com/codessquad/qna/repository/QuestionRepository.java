@@ -13,10 +13,18 @@ public class QuestionRepository {
     private List<Question> questions = new ArrayList<>();
 
     public void save(Question question) {
+        question.setId((long) (questions.size() + 1));
         questions.add(question);
     }
 
     public List<Question> findAll() {
         return Collections.unmodifiableList(questions);
+    }
+
+    public Question findById(int id) {
+        return questions.stream()
+                .filter(question -> question.getId() == id)
+                .findAny()
+                .orElse(null);
     }
 }
