@@ -15,27 +15,27 @@ public class UsersController {
     private final List<User> userList = new ArrayList<>();
 
     @PostMapping("users")
-    public String onRegister(String userId, String password, String name, String email) {
+    public String createUser(String userId, String password, String name, String email) {
         User createdUser = new User(userId, password, name, email);
         userList.add(createdUser);
         return "redirect:/users";
     }
 
     @GetMapping("users")
-    public String onList(Model model) {
+    public String getUserList(Model model) {
         model.addAttribute("users", userList);
         return "user/list";
     }
 
     @GetMapping("users/{userId}")
-    public String onUserProfile(@PathVariable("userId") String userId, Model model) {
+    public String getOneUser(@PathVariable("userId") String userId, Model model) {
         User foundUser = getUserById(userId);
         model.addAttribute("user", foundUser);
         return "user/profile";
     }
 
     @GetMapping("users/modify/{userId}")
-    public String onRequestModifyUserProfilePage(@PathVariable("userId") String userId, Model model) {
+    public String getModifyUserPage(@PathVariable("userId") String userId, Model model) {
         User foundUser = getUserById(userId);
         model.addAttribute("user", foundUser);
         return "user/modify-form";
@@ -48,8 +48,8 @@ public class UsersController {
     }
 
     @PostMapping("users/modify")
-    public String onModifyUserProfile(String userId, String prevPassword, String newPassword,
-                                      String name, String email) {
+    public String modifyUser(String userId, String prevPassword, String newPassword,
+                             String name, String email) {
         User foundUser = getUserById(userId);
         if (foundUser != null && foundUser.getPassword().equals(prevPassword)) {
             foundUser.setPassword(newPassword);

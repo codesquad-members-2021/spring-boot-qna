@@ -17,7 +17,7 @@ public class QnaController {
     private List<Question> questionList = new ArrayList<>();
 
     @PostMapping("/questions")
-    public String onRequestCreateQuestion(String writerId, String title, String contents) {
+    public String createQuestion(String writerId, String title, String contents) {
         logger.info("onRequestCreateQuestion called");
         Question newQuestion = new Question(questionList.size() + 1, writerId, title, contents);
         questionList.add(newQuestion);
@@ -25,14 +25,14 @@ public class QnaController {
     }
 
     @GetMapping("/")
-    public String onRequestShowQuestions(Model model) {
+    public String getQuestionList(Model model) {
         logger.info("onRequestShowQuestions called");
         model.addAttribute("questions", questionList);
         return "index";
     }
 
     @GetMapping("/questions/{questionId}")
-    public String onGetQuestionById(@PathVariable("questionId") int questionId, Model model) {
+    public String getOneQuestion(@PathVariable("questionId") int questionId, Model model) {
         logger.info("onGetQuestionById called");
         Question foundQuestion = questionList.stream()
                 .filter((question -> question.getId() == questionId))
