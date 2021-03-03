@@ -4,8 +4,11 @@ import com.codessquad.qna.domain.User;
 import com.codessquad.qna.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+
+import java.util.List;
 
 @Controller
 public class UserController {
@@ -16,12 +19,6 @@ public class UserController {
         this.userService = userService;
     }
 
-    @GetMapping("/user/create")
-    public String createForm() {
-        return "user/form";
-    }
-
-
     @PostMapping("/user/create")
     public String create(UserForm form) {
         User user = new User();
@@ -30,6 +27,13 @@ public class UserController {
         user.setName(form.getName());
         user.setEmail(form.getEmail());
         userService.join(user);
-        return "redirect:/";
+        return "redirect:/users";
+    }
+
+    @GetMapping("/users")
+    public String list(Model model) {
+        List<User> users = userService.findUsers();
+        model.addAttribute("users", users);
+        return "user/list";
     }
 }
