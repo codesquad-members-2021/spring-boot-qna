@@ -13,8 +13,18 @@ public class UserRepository {
     private List<User> users = new ArrayList<>();
 
     public String save(User user) {
-        users.add(user);
-        return user.getUserId();
+        if (checkDuplicateUserId(user.getUserId())) {
+            users.add(user);
+            return user.getUserId();
+        }
+
+        return null;
+    }
+
+    private boolean checkDuplicateUserId(String userId) {
+        return users.stream()
+                .map(User::getUserId)
+                .noneMatch(getUserId -> getUserId.equals(userId));
     }
 
     public List<User> findAll() {
