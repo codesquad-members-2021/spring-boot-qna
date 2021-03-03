@@ -2,20 +2,11 @@ package com.codessquad.qna.domain;
 
 public class User {
 
-    public static int serialCode = 1;
-    private int serialNum;
     private String userId;
     private String password;
     private String name;
     private String email;
 
-    public User() {
-        serialNum = serialCode++;
-    }
-
-    public int getSerialNum() {
-        return serialNum;
-    }
 
     public String getUserId() {
         return userId;
@@ -52,8 +43,7 @@ public class User {
     @Override
     public String toString() {
         return "User{" +
-            "serialNum=" + serialNum +
-            ", userId='" + userId + '\'' +
+            "userId='" + userId + '\'' +
             ", password='" + password + '\'' +
             ", name='" + name + '\'' +
             ", email='" + email + '\'' +

@@ -20,17 +20,11 @@ public class UserController {
         this.userService = userService;
     }
 
-    @GetMapping("/users/form")
-    public String userForm() {
-        return "user/form";
-    }
-
     @PostMapping("/users")
     public String createUser(User user) {
         try {
             userService.join(user);
         } catch (IllegalStateException e) {
-            User.serialCode -= 1;
             return "redirect:/users/join_failed";
         }
         return "redirect:/users/list";
@@ -39,15 +33,10 @@ public class UserController {
     @GetMapping("/users/list")
     public String userList(Model model) {
         List<User> users = userService.findUserAll();
-        System.out.println("123");
         model.addAttribute("users", users);
         return "user/list";
     }
 
-    @GetMapping("/users/join_failed")
-    public String failToJoin() {
-        return "user/join_failed";
-    }
 
     @GetMapping("/users/{userId}")
     public String userProfile(@PathVariable String userId, Model model) {

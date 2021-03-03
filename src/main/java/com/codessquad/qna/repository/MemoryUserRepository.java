@@ -3,13 +3,13 @@ package com.codessquad.qna.repository;
 
 import com.codessquad.qna.domain.User;
 import java.util.ArrayList;
-import java.util.LinkedHashMap;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 public class MemoryUserRepository implements UserRepository {
 
-    private Map<String, User> userMap = new LinkedHashMap<>();
+    private Map<String, User> userMap = new HashMap<>();
 
 
     @Override
