@@ -5,6 +5,7 @@ import com.codessquad.qna.repository.Users;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 
@@ -30,6 +31,13 @@ public class UserController {
         users.addUser(newUser);
         logger.info("회원가입 요청 " + newUser.toString());
         return "redirect:/users";
+    }
+
+    @GetMapping("/users")
+    public String viewUserList(Model model) {
+        model.addAttribute("users", this.users.getAllUser());
+        logger.info("유저 리스트 패이지 요청");
+        return "user/list";
     }
 
 }
