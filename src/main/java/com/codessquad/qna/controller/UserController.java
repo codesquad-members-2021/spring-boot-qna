@@ -18,27 +18,22 @@ public class UserController {
 
     @PostMapping("/users")
     public String signUp(User user) {
-        User newUser = new User();
-        newUser.setUserId(user.getUserId());
-        newUser.setPassword(user.getPassword());
-        newUser.setName(user.getName());
-        newUser.setEmail(user.getEmail());
-        users.addUser(newUser);
-        logger.info("회원가입 요청 " + newUser.toString());
+        users.addUser(user);
+        logger.info("회원가입 요청");
         return "redirect:/users";
     }
 
     @GetMapping("/users")
     public String viewUserList(Model model) {
         model.addAttribute("users", this.users.getAllUser());
-        logger.info("유저 리스트 패이지 요청");
+        logger.info("유저 리스트 페이지 요청");
         return "user/list";
     }
 
     @GetMapping("/users/{userId}")
     public String viewProfile(@PathVariable("userId") String userId, Model model) {
         model.addAttribute("user", this.users.findUser(userId));
-        logger.info(userId + "유저의 프로필 페이지 요청");
+        logger.info("유저 프로필 페이지 요청");
         return "user/profile";
     }
 

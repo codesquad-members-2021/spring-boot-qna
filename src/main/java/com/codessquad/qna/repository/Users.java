@@ -10,7 +10,12 @@ public class Users {
     private final List<User> userList = new ArrayList<>();
 
     public void addUser(User user) {
-        userList.add(user);
+        User newUser = new User();
+        newUser.setUserId(user.getUserId());
+        newUser.setPassword(user.getPassword());
+        newUser.setName(user.getName());
+        newUser.setEmail(user.getEmail());
+        userList.add(newUser);
     }
 
     public List<User> getAllUser() {
