@@ -38,4 +38,15 @@ public class UserController {
         users.add(user);
         return "redirect:/users";
     }
+
+    @GetMapping("{userId}/form")
+    public String form(@PathVariable String userId, Model model) {
+        for (User user : users) {
+            if (user.getUserId().equals(userId)) {
+                model.addAttribute(user);
+                return "/user/updateForm";
+            }
+        }
+        return "redirect:/users";
+    }
 }
