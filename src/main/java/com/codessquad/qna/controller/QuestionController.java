@@ -32,6 +32,7 @@ public class QuestionController {
     @GetMapping("/question/{id}")
     public String viewQuestion(@PathVariable("id") int id, Model model) {
         model.addAttribute("question", this.questions.findQuestion(id));
+        logger.info("상제 질문 페이지 요청");
         return "qna/show";
     }
 

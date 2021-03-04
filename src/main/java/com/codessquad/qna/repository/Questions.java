@@ -10,13 +10,9 @@ public class Questions {
     private final List<Question> questionList = new ArrayList<>();
 
     public void addQuestion(Question question) {
-        Question newQuestion = new Question();
-        newQuestion.setId(this.questionList.size() + 1);
-        newQuestion.setWriter(question.getWriter());
-        newQuestion.setTitle(question.getTitle());
-        newQuestion.setContents(question.getContents());
-        newQuestion.setDate();
-        questionList.add(newQuestion);
+        question.setId(this.questionList.size() + 1);
+        question.setDate();
+        questionList.add(question);
     }
 
     public List<Question> getAllQuestion() {
