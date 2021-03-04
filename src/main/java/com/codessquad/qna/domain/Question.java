@@ -1,9 +1,14 @@
 package com.codessquad.qna.domain;
 
 public class Question {
+    private int questionId;
     private String writer;
     private String title;
     private String contents;
+
+    public int getQuestionId() {
+        return questionId;
+    }
 
     public String getWriter() {
         return writer;
@@ -15,6 +20,10 @@ public class Question {
 
     public String getContents() {
         return contents;
+    }
+
+    public void setQuestionId(int questionId) {
+        this.questionId = questionId;
     }
 
     public void setWriter(String writer) {
@@ -32,7 +41,8 @@ public class Question {
     @Override
     public String toString() {
         return "Question{" +
-                "writer='" + writer + '\'' +
+                "questionId=" + questionId +
+                ", writer='" + writer + '\'' +
                 ", title='" + title + '\'' +
                 ", contents='" + contents + '\'' +
                 '}';

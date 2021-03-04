@@ -7,6 +7,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -14,6 +15,7 @@ import java.util.List;
 
 @Controller
 public class QuestionController {
+    Logger logger = LoggerFactory.getLogger(QuestionController.class);
     QuestionRepository questionRepository = new QuestionRepository();
 
     @GetMapping("/questions/form")
@@ -23,7 +25,6 @@ public class QuestionController {
 
     @GetMapping("/")
     public String createQuestionList(Question question, Model model){
-        Logger logger = LoggerFactory.getLogger(QuestionController.class);
         List<Question> questions = questionRepository.getAll();
 
         model.addAttribute("questions", questions);
@@ -34,7 +35,6 @@ public class QuestionController {
 
     @PostMapping("/questions")
     public String createQuestion(Question question){
-        Logger logger = LoggerFactory.getLogger(QuestionController.class);
         Question newQuestion = new Question();
 
         newQuestion.setWriter(question.getWriter());
@@ -46,6 +46,15 @@ public class QuestionController {
         logger.info("Question in questionRepository: " + newQuestion);
 
         return "redirect:/";
+    }
+
+    @GetMapping("/questions/{questionId}")
+    public String createQuestionInDetail(@PathVariable(name = "questionId") int targetId, Model model){
+        Question targetQuestion = questionRepository.getOne(targetId);
+
+        model.addAttribute("question", targetQuestion);
+
+        return "/questions/show";
     }
 
 
