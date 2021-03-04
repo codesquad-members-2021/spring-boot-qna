@@ -5,9 +5,12 @@ import com.codessquad.qna.repository.QuestionRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+
+import java.util.List;
 
 @Controller
 public class QuestionController {
@@ -16,6 +19,17 @@ public class QuestionController {
     @GetMapping("/questions/form")
     public String createForm(){
         return "/questions/form";
+    }
+
+    @GetMapping("/")
+    public String createQuestionList(Question question, Model model){
+        Logger logger = LoggerFactory.getLogger(QuestionController.class);
+        List<Question> questions = questionRepository.getAll();
+
+        model.addAttribute("questions", questions);
+        logger.info("Questions in questionRepository: " + questions.toString());
+
+        return "/index";
     }
 
     @PostMapping("/questions")
@@ -33,4 +47,6 @@ public class QuestionController {
 
         return "redirect:/";
     }
+
+
 }
