@@ -15,7 +15,6 @@ public class UserController {
 
     @PostMapping("/users")
     public String createUser(User user) {
-        System.out.println("유저생성!");
         users.add(user);
         return "redirect:/users";
     }
@@ -53,8 +52,6 @@ public class UserController {
 
     @PostMapping("/users/{userId}/update")
     public String updateUser(User updatedUser){
-        System.out.println(users.size());
-        System.out.println('H');
         User foundUser = fingByUserId(updatedUser.getUserId());
         foundUser.setPassword(updatedUser.getPassword());
         foundUser.setName(updatedUser.getName());
