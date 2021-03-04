@@ -8,10 +8,12 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@RequestMapping("/users")
 @Controller
 public class UserController {
 
@@ -19,49 +21,49 @@ public class UserController {
 
     private List<User> users = new ArrayList<>();
 
-    @PostMapping("user/signUp")
+    @PostMapping("/signUp")
     public String signUp(User user) {
         user.setId(users.size() + 1);
         users.add(user);
         logger.info(user.toString());
 
-        return "redirect:list";
+        return "redirect:/users/list";
     }
 
-    @GetMapping("user/list")
+    @GetMapping("/list")
     public String list(Model model) {
         model.addAttribute("users", users);
-        return "/user/list";
+        return "/users/list";
     }
 
-    @GetMapping("user/profile/{userId}")
+    @GetMapping("/profile/{userId}")
     public String getProfile(@PathVariable("userId") String userId, Model model) {
         for (User user : users) {
             if (user.getUserId().equals(userId)) {
                 model.addAttribute("user", user);
-                return "/user/profile";
+                return "/users/profile";
             }
         }
-        return "redirect:user/list";
+        return "redirect:/users/list";
     }
 
-    @GetMapping("user/{id}/updateForm")
+    @GetMapping("/{id}/updateForm")
     public String getUpdateForm(@PathVariable("id") long id, Model model) {
         User user = users.get((int) id - 1);
         model.addAttribute("user", user);
-        return "/user/updateForm";
+        return "/users/updateForm";
     }
 
-    @PostMapping("user/{id}/update")
+    @PostMapping("/{id}/update")
     public String updateUser(
             @PathVariable("id") long id, User userWithUpdatedInfo, String currentPassword) {
         User targetUser = users.get((int) id - 1);
         if (!targetUser.getPassword().equals(currentPassword)) {
             logger.warn("비밀번호가 일치하지 않습니다.");
-            return "redirect:../list";
+            return "redirect:/users/list";
         }
         logger.info(userWithUpdatedInfo.toString());
         users.set((int) id - 1, userWithUpdatedInfo);
-        return "redirect:../list";
+        return "redirect:/users/list";
     }
 }

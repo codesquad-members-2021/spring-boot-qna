@@ -8,6 +8,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -15,6 +16,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+@RequestMapping("/questions")
 @Controller
 public class QuestionController {
 
@@ -25,7 +27,7 @@ public class QuestionController {
         return Collections.unmodifiableList(questions);
     }
 
-    @PostMapping("questions/ask")
+    @PostMapping("/ask")
     public String askQuestion(Question question) {
         String date = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"));
         question.setDate(date);
@@ -37,7 +39,7 @@ public class QuestionController {
         return "redirect:/";
     }
 
-    @GetMapping("questions/{index}")
+    @GetMapping("/{index}")
     public String showQuestion(@PathVariable("index") long index, Model model) {
         model.addAttribute("question", questions.get((int) index - 1));
         return "/qna/show";
