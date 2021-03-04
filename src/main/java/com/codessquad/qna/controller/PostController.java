@@ -57,7 +57,7 @@ public class PostController {
      * @return
      */
     @GetMapping("/questions/{id}")
-    public String getPost(@PathVariable int id, Model model) {
+    public String getPost(@PathVariable Long id, Model model) {
         try{
             Post post = postService.getPost(id);
             model.addAttribute("post", post);
