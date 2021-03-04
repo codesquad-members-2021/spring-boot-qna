@@ -29,10 +29,13 @@ public class UserService {
 
     public User getUser(Long userId) {
         Optional<User> user = userRepository.findById(userId);
-        if(!user.isPresent()){
-            throw new CanNotFindUserException();
-        }
+        user.orElseThrow(CanNotFindUserException::new);
         return user.get();
+    }
+
+
+    public void change(User oldUserInfo, User updateUserInfo) {
+        userRepository.update(oldUserInfo, updateUserInfo);
     }
 
     public void removeUser(Long userId) {userRepository.remove(userId);}
