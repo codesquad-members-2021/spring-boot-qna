@@ -8,8 +8,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,7 +27,7 @@ public class QuestionController {
     public String query(QuestionRequest questionRequest) {
         Question question = new Question(questionRequest);
         question.setId(questions.size() + 1);
-        question.setTime(ZonedDateTime.now(ZoneId.of("Asia/Seoul")));
+        question.setTime(LocalDateTime.now());
         question.setPoint(0);
         questions.add(question);
         return "redirect:/";

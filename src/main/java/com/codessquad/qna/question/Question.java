@@ -1,13 +1,13 @@
 package com.codessquad.qna.question;
 
-import java.time.ZonedDateTime;
+import java.time.LocalDateTime;
 
 public class Question {
     private int id;
     private String writer;
     private String title;
     private String contents;
-    private ZonedDateTime time;
+    private LocalDateTime time;
     private int point;
 
     public Question(QuestionRequest questionRequest) {
@@ -20,7 +20,7 @@ public class Question {
         this.id = id;
     }
 
-    public void setTime(ZonedDateTime time) {
+    public void setTime(LocalDateTime time) {
         this.time = time;
     }
 
@@ -44,7 +44,7 @@ public class Question {
         return contents;
     }
 
-    public ZonedDateTime getTime() {
+    public LocalDateTime getTime() {
         return time;
     }
 
