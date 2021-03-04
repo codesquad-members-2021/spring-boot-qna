@@ -37,4 +37,18 @@ public class UserController {
         return "user/profile";
     }
 
+    @GetMapping("/user/{userId}/form")
+    public String viewUpdateProfile(@PathVariable("userId") String userId, Model model) {
+        model.addAttribute("user", this.users.findUser(userId));
+        logger.info("유저 정보 수정 페이지 요청");
+        return "user/updateForm";
+    }
+
+    @PostMapping("/user/{userId}/update")
+    public String updateProfile(@PathVariable("userId") String userId, User user) {
+        users.updateUser(userId, user);
+        logger.info("유저 정보 수정 요청");
+        return "redirect:/users";
+    }
+
 }
