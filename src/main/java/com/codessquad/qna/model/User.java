@@ -1,4 +1,4 @@
-package com.codessquad.qna.domain;
+package com.codessquad.qna.models;
 
 public class User {
     private String userId;
