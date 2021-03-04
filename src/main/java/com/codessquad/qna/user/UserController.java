@@ -35,7 +35,6 @@ public class UserController {
     @PostMapping
     public String createUser(User user) {
         logger.debug(user.toString());
-        //TODO: userId는 중복되면 안됨 map과 같은 구조 이용하여 개선 고려
         users.add(user);
 
         return "redirect:/users";
