@@ -10,12 +10,7 @@ public class Users {
     private final List<User> userList = new ArrayList<>();
 
     public void addUser(User user) {
-        User newUser = new User();
-        newUser.setUserId(user.getUserId());
-        newUser.setPassword(user.getPassword());
-        newUser.setName(user.getName());
-        newUser.setEmail(user.getEmail());
-        userList.add(newUser);
+        userList.add(user);
     }
 
     public List<User> getAllUser() {
@@ -27,6 +22,14 @@ public class Users {
                 .filter(user -> user.getUserId().equals(userId))
                 .findFirst()
                 .get();
+    }
+
+    public void updateUser(String userId, User user) {
+        User oldUser = findUser(userId);
+        oldUser.setUserId(user.getUserId());
+        oldUser.setPassword(user.getPassword());
+        oldUser.setName(user.getName());
+        oldUser.setEmail(user.getEmail());
     }
 
 }
