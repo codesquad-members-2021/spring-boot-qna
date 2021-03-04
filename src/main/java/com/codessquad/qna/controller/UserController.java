@@ -82,11 +82,10 @@ public class UserController {
      * @param email
      * @return
      */
-    @PostMapping("/user/{id}/update")
+    @PostMapping("/user/{id}")
     public String updateUserProfile(@PathVariable Long id, String userId, String password, String name, String email) {
-        userService.removeUser(id);
-        User ChangeUser = new User(userId, password, name, email);
-        userService.save(ChangeUser);
+        User changeUser = new User(userId, password, name, email);
+        userService.change(userService.getUser(id), changeUser);
         return "redirect:/users";
     }
 
