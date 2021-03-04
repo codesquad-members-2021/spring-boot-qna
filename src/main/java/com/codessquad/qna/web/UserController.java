@@ -1,6 +1,8 @@
 package com.codessquad.qna.web;
 
 import com.codessquad.qna.domain.User;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -13,6 +15,9 @@ import java.util.List;
 @Controller
 @RequestMapping("/users")
 public class UserController {
+
+    Logger logger = LoggerFactory.getLogger(UserController.class);
+
     private List<User> userList = new ArrayList<>();
 
     @GetMapping("/form")
@@ -22,7 +27,7 @@ public class UserController {
 
     @PostMapping("")
     public String createUser(User user) {
-        System.out.println("user: " + user);
+        logger.info(user.toString());
         userList.add(user);
         return "redirect:/users";
     }
@@ -39,7 +44,7 @@ public class UserController {
             if(user.matchId(userId)) {
                 model.addAttribute("user", user);
             }
-            System.out.println(user);
+            logger.info(user.toString());
         }
 
         return "user/profile";
