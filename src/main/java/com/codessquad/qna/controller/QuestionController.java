@@ -19,12 +19,12 @@ public class QuestionController {
     QuestionRepository questionRepository = new QuestionRepository();
 
     @GetMapping("/questions/form")
-    public String createForm(){
+    public String createForm() {
         return "/questions/form";
     }
 
     @GetMapping("/")
-    public String createQuestionList(Question question, Model model){
+    public String createQuestionList(Question question, Model model) {
         List<Question> questions = questionRepository.getAll();
 
         model.addAttribute("questions", questions);
@@ -34,7 +34,7 @@ public class QuestionController {
     }
 
     @PostMapping("/questions")
-    public String createQuestion(Question question){
+    public String createQuestion(Question question) {
         Question newQuestion = new Question();
 
         newQuestion.setWriter(question.getWriter());
@@ -49,13 +49,11 @@ public class QuestionController {
     }
 
     @GetMapping("/questions/{questionId}")
-    public String createQuestionInDetail(@PathVariable(name = "questionId") int targetId, Model model){
+    public String createQuestionInDetail(@PathVariable(name = "questionId") int targetId, Model model) {
         Question targetQuestion = questionRepository.getOne(targetId);
 
         model.addAttribute("question", targetQuestion);
 
         return "/questions/show";
     }
-
-
 }
