@@ -15,12 +15,8 @@ public class Question {
         this.writer = writer;
         this.title = title;
         this.contents = contents;
-        this.createdTime = nowDateToString();
-    }
-
-    public String nowDateToString() {
-        return LocalDateTime.now()
-                .format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+        this.createdTime = LocalDateTime.now()
+                .format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));;
     }
 
     public long getIndex() {
@@ -41,26 +37,6 @@ public class Question {
 
     public String getCreatedTime() {
         return createdTime;
-    }
-
-    public void setIndex(long index) {
-        this.index = index;
-    }
-
-    public void setWriter(String writer) {
-        this.writer = writer;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    public void setContents(String contents) {
-        this.contents = contents;
-    }
-
-    public void setCreatedTime(String createdTime) {
-        this.createdTime = createdTime;
     }
 
     @Override
