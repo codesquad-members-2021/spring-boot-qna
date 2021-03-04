@@ -18,4 +18,10 @@ public class QuestionController {
         model.addAttribute("qeustions", question);
         return "redirect:/";
     }
+
+    @GetMapping("/")
+    public String getQuestion(Model model){
+        model.addAttribute("qeustions", questions);
+        return "/index";
+    }
 }
