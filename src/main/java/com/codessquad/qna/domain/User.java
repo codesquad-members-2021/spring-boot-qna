@@ -38,6 +38,13 @@ public class User {
         this.email = email;
     }
 
+    public void update(User user) {
+        setUserId(user.userId);
+        setPassword(user.password);
+        setName(user.name);
+        setEmail(user.email);
+    }
+
     @Override
     public String toString() {
         return "User{" +

@@ -49,4 +49,14 @@ public class UserController {
         }
         return "redirect:/users";
     }
+
+    @PostMapping("{userId}/update")
+    public String update(@PathVariable String userId, User userToUpdate) {
+        for (User user : users) {
+            if (user.getUserId().equals(userId)) {
+                user.update(userToUpdate);
+            }
+        }
+        return "redirect:/users";
+    }
 }
