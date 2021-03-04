@@ -21,22 +21,22 @@ public class UserController {
 
     private List<User> users = new ArrayList<>();
 
-    @PostMapping("/signUp")
-    public String signUp(User user) {
+    @PostMapping("/")
+    public String CreateUser(User user) {
         user.setId(users.size() + 1);
         users.add(user);
         logger.info(user.toString());
 
-        return "redirect:/users/list";
+        return "redirect:/users/";
     }
 
-    @GetMapping("/list")
+    @GetMapping("/")
     public String list(Model model) {
         model.addAttribute("users", users);
         return "/users/list";
     }
 
-    @GetMapping("/profile/{userId}")
+    @GetMapping("/{userId}")
     public String getProfile(@PathVariable("userId") String userId, Model model) {
         for (User user : users) {
             if (user.getUserId().equals(userId)) {
@@ -44,10 +44,10 @@ public class UserController {
                 return "/users/profile";
             }
         }
-        return "redirect:/users/list";
+        return "redirect:/users/";
     }
 
-    @GetMapping("/{id}/updateForm")
+    @GetMapping("/{id}/form")
     public String getUpdateForm(@PathVariable("id") long id, Model model) {
         User user = users.get((int) id - 1);
         model.addAttribute("user", user);
@@ -60,10 +60,10 @@ public class UserController {
         User targetUser = users.get((int) id - 1);
         if (!targetUser.isCorrectPassword(currentPassword)) {
             logger.warn("비밀번호가 일치하지 않습니다.");
-            return "redirect:/users/list";
+            return "redirect:/users/";
         }
         logger.info(userWithUpdatedInfo.toString());
         users.set((int) id - 1, userWithUpdatedInfo);
-        return "redirect:/users/list";
+        return "redirect:/users/";
     }
 }

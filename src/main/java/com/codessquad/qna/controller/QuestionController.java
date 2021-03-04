@@ -27,8 +27,8 @@ public class QuestionController {
         return Collections.unmodifiableList(questions);
     }
 
-    @PostMapping("/ask")
-    public String askQuestion(Question question) {
+    @PostMapping("/")
+    public String createQuestion(Question question) {
         String date = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"));
         question.setDate(date);
         question.setIndex(questions.size() + 1);
@@ -40,7 +40,7 @@ public class QuestionController {
     }
 
     @GetMapping("/{index}")
-    public String showQuestion(@PathVariable("index") long index, Model model) {
+    public String getQuestion(@PathVariable("index") long index, Model model) {
         model.addAttribute("question", questions.get((int) index - 1));
         return "/qna/show";
     }
