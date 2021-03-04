@@ -10,7 +10,7 @@ public class Qna {
     private String contents;
     private Date date;
 
-    public Qna(int id, String writer, String title, String contents){
+    public Qna(int id, String writer, String title, String contents) {
         this.id = id;
         this.writer = writer;
         this.title = title;
