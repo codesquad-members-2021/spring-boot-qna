@@ -7,6 +7,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
 @Controller
@@ -26,6 +27,12 @@ public class QuestionController {
         this.questions.addQuestion(question);
         logger.info("질문 등록 요청");
         return "redirect:/";
+    }
+
+    @GetMapping("/question/{id}")
+    public String viewQuestion(@PathVariable("id") int id, Model model) {
+        model.addAttribute("question", this.questions.findQuestion(id));
+        return "qna/show";
     }
 
 }
