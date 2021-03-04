@@ -1,5 +1,7 @@
 package com.codessquad.qna.entity;
 
+import com.codessquad.qna.dto.UserDto;
+
 import javax.persistence.*;
 import java.util.Objects;
 
@@ -51,6 +53,10 @@ public class User {
         this.password = password;
         this.name = name;
         this.email = email;
+    }
+
+    public static User map(UserDto userDto) {
+        return new User(userDto.getUserId(), userDto.getPassword(), userDto.getPassword(), userDto.getEmail());
     }
 
     @Override
