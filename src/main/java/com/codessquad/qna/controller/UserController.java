@@ -1,5 +1,6 @@
 package com.codessquad.qna.controller;
 
+import com.codessquad.qna.model.User;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -13,8 +14,8 @@ public class UserController {
     }
 
     @PostMapping("/user/create")
-    public String create(String userId, String password, String name, String email){
-        System.out.printf("%s %s %s %s ", userId, password, name, email);
+    public String create(User user){
+        System.out.printf("%s ", user);
         return "user/list";
     }
 
