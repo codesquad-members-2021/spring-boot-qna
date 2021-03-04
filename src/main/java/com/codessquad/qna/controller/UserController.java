@@ -24,7 +24,7 @@ public class UserController {
     public UserController(UserService userService) {
         this.userService = userService;
     }
-    
+
     @PostMapping("/login")
     public String login(String userId, String password, HttpSession session) {
         Optional<User> userTemp = userService.findByUserId(userId);
@@ -80,7 +80,7 @@ public class UserController {
     public String updateForm(@PathVariable Long id, Model model, HttpSession session) {
         User sessionUser = (User) session.getAttribute("sessionUser");
         if (sessionUser==null) {
-            return "redirect:/users";
+            return "redirect:/users/loginForm";
         }
         if (!id.equals(sessionUser.getId())) {
             throw new IllegalStateException("잘못된 접근입니다.");
@@ -95,14 +95,20 @@ public class UserController {
     }
 
     @PutMapping("/{id}")
-    public String update(@PathVariable Long id, User newUser) {
+    public String update(@PathVariable Long id, User updatedUser, HttpSession session) {
+        User sessionUser = (User) session.getAttribute("sessionUser");
+        if (sessionUser==null) {
+            return "redirect:/users/loginForm";
+        }
+        if (!id.equals(sessionUser.getId())) {
+            throw new IllegalStateException("잘못된 접근입니다.");
+        }
         if (!userService.findUser(id).isPresent()) {
             return "redirect:/users";
         }
         User user = userService.findUser(id).get();
-        user.update(newUser);
+        user.update(updatedUser);
         userService.join(user);
         return "redirect:/users";
     }
-
 }
