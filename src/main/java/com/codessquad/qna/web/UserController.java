@@ -37,4 +37,9 @@ public class UserController {
         return "user/profile";
     }
 
+    @GetMapping("/editUserInfo")
+    public String changeUserInfo() {
+        return "/user/editUserInfo";
+    }
+
 }
