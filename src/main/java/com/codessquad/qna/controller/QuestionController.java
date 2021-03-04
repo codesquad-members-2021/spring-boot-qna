@@ -18,11 +18,6 @@ public class QuestionController {
     Logger logger = LoggerFactory.getLogger(QuestionController.class);
     QuestionRepository questionRepository = new QuestionRepository();
 
-    @GetMapping("/questions/form")
-    public String createForm() {
-        return "/questions/form";
-    }
-
     @GetMapping("/")
     public String createQuestionList(Question question, Model model) {
         List<Question> questions = questionRepository.getAll();
