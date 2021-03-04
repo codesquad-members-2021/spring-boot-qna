@@ -28,8 +28,8 @@ public class UserController {
 
     @GetMapping("/users/{userId}")
     public String viewProfile(@PathVariable("userId") String userId, Model model) {
-        for(User user : users) {
-            if(user.getUserId().equals(userId)) {
+        for (User user : users) {
+            if (user.getUserId().equals(userId)) {
                 model.addAttribute("user", user);
                 return "user/profile";
             }
@@ -37,9 +37,32 @@ public class UserController {
         return "user/profile";
     }
 
-    @GetMapping("/editUserInfo")
-    public String changeUserInfo() {
-        return "/user/editUserInfo";
+    @GetMapping("/users/confirmUserInfo")
+    public String editUserInfo() {
+        return "user/confirmUserInfo";
+    }
+
+    @PostMapping("/users/confirmUserInfo")
+    public String editUserInfo(String userId, String password, Model model) {
+        model.addAttribute("userId", userId);
+        for (User user : users) {
+            if (user.getUserId().equals(userId) && user.getPassword().equals(password)) {
+                return "user/updateForm";
+            }
+        }
+        return "redirect:/users/confirmUserInfo";
+    }
+
+    @PostMapping("/users/{userId}/update")
+    public String changeUserInfoForm(@PathVariable("userId") String userId, String password, String name, String email) {
+        for (User user : users) {
+            if (user.getUserId().equals(userId)) {
+                user.setPassword(password);
+                user.setName(name);
+                user.setEmail(email);
+            }
+        }
+        return "redirect:/users";
     }
 
 }
