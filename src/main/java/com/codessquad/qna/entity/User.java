@@ -55,9 +55,7 @@ public class User {
         this.email = email;
     }
 
-    public static User map(UserDto userDto) {
-        return new User(userDto.getUserId(), userDto.getPassword(), userDto.getPassword(), userDto.getEmail());
-    }
+
 
     @Override
     public String toString() {

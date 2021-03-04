@@ -55,10 +55,6 @@ public class Post {
         return date;
     }
 
-    public static Post map(PostDto postDto) {
-       return new Post(postDto.getTitle(), postDto.getAuthor(), postDto.getBody());
-    }
-
     @Override
     public String toString() {
         return "Post{" +
