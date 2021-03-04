@@ -10,10 +10,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
 
 @Controller
 public class UserController {
@@ -80,7 +77,7 @@ public class UserController {
      * @param userDto
      * @return
      */
-    @PostMapping("/user/{id}")
+    @PutMapping("/user/{id}")
     public String updateUserProfile(@PathVariable Long id, @ModelAttribute UserDto userDto) {
         User changeUser = Mapper.mapToUser(userDto);
         userService.change(userService.getUser(id), changeUser);
