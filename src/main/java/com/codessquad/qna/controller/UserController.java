@@ -57,12 +57,12 @@ public class UserController {
         return "user/userUpdateForm";
     }
 
-    @GetMapping("/update")
+    @PostMapping("/update")
     public String userUpdate(User user, String newPassword) {
 
         if (userRepository.checkPassword(user)) {
             userRepository.updateUserInfo(user, newPassword);
-            return "/";
+            return "redirect:/";
         }
 
         return "user/userUpdateForm";
