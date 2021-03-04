@@ -1,6 +1,6 @@
 package com.codessquad.qna.web;
 
-public class UserInfo {
+public class User {
     private String userId;
     private String password;
     private String name;
@@ -10,16 +10,32 @@ public class UserInfo {
         this.userId = userId;
     }
 
+    public String getUserId(){
+        return userId;
+    }
+
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public String getPassword(){
+        return password;
     }
 
     public void setName(String name) {
         this.name = name;
     }
 
+    public String getName(){
+        return name;
+    }
+
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public String getEmail(){
+        return email;
     }
 
     @Override
