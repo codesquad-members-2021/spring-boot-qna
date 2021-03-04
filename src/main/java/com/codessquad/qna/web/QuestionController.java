@@ -25,4 +25,10 @@ public class QuestionController {
         return "redirect:/";
     }
 
+    @GetMapping("/")
+    public String getQnaList(Model model){
+        model.addAttribute("qnaList", qnaList);
+        return "index";
+    }
+
 }
