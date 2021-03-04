@@ -1,6 +1,7 @@
 package com.codessquad.qna.dto;
 
 import com.codessquad.qna.entity.Post;
+import com.codessquad.qna.util.DateFormat;
 
 import java.util.Date;
 
@@ -12,7 +13,7 @@ public class PostDto {
     private String date;
 
     public PostDto() {
-        this.date = Post.ISO8601.format(new Date());
+        this.date = DateFormat.ISO8601.format(new Date());
     }
 
     public String getTitle() {
