@@ -28,7 +28,7 @@ public class UserController {
         return "redirect:/users";
     }
 
-    @GetMapping("/{userId}")
+    @GetMapping("/{userId}/profile")
     String getProfile(@PathVariable String userId, Model model) {
         Optional<User> user = findUser(userId);
         if (user.isPresent()) {
