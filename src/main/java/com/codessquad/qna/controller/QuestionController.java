@@ -1,9 +1,9 @@
 package com.codessquad.qna.controller;
 
+import com.codessquad.qna.domain.User;
+import com.codessquad.qna.domain.UserRepository;
 import com.codessquad.qna.question.Question;
 import com.codessquad.qna.question.QuestionRequest;
-import com.codessquad.qna.user.User;
-import com.codessquad.qna.user.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -39,8 +39,9 @@ public class QuestionController {
     @PostMapping("/questions")
     public String query(QuestionRequest questionRequest) {
         String writerId = questionRequest.getWriter();
-        Optional<User> optionalWriter = userRepository.findUserById(writerId);
-        User writer = optionalWriter.orElse(new User(writerId, writerId));
+        User writer = new User();
+        writer.setId(0L);
+        writer.setName(writerId);
         Question question = new Question();
         int questionId = questions.size() + 1;
         question.setId(questionId);

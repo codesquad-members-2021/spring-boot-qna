@@ -1,19 +1,27 @@
-package com.codessquad.qna.user;
+package com.codessquad.qna.domain;
 
+import javax.persistence.*;
+
+@Entity
 public class User {
 
+    @Id
+    @GeneratedValue
+    private Long id;
+
+    @Column(nullable = false, length = 20, unique = true)
     private String userId;
+
     private String password;
     private String name;
     private String email;
 
-    public User() {
-
+    public Long getId() {
+        return id;
     }
 
-    public User(String userId, String name) {
-        this.userId = userId;
-        this.name = name;
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getUserId() {
@@ -48,12 +56,8 @@ public class User {
         this.email = email;
     }
 
-    public boolean isMatchingUserId(String userId) {
-        return this.userId.equals(userId);
-    }
-
-    public boolean isMatchingPassword(String password) {
-        return this.password.equals(password);
+    public boolean isMatchingPassword(String oldPassword) {
+        return this.password.equals(oldPassword);
     }
 
     public void update(User newUserInfo) {
