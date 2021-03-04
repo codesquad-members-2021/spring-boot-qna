@@ -1,19 +1,20 @@
 package com.codessquad.qna.web;
 
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+
 
 public class Question {
+    private static final DateTimeFormatter pattern = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+
     private int id;
     private String writer;
     private String title;
     private String contents;
-    private String currentTime;
+    private LocalDateTime currentTime;
 
-    public Question(Calendar currentTime) {
-        Calendar cal = Calendar.getInstance();
-        SimpleDateFormat Format = new SimpleDateFormat("yyyy-MM-dd EEEEE HH:mm:ss");
-        this.currentTime = Format.format(cal.getTime());
+    public Question() {
+        currentTime = LocalDateTime.now();
     }
 
     public void setId(int id) {
@@ -32,7 +33,7 @@ public class Question {
         this.contents = contents;
     }
 
-    public void setCurrentTime(String currentTime) {
+    public void setCurrentTime(LocalDateTime currentTime) {
         this.currentTime = currentTime;
     }
 
@@ -53,7 +54,7 @@ public class Question {
     }
 
     public String getCurrentTime() {
-        return currentTime;
+        return currentTime.format(pattern);
     }
 
 }
