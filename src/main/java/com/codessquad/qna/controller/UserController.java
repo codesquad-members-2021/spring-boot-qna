@@ -2,6 +2,8 @@ package com.codessquad.qna.controller;
 
 import com.codessquad.qna.domain.User;
 import com.codessquad.qna.service.UserService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -14,6 +16,8 @@ import java.util.Optional;
 @RequestMapping("/users")
 @Controller
 public class UserController {
+
+    private Logger logger = LoggerFactory.getLogger(UserController.class);
     private final UserService userService;
 
     @Autowired
@@ -30,6 +34,7 @@ public class UserController {
     public String login(String userId, String password, HttpSession session) {
         Optional<User> user = userService.findByUserId(userId);
         if (!user.isPresent()) {
+            logger.info("로그인에 실패했습니다.");
             return "redirect:/users/loginForm";
         }
         if (!password.equals(user.get().getPassword())) {
