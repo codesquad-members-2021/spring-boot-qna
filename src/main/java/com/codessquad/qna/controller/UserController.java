@@ -4,6 +4,7 @@ import com.codessquad.qna.domain.User;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import java.util.ArrayList;
@@ -29,5 +30,15 @@ public class UserController {
         System.out.println(user);
         model.addAttribute("user", user);
         return "user/list";
+    }
+
+    @GetMapping("user/{userId}")
+    public String profile(@PathVariable String userId, Model model) {
+        for (User user : users) {
+            if (user.getUserId().equals(userId)) {
+                model.addAttribute("user", user);
+            }
+        }
+        return "user/profile";
     }
 }
