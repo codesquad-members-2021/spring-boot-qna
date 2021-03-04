@@ -13,17 +13,22 @@ import java.util.stream.Collectors;
 
 public class MemoryUserRepository implements UserRepository{
 
-    private final ConcurrentMap<String, User> users = new ConcurrentHashMap<>();
+    private final ConcurrentMap<Long, User> users = new ConcurrentHashMap<>();
 
     @Override
     public void save(User user) {
-        users.put(user.getNickname(), user);
+        users.put(user.getId(), user);
     }
 
     @Override
     public Optional<User> findById(Long userId) {
         Optional<User> user = Optional.ofNullable(users.get(userId));
         return user;
+    }
+
+    @Override
+    public void update(User oldUserInfo, User updateUserInfo) {
+
     }
 
     @Override

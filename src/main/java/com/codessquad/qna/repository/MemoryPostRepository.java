@@ -9,7 +9,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
-public class MemoryPostRepository implements PostRepository{
+public class MemoryPostRepository implements PostRepository {
 
     private List<Post> posts = Collections.synchronizedList(new ArrayList<>());
 
@@ -42,4 +42,5 @@ public class MemoryPostRepository implements PostRepository{
     public int size() {
         return posts.size();
     }
+
 }
