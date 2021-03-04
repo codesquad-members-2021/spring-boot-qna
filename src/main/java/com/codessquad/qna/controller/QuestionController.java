@@ -11,11 +11,14 @@ import org.springframework.web.bind.annotation.PostMapping;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 @Controller
 public class QuestionController {
 
     private final List<Question> questions = new ArrayList<>();
+    private final Pattern questionIdPattern = Pattern.compile("[1-9]\\d*");
 
     @GetMapping("/")
     public String index(Model model) {
@@ -35,13 +38,13 @@ public class QuestionController {
 
     @GetMapping("/questions/{id}")
     public String qnaShow(@PathVariable("id") String id, Model model) {
-        if (!id.matches("[1-9]\\d*")) {
+        Matcher questionIdMatcher = questionIdPattern.matcher(id);
+        if (!questionIdMatcher.matches()) {
             return "redirect:/";
         }
         int questionIndex = Integer.parseInt(id) - 1;
         if (questionIndex < questions.size()) {
-            Question question = questions.get(questionIndex);
-            model.addAttribute(question);
+            model.addAttribute(questions.get(questionIndex));
             return "qna/show";
         }
         return "redirect:/";
