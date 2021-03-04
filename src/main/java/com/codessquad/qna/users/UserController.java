@@ -17,7 +17,7 @@ public class UserController {
     @GetMapping()
     String getUsers(Model model) {
         model.addAttribute("users", users);
-        return "users/list";
+        return "user/list";
     }
 
     @PostMapping()
@@ -33,7 +33,7 @@ public class UserController {
         Optional<User> user = findUser(userId);
         if (user.isPresent()) {
             model.addAttribute("user", user.get());
-            return "users/profile";
+            return "user/profile";
         }
         return "redirect:/users";
     }
