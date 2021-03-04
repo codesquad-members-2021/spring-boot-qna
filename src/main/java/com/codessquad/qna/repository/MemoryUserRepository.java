@@ -11,8 +11,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 import java.util.stream.Collectors;
 
-@Repository
-public class UserRepositoryImpl implements UserRepository{
+public class MemoryUserRepository implements UserRepository{
 
     private final ConcurrentMap<String, User> users = new ConcurrentHashMap<>();
 
@@ -22,13 +21,13 @@ public class UserRepositoryImpl implements UserRepository{
     }
 
     @Override
-    public Optional<User> find(String userId) {
+    public Optional<User> findById(Long userId) {
         Optional<User> user = Optional.ofNullable(users.get(userId));
         return user;
     }
 
     @Override
-    public void remove(String userId) {
+    public void remove(Long userId) {
         users.remove(userId);
     }
 
