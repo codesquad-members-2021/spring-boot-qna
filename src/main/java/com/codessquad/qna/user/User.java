@@ -39,4 +39,17 @@ public class User {
         this.email = email;
     }
 
+    public boolean isMatchingUserId(String userId) {
+        return this.userId.equals(userId);
+    }
+
+    public boolean isMatchingPassword(String password) {
+        return this.password.equals(password);
+    }
+
+    public void update(User newUserInfo) {
+        this.password = newUserInfo.password;
+        this.name = newUserInfo.name;
+        this.email = newUserInfo.email;
+    }
 }
