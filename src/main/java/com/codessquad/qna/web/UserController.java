@@ -25,14 +25,14 @@ public class UserController {
         return "user/form";
     }
 
-    @PostMapping("")
+    @PostMapping("/")
     public String createUser(User user) {
         logger.info(user.toString());
         userList.add(user);
-        return "redirect:/users";
+        return "redirect:/users/";
     }
 
-    @GetMapping("")
+    @GetMapping("/")
     public String getUserList(Model model) {
         model.addAttribute("userList", userList);
         return "user/list";
