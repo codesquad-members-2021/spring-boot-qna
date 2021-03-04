@@ -9,7 +9,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
-import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -26,10 +27,8 @@ public class QuestionController {
 
     @PostMapping("questions/ask")
     public String askQuestion(Question question) {
-        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm");
-        String format_time = format.format(System.currentTimeMillis());
-
-        question.setDate(format_time);
+        String date = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"));
+        question.setDate(date);
         question.setIndex(questions.size() + 1);
 
         questions.add(question);
