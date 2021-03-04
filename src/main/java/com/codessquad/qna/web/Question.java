@@ -1,6 +1,7 @@
 package com.codessquad.qna.web;
 
 public class Question {
+    private int index;
     private String writer;
     private String title;
     //spring에서는 contents를 뭘로 받나
@@ -14,6 +15,12 @@ public class Question {
         return title;
     }
 
+    public String getContents() {
+        return contents;
+    }
+
+    public int getIndex() { return index; }
+
     public void setWriter(String writer) {
         this.writer = writer;
     }
@@ -26,7 +33,5 @@ public class Question {
         this.contents = contents;
     }
 
-    public String getContents() {
-        return contents;
-    }
+    public void setIndex(int index) { this.index = index; }
 }
