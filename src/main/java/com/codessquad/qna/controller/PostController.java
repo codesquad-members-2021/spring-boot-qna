@@ -1,5 +1,6 @@
 package com.codessquad.qna.controller;
 
+import com.codessquad.qna.dto.PostDto;
 import com.codessquad.qna.entity.Post;
 import com.codessquad.qna.exception.CanNotFindPostException;
 import com.codessquad.qna.service.PostService;
@@ -22,12 +23,12 @@ public class PostController {
 
     /**
      * 질문 게시글을 게시판에 등록합니다.
-     * @param servedPost
+     * @param postDto
      * @return
      */
     @PostMapping("/questions")
-    public String addPost(@ModelAttribute Post servedPost) {
-        Post post = servedPost;
+    public String addPost(@ModelAttribute PostDto postDto) {
+        Post post = Post.map(postDto);
         postService.addPost(post);
         return "redirect:/";
     }
