@@ -14,13 +14,13 @@ import java.util.*;
 public class UserController {
     private final List<User> users = Collections.synchronizedList(new ArrayList<>());
 
-    @GetMapping()
+    @GetMapping
     String getUsers(Model model) {
         model.addAttribute("users", users);
         return "user/list";
     }
 
-    @PostMapping()
+    @PostMapping
     String createUser(User user) {
         if (!users.contains(user)) {
             users.add(user);
