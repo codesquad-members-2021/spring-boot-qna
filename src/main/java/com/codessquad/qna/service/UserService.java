@@ -30,4 +30,10 @@ public class UserService {
         return userRepostiory.findById(id);
     }
 
+    public Optional<User> findByUserId(String userId) {
+        return userRepostiory.findByUserId(userId);
+    }
+
+
+
 }

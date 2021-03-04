@@ -1,8 +1,9 @@
-package com.codessquad.qna.service;
+package com.codessquad.qna.config;
 
 
 import com.codessquad.qna.repository.JpaUserRepository;
 import com.codessquad.qna.repository.UserRepository;
+import com.codessquad.qna.service.UserService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 

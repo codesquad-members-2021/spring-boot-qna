@@ -7,6 +7,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpSession;
 import java.util.List;
 import java.util.Optional;
 
@@ -18,6 +19,24 @@ public class UserController {
     @Autowired
     public UserController(UserService userService) {
         this.userService = userService;
+    }
+
+    @GetMapping("/loginForm")
+    public String loginForm() {
+        return "/user/login";
+    }
+
+    @PostMapping("/login")
+    public String login(String userId, String password, HttpSession session) {
+        Optional<User> user = userService.findByUserId(userId);
+        if (!user.isPresent()) {
+            return "redirect:/users/loginForm";
+        }
+        if (!password.equals(user.get().getPassword())) {
+            return "redirect:/users/loginForm";
+        }
+        session.setAttribute("user", user);
+        return "redirect:/";
     }
 
     @PostMapping("")
