@@ -1,6 +1,7 @@
 package com.codessquad.qna.service;
 
 import com.codessquad.qna.entity.Post;
+import com.codessquad.qna.entity.User;
 import com.codessquad.qna.exception.CanNotFindPostException;
 import com.codessquad.qna.repository.PostRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,10 +26,8 @@ public class PostService {
     }
 
     public Post getPost(Long id) {
-        final Optional<Post> post = postRepository.findById(id);
-        if(!post.isPresent()){
-            throw new CanNotFindPostException();
-        }
+        Optional<Post> post = postRepository.findById(id);
+        post.orElseThrow(CanNotFindPostException::new);
         return post.get();
     }
 
