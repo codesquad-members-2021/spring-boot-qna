@@ -1,5 +1,7 @@
 package com.codessquad.qna.entity;
 
+import com.codessquad.qna.dto.PostDto;
+import com.codessquad.qna.util.DateFormat;
 import org.springframework.context.annotation.Primary;
 
 import javax.persistence.Entity;
@@ -12,8 +14,6 @@ import java.util.Objects;
 
 @Entity
 public class Post {
-
-    private static final SimpleDateFormat ISO8601 = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -32,7 +32,7 @@ public class Post {
         this.title = title;
         this.author = author;
         this.body = body;
-        this.date = ISO8601.format(new Date());
+        this.date = DateFormat.ISO8601.format(new Date());
     }
 
     public Long getPostId() {
@@ -53,6 +53,10 @@ public class Post {
 
     public String getDate() {
         return date;
+    }
+
+    public static Post map(PostDto postDto) {
+       return new Post(postDto.getTitle(), postDto.getAuthor(), postDto.getBody());
     }
 
     @Override
