@@ -1,5 +1,6 @@
-package com.codessquad.qna;
+package com.codessquad.qna.user;
 
+import com.codessquad.qna.user.User;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -8,14 +9,13 @@ import org.springframework.web.bind.annotation.PostMapping;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Controller
 public class UserController {
     private List<User> users = new ArrayList<>();
 
     @GetMapping("/user/create")
-    public String signUp(){
+    public String signUp() {
         return "/user/form";
     }
 
@@ -43,5 +43,4 @@ public class UserController {
         model.addAttribute("user", selectedUser);
         return "user/profile";
     }
-
 }
