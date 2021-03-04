@@ -27,15 +27,15 @@ public class UserService {
         return userRepository.findAll();
     }
 
-    public User getUser(String userId) {
-        Optional<User> user = userRepository.find(userId);
+    public User getUser(Long userId) {
+        Optional<User> user = userRepository.findById(userId);
         if(!user.isPresent()){
             throw new CanNotFindUserException();
         }
         return user.get();
     }
 
-    public void removeUser(String userId) {userRepository.remove(userId);}
+    public void removeUser(Long userId) {userRepository.remove(userId);}
 
     public int countOfUsers() {return userRepository.size();}
 
