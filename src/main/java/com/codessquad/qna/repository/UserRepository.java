@@ -14,7 +14,10 @@ public interface UserRepository {
 
     public Optional<User> findById(Long userId);
 
+    public void update(User oldUserInfo, User updateUserInfo);
+
     public void remove(Long userId);
 
     public int size();
+
 }
