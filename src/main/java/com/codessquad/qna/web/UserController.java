@@ -8,7 +8,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Controller
 public class UserController {
@@ -23,7 +22,7 @@ public class UserController {
     @GetMapping("/users")
     public String getUsers(Model model) {
         model.addAttribute("users", users);
-        return "/users/list";
+        return "/user/list";
     }
 
     @GetMapping("/users/{userId}")
@@ -31,7 +30,7 @@ public class UserController {
         //id 중복 확인, null일경우 처리
         User foundUser = fingByUserId(userId);
         model.addAttribute("user", foundUser);
-        return "/users/profile";
+        return "/user/profile";
     }
 
     private User fingByUserId(String userId) {
