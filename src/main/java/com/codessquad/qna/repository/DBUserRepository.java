@@ -2,6 +2,7 @@ package com.codessquad.qna.repository;
 
 import com.codessquad.qna.entity.User;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
@@ -30,6 +31,11 @@ public class DBUserRepository implements UserRepository {
     public Optional<User> findById(Long id) {
         Optional<User> user = Optional.ofNullable(entityManager.find(User.class, id));
         return user;
+    }
+
+    @Override
+    public void update(User oldUserInfo, User updateUserInfo) {
+        oldUserInfo.Change(updateUserInfo.getUserId(), updateUserInfo.getPassword(), updateUserInfo.getName(), updateUserInfo.getEmail());
     }
 
     @Override
