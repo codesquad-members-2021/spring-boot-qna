@@ -10,4 +10,6 @@ public interface UserRepository {
     List<User> findUserALl();
 
     User findUserByUserID(String userId);
+
+    void updateUserData(User user);
 }

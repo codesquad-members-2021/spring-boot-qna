@@ -18,6 +18,11 @@ public class MemoryUserRepository implements UserRepository {
         userMap.put(user.getUserId(), user);
     }
 
+    @Override
+    public void updateUserData(User user) {
+        userMap.put(user.getUserId(), user);
+    }
+
     private void validateUserDuplication(User user1) {
         for (User user2 : userMap.values()) {
             if (isMatchingUserId(user1, user2)) {
@@ -39,4 +44,5 @@ public class MemoryUserRepository implements UserRepository {
     public User findUserByUserID(String userId) {
         return userMap.get(userId);
     }
+
 }
