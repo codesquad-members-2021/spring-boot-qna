@@ -15,26 +15,22 @@
 {{> common/navbar-fixed-top}}
 {{> common/subnav}}
 <div class="container" id="main">
-    <div class="col-md-6 col-md-offset-3">
+    <div class="col-md-12 col-sm-12 col-lg-10 col-lg-offset-1">
         <div class="panel panel-default content-main">
-            <form name="question" method="post" action="/users">
+            <form name="question" method="post" action="/questions">
                 <div class="form-group">
-                    <label for="userId">사용자 아이디</label>
-                    <input class="form-control" id="userId" name="userId" placeholder="User ID">
+                    <label for="writer">글쓴이</label>
+                    <input class="form-control" id="writer" name="writer" placeholder="글쓴이"/>
                 </div>
                 <div class="form-group">
-                    <label for="password">비밀번호</label>
-                    <input type="password" class="form-control" id="password" name="password" placeholder="Password">
+                    <label for="title">제목</label>
+                    <input type="text" class="form-control" id="title" name="title" placeholder="제목"/>
                 </div>
                 <div class="form-group">
-                    <label for="name">이름</label>
-                    <input class="form-control" id="name" name="name" placeholder="Name">
+                    <label for="contents">내용</label>
+                    <textarea name="contents" id="contents" rows="5" class="form-control"></textarea>
                 </div>
-                <div class="form-group">
-                    <label for="email">이메일</label>
-                    <input type="email" class="form-control" id="email" name="email" placeholder="Email">
-                </div>
-                <button type="submit" class="btn btn-success clearfix pull-right">회원가입</button>
+                <button type="submit" class="btn btn-success clearfix pull-right">질문하기</button>
                 <div class="clearfix"/>
             </form>
         </div>
