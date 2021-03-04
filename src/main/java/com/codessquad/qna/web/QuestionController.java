@@ -19,16 +19,24 @@ public class QuestionController {
 
     @PostMapping("/qna")
     public String qnaMain(String writer, String title, String contents) {
-        Qna newQna = new Qna(qnaList.size()+ 1, writer,title,contents);
-        System.out.println("QnA: "+writer );
+        Qna newQna = new Qna(qnaList.size() + 1, writer, title, contents);
+        System.out.println("QnA: " + writer);
         qnaList.add(newQna);
         return "redirect:/";
     }
 
     @GetMapping("/")
-    public String getQnaList(Model model){
+    public String getQnaList(Model model) {
         model.addAttribute("qnaList", qnaList);
         return "index";
     }
 
+    @GetMapping("qna/show/{qnaId}")
+    public String getOneQuestion(@PathVariable("qnaId") int qnaId, Model model) {
+        Qna foundQuestion = qnaList.stream()
+                .filter((qua -> qua.getId() == qnaId))
+                .findFirst().orElse(null);
+        model.addAttribute("Qna", foundQuestion);
+        return "qna/show";
+    }
 }
