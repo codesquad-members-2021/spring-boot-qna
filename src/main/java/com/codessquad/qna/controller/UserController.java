@@ -4,6 +4,7 @@ import com.codessquad.qna.dto.UserDto;
 import com.codessquad.qna.entity.User;
 import com.codessquad.qna.exception.CanNotFindUserException;
 import com.codessquad.qna.service.UserService;
+import com.codessquad.qna.util.Mapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,7 +31,7 @@ public class UserController {
      */
     @PostMapping("/user")
     public String createAccount(@ModelAttribute UserDto userDto) {
-        User user = User.map(userDto);
+        User user = Mapper.mapToUser(userDto);
         userService.save(user);
         logger.info(user.toString());
         return "redirect:/users";
@@ -81,7 +82,7 @@ public class UserController {
      */
     @PostMapping("/user/{id}")
     public String updateUserProfile(@PathVariable Long id, @ModelAttribute UserDto userDto) {
-        User changeUser = User.map(userDto);
+        User changeUser = Mapper.mapToUser(userDto);
         userService.change(userService.getUser(id), changeUser);
         return "redirect:/users";
     }

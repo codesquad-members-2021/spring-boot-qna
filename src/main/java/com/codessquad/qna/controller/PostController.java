@@ -4,6 +4,7 @@ import com.codessquad.qna.dto.PostDto;
 import com.codessquad.qna.entity.Post;
 import com.codessquad.qna.exception.CanNotFindPostException;
 import com.codessquad.qna.service.PostService;
+import com.codessquad.qna.util.Mapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,7 +29,7 @@ public class PostController {
      */
     @PostMapping("/questions")
     public String addPost(@ModelAttribute PostDto postDto) {
-        Post post = Post.map(postDto);
+        Post post = Mapper.mapToPost(postDto);
         postService.addPost(post);
         return "redirect:/";
     }
