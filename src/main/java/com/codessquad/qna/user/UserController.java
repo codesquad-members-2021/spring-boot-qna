@@ -35,11 +35,6 @@ public class UserController {
         return new ModelAndView("/user/profile", "user", users.get(id));
     }
 
-    @GetMapping("/form")
-    public String getForm() {
-        return "/user/form";
-    }
-
     @PostMapping
     public String createUser(User user) {
         logger.debug(user.toString());
