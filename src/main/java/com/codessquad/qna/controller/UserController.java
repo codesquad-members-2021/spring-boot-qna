@@ -18,10 +18,9 @@ public class UserController {
 
     @GetMapping("/{userId}")
     public String profile(@PathVariable String userId, Model model) {
-        for (User user : users) {
-            if (user.getUserId().equals(userId)) {
-                model.addAttribute(user);
-            }
+        User user = findUserById(userId);
+        if (user != null) {
+            model.addAttribute(user);
         }
         return "/user/profile";
     }
@@ -41,22 +40,29 @@ public class UserController {
 
     @GetMapping("{userId}/form")
     public String form(@PathVariable String userId, Model model) {
-        for (User user : users) {
-            if (user.getUserId().equals(userId)) {
-                model.addAttribute(user);
-                return "/user/updateForm";
-            }
+        User user = findUserById(userId);
+        if (user != null) {
+            model.addAttribute(user);
+            return "/user/updateForm";
         }
         return "redirect:/users";
     }
 
     @PostMapping("{userId}/update")
     public String update(@PathVariable String userId, User userToUpdate) {
-        for (User user : users) {
-            if (user.getUserId().equals(userId)) {
-                user.update(userToUpdate);
-            }
+        User user = findUserById(userId);
+        if (user != null) {
+            user.update(userToUpdate);
         }
         return "redirect:/users";
+    }
+
+    private User findUserById(String userId) {
+        for (User user : users) {
+            if (user.matchUserId(userId)) {
+                return user;
+            }
+        }
+        return null;
     }
 }

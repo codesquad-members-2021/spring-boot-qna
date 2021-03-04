@@ -45,6 +45,10 @@ public class User {
         setEmail(user.email);
     }
 
+    public boolean matchUserId(String userId) {
+        return this.userId.equals(userId);
+    }
+
     @Override
     public String toString() {
         return "User{" +
