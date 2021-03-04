@@ -16,18 +16,6 @@ public class UserController {
     private Logger logger = LoggerFactory.getLogger(UserController.class);
     Users users = new Users();
 
-    @GetMapping("/")
-    public String viewMain() {
-        logger.info("메인 페이지 요청");
-        return "index";
-    }
-
-    @GetMapping("/user/form")
-    public String viewForm() {
-        logger.info("회원가입 페이지 요청");
-        return "user/form";
-    }
-
     @PostMapping("/users")
     public String signUp(User user) {
         User newUser = new User();
@@ -52,12 +40,6 @@ public class UserController {
         model.addAttribute("user", this.users.findUser(userId));
         logger.info(userId + "유저의 프로필 페이지 요청");
         return "user/profile";
-    }
-
-    @GetMapping("/user/login")
-    public String viewLogin() {
-        logger.info("로그인 페이지 요청");
-        return "user/login";
     }
 
 }
