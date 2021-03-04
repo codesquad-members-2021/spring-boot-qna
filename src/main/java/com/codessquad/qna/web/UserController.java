@@ -38,12 +38,12 @@ public class UserController {
         return "user/profile";
     }
 
-    @GetMapping("/users/confirmUserInfo")
+    @GetMapping("/users/confirm")
     public String editUserInfo() {
         return "user/confirmUserInfo";
     }
 
-    @PostMapping("/users/confirmUserInfo")
+    @PostMapping("/users/confirm")
     public String editUserInfo(String userId, String password, Model model) {
         model.addAttribute("userId", userId);
         for (User user : users) {
@@ -51,7 +51,7 @@ public class UserController {
                 return "user/updateForm";
             }
         }
-        return "redirect:/users/confirmUserInfo";
+        return "redirect:/users/confirm";
     }
 
     @PostMapping("/users/{userId}/update")
