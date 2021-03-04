@@ -58,7 +58,7 @@ public class UserController {
     public String updateUser(
             @PathVariable("id") long id, User userWithUpdatedInfo, String currentPassword) {
         User targetUser = users.get((int) id - 1);
-        if (!targetUser.getPassword().equals(currentPassword)) {
+        if (!targetUser.isCorrectPassword(currentPassword)) {
             logger.warn("비밀번호가 일치하지 않습니다.");
             return "redirect:/users/list";
         }
