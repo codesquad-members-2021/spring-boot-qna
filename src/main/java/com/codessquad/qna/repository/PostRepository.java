@@ -1,6 +1,7 @@
 package com.codessquad.qna.repository;
 
 import com.codessquad.qna.entity.Post;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -10,7 +11,7 @@ public interface PostRepository {
 
     public void save(Post post);
 
-    public Optional<Post> find(int postId);
+    public Optional<Post> findById(Long postId);
 
     public List<Post> findAll();
 
