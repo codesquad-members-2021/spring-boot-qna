@@ -24,29 +24,27 @@ public class UserController {
     public UserController(UserService userService) {
         this.userService = userService;
     }
-
-    @GetMapping("/loginForm")
-    public String loginForm() {
-        return "/user/login";
-    }
-
+    
     @PostMapping("/login")
     public String login(String userId, String password, HttpSession session) {
-        Optional<User> user = userService.findByUserId(userId);
-        if (!user.isPresent()) {
+        Optional<User> userTemp = userService.findByUserId(userId);
+        if (!userTemp.isPresent()) {
             logger.info("로그인에 실패했습니다.");
             return "redirect:/users/loginForm";
         }
-        if (!password.equals(user.get().getPassword())) {
+        User user = userTemp.get();
+        if (!password.equals(user.getPassword())) {
             return "redirect:/users/loginForm";
         }
-        session.setAttribute("user", user);
+
+        session.setAttribute("sessionUser", user);
+        logger.info("로그인에 성공했습니다.");
         return "redirect:/";
     }
 
     @GetMapping("/logout")
     public String logout(HttpSession session) {
-        session.removeAttribute("user");
+        session.removeAttribute("sessionUser");
         return "redirect:/";
     }
 
@@ -79,11 +77,19 @@ public class UserController {
     }
 
     @GetMapping("/{id}/form")
-    public String updateForm(@PathVariable Long id, Model model) {
-        Optional<User> user = userService.findUser(id);
-        if (!user.isPresent()) {
+    public String updateForm(@PathVariable Long id, Model model, HttpSession session) {
+        User sessionUser = (User) session.getAttribute("sessionUser");
+        if (sessionUser==null) {
             return "redirect:/users";
         }
+        if (!id.equals(sessionUser.getId())) {
+            throw new IllegalStateException("잘못된 접근입니다.");
+        }
+        Optional<User> tempUser = userService.findUser(id);
+        if (!tempUser.isPresent()) {
+            return "redirect:/users";
+        }
+        User user = tempUser.get();
         model.addAttribute("user", user);
         return "user/updateForm";
     }

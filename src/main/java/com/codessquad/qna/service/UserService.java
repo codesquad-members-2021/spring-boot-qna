@@ -18,7 +18,6 @@ public class UserService {
     }
 
     public void join(User user) {
-
         userRepostiory.save(user);
     }
 
