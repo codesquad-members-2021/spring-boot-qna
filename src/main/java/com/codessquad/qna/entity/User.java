@@ -1,25 +1,37 @@
 package com.codessquad.qna.entity;
 
+import javax.persistence.*;
+import java.util.Objects;
+
+@Entity
 public class User {
 
-    private String id;
+    @Id
+    @GeneratedValue
+    private Long id;
+
+    @Column(nullable = false, length = 20)
+    private String userId;
+
     private String password;
     private String name;
     private String email;
 
     public User(String id, String password, String name, String email) {
-        this.id = id;
+        this.userId = id;
         this.password = password;
         this.name = name;
         this.email = email;
     }
 
+    public User() { }
+
     public String getId() {
-        return id;
+        return userId;
     }
 
     public void setId(String id) {
-        this.id = id;
+        this.userId = id;
     }
 
     public String getPassword() {
@@ -49,7 +61,7 @@ public class User {
     @Override
     public String toString() {
         return "User{" +
-                "id='" + id + '\'' +
+                "id='" + userId + '\'' +
                 ", password='" + password + '\'' +
                 ", name='" + name + '\'' +
                 ", email='" + email + '\'' +
