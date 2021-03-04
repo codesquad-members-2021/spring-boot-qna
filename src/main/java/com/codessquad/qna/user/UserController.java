@@ -3,10 +3,7 @@ package com.codessquad.qna.user;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.util.ArrayList;
@@ -41,6 +38,20 @@ public class UserController {
         //TODO: userId는 중복되면 안됨 map과 같은 구조 이용하여 개선 고려
         users.add(user);
 
+        return "redirect:/users";
+    }
+
+    @GetMapping("/{id}/form")
+    public ModelAndView getUserUpdateForm(@PathVariable int id) {
+        ModelAndView modelAndView = new ModelAndView("/user/form");
+        modelAndView.addObject("user", users.get(id));
+        modelAndView.addObject("id", id);
+        return modelAndView;
+    }
+
+    @PostMapping("/{id}")
+    public String updateUser(@PathVariable int id, User user) {
+        users.set(id, user);
         return "redirect:/users";
     }
 }
