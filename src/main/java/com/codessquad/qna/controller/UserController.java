@@ -1,5 +1,6 @@
 package com.codessquad.qna.controller;
 
+import com.codessquad.qna.dto.UserDto;
 import com.codessquad.qna.entity.User;
 import com.codessquad.qna.exception.CanNotFindUserException;
 import com.codessquad.qna.service.UserService;
@@ -9,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
@@ -22,15 +24,13 @@ public class UserController {
 
 
     /**
-     * @param userId
-     * @param password
-     * @param name
-     * @param email
+     * UserDto 로 받아와서 User 객체로 Mapping 해준뒤 해당 유저를 생성합니다.
+     * @param userDto
      * @return redirect User list (/users)
      */
     @PostMapping("/user")
-    public String createAccount(String userId, String password, String name, String email) {
-        User user = new User(userId, password, name, email);
+    public String createAccount(@ModelAttribute UserDto userDto) {
+        User user = User.map(userDto);
         userService.save(user);
         logger.info(user.toString());
         return "redirect:/users";
@@ -74,17 +74,14 @@ public class UserController {
     }
 
     /**
-     * 유저 프로필을 해당 매개변수로 온 값으로 업데이트 합니다.
+     * 유저 프로필을 해당 userDto로 온 값으로 업데이트 합니다.
      * @param id
-     * @param userId
-     * @param password
-     * @param name
-     * @param email
+     * @param userDto
      * @return
      */
     @PostMapping("/user/{id}")
-    public String updateUserProfile(@PathVariable Long id, String userId, String password, String name, String email) {
-        User changeUser = new User(userId, password, name, email);
+    public String updateUserProfile(@PathVariable Long id, @ModelAttribute UserDto userDto) {
+        User changeUser = User.map(userDto);
         userService.change(userService.getUser(id), changeUser);
         return "redirect:/users";
     }
