@@ -46,6 +46,13 @@ public class User {
         return email;
     }
 
+    public void Change(String id, String password, String name, String email) {
+        this.userId = id;
+        this.password = password;
+        this.name = name;
+        this.email = email;
+    }
+
     @Override
     public String toString() {
         return "User{" +
