@@ -55,7 +55,7 @@ public class UserController {
      * @return only for users with the same id
      */
     @GetMapping("/users/{id}")
-    public String getUserProfile(@PathVariable String id, Model model) {
+    public String getUserProfile(@PathVariable Long id, Model model) {
         getUsetIfExist(id, model);
         return "user/profile";
     }
@@ -68,7 +68,7 @@ public class UserController {
      * @return
      */
     @GetMapping("/users/{id}/form")
-    public String updateUserProfileForm(@PathVariable String id, Model model) {
+    public String updateUserProfileForm(@PathVariable Long id, Model model) {
         getUsetIfExist(id, model);
         return "user/updateForm";
     }
@@ -83,14 +83,14 @@ public class UserController {
      * @return
      */
     @PostMapping("/user/{id}/update")
-    public String updateUserProfile(@PathVariable String id, String userId, String password, String name, String email) {
+    public String updateUserProfile(@PathVariable Long id, String userId, String password, String name, String email) {
         userService.removeUser(id);
         User ChangeUser = new User(userId, password, name, email);
         userService.save(ChangeUser);
         return "redirect:/users";
     }
 
-    private void getUsetIfExist(@PathVariable String id, Model model) {
+    private void getUsetIfExist(Long id, Model model) {
         try {
             User user = userService.getUser(id);
             model.addAttribute("user", user);
