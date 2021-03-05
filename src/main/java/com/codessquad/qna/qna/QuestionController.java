@@ -10,18 +10,18 @@ import java.util.List;
 
 @Controller
 public class QuestionController {
-    List<Question> questions = new ArrayList<>();
+    private List<Question> questions = new ArrayList<>();
 
-    @PostMapping("qna/create")
+    @PostMapping("/questions")
     public String create(Question question){
         questions.add(question);
         System.out.println(question);
         return "redirect:/";
     }
 
-//    @GetMapping("/")
-//    public String list(Model model){
-//        model.addAttribute("questions", questions);
-//        return "qna/show";
-//    }
+    @GetMapping("/")
+    public String list(Model model){
+        model.addAttribute("questions", questions);
+        return "index";
+    }
 }
