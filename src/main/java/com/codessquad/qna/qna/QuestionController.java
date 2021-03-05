@@ -12,11 +12,6 @@ import java.util.List;
 public class QuestionController {
     List<Question> questions = new ArrayList<>();
 
-    @GetMapping("/qna/create")
-    public String postQuestion(){
-        return "/qna/form";
-    }
-
     @PostMapping("qna/create")
     public String create(Question question){
         questions.add(question);
