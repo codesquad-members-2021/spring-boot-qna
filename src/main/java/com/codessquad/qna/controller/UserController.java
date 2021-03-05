@@ -4,10 +4,7 @@ import com.codessquad.qna.domain.User;
 import com.codessquad.qna.domain.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.util.Optional;
@@ -58,7 +55,7 @@ public class UserController {
         return modelAndView;
     }
 
-    @PostMapping("/{id}")
+    @PutMapping("/{id}")
     public String updateUser(@PathVariable("id") Long id, String oldPassword, User newUserInfo) {
         Optional<User> optionalUser = userRepository.findById(id);
         optionalUser.ifPresent(user -> checkPasswordAndUpdate(user, oldPassword, newUserInfo));
