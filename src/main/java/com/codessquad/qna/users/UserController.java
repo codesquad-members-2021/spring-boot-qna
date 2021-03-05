@@ -38,4 +38,14 @@ public class UserController {
         }
         return "redirect:/users";
     }
+
+    @GetMapping("/{userId}/form")
+    String updateForm(@PathVariable String userId, Model model) {
+        Optional<User> user = userService.getUser(userId);
+        if (user.isPresent()) {
+            model.addAttribute("user", user.get());
+            return "user/updateForm";
+        }
+        return "redirect:/users";
+    }
 }
