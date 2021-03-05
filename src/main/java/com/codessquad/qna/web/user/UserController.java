@@ -1,7 +1,5 @@
 package com.codessquad.qna.web.user;
 
-import com.codessquad.qna.web.user.User;
-import com.codessquad.qna.web.user.UserMapper;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -12,11 +10,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 public class UserController {
 
     private UserMapper userMapper = new UserMapper();
-
-    @GetMapping("/signup")
-    public String user_form() {
-        return "user/form";
-    }
 
     @PostMapping("/user/create")
     public String user_create(User user) {

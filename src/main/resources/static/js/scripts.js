@@ -7,3 +7,12 @@ String.prototype.format = function() {
         ;
   });
 };
+
+document.addEventListener('DOMContentLoaded', function() {
+  var navItems = document.querySelectorAll('.nav-item a');
+  for (var i = 0, len = navItems.length; i < len; i++) {
+    if (navItems[i].getAttribute("href") === location.pathname) {
+      navItems[i].parentElement.className += " active";
+    }
+  }
+}, false);
