@@ -5,6 +5,7 @@ public class Question {
     private String writer;
     private String title;
     private String contents;
+    private int id;
 
     public String getWriter() {
         return writer;
@@ -16,6 +17,9 @@ public class Question {
 
     public String getContents() {
         return contents;
+    }
+    public int getId() {
+        return id;
     }
 
     public void setWriter(String writer) {
@@ -29,10 +33,14 @@ public class Question {
     public void setContents(String contents) {
         this.contents = contents;
     }
+    public void setId(int id) {
+        this.id = id;
+    }
 
     @Override
     public String toString() {
         return "Question{" +
+                "id='" + id + '\'' +
                 "writer='" + writer + '\'' +
                 ", title='" + title + '\'' +
                 ", contents='" + contents + '\'' +

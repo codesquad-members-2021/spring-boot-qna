@@ -39,6 +39,26 @@
                       </div>
                   </div>
               </li>
+              {{#questions}}
+              <li>
+                  <div class="wrap">
+                      <div class="main">
+                          <strong class="subject">
+                              <a href="qna/show.html">{{title}}</a>
+                          </strong>
+                          <div class="auth-info">
+                              <i class="icon-add-comment"></i>
+                              <span class="time">2016-01-05 18:47</span>
+                              <a href="./user/profile.html" class="author">{{writer}}</a>
+                          </div>
+                          <div class="reply" title="댓글">
+                              <i class="icon-reply"></i>
+                              <span class="point">{{id}}</span>
+                          </div>
+                      </div>
+                  </div>
+              </li>
+              {{/questions}}
           </ul>
           <div class="row">
               <div class="col-md-3"></div>
