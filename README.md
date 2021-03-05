@@ -1,5 +1,8 @@
 # 질문답변 게시판
 
+## 💡배포링크 
+<https://bong-spring-boot-qna.herokuapp.com/>
+
 ## 진행 방법
 
 * 요구사항에 대한 구현을 완료한 후 자신의 **github 아이디**에 해당하는 브랜치에 Pull Request(이하 PR)를 통해 코드 리뷰 요청을 한다.
