@@ -9,7 +9,7 @@ public class Question {
     private String writer;
     private String title;
     private String contents;
-    private String date;
+    private Date date;
 
     public int getId() {
         return id;
@@ -44,12 +44,12 @@ public class Question {
     }
 
     public String getDate() {
-        return date;
+        SimpleDateFormat simpleDate = new SimpleDateFormat( "yyyy-MM-dd HH:mm");
+        return simpleDate.format(this.date);
     }
 
     public void setDate() {
-        SimpleDateFormat format = new SimpleDateFormat ( "yyyy-MM-dd HH:mm");
-        this.date = format.format(new Date());;
+        this.date = new Date();
     }
 
     @Override
