@@ -1,9 +1,8 @@
 package com.codessquad.qna.domain;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 @Entity
 public class Question {
@@ -11,18 +10,27 @@ public class Question {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String writer;
+    @ManyToOne
+    @JoinColumn(foreignKey = @ForeignKey(name = "fk_author"))
+    private User author;
     private String title;
     private String contents;
+    private LocalDateTime date;
 
-    public Question() {
+    public Question() {}
 
-    }
-
-    public Question(String writer, String title, String contents) {
-        this.writer = writer;
+    public Question(User author, String title, String contents) {
+        this.author = author;
         this.title = title;
         this.contents = contents;
+        this.date = LocalDateTime.now();
+    }
+
+    public String getDate() {
+        if (date == null) {
+            return "";
+        }
+        return date.format(DateTimeFormatter.ofPattern("yyyy.MM.dd HH:mm"));
     }
 
     public Long getId() {
@@ -33,12 +41,12 @@ public class Question {
         this.id = id;
     }
 
-    public String getWriter() {
-        return writer;
+    public User getAuthor() {
+        return author;
     }
 
-    public void setWriter(String writer) {
-        this.writer = writer;
+    public void setAuthor(User author) {
+        this.author = author;
     }
 
     public String getTitle() {

@@ -7,17 +7,17 @@
     <div class="col-md-12 col-sm-12 col-lg-10 col-lg-offset-1">
         <div class="panel panel-default qna-list">
             <ul class="list">
-                {{#each questions}}
+                {{#questions}}
                 <li>
                     <div class="wrap">
                         <div class="main">
                             <strong class="subject">
-                                <a href="/questions">{{title}}</a>
+                                <a href="/questions/{{id}}">{{title}}</a>
                             </strong>
                             <div class="auth-info">
                                 <i class="icon-add-comment"></i>
-                                <span class="time">2016-01-15 18:47</span>
-                                <a href="user/{{writer.id}}" class="author">{{writer.name}}</a>
+                                <span class="time">{{date}}</span>
+                                <a href="user/{{writer.id}}" class="author">{{author.userId}}</a>
                             </div>
                             <div class="reply" title="댓글">
                                 <i class="icon-reply"></i>
@@ -26,7 +26,7 @@
                         </div>
                     </div>
                 </li>
-                {{/each}}
+                {{/questions}}
             </ul>
             <div class="row">
                 <div class="col-md-3"></div>
