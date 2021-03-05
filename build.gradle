@@ -21,6 +21,7 @@ dependencies {
 	//H2 & JPA
 	runtimeOnly 'com.h2database:h2'
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+	compile group: 'javax.persistence', name: 'javax.persistence-api', version: '2.2'
 }
 
 test {
