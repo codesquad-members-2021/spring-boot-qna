@@ -33,10 +33,13 @@ public class Question {
         this.id = id;
     }
 
+    public void setWriter(String writer) {
+        this.writer = writer;
+    }
+
     public String getWriter() {
         return writer;
     }
-
 
     public String getTitle() {
         return title;
@@ -46,7 +49,12 @@ public class Question {
         this.title = title;
     }
 
+    public void setContents(String contents) {
+        this.contents = contents;
+    }
+
     public String getContents() {
         return contents;
     }
+
 }
