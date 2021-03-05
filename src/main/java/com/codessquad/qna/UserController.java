@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Controller
 public class UserController {
@@ -32,12 +33,15 @@ public class UserController {
 
     @GetMapping("/users/{userId}")
     private String displayProfile(@PathVariable("userId") String userId, Model model){
+        userId = Objects.toString(userId,""); // null 값일 경우 "" 정의
 
         for(User findUser:userList){
             if(findUser.getUserId().equals(userId)) {
+                model.addAttribute("invalidMember",true);
                 model.addAttribute("userID",findUser.getUserId());
                 model.addAttribute("email",findUser.getEmail());
-                break;
+            }else{
+                model.addAttribute("invalidMember",true);
             }
         }
         return "user/profile";
@@ -45,13 +49,18 @@ public class UserController {
 
     @GetMapping("users/{userId}/form")
     private String changeMemberInfo(@PathVariable("userId") String userId, Model model){
+        userId = Objects.toString(userId,""); // null 값일 경우 "" 정의
+
         for(User findUser:userList){
-            if(findUser.getUserId().equals(userId)) {
+            if(Objects.equals(findUser.getUserId(),userId)) {
+                model.addAttribute("invalidMember",false);
                 model.addAttribute("userID",findUser.getUserId());
                 model.addAttribute("password",findUser.getPassword());
                 model.addAttribute("name",findUser.getName());
                 model.addAttribute("email",findUser.getEmail());
                 break;
+            }else{
+                model.addAttribute("invalidMember",true);
             }
         }
         return "user/updateForm";
@@ -61,18 +70,17 @@ public class UserController {
     private String updateMemberList(User updateUser, Model model){
 
         for(int index = 0; index<userList.size() ; index++){
-            boolean findIdCheck = userList.get(index).getUserId().equals(updateUser.getUserId());
-            boolean findPasswordCheck = userList.get(index).getPassword().equals(updateUser.getPassword());
+            boolean findIdCheck = Objects.equals(userList.get(index).getUserId(),updateUser.getUserId()); // null 비교가능
+            boolean findPasswordCheck = Objects.equals(userList.get(index).getPassword(),updateUser.getPassword()); // null 비교가능
 
             if (findIdCheck && findPasswordCheck){
-                model.addAttribute("changeFail",false);
-                userList.get(index).setName(updateUser.getName());
-                userList.get(index).setEmail(updateUser.getEmail());
-                model.addAttribute("users",userList);
+                model.addAttribute("invalidPassword",false);
+                userList.get(index).setName(Objects.toString(updateUser.getName(),"")); // null default
+                userList.get(index).setEmail(Objects.toString(updateUser.getEmail(),"")); // null default
             }else{
-                model.addAttribute("changeFail",true);
-                model.addAttribute("users",userList);
+                model.addAttribute("invalidPassword",true);
             }
+            model.addAttribute("users",userList);
         }
         return "user/list";
     }

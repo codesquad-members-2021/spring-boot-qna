@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Controller
 public class QuestionController {
@@ -28,19 +29,23 @@ public class QuestionController {
     }
     @GetMapping("/")
     private String questionsList(Model model){
+        model.addAttribute("invalidMember",false);
+        model.addAttribute("invalidPassword",false);
         model.addAttribute("questions",questionList);
         return "/index";
     }
     @GetMapping("/questions/{id}")
     private String showQuestionContents(@PathVariable("id") int targetId, Model model){
-
         for(Question findQuestion : questionList){
-            if(findQuestion.getId() == targetId){
+            if(Objects.equals(findQuestion.getId(),targetId)){
+                model.addAttribute("invalidMember",false);
                 model.addAttribute("title",findQuestion.getTitle());
                 model.addAttribute("writer",findQuestion.getWriter());
                 model.addAttribute("time",findQuestion.getTime());
                 model.addAttribute("contents",findQuestion.getContents());
                 break;
+            }else{
+                model.addAttribute("invalidMember",true);
             }
         }
         return "qna/show";
