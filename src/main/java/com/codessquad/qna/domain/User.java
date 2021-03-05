@@ -63,9 +63,9 @@ public class User {
     }
 
     public void updateUserInfo(User user, String newPassword) {
-        this.name=user.getName();
-        this.userId=user.getUserId();
-        this.email=user.getEmail();
-        this.password=newPassword;
+        this.name = user.getName();
+        this.userId = user.getUserId();
+        this.email = user.getEmail();
+        this.password = newPassword;
     }
 }
