@@ -1,9 +1,17 @@
-package com.codessquad.qna.domain;
+package com.codessquad.qna.domain.user;
 
+import javax.persistence.*;
+
+@Entity
 public class User {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
+
+    @Column(nullable=false, length=20)
     private String userId;
+
     private String password;
     private String name;
     private String email;
@@ -50,6 +58,12 @@ public class User {
 
     public boolean isCorrectPassword(String password) {
         return this.password.equals(password);
+    }
+
+    public void update(User user) {
+        this.name = user.getName();
+        this.password = user.getPassword();
+        this.email = user.getEmail();
     }
 
     @Override
