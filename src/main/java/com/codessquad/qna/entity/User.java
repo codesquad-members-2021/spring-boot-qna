@@ -1,10 +1,16 @@
 package com.codessquad.qna.entity;
 
 import com.codessquad.qna.dto.UserDto;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 import javax.persistence.*;
 import java.util.Objects;
 
+@Getter
+@ToString
+@NoArgsConstructor
 @Entity
 public class User {
 
@@ -26,45 +32,11 @@ public class User {
         this.email = email;
     }
 
-    public User() { }
-
-    public Long getId() {
-        return id;
-    }
-
-    public String getUserId() {
-        return userId;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
     public void change(String id, String password, String name, String email) {
         this.userId = id;
         this.password = password;
         this.name = name;
         this.email = email;
-    }
-
-
-    @Override
-    public String toString() {
-        return "User{" +
-                "id=" + id +
-                ", userId='" + userId + '\'' +
-                ", password='" + password + '\'' +
-                ", name='" + name + '\'' +
-                ", email='" + email + '\'' +
-                '}';
     }
 
 }
