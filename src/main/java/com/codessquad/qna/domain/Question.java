@@ -1,9 +1,17 @@
 package com.codessquad.qna.domain;
 
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
 import java.time.LocalDateTime;
 
+@Entity
 public class Question {
+
+    @Id
+    @GeneratedValue
     private Long id;
+
     private String writer;
     private String title;
     private String contents;
