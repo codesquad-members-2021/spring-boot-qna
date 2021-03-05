@@ -12,16 +12,16 @@ import java.util.List;
 public class UserController {
     private List<User> users = new ArrayList<>();
 
-    @PostMapping("/user/create")
-    public String create(User user){
+    @PostMapping("/users")
+    public String signup(User user){
         users.add(user);
         System.out.println("user : " + user);
-        return "redirect:/user/list";
+        return "redirect:/users";
     }
 
-    @GetMapping("/user/list")
+    @GetMapping("/users")
     public String list(Model model){
         model.addAttribute("users",users);
-        return "list";
+        return "user/list";
     }
 }
