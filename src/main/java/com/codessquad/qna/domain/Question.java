@@ -3,7 +3,6 @@ package com.codessquad.qna.domain;
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.Objects;
 
 @Entity
 public class Question {
@@ -72,8 +71,8 @@ public class Question {
         this.contents = contents;
     }
 
-    public boolean isSameAuthor(User loginUser) {
-        return this.author.equals(loginUser);
+    public boolean isNotSameAuthor(User loginUser) {
+        return !this.author.equals(loginUser);
     }
 }
 

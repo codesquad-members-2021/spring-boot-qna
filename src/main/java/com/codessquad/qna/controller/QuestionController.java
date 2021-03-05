@@ -59,7 +59,7 @@ public class QuestionController {
         }
         User loginUser = getSessionUser(session);
         Question question = questionRepository.getOne(id);
-        if (!question.isSameAuthor(loginUser)) {
+        if (question.isNotSameAuthor(loginUser)) {
             return "/users/loginForm";
         }
         model.addAttribute("question", question);
@@ -73,7 +73,7 @@ public class QuestionController {
         }
         User loginUser = getSessionUser(session);
         Question question = questionRepository.getOne(id);
-        if (!question.isSameAuthor(loginUser)) {
+        if (question.isNotSameAuthor(loginUser)) {
             return "/users/loginForm";
         }
         question.update(title, contents);
@@ -88,10 +88,10 @@ public class QuestionController {
         }
         User loginUser = getSessionUser(session);
         Question question = questionRepository.getOne(id);
-        if (!question.isSameAuthor(loginUser)) {
+        if (question.isNotSameAuthor(loginUser)) {
             return "/users/loginForm";
         }
-        questionRepository.deleteById(id);
+        questionRepository.delete(question);
         return "redirect:/";
     }
 }

@@ -41,7 +41,7 @@ public class User {
     }
 
     public boolean matchId(Long id) {
-        if (id==null) {
+        if (id!=null) {
             return false;
         }
         return id.equals(this.id);
