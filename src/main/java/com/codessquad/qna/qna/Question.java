@@ -1,7 +1,7 @@
 package com.codessquad.qna.qna;
 
 public class Question {
-    private int id;
+    private String index;
     private String writer;
     private String title;
     private String contents;
@@ -18,8 +18,8 @@ public class Question {
         this.contents = contents;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public void setIndex(String index) {
+        this.index = index;
     }
 
     public String getWriter() {
@@ -34,16 +34,17 @@ public class Question {
         return contents;
     }
 
-    public int getId() {
-        return id;
+    public String getIndex() {
+        return index;
     }
 
     @Override
     public String toString() {
         return "Question{" +
-                "writer='" + writer + '\'' +
+                "id=" + index +
+                ", writer='" + writer + '\'' +
                 ", title='" + title + '\'' +
-                ", content='" + contents + '\'' +
+                ", contents='" + contents + '\'' +
                 '}';
     }
 }

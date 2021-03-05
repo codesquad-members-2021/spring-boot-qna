@@ -15,7 +15,7 @@ public class QuestionController {
 
     @PostMapping("/questions")
     public String create(Question question) {
-        question.setId(questions.size() + 1);
+        question.setIndex(questions.size() + 1 + "");
         questions.add(question);
         System.out.println(question);
         return "redirect:/";
@@ -28,9 +28,9 @@ public class QuestionController {
     }
 
     @GetMapping("/questions/{index}")
-    public String showQuestion(@PathVariable int index, Model model) {
+    public String showQuestion(@PathVariable String index, Model model) {
         for(Question question : questions){
-            if(question.getId() == index){
+            if(questions.indexOf(question) == Integer.parseInt(index) - 1){
                 model.addAttribute("question", question);
                 return "qna/show";
             }
