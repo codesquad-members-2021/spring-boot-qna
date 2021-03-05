@@ -35,7 +35,7 @@ public class DBUserRepository implements UserRepository {
 
     @Override
     public void update(User oldUserInfo, User updateUserInfo) {
-        oldUserInfo.Change(updateUserInfo.getUserId(), updateUserInfo.getPassword(), updateUserInfo.getName(), updateUserInfo.getEmail());
+        oldUserInfo.change(updateUserInfo.getUserId(), updateUserInfo.getPassword(), updateUserInfo.getName(), updateUserInfo.getEmail());
     }
 
     @Override
