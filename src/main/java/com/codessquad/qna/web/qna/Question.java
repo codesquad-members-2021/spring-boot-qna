@@ -1,27 +1,37 @@
 package com.codessquad.qna.web.qna;
 
+import javax.persistence.*;
 import java.time.LocalDateTime;
 
+@Entity
 public class Question {
-    private int id;
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private long id;
+
+    @Column(nullable = false)
     private String writerId;
     private String title;
     private String contents;
     private LocalDateTime reportingDate;
 
-    public Question(int id, String writerId, String title, String contents) {
-        this.id = id;
+    public Question(String writerId, String title, String contents) {
         this.writerId = writerId;
         this.title = title;
         this.contents = contents;
         this.reportingDate = LocalDateTime.now();
     }
 
-    public int getId() {
+    public Question() {
+
+    }
+
+    public long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(long id) {
         this.id = id;
     }
 
