@@ -5,6 +5,7 @@ import com.codessquad.qna.repository.QuestionRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.Optional;
 
 @Service
@@ -19,6 +20,7 @@ public class QuestionService {
 
     @Transactional
     public void write(Question question) {
+        question.setWriteTime(LocalDateTime.now());
         questionRepository.save(question);
     }
 
