@@ -23,11 +23,13 @@ public class UserController {
         logger.info(user.toString());
         return "redirect:/users";
     }
+
     @GetMapping("/users")
     private String getMemberList(Model model){
         model.addAttribute("users",userList);
         return "user/list";
     }
+
     @GetMapping("/users/{userId}")
     private String displayProfile(@PathVariable("userId") String userId, Model model){
 
@@ -41,4 +43,34 @@ public class UserController {
         return "user/profile";
     }
 
+    @GetMapping("users/{userId}/form")
+    private String changeMemberInfo(@PathVariable("userId") String userId, Model model){
+        for(User findUser:userList){
+            if(findUser.getUserId().equals(userId)) {
+                model.addAttribute("userID",findUser.getUserId());
+                model.addAttribute("password",findUser.getPassword());
+                model.addAttribute("name",findUser.getName());
+                model.addAttribute("email",findUser.getEmail());
+                break;
+            }
+        }
+        return "user/updateForm";
+    }
+
+    @PostMapping("/users/{userId}/update")
+    private String updateMemberList(User updateUser, Model model){
+
+        for(int index = 0; index<userList.size() ; index++){
+            boolean findeCheck = userList.get(index).getUserId().equals(updateUser.getUserId());
+            if (findeCheck){
+                userList.get(index).setName(updateUser.getName());
+                userList.get(index).setEmail(updateUser.getEmail());
+                userList.get(index).setPassword(updateUser.getPassword());
+            }
+        }
+
+        return "redirect:/users";
+    }
+
 }
+
