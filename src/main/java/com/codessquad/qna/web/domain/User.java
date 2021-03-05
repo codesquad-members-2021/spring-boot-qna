@@ -1,4 +1,4 @@
-package com.codessquad.qna.web;
+package com.codessquad.qna.web.domain;
 
 public class User {
     private int index;

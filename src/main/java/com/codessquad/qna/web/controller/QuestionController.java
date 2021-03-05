@@ -1,5 +1,6 @@
-package com.codessquad.qna.web;
+package com.codessquad.qna.web.controller;
 
+import com.codessquad.qna.web.domain.Question;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -31,7 +32,7 @@ public class QuestionController {
         try {
             model.addAttribute("question", questions.get(index -1));
         } catch (IndexOutOfBoundsException e){
-            return "/";
+            return "redirect:/";
         }
         return "/qna/show";
     }

@@ -1,12 +1,12 @@
-package com.codessquad.qna.web;
+package com.codessquad.qna.web.controller;
 
+import com.codessquad.qna.web.domain.User;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
-import javax.swing.text.html.Option;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -40,7 +40,7 @@ public class UserController {
             model.addAttribute("user", foundUser.get());
             return "/user/profile";
         }
-        return "/";
+        return "redirect:/";
     }
 
     private Optional<User> findByUserId(String userId) {
@@ -54,7 +54,7 @@ public class UserController {
         try {
             model.addAttribute("user", users.get(index - 1));
         } catch (IndexOutOfBoundsException e) {
-            return "/";
+            return "redirect:/";
         }
         return "/user/updateForm";
     }
@@ -64,7 +64,7 @@ public class UserController {
         try {
             users.set(updatedUser.getIndex() - 1, updatedUser);
         } catch (IndexOutOfBoundsException e) {
-            return "/";
+            return "redirect:/";
         }
         return "redirect:/users";
     }
