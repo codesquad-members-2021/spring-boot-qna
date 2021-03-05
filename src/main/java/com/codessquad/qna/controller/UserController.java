@@ -50,7 +50,7 @@ public class UserController {
         return mav;
     }
 
-    @PostMapping("/{id}")
+    @PutMapping("/{id}")
     public String updateUser(@PathVariable long id, User userWithUpdatedInfo, String oldPassword) {
         User targetUser = userRepository.findById(id).orElseThrow(
                 () -> new IllegalArgumentException("해당 사용자를 찾을 수 없습니다. id = " + id));
