@@ -16,6 +16,7 @@ import java.util.List;
 @RequestMapping("/users")
 public class UserController {
     Logger logger = LoggerFactory.getLogger(this.getClass());
+    
     private List<User> users = Collections.synchronizedList(new ArrayList<>(Arrays.asList(
             new User("javajigi", "1234", "자바지기", "javajigi@sample.net"),
             new User("slipp", "1234", "슬립", "slipp@sample.net")
