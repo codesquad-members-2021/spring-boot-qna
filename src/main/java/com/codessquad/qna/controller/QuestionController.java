@@ -46,8 +46,7 @@ public class QuestionController {
         if (!questionIdMatcher.matches()) {
             return new ModelAndView("redirect:/");
         }
-        Long questionId = Long.parseLong(id);
-        Optional<Question> questionOptional = questionRepository.findById(questionId);
+        Optional<Question> questionOptional = questionRepository.findById(Long.parseLong(id));
         if (questionOptional.isPresent()) {
             ModelAndView modelAndView = new ModelAndView("qna/show");
             modelAndView.addObject(questionOptional.get());

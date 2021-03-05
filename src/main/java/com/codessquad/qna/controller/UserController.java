@@ -8,12 +8,15 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.util.Optional;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 @Controller
 @RequestMapping("/users")
 public class UserController {
 
     private final UserRepository userRepository;
+    private final Pattern userIdPattern = Pattern.compile("[1-9]\\d*");
 
     @Autowired
     public UserController(UserRepository userRepository) {
@@ -34,8 +37,12 @@ public class UserController {
     }
 
     @GetMapping("/{id}")
-    public ModelAndView userProfile(@PathVariable("id") Long id) {
-        Optional<User> user = userRepository.findById(id);
+    public ModelAndView userProfile(@PathVariable("id") String id) {
+        Matcher userIdMatcher = userIdPattern.matcher(id);
+        if (!userIdMatcher.matches()) {
+            return new ModelAndView("redirect:/users");
+        }
+        Optional<User> user = userRepository.findById( Long.parseLong(id));
         if (!user.isPresent()) {
             return new ModelAndView("redirect:/users");
         }
