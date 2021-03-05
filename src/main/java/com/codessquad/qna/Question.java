@@ -6,6 +6,15 @@ public class Question {
     private String writer;
     private String title;
     private String contents;
+    private String date;
+
+    public String getDate() {
+        return date;
+    }
+
+    public void setDate(String date) {
+        this.date = date;
+    }
 
     public String getWriter() {
         return writer;
