@@ -48,8 +48,21 @@ public class QuestionController {
 
     @GetMapping("/{id}")
     public String show(@PathVariable Long id, Model model) {
-        model.addAttribute("question",questionRepository.getOne(id));
+        model.addAttribute("question", questionRepository.getOne(id));
         return "/qna/show";
     }
 
+    @GetMapping("/{id}/form")
+    public String updateForm(@PathVariable Long id, Model model) {
+        model.addAttribute("question", questionRepository.getOne(id));
+        return "/qna/updateForm";
+    }
+
+    @PutMapping("/{id}")
+    public String update(@PathVariable Long id, String title, String contents) {
+        Question question = questionRepository.getOne(id);
+        question.update(title, contents);
+        questionRepository.save(question);
+        return String.format("redirect:/questions/%d", id);
+    }
 }

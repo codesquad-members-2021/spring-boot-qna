@@ -64,4 +64,9 @@ public class Question {
     public void setContents(String contents) {
         this.contents = contents;
     }
+
+    public void update(String title, String contents) {
+        this.title = title;
+        this.contents=contents;
+    }
 }
