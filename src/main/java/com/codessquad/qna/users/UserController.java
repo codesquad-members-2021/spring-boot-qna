@@ -1,5 +1,7 @@
 package com.codessquad.qna.users;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -12,38 +14,28 @@ import java.util.*;
 @Controller
 @RequestMapping("/users")
 public class UserController {
-    private final List<User> users = Collections.synchronizedList(new ArrayList<>());
+    @Autowired
+    private UserService userService;
 
     @GetMapping
     String getUsers(Model model) {
-        model.addAttribute("users", users);
+        model.addAttribute("users", userService.getUsers());
         return "user/list";
     }
 
     @PostMapping
     String createUser(User user) {
-        if (!users.contains(user)) {
-            users.add(user);
-        }
+        userService.addUser(user);
         return "redirect:/users";
     }
 
     @GetMapping("/{userId}/profile")
     String getProfile(@PathVariable String userId, Model model) {
-        Optional<User> user = findUser(userId);
+        Optional<User> user = userService.getUser(userId);
         if (user.isPresent()) {
             model.addAttribute("user", user.get());
             return "user/profile";
         }
         return "redirect:/users";
-    }
-
-    private Optional<User> findUser(String userId) {
-        for (User user : users) {
-            if (user.getUserId().equals(userId)) {
-                return Optional.of(user);
-            }
-        }
-        return Optional.empty();
     }
 }
