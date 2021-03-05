@@ -33,7 +33,7 @@ public class UserController {
 
         for (User findUser : userList) {
             if (findUser.getUserId().equals(userId)) {
-                model.addAttribute("invalidMember", false);
+                model.addAttribute("invalidMember", true);
                 model.addAttribute("userID", findUser.getUserId());
                 model.addAttribute("email", findUser.getEmail());
             } else {
