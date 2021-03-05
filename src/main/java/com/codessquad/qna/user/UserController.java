@@ -28,13 +28,12 @@ public class UserController {
 
     @GetMapping("/users/{userId}")
     public String profile(@PathVariable String userId, Model model) {
-        User selectedUser = null;
         for (User user : users) {
             if (user.getUserId().equals(userId)) {
-                selectedUser = user;
+                model.addAttribute("user", user);
+                return "user/profile";
             }
         }
-        model.addAttribute("user", selectedUser);
-        return "user/profile";
+        return "redirect:/";
     }
 }

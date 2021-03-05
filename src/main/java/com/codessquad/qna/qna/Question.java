@@ -1,9 +1,10 @@
 package com.codessquad.qna.qna;
 
 public class Question {
-    String writer;
-    String title;
-    String contents;
+    private int id;
+    private String writer;
+    private String title;
+    private String contents;
 
     public void setWriter(String writer) {
         this.writer = writer;
@@ -17,6 +18,10 @@ public class Question {
         this.contents = contents;
     }
 
+    public void setId(int id) {
+        this.id = id;
+    }
+
     public String getWriter() {
         return writer;
     }
@@ -27,6 +32,10 @@ public class Question {
 
     public String getContents() {
         return contents;
+    }
+
+    public int getId() {
+        return id;
     }
 
     @Override
