@@ -12,6 +12,7 @@
         {{#user}}
         <div class="panel panel-default content-main">
             <form name="question" method="post" action="/users/update">
+                <input type="hidden" name="_method" value="put">
                 <div class="form-group">
                     <input type="hidden" class="form-control" id="id" name="id" value="{{id}}">
                 </div>
