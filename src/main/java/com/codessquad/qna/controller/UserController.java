@@ -52,13 +52,8 @@ public class UserController {
 
     @PutMapping("/update")
     public String userUpdate(User user, String newPassword) {
-        User getUser = userService.findById(user.getId()).orElseThrow(IllegalArgumentException::new);
-        if (user.checkPassword(getUser)) {
-            getUser.updateUserInfo(user, newPassword);
-            return "redirect:/";
-        }
-
-        return "user/userUpdateForm";
+        userService.update(user, newPassword);
+        return "redirect:/";
     }
 
 
