@@ -50,7 +50,22 @@ public class User {
         this.email = email;
     }
 
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
     public boolean checkPassword(User findUser) {
         return findUser.getPassword().equals(this.getPassword());
+    }
+
+    public void updateUserInfo(User user, String newPassword) {
+        this.setName(user.getName());
+        this.setUserId(user.getName());
+        this.setPassword(newPassword);
+        this.setEmail(user.getEmail());
     }
 }
