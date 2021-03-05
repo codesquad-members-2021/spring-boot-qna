@@ -6,37 +6,36 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-
-import java.util.ArrayList;
-import java.util.List;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
+@RequestMapping("users")
 public class UsersController {
 
     @Autowired
     private UserRepository userRepository;
 
-    @PostMapping("users")
+    @PostMapping()
     public String createUser(String userId, String password, String name, String email) {
         User createdUser = new User(userId, password, name, email);
         userRepository.save(createdUser);
         return "redirect:/users";
     }
 
-    @GetMapping("users")
+    @GetMapping()
     public String getUserList(Model model) {
         model.addAttribute("users", userRepository.findAll());
         return "user/list";
     }
 
-    @GetMapping("users/{userId}")
+    @GetMapping("/{userId}")
     public String getOneUser(@PathVariable("userId") long id, Model model) {
         User foundUser = getUserById(id);
         model.addAttribute("user", foundUser);
         return "user/profile";
     }
 
-    @GetMapping("users/modify/{userId}")
+    @GetMapping("/modify/{userId}")
     public String getModifyUserPage(@PathVariable("userId") long id, Model model) {
         User foundUser = getUserById(id);
         model.addAttribute("user", foundUser);
@@ -47,7 +46,7 @@ public class UsersController {
         return userRepository.findById(id).orElse(null);
     }
 
-    @PostMapping("users/modify")
+    @PostMapping("/modify")
     public String modifyUser(long id, String prevPassword, String newPassword,
                              String name, String email) {
         User foundUser = getUserById(id);
