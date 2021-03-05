@@ -1,20 +1,20 @@
 package com.codessquad.qna.web.qna;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 
 public class Question {
     private int id;
     private String writerId;
     private String title;
     private String contents;
-    private Date reportingDate;
+    private LocalDateTime reportingDate;
 
     public Question(int id, String writerId, String title, String contents) {
         this.id = id;
         this.writerId = writerId;
         this.title = title;
         this.contents = contents;
-        this.reportingDate = new Date();
+        this.reportingDate = LocalDateTime.now();
     }
 
     public int getId() {
@@ -49,11 +49,11 @@ public class Question {
         this.contents = contents;
     }
 
-    public Date getReportingDate() {
+    public LocalDateTime getReportingDate() {
         return reportingDate;
     }
 
-    public void setReportingDate(Date reportingDate) {
+    public void setReportingDate(LocalDateTime reportingDate) {
         this.reportingDate = reportingDate;
     }
 }
