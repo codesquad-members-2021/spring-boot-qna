@@ -59,4 +59,14 @@ public class UserController {
         }
         return "/qna/profile";
     }
+
+    @GetMapping("/userList/{userId}/update")
+    public String updateUser(@PathVariable String userId, Model model) {
+        for (User user : userList) {
+            if(user.getUserId().equals(userId)) {
+                model.addAttribute("user", user);
+            }
+        }
+        return "/user/updateForm";
+    }
 }
