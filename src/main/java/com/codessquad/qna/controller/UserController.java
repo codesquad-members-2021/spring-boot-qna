@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 public class UserController {
 
     private Logger logger = LoggerFactory.getLogger(UserController.class);
-    Users users = new Users();
+    private Users users = new Users();
 
     @PostMapping("/users")
     public String signUp(User user) {

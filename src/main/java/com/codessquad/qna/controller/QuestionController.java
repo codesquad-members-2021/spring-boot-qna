@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 public class QuestionController {
 
     private Logger logger = LoggerFactory.getLogger(UserController.class);
-    Questions questions = new Questions();
+    private Questions questions = new Questions();
 
     @GetMapping("/")
     public String viewMain(Model model) {
