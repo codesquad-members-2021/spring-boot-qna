@@ -23,7 +23,7 @@ public class UserController {
     @GetMapping("/users")
     public String list(Model model){
         model.addAttribute("users",users);
-        return "user/list";
+        return "/user/list";
     }
 
     @GetMapping("/users/{userId}")
@@ -31,7 +31,7 @@ public class UserController {
         for(User user : users){
             if(user.getUserId().equals(userId)){
                 model.addAttribute("user", user);
-                return "user/profile";
+                return "/user/profile";
             }
         }
         return "redirect:/users";
