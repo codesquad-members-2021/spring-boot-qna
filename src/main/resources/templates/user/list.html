@@ -9,7 +9,7 @@
                 </tr>
                 </thead>
                 <tbody>
-                {{#user}}
+                {{#users}}
                 <tr>
                     <th scope="row">{{@index}}</th>
                     <form method="get" action="/users/{userId}">
@@ -19,7 +19,7 @@
                     <td>{{email}}</td>
                     <td><a href="#" class="btn btn-success" role="button">수정</a></td>
                 </tr>
-                {{/user}}
+                {{/users}}
                 </tbody>
             </table>
         </div>
