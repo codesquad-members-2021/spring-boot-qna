@@ -8,10 +8,12 @@ import java.util.stream.IntStream;
 
 public class Questions {
 
+    private int questionId = 0;
     private final List<Question> questionList = new ArrayList<>();
 
     public void addQuestion(Question question) {
-        question.setId(this.questionList.size() + 1);
+        this.questionId++;
+        question.setId(this.questionId);
         question.setDate();
         questionList.add(question);
     }
@@ -22,23 +24,17 @@ public class Questions {
 
     public Question findQuestion(int id) {
         int index = getQuestionIndex(id);
-        return this.questionList.get(index);
-    }
-
-    public void deleteQuestion(int id) {
-        int index = getQuestionIndex(id);
-        this.questionList.remove(index);
+        if (index != -1) {
+            return this.questionList.get(index);
+        }
+        return new Question();
     }
 
     private int getQuestionIndex(int id) {
-        int index = IntStream.range(0, this.questionList.size())
+        return IntStream.range(0, this.questionList.size())
                 .filter(i -> this.questionList.get(i).getId() == id)
                 .findFirst()
                 .orElse(-1);
-        if (index == -1) {
-            throw new IllegalStateException("해당 질문이 없습니다.");
-        }
-        return index;
     }
 
 }
