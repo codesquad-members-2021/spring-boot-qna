@@ -1,10 +1,10 @@
-package com.codessquad.qna.model;
+package com.codessquad.qna.web.user;
 
 public class User {
-    private String userId;
-    private String password;
-    private String name;
-    private String email;
+    private String userId = "defaultId";
+    private String password = "defaultPassword";
+    private String name = "defaultName";
+    private String email = "defaultEmail";
 
     public String getUserId() {
         return userId;
