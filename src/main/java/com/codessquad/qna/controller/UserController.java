@@ -2,6 +2,7 @@ package com.codessquad.qna.controller;
 
 import com.codessquad.qna.model.User;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 
@@ -24,7 +25,8 @@ public class UserController {
     }
 
     @GetMapping("/users")
-    public String getUserList(){
+    public String getUserList(Model model){
+        model.addAttribute("users", users);
         return "user/list";
     }
 
