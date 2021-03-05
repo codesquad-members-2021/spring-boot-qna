@@ -9,6 +9,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 
 @Controller
 public class UserController {
@@ -18,9 +19,9 @@ public class UserController {
 
     @PostMapping("/users")
     public String signUp(User user) {
-        users.addUser(user);
+        boolean result = users.addUser(user);
         logger.info("회원가입 요청");
-        return "redirect:/users";
+        return result ? "redirect:/users" : "redirect:/user/form";
     }
 
     @GetMapping("/users")
@@ -32,23 +33,26 @@ public class UserController {
 
     @GetMapping("/users/{userId}")
     public String viewProfile(@PathVariable("userId") String userId, Model model) {
-        model.addAttribute("user", this.users.findUser(userId));
+        User user = this.users.findUser(userId);
+        model.addAttribute("user", user);
         logger.info("유저 프로필 페이지 요청");
-        return "user/profile";
+        return (user.getUserId() != null) ? "user/profile" : "redirect:/users";
     }
 
     @GetMapping("/user/{userId}/form")
     public String viewUpdateProfile(@PathVariable("userId") String userId, Model model) {
-        model.addAttribute("user", this.users.findUser(userId));
+        User user = this.users.findUser(userId);
+        model.addAttribute("user", user);
         logger.info("유저 정보 수정 페이지 요청");
-        return "user/updateForm";
+        return (user.getUserId() != null) ? "user/updateForm" : "redirect:/users";
     }
 
-    @PostMapping("/user/{userId}/update")
-    public String updateProfile(@PathVariable("userId") String userId, User user) {
-        users.updateUser(userId, user);
+    @PutMapping("/user/{userId}/update")
+    public String updateProfile(@PathVariable("userId") String userId, User user, String newPassword) {
+        boolean result = users.updateUser(userId, user, newPassword);
         logger.info("유저 정보 수정 요청");
-        return "redirect:/users";
+        System.out.println("redirect:/user/" + userId + "/update");
+        return result ? "redirect:/users" : "redirect:/user/" + userId + "/form";
     }
 
 }

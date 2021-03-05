@@ -31,9 +31,10 @@ public class QuestionController {
 
     @GetMapping("/question/{id}")
     public String viewQuestion(@PathVariable("id") int id, Model model) {
-        model.addAttribute("question", this.questions.findQuestion(id));
+        Question question = this.questions.findQuestion(id);
+        model.addAttribute("question", question);
         logger.info("상제 질문 페이지 요청");
-        return "qna/show";
+        return question.getTitle() != null ? "qna/show" : "redirect:/";
     }
 
 }
