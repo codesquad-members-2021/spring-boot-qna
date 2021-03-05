@@ -3,10 +3,7 @@ package com.codessquad.qna.web.users;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 @Controller
 @RequestMapping("users")
@@ -46,15 +43,18 @@ public class UsersController {
         return userRepository.findById(id).orElse(null);
     }
 
-    @PostMapping("/modify")
-    public String modifyUser(long id, String prevPassword, String newPassword,
+    @PutMapping("/modify")
+    public String modifyUser(long id, String userId, String prevPassword, String newPassword,
                              String name, String email) {
         User foundUser = getUserById(id);
         if (foundUser != null && foundUser.getPassword().equals(prevPassword)) {
-            foundUser.setPassword(newPassword);
+            if (!prevPassword.equals(newPassword)) {
+                foundUser.setPassword(newPassword);
+            }
             foundUser.setName(name);
             foundUser.setEmail(email);
-            return "redirect:/users/" + foundUser.getUserId();
+            userRepository.save(foundUser);
+            return "redirect:/users/" + foundUser.getId();
         }
         return "redirect:/users";
     }
