@@ -4,6 +4,7 @@ import com.codessquad.qna.model.Question;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.IntStream;
 
 public class Questions {
 
@@ -20,10 +21,24 @@ public class Questions {
     }
 
     public Question findQuestion(int id) {
-        return this.questionList.stream()
-                .filter(question -> question.getId() == id)
+        int index = getQuestionIndex(id);
+        return this.questionList.get(index);
+    }
+
+    public void deleteQuestion(int id) {
+        int index = getQuestionIndex(id);
+        this.questionList.remove(index);
+    }
+
+    private int getQuestionIndex(int id) {
+        int index = IntStream.range(0, this.questionList.size())
+                .filter(i -> this.questionList.get(i).getId() == id)
                 .findFirst()
-                .get();
+                .orElse(-1);
+        if (index == -1) {
+            throw new IllegalStateException("해당 질문이 없습니다.");
+        }
+        return index;
     }
 
 }
