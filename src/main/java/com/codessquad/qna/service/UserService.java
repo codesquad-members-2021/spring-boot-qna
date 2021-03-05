@@ -3,11 +3,13 @@ package com.codessquad.qna.service;
 import com.codessquad.qna.domain.User;
 import com.codessquad.qna.repository.UserRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
 
 @Service
+@Transactional(readOnly = true)
 public class UserService {
 
     private UserRepository userRepository;
@@ -16,6 +18,7 @@ public class UserService {
         this.userRepository = userRepository;
     }
 
+    @Transactional
     public void join(User user) {
         userRepository.save(user);
     }
