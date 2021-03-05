@@ -57,4 +57,5 @@ public class QuestionController {
         model.addAttribute("question",questionRepository.getOne(id));
         return "/qna/show";
     }
+    
 }
