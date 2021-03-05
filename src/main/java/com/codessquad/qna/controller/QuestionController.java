@@ -15,8 +15,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.servlet.http.HttpSession;
 
-import java.util.Optional;
-
 import static com.codessquad.qna.controller.HttpSessionUtils.getSessionUser;
 import static com.codessquad.qna.controller.HttpSessionUtils.isLoginUser;
 
@@ -57,5 +55,5 @@ public class QuestionController {
         model.addAttribute("question",questionRepository.getOne(id));
         return "/qna/show";
     }
-    
+
 }
