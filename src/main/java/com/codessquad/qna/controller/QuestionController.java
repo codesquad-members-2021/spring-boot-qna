@@ -3,6 +3,8 @@ package com.codessquad.qna.controller;
 import com.codessquad.qna.domain.Question;
 import com.codessquad.qna.domain.User;
 import com.codessquad.qna.repository.QuestionRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,9 +19,14 @@ import static com.codessquad.qna.controller.HttpSessionUtils.isLoginUser;
 @Controller
 @RequestMapping("/questions")
 public class QuestionController {
+    private final Logger logger = LoggerFactory.getLogger(UserController.class);
+
+    private QuestionRepository questionRepository;
 
     @Autowired
-    private QuestionRepository questionRepository;
+    public QuestionController(QuestionRepository questionRepository) {
+        this.questionRepository = questionRepository;
+    }
 
     @GetMapping("/form")
     public String form(HttpSession session) {
@@ -29,9 +36,10 @@ public class QuestionController {
         return "/qna/form";
     }
 
-    @PostMapping("/")
+    @PostMapping("")
     public String create(String title, String contents, HttpSession session) {
         if (!isLoginUser(session)) {
+            logger.info("새 글 작성에 실패했습니다.");
             return "/users/loginForm";
         }
         User sessionUser = getSessionUser(session);
