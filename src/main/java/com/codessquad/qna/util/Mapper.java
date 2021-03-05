@@ -10,10 +10,12 @@ public class Mapper {
     private Mapper(){}
 
     public static User mapToUser(UserDto userDto) {
-        return new User(userDto.getUserId(), userDto.getPassword(), userDto.getPassword(), userDto.getEmail());
+        UserValidation.validate(userDto);
+        return new User(userDto.getUserId(), userDto.getPassword(), userDto.getName(), userDto.getEmail());
     }
 
     public static Post mapToPost(PostDto postDto) {
+        PostValidation.validate(postDto);
         return new Post(postDto.getTitle(), postDto.getAuthor(), postDto.getBody());
     }
 
