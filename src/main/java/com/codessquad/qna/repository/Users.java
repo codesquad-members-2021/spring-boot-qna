@@ -4,6 +4,7 @@ import com.codessquad.qna.model.User;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.IntStream;
 
 public class Users {
 
@@ -18,10 +19,24 @@ public class Users {
     }
 
     public User findUser(String userId) {
-        return this.userList.stream()
-                .filter(user -> user.getUserId().equals(userId))
+        int index = getUserIndex(userId);
+        return this.userList.get(index);
+    }
+
+    public void deleteUser(String userId) {
+        int index = getUserIndex(userId);
+        this.userList.remove(index);
+    }
+
+    private int getUserIndex(String userId) {
+        int index = IntStream.range(0, this.userList.size())
+                .filter(i -> this.userList.get(i).getUserId().equals(userId))
                 .findFirst()
-                .get();
+                .orElse(-1);
+        if (index == -1) {
+            throw new IllegalStateException("해당 유저가 없습니다.");
+        }
+        return index;
     }
 
     public void updateUser(String userId, User user) {
