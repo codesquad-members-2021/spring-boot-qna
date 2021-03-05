@@ -24,8 +24,20 @@ public class UserController {
     }
 
     @GetMapping("/users/{userId}")
-    public String user_profile(@PathVariable("userId") String userId, Model model) { ;
+    public String user_profile(@PathVariable("userId") String userId, Model model) {
         model.addAttribute("user", userMapper.getUser(userId));
         return "user/profile";
+    }
+
+    @GetMapping("/users/{userId}/form")
+    public String user_form(@PathVariable("userId") String userId, Model model) {
+        model.addAttribute("user", userMapper.getUser(userId));
+        return "user/updateForm";
+    }
+
+    @PostMapping("/users/{userId}/update")
+    public String user_update(@PathVariable("userId") String userId, User user) {
+        userMapper.update(userId, user);
+        return "redirect:/users";
     }
 }

@@ -12,6 +12,10 @@ public class UserMapper {
         mapper.put(user.getUserId(), user);
     }
 
+    public void update(String userId, User user) {
+        mapper.put(userId, user);
+    }
+
     public List<User> getUsers() {
         return mapper.entrySet().
                 stream()
