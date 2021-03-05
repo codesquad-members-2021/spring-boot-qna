@@ -18,7 +18,7 @@ public class UserController {
     @PostMapping("/users")
     public String createUser(User user) {
         users.add(user);
-        user.setIndex(users.indexOf(user)+1);
+        user.setIndex(users.indexOf(user) + 1);
         return "redirect:/users";
     }
 

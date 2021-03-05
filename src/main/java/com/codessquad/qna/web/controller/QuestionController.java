@@ -15,23 +15,23 @@ public class QuestionController {
     private List<Question> questions = new ArrayList<>();
 
     @PostMapping("/questions")
-    public String createQuestion(Question question, Model model){
+    public String createQuestion(Question question, Model model) {
         questions.add(question);
-        question.setIndex(questions.indexOf(question)+1);
+        question.setIndex(questions.indexOf(question) + 1);
         return "redirect:/";
     }
 
     @GetMapping("/")
-    public String getQuestions(Model model){
+    public String getQuestions(Model model) {
         model.addAttribute("questions", questions);
         return "/index";
     }
 
     @GetMapping("/questions/{index}")
-    public String getQuestion(@PathVariable int index, Model model){
+    public String getQuestion(@PathVariable int index, Model model) {
         try {
-            model.addAttribute("question", questions.get(index -1));
-        } catch (IndexOutOfBoundsException e){
+            model.addAttribute("question", questions.get(index - 1));
+        } catch (IndexOutOfBoundsException e) {
             return "redirect:/";
         }
         return "/qna/show";

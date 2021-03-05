@@ -7,22 +7,22 @@
             <ul class="list">
                 {{#questions}}
                 <li>
-                <div class="wrap">
-                    <div class="main">
-                        <strong class="subject">
-                            <a href="/questions/{{index}}">{{title}}</a>
-                        </strong>
-                        <div class="auth-info">
-                            <i class="icon-add-comment"></i>
-                            <span class="time">{{formattedCreatedDate}}</span>
-                            <a href="user/profile" class="author">{{writer}}</a>
-                        </div>
-                        <div class="reply" title="댓글">
-                            <i class="icon-reply"></i>
-                            <span class="point">12</span>
+                    <div class="wrap">
+                        <div class="main">
+                            <strong class="subject">
+                                <a href="/questions/{{index}}">{{title}}</a>
+                            </strong>
+                            <div class="auth-info">
+                                <i class="icon-add-comment"></i>
+                                <span class="time">{{formattedCreatedDate}}</span>
+                                <a href="user/profile" class="author">{{writer}}</a>
+                            </div>
+                            <div class="reply" title="댓글">
+                                <i class="icon-reply"></i>
+                                <span class="point">12</span>
+                            </div>
                         </div>
                     </div>
-                </div>
                 </li>
                 {{/questions}}
             </ul>
