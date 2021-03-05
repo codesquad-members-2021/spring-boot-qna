@@ -26,9 +26,7 @@ public class PostService {
     }
 
     public Post getPost(Long id) {
-        Optional<Post> post = postRepository.findById(id);
-        post.orElseThrow(CanNotFindPostException::new);
-        return post.get();
+        return postRepository.findById(id).orElseThrow(CanNotFindPostException::new);
     }
 
     public List<Post> getPosts() {
