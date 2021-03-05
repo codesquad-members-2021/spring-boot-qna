@@ -1,11 +1,14 @@
 package com.codessquad.qna;
 
+import java.time.LocalDate;
+
 public class Question {
 
     private String writer;
     private String title;
     private String contents;
     private int id;
+    private LocalDate time;
 
     public String getWriter() {
         return writer;
@@ -20,6 +23,10 @@ public class Question {
     }
     public int getId() {
         return id;
+    }
+
+    public LocalDate getTime() {
+        return time;
     }
 
     public void setWriter(String writer) {
@@ -37,13 +44,18 @@ public class Question {
         this.id = id;
     }
 
+    public void setTime(LocalDate time) {
+        this.time = time;
+    }
+
     @Override
     public String toString() {
         return "Question{" +
-                "id='" + id + '\'' +
                 "writer='" + writer + '\'' +
                 ", title='" + title + '\'' +
                 ", contents='" + contents + '\'' +
+                ", id=" + id +
+                ", time=" + time +
                 '}';
     }
 }
