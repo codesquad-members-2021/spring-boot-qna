@@ -38,4 +38,26 @@ public class UserController {
         }
         return "user/profile";
     }
+
+    @GetMapping("/{userId}/form")
+    public String showModifyProfile(@PathVariable String userId, Model model) {
+        for (User user : users) {
+            if (user.getUserId().equals(userId)) {
+                model.addAttribute(user);
+            }
+        }
+        return "user/updateForm";
+    }
+
+    @PostMapping("/{userId}/update")
+    public String modifyProfile(User updatedUser, Model model) {
+        for (User user : users) {
+            if (user.getUserId().equals(updatedUser.getUserId())) {
+                user.setName(updatedUser.getName());
+                user.setEmail(updatedUser.getEmail());
+            }
+        }
+        model.addAttribute("users", users);
+        return "redirect:/user";
+    }
 }
