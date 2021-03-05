@@ -15,20 +15,14 @@ public class QuestionController {
 
     @PostMapping("/questions")
     public String createQuestion(Question question, Model model){
-        setIndex(question);
         questions.add(question);
-        model.addAttribute("questions", question);
+        question.setIndex(questions.indexOf(question)+1);
         return "redirect:/";
-    }
-
-    private void setIndex(Question question) {
-        int index = questions.size() + 1;
-        question.setIndex(index);
     }
 
     @GetMapping("/")
     public String getQuestions(Model model){
-        model.addAttribute("qeustions", questions);
+        model.addAttribute("questions", questions);
         return "/index";
     }
 
