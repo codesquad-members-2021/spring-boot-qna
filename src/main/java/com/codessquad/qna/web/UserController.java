@@ -6,8 +6,10 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
+import javax.swing.text.html.Option;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Controller
 public class UserController {
@@ -21,7 +23,7 @@ public class UserController {
     }
 
     private void setIndex(User user) {
-        int index = users.size() +1;
+        int index = users.size() + 1;
         user.setIndex(index);
     }
 
@@ -33,31 +35,37 @@ public class UserController {
 
     @GetMapping("/users/{userId}")
     public String getProfile(@PathVariable String userId, Model model) {
-        //id 중복 확인, null일경우 처리
-        User foundUser = findByUserId(userId);
-        model.addAttribute("user", foundUser);
-        return "/user/profile";
+        Optional<User> foundUser = findByUserId(userId);
+        if (foundUser.isPresent()) {
+            model.addAttribute("user", foundUser.get());
+            return "/user/profile";
+        }
+        return "/";
     }
 
-    private User findByUserId(String userId) {
-        User foundUser = null;
-        for (User user : users) {
-            if (user.getUserId().equals(userId)) {
-                foundUser = user;
-            }
-        }
-        return foundUser;
+    private Optional<User> findByUserId(String userId) {
+        return users.stream()
+                .filter(user -> user.getUserId()
+                        .equals(userId)).findAny();
     }
 
     @GetMapping("/users/{index}/form")
-    public String getUpdateForm(@PathVariable int index, Model model){
-        model.addAttribute("user", users.get(index-1));
+    public String getUpdateForm(@PathVariable int index, Model model) {
+        try {
+            model.addAttribute("user", users.get(index - 1));
+        } catch (IndexOutOfBoundsException e) {
+            return "/";
+        }
         return "/user/updateForm";
     }
 
     @PostMapping("/users/{index}/update")
-    public String updateUser(User updatedUser){
-        users.set(updatedUser.getIndex()-1, updatedUser);
-        return  "redirect:/users";
+    public String updateUser(User updatedUser) {
+        try {
+            users.set(updatedUser.getIndex() - 1, updatedUser);
+        } catch (IndexOutOfBoundsException e) {
+            return "/";
+        }
+        return "redirect:/users";
     }
 }

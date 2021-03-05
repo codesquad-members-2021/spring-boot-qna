@@ -28,8 +28,11 @@ public class QuestionController {
 
     @GetMapping("/questions/{index}")
     public String getQuestion(@PathVariable int index, Model model){
-        Question question = questions.get(index -1);
-        model.addAttribute("question", question);
+        try {
+            model.addAttribute("question", questions.get(index -1));
+        } catch (IndexOutOfBoundsException e){
+            return "/";
+        }
         return "/qna/show";
     }
 }
