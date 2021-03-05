@@ -20,6 +20,11 @@ public class UserController {
     @PostMapping("/user/create")
     public String create(User user){
         users.add(user);
+        return "redirect:/users";
+    }
+
+    @GetMapping("/users")
+    public String getUserList(){
         return "user/list";
     }
 
