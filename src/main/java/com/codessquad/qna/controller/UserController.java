@@ -13,6 +13,8 @@ import javax.servlet.http.HttpSession;
 import java.util.List;
 import java.util.Optional;
 
+import static com.codessquad.qna.controller.HttpSessionUtils.*;
+
 @RequestMapping("/users")
 @Controller
 public class UserController {
@@ -33,18 +35,18 @@ public class UserController {
             return "redirect:/users/loginForm";
         }
         User user = userTemp.get();
-        if (!password.equals(user.getPassword())) {
+        if (!user.matchPassword(password)) {
             return "redirect:/users/loginForm";
         }
 
-        session.setAttribute("sessionUser", user);
+        session.setAttribute(USER_SESSION_KEY, user);
         logger.info("로그인에 성공했습니다.");
         return "redirect:/";
     }
 
     @GetMapping("/logout")
     public String logout(HttpSession session) {
-        session.removeAttribute("sessionUser");
+        session.removeAttribute(USER_SESSION_KEY);
         return "redirect:/";
     }
 
@@ -78,29 +80,30 @@ public class UserController {
 
     @GetMapping("/{id}/form")
     public String updateForm(@PathVariable Long id, Model model, HttpSession session) {
-        User sessionUser = (User) session.getAttribute("sessionUser");
-        if (sessionUser==null) {
+        if (!isLoginUser(session)) {
             return "redirect:/users/loginForm";
         }
-        if (!id.equals(sessionUser.getId())) {
+        User sessionUser = getSessionUser(session);
+
+        if (!sessionUser.matchId(id)) {
             throw new IllegalStateException("잘못된 접근입니다.");
         }
-        Optional<User> tempUser = userService.findUser(id);
-        if (!tempUser.isPresent()) {
+
+        if (!userService.findUser(id).isPresent()) {
             return "redirect:/users";
         }
-        User user = tempUser.get();
+        User user = userService.findUser(id).get();
         model.addAttribute("user", user);
         return "user/updateForm";
     }
 
     @PutMapping("/{id}")
     public String update(@PathVariable Long id, User updatedUser, HttpSession session) {
-        User sessionUser = (User) session.getAttribute("sessionUser");
-        if (sessionUser==null) {
+        User sessionUser = getSessionUser(session);
+        if (!isLoginUser(session)) {
             return "redirect:/users/loginForm";
         }
-        if (!id.equals(sessionUser.getId())) {
+        if (!sessionUser.matchId(id)) {
             throw new IllegalStateException("잘못된 접근입니다.");
         }
         if (!userService.findUser(id).isPresent()) {
