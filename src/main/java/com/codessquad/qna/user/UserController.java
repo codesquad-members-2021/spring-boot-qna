@@ -15,24 +15,24 @@ import java.util.List;
 public class UserController {
     private List<User> users = new ArrayList<>();
 
-    @PostMapping("")
-    public String signup(User user){
+    @PostMapping
+    public String signup(User user) {
         users.add(user);
         System.out.println("user : " + user);
         return "redirect:/users";
     }
 
-    @GetMapping("")
-    public String list(Model model){
-        model.addAttribute("users",users);
+    @GetMapping
+    public String list(Model model) {
+        model.addAttribute("users", users);
         return "user/list";
     }
 
     @GetMapping("/{userId}")
-    public String viewUserProfile(@PathVariable String userId, Model model){
-        for(User user : users){
-            if(user.getUserId().equals(userId)){
-                model.addAttribute("user",user);
+    public String viewUserProfile(@PathVariable String userId, Model model) {
+        for (User user : users) {
+            if (user.getUserId().equals(userId)) {
+                model.addAttribute("user", user);
                 return "user/profile";
             }
         }
