@@ -64,4 +64,16 @@ public class PostController {
         return "qna/show";
     }
 
+    /**
+     * IllegalArgumentException 을 핸들링 해주는 메소드
+     * 지금은 그냥 redirect 를 하지만 나중에는 다른 페이지로 넘겨주는 작업이 필요할듯함.
+     * @param e
+     * @return
+     */
+    @ExceptionHandler(IllegalArgumentException.class)
+    public String handleException(Exception e) {
+        logger.error(e.getMessage());
+        return "redirect:/";
+    }
+
 }

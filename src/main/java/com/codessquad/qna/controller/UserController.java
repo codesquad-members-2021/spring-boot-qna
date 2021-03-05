@@ -93,4 +93,16 @@ public class UserController {
         }
     }
 
+    /**
+     * 잘못된 입력값이 들어왔을때 핸들링 해주는 메소드
+     * 후에 공부해서 에러페이지를 만들어서 처리해야할듯함
+     * @param e
+     * @return
+     */
+    @ExceptionHandler(IllegalArgumentException.class)
+    public String handleException(Exception e) {
+        logger.error(e.getMessage());
+        return "redirect:/";
+    }
+
 }
