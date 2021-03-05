@@ -17,7 +17,7 @@ public class QuestionController {
     public String createQuestion(Question question, Model model){
         setIndex(question);
         questions.add(question);
-        model.addAttribute("qeustions", question);
+        model.addAttribute("questions", question);
         return "redirect:/";
     }
 

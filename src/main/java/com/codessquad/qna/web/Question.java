@@ -15,6 +15,10 @@ public class Question {
         this.createdDate = LocalDateTime.now();
     }
 
+    public void setIndex(int index) {
+        this.index = index;
+    }
+
     public void setWriter(String writer) {
         this.writer = writer;
     }
@@ -27,12 +31,12 @@ public class Question {
         this.contents = contents;
     }
 
-    public void setIndex(int index) {
-        this.index = index;
-    }
-
     public void setCreatedDate() {
         this.createdDate = LocalDateTime.now();
+    }
+
+    public int getIndex() {
+        return index;
     }
 
     public String getWriter() {
@@ -45,10 +49,6 @@ public class Question {
 
     public String getContents() {
         return contents;
-    }
-
-    public int getIndex() {
-        return index;
     }
 
     public String getFormattedCreatedDate() {
