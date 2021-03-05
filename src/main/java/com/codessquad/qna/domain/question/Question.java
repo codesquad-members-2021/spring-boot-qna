@@ -1,24 +1,37 @@
-package com.codessquad.qna.domain;
+package com.codessquad.qna.domain.question;
 
+import javax.persistence.*;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+
+@Entity
 public class Question {
-    private long index;
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private long id;
+
+    @Column(nullable = false, length=20)
     private String writer;
+
+    @Column(nullable = false, length=500)
     private String title;
+
+    @Column(nullable = false, columnDefinition = "TEXT")
     private String contents;
+
     private String date;
 
-    public Question(String writer, String title, String contents) {
-        this.writer = writer;
-        this.title = title;
-        this.contents = contents;
+    public Question() {
+        this.date = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"));
     }
 
-    public long getIndex() {
-        return index;
+    public long getId() {
+        return id;
     }
 
-    public void setIndex(long index) {
-        this.index = index;
+    public void setId(long id) {
+        this.id = id;
     }
 
     public String getWriter() {
@@ -49,14 +62,10 @@ public class Question {
         return date;
     }
 
-    public void setDate(String date) {
-        this.date = date;
-    }
-
     @Override
     public String toString() {
         return "Question{" +
-                "index=" + index +
+                "id=" + id +
                 ", writer='" + writer + '\'' +
                 ", title='" + title + '\'' +
                 ", contents='" + contents + '\'' +
