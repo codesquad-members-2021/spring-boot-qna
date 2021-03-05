@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import java.util.List;
 
 @Controller
-@RequestMapping("/user")
+@RequestMapping("/users")
 public class UserController {
 
     Logger logger = LoggerFactory.getLogger(UserController.class);
@@ -25,18 +25,13 @@ public class UserController {
         this.userRepository = userRepository;
     }
 
-    @GetMapping("/create")
-    public String renderUserCreateForm() {
-        return "/user/form";
-    }
-
-    @PostMapping("/create")
+    @PostMapping("")
     public String createUser(User user) {
         userRepository.save(user);
-        return "redirect:/user/users";
+        return "redirect:/users";
     }
 
-    @GetMapping("/users")
+    @GetMapping("")
     public String renderUserList(Model model) {
         List<User> getUsers = userRepository.findAll();
         model.addAttribute("users", getUsers);
