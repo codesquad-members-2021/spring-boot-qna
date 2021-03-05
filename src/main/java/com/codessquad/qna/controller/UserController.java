@@ -1,5 +1,8 @@
-package com.codessquad.qna.web;
+package com.codessquad.qna.controller;
 
+import com.codessquad.qna.domain.User;
+import com.codessquad.qna.repository.UserRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -11,10 +14,14 @@ import java.util.List;
 public class UserController {
     private List<User> users = new ArrayList<>();
 
+    @Autowired
+    private UserRepository userRepository;
+
     @PostMapping("/users")
     public String create(User user) {
         System.out.println("user Info: " + user);
         users.add(user);
+        userRepository.save(user);
         return "redirect:/";
     }
 
@@ -52,7 +59,7 @@ public class UserController {
         return "redirect:/users/confirm";
     }
 
-    @RequestMapping(value = "/users/{userId}", method = RequestMethod.PUT)
+    @PutMapping(value = "/users/{userId}")
     public String changeUserInfoForm(@PathVariable("userId") String userId, String password, String name, String email) {
         for (User user : users) {
             if (user.getUserId().equals(userId)) {
