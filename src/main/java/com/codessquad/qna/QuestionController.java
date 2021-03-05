@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,7 +21,7 @@ public class QuestionController {
     private String questions(Question question, Model model){
         logger.info(question.toString());
         question.setId(questionList.size()+1); // 질문 객체 아이디 정의
-        question.setTime(LocalDate.now()); // 게시글 시간 설정
+        question.setTime(LocalDateTime.now()); // 게시글 시간 설정
         questionList.add(question);
         model.addAttribute("questions",questionList);
         return "redirect:/";

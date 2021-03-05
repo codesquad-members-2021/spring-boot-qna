@@ -1,6 +1,6 @@
 package com.codessquad.qna;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 public class Question {
 
@@ -8,7 +8,7 @@ public class Question {
     private String title;
     private String contents;
     private int id;
-    private LocalDate time;
+    private LocalDateTime time;
 
     public String getWriter() {
         return writer;
@@ -25,7 +25,7 @@ public class Question {
         return id;
     }
 
-    public LocalDate getTime() {
+    public LocalDateTime getTime() {
         return time;
     }
 
@@ -44,7 +44,7 @@ public class Question {
         this.id = id;
     }
 
-    public void setTime(LocalDate time) {
+    public void setTime(LocalDateTime time) {
         this.time = time;
     }
 
