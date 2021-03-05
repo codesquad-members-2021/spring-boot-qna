@@ -17,10 +17,6 @@ public class UserController {
     private Logger logger = LoggerFactory.getLogger(this.getClass());
     private List<User> userList = new ArrayList<>();
 
-    @GetMapping("/user/form.html")
-    private String registerDisplay(){
-        return "user/form";
-    }
     @PostMapping("/user/create")
     private String register(User user){
         userList.add(user);
