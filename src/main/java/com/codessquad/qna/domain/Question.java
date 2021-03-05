@@ -14,6 +14,7 @@ public class Question {
     @JoinColumn(foreignKey = @ForeignKey(name = "fk_author"))
     private User author;
     private String title;
+    @Lob
     private String contents;
     private LocalDateTime date;
 
