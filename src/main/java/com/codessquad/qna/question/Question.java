@@ -49,4 +49,14 @@ public class Question {
     public void setCreateDateTime(LocalDateTime createDateTime) {
         this.createDateTime = createDateTime;
     }
+
+    @Override
+    public String toString() {
+        return "Question{" +
+                "writer='" + writer + '\'' +
+                ", title='" + title + '\'' +
+                ", contents='" + contents + '\'' +
+                ", createDateTime=" + createDateTime +
+                '}';
+    }
 }
