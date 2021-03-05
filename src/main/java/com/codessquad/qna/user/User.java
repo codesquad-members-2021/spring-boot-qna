@@ -1,10 +1,15 @@
 package com.codessquad.qna.user;
 
 public class User {
+    private String index;
     private String userId;
     private String password;
     private String name;
     private String email;
+
+    public void setIndex(String index) {
+        this.index = index;
+    }
 
     public void setUserId(String userId) {
         this.userId = userId;
@@ -20,6 +25,10 @@ public class User {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public String getIndex() {
+        return index;
     }
 
     public String getUserId() {
@@ -46,5 +55,11 @@ public class User {
                 ", name='" + name + '\'' +
                 ", email='" + email + '\'' +
                 '}';
+    }
+
+    public void update(User newUser) {
+        this.password = newUser.password;
+        this.name = newUser.name;
+        this.email = newUser.email;
     }
 }

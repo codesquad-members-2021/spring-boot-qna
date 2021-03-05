@@ -16,6 +16,7 @@ public class UserController {
     @PostMapping("/users")
     public String create(User user) {
         System.out.println("user : " + user);
+        user.setIndex(users.size() + 1 + "");
         users.add(user);
         return "redirect:/users";
     }
@@ -28,12 +29,39 @@ public class UserController {
 
     @GetMapping("/users/{userId}")
     public String profile(@PathVariable String userId, Model model) {
+        model.addAttribute("user", getUserByUserId(userId));
+        return "user/profile";
+
+    }
+
+    private User getUserByUserId(String userId) {
         for (User user : users) {
             if (user.getUserId().equals(userId)) {
-                model.addAttribute("user", user);
-                return "user/profile";
+                return user;
             }
         }
-        return "redirect:/";
+        return null;
+    }
+
+    @GetMapping("/users/{index}/form")
+    public String updateForm(@PathVariable String index, Model model) {
+        model.addAttribute("user", getUserByIndex(index));
+        return "/user/updateForm";
+    }
+
+    private User getUserByIndex(String index) {
+        for (User user : users) {
+            if (user.getIndex().equals(index)) {
+                return user;
+            }
+        }
+        return null;
+    }
+
+    @PostMapping("/users/{index}")
+    public String update(@PathVariable String index, User newUser) {
+        User user = getUserByIndex(index);
+        user.update(newUser);
+        return "redirect:/users";
     }
 }
