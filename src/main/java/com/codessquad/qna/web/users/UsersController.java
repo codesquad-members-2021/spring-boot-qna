@@ -13,8 +13,7 @@ public class UsersController {
     private UserRepository userRepository;
 
     @PostMapping()
-    public String createUser(String userId, String password, String name, String email) {
-        User createdUser = new User(userId, password, name, email);
+    public String createUser(User createdUser) {
         userRepository.save(createdUser);
         return "redirect:/users";
     }

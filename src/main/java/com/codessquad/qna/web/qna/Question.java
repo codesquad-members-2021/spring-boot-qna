@@ -24,7 +24,7 @@ public class Question {
     }
 
     public Question() {
-
+        this.reportingDate = LocalDateTime.now();
     }
 
     public long getId() {

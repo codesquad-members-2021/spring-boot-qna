@@ -7,17 +7,13 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
-import java.util.ArrayList;
-import java.util.List;
-
 @Controller
 public class QnaController {
     @Autowired
     private QuestionRepository questionRepository;
 
     @PostMapping("/questions")
-    public String createQuestion(String writerId, String title, String contents) {
-        Question newQuestion = new Question(writerId, title, contents);
+    public String createQuestion(Question newQuestion) {
         questionRepository.save(newQuestion);
         return "redirect:/";
     }
