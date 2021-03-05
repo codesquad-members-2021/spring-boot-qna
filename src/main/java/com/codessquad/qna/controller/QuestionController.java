@@ -8,13 +8,15 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 @Controller
 @RequestMapping("/questions")
 public class QuestionController {
+    private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
     private final List<Question> questions = new ArrayList<>();
 
     @GetMapping("")
@@ -25,10 +27,11 @@ public class QuestionController {
 
     @PostMapping("")
     public String create(Question question) {
-        Date date = new Date(System.currentTimeMillis());
+        LocalDateTime now = LocalDateTime.now();
+        String formatDateTime = now.format(formatter);
 
         question.setId(questions.size() + 1);
-        question.setCreateDate(date);
+        question.setCreatedDate(formatDateTime);
 
         questions.add(question);
 

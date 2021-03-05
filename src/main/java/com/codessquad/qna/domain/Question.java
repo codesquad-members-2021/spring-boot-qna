@@ -7,7 +7,7 @@ public class Question {
     private String writer;
     private String title;
     private String contents;
-    private Date createDate;
+    private String createdDate;
 
     public Question(String writer, String title, String contents) {
         this.writer = writer;
@@ -47,11 +47,11 @@ public class Question {
         this.contents = contents;
     }
 
-    public Date getCreateDate() {
-        return createDate;
+    public String getCreatedDate() {
+        return createdDate;
     }
 
-    public void setCreateDate(Date createDate) {
-        this.createDate = createDate;
+    public void setCreatedDate(String createdDate) {
+        this.createdDate = createdDate;
     }
 }
