@@ -5,6 +5,7 @@ import com.codessquad.qna.entity.Post;
 import com.codessquad.qna.exception.CanNotFindPostException;
 import com.codessquad.qna.service.PostService;
 import com.codessquad.qna.util.Mapper;
+import com.sun.org.apache.xpath.internal.operations.Mod;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -71,9 +72,10 @@ public class PostController {
      * @return
      */
     @ExceptionHandler(IllegalArgumentException.class)
-    public String handleException(Exception e) {
+    public String handleException(Exception e, Model model) {
         logger.error(e.getMessage());
-        return "redirect:/";
+        model.addAttribute("exception", e);
+        return "error";
     }
 
 }

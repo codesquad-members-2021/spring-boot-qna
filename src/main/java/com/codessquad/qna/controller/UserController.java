@@ -100,9 +100,10 @@ public class UserController {
      * @return
      */
     @ExceptionHandler(IllegalArgumentException.class)
-    public String handleException(Exception e) {
+    public String handleException(Exception e, Model model) {
         logger.error(e.getMessage());
-        return "redirect:/";
+        model.addAttribute("exception", e);
+        return "error";
     }
 
 }
