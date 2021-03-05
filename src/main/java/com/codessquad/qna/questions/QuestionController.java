@@ -1,6 +1,7 @@
 package com.codessquad.qna.questions;
 
 import com.codessquad.qna.users.User;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,15 +17,13 @@ import java.util.List;
 @Controller
 @RequestMapping("/questions")
 public class QuestionController {
-    private final List<Question> questions = Collections.synchronizedList(new ArrayList<>());
+    @Autowired
+    private QuestionService questionService;
 
     @PostMapping
     String createQuestion(Question question) {
         question.setDateTime(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")));
-        synchronized (questions) {
-            question.setIndex(questions.size() + 1);
-            questions.add(question);
-        }
+        questionService.addQuestion(question);
 
         return "redirect:/";
     }
