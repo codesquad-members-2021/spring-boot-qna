@@ -7,7 +7,6 @@ public class Question {
     private int index;
     private String writer;
     private String title;
-    //spring에서는 contents를 뭘로 받나
     private String contents;
     private LocalDateTime createdDate;
 
