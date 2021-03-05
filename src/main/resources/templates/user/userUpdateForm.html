@@ -13,7 +13,7 @@
         <div class="panel panel-default content-main">
             <form name="question" method="post" action="/users/update">
                 <div class="form-group">
-                    <input type="hidden" class="form-control" id="userId" name="userId" value="{{userId}}">
+                    <input type="hidden" class="form-control" id="id" name="id" value="{{id}}">
                 </div>
                 <div class="form-group">
                     <label for="password">이전 비밀번호</label>
@@ -24,6 +24,7 @@
                     <input type="password" class="form-control" id="newPassword" name="newPassword"
                            placeholder="Password">
                 </div>
+
                 <div class="form-group">
                     <label for="name">이름</label>
                     <input type="text" class="form-control" id="name" name="name" value="{{name}}">
