@@ -40,6 +40,13 @@ public class User {
         this.email = email;
     }
 
+    public void update(User user) {
+        this.userId = user.userId;
+        this.password = user.password;
+        this.name = user.name;
+        this.email = user.email;
+    }
+
     @Override
     public String toString() {
         return "User{" +

@@ -48,4 +48,10 @@ public class UserController {
         }
         return "redirect:/users";
     }
+
+    @PostMapping("/{id}/update")
+    String updateUser(User user) {
+        userService.updateUser(user);
+        return "redirect:/users";
+    }
 }
