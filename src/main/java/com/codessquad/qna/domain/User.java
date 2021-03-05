@@ -58,14 +58,14 @@ public class User {
         this.id = id;
     }
 
-    public boolean checkPassword(User findUser) {
-        return findUser.getPassword().equals(this.getPassword());
+    public boolean checkPassword(User user) {
+        return user.getPassword().equals(this.password);
     }
 
     public void updateUserInfo(User user, String newPassword) {
-        this.setName(user.getName());
-        this.setUserId(user.getName());
-        this.setPassword(newPassword);
-        this.setEmail(user.getEmail());
+        this.name=user.getName();
+        this.userId=user.getUserId();
+        this.email=user.getEmail();
+        this.password=newPassword;
     }
 }
