@@ -21,19 +21,16 @@ public class MemoryUserRepository implements UserRepository{
     }
 
     @Override
-    public Optional<User> findById(Long userId) {
-        Optional<User> user = Optional.ofNullable(users.get(userId));
-        return user;
+    public Optional<User> findById(Long id) {
+        return Optional.ofNullable(users.get(id));
     }
 
     @Override
-    public void update(User oldUserInfo, User updateUserInfo) {
-
-    }
+    public void update(User oldUserInfo, User updateUserInfo) { }
 
     @Override
-    public void remove(Long userId) {
-        users.remove(userId);
+    public void remove(Long id) {
+        users.remove(id);
     }
 
     @Override

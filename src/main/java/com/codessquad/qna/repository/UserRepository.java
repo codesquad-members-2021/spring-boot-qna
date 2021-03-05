@@ -12,11 +12,11 @@ public interface UserRepository {
 
     public List<User> findAll();
 
-    public Optional<User> findById(Long userId);
+    public Optional<User> findById(Long id);
 
     public void update(User oldUserInfo, User updateUserInfo);
 
-    public void remove(Long userId);
+    public void remove(Long id);
 
     public int size();
 
