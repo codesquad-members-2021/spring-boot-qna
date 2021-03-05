@@ -37,4 +37,8 @@ public class User {
     public void setEmail(String email) {
         this.email = email;
     }
+
+    public boolean checkPassword(User findUser) {
+        return findUser.getPassword().equals(this.getPassword());
+    }
 }

@@ -54,8 +54,8 @@ public class UserController {
 
     @PostMapping("/update")
     public String userUpdate(User user, String newPassword) {
-
-        if (userRepository.checkPassword(user)) {
+        User findUser = userRepository.findById(user.getUserId());
+        if (user.checkPassword(findUser)) {
             userRepository.updateUserInfo(user, newPassword);
             return "redirect:/";
         }

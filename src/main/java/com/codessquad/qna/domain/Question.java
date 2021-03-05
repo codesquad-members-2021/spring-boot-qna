@@ -29,9 +29,6 @@ public class Question {
         return writer;
     }
 
-    public void setWriter(String writer) {
-        this.writer = writer;
-    }
 
     public String getTitle() {
         return title;
@@ -43,9 +40,5 @@ public class Question {
 
     public String getContents() {
         return contents;
-    }
-
-    public void setContents(String contents) {
-        this.contents = contents;
     }
 }

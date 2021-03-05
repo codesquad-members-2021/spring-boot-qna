@@ -38,12 +38,6 @@ public class UserRepository {
                 .orElse(null);
     }
 
-    public boolean checkPassword(User user) {
-        User getUser = findById(user.getUserId());
-
-        return getUser.getPassword().equals(user.getPassword());
-    }
-
     public String updateUserInfo(User user, String newPassword) {
         User getUser = findById(user.getUserId());
         getUser.setName(user.getName());
