@@ -61,15 +61,20 @@ public class UserController {
     private String updateMemberList(User updateUser, Model model){
 
         for(int index = 0; index<userList.size() ; index++){
-            boolean findeCheck = userList.get(index).getUserId().equals(updateUser.getUserId());
-            if (findeCheck){
+            boolean findIdCheck = userList.get(index).getUserId().equals(updateUser.getUserId());
+            boolean findPasswordCheck = userList.get(index).getPassword().equals(updateUser.getPassword());
+
+            if (findIdCheck && findPasswordCheck){
+                model.addAttribute("changeFail",false);
                 userList.get(index).setName(updateUser.getName());
                 userList.get(index).setEmail(updateUser.getEmail());
-                userList.get(index).setPassword(updateUser.getPassword());
+                model.addAttribute("users",userList);
+            }else{
+                model.addAttribute("changeFail",true);
+                model.addAttribute("users",userList);
             }
         }
-
-        return "redirect:/users";
+        return "user/list";
     }
 
 }
