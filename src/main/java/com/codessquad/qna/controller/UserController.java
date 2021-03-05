@@ -38,11 +38,7 @@ public class UserController {
 
     @GetMapping("/{id}")
     public ModelAndView userProfile(@PathVariable("id") String id) {
-        Matcher userIdMatcher = userIdPattern.matcher(id);
-        if (!userIdMatcher.matches()) {
-            return new ModelAndView("redirect:/users");
-        }
-        Optional<User> user = userRepository.findById( Long.parseLong(id));
+        Optional<User> user = matchIdPatternAndFindUser(id);
         if (!user.isPresent()) {
             return new ModelAndView("redirect:/users");
         }
@@ -52,8 +48,8 @@ public class UserController {
     }
 
     @GetMapping("/{id}/form")
-    public ModelAndView updateUserForm(@PathVariable("id") Long id) {
-        Optional<User> user = userRepository.findById(id);
+    public ModelAndView updateUserForm(@PathVariable("id") String id) {
+        Optional<User> user = matchIdPatternAndFindUser(id);
         if (!user.isPresent()) {
             return new ModelAndView("redirect:/users");
         }
@@ -63,9 +59,9 @@ public class UserController {
     }
 
     @PutMapping("/{id}")
-    public String updateUser(@PathVariable("id") Long id, String oldPassword, User newUserInfo) {
-        Optional<User> optionalUser = userRepository.findById(id);
-        optionalUser.ifPresent(user -> checkPasswordAndUpdate(user, oldPassword, newUserInfo));
+    public String updateUser(@PathVariable("id") String id, String oldPassword, User newUserInfo) {
+        Optional<User> user = matchIdPatternAndFindUser(id);
+        user.ifPresent(u -> checkPasswordAndUpdate(u, oldPassword, newUserInfo));
         return "redirect:/users";
     }
 
@@ -74,6 +70,14 @@ public class UserController {
             user.update(newUserInfo);
             userRepository.save(user);
         }
+    }
+
+    Optional<User> matchIdPatternAndFindUser(String id) {
+        Matcher userIdMatcher = userIdPattern.matcher(id);
+        if (!userIdMatcher.matches()) {
+            return Optional.empty();
+        }
+        return userRepository.findById(Long.parseLong(id));
     }
 
 }
