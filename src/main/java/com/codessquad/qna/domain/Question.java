@@ -1,7 +1,5 @@
 package com.codessquad.qna.domain;
 
-import java.util.Date;
-
 public class Question {
     private long id;
     private String writer;
