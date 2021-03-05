@@ -40,8 +40,7 @@ public class DBUserRepository implements UserRepository {
 
     @Override
     public void remove(Long id) {
-        Optional<User> user = findById(id);
-        user.ifPresent(value -> { entityManager.remove(value);});
+        findById(id).ifPresent(value -> { entityManager.remove(value);});
     }
 
     @Override
