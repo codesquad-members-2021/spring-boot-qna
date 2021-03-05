@@ -23,17 +23,17 @@ public class UserController {
     @GetMapping("/users")
     public String list(Model model){
         model.addAttribute("users",users);
-        return "/user/list";
+        return "users/list";
     }
 
     @GetMapping("/users/{userId}")
     public String viewUserProfile(@PathVariable String userId, Model model){
         for(User user : users){
             if(user.getUserId().equals(userId)){
-                model.addAttribute("user", user);
-                return "/user/profile";
+                model.addAttribute("user",user);
+                return "users/profile";
             }
         }
-        return "redirect:/users";
+        return "redirce:/users";
     }
 }
