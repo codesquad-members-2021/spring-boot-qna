@@ -14,16 +14,6 @@ import java.util.List;
 public class UserController {
     private List<User> users = new ArrayList<>();
 
-    @GetMapping("user/form")
-    public String getForm() {
-        return "user/form";
-    }
-
-    @GetMapping("/")
-    public String index() {
-        return "index";
-    }
-
     @PostMapping("user/create")
     public String create(User user, Model model) {
         users.add(user);
