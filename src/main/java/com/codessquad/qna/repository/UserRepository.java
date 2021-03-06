@@ -14,6 +14,8 @@ public interface UserRepository {
 
     public Optional<User> findById(Long id);
 
+    public Optional<User> findByUserId(String userId);
+
     public void update(User oldUserInfo, User updateUserInfo);
 
     public void remove(Long id);

@@ -31,6 +31,10 @@ public class UserService {
         return userRepository.findById(id).orElseThrow(CanNotFindUserException::new);
     }
 
+    public User getUserByUserId(String userId) {
+        return userRepository.findByUserId(userId).orElseThrow(CanNotFindUserException::new);
+    }
+
     public void change(User oldUserInfo, User updateUserInfo) {
         userRepository.update(oldUserInfo, updateUserInfo);
     }

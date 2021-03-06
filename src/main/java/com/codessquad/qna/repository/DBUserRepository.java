@@ -34,6 +34,12 @@ public class DBUserRepository implements UserRepository {
     }
 
     @Override
+    public Optional<User> findByUserId(String userId) {
+        return Optional.ofNullable(entityManager.createQuery("SELECT u FROM User u where u.userId = :userId", User.class)
+                .setParameter("userId", userId).getSingleResult());
+    }
+
+    @Override
     public void update(User oldUserInfo, User updateUserInfo) {
         oldUserInfo.change(updateUserInfo.getUserId(), updateUserInfo.getPassword(), updateUserInfo.getName(), updateUserInfo.getEmail());
     }
