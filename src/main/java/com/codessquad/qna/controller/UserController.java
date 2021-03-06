@@ -4,6 +4,7 @@ import com.codessquad.qna.dto.UserDto;
 import com.codessquad.qna.entity.User;
 import com.codessquad.qna.exception.CanNotFindUserException;
 import com.codessquad.qna.service.UserService;
+import com.codessquad.qna.util.HttpSessionUtils;
 import com.codessquad.qna.util.Mapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,6 +14,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
+import java.util.Optional;
 
 @Controller
 public class UserController {
@@ -50,7 +52,7 @@ public class UserController {
             logger.info("User password not matched : " + user.toString());
             return "redirect:/user/loginForm";
         }
-        httpSession.setAttribute("sessionUser", user);
+        httpSession.setAttribute(HttpSessionUtils.USER_SESSION_KEY, user);
         logger.info("Success User login : " + user.toString());
         return "redirect:/";
     }
@@ -63,7 +65,7 @@ public class UserController {
      */
     @GetMapping("/user/logout")
     public String logout(HttpSession httpSession) {
-        httpSession.removeAttribute("sessionUser");
+        httpSession.removeAttribute(HttpSessionUtils.USER_SESSION_KEY);
         return "redirect:/";
     }
 
@@ -100,12 +102,12 @@ public class UserController {
      */
     @GetMapping("/user/{id}/form")
     public String updateUserProfileForm(@PathVariable Long id, Model model, HttpSession httpSession) {
-        User sessionUser = isMatchingSessionUserById(id, httpSession);
-        if (sessionUser == null) {
-            return "redirect:/user/loginForm";
+        Optional<User> sessionUser = isMatchingSessionUserById(id, httpSession);
+        if (sessionUser.isPresent()) {
+            model.addAttribute("user", sessionUser);
+            return "user/updateForm";
         }
-        model.addAttribute("user", sessionUser);
-        return "user/updateForm";
+        return "redirect:/user/loginForm";
     }
 
     /**
@@ -116,27 +118,30 @@ public class UserController {
      */
     @PutMapping("/user/{id}")
     public String updateUserProfile(@PathVariable Long id, @ModelAttribute UserDto userDto, HttpSession httpSession) {
-        User sessionUser = isMatchingSessionUserById(id, httpSession);
-        if (sessionUser == null) {
-            return "redirect:/user/loginForm";
+        Optional<User> sessionUser = isMatchingSessionUserById(id, httpSession);
+        if (sessionUser.isPresent()) {
+            User changeUser = Mapper.mapToUser(userDto);
+            userService.change(userService.getUserById(id), changeUser);
+            return "redirect:/users";
         }
-        User changeUser = Mapper.mapToUser(userDto);
-        userService.change(userService.getUserById(id), changeUser);
-        return "redirect:/users";
+        return "redirect:/user/loginForm";
     }
 
-    private User isMatchingSessionUserById(Long id, HttpSession httpSession) {
-        Object tempUser = httpSession.getAttribute("sessionUser");
-        if(tempUser == null) {
+    private Optional<User> isMatchingSessionUserById(Long id, HttpSession httpSession) {
+        if(HttpSessionUtils.isLoggedUser(httpSession)) {
             logger.error("session 에 User 정보가 없습니다.");
-            return null;
+            return Optional.empty();
         }
-        User sessionUser = (User) tempUser;
-        if(!id.equals(sessionUser.getId())){
-            logger.error("sessionId : " + sessionUser.getId() + " 와 userId : + " + id + " 가 다릅니다. ");
-            throw new IllegalArgumentException("자신의 정보만 수정할 수 있습니다.");
+        Optional<User> userFromSession = HttpSessionUtils.getUserFromSession(httpSession);
+        if(userFromSession.isPresent()){
+            User sessionUser = userFromSession.get();
+            if(!id.equals(sessionUser.getId())){
+                logger.error("sessionId : " + sessionUser.getId() + " 와 userId : + " + id + " 가 다릅니다. ");
+                throw new IllegalArgumentException("자신의 정보만 수정할 수 있습니다.");
+            }
+            return Optional.of(sessionUser);
         }
-        return sessionUser;
+        return Optional.empty();
     }
 
    private void getUsetIfExist(Long id, Model model) {
