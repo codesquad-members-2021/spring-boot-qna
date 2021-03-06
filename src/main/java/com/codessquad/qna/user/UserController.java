@@ -23,6 +23,9 @@ public class UserController {
     @GetMapping("/users")
     public String list(Model model) {
         model.addAttribute("users", users);
+        for (User user : users) {
+            System.out.println(user.toString());
+        }
         return "user/list";
     }
 
@@ -30,7 +33,6 @@ public class UserController {
     public String profile(@PathVariable String userId, Model model) {
         model.addAttribute("user", getUserByUserId(userId));
         return "user/profile";
-
     }
 
     private User getUserByUserId(String userId) {
