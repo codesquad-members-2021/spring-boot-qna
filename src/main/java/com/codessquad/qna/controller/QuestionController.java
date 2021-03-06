@@ -84,12 +84,12 @@ public class QuestionController {
     @DeleteMapping("/{id}")
     public String delete(@PathVariable Long id, HttpSession session) {
         if (!isLoginUser(session)) {
-            return "/users/loginForm";
+            return "redirect:/users/loginForm";
         }
         User loginUser = getSessionUser(session);
         Question question = questionRepository.getOne(id);
         if (question.isNotSameAuthor(loginUser)) {
-            return "/users/loginForm";
+            return "redirect:/users/loginForm";
         }
         questionRepository.delete(question);
         return "redirect:/";
