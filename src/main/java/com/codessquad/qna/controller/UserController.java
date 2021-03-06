@@ -60,8 +60,7 @@ public class UserController {
 
     @PutMapping("/{id}")
     public String updateUser(@PathVariable("id") String id, String oldPassword, User newUserInfo) {
-        Optional<User> user = matchIdPatternAndFindUser(id);
-        user.ifPresent(u -> checkPasswordAndUpdate(u, oldPassword, newUserInfo));
+        matchIdPatternAndFindUser(id).ifPresent(u -> checkPasswordAndUpdate(u, oldPassword, newUserInfo));
         return "redirect:/users";
     }
 
@@ -72,7 +71,7 @@ public class UserController {
         }
     }
 
-    Optional<User> matchIdPatternAndFindUser(String id) {
+    private Optional<User> matchIdPatternAndFindUser(String id) {
         Matcher userIdMatcher = userIdPattern.matcher(id);
         if (!userIdMatcher.matches()) {
             return Optional.empty();
