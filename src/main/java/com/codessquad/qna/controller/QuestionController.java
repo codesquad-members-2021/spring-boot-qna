@@ -1,19 +1,15 @@
 package com.codessquad.qna.controller;
 
-import com.codessquad.qna.question.Question;
-import com.codessquad.qna.question.QuestionRequest;
-import com.codessquad.qna.user.User;
-import com.codessquad.qna.user.UserRepository;
+import com.codessquad.qna.domain.Question;
+import com.codessquad.qna.domain.QuestionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.servlet.ModelAndView;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -21,50 +17,42 @@ import java.util.regex.Pattern;
 @Controller
 public class QuestionController {
 
-    private final UserRepository userRepository;
-    private final List<Question> questions = new ArrayList<>();
+    private final QuestionRepository questionRepository;
     private final Pattern questionIdPattern = Pattern.compile("[1-9]\\d*");
 
     @Autowired
-    public QuestionController(UserRepository userRepository) {
-        this.userRepository = userRepository;
+    public QuestionController(QuestionRepository questionRepository) {
+        this.questionRepository = questionRepository;
     }
 
     @GetMapping("/")
-    public String index(Model model) {
-        model.addAttribute("questions", questions);
-        return "index";
+    public ModelAndView index() {
+        ModelAndView modelAndView = new ModelAndView("index");
+        modelAndView.addObject("questions", questionRepository.findAll());
+        return modelAndView;
     }
 
     @PostMapping("/questions")
-    public String query(QuestionRequest questionRequest) {
-        String writerId = questionRequest.getWriter();
-        Optional<User> optionalWriter = userRepository.findUserById(writerId);
-        User writer = optionalWriter.orElse(new User(writerId, writerId));
-        Question question = new Question();
-        int questionId = questions.size() + 1;
-        question.setId(questionId);
-        question.setWriter(writer);
-        question.setTitle(questionRequest.getTitle());
-        question.setContents(questionRequest.getContents());
+    public String query(Question question) {
         question.setTime(LocalDateTime.now());
         question.setPoint(0);
-        questions.add(question);
-        return "redirect:/questions/" + questionId;
+        questionRepository.save(question);
+        return "redirect:/";
     }
 
     @GetMapping("/questions/{id}")
-    public String qnaShow(@PathVariable("id") String id, Model model) {
+    public ModelAndView qnaShow(@PathVariable("id") String id) {
         Matcher questionIdMatcher = questionIdPattern.matcher(id);
         if (!questionIdMatcher.matches()) {
-            return "redirect:/";
+            return new ModelAndView("redirect:/");
         }
-        int questionIndex = Integer.parseInt(id) - 1;
-        if (questionIndex < questions.size()) {
-            model.addAttribute(questions.get(questionIndex));
-            return "qna/show";
+        Optional<Question> questionOptional = questionRepository.findById(Long.parseLong(id));
+        if (questionOptional.isPresent()) {
+            ModelAndView modelAndView = new ModelAndView("qna/show");
+            modelAndView.addObject(questionOptional.get());
+            return modelAndView;
         }
-        return "redirect:/";
+        return new ModelAndView("redirect:/");
     }
 
 }
