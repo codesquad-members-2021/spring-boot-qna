@@ -6,6 +6,7 @@ import com.codessquad.qna.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.NoResultException;
 import java.util.List;
 import java.util.Optional;
 
@@ -32,7 +33,11 @@ public class UserService {
     }
 
     public User getUserByUserId(String userId) {
-        return userRepository.findByUserId(userId).orElseThrow(CanNotFindUserException::new);
+        try {
+            return userRepository.findByUserId(userId).orElseThrow(CanNotFindUserException::new);
+        }catch (NoResultException e){
+            throw new CanNotFindUserException();
+        }
     }
 
     public void change(User oldUserInfo, User updateUserInfo) {

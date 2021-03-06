@@ -6,6 +6,7 @@ import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.transaction.Transactional;
 import java.util.List;
 import java.util.Optional;
@@ -34,7 +35,7 @@ public class DBUserRepository implements UserRepository {
     }
 
     @Override
-    public Optional<User> findByUserId(String userId) {
+    public Optional<User> findByUserId(String userId) throws NoResultException {
         return Optional.ofNullable(entityManager.createQuery("SELECT u FROM User u where u.userId = :userId", User.class)
                 .setParameter("userId", userId).getSingleResult());
     }
