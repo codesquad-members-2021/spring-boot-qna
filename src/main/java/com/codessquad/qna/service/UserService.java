@@ -24,4 +24,5 @@ public class UserService {
     public boolean validationUserInfo(String userIdCheck, String password) {
         return repository.findById(userIdCheck).getPassword().equals(password);
     }
+    
 }
