@@ -6,68 +6,68 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.ArrayList;
-import java.util.List;
+import org.springframework.web.servlet.ModelAndView;
 
 @Controller
+@RequestMapping("/users")
 public class UserController {
-    private List<User> users = new ArrayList<>();
 
     @Autowired
     private UserRepository userRepository;
 
-    @PostMapping("/users")
+    @PostMapping("")
     public String create(User user) {
         System.out.println("user Info: " + user);
-        users.add(user);
         userRepository.save(user);
         return "redirect:/";
     }
 
-    @GetMapping("/users")
+    @GetMapping("")
     public String list(Model model) {
-        model.addAttribute("users", users);
+        model.addAttribute("users", userRepository.findAll());
         System.out.println(model);
         return "user/list";
     }
 
-    @GetMapping("/users/{userId}")
-    public String viewProfile(@PathVariable("userId") String userId, Model model) {
-        for (User user : users) {
-            if (user.getUserId().equals(userId)) {
-                model.addAttribute("user", user);
-                return "user/profile";
-            }
-        }
+    @GetMapping("/{id}")
+    public String viewProfile(@PathVariable Long id, Model model) {
+        model.addAttribute("user", userRepository.findById(id).get());
         return "user/profile";
     }
 
-    @GetMapping("/users/confirm")
-    public String editUserInfo() {
-        return "user/confirmUserInfo";
+    @GetMapping("/confirm/{id}")
+    public ModelAndView confirmUserInfo(@PathVariable Long id) {
+        ModelAndView modelAndView = new ModelAndView("/user/confirmUserInfo");
+        User user = userRepository.findById(id).get();
+        modelAndView.addObject("userId", user.getUserId());
+        return modelAndView;
     }
 
-    @PostMapping("/users/confirm")
-    public String editUserInfo(String userId, String password, Model model) {
-        model.addAttribute("userId", userId);
-        for (User user : users) {
-            if (user.getUserId().equals(userId) && user.getPassword().equals(password)) {
-                return "user/updateForm";
-            }
+    @PostMapping("/confirm/{id}")
+    public String confirmUserInfo(@PathVariable("id") Long id, String password) {
+        User user = userRepository.findById(id).get();
+        String userPassword = user.getPassword();
+        if (userPassword.equals(password)) {
+            return "redirect:/users/update/{id}";
         }
-        return "redirect:/users/confirm";
+        return "redirect:/users/confirm/{id}";
     }
 
-    @PutMapping(value = "/users/{userId}")
-    public String changeUserInfoForm(@PathVariable("userId") String userId, String password, String name, String email) {
-        for (User user : users) {
-            if (user.getUserId().equals(userId)) {
-                user.setPassword(password);
-                user.setName(name);
-                user.setEmail(email);
-            }
-        }
+    @GetMapping("/update/{id}")
+    public ModelAndView updateUserInfo(@PathVariable Long id) {
+        ModelAndView modelAndView = new ModelAndView("user/updateForm");
+        User user = userRepository.findById(id).get();
+        modelAndView.addObject("userId", user.getUserId());
+        return modelAndView;
+    }
+
+    @PutMapping(value = "/update/{id}")
+    public String updateUserInfo(@PathVariable("id") Long id, String password, String name, String email) {
+        User user = userRepository.findById(id).get();
+        user.setPassword(password);
+        user.setName(name);
+        user.setEmail(email);
+        userRepository.save(user);
         return "redirect:/users";
     }
 
