@@ -34,14 +34,14 @@ public class User {
     }
 
     public boolean matchPassword(String password) {
-        if (password==null) {
+        if (password == null) {
             return false;
         }
         return password.equals(this.password);
     }
 
     public boolean matchId(Long id) {
-        if (id!=null) {
+        if (id == null) {
             return false;
         }
         return id.equals(this.id);
