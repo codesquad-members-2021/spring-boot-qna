@@ -44,13 +44,18 @@ public class UserController {
 
     @GetMapping("/users/{index}/form")
     public String updateForm(@PathVariable int index, Model model) {
-        model.addAttribute("user", users.get(index - 1));
-        return "/user/updateForm";
+        try {
+            model.addAttribute("user", users.get(index - 1));
+            return "/user/updateForm";
+        } catch (IndexOutOfBoundsException e){
+            return "redirect:/";
+        }
     }
 
     @PostMapping("/users/{index}")
     public String update(@PathVariable int index, User newUser) {
-        users.set(index - 1, newUser);
+        User user = users.get(index-1);
+        user.update(newUser);
         return "redirect:/users";
     }
 }
