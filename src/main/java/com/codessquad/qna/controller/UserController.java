@@ -80,13 +80,13 @@ public class UserController {
     @PutMapping("/user/{id}")
     public String updateUserProfile(@PathVariable Long id, @ModelAttribute UserDto userDto) {
         User changeUser = Mapper.mapToUser(userDto);
-        userService.change(userService.getUser(id), changeUser);
+        userService.change(userService.getUserById(id), changeUser);
         return "redirect:/users";
     }
 
-    private void getUsetIfExist(Long id, Model model) {
+   private void getUsetIfExist(Long id, Model model) {
         try {
-            User user = userService.getUser(id);
+            User user = userService.getUserById(id);
             model.addAttribute("user", user);
         } catch (CanNotFindUserException e) {
             logger.error(e.getMessage());

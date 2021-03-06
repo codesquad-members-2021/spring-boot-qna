@@ -27,16 +27,15 @@ public class UserService {
         return userRepository.findAll();
     }
 
-    public User getUser(Long userId) {
-        return userRepository.findById(userId).orElseThrow(CanNotFindUserException::new);
+    public User getUserById(Long id) {
+        return userRepository.findById(id).orElseThrow(CanNotFindUserException::new);
     }
-
 
     public void change(User oldUserInfo, User updateUserInfo) {
         userRepository.update(oldUserInfo, updateUserInfo);
     }
 
-    public void removeUser(Long userId) {userRepository.remove(userId);}
+    public void removeUser(Long id) {userRepository.remove(id);}
 
     public int countOfUsers() {return userRepository.size();}
 
