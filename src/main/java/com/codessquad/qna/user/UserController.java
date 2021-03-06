@@ -45,7 +45,7 @@ public class UserController {
     }
 
     @GetMapping("/users/{index}/form")
-    public String updateForm(@PathVariable int index, Model model) {
+    public String update(@PathVariable int index, Model model) {
         try {
             model.addAttribute("user", users.get(index - 1));
             return "/user/updateForm";
@@ -55,7 +55,7 @@ public class UserController {
     }
 
     @PostMapping("/users/{index}")
-    public String update(@PathVariable int index, User newUser) {
+    public String updateForm(@PathVariable int index, User newUser) {
         User user = users.get(index - 1);
         user.update(newUser);
         return "redirect:/users";
