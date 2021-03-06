@@ -7,6 +7,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.servlet.http.HttpSession;
 import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -77,6 +78,21 @@ public class UserController {
             return Optional.empty();
         }
         return userRepository.findById(Long.parseLong(id));
+    }
+
+    @GetMapping("/login")
+    public String loginForm() {
+        return "users/login";
+    }
+
+    @PostMapping("/login")
+    public String login(String userId, String password, HttpSession session) {
+        User user = userRepository.findByUserId(userId);
+        if (user == null || !user.isMatchingPassword(password)) {
+            return "users/login_failed";
+        }
+        session.setAttribute("user", user);
+        return "redirect:/";
     }
 
 }
