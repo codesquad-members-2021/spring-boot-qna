@@ -12,6 +12,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpSession;
+
 @Controller
 public class UserController {
 
@@ -32,6 +34,25 @@ public class UserController {
         userService.save(user);
         logger.info(user.toString());
         return "redirect:/users";
+    }
+
+    /**
+     * 유저 로그인 동작 로직
+     * 만약 비밀번호가 일치 하지않는다면 로그인폼으로 redirect 시킨다.
+     * @param userId
+     * @param password
+     * @return
+     */
+    @PostMapping("/user/login")
+    public String login(String userId, String password, HttpSession httpSession) {
+        User user = userService.getUserByUserId(userId);
+        if(!user.isMatchingPassword(password)) {
+            logger.info("User password not matched : " + user.toString());
+            return "redirect:/user/loginForm";
+        }
+        httpSession.setAttribute("user", user);
+        logger.info("Success User login : " + user.toString());
+        return "redirect:/";
     }
 
     /**
