@@ -25,8 +25,8 @@ public class User {
     private String name;
     private String email;
 
-    public User(String id, String password, String name, String email) {
-        this.userId = id;
+    public User(String userId, String password, String name, String email) {
+        this.userId = userId;
         this.password = password;
         this.name = name;
         this.email = email;
@@ -39,8 +39,10 @@ public class User {
         this.email = email;
     }
 
-    public boolean isMatchingPassword(String password) {
+    public boolean isMatchedPassword(String password) {
         return this.password.equals(password);
     }
+
+    public boolean isMatchedId(Long id) {return this.getId().equals(id);}
 
 }

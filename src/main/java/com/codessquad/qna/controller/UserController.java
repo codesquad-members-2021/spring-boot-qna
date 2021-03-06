@@ -48,7 +48,7 @@ public class UserController {
     @PostMapping("/user/login")
     public String login(String userId, String password, HttpSession httpSession) {
         User user = userService.getUserByUserId(userId);
-        if(!user.isMatchingPassword(password)) {
+        if(!user.isMatchedPassword(password)) {
             logger.info("User password not matched : " + user.toString());
             return "redirect:/user/loginForm";
         }
@@ -135,7 +135,7 @@ public class UserController {
         Optional<User> userFromSession = HttpSessionUtils.getUserFromSession(httpSession);
         if(userFromSession.isPresent()){
             User sessionUser = userFromSession.get();
-            if(!id.equals(sessionUser.getId())){
+            if(!sessionUser.isMatchedId(id)){
                 logger.error("sessionId : " + sessionUser.getId() + " 와 userId : + " + id + " 가 다릅니다. ");
                 throw new IllegalArgumentException("자신의 정보만 수정할 수 있습니다.");
             }
