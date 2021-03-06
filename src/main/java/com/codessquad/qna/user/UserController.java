@@ -47,14 +47,14 @@ public class UserController {
         try {
             model.addAttribute("user", users.get(index - 1));
             return "/user/updateForm";
-        } catch (IndexOutOfBoundsException e){
+        } catch (IndexOutOfBoundsException e) {
             return "redirect:/";
         }
     }
 
     @PostMapping("/users/{index}")
     public String update(@PathVariable int index, User newUser) {
-        User user = users.get(index-1);
+        User user = users.get(index - 1);
         user.update(newUser);
         return "redirect:/users";
     }
