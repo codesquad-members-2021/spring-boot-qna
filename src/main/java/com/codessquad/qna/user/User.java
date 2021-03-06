@@ -1,13 +1,13 @@
 package com.codessquad.qna.user;
 
 public class User {
-    private String index;
+    private int index;
     private String userId;
     private String password;
     private String name;
     private String email;
 
-    public void setIndex(String index) {
+    public void setIndex(int index) {
         this.index = index;
     }
 
@@ -27,7 +27,7 @@ public class User {
         this.email = email;
     }
 
-    public String getIndex() {
+    public int getIndex() {
         return index;
     }
 

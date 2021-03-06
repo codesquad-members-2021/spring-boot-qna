@@ -1,7 +1,7 @@
 package com.codessquad.qna.qna;
 
 public class Question {
-    private String index;
+    private int index;
     private String writer;
     private String title;
     private String contents;
@@ -18,7 +18,7 @@ public class Question {
         this.contents = contents;
     }
 
-    public void setIndex(String index) {
+    public void setIndex(int index) {
         this.index = index;
     }
 
@@ -34,7 +34,7 @@ public class Question {
         return contents;
     }
 
-    public String getIndex() {
+    public int getIndex() {
         return index;
     }
 
