@@ -102,7 +102,7 @@ public class UserController {
      */
     @GetMapping("/user/{id}/form")
     public String updateUserProfileForm(@PathVariable Long id, Model model, HttpSession httpSession) {
-        Optional<User> sessionUser = isMatchingSessionUserById(id, httpSession);
+        Optional<User> sessionUser = isMatchedSessionUserById(id, httpSession);
         if (sessionUser.isPresent()) {
             model.addAttribute("user", sessionUser);
             return "user/updateForm";
@@ -118,7 +118,7 @@ public class UserController {
      */
     @PutMapping("/user/{id}")
     public String updateUserProfile(@PathVariable Long id, @ModelAttribute UserDto userDto, HttpSession httpSession) {
-        Optional<User> sessionUser = isMatchingSessionUserById(id, httpSession);
+        Optional<User> sessionUser = isMatchedSessionUserById(id, httpSession);
         if (sessionUser.isPresent()) {
             User changeUser = Mapper.mapToUser(userDto);
             userService.change(userService.getUserById(id), changeUser);
@@ -127,10 +127,18 @@ public class UserController {
         return "redirect:/user/loginForm";
     }
 
-    private Optional<User> isMatchingSessionUserById(Long id, HttpSession httpSession) {
+    /**
+     * HttpSession 상의 유저와 url 에 주어진 id 로 mapping 된 유저가 같은 유저인지 테스트 하는 메소드
+     * @param id
+     * @param httpSession
+     * if Matched Session User and User from id
+     * @return Optional<User>
+     *     else
+     * @return Optional.empty();
+     */
+    private Optional<User> isMatchedSessionUserById(Long id, HttpSession httpSession) {
         if(HttpSessionUtils.isLoggedUser(httpSession)) {
             logger.error("session 에 User 정보가 없습니다.");
-            return Optional.empty();
         }
         Optional<User> userFromSession = HttpSessionUtils.getUserFromSession(httpSession);
         if(userFromSession.isPresent()){
