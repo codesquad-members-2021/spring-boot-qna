@@ -50,7 +50,7 @@ public class UserController {
             logger.info("User password not matched : " + user.toString());
             return "redirect:/user/loginForm";
         }
-        httpSession.setAttribute("user", user);
+        httpSession.setAttribute("sessionUser", user);
         logger.info("Success User login : " + user.toString());
         return "redirect:/";
     }
