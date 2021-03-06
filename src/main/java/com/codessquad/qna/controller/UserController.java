@@ -73,7 +73,7 @@ public class UserController {
      * @throws CanNotFindUserException
      * @return only for users with the same id
      */
-    @GetMapping("/users/{id}")
+    @GetMapping("/user/{id}")
     public String getUserProfile(@PathVariable Long id, Model model) {
         getUsetIfExist(id, model);
         return "user/profile";
@@ -86,7 +86,7 @@ public class UserController {
      * @param model
      * @return
      */
-    @GetMapping("/users/{id}/form")
+    @GetMapping("/user/{id}/form")
     public String updateUserProfileForm(@PathVariable Long id, Model model) {
         getUsetIfExist(id, model);
         return "user/updateForm";
