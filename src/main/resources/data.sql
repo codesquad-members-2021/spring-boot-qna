@@ -1,4 +1,6 @@
 INSERT INTO USER(USER_ID, PASSWORD, NAME, EMAIL)
+VALUES ('java', 'test', '자바', 'java@gmail.com');
+INSERT INTO USER(USER_ID, PASSWORD, NAME, EMAIL)
 VALUES ('janeljs', '1234', '제인', 'jane@gmail.com');
 INSERT INTO USER(USER_ID, PASSWORD, NAME, EMAIL)
 VALUES ('trevi', 'test', '트레비', 'lemonsparkling@gmail.com');
