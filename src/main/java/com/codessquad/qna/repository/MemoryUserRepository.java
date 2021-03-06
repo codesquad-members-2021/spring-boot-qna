@@ -3,13 +3,14 @@ package com.codessquad.qna.repository;
 
 import com.codessquad.qna.domain.User;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 public class MemoryUserRepository implements UserRepository {
 
-    private Map<String, User> userMap = new HashMap<>();
+    private final Map<String, User> userMap = Collections.synchronizedMap(new HashMap<>());
 
 
     @Override
@@ -25,14 +26,10 @@ public class MemoryUserRepository implements UserRepository {
 
     private void validateUserDuplication(User user1) {
         for (User user2 : userMap.values()) {
-            if (isMatchingUserId(user1, user2)) {
+            if (user1.equals(user2)) {
                 throw new IllegalStateException("이미 존재하는 회원입니다.");
             }
         }
-    }
-
-    private boolean isMatchingUserId(User user1, User user2) {
-        return user1.getUserId().equals(user2.getUserId());
     }
 
     @Override

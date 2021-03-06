@@ -2,9 +2,7 @@ package com.codessquad.qna.controller;
 
 import com.codessquad.qna.domain.User;
 import com.codessquad.qna.service.UserService;
-import java.lang.ProcessBuilder.Redirect;
 import java.util.List;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -19,7 +17,6 @@ public class UserController {
 
     private final UserService userService;
 
-    @Autowired
     public UserController(UserService userService) {
         this.userService = userService;
     }
@@ -32,32 +29,31 @@ public class UserController {
             redirect.addFlashAttribute("fail", true);
             return "redirect:/users/form";
         }
-        return "redirect:/users/list";
+        return "redirect:/users";
     }
 
-    @GetMapping("/list")
+    @GetMapping("")
     public String userList(Model model) {
         List<User> users = userService.findUserAll();
         model.addAttribute("users", users);
         return "/user/list";
     }
 
-    @PostMapping("/list")
-    public String userList(User user, RedirectAttributes redirect) {
+    @PostMapping("/{userId}/update")
+    public String updateUserProfile(User user, RedirectAttributes redirect) {
         User originUser = userService.findUserByUserId(user.getUserId());
         String[] passwordArray = user.getPassword().split(",");
 
-        String originPassword = originUser.getPassword();
         String receivedPassword = passwordArray[0];
         String newPassword = passwordArray[1];
-        if (!userService.isMatchingPassword(originPassword, receivedPassword)) {
+        if (!originUser.isMatchingPassword(receivedPassword)) {
             redirect.addFlashAttribute("fail", true);
-            return "redirect:/users/" + originUser.getUserId() + "/update";
+            return "redirect:/users/" + originUser.getUserId() + "/form";
         }
 
         user.setPassword(newPassword);
         userService.updateUserData(user);
-        return "redirect:/users/list";
+        return "redirect:/users";
     }
 
 
@@ -68,8 +64,8 @@ public class UserController {
         return "/user/profile";
     }
 
-    @GetMapping("/{userId}/update")
-    public String updateUserData(@PathVariable String userId, Model model) {
+    @GetMapping("/{userId}/form")
+    public String updateUserForm(@PathVariable String userId, Model model) {
         User user = userService.findUserByUserId(userId);
         model.addAttribute("user", user);
         return "/user/updateForm";

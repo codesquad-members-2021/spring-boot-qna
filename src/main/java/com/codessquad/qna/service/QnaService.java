@@ -6,7 +6,7 @@ import java.util.List;
 
 public class QnaService {
 
-    QnaRepository qnaRepository;
+    private final QnaRepository qnaRepository;
 
     public QnaService(QnaRepository qnaRepository) {
         this.qnaRepository = qnaRepository;

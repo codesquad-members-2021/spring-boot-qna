@@ -6,7 +6,7 @@ import java.util.List;
 
 public class UserService {
 
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
 
     public UserService(UserRepository userRepository) {
         this.userRepository = userRepository;
@@ -22,10 +22,6 @@ public class UserService {
 
     public User findUserByUserId(String userId) {
         return userRepository.findUserByUserID(userId);
-    }
-
-    public boolean isMatchingPassword(String originPassword, String receivedPassword) {
-        return originPassword.equals(receivedPassword);
     }
 
     public void updateUserData(User user) {

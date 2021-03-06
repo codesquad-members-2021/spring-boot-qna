@@ -3,16 +3,15 @@ package com.codessquad.qna.controller;
 import com.codessquad.qna.domain.Question;
 import com.codessquad.qna.service.QnaService;
 import java.util.List;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
 @Controller
 public class HomeController {
-    QnaService qnaService;
 
-    @Autowired
+    private final QnaService qnaService;
+
     public HomeController(QnaService qnaService) {
         this.qnaService = qnaService;
     }
