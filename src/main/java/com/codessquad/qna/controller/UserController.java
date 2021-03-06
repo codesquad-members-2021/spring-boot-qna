@@ -99,8 +99,12 @@ public class UserController {
      * @return
      */
     @GetMapping("/user/{id}/form")
-    public String updateUserProfileForm(@PathVariable Long id, Model model) {
-        getUsetIfExist(id, model);
+    public String updateUserProfileForm(@PathVariable Long id, Model model, HttpSession httpSession) {
+        User sessionUser = isMatchingSessionUserById(id, httpSession);
+        if (sessionUser == null) {
+            return "redirect:/user/loginForm";
+        }
+        model.addAttribute("user", sessionUser);
         return "user/updateForm";
     }
 
@@ -111,10 +115,28 @@ public class UserController {
      * @return
      */
     @PutMapping("/user/{id}")
-    public String updateUserProfile(@PathVariable Long id, @ModelAttribute UserDto userDto) {
+    public String updateUserProfile(@PathVariable Long id, @ModelAttribute UserDto userDto, HttpSession httpSession) {
+        User sessionUser = isMatchingSessionUserById(id, httpSession);
+        if (sessionUser == null) {
+            return "redirect:/user/loginForm";
+        }
         User changeUser = Mapper.mapToUser(userDto);
         userService.change(userService.getUserById(id), changeUser);
         return "redirect:/users";
+    }
+
+    private User isMatchingSessionUserById(Long id, HttpSession httpSession) {
+        Object tempUser = httpSession.getAttribute("sessionUser");
+        if(tempUser == null) {
+            logger.error("session 에 User 정보가 없습니다.");
+            return null;
+        }
+        User sessionUser = (User) tempUser;
+        if(!id.equals(sessionUser.getId())){
+            logger.error("sessionId : " + sessionUser.getId() + " 와 userId : + " + id + " 가 다릅니다. ");
+            throw new IllegalArgumentException("자신의 정보만 수정할 수 있습니다.");
+        }
+        return sessionUser;
     }
 
    private void getUsetIfExist(Long id, Model model) {
