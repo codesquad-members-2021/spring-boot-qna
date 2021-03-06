@@ -40,7 +40,6 @@ public class User {
 
     public void update(User user) {
         setUserId(user.userId);
-        setPassword(user.password);
         setName(user.name);
         setEmail(user.email);
     }
