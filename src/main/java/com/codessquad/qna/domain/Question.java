@@ -3,6 +3,8 @@ package com.codessquad.qna.domain;
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
+import java.util.Objects;
 
 @Entity
 public class Question {
@@ -17,6 +19,10 @@ public class Question {
     @Lob
     private String contents;
     private LocalDateTime date;
+
+    @OneToMany(mappedBy = "question")
+    @OrderBy("id asc")
+    private List<Answer> answers;
 
     public Question() {
     }
@@ -74,6 +80,19 @@ public class Question {
 
     public boolean isNotSameAuthor(User loginUser) {
         return !this.author.equals(loginUser);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Question question = (Question) o;
+        return Objects.equals(id, question.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
     }
 }
 
