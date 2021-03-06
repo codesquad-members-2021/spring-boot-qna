@@ -56,6 +56,18 @@ public class UserController {
     }
 
     /**
+     * User 가 logout 한다.
+     * Session 에서 sessionUser 의 data 또한 삭제한다.
+     * @param httpSession
+     * @return
+     */
+    @GetMapping("/user/logout")
+    public String logout(HttpSession httpSession) {
+        httpSession.removeAttribute("sessionUser");
+        return "redirect:/";
+    }
+
+    /**
      * @param model
      * @return All User Accounts to List
      */
