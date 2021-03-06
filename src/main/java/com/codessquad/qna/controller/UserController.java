@@ -1,6 +1,8 @@
 package com.codessquad.qna.controller;
 
 import com.codessquad.qna.domain.User;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -14,6 +16,8 @@ import java.util.List;
 @Controller
 @RequestMapping("users")
 public class UserController {
+    Logger logger = LoggerFactory.getLogger(UserController.class);
+
     private final List<User> users = new ArrayList<>();
 
     @GetMapping("/{userId}")
@@ -33,7 +37,8 @@ public class UserController {
 
     @PostMapping("/create")
     public String create(User user) {
-        System.out.println(user);
+        logger.info(user.toString());
+
         users.add(user);
         return "redirect:/users";
     }
