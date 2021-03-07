@@ -13,7 +13,7 @@ public class Question {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(foreignKey = @ForeignKey(name = "fk_author"))
+    @JoinColumn(foreignKey = @ForeignKey(name = "fk_question_author"))
     private User author;
     private String title;
     @Lob
@@ -71,6 +71,15 @@ public class Question {
 
     public void setContents(String contents) {
         this.contents = contents;
+    }
+
+
+    public List<Answer> getAnswers() {
+        return answers;
+    }
+
+    public void setAnswers(List<Answer> answers) {
+        this.answers = answers;
     }
 
     public void update(String title, String contents) {
