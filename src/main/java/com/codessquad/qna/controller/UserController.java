@@ -51,15 +51,14 @@ public class UserController {
             return "redirect:/users/" + originUser.getUserId() + "/form";
         }
 
-        user.setPassword(newPassword);
-        userService.updateUserData(user);
+        userService.updateUserData(originUser, user);
         return "redirect:/users";
     }
 
 
-    @GetMapping("/{userId}")
-    public String userProfile(@PathVariable String userId, Model model) {
-        User user = userService.findUserByUserId(userId);
+    @GetMapping("/{id}")
+    public String userProfile(@PathVariable Long id, Model model) {
+        User user = userService.findById(id);
         model.addAttribute("user", user);
         return "/user/profile";
     }

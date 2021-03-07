@@ -14,33 +14,37 @@ public class MemoryUserRepository implements UserRepository {
 
     private final Map<String, User> userMap = Collections.synchronizedMap(new HashMap<>());
 
-
     @Override
-    public void save(User user) {
-        validateUserDuplication(user);
+    public User save(User user) {
         userMap.put(user.getUserId(), user);
+        return user;
     }
 
     @Override
-    public void updateUserData(User user) {
-        userMap.put(user.getUserId(), user);
-    }
-
-    private void validateUserDuplication(User user1) {
-        for (User user2 : userMap.values()) {
-            if (user1.equals(user2)) {
-                throw new IllegalStateException("이미 존재하는 회원입니다.");
-            }
-        }
-    }
-
-    @Override
-    public List<User> findUserALl() {
+    public List<User> findAll() {
         return new ArrayList<>(userMap.values());
     }
 
     @Override
-    public User findUserByUserID(String userId) {
+    public boolean existsUserByUserId(String userId) {
+        if (userMap.get(userId) == null) {
+            return false;
+        }
+        return true;
+    }
+
+    @Override
+    public User findUserById(Long id) {
+        for (User user : userMap.values()) {
+            if (user.getId().equals(id)) {
+                return user;
+            }
+        }
+        return null;
+    }
+
+    @Override
+    public User findUserByUserId(String userId) {
         return userMap.get(userId);
     }
 

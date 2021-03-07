@@ -5,11 +5,14 @@ import java.util.List;
 
 public interface UserRepository {
 
-    void save(User user);
+    User save(User user);
 
-    List<User> findUserALl();
+    List<User> findAll();
 
-    User findUserByUserID(String userId);
+    User findUserByUserId(String userId);
 
-    void updateUserData(User user);
+    boolean existsUserByUserId(String userId);
+
+    User findUserById(Long id);
+
 }
