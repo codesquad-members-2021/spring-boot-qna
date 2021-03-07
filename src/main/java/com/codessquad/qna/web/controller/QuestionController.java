@@ -16,11 +16,6 @@ public class QuestionController {
 
     List<Question> questions = new ArrayList<>();
 
-    @GetMapping("/questions/form")
-    public String getForm(){
-        return "qna/form";
-    }
-
     @GetMapping("/questions/{index}")
     public String getQuestionDetail(@PathVariable("index") String stringIdx, Model model){
         int index = getIndex(stringIdx);

@@ -42,12 +42,6 @@ public class User {
         return email;
     }
 
-    public void updateAll(User updated){
-        setPassword(updated.password);
-        setName(updated.name);
-        setEmail(updated.email);
-    }
-
     @Override
     public String toString() {
         return "User{" +
