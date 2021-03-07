@@ -1,12 +1,12 @@
 package com.codessquad.qna.web.question;
 
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
 public class QuestionRepository {
-    private Map<Integer, Question> questions = new LinkedHashMap<>();
+    private Map<Integer, Question> questions = new ConcurrentHashMap<>();
 
     public void add(Question question) {
         int questionId = questions.size() + 1;
