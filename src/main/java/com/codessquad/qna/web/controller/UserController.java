@@ -40,9 +40,11 @@ public class UserController {
 
     @PostMapping("/users/{userId}/update")
     public String updateProfile(User updatedUser, String oldPassword){
-        User user = findUserById(updatedUser.getUserId());
-        if(user.getPassword().equals(oldPassword)){
-            user.updateAll(updatedUser);
+        for(User user : users){
+            if (user.getPassword().equals(oldPassword)) {
+                user.updateAll(updatedUser);
+                break;
+            }
         }
         return "redirect:/users";
     }
