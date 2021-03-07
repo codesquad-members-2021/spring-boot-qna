@@ -22,8 +22,9 @@ public class UserService {
     }
 
     @Transactional
-    public void join(User user) {
-        userRepository.save(user);
+    public Long join(User user) {
+        User DBUser = userRepository.save(user);
+        return DBUser.getId();
     }
 
     public Optional<User> findById(Long userId) {
