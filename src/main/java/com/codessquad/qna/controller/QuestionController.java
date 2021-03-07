@@ -24,9 +24,7 @@ public class QuestionController {
         return "redirect:/";
     }
 
-    @GetMapping("/")
-    public String showQuestionList(){
-        return "qna/show";
-    }
+
+
 
 }
