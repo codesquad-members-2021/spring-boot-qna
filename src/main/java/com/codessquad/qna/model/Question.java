@@ -5,16 +5,26 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class Question {
+    private int id;
     private String writer;
     private String title;
     private String contents;
     private Date writetime;
 
     public Question(String writer, String title, String contents) {
+        this.id = id;
         this.writer = writer;
         this.title = title;
         this.contents = contents;
         this.writetime = new Date();
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public String getWriter() {
