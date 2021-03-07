@@ -1,5 +1,8 @@
 package com.codessquad.qna.user;
 
+import java.util.Arrays;
+import java.util.List;
+
 public class User {
     private String userId;
     private String password;
@@ -14,6 +17,13 @@ public class User {
         this.password = password;
         this.name = name;
         this.email = email;
+    }
+
+    public static List<User> getDummyData() {
+        return Arrays.asList(
+                new User("javajigi", "1234", "자바지기", "javajigi@sample.net"),
+                new User("slipp", "1234", "슬립", "slipp@sample.net")
+        );
     }
 
     public String getUserId() {
