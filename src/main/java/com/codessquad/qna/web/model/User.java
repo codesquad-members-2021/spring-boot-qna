@@ -1,9 +1,13 @@
 package com.codessquad.qna.web.model;
 
 public class User {
+
     private String userId;
+
     private String password;
+
     private String name;
+
     private String email;
 
     public void setUserId(String userId) {
@@ -36,6 +40,12 @@ public class User {
 
     public String getEmail() {
         return email;
+    }
+
+    public void updateAll(User updated){
+        setPassword(updated.password);
+        setName(updated.name);
+        setEmail(updated.email);
     }
 
     @Override

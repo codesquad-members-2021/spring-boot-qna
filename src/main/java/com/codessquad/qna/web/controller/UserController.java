@@ -26,18 +26,27 @@ public class UserController {
         return "user/list";
     }
 
-    @GetMapping("users/{userId}/form")
-    public String getEditProfileForm(@PathVariable("userId") String userId, Model model){
-        model.addAttribute("user", findUserById(userId));
-        return "user/updateForm";
-    }
-
-
     @GetMapping("/users/{userId}")
     public String getUserProfile(@PathVariable("userId") String userId, Model model){
         model.addAttribute("user", findUserById(userId));
         return "user/profile";
     }
+
+    @GetMapping("/users/{userId}/form")
+    public String getEditProfileForm(@PathVariable("userId") String userId, Model model){
+        model.addAttribute("user", findUserById(userId));
+        return "user/updateForm";
+    }
+
+    @PostMapping("/users/{id}/update")
+    public String updateProfile(User updatedUser, String oldPassword){
+        User user = findUserById(updatedUser.getUserId());
+        if(user.getPassword().equals(oldPassword)){
+            user.updateAll(updatedUser);
+        }
+        return "redirect:/users";
+    }
+
 
     private User findUserById(String userId){
         for(User user : users){
