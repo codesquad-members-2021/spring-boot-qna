@@ -1,4 +1,4 @@
-package com.codessquad.qna.repository;
+package com.codessquad.qna.service;
 
 import com.codessquad.qna.model.Question;
 
@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.IntStream;
 
-public class Questions {
+public class QuestionService {
 
     private int questionId = 0;
     private final List<Question> questionList = new ArrayList<>();

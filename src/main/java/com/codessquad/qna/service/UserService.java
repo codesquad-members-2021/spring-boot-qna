@@ -1,4 +1,4 @@
-package com.codessquad.qna.repository;
+package com.codessquad.qna.service;
 
 import com.codessquad.qna.model.User;
 
@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.IntStream;
 
-public class Users {
+public class UserService {
 
     private final List<User> userList = new ArrayList<>();
 

@@ -1,7 +1,7 @@
 package com.codessquad.qna.controller;
 
 import com.codessquad.qna.model.User;
-import com.codessquad.qna.repository.Users;
+import com.codessquad.qna.service.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 public class UserController {
 
     private Logger logger = LoggerFactory.getLogger(UserController.class);
-    private Users users = new Users();
+    private UserService users = new UserService();
 
     @PostMapping("/users")
     public String signUp(User user) {
@@ -51,7 +51,6 @@ public class UserController {
     public String updateProfile(@PathVariable("userId") String userId, User user, String newPassword) {
         boolean result = users.updateUser(userId, user, newPassword);
         logger.info("유저 정보 수정 요청");
-        System.out.println("redirect:/user/" + userId + "/update");
         return result ? "redirect:/users" : "redirect:/user/" + userId + "/form";
     }
 
