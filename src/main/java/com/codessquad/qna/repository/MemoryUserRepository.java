@@ -7,7 +7,9 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import org.springframework.stereotype.Repository;
 
+@Repository
 public class MemoryUserRepository implements UserRepository {
 
     private final Map<String, User> userMap = Collections.synchronizedMap(new HashMap<>());

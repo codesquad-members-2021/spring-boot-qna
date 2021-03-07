@@ -4,7 +4,9 @@ import com.codessquad.qna.domain.Question;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import org.springframework.stereotype.Repository;
 
+@Repository
 public class MemoryQnaRepository implements QnaRepository {
 
     private final List<Question> questions = Collections.synchronizedList(new ArrayList<>());

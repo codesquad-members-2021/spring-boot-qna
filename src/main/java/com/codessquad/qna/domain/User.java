@@ -2,13 +2,13 @@ package com.codessquad.qna.domain;
 
 import java.util.Objects;
 
+
 public class User {
 
     private String userId;
     private String password;
     private String name;
     private String email;
-
 
     public String getUserId() {
         return userId;

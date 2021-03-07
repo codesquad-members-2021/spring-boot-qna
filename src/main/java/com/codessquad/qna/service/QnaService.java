@@ -3,7 +3,9 @@ package com.codessquad.qna.service;
 import com.codessquad.qna.domain.Question;
 import com.codessquad.qna.repository.QnaRepository;
 import java.util.List;
+import org.springframework.stereotype.Service;
 
+@Service
 public class QnaService {
 
     private final QnaRepository qnaRepository;
