@@ -1,7 +1,7 @@
-package com.codessquad.qna.controller;
+package com.codessquad.qna.web.controller;
 
-import com.codessquad.qna.model.Question;
-import com.codessquad.qna.validation.CastValidation;
+import com.codessquad.qna.web.model.Question;
+import com.codessquad.qna.web.validation.CastValidation;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;

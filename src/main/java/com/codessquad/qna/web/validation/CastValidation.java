@@ -1,4 +1,4 @@
-package com.codessquad.qna.validation;
+package com.codessquad.qna.web.validation;
 
 public class CastValidation {
 

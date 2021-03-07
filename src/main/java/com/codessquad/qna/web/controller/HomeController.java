@@ -1,4 +1,4 @@
-package com.codessquad.qna.controller;
+package com.codessquad.qna.web.controller;
 
 import org.springframework.web.bind.annotation.GetMapping;
 

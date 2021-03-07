@@ -1,4 +1,4 @@
-package com.codessquad.qna.config;
+package com.codessquad.qna.web.config;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.Ordered;
