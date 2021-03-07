@@ -29,8 +29,8 @@ public class QnaController {
     }
 
     @GetMapping("/questions/{id}")
-    public String getDetailedQuestion(@PathVariable int id, Model model) {
-        model.addAttribute("question", questions.get(id - 1));
+    public String getDetailedQuestion(@PathVariable long id, Model model) {
+        model.addAttribute("question", questions.get((int) (id - 1)));
         return "qna/show";
     }
 }

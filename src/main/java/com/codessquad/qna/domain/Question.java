@@ -4,10 +4,10 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 public class Question {
+    private long id;
     private String writer;
     private String title;
     private String contents;
-    private int id;
     private String timeCreated;
 
     public Question(String writer, String title, String contents, int id) {
@@ -42,7 +42,7 @@ public class Question {
         return contents;
     }
 
-    public int getId() {
+    public long getId() {
         return id;
     }
 
