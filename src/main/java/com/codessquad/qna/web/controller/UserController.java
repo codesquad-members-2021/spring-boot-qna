@@ -26,14 +26,26 @@ public class UserController {
         return "user/list";
     }
 
+    @GetMapping("users/{userId}/form")
+    public String getEditProfileForm(@PathVariable("userId") String userId, Model model){
+        model.addAttribute("user", findUserById(userId));
+        return "user/updateForm";
+    }
+
+
     @GetMapping("/users/{userId}")
     public String getUserProfile(@PathVariable("userId") String userId, Model model){
+        model.addAttribute("user", findUserById(userId));
+        return "user/profile";
+    }
+
+    private User findUserById(String userId){
         for(User user : users){
             if(user.getUserId().equals(userId)){
-                model.addAttribute("user", user);
+                return user;
             }
         }
-        return "user/profile";
+        throw new IllegalArgumentException("There is no user id, " + userId);
     }
 
 }
