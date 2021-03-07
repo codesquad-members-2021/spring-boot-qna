@@ -42,7 +42,7 @@ public class QuestionController {
         return "index";
     }
 
-    public int getIndex(String stringIdx){
+    private int getIndex(String stringIdx){
         System.out.println(questions.size());
         int index = CastValidation.stringToInt(stringIdx) - 1;
         if(index < 0 || index > questions.size()){
@@ -51,7 +51,7 @@ public class QuestionController {
         return index;
     }
 
-    public int nextId(){
+    private int nextId(){
         return questions.size() + 1;
     }
 
