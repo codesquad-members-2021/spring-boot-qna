@@ -11,4 +11,15 @@ public class QuestionController {
         return "qna/form";
     }
 
+    @PostMapping("/questions")
+    public String create(String writer, String title, String contents){
+        System.out.printf("%s %s %s ", writer, title, contents);
+        return "redirect:/";
+    }
+
+    @GetMapping("/")
+    public String showQuestionList(){
+        return "qna/show";
+    }
+
 }
