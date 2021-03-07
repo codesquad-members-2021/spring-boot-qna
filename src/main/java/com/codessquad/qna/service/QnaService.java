@@ -1,28 +1,29 @@
 package com.codessquad.qna.service;
 
 import com.codessquad.qna.domain.Question;
-import com.codessquad.qna.repository.QnaRepository;
+import com.codessquad.qna.repository.QuestionRepository;
+import com.codessquad.qna.repository.SpringDataJpaQuestionRepository;
 import java.util.List;
 import org.springframework.stereotype.Service;
 
 @Service
 public class QnaService {
 
-    private final QnaRepository qnaRepository;
+    private final QuestionRepository questionRepository;
 
-    public QnaService(QnaRepository qnaRepository) {
-        this.qnaRepository = qnaRepository;
+    public QnaService(SpringDataJpaQuestionRepository springDataJpaQuestionRepository) {
+        this.questionRepository = springDataJpaQuestionRepository;
     }
 
     public void save(Question question) {
-        qnaRepository.save(question);
+        questionRepository.save(question);
     }
 
     public List<Question> findAll() {
-        return qnaRepository.findAll();
+        return questionRepository.findAll();
     }
 
-    public Question findQuestionById(int index) {
-        return qnaRepository.findQuestionById(index);
+    public Question findQuestionById(Long id) {
+        return questionRepository.findQuestionById(id);
     }
 }

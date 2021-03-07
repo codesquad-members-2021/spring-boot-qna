@@ -7,13 +7,14 @@ import java.util.List;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public class MemoryQnaRepository implements QnaRepository {
+public class MemoryQuestionRepository implements QuestionRepository {
 
     private final List<Question> questions = Collections.synchronizedList(new ArrayList<>());
 
     @Override
-    public void save(Question question) {
+    public Question save(Question question) {
         questions.add(question);
+        return question;
     }
 
     @Override
@@ -22,7 +23,7 @@ public class MemoryQnaRepository implements QnaRepository {
     }
 
     @Override
-    public Question findQuestionById(int index) {
-        return questions.get(index - 1);
+    public Question findQuestionById(Long id) {
+        return questions.get((int) (id - 1));
     }
 }

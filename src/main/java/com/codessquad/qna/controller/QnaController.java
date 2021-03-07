@@ -26,9 +26,9 @@ public class QnaController {
         return "redirect:/";
     }
 
-    @GetMapping("/{index}")
-    public String showQuestion(@PathVariable int index, Model model) {
-        Question question = qnaService.findQuestionById(index);
+    @GetMapping("/{id}")
+    public String showQuestion(@PathVariable Long id, Model model) {
+        Question question = qnaService.findQuestionById(id);
         model.addAttribute("question", question);
         return "/qna/show";
     }

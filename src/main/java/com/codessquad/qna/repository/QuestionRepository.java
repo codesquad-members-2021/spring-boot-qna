@@ -3,11 +3,11 @@ package com.codessquad.qna.repository;
 import com.codessquad.qna.domain.Question;
 import java.util.List;
 
-public interface QnaRepository {
+public interface QuestionRepository {
 
-    void save(Question question);
+    Question save(Question question);
 
     List<Question> findAll();
 
-    Question findQuestionById(int index);
+    Question findQuestionById(Long id);
 }

@@ -1,24 +1,28 @@
 package com.codessquad.qna.domain;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
 
+@Entity
 public class Question {
 
-    private static int serialCode = 1;
     public static final String DATE_FORMAT = "yyyy-MM-dd HH:mm";
-    private int id;
+
+    @Id
+    @GeneratedValue
+    private Long id;
+
+    @Column(nullable = false, length = 20)
     private String writer;
     private String title;
     private String contents;
-    private LocalDate date;
+    private LocalDateTime time = LocalDateTime.now();
 
-    public Question() {
-        this.date = LocalDate.now();
-        this.id = serialCode++;
-    }
-
-    public int getId() {
+    public Long getId() {
         return id;
     }
 
@@ -46,12 +50,12 @@ public class Question {
         this.contents = contents;
     }
 
-    public String getDate() {
-        return formatTime(date);
+    public String getTime() {
+        return formatTime(time);
     }
 
-    private String formatTime(LocalDate date) {
-        return date.format(DateTimeFormatter.ofPattern(DATE_FORMAT));
+    private String formatTime(LocalDateTime time) {
+        return time.format(DateTimeFormatter.ofPattern(DATE_FORMAT));
     }
 
     @Override
@@ -61,7 +65,7 @@ public class Question {
             ", writer='" + writer + '\'' +
             ", title='" + title + '\'' +
             ", contents='" + contents + '\'' +
-            ", date=" + date +
+            ", time=" + time +
             '}';
     }
 }
