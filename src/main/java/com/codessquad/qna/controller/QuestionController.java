@@ -20,8 +20,14 @@ public class QuestionController {
 
     @PostMapping("/questions")
     public String create(Question question){
+        question.setId(nextId());
         questions.add(question);
+        System.out.println(question.getId());
         return "redirect:/";
+    }
+
+    public int nextId(){
+        return questions.size() + 1;
     }
 
 
