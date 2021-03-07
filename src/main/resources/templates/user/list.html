@@ -7,11 +7,10 @@
             <table class="table table-hover">
                 <thead>
                 <tr>
-                    <th>#</th>
                     <th>사용자 아이디</th>
                     <th>이름</th>
                     <th>이메일</th>
-                    <th></th>
+                    <th>수정</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -20,7 +19,8 @@
                     <th scope="row"><a href="/users/{{userId}}"/>{{userId}}</th>
                     <td>{{name}}</td>
                     <td>{{email}}</td>
-                    <td><a href="/users/{{userId}}/form" class="btn btn-success" role="button">수정</a></td>
+<!--                    <td><a href="/users/{{userId}}/form" class="btn btn-success" role="button">수정</a></td>-->
+                    <td><a href="/users/verify/{{userId}}" class="btn btn-success" role="button">수정</a></td>
                 </tr>
                 {{/users}}
                 </tbody>

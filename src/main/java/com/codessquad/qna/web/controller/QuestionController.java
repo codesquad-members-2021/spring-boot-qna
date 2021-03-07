@@ -43,7 +43,6 @@ public class QuestionController {
     }
 
     private int getIndex(String stringIdx){
-        System.out.println(questions.size());
         int index = CastValidation.stringToInt(stringIdx) - 1;
         if(index < 0 || index > questions.size()){
             throw new IndexOutOfBoundsException(stringIdx + " is out of range!");

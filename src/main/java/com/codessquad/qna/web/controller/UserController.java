@@ -38,7 +38,7 @@ public class UserController {
         return "user/updateForm";
     }
 
-    @PostMapping("/users/{id}/update")
+    @PostMapping("/users/{userId}/update")
     public String updateProfile(User updatedUser, String oldPassword){
         User user = findUserById(updatedUser.getUserId());
         if(user.getPassword().equals(oldPassword)){
