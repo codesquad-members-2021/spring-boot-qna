@@ -40,11 +40,7 @@ public class AnswerController {
             return "redirect:/users/loginForm";
         }
         User loginUser = getSessionUser(session);
-        Optional<Question> tempQuestion = questionRepository.findById(questionId);
-        if (!tempQuestion.isPresent()) {
-            return "redirect:/users/loginForm";
-        }
-        Question question = tempQuestion.get();
+        Question question = questionRepository.getOne(questionId);
         Answer answer = new Answer(loginUser, question, contents);
         answerRepository.save(answer);
         logger.info("답변 작성에 성공했습니다.");
