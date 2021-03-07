@@ -1,13 +1,21 @@
-package com.codessquad.qna.web;
+package com.codessquad.qna.domain;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
-
+@Entity
 public class Question {
     private static final DateTimeFormatter pattern = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
 
-    private int id;
+    @Id
+    @GeneratedValue
+    private Long id;
+
+    @Column(nullable = false)
     private String writer;
     private String title;
     private String contents;
@@ -17,7 +25,7 @@ public class Question {
         currentTime = LocalDateTime.now();
     }
 
-    public void setId(int id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -37,7 +45,7 @@ public class Question {
         this.currentTime = currentTime;
     }
 
-    public int getId() {
+    public Long getId() {
         return id;
     }
 
