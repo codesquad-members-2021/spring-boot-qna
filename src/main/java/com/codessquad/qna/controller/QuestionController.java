@@ -89,7 +89,7 @@ public class QuestionController {
             return "redirect:/";
         } catch (IllegalStateException e) {
             model.addAttribute("errorMessage", e.getMessage());
-            return "redirect:/user/login";
+            return "/user/login";
         }
     }
 
