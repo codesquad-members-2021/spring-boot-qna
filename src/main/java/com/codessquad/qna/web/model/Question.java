@@ -1,15 +1,26 @@
 package com.codessquad.qna.web.model;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+
 public class Question {
+    private static final DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+
     private Integer id;
+
     private String writer;
+
     private String title;
+
     private String contents;
+
+    private final LocalDateTime createdAt;
 
     public Question(String writer, String title, String contents) {
         this.writer = writer;
         this.title = title;
         this.contents = contents;
+        this.createdAt = LocalDateTime.now();
     }
 
     public Integer getId() {
@@ -42,6 +53,10 @@ public class Question {
 
     public void setContents(String contents) {
         this.contents = contents;
+    }
+
+    public String getCreatedAt() {
+        return this.createdAt.format(DATE_TIME_FORMATTER);
     }
 
     @Override
