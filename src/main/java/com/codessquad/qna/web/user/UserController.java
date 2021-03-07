@@ -36,7 +36,7 @@ public class UserController {
         return "user/updateForm";
     }
 
-    @RequestMapping(value = "/{userId}/update", method = RequestMethod.POST)
+    @RequestMapping(value = "/{userId}", method = RequestMethod.PUT)
     public String user_update(@PathVariable("userId") String userId, User user) {
         userRepository.update(userId, user);
         return "redirect:/users";
