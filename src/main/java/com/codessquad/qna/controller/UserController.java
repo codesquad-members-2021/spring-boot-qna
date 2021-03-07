@@ -17,7 +17,6 @@ import java.util.regex.Pattern;
 public class UserController {
 
     private final UserRepository userRepository;
-    private final Pattern userIdPattern = Pattern.compile("[1-9]\\d*");
 
     @Autowired
     public UserController(UserRepository userRepository) {
@@ -38,8 +37,16 @@ public class UserController {
     }
 
     @GetMapping("/{id}")
-    public ModelAndView userProfile(@PathVariable("id") String id) {
-        Optional<User> user = matchIdPatternAndFindUser(id);
+    public ModelAndView userProfile(@PathVariable("id") Long id, HttpSession session) {
+        Object userObject = session.getAttribute("sessionUser");
+        if (userObject == null) {
+            return new ModelAndView("redirect:/users/login");
+        }
+        User sessionUser = (User) userObject;
+        if (!sessionUser.isMatchingId(id)) {
+            throw new IllegalStateException("다른 유저의 정보를 볼 수 없습니다.");
+        }
+        Optional<User> user = userRepository.findById(id);
         if (!user.isPresent()) {
             return new ModelAndView("redirect:/users");
         }
@@ -49,35 +56,35 @@ public class UserController {
     }
 
     @GetMapping("/{id}/form")
-    public ModelAndView updateUserForm(@PathVariable("id") String id) {
-        Optional<User> user = matchIdPatternAndFindUser(id);
-        if (!user.isPresent()) {
-            return new ModelAndView("redirect:/users");
+    public ModelAndView updateUserForm(@PathVariable("id") Long id, HttpSession session) {
+        Object userObject = session.getAttribute("sessionUser");
+        if (userObject == null) {
+            return new ModelAndView("redirect:/users/login");
         }
-        ModelAndView modelAndView = new ModelAndView("users/update_form");
-        modelAndView.addObject(user.get());
-        return modelAndView;
+        User sessionUser = (User) userObject;
+        if (!sessionUser.isMatchingId(id)) {
+            throw new IllegalStateException("다른 유저의 정보를 수정할 수 없습니다.");
+        }
+        Optional<User> user = userRepository.findById(id);
+        if (!user.isPresent()) {
+            throw new IllegalStateException("존재하지 않는 유저");
+        }
+        return new ModelAndView("users/update_form", "user", user.get());
     }
 
     @PutMapping("/{id}")
-    public String updateUser(@PathVariable("id") String id, String oldPassword, User newUserInfo) {
-        matchIdPatternAndFindUser(id).ifPresent(u -> checkPasswordAndUpdate(u, oldPassword, newUserInfo));
+    public String updateUser(@PathVariable("id") Long id, String oldPassword, User newUserInfo, HttpSession session) {
+        Object userObject = session.getAttribute("sessionUser");
+        if (userObject == null) {
+            return "redirect:/users/login";
+        }
+        User sessionUser = (User) userObject;
+        if (!sessionUser.isMatchingId(id)) {
+            throw new IllegalStateException("다른 유저의 정보를 수정할 수 없습니다.");
+        }
+        userRepository.findById(id)
+                .ifPresent(u -> checkPasswordAndUpdate(u, oldPassword, newUserInfo));
         return "redirect:/users";
-    }
-
-    private void checkPasswordAndUpdate(User user, String oldPassword, User newUserInfo) {
-        if (user.isMatchingPassword(oldPassword)) {
-            user.update(newUserInfo);
-            userRepository.save(user);
-        }
-    }
-
-    private Optional<User> matchIdPatternAndFindUser(String id) {
-        Matcher userIdMatcher = userIdPattern.matcher(id);
-        if (!userIdMatcher.matches()) {
-            return Optional.empty();
-        }
-        return userRepository.findById(Long.parseLong(id));
     }
 
     @GetMapping("/login")
@@ -101,4 +108,10 @@ public class UserController {
         return "redirect:/";
     }
 
+    private void checkPasswordAndUpdate(User user, String oldPassword, User newUserInfo) {
+        if (user.isMatchingPassword(oldPassword)) {
+            user.update(newUserInfo);
+            userRepository.save(user);
+        }
+    }
 }

@@ -45,6 +45,10 @@ public class User {
         return this.password.equals(oldPassword);
     }
 
+    public boolean isMatchingId(Long id) {
+        return this.id.equals(id);
+    }
+
     public void update(User newUserInfo) {
         this.password = newUserInfo.password;
         this.name = newUserInfo.name;
