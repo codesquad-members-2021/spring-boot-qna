@@ -13,33 +13,39 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Controller
-@RequestMapping("/questions")
 public class QuestionController {
 
     List<Question> questions = new ArrayList<>();
 
-    @GetMapping("/form")
+    @GetMapping("/questions/form")
     public String getForm(){
         return "qna/form";
     }
 
-    @GetMapping("/{index}")
+    @GetMapping("/questions/{index}")
     public String getQuestionDetail(@PathVariable("index") String stringIdx, Model model){
         int index = getIndex(stringIdx);
-        Question question = questions.get(index - 1);
+        Question question = questions.get(index);
         model.addAttribute("question", question);
         return "/qna/show";
     }
 
-    @PostMapping("/")
+    @PostMapping("/questions")
     public String create(Question question){
         question.setId(nextId());
         questions.add(question);
         return "redirect:/";
     }
 
+    @GetMapping("/")
+    public String getHome(Model model){
+        model.addAttribute("questions", questions);
+        return "index";
+    }
+
     public int getIndex(String stringIdx){
-        int index = CastValidation.stringToInt(stringIdx);
+        System.out.println(questions.size());
+        int index = CastValidation.stringToInt(stringIdx) - 1;
         if(index < 0 || index > questions.size()){
             throw new IndexOutOfBoundsException(stringIdx + " is out of range!");
         }

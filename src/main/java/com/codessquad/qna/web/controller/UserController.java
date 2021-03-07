@@ -12,23 +12,22 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Controller
-@RequestMapping("/users")
 public class UserController {
     private List<User> users = new ArrayList<>();
 
-    @PostMapping("/create")
+    @PostMapping("/users/create")
     public String create(User user){
         users.add(user);
         return "redirect:/users";
     }
 
-    @GetMapping("")
+    @GetMapping("/users")
     public String getUserList(Model model){
         model.addAttribute("users", users);
         return "user/list";
     }
 
-    @GetMapping("/{userId}")
+    @GetMapping("/users/{userId}")
     public String getUserProfile(@PathVariable("userId") String userId, Model model){
         for(User user : users){
             if(user.getUserId().equals(userId)){
