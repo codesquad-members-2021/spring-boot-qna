@@ -12,7 +12,7 @@ import java.util.Collections;
 import java.util.List;
 
 @Controller
-@RequestMapping("questions")
+@RequestMapping("/questions")
 public class QuestionController {
     private List<Question> questions = Collections.synchronizedList(new ArrayList<>(Question.getDummyData()));
 
