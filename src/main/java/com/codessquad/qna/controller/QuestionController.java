@@ -1,7 +1,9 @@
 package com.codessquad.qna.controller;
 
+import com.codessquad.qna.model.Question;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 
 @Controller
 public class QuestionController {
@@ -12,8 +14,8 @@ public class QuestionController {
     }
 
     @PostMapping("/questions")
-    public String create(String writer, String title, String contents){
-        System.out.printf("%s %s %s ", writer, title, contents);
+    public String create(Question question){
+        System.out.println(question);
         return "redirect:/";
     }
 
