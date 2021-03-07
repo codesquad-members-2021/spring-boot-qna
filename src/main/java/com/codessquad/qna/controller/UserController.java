@@ -91,7 +91,7 @@ public class UserController {
         if (user == null || !user.isMatchingPassword(password)) {
             return "users/login_failed";
         }
-        session.setAttribute("user", user);
+        session.setAttribute("sessionUser", user);
         return "redirect:/";
     }
 
