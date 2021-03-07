@@ -8,23 +8,23 @@ import org.springframework.web.bind.annotation.PostMapping;
 
 @Controller
 public class QuestionController {
-    QuestionMapper questionMapper = new QuestionMapper();
+    QuestionRepository questionRepository = new QuestionRepository();
 
     @PostMapping("/question/create")
     public String question_create(Question question) {
-        questionMapper.add(question);
+        questionRepository.add(question);
         return "redirect:/questions";
     }
 
     @GetMapping("/questions")
     public String question_list(Model model) {
-        model.addAttribute("questions", questionMapper.getQuestions());
+        model.addAttribute("questions", questionRepository.getQuestions());
         return "question/list";
     }
 
     @GetMapping("/questions/{questionId}")
     public String question_profile(@PathVariable("questionId") int questionId, Model model) {
-        model.addAttribute("question", questionMapper.getQuestion(questionId));
+        model.addAttribute("question", questionRepository.getQuestion(questionId));
         return "question/show";
     }
 }

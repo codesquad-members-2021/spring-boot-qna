@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-public class QuestionMapper {
+public class QuestionRepository {
     private Map<Integer, Question> questions = new LinkedHashMap<>();
 
     public void add(Question question) {
