@@ -14,12 +14,7 @@ import java.util.List;
 public class UserController {
     private List<User> users = new ArrayList<User>();
 
-    @GetMapping("/users/form")
-    public String moveToForm() {
-        return "users/form";
-    }
-
-    @PostMapping("/user/create")
+    @PostMapping("/users")
     public String create(User user){
         users.add(user);
         return "redirect:/users";
