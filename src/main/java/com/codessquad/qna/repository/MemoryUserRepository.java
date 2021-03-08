@@ -26,6 +26,16 @@ public class MemoryUserRepository implements UserRepository{
     }
 
     @Override
+    public Optional<User> findByUserId(String userId) {
+        for(User user : users.values()){
+            if(user.getUserId().equals(userId)){
+                return Optional.ofNullable(user);
+            }
+        }
+        return Optional.empty();
+    }
+
+    @Override
     public void update(User oldUserInfo, User updateUserInfo) { }
 
     @Override
