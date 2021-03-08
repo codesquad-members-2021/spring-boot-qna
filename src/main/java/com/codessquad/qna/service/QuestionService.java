@@ -1,40 +1,40 @@
 package com.codessquad.qna.service;
 
 import com.codessquad.qna.model.Question;
+import com.codessquad.qna.model.User;
+import com.codessquad.qna.repository.QuestionRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.IntStream;
 
+@Service
 public class QuestionService {
 
-    private int questionId = 0;
-    private final List<Question> questionList = new ArrayList<>();
+    @Autowired
+    private final QuestionRepository questionRepository;
 
-    public void addQuestion(Question question) {
-        this.questionId++;
-        question.setId(this.questionId);
+    public QuestionService(QuestionRepository questionRepository) {
+        this.questionRepository = questionRepository;
+    }
+
+    public void save(Question question) {
         question.setDate();
-        questionList.add(question);
+        this.questionRepository.save(question);
     }
 
-    public List<Question> getAllQuestion() {
-        return this.questionList;
+    public List<Question> findAll() {
+        List<Question> questionList = new ArrayList<>();
+        this.questionRepository.findAll().forEach(questionList::add);
+        return questionList;
     }
 
-    public Question findQuestion(int id) {
-        int index = getQuestionIndex(id);
-        if (index != -1) {
-            return this.questionList.get(index);
-        }
-        return new Question();
-    }
-
-    private int getQuestionIndex(int id) {
-        return IntStream.range(0, this.questionList.size())
-                .filter(i -> this.questionList.get(i).getId() == id)
-                .findFirst()
-                .orElse(-1);
+    public Question findById(Long id) {
+        Optional<Question> question = this.questionRepository.findById(id);
+        return question.orElseGet(Question::new);
     }
 
 }
