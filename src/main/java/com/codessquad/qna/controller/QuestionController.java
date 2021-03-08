@@ -15,7 +15,6 @@ import java.util.List;
 
 @Controller
 public class QuestionController {
-    Logger logger = LoggerFactory.getLogger(QuestionController.class);
     QuestionRepository questionRepository = new QuestionRepository();
 
     @GetMapping("/")
@@ -23,7 +22,6 @@ public class QuestionController {
         List<Question> questions = questionRepository.getAll();
 
         model.addAttribute("questions", questions);
-        logger.info("Questions in questionRepository: " + questions.toString());
 
         return "/index";
     }
@@ -37,8 +35,6 @@ public class QuestionController {
         newQuestion.setContents(question.getContents());
 
         questionRepository.save(newQuestion);
-
-        logger.info("Question in questionRepository: " + newQuestion);
 
         return "redirect:/";
     }

@@ -15,7 +15,6 @@ import java.util.List;
 @Controller
 public class UserController {
     UserRepository userRepository = new UserRepository();
-    Logger logger = LoggerFactory.getLogger(UserController.class);
 
     @PostMapping("/users")
     public String createUser(User referenceUser) {
@@ -28,7 +27,6 @@ public class UserController {
 
         userRepository.save(newUser);
 
-        logger.info("User in UserRepository: " + referenceUser.toString());
         return "redirect:/users";
     }
 
@@ -40,7 +38,6 @@ public class UserController {
     public String createUserList(Model model) {
         List<User> users = userRepository.getAll();
 
-        logger.info("All Users in UserRepository: " + users.toString());
         model.addAttribute("users", users);
         return "users/list";
     }
@@ -49,7 +46,7 @@ public class UserController {
     public String createProfile(@PathVariable(name = "userId") String targetId, Model model) {
         User targetUser = userRepository.getOne(targetId);
         model.addAttribute("user", targetUser);
-        logger.info("The User in detail: " + targetUser.toString());
+
         return "users/profile";
     }
 
