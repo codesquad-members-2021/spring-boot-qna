@@ -15,24 +15,25 @@ public class QuestionController {
     private List<Question> questions = new ArrayList<>();
 
     @PostMapping("/questions")
-    public String createQuestion(Question question){
+    public String createQuestion(Question question) {
         questions.add(question);
         return "redirect:/";
     }
 
     @GetMapping("/")
-    public String list(Model model){
+    public String list(Model model) {
         model.addAttribute("questions", questions);
         return "index";
     }
 
     @GetMapping("/questions/{index}")
-    public String viewQuestion(@PathVariable int index, Model model){
-        for(Question question : questions){
-            if(questions.indexOf(question) == index-1){
+    public String viewQuestion(@PathVariable int index, Model model) {
+        for (Question question : questions) {
+            if (questions.indexOf(question) == index - 1) {
                 model.addAttribute("question", question);
                 return "qna/show";
             }
         }
+        return "redirect:/";
     }
 }
