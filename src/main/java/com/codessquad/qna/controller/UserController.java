@@ -16,7 +16,6 @@ public class UserController {
 
     @PostMapping("/users")
     public String create(User user) {
-        user.setIndex(users.size() + 1);
         users.add(user);
         return "redirect:/users";
     }

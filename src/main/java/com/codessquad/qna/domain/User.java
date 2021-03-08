@@ -1,15 +1,20 @@
 package com.codessquad.qna.domain;
 
+import javax.persistence.*;
+
+@Entity
 public class User {
-    private int index;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @Column(nullable = false, length = 20)
     private String userId;
+
     private String password;
     private String name;
     private String email;
 
-    public void setIndex(int index) {
-        this.index = index;
-    }
 
     public void setUserId(String userId) {
         this.userId = userId;
@@ -25,10 +30,6 @@ public class User {
 
     public void setEmail(String email) {
         this.email = email;
-    }
-
-    public int getIndex() {
-        return index;
     }
 
     public String getUserId() {
