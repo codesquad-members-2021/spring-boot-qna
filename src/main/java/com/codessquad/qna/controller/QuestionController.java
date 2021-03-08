@@ -1,8 +1,6 @@
 package com.codessquad.qna.controller;
 
-import com.codessquad.qna.domain.Question;
-import com.codessquad.qna.domain.QuestionRepository;
-import com.codessquad.qna.domain.User;
+import com.codessquad.qna.domain.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -11,19 +9,18 @@ import org.springframework.web.servlet.ModelAndView;
 import javax.servlet.http.HttpSession;
 import java.time.LocalDateTime;
 import java.util.Optional;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 @Controller
 @RequestMapping("/questions")
 public class QuestionController {
 
     private final QuestionRepository questionRepository;
-    private final Pattern questionIdPattern = Pattern.compile("[1-9]\\d*");
+    private final AnswerRepository answerRepository;
 
     @Autowired
-    public QuestionController(QuestionRepository questionRepository) {
+    public QuestionController(QuestionRepository questionRepository, AnswerRepository answerRepository) {
         this.questionRepository = questionRepository;
+        this.answerRepository = answerRepository;
     }
 
     @GetMapping("/form")
@@ -48,18 +45,17 @@ public class QuestionController {
     }
 
     @GetMapping("/{id}")
-    public ModelAndView qnaShow(@PathVariable("id") String id) {
-        Matcher questionIdMatcher = questionIdPattern.matcher(id);
-        if (!questionIdMatcher.matches()) {
+    public ModelAndView qnaShow(@PathVariable("id") Long id) {
+        Optional<Question> questionOptional = questionRepository.findById(id);
+        if (!questionOptional.isPresent()) {
             return new ModelAndView("redirect:/");
         }
-        Optional<Question> questionOptional = questionRepository.findById(Long.parseLong(id));
-        if (questionOptional.isPresent()) {
-            ModelAndView modelAndView = new ModelAndView("qna/show");
-            modelAndView.addObject(questionOptional.get());
-            return modelAndView;
-        }
-        return new ModelAndView("redirect:/");
+        ModelAndView modelAndView = new ModelAndView("qna/show");
+        Question question = questionOptional.get();
+        modelAndView.addObject("question", question);
+        modelAndView.addObject("comments", answerRepository.findAllByQuestion(question));
+        modelAndView.addObject("commentsSize", answerRepository.countByQuestion(question));
+        return modelAndView;
     }
 
     @GetMapping("/{id}/form")
@@ -112,6 +108,22 @@ public class QuestionController {
     @GetMapping("/unauthorized")
     public String unauthorized() {
         return "qna/unauthorized";
+    }
+
+    @PostMapping("/{id}/answers")
+    public String answer(@PathVariable("id") Long id, Answer answer, HttpSession session){
+        if (!HttpSessionUtils.isLogined(session)) {
+            return "redirect:/questions/" + id;
+        }
+        User writer = HttpSessionUtils.getUserFromSession(session);
+        questionRepository.findById(id)
+                .ifPresent(question -> {
+                    answer.setQuestion(question);
+                    answer.setWriter(writer);
+                    answer.setTime(LocalDateTime.now());
+                    answerRepository.save(answer);
+                });
+        return "redirect:/questions/" + id;
     }
 
 }
