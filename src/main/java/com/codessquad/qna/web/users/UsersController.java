@@ -12,7 +12,7 @@ public class UsersController {
     @Autowired
     private UserRepository userRepository;
 
-    @PostMapping()
+    @PostMapping
     public String createUser(User createdUser) {
         userRepository.save(createdUser);
         return "redirect:/users";
