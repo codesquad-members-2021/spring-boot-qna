@@ -1,4 +1,4 @@
-package com.codessquad.qna.domain;
+package com.codessquad.qna.domain.user;
 
 import javax.persistence.*;
 
@@ -16,7 +16,7 @@ public class User {
     private String name;
     private String email;
 
-    public User() {
+    protected User() {
     }
 
     public User(String userId, String password, String name, String email) {
@@ -24,6 +24,10 @@ public class User {
         this.password = password;
         this.name = name;
         this.email = email;
+    }
+
+    public Long getId() {
+        return id;
     }
 
     public String getUserId() {
@@ -44,6 +48,11 @@ public class User {
 
     public boolean matchId(String id) {
         return this.userId.equals(id);
+    }
+
+    public void update(User updateUser) {
+        this.name = updateUser.name;
+        this.email = email;
     }
 
     @Override
