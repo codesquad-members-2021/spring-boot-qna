@@ -83,14 +83,15 @@
                 </tr>
               </thead>
               <tbody>
-                {{#users}}
+                {{#userlist}}
                 <tr>
-                    <th scope="row">{{userId}}</th>
+                    <th scope="row"> </th>
+                    <td>{{userId}}</td>
                     <td>{{name}}</td>
                     <td>{{email}}</td>
-                    <td><a href="#" class="btn btn-success" role="button">수정</a></td>
+                    <td><a href="/users/{{userId}}/form" class="btn btn-success" role="button">수정</a></td>
                 </tr>
-                {{/users}}
+                {{/userlist}}
 
               </tbody>
           </table>
