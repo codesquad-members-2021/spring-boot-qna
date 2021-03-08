@@ -16,6 +16,7 @@ public class QuestionController {
 
     @PostMapping("/questions")
     public String createQuestion(Question question) {
+        question.setIndex(questions.size()+1);
         questions.add(question);
         return "redirect:/";
     }
