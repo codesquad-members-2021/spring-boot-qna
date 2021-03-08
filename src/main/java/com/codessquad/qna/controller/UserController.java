@@ -1,6 +1,7 @@
 package com.codessquad.qna.controller;
 
 import com.codessquad.qna.domain.User;
+import com.codessquad.qna.service.ExistedUserException;
 import com.codessquad.qna.service.UserService;
 import java.util.List;
 import org.springframework.stereotype.Controller;
@@ -26,7 +27,7 @@ public class UserController {
     public String createUser(User user, RedirectAttributes redirect) {
         try {
             userService.join(user);
-        } catch (IllegalStateException e) {
+        } catch (ExistedUserException e) {
             redirect.addFlashAttribute("fail", true);
             return "redirect:/users/form";
         }
@@ -44,6 +45,9 @@ public class UserController {
     @GetMapping("/{userId}")
     public String userProfile(@PathVariable String userId, Model model) {
         User user = userService.findUserByUserId(userId);
+        if (user == null) {
+            return "redirect:/users";
+        }
         model.addAttribute("user", user);
         return "/user/profile";
     }
@@ -51,6 +55,9 @@ public class UserController {
     @GetMapping("/{userId}/form")
     public String updateUserForm(@PathVariable String userId, Model model) {
         User user = userService.findUserByUserId(userId);
+        if (user == null) {
+            return "redirect:/users";
+        }
         model.addAttribute("user", user);
         return "/user/updateForm";
     }
@@ -58,18 +65,13 @@ public class UserController {
     @PutMapping("/{id}")
     public String updateUserProfile(@PathVariable Long id, User user, RedirectAttributes redirect) {
         User originUser = userService.findById(id);
-        String[] passwordArray = user.getPassword().split(",");
 
-        String receivedPassword = passwordArray[0];
-        String newPassword = passwordArray[1];
-
-        if (!originUser.isMatchingPassword(receivedPassword)) {
-            redirect.addFlashAttribute("fail", true);
-            return "redirect:/users/" + originUser.getUserId() + "/form";
+        if (userService.confirmPassword(originUser, user)) {
+            userService.updateUserData(originUser, user);
+            return "redirect:/users";
         }
 
-        user.setPassword(newPassword);
-        userService.updateUserData(originUser, user);
-        return "redirect:/users";
+        redirect.addFlashAttribute("fail", true);
+        return "redirect:/users/" + originUser.getUserId() + "/form";
     }
 }

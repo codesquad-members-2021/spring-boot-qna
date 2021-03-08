@@ -1,13 +1,8 @@
 package com.codessquad.qna.repository;
 
 import com.codessquad.qna.domain.Question;
-import java.util.List;
+import org.springframework.data.repository.CrudRepository;
 
-public interface QuestionRepository {
+public interface QuestionRepository extends CrudRepository<Question, Long> {
 
-    Question save(Question question);
-
-    List<Question> findAll();
-
-    Question findQuestionById(Long id);
 }

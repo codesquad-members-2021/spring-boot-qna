@@ -11,7 +11,8 @@ import javax.persistence.Id;
 @Entity
 public class Question {
 
-    public static final String DATE_FORMAT = "yyyy-MM-dd HH:mm";
+    public static final DateTimeFormatter DATE_FORMAT = DateTimeFormatter
+        .ofPattern("yyyy-MM-dd HH:mm");
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -22,7 +23,7 @@ public class Question {
 
     private String title;
     private String contents;
-    private LocalDateTime time = LocalDateTime.now();
+    private LocalDateTime qnaDateTime = LocalDateTime.now();
 
     public Long getId() {
         return id;
@@ -52,13 +53,10 @@ public class Question {
         this.contents = contents;
     }
 
-    public String getTime() {
-        return formatTime(time);
+    public String getQnaDateTime() {
+        return qnaDateTime.format(DATE_FORMAT);
     }
 
-    private String formatTime(LocalDateTime time) {
-        return time.format(DateTimeFormatter.ofPattern(DATE_FORMAT));
-    }
 
     @Override
     public String toString() {
@@ -67,7 +65,7 @@ public class Question {
             ", writer='" + writer + '\'' +
             ", title='" + title + '\'' +
             ", contents='" + contents + '\'' +
-            ", time=" + time +
+            ", qnaDateTime=" + qnaDateTime +
             '}';
     }
 }
