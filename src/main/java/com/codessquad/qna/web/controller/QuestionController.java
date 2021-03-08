@@ -14,7 +14,7 @@ import java.util.List;
 @Controller
 public class QuestionController {
 
-    List<Question> questions = new ArrayList<>();
+    private List<Question> questions = new ArrayList<>();
 
     @GetMapping("/questions/{index}")
     public String getQuestionDetail(@PathVariable("index") String stringIdx, Model model){
