@@ -3,10 +3,12 @@ package com.codessquad.qna.repository;
 import com.codessquad.qna.domain.User;
 
 import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import java.util.List;
 import java.util.Optional;
 
 public class JpaUserRepository implements UserRepository {
+    @PersistenceContext
     private final EntityManager entityManager;
 
     public JpaUserRepository(EntityManager entityManager) {
