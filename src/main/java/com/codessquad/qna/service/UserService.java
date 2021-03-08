@@ -25,14 +25,12 @@ public class UserService {
         return userRepostiory.findAll();
     }
 
-    public Optional<User> findUser(Long id) {
-        return userRepostiory.findById(id);
+    public User findUser(Long id) {
+        return userRepostiory.findById(id).orElseThrow(RuntimeException::new);
     }
 
     public Optional<User> findByUserId(String userId) {
         return userRepostiory.findByUserId(userId);
     }
-
-
-
 }
+

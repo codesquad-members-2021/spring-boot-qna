@@ -1,5 +1,6 @@
 package com.codessquad.qna.controller;
 
+import com.codessquad.qna.domain.Question;
 import com.codessquad.qna.domain.User;
 import com.codessquad.qna.service.UserService;
 import org.slf4j.Logger;
@@ -65,48 +66,52 @@ public class UserController {
 
     @GetMapping("/{id}")
     public String profile(@PathVariable Long id, Model model) {
-        Optional<User> user = userService.findUser(id);
-        if (!user.isPresent()) {
+        try {
+            User user = userService.findUser(id);
+            model.addAttribute("user", user);
+            return "user/profile";
+        } catch (RuntimeException e) {
+            logger.error(e.getMessage());
             return "redirect:/users";
         }
-        model.addAttribute(user.get());
-        return "user/profile";
+    }
+
+    private String checkPermission(Long id, HttpSession session) {
+        if (!isLoginUser(session)) {
+            return "redirect:/users/loginForm";
+        }
+        User loginUser = getSessionUser(session);
+        if (!loginUser.matchId(id)) {
+            throw new IllegalStateException("수정 및 삭제 권한이 없습니다.");
+        }
+        return "";
     }
 
     @GetMapping("/{id}/form")
     public String updateForm(@PathVariable Long id, Model model, HttpSession session) {
-        if (!isLoginUser(session)) {
-            return "redirect:/users/loginForm";
-        }
-        User sessionUser = getSessionUser(session);
-
-        if (!sessionUser.matchId(id)) {
-            throw new IllegalStateException("잘못된 접근입니다.");
-        }
-
-        if (!userService.findUser(id).isPresent()) {
+        try {
+            checkPermission(id, session);
+            User user = userService.findUser(id);
+            model.addAttribute("user", user);
+            return "user/updateForm";
+        } catch (IllegalStateException e) {
+            model.addAttribute("errorMessage", e.getMessage());
             return "redirect:/users";
         }
-        User user = userService.findUser(id).get();
-        model.addAttribute("user", user);
-        return "user/updateForm";
     }
 
     @PutMapping("/{id}")
-    public String update(@PathVariable Long id, User updatedUser, HttpSession session) {
-        User sessionUser = getSessionUser(session);
-        if (!isLoginUser(session)) {
-            return "redirect:/users/loginForm";
-        }
-        if (!sessionUser.matchId(id)) {
-            throw new IllegalStateException("잘못된 접근입니다.");
-        }
-        if (!userService.findUser(id).isPresent()) {
+    public String update(@PathVariable Long id, User updatedUser, Model model, HttpSession session) {
+        try {
+            checkPermission(id, session);
+            User user = userService.findUser(id);
+            user.update(updatedUser);
+            userService.join(user);
+            return "redirect:/users";
+        } catch (IllegalStateException e) {
+            model.addAttribute("errorMessage", e.getMessage());
             return "redirect:/users";
         }
-        User user = userService.findUser(id).get();
-        user.update(updatedUser);
-        userService.join(user);
-        return "redirect:/users";
     }
 }
+
