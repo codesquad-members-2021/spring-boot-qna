@@ -39,7 +39,12 @@ public class User {
     }
 
     @Override
-    public String toString(){
-        return "userId = "+userId+" password = "+password+" name = "+name+" email = "+email;
+    public String toString() {
+        return "User{" +
+                "userId='" + userId + '\'' +
+                ", password='" + password + '\'' +
+                ", name='" + name + '\'' +
+                ", email='" + email + '\'' +
+                '}';
     }
 }
