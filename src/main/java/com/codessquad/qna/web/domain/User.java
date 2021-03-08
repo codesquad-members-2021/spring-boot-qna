@@ -7,9 +7,6 @@ public class User {
     private String name;
     private String email;
 
-    User() {
-    }
-
     public void setIndex(int index) {
         this.index = index;
     }
