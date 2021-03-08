@@ -1,53 +1,59 @@
 package com.codessquad.qna.service;
 
 import com.codessquad.qna.model.User;
+import com.codessquad.qna.repository.UserRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.IntStream;
+import java.util.Optional;
+import java.util.concurrent.atomic.AtomicBoolean;
 
+@Service
 public class UserService {
 
-    private final List<User> userList = new ArrayList<>();
+    @Autowired
+    private final UserRepository userRepository;
 
-    public boolean addUser(User user) {
-        int index = getUserIndex(user.getUserId());
-        if (index == -1) {
-            userList.add(user);
+    public UserService(UserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
+
+    public boolean save(User user) {
+        Optional<User> duplicateUser = userRepository.findByUserId(user.getUserId());
+        if (!duplicateUser.isPresent()) {
+            this.userRepository.save(user);
             return true;
         }
         return false;
     }
 
-    public List<User> getAllUser() {
-        return this.userList;
+    public List<User> findAll() {
+        List<User> userList = new ArrayList<>();
+        this.userRepository.findAll().forEach(userList::add);
+        return userList;
     }
 
-    public User findUser(String userId) {
-        int index = getUserIndex(userId);
-        if (index != -1) {
-            return this.userList.get(index);
-        }
-        return new User();
+    public User findById(Long id) {
+        Optional<User> user = this.userRepository.findById(id);
+        return user.orElseGet(User::new);
     }
 
-    private int getUserIndex(String userId) {
-        return IntStream.range(0, this.userList.size())
-                .filter(i -> this.userList.get(i).getUserId().equals(userId))
-                .findFirst()
-                .orElse(-1);
-    }
-
-    public boolean updateUser(String userId, User user, String newPassword) {
-        User oldUser = findUser(userId);
-        if (oldUser.getUserId() != null && user.getPassword().equals(oldUser.getPassword())) {
-            oldUser.setUserId(user.getUserId());
-            oldUser.setPassword(newPassword);
-            oldUser.setName(user.getName());
-            oldUser.setEmail(user.getEmail());
-            return true;
-        }
-        return false;
+    public boolean update(Long id, User user, String newPassword) {
+        AtomicBoolean isUpdate = new AtomicBoolean(false);
+        Optional<User> optionalUser = this.userRepository.findById(id);
+        optionalUser.ifPresent(targetUser -> {
+            if (targetUser.getPassword().equals(user.getPassword())) {
+                targetUser.setUserId(user.getUserId());
+                targetUser.setPassword(newPassword);
+                targetUser.setName(user.getName());
+                targetUser.setEmail(user.getEmail());
+                this.userRepository.save(targetUser);
+                isUpdate.set(true);
+            }
+        });
+        return isUpdate.get();
     }
 
 }
