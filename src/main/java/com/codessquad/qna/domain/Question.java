@@ -21,10 +21,13 @@ public class Question {
 
     protected Question() {}
 
-    public Question(String writer, String title, String contents) {
-        this.writer = writer;
+    public Question(String title, String contents) {
         this.title = title;
         this.contents = contents;
+    }
+
+    public void setWriter(String writer) {
+        this.writer = writer;
     }
 
     public void setTime(LocalDateTime time) {
