@@ -8,5 +8,5 @@ import java.util.Optional;
 public interface QuestionRepository {
     void save(Question question);
     List<Question> findAll();
-    Optional<Question> findByIndex(int index);
+    Question findByIndex(int index);
 }

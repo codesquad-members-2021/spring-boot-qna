@@ -34,7 +34,7 @@ public class QuestionController {
     public String getQuestion(@PathVariable int index, Model model) {
         try {
             model.addAttribute("question", questionService.findQuestion(index));
-        } catch (IllegalStateException e) {
+        } catch (IndexOutOfBoundsException e) {
             return "redirect:/";
         }
         return "/qna/show";

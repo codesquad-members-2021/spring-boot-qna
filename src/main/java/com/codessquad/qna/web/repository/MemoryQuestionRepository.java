@@ -25,7 +25,7 @@ public class MemoryQuestionRepository implements QuestionRepository {
     }
 
     @Override
-    public Optional<Question> findByIndex(int index) {
-        return Optional.ofNullable(questions.get(index-1));
+    public Question findByIndex(int index) {
+        return questions.get(index-1);
     }
 }

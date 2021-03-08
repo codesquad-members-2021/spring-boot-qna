@@ -26,10 +26,6 @@ public class QuestionService {
     }
 
     public Question findQuestion(int index) {
-        Optional<Question> foundQuestion = questionRepository.findByIndex(index);
-        if(!foundQuestion.isPresent()){
-            throw new IllegalStateException("index에 해당하는 qeustion이 없습니다");
-        }
-        return foundQuestion.get();
+       return questionRepository.findByIndex(index);
     }
 }
