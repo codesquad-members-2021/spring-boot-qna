@@ -1,31 +1,22 @@
 package com.codessquad.qna;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 @Controller
 public class UserController {
 
+    private final Logger LOGGER = LoggerFactory.getLogger(QuestionController.class.getName());
+
     private List<User> userList = new ArrayList<>();
-
-    @GetMapping("/")
-    public String index(Model model) {
-        model.addAttribute("questionList", QuestionController.questionList());
-        return "index";
-    }
-
-    @GetMapping("/qna/form")
-    public String qnaForm() {
-        return "/qna/form";
-    }
 
     @GetMapping("/user/form")
     public String userForm() {
@@ -38,8 +29,8 @@ public class UserController {
     }
 
     @PostMapping("/user/create")
-    public String create(User user) {
-        System.out.println("user: " + user.toString());
+    public String createUser(User user) {
+        LOGGER.info(user.toString());
         userList.add(user);
         return "redirect:/user/list";
     }
@@ -52,21 +43,21 @@ public class UserController {
 
     @GetMapping("/userList/{userId}")
     public String profile(@PathVariable String userId, Model model) {
-        for (User user : userList) {
-            if(user.getUserId().equals(userId)) {
-                model.addAttribute("user", user);
-            }
-        }
+        searchUserId(userId, model);
         return "/qna/profile";
     }
 
     @GetMapping("/userList/{userId}/update")
     public String updateUser(@PathVariable String userId, Model model) {
+        searchUserId(userId, model);
+        return "/user/updateForm";
+    }
+
+    private void searchUserId(String userId, Model model) {
         for (User user : userList) {
-            if(user.getUserId().equals(userId)) {
+            if (user.getUserId().equals(userId)) {
                 model.addAttribute("user", user);
             }
         }
-        return "/user/updateForm";
     }
 }
