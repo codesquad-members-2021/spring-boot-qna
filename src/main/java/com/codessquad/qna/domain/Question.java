@@ -1,4 +1,4 @@
-package com.codessquad.qna.qna;
+package com.codessquad.qna.domain;
 
 public class Question {
     private int index;
