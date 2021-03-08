@@ -2,10 +2,10 @@
 <div class="col-md-6 col-md-offset-3">
     <div class="panel panel-default content-main">
         <form action="/users/modify" method="post" name="question">
-            <input hidden id="id" name="id" readonly value="{{foundUser.id}}">
+            <input hidden id="id" name="id" readonly value="{{loginUser.id}}">
             <div class="form-group">
                 <label for="userId">사용자 아이디</label>
-                <input class="form-control" id="userId" readonly name="userId" placeholder="User ID" value="{{foundUser.userId}}">
+                <input class="form-control" id="userId" readonly name="userId" placeholder="User ID" value="{{loginUser.userId}}">
             </div>
             <div class="form-group">
                 <label for="password">이전 비밀번호</label>
@@ -17,11 +17,11 @@
             </div>
             <div class="form-group">
                 <label for="name">이름</label>
-                <input class="form-control" id="name" name="name" placeholder="Name" value="{{foundUser.name}}">
+                <input class="form-control" id="name" name="name" placeholder="Name" value="{{loginUser.name}}">
             </div>
             <div class="form-group">
                 <label for="email">이메일</label>
-                <input type="email" class="form-control" id="email" name="email" placeholder="Email" value="{{foundUser.email}}">
+                <input type="email" class="form-control" id="email" name="email" placeholder="Email" value="{{loginUser.email}}">
             </div>
             <button type="submit" class="btn btn-success clearfix pull-right">수정하기</button>
             <div class="clearfix" />

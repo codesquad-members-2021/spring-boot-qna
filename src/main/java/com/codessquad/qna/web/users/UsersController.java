@@ -33,10 +33,12 @@ public class UsersController {
         return "user/profile";
     }
 
-    @GetMapping("/modify/{userId}")
-    public String getModifyUserPage(@PathVariable("userId") long id, Model model) {
-        User foundUser = getUserById(id);
-        model.addAttribute("foundUser", foundUser);
+    @GetMapping("/modify")
+    public String getModifyUserPage(Model model, HttpSession session) {
+        User sessionUser = (User) session.getAttribute("loginUser");
+        if (sessionUser == null) {
+            return "redirect:/";
+        }
         return "user/modify-form";
     }
 
