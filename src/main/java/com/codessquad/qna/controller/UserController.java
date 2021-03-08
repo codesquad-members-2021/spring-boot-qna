@@ -1,6 +1,6 @@
 package com.codessquad.qna.controller;
 
-import com.codessquad.qna.User;
+import com.codessquad.qna.domain.User;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
