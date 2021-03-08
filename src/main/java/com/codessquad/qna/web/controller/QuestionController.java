@@ -8,11 +8,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-//import org.springframework.web.bind.annotation.PostMapping;
-
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
 
 @Controller
 public class QuestionController {
@@ -26,10 +21,10 @@ public class QuestionController {
     @PostMapping("/questions")
     public String createQuestion(Question question) {
         questionService.postQuestion(question);
-        return "redirect:/";
+        return "redirect:/questions";
     }
 
-    @GetMapping("/")
+    @GetMapping("/questions")
     public String getQuestions(Model model) {
         model.addAttribute("questions", questionService.findQuestions());
         return "/index";

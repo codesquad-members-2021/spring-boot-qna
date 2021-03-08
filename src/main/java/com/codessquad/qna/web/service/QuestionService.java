@@ -22,7 +22,7 @@ public class QuestionService {
     }
 
     public List<Question> findQuestions() {
-        return questionRepository.findALL();
+        return questionRepository.findAll();
     }
 
     public Question findQuestion(int index) {

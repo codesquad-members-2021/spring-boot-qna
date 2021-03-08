@@ -20,7 +20,7 @@ public class MemoryQuestionRepository implements QuestionRepository {
     }
 
     @Override
-    public List<Question> findALL() {
+    public List<Question> findAll() {
         return new ArrayList<>(questions);
     }
 
