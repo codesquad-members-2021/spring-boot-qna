@@ -44,14 +44,13 @@ public class UserController {
     public String updateProfile(User updatedUser, String oldPassword){
         for(int i = 0; i < users.size(); i++){
             User user = users.get(i);
-            if (user.getPassword().equals(oldPassword)) {
+            if (user.isMatchingPassword(oldPassword)) {
                 users.set(i, updatedUser);
                 break;
             }
         }
         return "redirect:/users";
     }
-
 
     private User findUserById(String userId){
         for(User user : users){
