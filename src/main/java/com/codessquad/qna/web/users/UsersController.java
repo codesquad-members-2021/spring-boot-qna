@@ -1,5 +1,7 @@
 package com.codessquad.qna.web.users;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -14,9 +16,12 @@ public class UsersController {
     @Autowired
     private UserRepository userRepository;
 
+    Logger logger = LoggerFactory.getLogger(UsersController.class);
+
     @PostMapping
     public String createUser(User createdUser) {
         userRepository.save(createdUser);
+        logger.info("user created : " + createdUser.getUserId());
         return "redirect:/users";
     }
 
@@ -75,11 +80,14 @@ public class UsersController {
             return "redirect:/users/loginForm";
         }
         session.setAttribute(User.SESSION_KEY_USER_OBJECT, foundUser);
+        logger.info("user login : " + foundUser.getUserId());
         return "redirect:/";
     }
 
     @GetMapping("/logout")
     public String processLogout(HttpSession session) {
+        User sessionUser = (User) session.getAttribute(User.SESSION_KEY_USER_OBJECT);
+        logger.info("user logout : " + sessionUser.getUserId());
         session.removeAttribute(User.SESSION_KEY_USER_OBJECT);
         return "redirect:/";
     }

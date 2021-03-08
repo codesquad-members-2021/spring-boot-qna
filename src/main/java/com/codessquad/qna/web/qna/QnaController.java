@@ -1,6 +1,8 @@
 package com.codessquad.qna.web.qna;
 
 import com.codessquad.qna.web.users.User;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -13,6 +15,8 @@ public class QnaController {
     @Autowired
     private QuestionRepository questionRepository;
 
+    Logger logger = LoggerFactory.getLogger(QnaController.class);
+
     @PostMapping("/questions")
     public String createQuestion(Question newQuestion, HttpSession session) {
         User sessionUser = (User) session.getAttribute(User.SESSION_KEY_USER_OBJECT);
@@ -20,6 +24,7 @@ public class QnaController {
             newQuestion.setWriterId(sessionUser.getId());
             newQuestion.setWriterUserId(sessionUser.getUserId());
             questionRepository.save(newQuestion);
+            logger.info("question created! [" + newQuestion.getId() + "] " + " title : " + newQuestion.getTitle());
         }
         return "redirect:/";
     }
@@ -69,6 +74,7 @@ public class QnaController {
         currentQuestion.setTitle(newTitle);
         currentQuestion.setContents(newContents);
         questionRepository.save(currentQuestion);
+        logger.info("question modified! title : " + currentQuestion.getTitle());
         return "redirect:/questions/" + currentQuestion.getId();
     }
 
@@ -85,10 +91,10 @@ public class QnaController {
         if (!currentQuestion.isMatchingWriterId(sessionUser.getId())) {
             return "redirect:/";
         }
+        logger.info("question deleted! title : " + currentQuestion.getTitle());
         questionRepository.delete(currentQuestion);
         return "redirect:/";
     }
-
 
     private Question getQuestionById(long questionId) {
         return (Question) questionRepository.findById(questionId).orElse(null);
