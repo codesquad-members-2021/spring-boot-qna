@@ -13,7 +13,15 @@ import java.util.List;
 public class UserController {
     private List<User> users = new ArrayList<>();
 
-    @PostMapping("/user/create")
+    @GetMapping("/user/login")
+    public String getLogin() { return "user/login";}
+
+    @GetMapping("/user/form")
+    public String getForm() {
+        return "user/form";
+    }
+
+    @PostMapping("/user/form")
     public String createUser(User user) {
         users.add(user);
         return "redirect:/users";
