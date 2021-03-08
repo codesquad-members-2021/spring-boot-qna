@@ -137,19 +137,12 @@ public class UserController {
      * @return Optional.empty();
      */
     private Optional<User> isMatchedSessionUserById(Long id, HttpSession httpSession) {
-        if(HttpSessionUtils.isLoggedUser(httpSession)) {
-            logger.error("session 에 User 정보가 없습니다.");
+        User sessionUser = HttpSessionUtils.getUserFromSession(httpSession);
+        if(!sessionUser.isMatchedId(id)){
+            logger.error("sessionId : " + sessionUser.getId() + " 와 userId : + " + id + " 가 다릅니다. ");
+            throw new IllegalArgumentException("자신의 정보만 수정할 수 있습니다.");
         }
-        Optional<User> userFromSession = HttpSessionUtils.getUserFromSession(httpSession);
-        if(userFromSession.isPresent()){
-            User sessionUser = userFromSession.get();
-            if(!sessionUser.isMatchedId(id)){
-                logger.error("sessionId : " + sessionUser.getId() + " 와 userId : + " + id + " 가 다릅니다. ");
-                throw new IllegalArgumentException("자신의 정보만 수정할 수 있습니다.");
-            }
-            return Optional.of(sessionUser);
-        }
-        return Optional.empty();
+        return Optional.of(sessionUser);
     }
 
    private void getUsetIfExist(Long id, Model model) {
