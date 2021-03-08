@@ -27,4 +27,8 @@ public class UserRepository {
         return userStorage.stream()
                 .anyMatch(user -> user.getUserId().equals(targetId));
     }
+
+    public void deleteOne(User user) {
+        userStorage.remove(user);
+    }
 }
