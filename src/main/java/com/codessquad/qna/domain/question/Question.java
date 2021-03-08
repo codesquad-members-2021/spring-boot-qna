@@ -16,7 +16,7 @@ public class Question {
         this.title = title;
         this.contents = contents;
         this.createdTime = LocalDateTime.now()
-                .format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));;
+                .format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
     }
 
     public long getIndex() {
