@@ -18,6 +18,7 @@ public class Question {
 
     @Column(nullable = false, length = 20)
     private String writer;
+
     private String title;
     private String contents;
     private LocalDateTime time = LocalDateTime.now();

@@ -60,6 +60,12 @@ public class User {
         return this.password.equals(password);
     }
 
+    public void update(User user) {
+        this.password = user.password;
+        this.name = user.name;
+        this.email = user.email;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -85,11 +91,5 @@ public class User {
             ", name='" + name + '\'' +
             ", email='" + email + '\'' +
             '}';
-    }
-
-    public void update(User user) {
-        this.password = user.password;
-        this.name = user.name;
-        this.email = user.email;
     }
 }

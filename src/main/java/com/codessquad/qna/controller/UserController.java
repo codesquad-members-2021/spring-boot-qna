@@ -8,6 +8,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -39,22 +40,6 @@ public class UserController {
         return "/user/list";
     }
 
-    @PostMapping("/{userId}/update")
-    public String updateUserProfile(User user, RedirectAttributes redirect) {
-        User originUser = userService.findUserByUserId(user.getUserId());
-        String[] passwordArray = user.getPassword().split(",");
-
-        String receivedPassword = passwordArray[0];
-        String newPassword = passwordArray[1];
-        if (!originUser.isMatchingPassword(receivedPassword)) {
-            redirect.addFlashAttribute("fail", true);
-            return "redirect:/users/" + originUser.getUserId() + "/form";
-        }
-
-        userService.updateUserData(originUser, user);
-        return "redirect:/users";
-    }
-
 
     @GetMapping("/{id}")
     public String userProfile(@PathVariable Long id, Model model) {
@@ -68,5 +53,23 @@ public class UserController {
         User user = userService.findUserByUserId(userId);
         model.addAttribute("user", user);
         return "/user/updateForm";
+    }
+
+    @PutMapping("/{id}")
+    public String updateUserProfile(@PathVariable Long id, User user, RedirectAttributes redirect) {
+        User originUser = userService.findById(id);
+        String[] passwordArray = user.getPassword().split(",");
+
+        String receivedPassword = passwordArray[0];
+        String newPassword = passwordArray[1];
+
+        if (!originUser.isMatchingPassword(receivedPassword)) {
+            redirect.addFlashAttribute("fail", true);
+            return "redirect:/users/" + originUser.getUserId() + "/form";
+        }
+
+        user.setPassword(newPassword);
+        userService.updateUserData(originUser, user);
+        return "redirect:/users";
     }
 }
