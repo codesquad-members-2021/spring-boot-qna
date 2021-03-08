@@ -6,29 +6,31 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 @Controller
+@RequestMapping("/users")
 public class UserController {
     private List<User> users = new ArrayList<>();
 
-    @PostMapping("/users")
+    @PostMapping
     public String createUser(User user) {
         users.add(user);
         user.setIndex(users.indexOf(user) + 1);
         return "redirect:/users";
     }
 
-    @GetMapping("/users")
+    @GetMapping
     public String getUsers(Model model) {
         model.addAttribute("users", users);
         return "/user/list";
     }
 
-    @GetMapping("/users/{userId}")
+    @GetMapping("/{userId}")
     public String getProfile(@PathVariable String userId, Model model) {
         Optional<User> foundUser = findByUserId(userId);
         if (foundUser.isPresent()) {
@@ -44,7 +46,7 @@ public class UserController {
                         .equals(userId)).findAny();
     }
 
-    @GetMapping("/users/{index}/form")
+    @GetMapping("/{index}/form")
     public String getUpdateForm(@PathVariable int index, Model model) {
         try {
             model.addAttribute("user", users.get(index - 1));
@@ -54,7 +56,7 @@ public class UserController {
         return "/user/updateForm";
     }
 
-    @PostMapping("/users/{index}/update")
+    @PostMapping("/{index}/update")
     public String updateUser(User updatedUser) {
         try {
             users.set(updatedUser.getIndex() - 1, updatedUser);
