@@ -8,7 +8,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @Transactional(readOnly = true)
@@ -27,8 +26,8 @@ public class UserService {
         return DBUser.getId();
     }
 
-    public Optional<User> findById(Long userId) {
-        return userRepository.findById(userId);
+    public User findById(Long userId) {
+        return userRepository.findById(userId).orElseThrow(NullPointerException::new);
     }
 
     public List<User> findAll() {
@@ -37,7 +36,7 @@ public class UserService {
 
     @Transactional
     public boolean update(User user, String newPassword) {
-        User getUser = userRepository.findById(user.getId()).orElseThrow(IllegalArgumentException::new);
+        User getUser = findById(user.getId());
         if (getUser.checkPassword(user)) {
             getUser.updateUserInfo(user, newPassword);
             return true;

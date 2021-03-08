@@ -9,7 +9,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 @Controller
 @RequestMapping("/users")
@@ -38,21 +37,21 @@ public class UserController {
 
     @GetMapping("/{userId}")
     public String renderProfile(@PathVariable Long userId, Model model) {
-        Optional<User> getUser = userService.findById(userId);
-        model.addAttribute("user", getUser.orElseThrow(IllegalArgumentException::new));
+        User findUser = userService.findById(userId);
+        model.addAttribute("user", findUser);
         return "user/profile";
     }
 
     @GetMapping("/{userId}/form")
     public String renderUpdateForm(@PathVariable Long userId, Model model) {
-        Optional<User> getUser = userService.findById(userId);
-        model.addAttribute("user", getUser.orElseThrow(IllegalArgumentException::new));
+        User findUser = userService.findById(userId);
+        model.addAttribute("user", findUser);
         return "user/userUpdateForm";
     }
 
     @PutMapping("/update")
     public String userUpdate(User user, String newPassword) {
-        if(userService.update(user, newPassword)){
+        if (userService.update(user, newPassword)) {
             return "redirect:/";
         }
         return "user/userUpdateForm";

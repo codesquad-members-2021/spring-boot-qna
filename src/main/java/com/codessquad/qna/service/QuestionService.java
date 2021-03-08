@@ -6,7 +6,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
-import java.util.Optional;
 
 @Service
 @Transactional(readOnly = true)
@@ -24,8 +23,8 @@ public class QuestionService {
         questionRepository.save(question);
     }
 
-    public Optional<Question> findById(Long questionId) {
-        return questionRepository.findById(questionId);
+    public Question findById(Long questionId) {
+        return questionRepository.findById(questionId).orElseThrow(NullPointerException::new);
     }
 
 }

@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import java.util.Optional;
 
 @Controller
 @RequestMapping("/questions")
@@ -29,9 +28,9 @@ public class QuestionController {
 
     @GetMapping("/{questionId}")
     public String renderQuestion(@PathVariable Long questionId, Model model) {
-        Optional<Question> getQuestion = questionService.findById(questionId);
+        Question findQuestion = questionService.findById(questionId);
 
-        model.addAttribute("question", getQuestion.orElseThrow(NullPointerException::new));
+        model.addAttribute("question", findQuestion);
         return "qna/show";
     }
 
