@@ -57,9 +57,9 @@ public class UserController {
     }
 
     @PostMapping("/{index}/update")
-    public String updateUser(User updatedUser) {
+    public String updateUser(User user) {
         try {
-            users.set(updatedUser.getIndex() - 1, updatedUser);
+            users.set(user.getIndex() - 1, user);
         } catch (IndexOutOfBoundsException e) {
             return "redirect:/";
         }
