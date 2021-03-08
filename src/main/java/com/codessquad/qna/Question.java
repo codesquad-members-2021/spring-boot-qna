@@ -4,10 +4,10 @@ import java.time.LocalDateTime;
 
 public class Question {
 
+    private int id;
     private String writer;
     private String title;
     private String contents;
-    private int id;
     private LocalDateTime time;
 
     public String getWriter() {
