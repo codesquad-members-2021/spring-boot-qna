@@ -4,6 +4,7 @@ import com.codessquad.qna.web.model.Question;
 import com.codessquad.qna.web.validation.CastValidation;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -47,6 +48,11 @@ public class QuestionController {
 
     private int nextId(){
         return questions.size() + 1;
+    }
+
+    @ExceptionHandler(IllegalArgumentException.class)
+    public String handleIllegalArgumentException(){
+        return "/questions/invalidIndex";
     }
 
 }
