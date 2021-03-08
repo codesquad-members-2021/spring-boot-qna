@@ -41,7 +41,6 @@ public class UserController {
     }
 
     @GetMapping("{id}/form")
-    public String viewUpdateUserForm(@PathVariable String id){
-
+    public String viewUpdateUserForm(@PathVariable long id){
     }
 }

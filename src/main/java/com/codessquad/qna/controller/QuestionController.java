@@ -28,9 +28,9 @@ public class QuestionController {
     }
 
     @GetMapping("/questions/{index}")
-    public String viewQuestion(@PathVariable int index, Model model) {
+    public String viewQuestion(@PathVariable long index, Model model) {
         for (Question question : questions) {
-            if (questions.indexOf(question) == index - 1) {
+            if (questions.indexOf(question) == index++) {
                 model.addAttribute("question", question);
                 return "qna/show";
             }
