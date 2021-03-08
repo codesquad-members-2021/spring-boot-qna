@@ -9,12 +9,11 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
-@Repository
-public class PostRepositoryImpl implements PostRepository{
+public class MemoryPostRepository implements PostRepository {
 
     private List<Post> posts = Collections.synchronizedList(new ArrayList<>());
 
-    public PostRepositoryImpl(List<Post> posts) {
+    public MemoryPostRepository(List<Post> posts) {
         this.posts = posts;
     }
 
@@ -24,12 +23,12 @@ public class PostRepositoryImpl implements PostRepository{
     }
 
     @Override
-    public Optional<Post> find(int postId) {
+    public Optional<Post> findById(Long postId) {
         Optional<Post> post = Optional.empty();
         try{
-            post = Optional.ofNullable(posts.get(postId));
+            post = Optional.ofNullable(posts.get(postId.intValue()));
         }catch (IndexOutOfBoundsException e) {
-            throw new CanNotFindPostException();
+            return Optional.empty();
         }
         return post;
     }
@@ -43,4 +42,5 @@ public class PostRepositoryImpl implements PostRepository{
     public int size() {
         return posts.size();
     }
+
 }

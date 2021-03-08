@@ -27,15 +27,16 @@ public class UserService {
         return userRepository.findAll();
     }
 
-    public User getUser(String userId) {
-        Optional<User> user = userRepository.find(userId);
-        if(!user.isPresent()){
-            throw new CanNotFindUserException();
-        }
-        return user.get();
+    public User getUser(Long userId) {
+        return userRepository.findById(userId).orElseThrow(CanNotFindUserException::new);
     }
 
-    public void removeUser(String userId) {userRepository.remove(userId);}
+
+    public void change(User oldUserInfo, User updateUserInfo) {
+        userRepository.update(oldUserInfo, updateUserInfo);
+    }
+
+    public void removeUser(Long userId) {userRepository.remove(userId);}
 
     public int countOfUsers() {return userRepository.size();}
 

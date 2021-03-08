@@ -1,17 +1,17 @@
 package com.codessquad.qna.controller;
 
+import com.codessquad.qna.dto.PostDto;
 import com.codessquad.qna.entity.Post;
 import com.codessquad.qna.exception.CanNotFindPostException;
 import com.codessquad.qna.service.PostService;
+import com.codessquad.qna.util.Mapper;
+import com.sun.org.apache.xpath.internal.operations.Mod;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Optional;
 
@@ -25,14 +25,12 @@ public class PostController {
 
     /**
      * 질문 게시글을 게시판에 등록합니다.
-     * @param writer
-     * @param title
-     * @param contents
+     * @param postDto
      * @return
      */
     @PostMapping("/questions")
-    public String addPost(@RequestParam String writer, @RequestParam String title, @RequestParam String contents) {
-        Post post = new Post(writer, title, contents);
+    public String addPost(@ModelAttribute PostDto postDto) {
+        Post post = Mapper.mapToPost(postDto);
         postService.addPost(post);
         return "redirect:/";
     }
@@ -57,7 +55,7 @@ public class PostController {
      * @return
      */
     @GetMapping("/questions/{id}")
-    public String getPost(@PathVariable int id, Model model) {
+    public String getPost(@PathVariable Long id, Model model) {
         try{
             Post post = postService.getPost(id);
             model.addAttribute("post", post);
@@ -65,6 +63,19 @@ public class PostController {
             logger.error(e.getMessage());
         }
         return "qna/show";
+    }
+
+    /**
+     * IllegalArgumentException 을 핸들링 해주는 메소드
+     * 지금은 그냥 redirect 를 하지만 나중에는 다른 페이지로 넘겨주는 작업이 필요할듯함.
+     * @param e
+     * @return
+     */
+    @ExceptionHandler(IllegalArgumentException.class)
+    public String handleException(Exception e, Model model) {
+        logger.error(e.getMessage());
+        model.addAttribute("exception", e);
+        return "error";
     }
 
 }

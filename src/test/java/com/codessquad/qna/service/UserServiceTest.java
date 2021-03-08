@@ -27,7 +27,7 @@ class UserServiceTest {
     void save() {
         User user = new User("roach", "1234", "roach", "dev0jsh@gmail.com");
         userService.save(user);
-        assertThat(userService.getUser("roach")).isEqualTo(user);
+        assertThat(userService.getUser(1L).getId()).isEqualTo(user.getId());
     }
 
     @Test
@@ -38,8 +38,8 @@ class UserServiceTest {
         userService.save(user);
         userService.save(user1);
         Assertions.assertAll(
-                ()->assertThat(userService.getUsers().get(0)).isEqualTo(user1),
-                ()->assertThat(userService.getUsers().get(1)).isEqualTo(user)
+                ()->assertThat(userService.getUsers().get(0).getId()).isEqualTo(user.getId()),
+                ()->assertThat(userService.getUsers().get(1).getId()).isEqualTo(user1.getId())
         );
     }
 
@@ -50,14 +50,14 @@ class UserServiceTest {
         User honux = new User("honux", "12345", "honux", "1234@naver.com");
         userService.save(user);
         userService.save(honux);
-        assertThat(userService.getUser("roach")).isEqualTo(user);
+        assertThat(userService.getUser(1L).getId()).isEqualTo(user.getId());
     }
 
     @Test
     @DisplayName("유저가 없을시 CanNotFindUserException 을 리턴하는지 확인한다.")
     void failGetUser() {
         assertThatExceptionOfType(CanNotFindUserException.class)
-                .isThrownBy(() -> userService.getUser("Xxxx"))
+                .isThrownBy(() -> userService.getUser(100L))
                 .withMessage("해당 유저가 존재하지 않습니다.");
     }
 
@@ -65,8 +65,10 @@ class UserServiceTest {
     void removeUser() {
         User user = new User("honux", "12345", "honux", "1234@naver.com");
         userService.save(user);
-        userService.removeUser("honux");
-        assertThat(userService.contOfUsers()).isEqualTo(0);
+        userService.removeUser(1L);
+        assertThatExceptionOfType(CanNotFindUserException.class)
+                .isThrownBy(() -> userService.getUser(1L))
+                .withMessage("해당 유저가 존재하지 않습니다.");
     }
 
 }
