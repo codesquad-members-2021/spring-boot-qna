@@ -6,6 +6,10 @@ public class User {
     private String name;
     private String email;
 
+    public User(String userId){
+        this.userId = userId;
+    }
+
     public String getUserId() {
         return userId;
     }
