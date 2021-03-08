@@ -11,6 +11,8 @@ import org.springframework.web.servlet.ModelAndView;
 @Controller
 @RequestMapping("/users")
 public class UserController {
+    private final String CONFIRM_INFO = "/confirm/{id}";
+    private final String UPDATE_INFO = "/update/{id}";
 
     @Autowired
     private UserRepository userRepository;
@@ -35,15 +37,12 @@ public class UserController {
         return "user/profile";
     }
 
-    @GetMapping("/confirm/{id}")
+    @GetMapping(CONFIRM_INFO)
     public ModelAndView confirmUserInfo(@PathVariable Long id) {
-        ModelAndView modelAndView = new ModelAndView("/user/confirmUserInfo");
-        User user = userRepository.findById(id).orElse(null);
-        modelAndView.addObject("userId", user.getUserId());
-        return modelAndView;
+        return getUserRepository("/user/confirmUserInfo", id);
     }
 
-    @PostMapping("/confirm/{id}")
+    @PostMapping(CONFIRM_INFO)
     public String confirmUserInfo(@PathVariable("id") Long id, String password) {
         User user = userRepository.findById(id).orElse(null);
         String userPassword = user.getPassword();
@@ -53,15 +52,12 @@ public class UserController {
         return "redirect:/users/confirm/{id}";
     }
 
-    @GetMapping("/update/{id}")
+    @GetMapping(UPDATE_INFO)
     public ModelAndView updateUserInfo(@PathVariable Long id) {
-        ModelAndView modelAndView = new ModelAndView("user/updateForm");
-        User user = userRepository.findById(id).orElse(null);
-        modelAndView.addObject("userId", user.getUserId());
-        return modelAndView;
+        return getUserRepository("user/updateForm", id);
     }
 
-    @PutMapping(value = "/update/{id}")
+    @PutMapping(UPDATE_INFO)
     public String updateUserInfo(@PathVariable("id") Long id, String password, String name, String email) {
         User user = userRepository.findById(id).orElse(null);
         user.setPassword(password);
@@ -69,6 +65,13 @@ public class UserController {
         user.setEmail(email);
         userRepository.save(user);
         return "redirect:/users";
+    }
+
+    private ModelAndView getUserRepository(String viewName, Long id) {
+        ModelAndView modelAndView = new ModelAndView(viewName);
+        User user = userRepository.findById(id).orElse(null);
+        modelAndView.addObject("userId", user.getUserId());
+        return modelAndView;
     }
 
 }
