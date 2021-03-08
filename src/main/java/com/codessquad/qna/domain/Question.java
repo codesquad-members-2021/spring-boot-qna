@@ -28,4 +28,13 @@ public class Question {
     public String getContents() {
         return contents;
     }
+
+    @Override
+    public String toString() {
+        return "Question{" +
+                "writer='" + writer + '\'' +
+                ", title='" + title + '\'' +
+                ", contents='" + contents + '\'' +
+                '}';
+    }
 }
