@@ -14,6 +14,12 @@ import java.util.Optional;
 public class UserController {
     private List<User> users = new ArrayList<>();
 
+    @GetMapping("/")
+    public String index() {
+        return "index";
+    }
+
+
     @GetMapping("/user/login")
     public String getLogin() { return "user/login";}
 
