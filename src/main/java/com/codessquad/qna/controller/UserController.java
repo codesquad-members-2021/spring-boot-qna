@@ -39,4 +39,9 @@ public class UserController {
         }
         return "redirect:/users";
     }
+
+    @GetMapping("{id}/form")
+    public String viewUpdateUserForm(@PathVariable String id){
+
+    }
 }
