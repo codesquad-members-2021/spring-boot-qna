@@ -49,4 +49,32 @@ public class UserController {
 
         return "user/profile";
     }
+
+    @GetMapping("/{userId}/form")
+    public String getUpdateForm(@PathVariable String userId, Model model) {
+        for (User user : userList) {
+            if(user.matchId(userId)) {
+                model.addAttribute("user", user);
+            }
+            logger.info(user.toString());
+        }
+
+        return "user/updateForm";
+    }
+
+    @PutMapping("/{userId}")
+    public String update(@PathVariable String userId, User updateUser) {
+        int index = 0;
+
+        for (User user : userList) {
+            if(user.matchId(userId)) {
+                userList.set(index, updateUser);
+                logger.info(updateUser.toString());
+                break;
+            }
+            index++;
+        }
+
+        return "redirect:/users/";
+    }
 }
