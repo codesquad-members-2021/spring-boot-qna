@@ -1,5 +1,6 @@
 package com.codessquad.qna.domain.user;
 
+import javax.jws.soap.SOAPBinding;
 import javax.persistence.*;
 
 @Entity
@@ -46,8 +47,8 @@ public class User {
         return email;
     }
 
-    public boolean matchId(String id) {
-        return this.userId.equals(id);
+    public boolean matchPassword(String prevPasswrod) {
+        return this.password.equals(prevPasswrod);
     }
 
     public void update(User updateUser) {
