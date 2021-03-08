@@ -61,4 +61,14 @@ public class Question {
     public int getPoint() {
         return point;
     }
+
+    public boolean isWriter(User user) {
+        return writer.equals(user);
+    }
+
+    public void updateContents(Question updatedQuestion) {
+        this.title = updatedQuestion.title;
+        this.contents = updatedQuestion.contents;
+        this.time = LocalDateTime.now();
+    }
 }

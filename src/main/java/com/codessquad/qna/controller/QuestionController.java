@@ -5,10 +5,7 @@ import com.codessquad.qna.domain.QuestionRepository;
 import com.codessquad.qna.domain.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpSession;
@@ -63,6 +60,38 @@ public class QuestionController {
             return modelAndView;
         }
         return new ModelAndView("redirect:/");
+    }
+
+    @GetMapping("/{id}/form")
+    public ModelAndView updateForm(@PathVariable("id") Long id, HttpSession session) {
+        if (!HttpSessionUtils.isLogined(session)) {
+            return new ModelAndView("redirect:/questions/unauthorized");
+        }
+        User sessionUser = HttpSessionUtils.getUserFromSession(session);
+        Question question = questionRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 질문"));
+        if (!question.isWriter(sessionUser)) {
+            return new ModelAndView("redirect:/questions/unauthorized");
+        }
+        ModelAndView modelAndView = new ModelAndView("/qna/update_form");
+        modelAndView.addObject("question", question);
+        return modelAndView;
+    }
+
+    @PutMapping("/{id}")
+    public String update(@PathVariable("id") Long id, Question updatedQuestion, HttpSession session) {
+        if (!HttpSessionUtils.isLogined(session)) {
+            return "redirect:/questions/unauthorized";
+        }
+        User sessionUser = HttpSessionUtils.getUserFromSession(session);
+        Question question = questionRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 질문"));
+        if (!question.isWriter(sessionUser)) {
+            return "redirect:/questions/unauthorized";
+        }
+        question.updateContents(updatedQuestion);
+        questionRepository.save(question);
+        return "redirect:/questions/" + id;
     }
 
     @GetMapping("/unauthorized")
