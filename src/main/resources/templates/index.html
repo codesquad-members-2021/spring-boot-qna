@@ -1,0 +1,46 @@
+{{#partial "content"}}
+<!-- 질문게시판 -->
+<div class="container" id="main">
+    <div class="col-md-12 col-sm-12 col-lg-10 col-lg-offset-1">
+        <div class="panel panel-default qna-list">
+            <ul class="list">
+                {{#questions}}
+                <li>
+                    <div class="wrap">
+                        <div class="main">
+                            <strong class="subject">
+                                <a href="questions/{{index}}">{{title}}</a>
+                            </strong>
+                            <div class="auth-info">
+                                <i class="icon-add-comment"></i>
+                                <span class="time">{{date}}</span>
+                                <a href="userrofile.html" class="author">{{writer}}</a>
+                            </div>
+                            <div class="reply" title="댓글">
+                                <i class="icon-reply"></i>
+                                <span class="point">0</span>
+                            </div>
+                        </div>
+                    </div>
+                </li>
+                {{/questions}}
+            </ul>
+            <div class="row">
+                <div class="col-md-3"></div>
+                <div class="col-md-6 text-center">
+                    <ul class="pagination center-block" style="display:inline-block;">
+                        <li><a href="#">«</a></li>
+                        <li><a href="#">1</a></li>
+                        <li><a href="#">»</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-3 qna-write">
+                    <a href="questions/form" class="btn btn-primary pull-right" role="button">질문하기</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{{/partial}}
+
+{{> component/base}}
