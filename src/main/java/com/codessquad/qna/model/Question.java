@@ -1,22 +1,21 @@
 package com.codessquad.qna.model;
 
-
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 public class Question {
     private int id;
     private String writer;
     private String title;
     private String contents;
-    private Date writetime;
+    private LocalDateTime writetime;
 
     public Question(String writer, String title, String contents) {
         this.id = id;
         this.writer = writer;
         this.title = title;
         this.contents = contents;
-        this.writetime = new Date();
+        this.writetime = LocalDateTime.now();
     }
 
     public int getId() {
@@ -53,10 +52,10 @@ public class Question {
 
 
     public String getWritetime() {
-        return new SimpleDateFormat("yyyy-MM-dd HH:mm").format(writetime);
+        return writetime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"));
     }
 
-    public void setWritetime(Date writetime) {
+    public void setWritetime(LocalDateTime writetime) {
         this.writetime = writetime;
     }
 
