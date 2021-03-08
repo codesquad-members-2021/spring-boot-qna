@@ -58,6 +58,11 @@ public class UserController {
 
     @PostMapping("/{index}/update")
     public String updateUser(User user) {
+        User originUser = users.get(user.getIndex() - 1);
+        if(!user.getPassword().equals(originUser.getPassword())) {
+            return "redirect:/";
+        }
+        user.setUserId(originUser.getUserId());
         try {
             users.set(user.getIndex() - 1, user);
         } catch (IndexOutOfBoundsException e) {
