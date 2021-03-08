@@ -58,4 +58,7 @@ public class Post {
         return date;
     }
 
+    public boolean isMatchedAuthor(User user) {
+        return this.author.equals(user.getUserId());
+    }
 }
