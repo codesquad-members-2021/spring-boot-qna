@@ -29,14 +29,14 @@ public class UsersController {
     @GetMapping("/{userId}")
     public String getOneUser(@PathVariable("userId") long id, Model model) {
         User foundUser = getUserById(id);
-        model.addAttribute("user", foundUser);
+        model.addAttribute("foundUser", foundUser);
         return "user/profile";
     }
 
     @GetMapping("/modify/{userId}")
     public String getModifyUserPage(@PathVariable("userId") long id, Model model) {
         User foundUser = getUserById(id);
-        model.addAttribute("user", foundUser);
+        model.addAttribute("foundUser", foundUser);
         return "user/modify-form";
     }
 
