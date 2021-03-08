@@ -83,7 +83,8 @@
 
                 {{#userId}}
                 <div class="form-group">
-                    <label>사용자 아이디 : {{userId}}</label>
+                    <label for="userId">{{userId}}</label>
+                    <input type="hidden" class="form-control" id="userId" name="userId" placeholder="UserId" value="{{userId}}">
                 </div>
                 {{/userId}}
                 <div class="form-group">

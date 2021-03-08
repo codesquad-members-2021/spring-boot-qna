@@ -12,23 +12,21 @@ import org.springframework.web.bind.annotation.PostMapping;
 @Controller
 public class UserController {
 
-    UserService userService = new UserService();
+    private UserService userService = new UserService();
 
-    String userIdCheck = null;
-
-    @PostMapping ("/user/create")
+    @PostMapping ("/users/create")
     public String create(User user) {
 
         userService.create(user);
 
-        return "redirect:/user/list";
+        return "redirect:/users/list";
     }
 
-    @GetMapping("/user/list")
+    @GetMapping("/users/list")
     public String list(Model model){
 
         model.addAttribute("users", userService.findUsers());
-        System.out.println(model);
+
         return "/user/list";
     }
 
@@ -40,12 +38,10 @@ public class UserController {
         return "/user/profile";
     }
 
-    @GetMapping("/user/{userId}/validation")
+    @GetMapping("/users/{userId}/validation")
     public String userValidation(@PathVariable String userId, Model model){
 
         model.addAttribute("userId", userId);
-
-        userIdCheck = userId;
 
         return "/user/validation_user";
     }
@@ -53,22 +49,21 @@ public class UserController {
     @PostMapping("/validation")
     public String validationUser(User user, Model model) {
 
-        if(userService.validationUserInfo(userIdCheck, user.getPassword())){
-            model.addAttribute("userId", userIdCheck);
+        if(userService.validationUserInfo(user.getUserId(), user.getPassword())){
+            model.addAttribute("user", user);
             return "/user/updateForm";
         }
-        return "/user/validation_user.html";
+        return "/user/validation_user";
     }
 
-    @PostMapping("/user/update")
+    @PostMapping("/users/update")
     public String userUpdate(User user){
-        System.out.println(user);
 
         userService.findUser(user.getUserId()).setPassword(user.getPassword());
         userService.findUser(user.getUserId()).setEmail(user.getEmail());
         userService.findUser(user.getUserId()).setName(user.getName());
 
-        return "redirect:/user/list";
+        return "redirect:/users/list";
     }
 
 }

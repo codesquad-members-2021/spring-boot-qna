@@ -5,7 +5,7 @@ import com.codessquad.qna.domain.User;
 import java.util.ArrayList;
 import java.util.List;
 
-public class UserRepositoryimpl implements ListUserRepository {
+public class UserRepositoryimpl implements UserRepository {
 
     private List<User> users = new ArrayList<>();
 

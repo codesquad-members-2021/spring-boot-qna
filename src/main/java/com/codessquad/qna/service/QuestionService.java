@@ -7,7 +7,7 @@ import java.util.List;
 
 public class QuestionService {
 
-    QuestionRepositoryimpl questionRepository = new QuestionRepositoryimpl();
+    private QuestionRepositoryimpl questionRepository = new QuestionRepositoryimpl();
 
     public void registerQuestion(Question question) {
 

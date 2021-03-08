@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 @Controller
 public class QuestionController {
 
-    QuestionService questionService = new QuestionService();
+    private QuestionService questionService = new QuestionService();
 
     @PostMapping("/questions")
     public String question(Question question){
@@ -36,6 +36,5 @@ public class QuestionController {
 
         return "/qna/show";
     }
-
 
 }

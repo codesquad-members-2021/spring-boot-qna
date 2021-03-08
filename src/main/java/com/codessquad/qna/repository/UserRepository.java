@@ -6,7 +6,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface ListUserRepository {
+public interface UserRepository {
 
     void save(User user);
 

@@ -6,7 +6,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-public class QuestionRepositoryimpl implements ListQuestionRepository {
+public class QuestionRepositoryimpl implements QuestionRepository {
 
     private List<Question> questions = new ArrayList<>();
 
@@ -25,6 +25,7 @@ public class QuestionRepositoryimpl implements ListQuestionRepository {
 
     @Override
     public List<Question> findQuestionList() {
+
         return questions;
     }
 }
