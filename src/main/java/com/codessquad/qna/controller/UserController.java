@@ -1,35 +1,39 @@
 package com.codessquad.qna.controller;
 
 import com.codessquad.qna.domain.User;
+import com.codessquad.qna.domain.UserRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Controller
+@RequestMapping("/users")
 public class UserController {
     private List<User> users = new ArrayList<>();
 
-    @PostMapping("/users")
+    @Autowired
+    private UserRepository userRepository;
+
+    @PostMapping("")
     public String create(User user) {
-        users.add(user);
+        userRepository.save(user);
         return "redirect:/users";
     }
 
-    @GetMapping("/users")
+    @GetMapping("")
     public String list(Model model) {
         model.addAttribute("users", users);
-        for (User user : users) {
-            System.out.println(user.toString());
-        }
         return "user/list";
     }
 
-    @GetMapping("/users/{userId}")
+    @GetMapping("/{userId}")
     public String profile(@PathVariable String userId, Model model) {
         model.addAttribute("user", getUserByUserId(userId));
         return "user/profile";
@@ -44,7 +48,7 @@ public class UserController {
         return null;
     }
 
-    @GetMapping("/users/{index}/form")
+    @GetMapping("/{index}/form")
     public String update(@PathVariable int index, Model model) {
         try {
             model.addAttribute("user", users.get(index - 1));
@@ -54,7 +58,7 @@ public class UserController {
         }
     }
 
-    @PostMapping("/users/{index}")
+    @PostMapping("/{index}")
     public String updateForm(@PathVariable int index, User newUser) {
         User user = users.get(index - 1);
         user.update(newUser);
