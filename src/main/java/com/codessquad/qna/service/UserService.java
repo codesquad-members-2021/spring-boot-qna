@@ -36,11 +36,13 @@ public class UserService {
     }
 
     @Transactional
-    public void update(User user, String newPassword) {
+    public boolean update(User user, String newPassword) {
         User getUser = userRepository.findById(user.getId()).orElseThrow(IllegalArgumentException::new);
         if (getUser.checkPassword(user)) {
             getUser.updateUserInfo(user, newPassword);
+            return true;
         }
+        return false;
     }
 
 }

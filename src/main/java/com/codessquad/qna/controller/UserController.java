@@ -52,8 +52,10 @@ public class UserController {
 
     @PutMapping("/update")
     public String userUpdate(User user, String newPassword) {
-        userService.update(user, newPassword);
-        return "redirect:/";
+        if(userService.update(user, newPassword)){
+            return "redirect:/";
+        }
+        return "user/userUpdateForm";
     }
 
 
