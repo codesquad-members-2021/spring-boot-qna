@@ -31,21 +31,21 @@ public class UserController {
 
     @GetMapping("/{id}")
     public String viewProfile(@PathVariable Long id, Model model) {
-        model.addAttribute("user", userRepository.findById(id).get());
+        model.addAttribute("user", userRepository.findById(id).orElse(null));
         return "user/profile";
     }
 
     @GetMapping("/confirm/{id}")
     public ModelAndView confirmUserInfo(@PathVariable Long id) {
         ModelAndView modelAndView = new ModelAndView("/user/confirmUserInfo");
-        User user = userRepository.findById(id).get();
+        User user = userRepository.findById(id).orElse(null);
         modelAndView.addObject("userId", user.getUserId());
         return modelAndView;
     }
 
     @PostMapping("/confirm/{id}")
     public String confirmUserInfo(@PathVariable("id") Long id, String password) {
-        User user = userRepository.findById(id).get();
+        User user = userRepository.findById(id).orElse(null);
         String userPassword = user.getPassword();
         if (userPassword.equals(password)) {
             return "redirect:/users/update/{id}";
@@ -56,14 +56,14 @@ public class UserController {
     @GetMapping("/update/{id}")
     public ModelAndView updateUserInfo(@PathVariable Long id) {
         ModelAndView modelAndView = new ModelAndView("user/updateForm");
-        User user = userRepository.findById(id).get();
+        User user = userRepository.findById(id).orElse(null);
         modelAndView.addObject("userId", user.getUserId());
         return modelAndView;
     }
 
     @PutMapping(value = "/update/{id}")
     public String updateUserInfo(@PathVariable("id") Long id, String password, String name, String email) {
-        User user = userRepository.findById(id).get();
+        User user = userRepository.findById(id).orElse(null);
         user.setPassword(password);
         user.setName(name);
         user.setEmail(email);

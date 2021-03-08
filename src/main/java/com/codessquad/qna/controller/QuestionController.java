@@ -25,7 +25,7 @@ public class QuestionController {
     @GetMapping("/questions/{id}")
     public ModelAndView viewQuestion(@PathVariable Long id) {
         ModelAndView modelAndView = new ModelAndView("/qna/show");
-        modelAndView.addObject("question", questionRepository.findById(id).get());
+        modelAndView.addObject("question", questionRepository.findById(id).orElse(null));
         return modelAndView;
     }
 

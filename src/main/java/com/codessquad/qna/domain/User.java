@@ -1,15 +1,12 @@
 package com.codessquad.qna.domain;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @Entity
 public class User {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(nullable = false)
@@ -21,6 +18,7 @@ public class User {
     public Long getId() {
         return id;
     }
+
     public void setId(Long id) {
         this.id = id;
     }
