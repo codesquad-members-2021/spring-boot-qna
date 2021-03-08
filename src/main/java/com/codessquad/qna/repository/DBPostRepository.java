@@ -42,4 +42,9 @@ public class DBPostRepository implements PostRepository {
         return entityManager.createQuery("SELECT count(p) FROM Post p", Long.class).getSingleResult().intValue();
     }
 
+    @Override
+    public void update(Post oldPost, Post newPost) {
+        oldPost.change(newPost);
+    }
+
 }

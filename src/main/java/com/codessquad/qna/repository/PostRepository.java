@@ -17,4 +17,6 @@ public interface PostRepository {
 
     public int size();
 
+    public void update(Post oldPost, Post updatePost);
+
 }

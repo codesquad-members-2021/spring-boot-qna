@@ -33,4 +33,8 @@ public class PostService {
         return postRepository.findAll();
     }
 
+    public void updatePost(Post oldPost, Post updatePost) {
+        postRepository.update(oldPost, updatePost);
+    }
+
 }
