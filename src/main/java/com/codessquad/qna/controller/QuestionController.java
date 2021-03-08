@@ -29,8 +29,14 @@ public class QuestionController {
 
     @GetMapping("/questions/{id}")
     public String show(@PathVariable("id") int index, Model model) {
-        Question question = questions.get(index - 1);
-        model.addAttribute("question", question);
-        return "qna/show";
+        Question question;
+        try {
+            question = questions.get(index - 1);
+            model.addAttribute("question", question);
+            return "qna/show";
+        } catch (IndexOutOfBoundsException e) {
+            System.err.println("The index is not vaild.");
+        }
+        return "redirect:/";
     }
 }
