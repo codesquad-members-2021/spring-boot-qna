@@ -10,7 +10,7 @@ public class User {
         this.userId = userId;
     }
 
-    public String getUserId(){
+    public String getUserId() {
         return userId;
     }
 
@@ -18,7 +18,7 @@ public class User {
         this.password = password;
     }
 
-    public String getPassword(){
+    public String getPassword() {
         return password;
     }
 
@@ -26,7 +26,7 @@ public class User {
         this.name = name;
     }
 
-    public String getName(){
+    public String getName() {
         return name;
     }
 
@@ -34,7 +34,7 @@ public class User {
         this.email = email;
     }
 
-    public String getEmail(){
+    public String getEmail() {
         return email;
     }
 
