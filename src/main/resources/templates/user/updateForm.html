@@ -17,11 +17,14 @@
                     <input class="form-control" id="userId" name="userId" placeholder="User ID" value="{{user.userId}}" readonly>
                 </div>
                 <div class="form-group">
-                    <label for="password">비밀번호</label>
-                    <input type="password" class="form-control" id="password" name="password" value="{{user.password}}"
-                           placeholder="Password" readonly>
+                    <label for="password">비밀번호 확인</label>
+                    <input type="password" class="form-control" id="prevPassword" name="prevPassword"
+                           placeholder="previous Password">
                 </div>
-
+                <div class="form-group">
+                    <label for="password">새 비밀번호</label>
+                    <input type="password" class="form-control" id="password" name="password" placeholder="new Password">
+                </div>
                 <div class="form-group">
                     <label for="name">이름</label>
                     <input class="form-control" id="name" name="name" placeholder="Name" value="{{user.name}}">
