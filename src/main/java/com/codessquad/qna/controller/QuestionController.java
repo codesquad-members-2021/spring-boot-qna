@@ -62,7 +62,6 @@ public class QuestionController {
             mav.setViewName("redirect:/users/login");
             return mav;
         }
-
         if (!sessionedUser.isSameUserId(question.getWriter())) {
             throw new IllegalStateException("자신이 작성한 글만 수정할 수 있습니다.");
         }
@@ -80,5 +79,23 @@ public class QuestionController {
         questionRepository.save(targetQuestion);
 
         return "redirect:/questions/" + id;
+    }
+
+    @DeleteMapping("/{id}")
+    public String deleteQuestion(@PathVariable Long id, HttpSession session) {
+        Question targetQuestion = questionRepository.findById(id).orElseThrow(
+                () -> new IllegalStateException("해당 글을 찾을 수 없습니다. id = " + id));
+        User sessionedUser = (User) session.getAttribute("sessionedUser");
+
+        if (sessionedUser == null) {
+            return "redirect:/users/login";
+        }
+
+        if (!sessionedUser.isSameUserId(targetQuestion.getWriter())) {
+            throw new IllegalStateException("자신이 작성한 글만 삭제할 수 있습니다.");
+        }
+
+        questionRepository.delete(targetQuestion);
+        return "redirect:/";
     }
 }
