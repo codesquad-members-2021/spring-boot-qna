@@ -51,4 +51,10 @@ public class UserController {
         }
         return "redircet:/users";
     }
+
+    @PostMapping("{{id}}/update")
+    public String updateUser(@PathVariable long id, Model model){
+        model.addAttribute("user",users.get((int)id-1));
+        return "redirect:/users";
+    }
 }
