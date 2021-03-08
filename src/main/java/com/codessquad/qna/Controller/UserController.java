@@ -4,6 +4,7 @@ import com.codessquad.qna.domain.User;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import java.util.ArrayList;
@@ -11,9 +12,9 @@ import java.util.List;
 
 @Controller
 public class UserController {
-    private List<User> users = new ArrayList<>();
+    private List<User> userlist = new ArrayList<>();
 
-    @GetMapping("/form")
+    @GetMapping("user/form.html")
     public String form() {
         System.out.println(" form :: in");
         return "users/form";
@@ -21,7 +22,7 @@ public class UserController {
 
     @PostMapping("/user/create")
     public String create(User user) {
-        users.add(user);
+        userlist.add(user);
 
         return "redirect:/userslist";
     }
@@ -31,8 +32,16 @@ public class UserController {
     @GetMapping("/userslist")
     public String list(Model model) {
         System.out.println("userslist");
-        model.addAttribute("users",users);
+        model.addAttribute("userlist",userlist);
 
         return "users/list";
     }
+
+    @GetMapping("/users/{userId}/form")
+    public String updateUserForm(@PathVariable(name="userId") String targetId, User reference) {
+        //User PresentUser = userlist.get();
+        return "users/list";
+    }
+
+
 }
