@@ -11,13 +11,15 @@ public class Question {
     private long id;
 
     @Column(nullable = false)
-    private String writerId;
+    private long writerId;
+    private String writerUserId;
     private String title;
     private String contents;
     private LocalDateTime reportingDate;
 
-    public Question(String writerId, String title, String contents) {
+    public Question(long writerId, String writerUserId, String title, String contents) {
         this.writerId = writerId;
+        this.writerUserId = writerUserId;
         this.title = title;
         this.contents = contents;
         this.reportingDate = LocalDateTime.now();
@@ -35,11 +37,19 @@ public class Question {
         this.id = id;
     }
 
-    public String getWriterId() {
+    public String getWriterUserId() {
+        return writerUserId;
+    }
+
+    public void setWriterUserId(String writerUserId) {
+        this.writerUserId = writerUserId;
+    }
+
+    public long getWriterId() {
         return writerId;
     }
 
-    public void setWriterId(String writerId) {
+    public void setWriterId(long writerId) {
         this.writerId = writerId;
     }
 

@@ -4,6 +4,7 @@ import javax.persistence.*;
 
 @Entity
 public class User {
+    public final static String SESSION_KEY_USER_OBJECT = "loginUser";
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

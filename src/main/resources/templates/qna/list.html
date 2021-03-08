@@ -10,7 +10,7 @@
                     <div class="auth-info">
                         <i class="icon-add-comment"></i>
                         <span class="time">{{reportingDate}}</span>
-                        <a class="author" href="#">{{writerId}}</a>
+                        <a class="author" href="#">{{writerUserId}}</a>
                     </div>
                     <div class="reply" title="댓글">
                         <i class="icon-reply"></i>
@@ -34,8 +34,10 @@
                 <li><a href="#">»</a></li>
             </ul>
         </div>
+        {{#loginUser}}
         <div class="col-md-3 qna-write">
             <a class="btn btn-primary pull-right" href="/questions/form" role="button">질문하기</a>
         </div>
+        {{/loginUser}}
     </div>
 </div>
