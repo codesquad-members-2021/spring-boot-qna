@@ -16,7 +16,6 @@ public class Question {
     private String writer;
     private String title;
     private String contents;
-
     private LocalDateTime currentDateTime;
 
     public Question() {
@@ -39,8 +38,8 @@ public class Question {
         this.contents = contents;
     }
 
-    public void setCurrentDateTime(LocalDateTime currentTime) {
-        this.currentDateTime = currentTime;
+    public void setCurrentDateTime(LocalDateTime currentDateTime) {
+        this.currentDateTime = currentDateTime;
     }
 
     public Long getId() {
