@@ -46,6 +46,12 @@ public class ControllerExceptionHandler {
         return handleException(e, model);
     }
 
+    /**
+     * 세션에 로그인 된 유저가 없을시 발생하는 에러
+     * @param e
+     * @param model
+     * @return
+     */
     @ExceptionHandler(NotExistLoggedUserInSession.class)
     public String handleNotExistLoggedUserInSession(Exception e, Model model) {
         return handleException(e, model);

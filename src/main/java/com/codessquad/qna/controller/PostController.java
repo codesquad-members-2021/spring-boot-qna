@@ -65,9 +65,11 @@ public class PostController {
     }
 
     /**
-     * UpdateForm 으로
+     * Post UpdateForm 으로 이동할 수 있음.
+     * 세션에 로그인 되어 있는 유저와 작성자를 비교하여 틀릴시 IllegalAccessException 을 리턴함
      * @param id
      * @param model
+     * @throws IllegalAccessException
      * @return
      */
     @GetMapping("/questions/{id}/form")
@@ -81,6 +83,12 @@ public class PostController {
         return "qna/updateForm";
     }
 
+    /**
+     * postDto 를 받아 기존의 post 를 업데이트 할 수 있도록 하였음
+     * @param id
+     * @param postDto
+     * @return
+     */
     @PutMapping("/questions/{id}")
     public String updatePost(@PathVariable Long id, @ModelAttribute PostDto postDto) {
         Post post = postService.getPost(id);
