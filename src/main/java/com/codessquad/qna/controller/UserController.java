@@ -18,7 +18,7 @@ public class UserController {
 
     @PostMapping
     public String signup(User user) {
-        user.setId(users.size()+1);
+        user.setId(users.size() + 1);
         users.add(user);
         System.out.println("user : " + user);
         return "redirect:/users";
@@ -42,9 +42,9 @@ public class UserController {
     }
 
     @GetMapping("{id}/form")
-    public String viewUpdateUserForm(@PathVariable int id, Model model){
-        for(User user : users){
-            if(user.getId()==id) {
+    public String viewUpdateUserForm(@PathVariable int id, Model model) {
+        for (User user : users) {
+            if (user.getId() == id) {
                 model.addAttribute("user", user);
                 return "user/updateForm";
             }
@@ -53,9 +53,9 @@ public class UserController {
     }
 
     @PostMapping("{id}/update")
-    public String updateUser(@PathVariable int id, User updateUser){
-        User targetUser = users.get(id+1);
-        targetUser.set(updateUser);
+    public String updateUser(@PathVariable int id, User updateUser) {
+        User targetUser = users.get(id - 1);
+        targetUser.setUser(updateUser);
         return "redirect:/users";
     }
 }
