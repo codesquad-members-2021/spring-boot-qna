@@ -25,9 +25,7 @@ public class QuestionController {
     }
 
     @PostMapping("/questions")
-    public String submitQuestion(String writer, String title, String contents, Model model) {
-        Question question = new Question(writer, title, contents);
-
+    public String submitQuestion(Question question, Model model) {
         questionRepository.save(question);
         model.addAttribute(question);
 

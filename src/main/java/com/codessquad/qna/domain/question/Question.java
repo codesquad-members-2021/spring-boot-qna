@@ -19,7 +19,7 @@ public class Question {
     private String contents;
     private String createdTime;
 
-    public Question() {
+    protected Question() {
     }
 
     public Question(String writer, String title, String contents) {
