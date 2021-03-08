@@ -2,6 +2,7 @@ package com.codessquad.qna.domain;
 
 public class User {
 
+    private long id;
     private String userId;
     private String password;
     private String name;
@@ -11,11 +12,20 @@ public class User {
     @Override
     public String toString() {
         return "User{" +
-                "userId='" + userId + '\'' +
+                "id=" + id +
+                ", userId='" + userId + '\'' +
                 ", password='" + password + '\'' +
                 ", name='" + name + '\'' +
                 ", email='" + email + '\'' +
                 '}';
+    }
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
     }
 
     public String getUserId() {
