@@ -6,6 +6,14 @@ public class Question {
     private String title;
     private String contents;
 
+    public void setIndex(int index) {
+        this.index = index;
+    }
+
+    public int getIndex() {
+        return index;
+    }
+
     public void setWriter(String writer) {
         this.writer = writer;
     }
