@@ -65,6 +65,10 @@ public class User {
         this.email = email;
     }
 
+    public boolean isMatchingPassword(String suggestedPassword) {
+        return password.equals(suggestedPassword);
+    }
+
     @Override
     public String toString() {
         return "User{" +

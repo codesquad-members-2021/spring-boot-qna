@@ -46,7 +46,7 @@ public class UsersController {
     public String modifyUser(long id, String userId, String prevPassword, String newPassword,
                              String name, String email) {
         User foundUser = getUserById(id);
-        if (foundUser != null && foundUser.getPassword().equals(prevPassword)) {
+        if (foundUser != null && foundUser.isMatchingPassword(prevPassword)) {
             if (!prevPassword.equals(newPassword)) {
                 foundUser.setPassword(newPassword);
             }
