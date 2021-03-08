@@ -43,7 +43,7 @@ public class QuestionController {
             return "redirect:/users/login";
         }
         User sessionUser = HttpSessionUtils.getUserFromSession(session);
-        question.setWriter(sessionUser.getName());
+        question.setWriter(sessionUser);
         question.setTime(LocalDateTime.now());
         question.setPoint(0);
         questionRepository.save(question);
