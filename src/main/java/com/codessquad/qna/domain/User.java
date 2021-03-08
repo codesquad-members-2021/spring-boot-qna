@@ -1,17 +1,17 @@
 package com.codessquad.qna.domain;
 
 public class User {
-    private long id;
+    private int id;
     private String userId;
     private String password;
     private String name;
     private String email;
 
-    public void setId(long id) {
+    public void setId(int id) {
         this.id = id;
     }
 
-    public long getId() {
+    public int getId() {
         return id;
     }
 

@@ -1,16 +1,16 @@
 package com.codessquad.qna.domain;
 
 public class Question {
-    private long index;
+    private int index;
     private String writer;
     private String title;
     private String contents;
 
-    public void setIndex(long index) {
+    public void setIndex(int index) {
         this.index = index;
     }
 
-    public long getIndex() {
+    public int getIndex() {
         return index;
     }
 
