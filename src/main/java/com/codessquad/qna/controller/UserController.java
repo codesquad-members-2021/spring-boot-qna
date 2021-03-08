@@ -30,7 +30,7 @@ public class UserController {
 
     @GetMapping("/users/{userId}")
     private String displayProfile(@PathVariable("userId") String userId, Model model) {
-        userId = Objects.toString(userId, ""); // null 값일 경우 "" 정의
+        userId = Objects.requireNonNull(userId, "Exception: userId가 NULL 값입니다.");
 
         for (User findUser : userList) {
             if (findUser.getUserId().equals(userId)) {
@@ -46,7 +46,7 @@ public class UserController {
 
     @GetMapping("users/{userId}/form")
     private String changeMemberInfo(@PathVariable("userId") String userId, Model model) {
-        userId = Objects.toString(userId, ""); // null 값일 경우 "" 정의
+        userId = Objects.requireNonNull(userId, "Exception: userId가 NULL 값입니다.");
 
         for (User findUser : userList) {
             if (Objects.equals(findUser.getUserId(), userId)) {
