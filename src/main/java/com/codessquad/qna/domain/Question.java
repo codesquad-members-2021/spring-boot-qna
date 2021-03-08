@@ -1,6 +1,7 @@
 package com.codessquad.qna.domain;
 
 public class Question {
+    private int index;
     private String writer;
     private String title;
     private String contents;
@@ -28,6 +29,7 @@ public class Question {
     public String getContents() {
         return contents;
     }
+
 
     @Override
     public String toString() {
