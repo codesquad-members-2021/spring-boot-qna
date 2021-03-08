@@ -94,6 +94,21 @@ public class QuestionController {
         return "redirect:/questions/" + id;
     }
 
+    @DeleteMapping("/{id}")
+    public String delete(@PathVariable("id") Long id, HttpSession session) {
+        if (!HttpSessionUtils.isLogined(session)) {
+            return "redirect:/questions/unauthorized";
+        }
+        User sessionUser = HttpSessionUtils.getUserFromSession(session);
+        Question question = questionRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 질문"));
+        if (!question.isWriter(sessionUser)) {
+            return "redirect:/questions/unauthorized";
+        }
+        questionRepository.deleteById(id);
+        return "redirect:/";
+    }
+
     @GetMapping("/unauthorized")
     public String unauthorized() {
         return "qna/unauthorized";
