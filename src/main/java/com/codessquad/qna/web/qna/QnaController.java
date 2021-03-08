@@ -4,10 +4,7 @@ import com.codessquad.qna.web.users.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
 
@@ -41,7 +38,7 @@ public class QnaController {
     }
 
     @GetMapping("/questions/modify/{questionId}")
-    public String getModifyPage(@PathVariable long questionId,
+    public String getModifyPage(@PathVariable("questionId") long questionId,
                                 Model model, HttpSession session) {
         User sessionUser = (User) session.getAttribute(User.SESSION_KEY_USER_OBJECT);
         if (sessionUser == null) {
@@ -73,6 +70,23 @@ public class QnaController {
         currentQuestion.setContents(newContents);
         questionRepository.save(currentQuestion);
         return "redirect:/questions/" + currentQuestion.getId();
+    }
+
+    @DeleteMapping("/questions/{questionId}")
+    public String deleteQuestion(@PathVariable("questionId") long questionId, HttpSession session) {
+        Question currentQuestion = getQuestionById(questionId);
+        if (currentQuestion == null) {
+            return "redirect:/";
+        }
+        User sessionUser = (User) session.getAttribute(User.SESSION_KEY_USER_OBJECT);
+        if (sessionUser == null) {
+            return "redirect:/";
+        }
+        if (!currentQuestion.isMatchingWriterId(sessionUser.getId())) {
+            return "redirect:/";
+        }
+        questionRepository.delete(currentQuestion);
+        return "redirect:/";
     }
 
 
