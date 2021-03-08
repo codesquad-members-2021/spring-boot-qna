@@ -1,6 +1,7 @@
 # 질문답변 게시판
 
-## 💡배포링크 
+## 💡배포링크
+
 <https://bong-spring-boot-qna.herokuapp.com/>
 
 ## 진행 방법
@@ -13,6 +14,7 @@
 * 반복적으로 프로젝트를 진행한다.
 
 ## 온라인 코드 리뷰 과정
+
 * [텍스트와 이미지로 살펴보는 코드스쿼드의 온라인 코드 리뷰 과정](https://github.com/code-squad/codesquad-docs/blob/master/codereview/README.md)
 * [동영상으로 살펴보는 코드스쿼드의 온라인 코드 리뷰 과정](https://youtu.be/a5c9ku-_fok)
 
@@ -25,6 +27,7 @@ For further reference, please consider the following sections:
 * [Create an OCI image](https://docs.spring.io/spring-boot/docs/2.4.3/gradle-plugin/reference/html/#build-image)
 
 ### Additional Links
+
 These additional references should also help you:
 
 * [Gradle Build Scans – insights for your project's build](https://scans.gradle.com#gradle)
