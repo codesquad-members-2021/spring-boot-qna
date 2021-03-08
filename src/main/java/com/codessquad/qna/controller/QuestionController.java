@@ -126,4 +126,19 @@ public class QuestionController {
         return "redirect:/questions/" + id;
     }
 
+    @DeleteMapping("/{questionId}/answers/{answerId}")
+    public String deleteAnswer(@PathVariable("questionId") Long questionId,
+                               @PathVariable("answerId") Long answerId,
+                               HttpSession session) {
+        if (!HttpSessionUtils.isLogined(session)) {
+            //error
+            return "redirect:/users/login";
+        }
+        User user = HttpSessionUtils.getUserFromSession(session);
+        answerRepository.findByIdAndQuestionIdAndWriter(answerId, questionId, user)
+                .ifPresent(answerRepository::delete);
+
+        return "redirect:/questions/" + questionId;
+    }
+
 }

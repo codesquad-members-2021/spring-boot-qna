@@ -62,4 +62,8 @@ public class Answer {
     public void updateComment(Answer updatedAnswer) {
         this.comment = updatedAnswer.comment;
     }
+
+    public boolean isWriter(User user) {
+        return this.writer.equals(user);
+    }
 }
