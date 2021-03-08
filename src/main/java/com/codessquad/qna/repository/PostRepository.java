@@ -19,4 +19,6 @@ public interface PostRepository {
 
     public void update(Post oldPost, Post updatePost);
 
+    public void delete(Post post);
+
 }

@@ -48,4 +48,9 @@ public class MemoryPostRepository implements PostRepository {
         posts.get(posts.indexOf(oldPost)).change(updatePost);
     }
 
+    @Override
+    public void delete(Post post) {
+        posts.remove(post);
+    }
+
 }

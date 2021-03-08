@@ -47,4 +47,9 @@ public class DBPostRepository implements PostRepository {
         oldPost.change(newPost);
     }
 
+    @Override
+    public void delete(Post post) {
+        entityManager.createQuery("DELETE FROM Post p where p.postId in :postId").setParameter("postId", post.getPostId()).executeUpdate();
+    }
+
 }

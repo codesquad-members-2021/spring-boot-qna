@@ -37,4 +37,8 @@ public class PostService {
         postRepository.update(oldPost, updatePost);
     }
 
+    public void deletePost(Post post) {
+        postRepository.delete(post);
+    }
+
 }
