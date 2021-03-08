@@ -161,31 +161,4 @@ public class UserController {
         }
     }
 
-    /**
-     * 잘못된 입력값이 들어왔을때 핸들링 해주는 메소드
-     * 후에 공부해서 에러페이지를 만들어서 처리해야할듯함
-     * @param e
-     * @return
-     */
-    @ExceptionHandler(IllegalArgumentException.class)
-    public String handleIllegalArgumentException(Exception e, Model model) {
-        handleException(e, model);
-        return "error";
-    }
-
-    /**
-     * 유저를 가져오지 못할시 처리할 로직 생성
-     * @return
-     */
-    @ExceptionHandler(CanNotFindUserException.class)
-    public String handlerCanNotFindUserException(Exception e, Model model) {
-        handleException(e, model);
-        return "error";
-    }
-
-    private void handleException(Exception e, Model model) {
-        logger.error(e.getMessage());
-        model.addAttribute("exception", e);
-    }
-
 }

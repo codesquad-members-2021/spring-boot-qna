@@ -56,26 +56,8 @@ public class PostController {
      */
     @GetMapping("/questions/{id}")
     public String getPost(@PathVariable Long id, Model model) {
-        try{
-            Post post = postService.getPost(id);
-            model.addAttribute("post", post);
-        }catch (CanNotFindPostException e){
-            logger.error(e.getMessage());
-        }
+        model.addAttribute("post", postService.getPost(id));
         return "qna/show";
-    }
-
-    /**
-     * IllegalArgumentException 을 핸들링 해주는 메소드
-     * 지금은 그냥 redirect 를 하지만 나중에는 다른 페이지로 넘겨주는 작업이 필요할듯함.
-     * @param e
-     * @return
-     */
-    @ExceptionHandler(IllegalArgumentException.class)
-    public String handleException(Exception e, Model model) {
-        logger.error(e.getMessage());
-        model.addAttribute("exception", e);
-        return "error";
     }
 
 }
