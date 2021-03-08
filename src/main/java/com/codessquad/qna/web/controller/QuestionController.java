@@ -1,5 +1,6 @@
 package com.codessquad.qna.web.controller;
 
+import com.codessquad.qna.web.exception.QuestionListIndexOutOfBoundException;
 import com.codessquad.qna.web.model.Question;
 import com.codessquad.qna.web.validation.CastValidation;
 import org.springframework.stereotype.Controller;
@@ -40,9 +41,7 @@ public class QuestionController {
 
     private int getIndex(String stringIdx){
         int index = CastValidation.stringToInt(stringIdx) - 1;
-        if(index < 0 || index > questions.size()){
-            throw new IndexOutOfBoundsException(stringIdx + " is out of range!");
-        }
+        indexValidation(index);
         return index;
     }
 
@@ -50,9 +49,15 @@ public class QuestionController {
         return questions.size() + 1;
     }
 
+    private void indexValidation(int index){
+        if(index < 0 || index > questions.size()){
+            throw new QuestionListIndexOutOfBoundException(index, questions.size());
+        }
+    }
+
     @ExceptionHandler(IllegalArgumentException.class)
     public String handleIllegalArgumentException(){
-        return "/questions/invalidIndex";
+        return "/errors/invalidInput";
     }
 
 }

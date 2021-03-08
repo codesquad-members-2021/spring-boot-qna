@@ -1,5 +1,6 @@
 package com.codessquad.qna.web.controller;
 
+import com.codessquad.qna.web.exception.UserNotFoundException;
 import com.codessquad.qna.web.model.User;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -58,7 +59,7 @@ public class UserController {
                 return user;
             }
         }
-        throw new IllegalArgumentException("There is no user id, " + userId);
+        throw new UserNotFoundException(userId);
     }
 
 }
