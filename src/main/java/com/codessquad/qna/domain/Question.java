@@ -52,6 +52,5 @@ public class Question {
     public boolean isNotSameAuthor(User loginUser) {
         return !this.author.equals(loginUser);
     }
-
 }
 

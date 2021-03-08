@@ -47,3 +47,4 @@ public class AnswerController {
         return String.format("redirect:/questions/%d", questionId);
     }
 }
+

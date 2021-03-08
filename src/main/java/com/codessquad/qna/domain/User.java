@@ -1,6 +1,7 @@
 package com.codessquad.qna.domain;
 
 import lombok.*;
+
 import javax.persistence.*;
 
 @Entity

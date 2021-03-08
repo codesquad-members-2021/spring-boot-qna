@@ -36,3 +36,4 @@ public class MemoryUserRepository {
         return new ArrayList<>(store.values());
     }
 }
+

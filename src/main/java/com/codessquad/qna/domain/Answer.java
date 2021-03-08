@@ -42,7 +42,5 @@ public class Answer {
         }
         return date.format(DateTimeFormatter.ofPattern("yyyy.MM.dd HH:mm"));
     }
-
 }
-
 
