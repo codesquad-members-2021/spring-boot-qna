@@ -44,8 +44,19 @@ public class UserController {
     }
 
     @GetMapping("/{id}/form")
-    public ModelAndView getUpdateForm(@PathVariable Long id) {
+    public ModelAndView getUpdateForm(@PathVariable Long id, HttpSession session) {
         ModelAndView mav = new ModelAndView("/users/updateForm");
+
+        User sessionedUser = (User) session.getAttribute("sessionedUser");
+        if (sessionedUser == null) {
+            mav.setViewName("redirect:/users/login");
+            return mav;
+        }
+
+        if (!id.equals(sessionedUser.getId())) {
+            throw new IllegalStateException("자신의 정보만 수정할 수 있습니다.");
+        }
+
         User user = userRepository.findById(id).orElseThrow(
                 () -> new IllegalArgumentException("해당 사용자를 찾을 수 없습니다. id = " + id));
         mav.addObject("user", user);
@@ -53,10 +64,10 @@ public class UserController {
     }
 
     @PutMapping("/{id}")
-    public String updateUser(@PathVariable long id, User userWithUpdatedInfo, String oldPassword) {
+    public String updateUser(@PathVariable long id, User userWithUpdatedInfo) {
         User targetUser = userRepository.findById(id).orElseThrow(
                 () -> new IllegalArgumentException("해당 사용자를 찾을 수 없습니다. id = " + id));
-        if (!targetUser.isCorrectPassword(oldPassword)) {
+        if (!targetUser.isCorrectPassword(userWithUpdatedInfo.getPassword())) {
             logger.warn("비밀번호가 일치하지 않습니다.");
             return "redirect:/users/";
         }
