@@ -17,15 +17,6 @@ import java.util.List;
 public class QuestionController {
     QuestionRepository questionRepository = new QuestionRepository();
 
-    @GetMapping("/")
-    public String createQuestionList(Question question, Model model) {
-        List<Question> questions = questionRepository.getAll();
-
-        model.addAttribute("questions", questions);
-
-        return "/index";
-    }
-
     @PostMapping("/questions")
     public String createQuestion(Question question) {
         Question newQuestion = new Question();
