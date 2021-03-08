@@ -65,4 +65,9 @@ public class QuestionController {
         return new ModelAndView("redirect:/");
     }
 
+    @GetMapping("/unauthorized")
+    public String unauthorized() {
+        return "qna/unauthorized";
+    }
+
 }
