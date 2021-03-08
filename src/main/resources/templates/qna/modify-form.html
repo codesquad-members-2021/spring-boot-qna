@@ -1,0 +1,25 @@
+{{#partial "content"}}
+<div class="col-md-12 col-sm-12 col-lg-10 col-lg-offset-1">
+    <div class="panel panel-default content-main">
+        <form action="/questions/modify" method="post" name="question">
+            <input hidden name="questionId" name="questionId" value="{{currentQuestion.id}}"/>
+            <div class="form-group">
+                <label for="writer">글쓴이</label>
+                <input class="form-control" disabled id="writer" name="writerId" placeholder="글쓴이" value="{{currentQuestion.writerUserId}}"/>
+            </div>
+            <div class="form-group">
+                <label for="newTitle">제목</label>
+                <input type="text" class="form-control" id="newTitle" name="newTitle" placeholder="제목" value="{{currentQuestion.title}}"/>
+            </div>
+            <div class="form-group">
+                <label for="newContents">내용</label>
+                <textarea name="newContents" id="newContents" rows="5" class="form-control">{{currentQuestion.contents}}</textarea>
+            </div>
+            <button type="submit" class="btn btn-success clearfix pull-right">수정하기</button>
+            <div class="clearfix" />
+            <input name="_method" type="hidden" value="PUT"/>
+        </form>
+    </div>
+</div>
+{{/partial}}
+{{> base}}

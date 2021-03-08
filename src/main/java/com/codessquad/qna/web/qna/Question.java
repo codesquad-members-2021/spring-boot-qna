@@ -29,6 +29,10 @@ public class Question {
         this.reportingDate = LocalDateTime.now();
     }
 
+    public boolean isMatchingWriterId(long suggestedWriterId) {
+        return writerId == suggestedWriterId;
+    }
+
     public long getId() {
         return id;
     }
