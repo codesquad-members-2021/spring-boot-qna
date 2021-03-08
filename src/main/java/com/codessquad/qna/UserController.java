@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Controller
 public class UserController {
@@ -34,9 +35,16 @@ public class UserController {
     }
 
     @GetMapping("/users/{userId}")
-    public String getSpecificUser(@PathVariable String userId) {
-
+    public String getSpecificUser(@PathVariable("userId") String userId, Model model) {
+        User foundUser = findUserById(userId);
+        model.addAttribute("user", foundUser);
         return "user/profile";
+    }
+
+    private User findUserById(String userId) {
+        return users.stream()
+                .filter(user -> user.getUserId().equals(userId))
+                .findAny().orElse(null);
     }
 
 }
