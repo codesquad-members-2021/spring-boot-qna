@@ -10,6 +10,7 @@ import javax.servlet.http.HttpSession;
 @Controller
 @RequestMapping("/users")
 public class UsersController {
+    private final static String SESSION_KEY_USER_OBJECT = "loginUser";
 
     @Autowired
     private UserRepository userRepository;
@@ -35,7 +36,7 @@ public class UsersController {
 
     @GetMapping("/modify")
     public String getModifyUserPage(Model model, HttpSession session) {
-        User sessionUser = (User) session.getAttribute("loginUser");
+        User sessionUser = (User) session.getAttribute(SESSION_KEY_USER_OBJECT);
         if (sessionUser == null) {
             return "redirect:/";
         }
@@ -49,7 +50,7 @@ public class UsersController {
     @PutMapping("/modify")
     public String modifyUser(String prevPassword, String newPassword,
                              String name, String email, HttpSession session) {
-        User sessionUser = (User) session.getAttribute("loginUser");
+        User sessionUser = (User) session.getAttribute(SESSION_KEY_USER_OBJECT);
         if (sessionUser == null) {
             return "redirect:/";
         }
@@ -74,7 +75,13 @@ public class UsersController {
         if (!foundUser.isMatchingPassword(password)) {
             return "redirect:/users/loginForm";
         }
-        session.setAttribute("loginUser", foundUser);
+        session.setAttribute(SESSION_KEY_USER_OBJECT, foundUser);
+        return "redirect:/";
+    }
+
+    @GetMapping("/logout")
+    public String processLogout(HttpSession session) {
+        session.removeAttribute(SESSION_KEY_USER_OBJECT);
         return "redirect:/";
     }
 }
