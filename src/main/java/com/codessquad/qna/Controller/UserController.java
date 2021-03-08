@@ -1,6 +1,7 @@
 package com.codessquad.qna.Controller;
 
 import com.codessquad.qna.domain.User;
+import org.graalvm.compiler.lir.LIRInstruction;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -38,10 +39,21 @@ public class UserController {
     }
 
     @GetMapping("/users/{userId}/form")
-    public String updateUserForm(@PathVariable(name="userId") String targetId, User reference) {
-        //User PresentUser = userlist.get();
-        return "users/list";
+    public String updateForm(@PathVariable(name="userId") String userId, Model model) {
+        System.out.println("updateForm@@@");
+        User currentUser = new User();
+        for(User user : userlist) {
+            if(user.getUserId().equals(userId)) {
+                currentUser = user;
+            }
+        }
+
+
+        model.addAttribute("user",currentUser);
+        return "users/updateForm";
     }
+
+
 
 
 }
