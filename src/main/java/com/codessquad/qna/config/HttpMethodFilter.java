@@ -7,6 +7,7 @@ import org.springframework.web.filter.HiddenHttpMethodFilter;
 
 @Configuration
 public class HttpMethodFilter {
+
     @Bean
     public FilterRegistrationBean<HiddenHttpMethodFilter> hiddenHttpMethodFilter() {
         FilterRegistrationBean<HiddenHttpMethodFilter> filter = new FilterRegistrationBean<>();
@@ -14,4 +15,5 @@ public class HttpMethodFilter {
         filter.addUrlPatterns("/*");
         return filter;
     }
+
 }
