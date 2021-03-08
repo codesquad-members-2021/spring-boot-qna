@@ -61,4 +61,9 @@ public class Post {
     public boolean isMatchedAuthor(User user) {
         return this.author.equals(user.getUserId());
     }
+
+    public void change(Post post) {
+        this.title = post.title;
+        this.body = post.body;
+    }
 }
