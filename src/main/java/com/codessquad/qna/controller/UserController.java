@@ -43,7 +43,7 @@ public class UserController {
         return "redirect:/users";
     }
 
-    @GetMapping("{userId}/form")
+    @GetMapping("{userId}/update")
     public String form(@PathVariable String userId, Model model) {
         User user = findUserById(userId);
         if (user != null) {

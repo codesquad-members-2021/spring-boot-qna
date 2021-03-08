@@ -5,7 +5,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,8 +21,6 @@ public class QuestionController {
 
     @PostMapping("")
     public String create(Question question) {
-        LocalDateTime now = LocalDateTime.now();
-
         question.setId(questions.size() + 1);
         questions.add(question);
 
