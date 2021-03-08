@@ -29,7 +29,7 @@ public class UserController {
     @GetMapping("/users/{userId}")
     public String profile(@PathVariable("userId") String userId, Model model) {
         for (User user : users) {
-            if (user.getUserId().equals(userId))
+            if (user.isUserId(userId))
                 model.addAttribute("user", user);
         }
         return "users/profile";
@@ -38,7 +38,7 @@ public class UserController {
     @GetMapping("/users/{userId}/form")
     public String updateForm(@PathVariable("userId") String userId, Model model) {
         for (User user : users) {
-            if (user.getUserId().equals(userId))
+            if (user.isUserId(userId))
                 model.addAttribute("user", user);
         }
         return "users/updateForm";
@@ -47,9 +47,8 @@ public class UserController {
     @PostMapping("/users/{userId}/update")
     public String update(@PathVariable("userId") String userId, User updateUserInfo, Model model) {
         for (User user : users) {
-            if (user.getUserId().equals(userId)) {
-                user.setName(updateUserInfo.getName());
-                user.setEmail(updateUserInfo.getEmail());
+            if (user.isUserId(userId)) {
+                user.updateUserInfo(updateUserInfo);
             }
             model.addAttribute("user", user);
         }
