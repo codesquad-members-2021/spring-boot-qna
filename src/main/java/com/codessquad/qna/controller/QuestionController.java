@@ -8,10 +8,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpSession;
@@ -54,4 +51,34 @@ public class QuestionController {
         return "/qna/show";
     }
 
+    @GetMapping("/{id}/form")
+    public ModelAndView getUpdateForm(@PathVariable Long id, HttpSession session) {
+        ModelAndView mav = new ModelAndView("/qna/update_form");
+        User sessionedUser = (User) session.getAttribute("sessionedUser");
+        Question question = (Question) questionRepository.findById(id).orElseThrow(
+                () -> new IllegalArgumentException("해당 질문이 없습니다. id = " + id));
+
+        if (sessionedUser == null) {
+            mav.setViewName("redirect:/users/login");
+            return mav;
+        }
+
+        if (!sessionedUser.isSameUserId(question.getWriter())) {
+            throw new IllegalStateException("자신이 작성한 글만 수정할 수 있습니다.");
+        }
+
+        mav.addObject("question", question);
+        return mav;
+    }
+
+    @PutMapping("/{id}")
+    public String updateQuestion(@PathVariable Long id, Question questionWithUpdatedInfo) {
+        Question targetQuestion = questionRepository.findById(id).orElseThrow(
+                () -> new IllegalStateException("해당 글을 찾을 수 없습니다. id = " + id));
+
+        targetQuestion.update(questionWithUpdatedInfo);
+        questionRepository.save(targetQuestion);
+
+        return "redirect:/questions/" + id;
+    }
 }

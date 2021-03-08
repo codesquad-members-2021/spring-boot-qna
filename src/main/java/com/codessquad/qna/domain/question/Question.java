@@ -62,6 +62,11 @@ public class Question {
         return date;
     }
 
+    public void update(Question questionWithUpdatedInfo) {
+        this.title = questionWithUpdatedInfo.getTitle();
+        this.contents = questionWithUpdatedInfo.getContents();
+    }
+
     @Override
     public String toString() {
         return "Question{" +
