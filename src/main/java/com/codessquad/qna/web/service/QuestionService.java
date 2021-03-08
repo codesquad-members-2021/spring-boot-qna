@@ -6,7 +6,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class QuestionService {
@@ -26,6 +25,6 @@ public class QuestionService {
     }
 
     public Question findQuestion(int index) {
-       return questionRepository.findByIndex(index);
+        return questionRepository.findByIndex(index);
     }
 }

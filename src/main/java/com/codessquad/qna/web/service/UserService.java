@@ -17,7 +17,7 @@ public class UserService {
         this.userRepository = userRepository;
     }
 
-    public void signUp(User user){
+    public void signUp(User user) {
         validateUserID(user);
         userRepository.save(user);
     }
@@ -35,7 +35,7 @@ public class UserService {
 
     public User findUser(String userId) {
         Optional<User> foundUser = userRepository.findByUserId(userId);
-        if(!foundUser.isPresent()) {
+        if (!foundUser.isPresent()) {
             throw new IllegalStateException("찾는 아이디가 없습니다");
         }
         return foundUser.get();
@@ -48,7 +48,7 @@ public class UserService {
     }
 
     private void validatePassword(User originUser, User user) {
-        if(!originUser.getPassword().equals(user.getPassword())) {
+        if (!originUser.getPassword().equals(user.getPassword())) {
             throw new IllegalStateException("잘못된 비밀번호 입니다");
         }
     }

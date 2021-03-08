@@ -21,7 +21,7 @@ public class UserController {
     public String createUser(User user) {
         try {
             userService.signUp(user);
-        }catch (IllegalStateException e){
+        } catch (IllegalStateException e) {
             return "redirect:/";
         }
         return "redirect:/users";
@@ -37,7 +37,7 @@ public class UserController {
     public String getProfile(@PathVariable String userId, Model model) {
         try {
             model.addAttribute("user", userService.findUser(userId));
-        }catch (IllegalStateException e){
+        } catch (IllegalStateException e) {
             return "redirect:/";
         }
         return "/user/profile";
@@ -47,7 +47,7 @@ public class UserController {
     public String getUpdateForm(@PathVariable String userId, Model model) {
         try {
             model.addAttribute("user", userService.findUser(userId));
-        }catch (IllegalStateException e){
+        } catch (IllegalStateException e) {
             return "redirect:/";
         }
         return "/user/updateForm";
@@ -57,7 +57,7 @@ public class UserController {
     public String updateUser(User user) {
         try {
             userService.updateUser(user);
-        }catch (IllegalStateException e){
+        } catch (IllegalStateException e) {
             return "redirect:/";
         }
         return "redirect:/users";

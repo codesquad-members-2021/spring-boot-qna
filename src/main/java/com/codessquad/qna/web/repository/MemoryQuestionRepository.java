@@ -6,7 +6,6 @@ import org.springframework.stereotype.Repository;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
 
 @Repository
 public class MemoryQuestionRepository implements QuestionRepository {
@@ -26,6 +25,6 @@ public class MemoryQuestionRepository implements QuestionRepository {
 
     @Override
     public Question findByIndex(int index) {
-        return questions.get(index-1);
+        return questions.get(index - 1);
     }
 }

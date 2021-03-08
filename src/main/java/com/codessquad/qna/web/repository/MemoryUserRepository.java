@@ -10,7 +10,6 @@ import java.util.Optional;
 
 @Repository
 public class MemoryUserRepository implements UserRepository {
-
     private List<User> users = Collections.synchronizedList(new ArrayList<>());
 
     @Override
