@@ -10,6 +10,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.servlet.http.HttpSession;
+
 @RequestMapping("/users")
 @Controller
 public class UserController {
@@ -62,5 +64,26 @@ public class UserController {
         userRepository.save(targetUser);
         logger.info(targetUser.toString());
         return "redirect:/users/";
+    }
+
+    @GetMapping("/login")
+    public String login() {
+        return "/users/login";
+    }
+
+    @PostMapping("/login")
+    public String login(String userId, String password, HttpSession session) {
+        User user = userRepository.findByUserId(userId);
+        if (user == null || !user.isCorrectPassword(password)) {
+            return "/users/login_failed";
+        }
+        session.setAttribute("sessionedUser", user);
+        return "redirect:/";
+    }
+
+    @GetMapping("/logout")
+    public String logout(HttpSession session) {
+        session.removeAttribute("sessionedUser");
+        return "redirect:/";
     }
 }
