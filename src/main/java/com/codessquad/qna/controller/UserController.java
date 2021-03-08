@@ -67,10 +67,10 @@ public class UserController {
     private String updateMemberList(User updateUser, Model model) {
 
         for (int index = 0; index < userList.size(); index++) {
-            boolean findIdCheck = Objects.equals(userList.get(index).getUserId(), updateUser.getUserId()); // null 비교가능
-            boolean findPasswordCheck = Objects.equals(userList.get(index).getPassword(), updateUser.getPassword()); // null 비교가능
+            boolean idCheck = User.checkId(userList.get(index),updateUser); // 아이디 유효성 체크
+            boolean findPasswordCheck = User.chekPassword(userList.get(index),updateUser); // 비밀번호 유효성 체크
 
-            if (findIdCheck && findPasswordCheck) {
+            if (idCheck && findPasswordCheck) {
                 model.addAttribute("invalidPassword", false);
                 userList.get(index).setName(Objects.toString(updateUser.getName(), "")); // null default
                 userList.get(index).setEmail(Objects.toString(updateUser.getEmail(), "")); // null default

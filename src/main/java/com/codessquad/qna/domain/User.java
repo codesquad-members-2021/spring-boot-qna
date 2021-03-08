@@ -1,5 +1,7 @@
 package com.codessquad.qna.domain;
 
+import java.util.Objects;
+
 public class User {
     private String userId;
     private String password;
@@ -46,5 +48,12 @@ public class User {
                 ", name='" + name + '\'' +
                 ", email='" + email + '\'' +
                 '}';
+    }
+
+    public static boolean checkId(User previousId, User updatedId){
+        return Objects.equals(previousId.getUserId(), updatedId.getUserId());
+    }
+    public static boolean chekPassword(User previousId, User updatedId){
+        return Objects.equals(previousId.getPassword(), updatedId.getPassword());
     }
 }
