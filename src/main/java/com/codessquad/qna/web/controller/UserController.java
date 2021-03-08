@@ -6,39 +6,41 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Controller
+@RequestMapping("/users")
 public class UserController {
     private List<User> users = new ArrayList<>();
 
-    @PostMapping("/users/create")
+    @PostMapping("/create")
     public String create(User user){
         users.add(user);
         return "redirect:/users";
     }
 
-    @GetMapping("/users")
+    @GetMapping()
     public String getUserList(Model model){
         model.addAttribute("users", users);
         return "user/list";
     }
 
-    @GetMapping("/users/{userId}")
+    @GetMapping("/{userId}")
     public String getUserProfile(@PathVariable("userId") String userId, Model model){
         model.addAttribute("user", findUserById(userId));
         return "user/profile";
     }
 
-    @GetMapping("/users/{userId}/form")
+    @GetMapping("/{userId}/form")
     public String getEditProfileForm(@PathVariable("userId") String userId, Model model){
         model.addAttribute("user", findUserById(userId));
         return "user/updateForm";
     }
 
-    @PostMapping("/users/{userId}/update")
+    @PostMapping("/{userId}/update")
     public String updateProfile(User updatedUser, String oldPassword){
         for(int i = 0; i < users.size(); i++){
             User user = users.get(i);
