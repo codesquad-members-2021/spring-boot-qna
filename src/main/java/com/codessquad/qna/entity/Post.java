@@ -15,9 +15,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Objects;
 
-@Getter
 @ToString
-@NoArgsConstructor
 @Entity
 public class Post {
 
@@ -30,11 +28,34 @@ public class Post {
     private String body;
     private String date;
 
+    public Post() {
+    }
+
     public Post(String title, String author, String body) {
         this.title = title;
         this.author = author;
         this.body = body;
         this.date = DateFormat.ISO8601.format(new Date());
+    }
+
+    public Long getPostId() {
+        return postId;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public String getAuthor() {
+        return author;
+    }
+
+    public String getBody() {
+        return body;
+    }
+
+    public String getDate() {
+        return date;
     }
 
 }
