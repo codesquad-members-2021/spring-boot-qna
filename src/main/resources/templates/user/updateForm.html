@@ -3,7 +3,7 @@
    <div class="col-md-6 col-md-offset-3">
       <div class="panel panel-default content-main">
           {{#user}}
-          <form name="user" method="post" action="/users/{{index}}">
+          <form name="user" method="post" action="/users/{{id}}">
               <div class="form-group">
                   <label for="userId">사용자 아이디</label>
                   <input class="form-control" id="userId" name="userId" placeholder="User ID" value="{{userId}}" readonly>

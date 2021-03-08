@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.servlet.ModelAndView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,7 +17,6 @@ import java.util.List;
 @Controller
 @RequestMapping("/users")
 public class UserController {
-    private List<User> users = new ArrayList<>();
 
     @Autowired
     private UserRepository userRepository;
@@ -29,36 +29,25 @@ public class UserController {
 
     @GetMapping("")
     public String list(Model model) {
-        model.addAttribute("users", users);
+        model.addAttribute("users", userRepository.findAll());
         return "user/list";
     }
 
-    @GetMapping("/{userId}")
-    public String profile(@PathVariable String userId, Model model) {
-        model.addAttribute("user", getUserByUserId(userId));
-        return "user/profile";
+    @GetMapping("/{id}")
+    public ModelAndView show(@PathVariable long id) {
+        ModelAndView modelAndView = new ModelAndView("/user/profile");
+        modelAndView.addObject("user", userRepository.findById(id).get());
+        return modelAndView;
     }
 
-    private User getUserByUserId(String userId) {
-        for (User user : users) {
-            if (user.getUserId().equals(userId)) {
-                return user;
-            }
-        }
-        return null;
+    @GetMapping("/{id}/form")
+    public ModelAndView update(@PathVariable long id, Model model) {
+        ModelAndView modelAndView = new ModelAndView("/user/updateForm");
+        modelAndView.addObject("user", userRepository.findById(id).get());
+        return modelAndView;
     }
 
-    @GetMapping("/{index}/form")
-    public String update(@PathVariable int index, Model model) {
-        try {
-            model.addAttribute("user", users.get(index - 1));
-            return "/user/updateForm";
-        } catch (IndexOutOfBoundsException e) {
-            return "redirect:/";
-        }
-    }
-
-    @PostMapping("/{index}")
+    @PostMapping("/{id}")
     public String updateForm(@PathVariable int index, User newUser) {
         User user = users.get(index - 1);
         user.update(newUser);
