@@ -39,6 +39,7 @@ public class UserController {
     public String create(User user) {
         logger.info(user.toString());
 
+        user.setId(users.size() + 1);
         users.add(user);
         return "redirect:/users";
     }
