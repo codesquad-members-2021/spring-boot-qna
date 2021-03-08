@@ -65,8 +65,12 @@ public class UserController {
     }
 
     @PutMapping("/{id}")
-    public String update(@PathVariable Long id, User updateUser) {
+    public String update(@PathVariable Long id, String prevPassword, User updateUser) {
         User user = userRepository.findById(id).get();
+
+        if(!user.matchPassword(prevPassword)) {
+            return "redirect:/users/";
+        }
 
         user.update(updateUser);
         userRepository.save(user);
