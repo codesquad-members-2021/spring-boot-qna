@@ -1,9 +1,6 @@
 package com.codessquad.qna.domain;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
@@ -12,17 +9,18 @@ public class Question {
     private static final DateTimeFormatter pattern = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 20)
     private String writer;
     private String title;
     private String contents;
-    private LocalDateTime currentTime;
+
+    private LocalDateTime currentDateTime;
 
     public Question() {
-        currentTime = LocalDateTime.now();
+        currentDateTime = LocalDateTime.now();
     }
 
     public void setId(Long id) {
@@ -41,8 +39,8 @@ public class Question {
         this.contents = contents;
     }
 
-    public void setCurrentTime(LocalDateTime currentTime) {
-        this.currentTime = currentTime;
+    public void setCurrentDateTime(LocalDateTime currentTime) {
+        this.currentDateTime = currentTime;
     }
 
     public Long getId() {
@@ -61,8 +59,8 @@ public class Question {
         return contents;
     }
 
-    public String getCurrentTime() {
-        return currentTime.format(pattern);
+    public String getCurrentDateTime() {
+        return currentDateTime.format(pattern);
     }
 
 }
