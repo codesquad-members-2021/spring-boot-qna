@@ -2,6 +2,7 @@ package com.codessquad.qna.controller;
 
 import com.codessquad.qna.exception.CanNotFindPostException;
 import com.codessquad.qna.exception.CanNotFindUserException;
+import com.codessquad.qna.exception.NotExistLoggedUserInSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.ui.Model;
@@ -21,8 +22,7 @@ public class ControllerExceptionHandler {
      */
     @ExceptionHandler(IllegalArgumentException.class)
     public String handleIllegalArgumentException(Exception e, Model model) {
-        handleException(e, model);
-        return "error";
+        return handleException(e, model);
     }
 
     /**
@@ -32,8 +32,7 @@ public class ControllerExceptionHandler {
      */
     @ExceptionHandler(CanNotFindUserException.class)
     public String handleCanNotFindUserException(Exception e, Model model) {
-        handleException(e, model);
-        return "error";
+        return handleException(e, model);
     }
 
     /**
@@ -44,13 +43,23 @@ public class ControllerExceptionHandler {
      */
     @ExceptionHandler(CanNotFindPostException.class)
     public String handleCanNotFindPostException(Exception e, Model model) {
-        handleException(e, model);
-        return "error";
+        return handleException(e, model);
     }
 
-    private void handleException(Exception e, Model model) {
+    @ExceptionHandler(NotExistLoggedUserInSession.class)
+    public String handleNotExistLoggedUserInSession(Exception e, Model model) {
+        return handleException(e, model);
+    }
+
+    @ExceptionHandler(IllegalAccessException.class)
+    public String handleIllegalAccessException(Exception e, Model model) {
+        return handleException(e, model);
+    }
+
+    private String handleException(Exception e, Model model) {
         logger.error(e.getMessage());
         model.addAttribute("exception", e);
+        return "error";
     }
 
 }
