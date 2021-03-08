@@ -47,17 +47,20 @@ public class UsersController {
     }
 
     @PutMapping("/modify")
-    public String modifyUser(long id, String userId, String prevPassword, String newPassword,
-                             String name, String email) {
-        User foundUser = getUserById(id);
-        if (foundUser != null && foundUser.isMatchingPassword(prevPassword)) {
+    public String modifyUser(String prevPassword, String newPassword,
+                             String name, String email, HttpSession session) {
+        User sessionUser = (User) session.getAttribute("loginUser");
+        if (sessionUser == null) {
+            return "redirect:/";
+        }
+        if (sessionUser.isMatchingPassword(prevPassword)) {
             if (!prevPassword.equals(newPassword)) {
-                foundUser.setPassword(newPassword);
+                sessionUser.setPassword(newPassword);
             }
-            foundUser.setName(name);
-            foundUser.setEmail(email);
-            userRepository.save(foundUser);
-            return "redirect:/users/" + foundUser.getId();
+            sessionUser.setName(name);
+            sessionUser.setEmail(email);
+            userRepository.save(sessionUser);
+            return "redirect:/users/" + sessionUser.getId();
         }
         return "redirect:/users";
     }
