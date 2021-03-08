@@ -1,5 +1,6 @@
-package com.codessquad.qna;
+package com.codessquad.qna.controller;
 
+import com.codessquad.qna.User;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -24,7 +25,7 @@ public class UserController {
     @GetMapping("/users")
     private String getMemberList(Model model) {
         model.addAttribute("users", userList);
-        return "user/list";
+        return "/user/list";
     }
 
     @GetMapping("/users/{userId}")
@@ -33,14 +34,14 @@ public class UserController {
 
         for (User findUser : userList) {
             if (findUser.getUserId().equals(userId)) {
-                model.addAttribute("invalidMember", true);
+                model.addAttribute("invalidMember", false);
                 model.addAttribute("userID", findUser.getUserId());
                 model.addAttribute("email", findUser.getEmail());
             } else {
                 model.addAttribute("invalidMember", true);
             }
         }
-        return "user/profile";
+        return "/user/profile";
     }
 
     @GetMapping("users/{userId}/form")
@@ -59,7 +60,7 @@ public class UserController {
                 model.addAttribute("invalidMember", true);
             }
         }
-        return "user/updateForm";
+        return "/user/updateForm";
     }
 
     @PostMapping("/users/{userId}/update")
@@ -78,7 +79,7 @@ public class UserController {
             }
             model.addAttribute("users", userList);
         }
-        return "user/list";
+        return "redirect:/users";
     }
 
 }

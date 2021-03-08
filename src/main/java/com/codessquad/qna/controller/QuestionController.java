@@ -1,5 +1,6 @@
-package com.codessquad.qna;
+package com.codessquad.qna.controller;
 
+import com.codessquad.qna.Question;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -13,7 +14,7 @@ import java.util.Objects;
 
 @Controller
 public class QuestionController {
-    private List<Question> questionList = new ArrayList<>();
+    private static List<Question> questionList = new ArrayList<>();
 
     @PostMapping("/questions")
     private String questions(Question question, Model model) {
@@ -22,12 +23,6 @@ public class QuestionController {
         questionList.add(question);
         model.addAttribute("questions", questionList);
         return "redirect:/";
-    }
-
-    @GetMapping("/")
-    private String questionsList(Model model) {
-        model.addAttribute("questions", questionList);
-        return "/index";
     }
 
     @GetMapping("/questions/{id}")
@@ -44,7 +39,11 @@ public class QuestionController {
                 model.addAttribute("invalidMember", true);
             }
         }
-        return "qna/show";
+        return "/qna/show";
+    }
+
+    public static List<Question> getQuestionList(){
+        return questionList;
     }
 
 }
