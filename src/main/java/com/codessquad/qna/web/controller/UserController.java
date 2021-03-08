@@ -9,13 +9,14 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
 @Controller
 @RequestMapping("/users")
 public class UserController {
-    private List<User> users = new ArrayList<>();
+    private List<User> users = Collections.synchronizedList(new ArrayList<>());
 
     @PostMapping
     public String createUser(User user) {
