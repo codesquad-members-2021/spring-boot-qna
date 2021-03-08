@@ -17,6 +17,8 @@ dependencies {
 	developmentOnly 'org.springframework.boot:spring-boot-devtools'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	compile 'pl.allegro.tech.boot:handlebars-spring-boot-starter:0.3.2'
+	compile('org.springframework.boot:spring-boot-starter-thymeleaf')
+	compile('org.springframework.boot:spring-boot-starter-mustache')
 }
 
 test {

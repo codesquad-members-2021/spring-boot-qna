@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="kr">
+<head>
+    {{> base/header}}
+</head>
+
+<body>
+
+{{> base/nav}}
+
+<div class="container" id="main">
+   <div class="col-md-6 col-md-offset-3">
+      <div class="panel panel-default content-main">
+          <form name="question" method="post" action="/user/login">
+              <div class="form-group">
+                  <label for="userId">사용자 아이디</label>
+                  <input class="form-control" id="userId" name="userId" placeholder="User ID">
+              </div>
+              <div class="form-group">
+                  <label for="password">비밀번호</label>
+                  <input type="password" class="form-control" id="password" name="password" placeholder="Password">
+              </div>
+              <button type="submit" class="btn btn-success clearfix pull-right">로그인</button>
+              <div class="clearfix" />
+          </form>
+        </div>
+    </div>
+</div>
+
+<!-- script references -->
+<script src="../../static/js/jquery-2.2.0.min.js"></script>
+<script src="../../static/js/bootstrap.min.js"></script>
+<script src="../../static/js/scripts.js"></script>
+	</body>
+</html>
