@@ -15,43 +15,47 @@ import org.springframework.web.bind.annotation.PutMapping;
 public class UserController {
 
     private Logger logger = LoggerFactory.getLogger(UserController.class);
-    private UserService users = new UserService();
+    private final UserService userService;
 
-    @PostMapping("/users")
-    public String signUp(User user) {
-        boolean result = users.addUser(user);
-        logger.info("회원가입 요청");
-        return result ? "redirect:/users" : "redirect:/user/form";
+    public UserController(UserService userService) {
+        this.userService = userService;
     }
 
     @GetMapping("/users")
     public String viewUserList(Model model) {
-        model.addAttribute("users", this.users.getAllUser());
+        model.addAttribute("users", this.userService.findAll());
         logger.info("유저 리스트 페이지 요청");
         return "user/list";
     }
 
-    @GetMapping("/users/{userId}")
-    public String viewProfile(@PathVariable("userId") String userId, Model model) {
-        User user = this.users.findUser(userId);
+    @PostMapping("/users")
+    public String signUp(User user) {
+        boolean result = userService.save(user);
+        logger.info("회원가입 요청");
+        return result ? "redirect:/users" : "redirect:/user/form";
+    }
+
+    @GetMapping("/users/{id}")
+    public String viewProfile(@PathVariable("id") Long id, Model model) {
+        User user = this.userService.findById(id);
         model.addAttribute("user", user);
         logger.info("유저 프로필 페이지 요청");
         return (user.getUserId() != null) ? "user/profile" : "redirect:/users";
     }
 
-    @GetMapping("/user/{userId}/form")
-    public String viewUpdateProfile(@PathVariable("userId") String userId, Model model) {
-        User user = this.users.findUser(userId);
+    @GetMapping("/user/{id}/form")
+    public String viewUpdateProfile(@PathVariable("id") Long id, Model model) {
+        User user = this.userService.findById(id);
         model.addAttribute("user", user);
         logger.info("유저 정보 수정 페이지 요청");
         return (user.getUserId() != null) ? "user/updateForm" : "redirect:/users";
     }
 
-    @PutMapping("/user/{userId}/update")
-    public String updateProfile(@PathVariable("userId") String userId, User user, String newPassword) {
-        boolean result = users.updateUser(userId, user, newPassword);
+    @PutMapping("/user/{id}/update")
+    public String updateProfile(@PathVariable("id") Long id, User user, String newPassword) {
+        boolean result = userService.update(id, user, newPassword);
         logger.info("유저 정보 수정 요청");
-        return result ? "redirect:/users" : "redirect:/user/" + userId + "/form";
+        return result ? "redirect:/users" : "redirect:/user/" + id + "/form";
     }
 
 }
