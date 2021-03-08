@@ -14,24 +14,28 @@ import org.springframework.web.bind.annotation.PostMapping;
 public class QuestionController {
 
     private Logger logger = LoggerFactory.getLogger(UserController.class);
-    private QuestionService questions = new QuestionService();
+    private QuestionService questionService;
+
+    public QuestionController(QuestionService questionService) {
+        this.questionService = questionService;
+    }
 
     @GetMapping("/")
     public String viewMain(Model model) {
-        model.addAttribute("questions", this.questions.getAllQuestion());
+        model.addAttribute("questions", this.questionService.findAll());
         return "index";
     }
 
     @PostMapping("/question/form")
     public String createQuestion(Question question) {
-        this.questions.addQuestion(question);
+        this.questionService.save(question);
         logger.info("질문 등록 요청");
         return "redirect:/";
     }
 
     @GetMapping("/question/{id}")
-    public String viewQuestion(@PathVariable("id") int id, Model model) {
-        Question question = this.questions.findQuestion(id);
+    public String viewQuestion(@PathVariable("id") Long id, Model model) {
+        Question question = this.questionService.findById(id);
         model.addAttribute("question", question);
         logger.info("상제 질문 페이지 요청");
         return question.getTitle() != null ? "qna/show" : "redirect:/";
