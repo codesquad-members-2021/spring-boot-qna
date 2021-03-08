@@ -22,10 +22,6 @@ public class Question {
         currentDateTime = LocalDateTime.now();
     }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
-
     public void setWriter(String writer) {
         this.writer = writer;
     }

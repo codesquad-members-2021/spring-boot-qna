@@ -60,9 +60,7 @@ public class UserController {
     @PutMapping(UPDATE_INFO)
     public String updateUserInfo(@PathVariable("id") Long id, String password, String name, String email) {
         User user = userRepository.findById(id).orElse(null);
-        user.setPassword(password);
-        user.setName(name);
-        user.setEmail(email);
+        user.updateUserInfo(password, name, email);
         userRepository.save(user);
         return "redirect:/users";
     }

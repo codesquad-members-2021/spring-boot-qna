@@ -19,10 +19,6 @@ public class User {
         return id;
     }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
-
     public void setUserId(String userId) {
         this.userId = userId;
     }
@@ -36,6 +32,12 @@ public class User {
     }
 
     public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public void updateUserInfo(String password, String name, String email) {
+        this.password = password;
+        this.name = name;
         this.email = email;
     }
 
