@@ -22,6 +22,6 @@ public class QuestionController {
     @GetMapping("/")
     public String list(Model model){
         model.addAttribute("questions", questions);
-        return "redirect:/";
+        return "index";
     }
 }
