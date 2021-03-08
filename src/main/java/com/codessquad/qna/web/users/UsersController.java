@@ -5,6 +5,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpSession;
+
 @Controller
 @RequestMapping("/users")
 public class UsersController {
@@ -19,7 +21,7 @@ public class UsersController {
     }
 
     @GetMapping()
-    public String getUserList(Model model) {
+    public String getUserList(Model model, HttpSession session) {
         model.addAttribute("users", userRepository.findAll());
         return "user/list";
     }
@@ -56,5 +58,18 @@ public class UsersController {
             return "redirect:/users/" + foundUser.getId();
         }
         return "redirect:/users";
+    }
+
+    @PostMapping("/login")
+    public String processLogin(String userId, String password, HttpSession session) {
+        User foundUser = userRepository.findByUserId(userId);
+        if (foundUser == null) {
+            return "redirect:/users/loginForm";
+        }
+        if (!foundUser.isMatchingPassword(password)) {
+            return "redirect:/users/loginForm";
+        }
+        session.setAttribute("loginUser", foundUser);
+        return "redirect:/";
     }
 }
