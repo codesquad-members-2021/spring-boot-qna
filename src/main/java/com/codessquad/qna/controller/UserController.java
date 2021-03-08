@@ -1,6 +1,5 @@
 package com.codessquad.qna.controller;
 
-import com.codessquad.qna.domain.Question;
 import com.codessquad.qna.domain.User;
 import com.codessquad.qna.service.UserService;
 import org.slf4j.Logger;
@@ -30,16 +29,14 @@ public class UserController {
 
     @PostMapping("/login")
     public String login(String userId, String password, HttpSession session) {
-        Optional<User> userTemp = userService.findByUserId(userId);
-        if (!userTemp.isPresent()) {
+        User user = userService.findByUserId(userId);
+        if (user == null) {
             logger.info("로그인에 실패했습니다.");
             return "redirect:/users/loginForm";
         }
-        User user = userTemp.get();
         if (!user.matchPassword(password)) {
             return "redirect:/users/loginForm";
         }
-
         session.setAttribute(USER_SESSION_KEY, user);
         logger.info("로그인에 성공했습니다.");
         return "redirect:/";
@@ -76,15 +73,14 @@ public class UserController {
         }
     }
 
-    private String checkPermission(Long id, HttpSession session) {
+    private void checkPermission(Long id, HttpSession session) {
         if (!isLoginUser(session)) {
-            return "redirect:/users/loginForm";
+            throw new IllegalStateException("로그인이 필요합니다.");
         }
         User loginUser = getSessionUser(session);
         if (!loginUser.matchId(id)) {
             throw new IllegalStateException("수정 및 삭제 권한이 없습니다.");
         }
-        return "";
     }
 
     @GetMapping("/{id}/form")

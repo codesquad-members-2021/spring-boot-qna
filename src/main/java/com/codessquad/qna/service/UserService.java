@@ -29,7 +29,7 @@ public class UserService {
         return userRepostiory.findById(id).orElseThrow(RuntimeException::new);
     }
 
-    public Optional<User> findByUserId(String userId) {
+    public User findByUserId(String userId) {
         return userRepostiory.findByUserId(userId);
     }
 }
