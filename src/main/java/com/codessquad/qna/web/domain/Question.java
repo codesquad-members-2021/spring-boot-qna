@@ -4,15 +4,13 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 public class Question {
+    private static final DateTimeFormatter DATE_TIME_FORMATTER =  DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+
     private int index;
     private String writer;
     private String title;
     private String contents;
-    private LocalDateTime createdDate;
-
-    Question() {
-        this.createdDate = LocalDateTime.now();
-    }
+    private LocalDateTime createdDate = LocalDateTime.now();
 
     public void setIndex(int index) {
         this.index = index;
@@ -54,6 +52,6 @@ public class Question {
         if (createdDate == null) {
             return "";
         }
-        return createdDate.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"));
+        return createdDate.format(DATE_TIME_FORMATTER);
     }
 }
