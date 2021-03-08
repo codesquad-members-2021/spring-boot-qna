@@ -38,11 +38,10 @@ public class UserController {
 
     @GetMapping("/{id}")
     public ModelAndView userProfile(@PathVariable("id") Long id, HttpSession session) {
-        Object userObject = session.getAttribute("sessionUser");
-        if (userObject == null) {
+        if (!HttpSessionUtils.isLogined(session)) {
             return new ModelAndView("redirect:/users/login");
         }
-        User sessionUser = (User) userObject;
+        User sessionUser = HttpSessionUtils.getUserFromSession(session);
         if (!sessionUser.isMatchingId(id)) {
             throw new IllegalStateException("다른 유저의 정보를 볼 수 없습니다.");
         }
@@ -57,33 +56,32 @@ public class UserController {
 
     @GetMapping("/{id}/form")
     public ModelAndView updateUserForm(@PathVariable("id") Long id, HttpSession session) {
-        Object userObject = session.getAttribute("sessionUser");
-        if (userObject == null) {
+        if (!HttpSessionUtils.isLogined(session)) {
             return new ModelAndView("redirect:/users/login");
         }
-        User sessionUser = (User) userObject;
+        User sessionUser = HttpSessionUtils.getUserFromSession(session);
         if (!sessionUser.isMatchingId(id)) {
             throw new IllegalStateException("다른 유저의 정보를 수정할 수 없습니다.");
         }
-        Optional<User> user = userRepository.findById(id);
-        if (!user.isPresent()) {
-            throw new IllegalStateException("존재하지 않는 유저");
-        }
-        return new ModelAndView("users/update_form", "user", user.get());
+        User user = userRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("존재하지 않는 유저"));
+        return new ModelAndView("users/update_form", "user", user);
     }
 
     @PutMapping("/{id}")
     public String updateUser(@PathVariable("id") Long id, String oldPassword, User newUserInfo, HttpSession session) {
-        Object userObject = session.getAttribute("sessionUser");
-        if (userObject == null) {
+        if (!HttpSessionUtils.isLogined(session)) {
             return "redirect:/users/login";
         }
-        User sessionUser = (User) userObject;
+        User sessionUser = HttpSessionUtils.getUserFromSession(session);
         if (!sessionUser.isMatchingId(id)) {
             throw new IllegalStateException("다른 유저의 정보를 수정할 수 없습니다.");
         }
         userRepository.findById(id)
-                .ifPresent(u -> checkPasswordAndUpdate(u, oldPassword, newUserInfo));
+                .filter(user -> user.isMatchingPassword(oldPassword))
+                .ifPresent(user -> {
+                    user.update(newUserInfo);
+                    userRepository.save(user);
+                });
         return "redirect:/users";
     }
 
@@ -94,24 +92,17 @@ public class UserController {
 
     @PostMapping("/login")
     public String login(String userId, String password, HttpSession session) {
-        User user = userRepository.findByUserId(userId);
-        if (user == null || !user.isMatchingPassword(password)) {
-            return "users/login_failed";
+        Optional<User> user = userRepository.findByUserId(userId);
+        if (!user.filter(u -> u.isMatchingPassword(password)).isPresent()) {
+            return "redirect:/users/login";
         }
-        session.setAttribute("sessionUser", user);
+        session.setAttribute("sessionUser", user.get());
         return "redirect:/";
     }
 
     @GetMapping("/logout")
     public String logout(HttpSession session) {
-        session.removeAttribute("sessionUser");
+        HttpSessionUtils.removeUserSession(session);
         return "redirect:/";
-    }
-
-    private void checkPasswordAndUpdate(User user, String oldPassword, User newUserInfo) {
-        if (user.isMatchingPassword(oldPassword)) {
-            user.update(newUserInfo);
-            userRepository.save(user);
-        }
     }
 }
