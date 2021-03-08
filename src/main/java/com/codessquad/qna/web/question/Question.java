@@ -1,12 +1,12 @@
 package com.codessquad.qna.web.question;
 
 public class Question {
-    int questionId;
+    long questionId;
     String writer;
     String title;
     String contents;
 
-    public int getQuestionId() {
+    public long getQuestionId() {
         return questionId;
     }
 
