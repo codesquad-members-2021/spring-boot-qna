@@ -37,14 +37,7 @@ public class UserController {
     }
 
     @GetMapping("/{id}")
-    public ModelAndView userProfile(@PathVariable("id") Long id, HttpSession session) {
-        if (!HttpSessionUtils.isLogined(session)) {
-            return new ModelAndView("redirect:/users/login");
-        }
-        User sessionUser = HttpSessionUtils.getUserFromSession(session);
-        if (!sessionUser.isMatchingId(id)) {
-            throw new IllegalStateException("다른 유저의 정보를 볼 수 없습니다.");
-        }
+    public ModelAndView userProfile(@PathVariable("id") Long id) {
         Optional<User> user = userRepository.findById(id);
         if (!user.isPresent()) {
             return new ModelAndView("redirect:/users");
