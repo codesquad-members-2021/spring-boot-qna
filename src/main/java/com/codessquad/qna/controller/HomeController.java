@@ -11,7 +11,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping("/")
 public class HomeController {
     @Autowired
-    QuestionRepository questionRepository;
+    private final QuestionRepository questionRepository;
+
+    public HomeController(QuestionRepository questionRepository) {
+        this.questionRepository = questionRepository;
+    }
 
     @GetMapping
     public String showQuestions(Model model) {
