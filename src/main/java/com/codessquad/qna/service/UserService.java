@@ -29,20 +29,27 @@ public class UserService {
         return false;
     }
 
-    public boolean login(String userId, String password, HttpSession session) {
+    public User login(String userId, String password) {
         User targetUser = findByUserId(userId);
         if (targetUser.getId() != null && targetUser.getPassword().equals(password)) {
-            session.setAttribute("user", targetUser);
-            return true;
+            return targetUser;
         }
-        return false;
+        return new User();
     }
 
-    public boolean update(Long id, User user, String oldPassword) {
-        User targetUser = findById(id);
-        if (targetUser.getPassword().equals(oldPassword)) {
-            targetUser.update(user);
-            this.userRepository.save(targetUser);
+    public User verifyUser(Long id, HttpSession session) {
+        Object loginUser = session.getAttribute("loginUser");
+        if (loginUser != null && ((User) loginUser).getId().equals(id)) {
+            return (User) loginUser;
+        }
+        return new User();
+    }
+
+    public boolean update(Long id, User user, String oldPassword, HttpSession session) {
+        User loginUser = verifyUser(id, session);
+        if (loginUser.getId() != null && loginUser.getPassword().equals(oldPassword)) {
+            loginUser.update(user);
+            this.userRepository.save(loginUser);
             return true;
         }
         return false;
