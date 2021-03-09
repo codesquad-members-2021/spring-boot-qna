@@ -81,6 +81,10 @@ public class UserController {
     public String updateUser(@PathVariable(name = "userId") String userId, User referenceUser) {
         User presentUser = userRepository.getOne(userId);
 
+        if(!isValidUser(presentUser)){
+            return "redirect:/users";
+        }
+
         if (!isValidPassword(presentUser.getPassword(), referenceUser.getPassword())) {
             return "redirect:/users";
         }
