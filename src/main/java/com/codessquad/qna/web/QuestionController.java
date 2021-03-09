@@ -16,7 +16,7 @@ import java.util.Optional;
 @Controller
 public class QuestionController {
 
-    Logger logger = LoggerFactory.getLogger(QuestionController.class);
+    private Logger logger = LoggerFactory.getLogger(QuestionController.class);
 
     private final QuestionRepository questionRepository;
 

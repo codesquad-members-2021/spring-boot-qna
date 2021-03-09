@@ -16,7 +16,7 @@ import java.util.Optional;
 @RequestMapping("/users")
 public class UserController {
 
-    Logger logger = LoggerFactory.getLogger(UserController.class);
+    private Logger logger = LoggerFactory.getLogger(UserController.class);
 
     @Autowired
     private UserRepository userRepository;
