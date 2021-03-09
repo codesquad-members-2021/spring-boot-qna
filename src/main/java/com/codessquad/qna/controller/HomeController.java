@@ -20,7 +20,7 @@ public class HomeController {
     @GetMapping
     public String showQuestions(Model model) {
 
-        model.addAttribute("questions", questionRepository.getAll());
+        model.addAttribute("questions", questionRepository.findAll());
 
         return "/index";
     }
