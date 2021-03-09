@@ -32,19 +32,14 @@ public class UserController {
         return "user/list";
     }
 
-    @GetMapping("/users/{userId}")
-    private String displayProfile(@PathVariable("userId") String userId, Model model) {
-        userId = Objects.requireNonNull(userId, "Exception: userId가 NULL 값입니다.");
+    @GetMapping("/users/{primaryKey}")
+    private String displayProfile(@PathVariable Long primaryKey, Model model) {
+        primaryKey = Objects.requireNonNull(primaryKey, "Exception: primaryKey가 NULL 값입니다.");
 
-        for (User findUser : userList) {
-            if (findUser.getUserId().equals(userId)) {
-                model.addAttribute("invalidMember", false);
-                model.addAttribute("userID", findUser.getUserId());
-                model.addAttribute("email", findUser.getEmail());
-            } else {
-                model.addAttribute("invalidMember", true);
-            }
-        }
+        model.addAttribute("users",userRepository.findById(primaryKey).get());
+
+        // TODO. model.addAttribute("invalidMember", true);
+
         return "user/profile";
     }
 

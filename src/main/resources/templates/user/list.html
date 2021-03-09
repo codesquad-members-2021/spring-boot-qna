@@ -16,8 +16,8 @@
                 {{#users}}
                 <tr>
                     <th scope="row">1</th>
-                    <td>{{userId}}</td>
-                    <td><a href="/users/{{userId}}">{{name}}</a></td>
+                    <td><a href="/users/{{primaryKey}}">{{userId}}</a></td>
+                    <td>{{name}}</td>
                     <td>{{email}}</td>
                     <td><a href="/users/{{userId}}/form" class="btn btn-success" role="button">수정</a></td>
                 </tr>
