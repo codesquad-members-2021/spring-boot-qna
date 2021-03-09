@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
 import java.util.List;
-import java.util.Optional;
+
 
 import static com.codessquad.qna.controller.HttpSessionUtils.*;
 
@@ -110,4 +110,3 @@ public class UserController {
         }
     }
 }
-

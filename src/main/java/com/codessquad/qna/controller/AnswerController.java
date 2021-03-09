@@ -5,6 +5,8 @@ import com.codessquad.qna.domain.Question;
 import com.codessquad.qna.domain.User;
 import com.codessquad.qna.repository.AnswerRepository;
 import com.codessquad.qna.repository.QuestionRepository;
+import com.codessquad.qna.service.AnswerService;
+import com.codessquad.qna.service.QuestionService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,13 +26,13 @@ import static com.codessquad.qna.controller.HttpSessionUtils.isLoginUser;
 @RequestMapping("/questions/{questionId}/answers")
 public class AnswerController {
     private final Logger logger = LoggerFactory.getLogger(UserController.class);
-    private QuestionRepository questionRepository;
-    private AnswerRepository answerRepository;
+    private final QuestionService questionService;
+    private final AnswerService answerService;
 
     @Autowired
-    public AnswerController(QuestionRepository questionRepository, AnswerRepository answerRepository) {
-        this.questionRepository = questionRepository;
-        this.answerRepository = answerRepository;
+    public AnswerController(QuestionService questionService, AnswerService answerService) {
+        this.questionService = questionService;
+        this.answerService = answerService;
     }
 
     @PostMapping("")
@@ -40,9 +42,9 @@ public class AnswerController {
             return "redirect:/users/loginForm";
         }
         User loginUser = getSessionUser(session);
-        Question question = questionRepository.getOne(questionId);
+        Question question = questionService.findQuestion(questionId);
         Answer answer = new Answer(loginUser, question, contents);
-        answerRepository.save(answer);
+        answerService.create(answer);
         logger.info("답변 작성에 성공했습니다.");
         return String.format("redirect:/questions/%d", questionId);
     }

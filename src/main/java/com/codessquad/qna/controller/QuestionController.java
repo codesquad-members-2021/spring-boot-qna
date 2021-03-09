@@ -2,6 +2,7 @@ package com.codessquad.qna.controller;
 
 import com.codessquad.qna.domain.*;
 import com.codessquad.qna.repository.QuestionRepository;
+import com.codessquad.qna.service.QuestionService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,11 +21,11 @@ import static com.codessquad.qna.controller.HttpSessionUtils.*;
 public class QuestionController {
     private final Logger logger = LoggerFactory.getLogger(UserController.class);
 
-    private QuestionRepository questionRepository;
+    private final QuestionService questionService;
 
     @Autowired
-    public QuestionController(QuestionRepository questionRepository) {
-        this.questionRepository = questionRepository;
+    public QuestionController(QuestionService questionService) {
+        this.questionService = questionService;
     }
 
     @GetMapping("/form")
@@ -43,20 +44,20 @@ public class QuestionController {
         }
         User sessionUser = getSessionUser(session);
         Question question = new Question(sessionUser, title, contents);
-        questionRepository.save(question);
+        questionService.create(question);
         return "redirect:/";
     }
 
     @GetMapping("/{id}")
     public String show(@PathVariable Long id, Model model) {
-        model.addAttribute("question", questionRepository.getOne(id));
+        model.addAttribute("question", questionService.findQuestion(id));
         return "/qna/show";
     }
 
     @GetMapping("/{id}/form")
     public String updateForm(@PathVariable Long id, Model model, HttpSession session) {
         try {
-            Question question = questionRepository.getOne(id);
+            Question question = questionService.findQuestion(id);
             checkPermission(session, question);
             model.addAttribute("question", question);
             return "/qna/updateForm";
@@ -69,10 +70,10 @@ public class QuestionController {
     @PutMapping("/{id}")
     public String update(@PathVariable Long id, String title, String contents, Model model, HttpSession session) {
         try {
-            Question question = questionRepository.getOne(id);
+            Question question = questionService.findQuestion(id);
             checkPermission(session, question);
             question.update(title, contents);
-            questionRepository.save(question);
+            questionService.create(question);
             return String.format("redirect:/questions/%d", id);
         } catch (IllegalStateException e) {
             model.addAttribute("errorMessage", e.getMessage());
@@ -83,9 +84,9 @@ public class QuestionController {
     @DeleteMapping("/{id}")
     public String delete(@PathVariable Long id, Model model, HttpSession session) {
         try {
-            Question question = questionRepository.getOne(id);
+            Question question = questionService.findQuestion(id);
             checkPermission(session, question);
-            questionRepository.delete(question);
+            questionService.delete(question);
             return "redirect:/";
         } catch (IllegalStateException e) {
             model.addAttribute("errorMessage", e.getMessage());
