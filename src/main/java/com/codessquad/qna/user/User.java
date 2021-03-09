@@ -1,9 +1,16 @@
 package com.codessquad.qna.user;
 
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
 import java.util.Arrays;
 import java.util.List;
 
+@Entity
 public class User {
+    @Id
+    @GeneratedValue
+    private Long id;
     private String userId;
     private String password;
     private String name;
@@ -12,7 +19,8 @@ public class User {
     public User() {
     }
 
-    public User(String userId, String password, String name, String email) {
+    public User(Long id, String userId, String password, String name, String email) {
+        this.id = id;
         this.userId = userId;
         this.password = password;
         this.name = name;
@@ -21,9 +29,17 @@ public class User {
 
     public static List<User> getDummyData() {
         return Arrays.asList(
-                new User("javajigi", "1234", "자바지기", "javajigi@sample.net"),
-                new User("slipp", "1234", "슬립", "slipp@sample.net")
+                new User(null, "javajigi", "1234", "자바지기", "javajigi@sample.net"),
+                new User(null, "slipp", "1234", "슬립", "slipp@sample.net")
         );
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getUserId() {
