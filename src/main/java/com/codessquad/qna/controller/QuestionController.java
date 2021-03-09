@@ -89,7 +89,7 @@ public class QuestionController {
 
     private void matchesQuestionWriterWithUser(Question question, User sessionUser) throws UnauthorizedAccessException {
         if (!question.isWriter(sessionUser)) {
-            throw new UnauthorizedAccessException();
+            throw new UnauthorizedAccessException("다른 사람의 질문을 수정하거나 삭제할 수 없습니다.");
         }
     }
 

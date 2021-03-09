@@ -61,7 +61,7 @@ public class UserController {
         checkUserWithId(sessionUser, id);
         User user = userRepository.findById(id)
                 .filter(u -> u.isMatchingPassword(oldPassword))
-                .orElseThrow(UnauthorizedAccessException::new);
+                .orElseThrow(() -> new UnauthorizedAccessException("권한이 존재하지 않습니다."));
         user.update(newUserInfo);
         userRepository.save(user);
         return "redirect:/users";
@@ -89,7 +89,7 @@ public class UserController {
 
     private void checkUserWithId(User sessionUser, Long accessId) {
         if (!sessionUser.isMatchingId(accessId)) {
-            throw new UnauthorizedAccessException();
+            throw new UnauthorizedAccessException("다른 사람의 정보를 수정할 수 없습니다.");
         }
     }
 }

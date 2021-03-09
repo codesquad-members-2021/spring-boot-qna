@@ -2,6 +2,7 @@ package com.codessquad.qna.controller;
 
 import com.codessquad.qna.domain.*;
 import com.codessquad.qna.exception.NotFoundException;
+import com.codessquad.qna.exception.NotLoggedInException;
 import com.codessquad.qna.exception.UnauthorizedAccessException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -25,7 +26,7 @@ public class AnswerController {
     }
 
     @PostMapping()
-    public String answer(@PathVariable("questionId") Long id, Answer answer, HttpSession session){
+    public String creatAnswer(@PathVariable("questionId") Long id, Answer answer, HttpSession session){
         User writer = HttpSessionUtils.getUserFromSession(session);
         Question question = questionRepository.findById(id)
                 .orElseThrow(NotFoundException::new);
@@ -37,45 +38,40 @@ public class AnswerController {
     }
 
     @DeleteMapping("/{answerId}")
-    public String deleteAnswer(@PathVariable("questionId") Long questionId,
+    public String delete(@PathVariable("questionId") Long questionId,
                                @PathVariable("answerId") Long answerId,
                                HttpSession session) {
-        User user = HttpSessionUtils.getUserFromSession(session);
-        Answer answer = answerRepository.findByIdAndQuestionId(answerId, questionId)
-                .orElseThrow(NotFoundException::new);
-        matchesAnswerWriterWithUser(answer, user);
-        answerRepository.delete(answer);
+        answerRepository.delete(getAnswerWithCheckSession(questionId, answerId, session));
         return "redirect:/questions/" + questionId;
     }
 
     @GetMapping("/{answerId}/form")
-    public ModelAndView updateAnswerForm(@PathVariable("questionId") Long questionId,
+    public ModelAndView updateForm(@PathVariable("questionId") Long questionId,
                                          @PathVariable("answerId") Long answerId,
                                          HttpSession session) {
-        User user = HttpSessionUtils.getUserFromSession(session);
-        Answer answer = answerRepository.findByIdAndQuestionId(answerId, questionId)
-                .orElseThrow(NotFoundException::new);
-        matchesAnswerWriterWithUser(answer, user);
-        return new ModelAndView("qna/update_answer_form", "answer", answer);
+        return new ModelAndView("qna/update_answer_form",
+                "answer", getAnswerWithCheckSession(questionId, answerId, session));
     }
 
     @PutMapping("/{answerId}")
-    public String updateAnswer(@PathVariable("questionId") Long questionId,
+    public String update(@PathVariable("questionId") Long questionId,
                                @PathVariable("answerId") Long answerId,
                                Answer updatedAnswer,
                                HttpSession session) {
-        User user = HttpSessionUtils.getUserFromSession(session);
-        Answer answer = answerRepository.findByIdAndQuestionId(answerId, questionId)
-                .orElseThrow(NotFoundException::new);
-        matchesAnswerWriterWithUser(answer, user);
+        Answer answer = getAnswerWithCheckSession(questionId, answerId, session);
         answer.updateAnswer(updatedAnswer);
         answerRepository.save(answer);
         return "redirect:/questions/" + questionId;
     }
 
-    private void matchesAnswerWriterWithUser(Answer answer, User user) throws UnauthorizedAccessException {
+    private Answer getAnswerWithCheckSession (Long questionId, Long answerId, HttpSession session)
+            throws NotLoggedInException, NotFoundException {
+        User user = HttpSessionUtils.getUserFromSession(session);
+        Answer answer = answerRepository.findByIdAndQuestionId(answerId, questionId)
+                .orElseThrow(NotFoundException::new);
         if (!answer.matchesWriter(user)) {
-            throw new UnauthorizedAccessException();
+            throw new UnauthorizedAccessException("다른 사람의 답변을 수정하거나 삭제할 수 없습니다.");
         }
+        return answer;
     }
 }

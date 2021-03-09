@@ -29,8 +29,9 @@ public class GlobalControllerExceptionHandler {
 
     @ResponseStatus(HttpStatus.UNAUTHORIZED)
     @ExceptionHandler(UnauthorizedAccessException.class)
-    public String handleUnauthorizedAccess() {
-        return "error/401";
+    public ModelAndView handleUnauthorizedAccess(UnauthorizedAccessException unauthorizedAccessException) {
+        return new ModelAndView("error/401",
+                "errorMessage", unauthorizedAccessException.getMessage());
     }
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
