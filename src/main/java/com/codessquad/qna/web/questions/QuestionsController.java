@@ -11,6 +11,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
+import javax.transaction.Transactional;
 import java.util.List;
 
 @Controller
@@ -84,6 +85,7 @@ public class QuestionsController {
     }
 
     @DeleteMapping("/questions/{questionId}")
+    @Transactional
     public String deleteQuestion(@PathVariable("questionId") long questionId, HttpSession session) {
         Question currentQuestion = getQuestionById(questionId);
         if (currentQuestion == null) {
@@ -96,8 +98,9 @@ public class QuestionsController {
         if (!currentQuestion.isMatchingWriterId(sessionUser.getId())) {
             return "redirect:/";
         }
-        logger.info("question deleted! title : " + currentQuestion.getTitle());
+        answersRepository.deleteAllByQuestionId(questionId);
         questionRepository.delete(currentQuestion);
+        logger.info("question deleted! title : " + currentQuestion.getTitle());
         return "redirect:/";
     }
 

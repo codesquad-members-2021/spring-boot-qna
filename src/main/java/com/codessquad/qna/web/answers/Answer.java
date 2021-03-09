@@ -15,14 +15,14 @@ public class Answer {
     @JoinColumn(foreignKey = @ForeignKey(name = "fk_answer_writer"))
     private User writer;
 
-    @ManyToOne
+    @ManyToOne()
     @JoinColumn(foreignKey = @ForeignKey(name = "fk_answer_to_question"))
     private Question question;
 
     @Column(nullable = false, length = 20)
     private String contents;
 
-    public boolean isMatchingWriter(User suggestedWriter){
+    public boolean isMatchingWriter(User suggestedWriter) {
         return writer.isMatchingId(suggestedWriter.getId());
     }
 

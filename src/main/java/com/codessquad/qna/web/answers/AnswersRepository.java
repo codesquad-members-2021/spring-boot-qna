@@ -4,6 +4,8 @@ import org.springframework.data.repository.CrudRepository;
 
 import java.util.List;
 
-public interface AnswersRepository  extends CrudRepository<Answer, Long> {
+public interface AnswersRepository extends CrudRepository<Answer, Long> {
     List findByQuestionId(long questionId);
+
+    List<Answer> deleteAllByQuestionId(long questionId);
 }
