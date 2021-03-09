@@ -1,6 +1,15 @@
 package com.codessquad.qna.domain;
 
+import javax.persistence.*;
+
+@Entity
 public class User {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @Column(nullable = false, length = 20)
     private String userId;
     private String password;
     private String name;
@@ -8,6 +17,10 @@ public class User {
 
     public User(String userId) {
         this.userId = userId;
+    }
+
+    public Long getId() {
+        return id;
     }
 
     public String getUserId() {
@@ -45,7 +58,8 @@ public class User {
     @Override
     public String toString() {
         return "User{" +
-                "userId='" + userId + '\'' +
+                "id=" + id +
+                ", userId='" + userId + '\'' +
                 ", password='" + password + '\'' +
                 ", name='" + name + '\'' +
                 ", email='" + email + '\'' +
