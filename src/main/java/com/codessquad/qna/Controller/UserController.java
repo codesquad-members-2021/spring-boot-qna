@@ -38,9 +38,6 @@ public class UserController {
         model.addAttribute("userlist",userList);
         return "users/list";
     }
-    // 기능 1, 2 회원가입 및 기능 개발
-    //====================================================================
-
 
     @GetMapping("/users/{userId}")
     public String showProfile(@PathVariable String userId, Model model) {
@@ -49,7 +46,6 @@ public class UserController {
         logger.info("update User : " + currentUser.toString());
         return "/users/profile";
     }
-
 
     public User getUserByUserId(String userId) {
         for(User user: userList) {
@@ -60,17 +56,6 @@ public class UserController {
         return null;
     }
 
-
-    // 기능 3 회원 프로필 정보 보기 기능 구현 완료
-    //====================================================================
-    // 기능 4 질문하기, 질문목록 기능 구현
-
-
-    //QuestionController
-
-    // 기능 4 질문하기, 질문목록 기능 구현
-    //====================================================================
-    // 기능 5 회원정보 수정 기능 구현
     @GetMapping("/users")
     public String userListShow() {
         return "redirect:/users/list";
@@ -86,23 +71,8 @@ public class UserController {
                 break;
             }
         }
-
         return "users/updateForm";
     }
-
-    /*
-    @PostMapping("{userId}")
-    public String updddd(@PathVariable String userId,User newUser) {
-        User oldUser = getUserByUserId(userId);
-        for(int i=0 ; i<userList.size() ; i++) {
-            if( is_sameUser(userList.get(i),oldUser) ) {
-                userList.set(i,new User(newUser));
-                break;
-            }
-        }
-        return "redirect:/users";
-    }
-    */
 
     private boolean is_sameUser(User u1, User u2) {
         return u1.getUserId().equals(u2.getUserId());
@@ -110,11 +80,8 @@ public class UserController {
 
     @PostMapping("/users/update")
     public String updateConfirm(User newUser) {
-        //userList.
         return "redirect:/users";
     }
-    // 기능 5 회원정보 수정 기능 구현
-    //====================================================================
 
 
 }

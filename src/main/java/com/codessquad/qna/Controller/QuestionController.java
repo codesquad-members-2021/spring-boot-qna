@@ -19,8 +19,6 @@ public class QuestionController {
     Logger logger = LoggerFactory.getLogger(UserController.class);
     final private List<Question> questionList = new ArrayList<>();
 
-    //======================================
-    //1단계 질문하기
     @GetMapping("/qna/form.html")
     public String questionList() {
         logger.info("askQuestion");
@@ -32,21 +30,13 @@ public class QuestionController {
         //qList.add();
         question.setIndex(questionList.size()+1);
         questionList.add(question);
-
         return "redirect:/qna/list";
     }
-
     @GetMapping("/qna/list")
     public String showQuestionList(Model model) {
         model.addAttribute("questionList",questionList);
         return "qna/list";
     }
-    /*
-    @GetMapping("/qna/show")
-    public String list(Model model) {
-        logger.info("questionList");
-
-    }*/
 
     @GetMapping("/qna/{index}")
     public String showProfile(@PathVariable int index, Model model) {
@@ -55,9 +45,6 @@ public class QuestionController {
         logger.info("update Question : " + currentQuestion.toString());
         return "/qna/show";
     }
-
-    //1단계 질문하기
-    //======================================
 
 
 }
