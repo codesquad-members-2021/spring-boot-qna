@@ -1,6 +1,6 @@
 # 질문답변 게시판
 
-## 배포 URL: [https://glacial-eyrie-85861.herokuapp.com](https://glacial-eyrie-85861.herokuapp.com)
+## 배포 URL: <https://glacial-eyrie-85861.herokuapp.com>
 
 ## 진행 방법
 
@@ -27,4 +27,3 @@ For further reference, please consider the following sections:
 These additional references should also help you:
 
 * [Gradle Build Scans – insights for your project's build](https://scans.gradle.com#gradle)
-
