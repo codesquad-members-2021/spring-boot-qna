@@ -67,13 +67,13 @@ public class UserController {
             return "redirect:/users/loginForm";
         }
         logger.debug("로그인 성공");
-        session.setAttribute("user", findUser);
+        session.setAttribute("sessionedUser", findUser);
         return "redirect:/";
     }
 
     @GetMapping("/logout")
-    public String logout(HttpSession session){
-        session.removeAttribute("user");
+    public String logout(HttpSession session) {
+        session.removeAttribute("sessionedUser");
         return "redirect:/";
     }
 
