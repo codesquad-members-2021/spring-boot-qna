@@ -51,26 +51,22 @@ public class UserController {
 
     @GetMapping("/{userId}")
     public String profile(@PathVariable String userId, Model model) {
-        searchUserId(userId, model);
         return "/qna/profile";
     }
 
-    @GetMapping("/{userId}/update")
-    public String updateUser(@PathVariable String userId, Model model) {
-        searchUserId(userId, model);
+    @GetMapping("/{id}/form")
+    public String getForm(@PathVariable Long id, Model model) {
+        User user = userRepository.findById(id).get();
+        model.addAttribute("user", user);
         return "/user/updateForm";
     }
 
-    @PostMapping("/{userId}/update")
-    public String finishUpdateUser() {
-        return "/user/list";
+    @PostMapping("/{id}")
+    public String updateForm(@PathVariable Long id, User updatedUser) {
+        User user = userRepository.findById(id).get();
+        user.update(updatedUser);
+        userRepository.save(user);
+        return "redirect:/users";
     }
 
-    private void searchUserId(String userId, Model model) {
-        for (User user : userList) {
-            if (user.getUserId().equals(userId)) {
-                model.addAttribute("user", user);
-            }
-        }
-    }
 }
