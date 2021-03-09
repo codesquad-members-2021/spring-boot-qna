@@ -39,7 +39,7 @@ public class QuestionController {
                 model.addAttribute("invalidMember", true);
             }
         }
-        return "/qna/show";
+        return "qna/show";
     }
 
     public static List<Question> getQuestionList(){

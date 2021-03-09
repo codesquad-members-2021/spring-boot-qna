@@ -9,6 +9,6 @@ public class IndexController {
     @GetMapping("/")
     private String questionsList(Model model) {
         model.addAttribute("questions", QuestionController.getQuestionList());
-        return "/index";
+        return "index";
     }
 }

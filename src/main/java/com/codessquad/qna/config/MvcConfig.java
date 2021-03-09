@@ -16,6 +16,6 @@ public class MvcConfig implements WebMvcConfigurer {
         // 실험을 통해 알아낸 것: 정보를 주고받지 않는 일반적인 GET 통신일 경우에만 이 뷰컨트롤러를 사용할 수 있는 것 같다.
         // EX) index
         registry.addViewController("/qna/form").setViewName("qna/form");
-        registry.addViewController("/user/form").setViewName("/user/form");
+        registry.addViewController("/user/form").setViewName("user/form");
     }
 }

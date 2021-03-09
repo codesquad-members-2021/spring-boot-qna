@@ -25,7 +25,7 @@ public class UserController {
     @GetMapping("/users")
     private String getMemberList(Model model) {
         model.addAttribute("users", userList);
-        return "/user/list";
+        return "user/list";
     }
 
     @GetMapping("/users/{userId}")
@@ -41,7 +41,7 @@ public class UserController {
                 model.addAttribute("invalidMember", true);
             }
         }
-        return "/user/profile";
+        return "user/profile";
     }
 
     @GetMapping("users/{userId}/form")
@@ -60,7 +60,7 @@ public class UserController {
                 model.addAttribute("invalidMember", true);
             }
         }
-        return "/user/updateForm";
+        return "user/updateForm";
     }
 
     @PostMapping("/users/{userId}/update")
