@@ -52,9 +52,13 @@ public class User {
         this.name = updateUser.name;
         this.email = updateUser.email;
     }
-    
-    public boolean isMatchingUserId(String userId){
+
+    public boolean isMatchingUserId(String userId) {
         return this.userId.equals(userId);
+    }
+
+    public boolean isMatchingId(int id) {
+        return this.id == id;
     }
 
     @Override
