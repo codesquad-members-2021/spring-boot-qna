@@ -68,8 +68,10 @@ public class UserController {
     public String login(String userId, String password, HttpSession session) {
         User findUser = userService.login(userId, password);
         if (findUser == null) {
+            logger.debug("로그인 실패");
             return "redirect:/users/loginForm";
         }
+        logger.debug("로그인 성공");
         session.setAttribute("user", findUser);
         return "redirect:/";
     }
