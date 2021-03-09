@@ -69,6 +69,10 @@ public class Answer {
         this.date = date;
     }
 
+    public void update(Answer answer) {
+        this.contents = answer.contents;
+    }
+
     @Override
     public String toString() {
         return "Answer{" +

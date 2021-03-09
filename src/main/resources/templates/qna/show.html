@@ -54,7 +54,7 @@
                                         <img src="https://graph.facebook.com/v2.3/1324855987/picture" class="article-author-thumb" alt="">
                                     </div>
                                     <div class="article-header-text">
-                                        <a href="/users/1/자바지기" class="article-author-name">{{writer.name}}</a>
+                                        <a href="/users/{{user.id}}/자바지기" class="article-author-name">{{writer.name}}</a>
                                         <a href="#answer-1434" class="article-header-time" title="퍼머링크">
                                             {{date}}
                                         </a>
@@ -66,7 +66,7 @@
                                 <div class="article-util">
                                     <ul class="article-util-list">
                                         <li>
-                                            <a class="link-modify-article" href="/questions/413/answers/1405/form">수정</a>
+                                            <a class="link-modify-article" href="/questions/{{question.id}}/answers/{{id}}/form">수정</a>
                                         </li>
                                         <li>
                                             <form class="delete-answer-form" action="/questions/413/answers/1405" method="POST">
