@@ -43,13 +43,13 @@ public class UserController {
 
     @GetMapping("{id}/form")
     public String viewUpdateUserForm(@PathVariable int id, Model model) {
-        for (User user : users) {
-            if (user.getId() == id) {
-                model.addAttribute("user", user);
-                return "user/updateForm";
-            }
+        try {
+            User user = users.get(id - 1);
+            model.addAttribute("user", user);
+            return "user/updateForm";
+        } catch (IndexOutOfBoundsException e) {
+            return "redircet:/users";
         }
-        return "redircet:/users";
     }
 
     @PostMapping("{id}/update")
