@@ -1,6 +1,5 @@
 package com.codessquad.qna.domain.user;
 
-import javax.jws.soap.SOAPBinding;
 import javax.persistence.*;
 
 @Entity
