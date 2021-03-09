@@ -18,7 +18,7 @@ import java.util.List;
 @Controller
 public class QuestionController {
 
-    private final Logger LOGGER = LoggerFactory.getLogger(QuestionController.class.getName());
+    private static final Logger LOGGER = LoggerFactory.getLogger(QuestionController.class.getName());
 
     private List<Question> questionList = new ArrayList<>();
 
@@ -27,17 +27,17 @@ public class QuestionController {
     }
 
     @GetMapping("/")
-    public String index(Model model) {
+    public String showHome(Model model) {
         model.addAttribute("questionList", questionList());
         return "index";
     }
 
-    @GetMapping("/qna/form")
+    @GetMapping("/questions/form")
     public String qnaForm() {
         return "/qna/form";
     }
 
-    @PostMapping("/qna/create")
+    @PostMapping("/questions/create")
     public String createQuestion(Question question, Model model) {
         String date = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"));
 
@@ -50,7 +50,7 @@ public class QuestionController {
         return "redirect:/";
     }
 
-    @GetMapping("/qna/{index}")
+    @GetMapping("/questions/{index}")
     public String getQuestion(@PathVariable int index, Model model) {
         model.addAttribute("question", questionList.get(index - 1));
         return "/qna/show";
