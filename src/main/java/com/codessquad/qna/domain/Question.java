@@ -1,14 +1,27 @@
 package com.codessquad.qna.domain;
 
-import java.time.LocalDateTime;
+import javax.persistence.*;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 
+@Entity
 public class Question {
 
-    private int id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @Column(nullable = false, length = 20)
     private String writer;
+    @Column(nullable = false, length = 20)
     private String title;
+    @Column(nullable = false, length = 20)
     private String contents;
-    private LocalDateTime time;
+    @Column(nullable = false, length = 20)
+    // ZonedDateTime 타임존 또는 시차 개념이 필요한 날짜와 시간 정보를 나타낼 때 사용: https://www.daleseo.com/java8-zoned-date-time/
+    // 배포서버가 미국에 있기 때문에 타임존을 사용하였습니다.
+    private final String time = ZonedDateTime.now(ZoneId.of("Asia/Seoul")).format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
 
     public String getWriter() {
         return writer;
@@ -21,11 +34,11 @@ public class Question {
     public String getContents() {
         return contents;
     }
-    public int getId() {
+    public Long getId() {
         return id;
     }
 
-    public LocalDateTime getTime() {
+    public String getTime() {
         return time;
     }
 
@@ -40,13 +53,10 @@ public class Question {
     public void setContents(String contents) {
         this.contents = contents;
     }
-    public void setId(int id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
-    public void setTime(LocalDateTime time) {
-        this.time = time;
-    }
 
     @Override
     public String toString() {

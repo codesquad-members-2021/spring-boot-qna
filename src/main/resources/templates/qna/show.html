@@ -3,10 +3,13 @@
     <div class="col-md-12 col-sm-12 col-lg-12">
         <div class="panel panel-default">
             <header class="qna-header">
+                {{#question}}
                 <h2 class="qna-title">{{title}}</h2>
+                {{/question}}
             </header>
             <div class="content-main">
                 <article class="article">
+                    {{#question}}
                     <div class="article-header">
                         <div class="article-header-thumb">
                             <img src="https://graph.facebook.com/v2.3/100000059371774/picture"
@@ -39,6 +42,7 @@
                             </li>
                         </ul>
                     </div>
+                    {{/question}}
                 </article>
 
                 <div class="qna-comment">
