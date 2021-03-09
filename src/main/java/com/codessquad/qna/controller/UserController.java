@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.servlet.ModelAndView;
 
 @Controller
 @RequestMapping("/users")
@@ -23,15 +24,12 @@ public class UserController {
     @PostMapping
     public String createUser(User newUser) {
 
-        if (userRepository.isRedundant(newUser.getUserId())) {
-            return "users/form";
-        }
         if (!isValidUser(newUser)) {
             return "users/form";
         }
-        if (!userRepository.save(newUser)) {
-            return "users/form";
-        }
+
+        // TODO: 기존 회원과의 중복 여부 확인 로직 추가
+        userRepository.save(newUser);
 
         return "redirect:/users";
     }
@@ -58,16 +56,17 @@ public class UserController {
 
     @GetMapping
     public String showUsers(Model model) {
-        model.addAttribute("users", userRepository.getAll());
+        model.addAttribute("users", userRepository.findAll());
 
         return "/users/list";
     }
 
-    @GetMapping("/{userId}")
-    public String showUserInDetail(@PathVariable(name = "userId") String targetId, Model model) {
-        model.addAttribute("user", userRepository.getOne(targetId));
+    @GetMapping("/{id}")
+    public ModelAndView showUserInDetail(@PathVariable long id) {
+        ModelAndView modelAndView = new ModelAndView("/users/profile");
+        modelAndView.addObject("user", userRepository.findById(id));
 
-        return "/users/profile";
+        return modelAndView;
     }
 
     @GetMapping("/{userId}/form")
@@ -77,9 +76,9 @@ public class UserController {
         return "/users/update";
     }
 
-    @PostMapping("/{userId}")
-    public String updateUser(@PathVariable(name = "userId") String userId, User referenceUser) {
-        User presentUser = userRepository.getOne(userId);
+    @PostMapping("/{id}")
+    public String updateUser(@PathVariable(name = "id") long id, User referenceUser) {
+        User presentUser = userRepository.findById(id).get();
 
         if(!isValidUser(presentUser)){
             return "redirect:/users";
