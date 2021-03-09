@@ -2,6 +2,8 @@ package com.codessquad.qna.controller;
 
 import com.codessquad.qna.domain.User;
 import com.codessquad.qna.repository.UserRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -20,6 +22,8 @@ public class UserController {
     public UserController(UserRepository userRepository) {
         this.userRepository = userRepository;
     }
+
+    Logger logger = LoggerFactory.getLogger(UserController.class);
 
     @PostMapping
     public String createUser(User newUser) {
@@ -69,27 +73,31 @@ public class UserController {
         return modelAndView;
     }
 
-    @GetMapping("/{userId}/form")
-    public String passUserId(@PathVariable(name = "userId") String targetId, Model model) {
-        model.addAttribute("userId", targetId);
+    @GetMapping("/{id}/form")
+    public String passUserId(@PathVariable long id, Model model) {
+        User user = userRepository.findById(id).get();
+
+        model.addAttribute("id", user.getId());
+        model.addAttribute("userId", user.getUserId());
 
         return "/users/update";
     }
 
     @PostMapping("/{id}")
-    public String updateUser(@PathVariable(name = "id") long id, User referenceUser) {
+    public String updateUser(@PathVariable long id, User referenceUser) {
         User presentUser = userRepository.findById(id).get();
 
         if(!isValidUser(presentUser)){
+            logger.info("isValidUser");
             return "redirect:/users";
         }
 
         if (!isEqualPassword(presentUser.getPassword(), referenceUser.getPassword())) {
+            logger.info("isEqualPassword");
             return "redirect:/users";
         }
-
+        logger.info("updateUserProperties");
         updateUserProperties(presentUser, referenceUser);
-
         return "redirect:/users";
     }
 
@@ -98,8 +106,11 @@ public class UserController {
     }
 
     private void updateUserProperties(User presentUser, User referenceUser) {
-        presentUser.setPassword(referenceUser.getPassword());
-        presentUser.setName(referenceUser.getName());
-        presentUser.setEmail(referenceUser.getEmail());
+
+        referenceUser.setUserId(presentUser.getUserId());
+
+        // TODO: 반환값을 활용하여 예외 처리
+        userRepository.delete(presentUser);
+        userRepository.save(referenceUser);
     }
 }
