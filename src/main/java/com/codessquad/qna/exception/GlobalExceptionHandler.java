@@ -24,17 +24,10 @@ public class GlobalExceptionHandler {
         return "/user/login";
     }
 
-    @ExceptionHandler(FailedUserLoginException.class)
-    private String handleFailedUserLoginException(Model model, FailedUserLoginException e) {
-        model.addAttribute("errorMessage", e.getMessage());
-        return "/user/login";
-    }
-
     @ExceptionHandler(DuplicateUserIdFoundException.class)
     private String handleDuplicateUserIdFoundException(Model model, DuplicateUserIdFoundException e) {
         model.addAttribute("errorMessage", e.getMessage());
         return "/user/login";
     }
-
 }
 

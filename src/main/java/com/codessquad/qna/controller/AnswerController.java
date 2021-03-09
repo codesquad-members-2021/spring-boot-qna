@@ -1,7 +1,7 @@
 package com.codessquad.qna.controller;
 
 import com.codessquad.qna.domain.Answer;
-import com.codessquad.qna.exception.FailedUserLoginException;
+import com.codessquad.qna.exception.IllegalUserAccessException;
 import com.codessquad.qna.service.AnswerService;
 import com.codessquad.qna.service.QuestionService;
 import org.slf4j.Logger;
@@ -33,7 +33,7 @@ public class AnswerController {
     @PostMapping
     public String create(@PathVariable Long questionId, String contents, HttpSession session) {
         if (!isLoginUser(session)) {
-            throw new FailedUserLoginException();
+            throw new IllegalUserAccessException("로그인이 필요합니다.");
         }
         Answer answer = new Answer(getSessionUser(session), questionService.findQuestion(questionId), contents);
         answerService.create(answer);

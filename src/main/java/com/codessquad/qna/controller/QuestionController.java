@@ -29,7 +29,7 @@ public class QuestionController {
     @GetMapping("/form")
     public String form(HttpSession session) {
         if (!isLoginUser(session)) {
-            throw new FailedUserLoginException();
+            throw new IllegalUserAccessException("로그인이 필요합니다.");
         }
         return "/qna/form";
     }
@@ -37,7 +37,7 @@ public class QuestionController {
     @PostMapping
     public String create(String title, String contents, HttpSession session) {
         if (!isLoginUser(session)) {
-            throw new FailedUserLoginException();
+            throw new IllegalUserAccessException("로그인이 필요합니다.");
         }
         User sessionUser = getSessionUser(session);
         Question question = new Question(sessionUser, title, contents);

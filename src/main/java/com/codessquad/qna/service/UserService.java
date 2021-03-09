@@ -55,7 +55,7 @@ public class UserService {
 
     private void checkPermission(Long id, HttpSession session) {
         if (!isLoginUser(session)) {
-            throw new FailedUserLoginException();
+            throw new IllegalUserAccessException("로그인이 필요합니다.");
         }
         User loginUser = getSessionUser(session);
         if (!loginUser.matchId(id)) {

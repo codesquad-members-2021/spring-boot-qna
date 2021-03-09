@@ -1,7 +1,6 @@
 package com.codessquad.qna.controller;
 
 import com.codessquad.qna.domain.User;
-import com.codessquad.qna.exception.FailedUserLoginException;
 import com.codessquad.qna.exception.IllegalUserAccessException;
 import com.codessquad.qna.service.UserService;
 import org.slf4j.Logger;
@@ -33,7 +32,7 @@ public class UserController {
     public String login(String userId, String password, HttpSession session) {
         User user = userService.findByUserId(userId);
         if (!user.matchPassword(password)) {
-            throw new FailedUserLoginException("비밀번호가 틀렸습니다.");
+            throw new IllegalUserAccessException("비밀번호가 틀렸습니다.");
         }
         session.setAttribute(USER_SESSION_KEY, user);
         logger.info("로그인에 성공했습니다.");
