@@ -5,3 +5,4 @@ public class DuplicateUserIdFoundException extends RuntimeException {
         super("중복된 아이디가 존재합니다.");
     }
 }
+
