@@ -55,8 +55,8 @@ public class User {
         this.id = id;
     }
 
-    public boolean checkPassword(User user) {
-        return user.getPassword().equals(this.password);
+    public boolean checkPassword(String password) {
+        return this.password.equals(password);
     }
 
     public void updateUserInfo(User user, String newPassword) {
