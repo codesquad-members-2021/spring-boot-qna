@@ -1,7 +1,10 @@
 package com.codessquad.qna;
 
+import com.codessquad.qna.domain.User;
+import com.codessquad.qna.domain.UserRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,6 +21,9 @@ public class UserController {
 
     private List<User> userList = new ArrayList<>();
 
+    @Autowired
+    private UserRepository userRepository;
+
     @GetMapping("/user/form")
     public String userForm() {
         return "/user/form";
@@ -31,13 +37,13 @@ public class UserController {
     @PostMapping("/user/create")
     public String createUser(User user) {
         LOGGER.info(user.toString());
-        userList.add(user);
+        userRepository.save(user);
         return "redirect:/user/list";
     }
 
     @GetMapping("/user/list")
     public String list(Model model) {
-        model.addAttribute("userList", userList);
+        model.addAttribute("userList", userRepository.findAll());
         return "/user/list";
     }
 
