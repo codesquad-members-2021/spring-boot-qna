@@ -6,4 +6,5 @@ import java.util.List;
 
 public interface AnswerRepository extends CrudRepository<Answer, Long> {
     List<Answer> findAllByQuestionId(Long questionId);
+    int countAnswersByQuestionId(Long questionId);
 }

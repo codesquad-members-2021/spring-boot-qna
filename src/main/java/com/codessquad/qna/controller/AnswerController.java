@@ -36,6 +36,8 @@ public class AnswerController {
 
         Question question = questionRepository.findById(questionId).orElseThrow(
                 () -> new IllegalStateException("해당 질문을 찾을 수 없습니다. id = " + questionId));
+        int answerCount = answerRepository.countAnswersByQuestionId(questionId);
+        question.setAnswerCount(++answerCount);
 
         answer.setQuestion(question);
         answer.setWriter(sessionedUser);

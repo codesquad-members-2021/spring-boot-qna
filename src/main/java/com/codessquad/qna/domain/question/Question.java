@@ -25,6 +25,8 @@ public class Question {
 
     private String date;
 
+    private int answerCount;
+
     public Question() {
         this.date = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"));
     }
@@ -63,6 +65,14 @@ public class Question {
 
     public String getDate() {
         return date;
+    }
+
+    public int getAnswerCount() {
+        return answerCount;
+    }
+
+    public void setAnswerCount(int answerCount) {
+        this.answerCount = answerCount;
     }
 
     public void update(Question questionWithUpdatedInfo) {
