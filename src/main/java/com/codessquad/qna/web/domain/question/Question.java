@@ -1,4 +1,4 @@
-package com.codessquad.qna.web.model;
+package com.codessquad.qna.web.domain.question;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;

@@ -1,4 +1,4 @@
-package com.codessquad.qna.web.model;
+package com.codessquad.qna.web.domain.user;
 
 import javax.persistence.Id;
 import javax.persistence.Column;

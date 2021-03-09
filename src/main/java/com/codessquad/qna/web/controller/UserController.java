@@ -1,7 +1,7 @@
 package com.codessquad.qna.web.controller;
 
 import com.codessquad.qna.web.exception.UserNotFoundException;
-import com.codessquad.qna.web.model.User;
+import com.codessquad.qna.web.domain.user.User;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;

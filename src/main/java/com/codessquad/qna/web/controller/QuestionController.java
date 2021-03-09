@@ -1,7 +1,7 @@
 package com.codessquad.qna.web.controller;
 
 import com.codessquad.qna.web.exception.QuestionListIndexOutOfBoundException;
-import com.codessquad.qna.web.model.Question;
+import com.codessquad.qna.web.domain.question.Question;
 import com.codessquad.qna.web.validation.CastValidation;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
