@@ -1,6 +1,7 @@
 package com.codessquad.qna.service;
 
 import com.codessquad.qna.domain.User;
+import com.codessquad.qna.exception.DuplicateUserIdFoundException;
 import com.codessquad.qna.exception.UserNotFoundException;
 import com.codessquad.qna.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +21,10 @@ public class UserService {
     }
 
     public void join(User user) {
+        userRepository.findByUserId(user.getUserId())
+                .ifPresent(u -> {
+                    throw new DuplicateUserIdFoundException();
+                });
         userRepository.save(user);
     }
 

@@ -28,5 +28,12 @@ public class GlobalExceptionHandler {
         model.addAttribute("errorMessage", e.getMessage());
         return "/user/login";
     }
+
+    @ExceptionHandler(DuplicateUserIdFoundException.class)
+    private String handleDuplicateUserIdFoundException(Model model, DuplicateUserIdFoundException e) {
+        model.addAttribute("errorMessage", e.getMessage());
+        return "/user/login";
+    }
+
 }
 
