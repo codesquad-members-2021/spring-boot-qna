@@ -2,13 +2,15 @@ package com.codessquad.qna.controller;
 
 import com.codessquad.qna.domain.Question;
 import com.codessquad.qna.repository.QuestionRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.servlet.ModelAndView;
 
 @Controller
 @RequestMapping("/questions")
@@ -20,6 +22,8 @@ public class QuestionController {
         this.questionRepository = questionRepository;
     }
 
+    Logger logger = LoggerFactory.getLogger(UserController.class);
+
     @PostMapping
     public String createQuestion(Question newQuestion) {
 
@@ -27,9 +31,9 @@ public class QuestionController {
             return "/questions/form";
         }
 
-        if (!questionRepository.save(newQuestion)) {
-            return "/questions/form";
-        }
+        Question question = questionRepository.save(newQuestion);
+
+        logger.info("after save" + question.toString());
 
         return "redirect:/";
     }
@@ -51,11 +55,11 @@ public class QuestionController {
         return true;
     }
 
-    @GetMapping("/{questionId}")
-    public String showQuestionInDetail(@PathVariable(name = "questionId") int targetId, Model model) {
+    @GetMapping("/{id}")
+    public ModelAndView showQuestionInDetail(@PathVariable long id){
+        ModelAndView modelAndView = new ModelAndView("/questions/show");
+        modelAndView.addObject("question", questionRepository.findById(id).get());
 
-        model.addAttribute("question", questionRepository.getOne(targetId));
-
-        return "/questions/show";
+        return modelAndView;
     }
 }

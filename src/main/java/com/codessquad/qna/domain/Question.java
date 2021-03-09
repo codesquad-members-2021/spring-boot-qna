@@ -9,10 +9,13 @@ public class Question {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column
+    @Column(nullable = false, length = 20)
     private String writer;
     private String title;
     private String contents;
+
+    public Question() {
+    }
 
     public Long getId() {
         return id;
@@ -30,6 +33,7 @@ public class Question {
         return contents;
     }
 
+    //TODO: 삭제할 것
     public void setId(Long id) {
         this.id = id;
     }
