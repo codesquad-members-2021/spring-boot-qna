@@ -35,14 +35,14 @@ public class UserController {
     }
 
     @GetMapping("/create/{id}")
-    public ModelAndView editUserInfo(@PathVariable long id){
+    public ModelAndView editUserInfo(@PathVariable long id) {
         ModelAndView modelAndView = new ModelAndView("user/updateForm");
         modelAndView.addObject("user", userRepository.findById(id).get());
         return modelAndView;
     }
 
     @PostMapping("/{id}")
-    public String update(@PathVariable long id, User updateUser){
+    public String update(@PathVariable long id, User updateUser) {
         User user = userRepository.findById(id).get();
         user.update(updateUser);
 
