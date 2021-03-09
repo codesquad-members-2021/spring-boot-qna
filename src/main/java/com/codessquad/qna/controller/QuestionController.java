@@ -19,7 +19,7 @@ public class QuestionController {
     @PostMapping
     public String createQuestion(Question newQuestion) {
 
-        if (!questionRepository.save(newQuestion)){
+        if (!questionRepository.save(newQuestion)) {
             return "/questions/form";
         }
 

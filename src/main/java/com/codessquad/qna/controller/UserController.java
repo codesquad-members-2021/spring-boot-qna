@@ -25,7 +25,7 @@ public class UserController {
             return "redirect:/users";
         }
 
-        if(!userRepository.save(newUser)){
+        if (!userRepository.save(newUser)) {
             return "users/form";
         }
         return "redirect:/users";
@@ -48,6 +48,7 @@ public class UserController {
     @GetMapping("/{userId}/form")
     public String passUserId(@PathVariable(name = "userId") String targetId, Model model) {
         model.addAttribute("userId", targetId);
+
         return "/users/update";
     }
 
@@ -65,8 +66,7 @@ public class UserController {
     }
 
     private boolean isValidPassword(String real, String expected) {
-        if (real.equals(expected)) return true;
-        else return false;
+        return real.equals(expected);
     }
 
     private void updateUserProperties(User presentUser, User referenceUser) {
