@@ -1,7 +1,7 @@
 package com.codessquad.qna.controller;
 
 import com.codessquad.qna.domain.*;
-import com.codessquad.qna.repository.QuestionRepository;
+import com.codessquad.qna.exception.*;
 import com.codessquad.qna.service.QuestionService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -9,7 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-
 
 import javax.servlet.http.HttpSession;
 
@@ -31,7 +30,7 @@ public class QuestionController {
     @GetMapping("/form")
     public String form(HttpSession session) {
         if (!isLoginUser(session)) {
-            return "/user/login";
+            throw new FailedUserLoginException();
         }
         return "/qna/form";
     }
@@ -39,8 +38,7 @@ public class QuestionController {
     @PostMapping("")
     public String create(String title, String contents, HttpSession session) {
         if (!isLoginUser(session)) {
-            logger.info("새 글 작성에 실패했습니다.");
-            return "/user/login";
+            throw new FailedUserLoginException();
         }
         User sessionUser = getSessionUser(session);
         Question question = new Question(sessionUser, title, contents);
@@ -56,52 +54,39 @@ public class QuestionController {
 
     @GetMapping("/{id}/form")
     public String updateForm(@PathVariable Long id, Model model, HttpSession session) {
-        try {
-            Question question = questionService.findQuestion(id);
-            checkPermission(session, question);
-            model.addAttribute("question", question);
-            return "/qna/updateForm";
-        } catch (IllegalStateException e) {
-            model.addAttribute("errorMessage", e.getMessage());
-            return "/user/login";
-        }
+        Question question = questionService.findQuestion(id);
+        checkPermission(session, question);
+        model.addAttribute("question", question);
+        return "/qna/updateForm";
     }
 
     @PutMapping("/{id}")
     public String update(@PathVariable Long id, String title, String contents, Model model, HttpSession session) {
-        try {
-            Question question = questionService.findQuestion(id);
-            checkPermission(session, question);
-            question.update(title, contents);
-            questionService.create(question);
-            return String.format("redirect:/questions/%d", id);
-        } catch (IllegalStateException e) {
-            model.addAttribute("errorMessage", e.getMessage());
-            return "/user/login";
-        }
+        Question question = questionService.findQuestion(id);
+        checkPermission(session, question);
+        question.update(title, contents);
+        questionService.create(question);
+        return String.format("redirect:/questions/%d", id);
     }
 
     @DeleteMapping("/{id}")
-    public String delete(@PathVariable Long id, Model model, HttpSession session) {
-        try {
-            Question question = questionService.findQuestion(id);
-            checkPermission(session, question);
-            questionService.delete(question);
-            return "redirect:/";
-        } catch (IllegalStateException e) {
-            model.addAttribute("errorMessage", e.getMessage());
-            return "/user/login";
-        }
+    public String delete(@PathVariable Long id, HttpSession session) {
+        Question question = questionService.findQuestion(id);
+        checkPermission(session, question);
+        questionService.delete(question);
+        return "redirect:/";
     }
 
     private void checkPermission(HttpSession session, Question question) {
         if (!isLoginUser(session)) {
-            throw new IllegalStateException("로그인이 필요합니다.");
+            throw new FailedUserLoginException();
         }
         User loginUser = getSessionUser(session);
         if (question.isNotSameAuthor(loginUser)) {
-            throw new IllegalStateException("수정 및 삭제 권한이 없습니다.");
+            throw new IllegalUserAccessException();
         }
     }
+
+
 }
 
