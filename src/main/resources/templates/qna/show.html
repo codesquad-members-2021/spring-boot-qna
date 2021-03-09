@@ -44,7 +44,7 @@
 
             <div class="qna-comment">
                 <div class="qna-comment-slipp">
-                    <p class="qna-comment-count"><strong>2</strong>개의 의견</p>
+                    <p class="qna-comment-count"><strong>{{numberOfAnswers}}</strong>개의 의견</p>
                     <div class="qna-comment-slipp-articles">
 
                         {{#each question.answers}}
@@ -57,7 +57,7 @@
                                 <div class="article-header-text">
                                     <a class="article-author-name" href="/users/{{this.writer.id}}">{{this.writer.name}}</a>
                                     <a class="article-header-time" href="#" title="퍼머링크">
-                                        2016-01-12 14:06
+                                        {{reportingDate}}
                                     </a>
                                 </div>
                             </div>

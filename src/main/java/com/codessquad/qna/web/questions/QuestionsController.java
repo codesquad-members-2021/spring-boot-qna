@@ -42,6 +42,7 @@ public class QuestionsController {
     public String getOneQuestion(@PathVariable("questionId") long questionId, Model model) {
         Question foundQuestion = getQuestionById(questionId);
         model.addAttribute("question", foundQuestion);
+        model.addAttribute("numberOfAnswers", foundQuestion.getSizeOfAnswers());
         return "qna/show";
     }
 

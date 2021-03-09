@@ -39,6 +39,10 @@ public class Question {
         return writer.getId() == suggestedWriterId;
     }
 
+    public int getSizeOfAnswers() {
+        return answers.size();
+    }
+
     public long getId() {
         return id;
     }

@@ -4,6 +4,7 @@ import com.codessquad.qna.web.questions.Question;
 import com.codessquad.qna.web.users.User;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 
 @Entity
 public class Answer {
@@ -21,6 +22,7 @@ public class Answer {
 
     @Column(nullable = false, length = 20)
     private String contents;
+    private LocalDateTime reportingDate;
 
     public boolean isMatchingWriter(User suggestedWriter) {
         return writer.isMatchingId(suggestedWriter.getId());
@@ -28,10 +30,11 @@ public class Answer {
 
     public Answer(String contents) {
         this.contents = contents;
+        reportingDate = LocalDateTime.now();
     }
 
     public Answer() {
-
+        reportingDate = LocalDateTime.now();
     }
 
     public Long getId() {
@@ -64,5 +67,13 @@ public class Answer {
 
     public void setQuestion(Question question) {
         this.question = question;
+    }
+
+    public LocalDateTime getReportingDate() {
+        return reportingDate;
+    }
+
+    public void setReportingDate(LocalDateTime reportingDate) {
+        this.reportingDate = reportingDate;
     }
 }
