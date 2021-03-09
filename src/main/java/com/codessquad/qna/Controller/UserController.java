@@ -70,6 +70,11 @@ public class UserController {
     // 기능 4 질문하기, 질문목록 기능 구현
     //====================================================================
     // 기능 5 회원정보 수정 기능 구현
+    @GetMapping("/users")
+    public String userListShow() {
+        return "redirect:/users/list";
+    }
+
     @GetMapping("/users/{userId}/form")
     public String updateForm(@PathVariable(name="userId") String userId, Model model) {
         System.out.println("updateForm@@@");
@@ -83,10 +88,30 @@ public class UserController {
 
         return "users/updateForm";
     }
+
+
+    @PostMapping("{userId}")
+    public String updddd(@PathVariable String userId,User newUser) {
+        User oldUser = getUserByUserId(userId);
+        for(int i=0 ; i<userList.size() ; i++) {
+            if( is_sameUser(userList.get(i),oldUser) ) {
+                userList.set(i,new User(newUser));
+                break;
+            }
+        }
+        return "redirect:/users";
+    }
+    private boolean is_sameUser(User u1, User u2) {
+        return u1.getUserId().equals(u2.getUserId());
+    }
+
+    @PostMapping("/users/update")
+    public String updateConfirm(User newUser) {
+        //userList.
+        return "redirect:/users";
+    }
     // 기능 5 회원정보 수정 기능 구현
     //====================================================================
-
-
 
 
 }
