@@ -37,7 +37,7 @@ public class UserController {
     }
 
     @PostMapping()
-    public String create(User user) {
+    public String account(User user) {
         logger.info("user: {}", user);
 
         user.setId(users.size() + 1);
