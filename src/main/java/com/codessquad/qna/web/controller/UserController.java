@@ -55,7 +55,7 @@ public class UserController {
 
     private User findUserById(String userId){
         for(User user : users){
-            if(user.isMatchingId(userId)){
+            if(user.isMatchingUserId(userId)){
                 return user;
             }
         }

@@ -1,7 +1,19 @@
 package com.codessquad.qna.web.model;
 
+import javax.persistence.Id;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+
+@Entity
 public class User {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @Column(nullable=false, length=20)
     private String userId;
 
     private String password;
@@ -9,6 +21,12 @@ public class User {
     private String name;
 
     private String email;
+
+
+
+    public void setId(Long id) {
+        this.id = id;
+    }
 
     public void setUserId(String userId) {
         this.userId = userId;
@@ -24,6 +42,10 @@ public class User {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public Long getId() {
+        return id;
     }
 
     public String getUserId() {
@@ -46,17 +68,20 @@ public class User {
         return this.password.equals(password);
     }
 
-    public boolean isMatchingId(String userId){
+    public boolean isMatchingUserId(String userId){
         return this.userId.equals(userId);
     }
 
     @Override
     public String toString() {
         return "User{" +
-                "userId='" + userId + '\'' +
+                "id=" + id +
+                ", userId='" + userId + '\'' +
                 ", password='" + password + '\'' +
                 ", name='" + name + '\'' +
                 ", email='" + email + '\'' +
                 '}';
     }
+
+
 }
