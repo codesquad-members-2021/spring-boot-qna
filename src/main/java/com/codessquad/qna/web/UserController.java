@@ -27,15 +27,20 @@ public class UserController {
         return "user/list";
     }
 
-    @PostMapping("/login")
-    public String login() {
-        return "";
-    }
-
     @GetMapping("/users/{id}")
     public ModelAndView getOneUserProfile(@PathVariable long id) {
         ModelAndView modelAndView = new ModelAndView("user/profile");
         modelAndView.addObject("user", userRepository.findById(id).get());
         return modelAndView;
     }
+
+    @GetMapping("/create/{id}")
+    public ModelAndView editUserInfo(@PathVariable long id){
+        ModelAndView modelAndView = new ModelAndView("user/updateForm");
+        modelAndView.addObject("user", userRepository.findById(id).get());
+        return modelAndView;
+    }
+
+
+
 }
