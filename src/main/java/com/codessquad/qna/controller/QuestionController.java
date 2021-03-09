@@ -62,7 +62,7 @@ public class QuestionController {
             mav.setViewName("redirect:/users/login");
             return mav;
         }
-        if (!sessionedUser.isSameUserId(question.getWriter())) {
+        if (!sessionedUser.isSameName(question.getWriter())) {
             throw new IllegalStateException("자신이 작성한 글만 수정할 수 있습니다.");
         }
 
@@ -91,7 +91,7 @@ public class QuestionController {
             return "redirect:/users/login";
         }
 
-        if (!sessionedUser.isSameUserId(targetQuestion.getWriter())) {
+        if (!sessionedUser.isSameName(targetQuestion.getWriter())) {
             throw new IllegalStateException("자신이 작성한 글만 삭제할 수 있습니다.");
         }
 

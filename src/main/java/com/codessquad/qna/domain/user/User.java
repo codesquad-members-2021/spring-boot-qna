@@ -60,8 +60,8 @@ public class User {
         return this.password.equals(password);
     }
 
-    public boolean isSameUserId(String userId) {
-        return this.userId.equals(userId);
+    public boolean isSameName(String name) {
+        return this.name.equals(name);
     }
 
     public void update(User user) {
