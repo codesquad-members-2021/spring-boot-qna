@@ -1,58 +1,40 @@
 package com.codessquad.qna.web.controller;
 
-import com.codessquad.qna.web.exception.QuestionListIndexOutOfBoundException;
+import com.codessquad.qna.web.domain.question.QuestionRepository;
 import com.codessquad.qna.web.domain.question.Question;
-import com.codessquad.qna.web.validation.CastValidation;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-
-import java.util.ArrayList;
-import java.util.List;
+import org.springframework.web.servlet.ModelAndView;
 
 @Controller
 public class QuestionController {
 
-    private List<Question> questions = new ArrayList<>();
-
-    @GetMapping("/questions/{index}")
-    public String getQuestionDetail(@PathVariable("index") String stringIdx, Model model){
-        int index = getIndex(stringIdx);
-        Question question = questions.get(index);
-        model.addAttribute("question", question);
-        return "/qna/show";
-    }
+    @Autowired
+    private QuestionRepository questionRepository;
 
     @PostMapping("/questions")
     public String create(Question question){
-        question.setId(nextId());
-        questions.add(question);
+        questionRepository.save(question);
         return "redirect:/";
     }
 
+    @GetMapping("/questions/{id}")
+    public ModelAndView getQuestionDetail(@PathVariable long id){
+        ModelAndView mav = new ModelAndView("/qna/show");
+        mav.addObject("question", questionRepository.findById(id).get());
+        return mav;
+    }
+
+
     @GetMapping("/")
-    public String getHome(Model model){
-        model.addAttribute("questions", questions);
-        return "index";
-    }
-
-    private int getIndex(String stringIdx){
-        int index = CastValidation.stringToInt(stringIdx) - 1;
-        indexValidation(index);
-        return index;
-    }
-
-    private int nextId(){
-        return questions.size() + 1;
-    }
-
-    private void indexValidation(int index){
-        if(index < 0 || index > questions.size()){
-            throw new QuestionListIndexOutOfBoundException(index, questions.size());
-        }
+    public ModelAndView getHome(){
+        ModelAndView mav = new ModelAndView("index");
+        mav.addObject("questions", questionRepository.findAll());
+        return mav;
     }
 
     @ExceptionHandler(IllegalArgumentException.class)
