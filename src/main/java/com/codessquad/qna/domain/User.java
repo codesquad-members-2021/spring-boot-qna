@@ -60,12 +60,10 @@ public class User {
         this.email = email;
     }
 
-
     public void update(User newUser) {
         this.name = newUser.name;
         this.userId = newUser.userId;
         this.email = newUser.email;
     }
-
 
 }
