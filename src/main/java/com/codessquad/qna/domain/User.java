@@ -11,8 +11,13 @@ public class User {
     @Column(nullable = false, length = 20)
     private String userId;
 
+    @Column(nullable = false, length = 10)
     private String password;
+
+    @Column(nullable = false, length = 20)
     private String name;
+
+    @Column(nullable = false, length = 30)
     private String email;
 
     public void setUserId(String userId) {

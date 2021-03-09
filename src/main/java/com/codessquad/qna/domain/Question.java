@@ -1,7 +1,15 @@
 package com.codessquad.qna.domain;
 
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+
+@Entity
 public class Question {
-    private int index;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
     private String writer;
     private String title;
     private String contents;
@@ -18,10 +26,6 @@ public class Question {
         this.contents = contents;
     }
 
-    public void setIndex(int index) {
-        this.index = index;
-    }
-
     public String getWriter() {
         return writer;
     }
@@ -34,14 +38,14 @@ public class Question {
         return contents;
     }
 
-    public int getIndex() {
-        return index;
+    public Long getId() {
+        return id;
     }
 
     @Override
     public String toString() {
         return "Question{" +
-                "id=" + index +
+                "id=" + id +
                 ", writer='" + writer + '\'' +
                 ", title='" + title + '\'' +
                 ", contents='" + contents + '\'' +
