@@ -5,7 +5,7 @@ import com.codessquad.qna.domain.User;
 public class UserValidation {
 
     public static void validUserInfo(User user) {
-        validID(user.getId());
+//        validID(user.getId());
         validUserId(user.getUserId());
         validPasssword(user.getPassword());
         validUserName(user.getName());
@@ -37,7 +37,7 @@ public class UserValidation {
         }
     }
 
-    private static void validID(Long id) {
+    private static void validId(Long id) {
         if (id == null) {
             throw new NullPointerException();
         }
