@@ -2,8 +2,7 @@ package com.codessquad.qna.controller;
 
 import com.codessquad.qna.domain.Question;
 import com.codessquad.qna.repository.QuestionRepository;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -11,39 +10,51 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import java.util.List;
-
 @Controller
+@RequestMapping("/questions")
 public class QuestionController {
-    QuestionRepository questionRepository = new QuestionRepository();
+    @Autowired
+    private final QuestionRepository questionRepository;
 
-    @GetMapping("/")
-    public String createQuestionList(Question question, Model model) {
-        List<Question> questions = questionRepository.getAll();
-
-        model.addAttribute("questions", questions);
-
-        return "/index";
+    public QuestionController(QuestionRepository questionRepository) {
+        this.questionRepository = questionRepository;
     }
 
-    @PostMapping("/questions")
-    public String createQuestion(Question question) {
-        Question newQuestion = new Question();
+    @PostMapping
+    public String createQuestion(Question newQuestion) {
 
-        newQuestion.setWriter(question.getWriter());
-        newQuestion.setTitle(question.getTitle());
-        newQuestion.setContents(question.getContents());
+        if(!isValidQuestion(newQuestion)){
+            return "/questions/form";
+        }
 
-        questionRepository.save(newQuestion);
+        if (!questionRepository.save(newQuestion)) {
+            return "/questions/form";
+        }
 
         return "redirect:/";
     }
 
-    @GetMapping("/questions/{questionId}")
-    public String createQuestionInDetail(@PathVariable(name = "questionId") int targetId, Model model) {
-        Question targetQuestion = questionRepository.getOne(targetId);
+    private boolean isValidQuestion(Question question) {
+        if (question == null){
+            return false;
+        }
+        if ("".equals(question.getWriter()) || question.getWriter() == null) {
+            return false;
+        }
+        if ("".equals(question.getTitle()) || question.getTitle() == null) {
+            return false;
+        }
+        if ("".equals(question.getContents()) || question.getContents() == null) {
+            return false;
+        }
 
-        model.addAttribute("question", targetQuestion);
+        return true;
+    }
+
+    @GetMapping("/{questionId}")
+    public String showQuestionInDetail(@PathVariable(name = "questionId") int targetId, Model model) {
+
+        model.addAttribute("question", questionRepository.getOne(targetId));
 
         return "/questions/show";
     }

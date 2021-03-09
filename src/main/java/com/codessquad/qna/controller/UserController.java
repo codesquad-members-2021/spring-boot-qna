@@ -2,65 +2,90 @@ package com.codessquad.qna.controller;
 
 import com.codessquad.qna.domain.User;
 import com.codessquad.qna.repository.UserRepository;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-
-import java.util.List;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
+@RequestMapping("/users")
 public class UserController {
-    UserRepository userRepository = new UserRepository();
+    @Autowired
+    private final UserRepository userRepository;
 
-    @PostMapping("/users")
-    public String createUser(User referenceUser) {
-        User newUser = new User(referenceUser.getUserId());
-        updateUserProperties(newUser, referenceUser);
+    public UserController(UserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
 
-        if (isRedundant(newUser)) {
-            throw new IllegalStateException("이미 존재하는 사용자 아이디");
+    @PostMapping
+    public String createUser(User newUser) {
+
+        if (userRepository.isRedundant(newUser.getUserId())) {
+            return "users/form";
         }
-
-        userRepository.save(newUser);
+        if (!isValidUser(newUser)) {
+            return "users/form";
+        }
+        if (!userRepository.save(newUser)) {
+            return "users/form";
+        }
 
         return "redirect:/users";
     }
 
-    private boolean isRedundant(User user) {
-        return userRepository.isRedundant(user.getUserId());
+    private boolean isValidUser(User user) {
+        if (user == null){
+            return false;
+        }
+        if ("".equals(user.getUserId()) || user.getUserId() == null) {
+            return false;
+        }
+        if ("".equals(user.getEmail()) || user.getEmail() == null) {
+            return false;
+        }
+        if ("".equals(user.getPassword()) || user.getPassword() == null) {
+            return false;
+        }
+        if ("".equals(user.getName()) || user.getName() == null) {
+            return false;
+        }
+
+        return true;
     }
 
-    @GetMapping("/users")
-    public String createUserList(Model model) {
-        List<User> users = userRepository.getAll();
+    @GetMapping
+    public String showUsers(Model model) {
+        model.addAttribute("users", userRepository.getAll());
 
-        model.addAttribute("users", users);
-        return "users/list";
+        return "/users/list";
     }
 
-    @GetMapping("/users/{userId}")
-    public String createProfile(@PathVariable(name = "userId") String targetId, Model model) {
-        User targetUser = userRepository.getOne(targetId);
-        model.addAttribute("user", targetUser);
+    @GetMapping("/{userId}")
+    public String showUserInDetail(@PathVariable(name = "userId") String targetId, Model model) {
+        model.addAttribute("user", userRepository.getOne(targetId));
 
-        return "users/profile";
+        return "/users/profile";
     }
 
-    @GetMapping("/users/{userId}/form")
-    public String createUpdateForm(@PathVariable(name = "userId") String targetId, Model model) {
+    @GetMapping("/{userId}/form")
+    public String passUserId(@PathVariable(name = "userId") String targetId, Model model) {
         model.addAttribute("userId", targetId);
-        return "users/update";
+
+        return "/users/update";
     }
 
-    @PostMapping("/users/{userId}/update")
+    @PostMapping("/{userId}")
     public String updateUser(@PathVariable(name = "userId") String userId, User referenceUser) {
         User presentUser = userRepository.getOne(userId);
 
-        if (!isValidPassword(presentUser.getPassword(), referenceUser.getPassword())) {
+        if(!isValidUser(presentUser)){
+            return "redirect:/users";
+        }
+
+        if (!isEqualPassword(presentUser.getPassword(), referenceUser.getPassword())) {
             return "redirect:/users";
         }
 
@@ -69,7 +94,7 @@ public class UserController {
         return "redirect:/users";
     }
 
-    private boolean isValidPassword(String real, String expected) {
+    private boolean isEqualPassword(String real, String expected) {
         return real.equals(expected);
     }
 

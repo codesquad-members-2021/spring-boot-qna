@@ -1,24 +1,27 @@
 package com.codessquad.qna.repository;
 
 import com.codessquad.qna.domain.Question;
+import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@Repository
 public class QuestionRepository {
-    private final List<Question> questionList = new ArrayList<>();
+    private final List<Question> questions = new ArrayList<>();
 
-    public void save(Question newQuestion) {
-        newQuestion.setQuestionId(questionList.size() + 1);
-        questionList.add(newQuestion);
+    public boolean save(Question question) {
+        question.setQuestionId(questions.size() + 1);
+
+        return questions.add(question);
     }
 
     public List<Question> getAll() {
-        return questionList;
+        return questions;
     }
 
     public Question getOne(int targetId) {
-        return questionList.stream()
+        return questions.stream()
                 .filter(question -> question.getQuestionId() == targetId)
                 .findAny()
                 .get();
