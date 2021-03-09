@@ -25,7 +25,7 @@ public class Question {
     private String contents;
     private LocalDateTime date;
 
-    @OneToMany(mappedBy = "question")
+    @OneToMany(mappedBy = "question", cascade = CascadeType.ALL)
     @OrderBy("id asc")
     private List<Answer> answers;
 
