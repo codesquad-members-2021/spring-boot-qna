@@ -1,44 +1,50 @@
 package com.codessquad.qna.web.controller;
 
-import com.codessquad.qna.web.exception.UserNotFoundException;
 import com.codessquad.qna.web.domain.user.User;
+
+import com.codessquad.qna.web.domain.user.UserRepository;
+import com.codessquad.qna.web.exception.UserNotFoundException;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import java.util.ArrayList;
-import java.util.List;
-
 @Controller
 @RequestMapping("/users")
 public class UserController {
-    private List<User> users = new ArrayList<>();
+
+    @Autowired
+    private UserRepository userRepository;
 
     @PostMapping("/create")
-    public String create(User user){
-        users.add(user);
+    public String create(User user) {
+        userRepository.save(user);
         return "redirect:/users";
     }
 
     @GetMapping()
-    public String getUserList(Model model){
-        model.addAttribute("users", users);
+    public String list(Model model) {
+        model.addAttribute("users", userRepository.findAll());
         return "user/list";
     }
 
-    @GetMapping("/{userId}")
-    public String getUserProfile(@PathVariable("userId") String userId, Model model){
-        model.addAttribute("user", findUserById(userId));
-        return "user/profile";
+    @GetMapping("/{id}")
+    public ModelAndView show(@PathVariable long id) {
+        ModelAndView mav = new ModelAndView("user/profile");
+        mav.addObject("user", userRepository.findById(id).get());
+        return mav;
     }
 
-    @GetMapping("/{userId}/form")
-    public String getEditProfileForm(@PathVariable("userId") String userId, Model model){
-        model.addAttribute("user", findUserById(userId));
-        return "user/updateForm";
+    @GetMapping("/{id}/form")
+    public ModelAndView updateForm(@PathVariable long id) {
+        ModelAndView mav = new ModelAndView("user/updateForm");
+        mav.addObject("user", userRepository.findById(id).get());
+        return mav;
     }
 
     @PostMapping("/{userId}/update")
