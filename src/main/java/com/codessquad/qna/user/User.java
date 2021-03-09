@@ -1,5 +1,6 @@
 package com.codessquad.qna.user;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -11,9 +12,13 @@ public class User {
     @Id
     @GeneratedValue
     private Long id;
+    @Column(nullable = false, length = 20, unique = true)
     private String userId;
+    @Column(nullable = false, length = 20)
     private String password;
+    @Column(nullable = false, length = 20)
     private String name;
+    @Column(nullable = false, length = 40, unique = true)
     private String email;
 
     public User() {
