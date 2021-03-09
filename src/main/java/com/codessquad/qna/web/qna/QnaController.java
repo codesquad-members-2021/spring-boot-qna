@@ -21,8 +21,9 @@ public class QnaController {
     public String createQuestion(Question newQuestion, HttpSession session) {
         User sessionUser = (User) session.getAttribute(User.SESSION_KEY_USER_OBJECT);
         if (sessionUser != null) {
-            newQuestion.setWriterId(sessionUser.getId());
-            newQuestion.setWriterUserId(sessionUser.getUserId());
+            //newQuestion.setWriterId(sessionUser.getId());
+            //newQuestion.setWriterUserId(sessionUser.getUserId());
+            newQuestion.setWriter(sessionUser);
             questionRepository.save(newQuestion);
             logger.info("question created! [" + newQuestion.getId() + "] " + " title : " + newQuestion.getTitle());
         }
@@ -50,7 +51,7 @@ public class QnaController {
             return "redirect:/";
         }
         Question currentQuestion = getQuestionById(questionId);
-        if (currentQuestion.getWriterId() != sessionUser.getId()) {
+        if (!currentQuestion.isMatchingWriterId(sessionUser.getId())) {
             return "redirect:/";
         }
         model.addAttribute("currentQuestion", currentQuestion);

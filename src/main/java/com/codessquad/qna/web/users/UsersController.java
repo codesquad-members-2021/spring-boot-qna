@@ -87,8 +87,10 @@ public class UsersController {
     @GetMapping("/logout")
     public String processLogout(HttpSession session) {
         User sessionUser = (User) session.getAttribute(User.SESSION_KEY_USER_OBJECT);
-        logger.info("user logout : " + sessionUser.getUserId());
-        session.removeAttribute(User.SESSION_KEY_USER_OBJECT);
+        if (sessionUser != null) {
+            logger.info("user logout : " + sessionUser.getUserId());
+            session.removeAttribute(User.SESSION_KEY_USER_OBJECT);
+        }
         return "redirect:/";
     }
 }

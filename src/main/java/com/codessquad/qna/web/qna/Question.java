@@ -1,25 +1,26 @@
 package com.codessquad.qna.web.qna;
 
+import com.codessquad.qna.web.users.User;
+
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
 public class Question {
+    @ManyToOne
+    @JoinColumn(foreignKey = @ForeignKey(name = "fk_question_writer"))
+    private User writer;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
     @Column(nullable = false)
-    private long writerId;
-    private String writerUserId;
     private String title;
     private String contents;
     private LocalDateTime reportingDate;
 
-    public Question(long writerId, String writerUserId, String title, String contents) {
-        this.writerId = writerId;
-        this.writerUserId = writerUserId;
+    public Question(String title, String contents) {
         this.title = title;
         this.contents = contents;
         this.reportingDate = LocalDateTime.now();
@@ -30,7 +31,7 @@ public class Question {
     }
 
     public boolean isMatchingWriterId(long suggestedWriterId) {
-        return writerId == suggestedWriterId;
+        return writer.getId() == suggestedWriterId;
     }
 
     public long getId() {
@@ -41,20 +42,12 @@ public class Question {
         this.id = id;
     }
 
-    public String getWriterUserId() {
-        return writerUserId;
+    public User getWriter() {
+        return writer;
     }
 
-    public void setWriterUserId(String writerUserId) {
-        this.writerUserId = writerUserId;
-    }
-
-    public long getWriterId() {
-        return writerId;
-    }
-
-    public void setWriterId(long writerId) {
-        this.writerId = writerId;
+    public void setWriter(User writer) {
+        this.writer = writer;
     }
 
     public String getTitle() {
