@@ -10,11 +10,13 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Controller
+@RequestMapping("/users")
 public class UserController {
 
     private final Logger LOGGER = LoggerFactory.getLogger(QuestionController.class.getName());
@@ -24,39 +26,44 @@ public class UserController {
     @Autowired
     private UserRepository userRepository;
 
-    @GetMapping("/user/form")
+    @GetMapping("/form")
     public String userForm() {
         return "/user/form";
     }
 
-    @GetMapping("/user/login")
+    @GetMapping("/login")
     public String login() {
         return "/user/login";
     }
 
-    @PostMapping("/user/create")
+    @PostMapping("")
     public String createUser(User user) {
         LOGGER.info(user.toString());
         userRepository.save(user);
-        return "redirect:/user/list";
+        return "redirect:/users";
     }
 
-    @GetMapping("/user/list")
+    @GetMapping("")
     public String list(Model model) {
         model.addAttribute("userList", userRepository.findAll());
         return "/user/list";
     }
 
-    @GetMapping("/userList/{userId}")
+    @GetMapping("/{userId}")
     public String profile(@PathVariable String userId, Model model) {
         searchUserId(userId, model);
         return "/qna/profile";
     }
 
-    @GetMapping("/userList/{userId}/update")
+    @GetMapping("/{userId}/update")
     public String updateUser(@PathVariable String userId, Model model) {
         searchUserId(userId, model);
         return "/user/updateForm";
+    }
+
+    @PostMapping("/{userId}/update")
+    public String finishUpdateUser() {
+        return "/user/list";
     }
 
     private void searchUserId(String userId, Model model) {
