@@ -49,6 +49,13 @@ public class UserController {
         return isLogin ? "redirect:/" : "redirect:/user/login_failed";
     }
 
+    @GetMapping("/user/logout")
+    public String logout(HttpSession session) {
+        session.removeAttribute("user");
+        logger.info("로그아웃 요청");
+        return "redirect:/";
+    }
+
     @GetMapping("/user/list")
     public String viewUserList(Model model) {
         model.addAttribute("users", this.userService.findAll());
