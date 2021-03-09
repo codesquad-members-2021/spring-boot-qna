@@ -1,17 +1,31 @@
-package com.codessquad.qna.web.question;
+package com.codessquad.qna.domain.question;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+
+@Entity
 public class Question {
-    long questionId;
+    @Id
+    @GeneratedValue
+    Long id;
+
+    @Column(nullable = false, length = 20)
     String writer;
+
+    @Column(nullable = false)
     String title;
+
+    @Column(nullable = false)
     String contents;
 
-    public long getQuestionId() {
-        return questionId;
+    public Long getId() {
+        return id;
     }
 
-    public void setQuestionId(int questionId) {
-        this.questionId = questionId;
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getWriter() {

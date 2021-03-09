@@ -1,4 +1,4 @@
-package com.codessquad.qna.web;
+package com.codessquad.qna.controller;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -8,6 +8,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 public class IndexController {
     @GetMapping("/")
     public String index_redirect() {
-        return "redirect:/questions/list";
+        return "redirect:/questions";
     }
 }
