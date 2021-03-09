@@ -3,8 +3,7 @@ package com.codessquad.qna.controller;
 import com.codessquad.qna.domain.Answer;
 import com.codessquad.qna.domain.Question;
 import com.codessquad.qna.domain.User;
-import com.codessquad.qna.repository.AnswerRepository;
-import com.codessquad.qna.repository.QuestionRepository;
+import com.codessquad.qna.exception.FailedUserLoginException;
 import com.codessquad.qna.service.AnswerService;
 import com.codessquad.qna.service.QuestionService;
 import org.slf4j.Logger;
@@ -16,8 +15,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.servlet.http.HttpSession;
-
-import java.util.Optional;
 
 import static com.codessquad.qna.controller.HttpSessionUtils.getSessionUser;
 import static com.codessquad.qna.controller.HttpSessionUtils.isLoginUser;
@@ -38,12 +35,9 @@ public class AnswerController {
     @PostMapping("")
     public String create(@PathVariable Long questionId, String contents, HttpSession session) {
         if (!isLoginUser(session)) {
-            logger.info("로그인 된 사용자가 아닙니다.");
-            return "redirect:/users/loginForm";
+            throw new FailedUserLoginException();
         }
-        User loginUser = getSessionUser(session);
-        Question question = questionService.findQuestion(questionId);
-        Answer answer = new Answer(loginUser, question, contents);
+        Answer answer = new Answer(getSessionUser(session), questionService.findQuestion(questionId), contents);
         answerService.create(answer);
         logger.info("답변 작성에 성공했습니다.");
         return String.format("redirect:/questions/%d", questionId);
