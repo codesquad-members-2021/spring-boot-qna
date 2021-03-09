@@ -3,6 +3,7 @@ package com.codessquad.qna.web.controller;
 import com.codessquad.qna.web.domain.question.QuestionRepository;
 import com.codessquad.qna.web.domain.question.Question;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -25,7 +26,8 @@ public class QuestionController {
 
     @GetMapping("/questions/{id}")
     public String getQuestionDetail(@PathVariable long id, Model model){
-        model.addAttribute("question", questionRepository.findById(id).get());
+        Question question = questionRepository.findById(id).orElseThrow(IllegalArgumentException::new);
+        model.addAttribute("question", question);
         return "/qna/show";
     }
 
