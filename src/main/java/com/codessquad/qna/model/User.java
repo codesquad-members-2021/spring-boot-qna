@@ -24,6 +24,24 @@ public class User {
     @Column(nullable = false)
     private String email;
 
+    public boolean notNull() {
+        return this.id != null;
+    }
+
+    public boolean matchId(Long id) {
+        if (this.id == null) {
+            return false;
+        }
+        return this.id.equals(id);
+    }
+
+    public boolean matchPassword(String password) {
+        if (this.password == null) {
+            return false;
+        }
+        return this.password.equals(password);
+    }
+
     public void update(User user) {
         this.password = user.getPassword();
         this.name = user.getName();
