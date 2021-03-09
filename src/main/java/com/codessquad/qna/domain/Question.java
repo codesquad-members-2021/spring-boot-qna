@@ -1,13 +1,21 @@
 package com.codessquad.qna.domain;
 
+import javax.persistence.*;
+
+@Entity
 public class Question {
-    private int questionId;
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @Column
     private String writer;
     private String title;
     private String contents;
 
-    public int getQuestionId() {
-        return questionId;
+    public Long getId() {
+        return id;
     }
 
     public String getWriter() {
@@ -22,8 +30,8 @@ public class Question {
         return contents;
     }
 
-    public void setQuestionId(int questionId) {
-        this.questionId = questionId;
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public void setWriter(String writer) {
@@ -41,7 +49,7 @@ public class Question {
     @Override
     public String toString() {
         return "Question{" +
-                "questionId=" + questionId +
+                "id=" + id +
                 ", writer='" + writer + '\'' +
                 ", title='" + title + '\'' +
                 ", contents='" + contents + '\'' +
