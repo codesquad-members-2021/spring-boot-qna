@@ -9,13 +9,13 @@ public class Question {
     private String writer;
     private String title;
     private String contents;
-    private LocalDateTime createdDate;
+    private LocalDateTime createdDateTime;
 
     public Question(String writer, String title, String contents) {
         this.writer = writer;
         this.title = title;
         this.contents = contents;
-        this.createdDate = LocalDateTime.now();
+        this.createdDateTime = LocalDateTime.now();
     }
 
     public long getId() {
@@ -38,8 +38,12 @@ public class Question {
         return contents;
     }
 
-    public String getCreatedDate() {
-        return DateTimeUtils.formatByPattern(createdDate);
+    public LocalDateTime getCreatedDateTime() {
+        return createdDateTime;
+    }
+
+    public String getCreatedTime() {
+        return DateTimeUtils.formatByPattern(createdDateTime);
     }
 
 }
