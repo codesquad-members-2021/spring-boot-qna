@@ -1,6 +1,7 @@
 package com.codessquad.qna.controller;
 
 import com.codessquad.qna.domain.*;
+import com.codessquad.qna.exception.NotLoginException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -36,7 +37,8 @@ public class QuestionController {
         if (!HttpSessionUtils.isLogined(session)) {
             return "redirect:/users/login";
         }
-        User sessionUser = HttpSessionUtils.getUserFromSession(session);
+        User sessionUser = HttpSessionUtils.getUserFromSession(session)
+                .orElseThrow(NotLoginException::new);
         question.setWriter(sessionUser);
         question.setTime(LocalDateTime.now());
         question.setPoint(0);
@@ -60,10 +62,8 @@ public class QuestionController {
 
     @GetMapping("/{id}/form")
     public ModelAndView updateForm(@PathVariable("id") Long id, HttpSession session) {
-        if (!HttpSessionUtils.isLogined(session)) {
-            return new ModelAndView("redirect:/questions/unauthorized");
-        }
-        User sessionUser = HttpSessionUtils.getUserFromSession(session);
+        User sessionUser = HttpSessionUtils.getUserFromSession(session)
+                .orElseThrow(NotLoginException::new);
         Question question = questionRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 질문"));
         if (!question.isWriter(sessionUser)) {
@@ -76,10 +76,8 @@ public class QuestionController {
 
     @PutMapping("/{id}")
     public String update(@PathVariable("id") Long id, Question updatedQuestion, HttpSession session) {
-        if (!HttpSessionUtils.isLogined(session)) {
-            return "redirect:/questions/unauthorized";
-        }
-        User sessionUser = HttpSessionUtils.getUserFromSession(session);
+        User sessionUser = HttpSessionUtils.getUserFromSession(session)
+                .orElseThrow(NotLoginException::new);
         Question question = questionRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 질문"));
         if (!question.isWriter(sessionUser)) {
@@ -92,10 +90,8 @@ public class QuestionController {
 
     @DeleteMapping("/{id}")
     public String delete(@PathVariable("id") Long id, HttpSession session) {
-        if (!HttpSessionUtils.isLogined(session)) {
-            return "redirect:/questions/unauthorized";
-        }
-        User sessionUser = HttpSessionUtils.getUserFromSession(session);
+        User sessionUser = HttpSessionUtils.getUserFromSession(session)
+                .orElseThrow(NotLoginException::new);
         Question question = questionRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 질문"));
         if (!question.isWriter(sessionUser)) {
@@ -112,10 +108,8 @@ public class QuestionController {
 
     @PostMapping("/{id}/answers")
     public String answer(@PathVariable("id") Long id, Answer answer, HttpSession session){
-        if (!HttpSessionUtils.isLogined(session)) {
-            return "redirect:/questions/" + id;
-        }
-        User writer = HttpSessionUtils.getUserFromSession(session);
+        User writer = HttpSessionUtils.getUserFromSession(session)
+                .orElseThrow(NotLoginException::new);
         questionRepository.findById(id)
                 .ifPresent(question -> {
                     answer.setQuestion(question);
@@ -130,11 +124,8 @@ public class QuestionController {
     public String deleteAnswer(@PathVariable("questionId") Long questionId,
                                @PathVariable("answerId") Long answerId,
                                HttpSession session) {
-        if (!HttpSessionUtils.isLogined(session)) {
-            //error
-            return "redirect:/users/login";
-        }
-        User user = HttpSessionUtils.getUserFromSession(session);
+        User user = HttpSessionUtils.getUserFromSession(session)
+                .orElseThrow(NotLoginException::new);
         answerRepository.findByIdAndQuestionIdAndWriter(answerId, questionId, user)
                 .ifPresent(answerRepository::delete);
 
@@ -145,11 +136,8 @@ public class QuestionController {
     public ModelAndView updateAnswerForm(@PathVariable("questionId") Long questionId,
                                          @PathVariable("answerId") Long answerId,
                                          HttpSession session) {
-        if (!HttpSessionUtils.isLogined(session)) {
-            //error
-            return new ModelAndView("redirect:/users/login");
-        }
-        User user = HttpSessionUtils.getUserFromSession(session);
+        User user = HttpSessionUtils.getUserFromSession(session)
+                .orElseThrow(NotLoginException::new);
         Answer answer = answerRepository.findByIdAndQuestionIdAndWriter(answerId, questionId, user)
                 .orElseThrow(() -> new IllegalStateException("잘못된 접근"));
 
@@ -161,11 +149,8 @@ public class QuestionController {
                                @PathVariable("answerId") Long answerId,
                                Answer updatedAnswer,
                                HttpSession session) {
-        if (!HttpSessionUtils.isLogined(session)) {
-            //error
-            return "redirect:/users/login";
-        }
-        User user = HttpSessionUtils.getUserFromSession(session);
+        User user = HttpSessionUtils.getUserFromSession(session)
+                .orElseThrow(NotLoginException::new);
         answerRepository.findByIdAndQuestionIdAndWriter(answerId, questionId, user)
                 .ifPresent(answer -> {
                     answer.updateAnswer(updatedAnswer);

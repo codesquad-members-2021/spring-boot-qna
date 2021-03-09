@@ -2,6 +2,8 @@ package com.codessquad.qna.controller;
 
 import com.codessquad.qna.domain.User;
 import com.codessquad.qna.domain.UserRepository;
+import com.codessquad.qna.exception.LoginFailedException;
+import com.codessquad.qna.exception.NotLoginException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -49,10 +51,8 @@ public class UserController {
 
     @GetMapping("/{id}/form")
     public ModelAndView updateUserForm(@PathVariable("id") Long id, HttpSession session) {
-        if (!HttpSessionUtils.isLogined(session)) {
-            return new ModelAndView("redirect:/users/login");
-        }
-        User sessionUser = HttpSessionUtils.getUserFromSession(session);
+        User sessionUser = HttpSessionUtils.getUserFromSession(session)
+                .orElseThrow(NotLoginException::new);
         if (!sessionUser.isMatchingId(id)) {
             throw new IllegalStateException("다른 유저의 정보를 수정할 수 없습니다.");
         }
@@ -62,10 +62,8 @@ public class UserController {
 
     @PutMapping("/{id}")
     public String updateUser(@PathVariable("id") Long id, String oldPassword, User newUserInfo, HttpSession session) {
-        if (!HttpSessionUtils.isLogined(session)) {
-            return "redirect:/users/login";
-        }
-        User sessionUser = HttpSessionUtils.getUserFromSession(session);
+        User sessionUser = HttpSessionUtils.getUserFromSession(session)
+                .orElseThrow(NotLoginException::new);
         if (!sessionUser.isMatchingId(id)) {
             throw new IllegalStateException("다른 유저의 정보를 수정할 수 없습니다.");
         }
@@ -85,11 +83,10 @@ public class UserController {
 
     @PostMapping("/login")
     public String login(String userId, String password, HttpSession session) {
-        Optional<User> user = userRepository.findByUserId(userId);
-        if (!user.filter(u -> u.isMatchingPassword(password)).isPresent()) {
-            return "redirect:/users/login";
-        }
-        session.setAttribute("sessionUser", user.get());
+        User user = userRepository.findByUserId(userId)
+                .filter(u -> u.isMatchingPassword(password))
+                .orElseThrow(LoginFailedException::new);
+        session.setAttribute("sessionUser", user);
         return "redirect:/";
     }
 
@@ -97,5 +94,10 @@ public class UserController {
     public String logout(HttpSession session) {
         HttpSessionUtils.removeUserSession(session);
         return "redirect:/";
+    }
+
+    @GetMapping("/loginFailed")
+    public String loginFailed() {
+        return "users/loginFailed";
     }
 }
