@@ -1,5 +1,6 @@
 package com.codessquad.qna.controller;
 
+import com.codessquad.qna.domain.Question;
 import com.codessquad.qna.domain.User;
 import com.codessquad.qna.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,13 +23,36 @@ public class UserController {
     public String createUser(User newUser) {
 
         if (userRepository.isRedundant(newUser.getUserId())) {
-            return "redirect:/users";
+            return "users/form";
         }
-
+        if (!isValidUser(newUser)) {
+            return "users/form";
+        }
         if (!userRepository.save(newUser)) {
             return "users/form";
         }
+
         return "redirect:/users";
+    }
+
+    private boolean isValidUser(User user) {
+        if (user == null){
+            return false;
+        }
+        if ("".equals(user.getUserId()) || user.getUserId() == null) {
+            return false;
+        }
+        if ("".equals(user.getEmail()) || user.getEmail() == null) {
+            return false;
+        }
+        if ("".equals(user.getPassword()) || user.getPassword() == null) {
+            return false;
+        }
+        if ("".equals(user.getName()) || user.getName() == null) {
+            return false;
+        }
+
+        return true;
     }
 
     @GetMapping
