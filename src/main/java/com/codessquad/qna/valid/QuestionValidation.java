@@ -6,7 +6,7 @@ public class QuestionValidation {
 
     public static void validQuestion(Question question) {
         validTitle(question.getTitle());
-        validTitle(question.getWriter());
+        validWriter(question.getWriter());
     }
 
     private static void validTitle(String title) {
