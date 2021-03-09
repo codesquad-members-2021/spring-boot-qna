@@ -49,7 +49,7 @@ public class AnswersController {
             return "redirect:/";
         }
         Question targetQuestion = targetAnswer.getQuestion();
-        if (targetAnswer.getWriter().getId() != sessionUser.getId()) {
+        if (!targetAnswer.isMatchingWriter(sessionUser)) {
             return "redirect:/questions/" + targetQuestion.getId();
         }
         this.answersRepository.delete(targetAnswer);

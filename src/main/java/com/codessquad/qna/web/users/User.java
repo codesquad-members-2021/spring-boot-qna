@@ -70,6 +70,10 @@ public class User {
         return password.equals(suggestedPassword);
     }
 
+    public boolean isMatchingId(long suggestedId) {
+        return id == suggestedId;
+    }
+
     @Override
     public String toString() {
         return "User{" +

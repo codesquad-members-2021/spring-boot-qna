@@ -22,6 +22,10 @@ public class Answer {
     @Column(nullable = false, length = 20)
     private String contents;
 
+    public boolean isMatchingWriter(User suggestedWriter){
+        return writer.isMatchingId(suggestedWriter.getId());
+    }
+
     public Answer(String contents) {
         this.contents = contents;
     }
