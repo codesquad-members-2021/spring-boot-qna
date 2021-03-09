@@ -18,8 +18,12 @@ public class UserController {
 
     private Logger logger = LoggerFactory.getLogger(UserController.class);
 
-    @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    public UserController(UserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
 
     @GetMapping("/form")
     public String getUserFormPage() {
