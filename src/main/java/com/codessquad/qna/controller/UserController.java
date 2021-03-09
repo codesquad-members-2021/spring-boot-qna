@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.PutMapping;
 
 import javax.servlet.http.HttpSession;
 
+import static com.codessquad.qna.controller.HttpSessionUtils.USER_SESSION_KEY;
+
 @Controller
 public class UserController {
 
@@ -45,14 +47,14 @@ public class UserController {
     @PostMapping("/user/login")
     public String login(String userId, String password, HttpSession session) {
         User loginUser = this.userService.login(userId, password);
-        session.setAttribute("loginUser", loginUser);
+        session.setAttribute(USER_SESSION_KEY, loginUser);
         logger.info("로그인 요청");
-        return (loginUser.getId() != null) ? "redirect:/" : "redirect:/user/login_failed";
+        return loginUser.notNull() ? "redirect:/" : "redirect:/user/login_failed";
     }
 
     @GetMapping("/user/logout")
     public String logout(HttpSession session) {
-        session.removeAttribute("loginUser");
+        session.removeAttribute(USER_SESSION_KEY);
         logger.info("로그아웃 요청");
         return "redirect:/";
     }
@@ -69,7 +71,7 @@ public class UserController {
         User user = this.userService.findByUserId(userId);
         model.addAttribute("user", user);
         logger.info("유저 프로필 페이지 요청");
-        return (user.getId() != null) ? "user/profile" : "redirect:/user/list";
+        return user.notNull() ? "user/profile" : "redirect:/user/list";
     }
 
     @GetMapping("/user/{id}/update")
@@ -77,7 +79,7 @@ public class UserController {
         User user = this.userService.verifyUser(id, session);
         model.addAttribute("user", user);
         logger.info("유저 정보 수정 페이지 요청");
-        return (user.getId() != null) ? "user/updateForm" : "redirect:/user/list";
+        return user.notNull() ? "user/updateForm" : "redirect:/user/list";
     }
 
     @PutMapping("/user/{id}/update")

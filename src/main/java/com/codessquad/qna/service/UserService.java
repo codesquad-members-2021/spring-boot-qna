@@ -10,6 +10,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import static com.codessquad.qna.controller.HttpSessionUtils.getUserFromSession;
+
 @Service
 public class UserService {
 
@@ -22,7 +24,7 @@ public class UserService {
 
     public boolean save(User user) {
         User duplicateUser = findByUserId(user.getUserId());
-        if (duplicateUser.getId() == null) {
+        if (!duplicateUser.notNull()) {
             this.userRepository.save(user);
             return true;
         }
@@ -31,23 +33,23 @@ public class UserService {
 
     public User login(String userId, String password) {
         User targetUser = findByUserId(userId);
-        if (targetUser.getId() != null && targetUser.getPassword().equals(password)) {
+        if (targetUser.notNull() && targetUser.matchPassword(password)) {
             return targetUser;
         }
         return new User();
     }
 
     public User verifyUser(Long id, HttpSession session) {
-        Object loginUser = session.getAttribute("loginUser");
-        if (loginUser != null && ((User) loginUser).getId().equals(id)) {
-            return (User) loginUser;
+        User loginUser = getUserFromSession(session);
+        if (loginUser.matchId(id)) {
+            return loginUser;
         }
         return new User();
     }
 
     public boolean update(Long id, User user, String oldPassword, HttpSession session) {
         User loginUser = verifyUser(id, session);
-        if (loginUser.getId() != null && loginUser.getPassword().equals(oldPassword)) {
+        if (loginUser.notNull() && loginUser.matchPassword(oldPassword)) {
             loginUser.update(user);
             this.userRepository.save(loginUser);
             return true;
@@ -63,11 +65,6 @@ public class UserService {
 
     public User findByUserId(String userId) {
         Optional<User> user = this.userRepository.findByUserId(userId);
-        return user.orElseGet(User::new);
-    }
-
-    public User findById(Long id) {
-        Optional<User> user = this.userRepository.findById(id);
         return user.orElseGet(User::new);
     }
 
