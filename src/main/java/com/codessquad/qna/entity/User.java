@@ -6,7 +6,6 @@ import lombok.ToString;
 import javax.persistence.*;
 import java.util.Objects;
 
-@ToString
 @Entity
 public class User {
 
@@ -63,5 +62,16 @@ public class User {
     }
 
     public boolean isMatchedId(Long id) {return this.getId().equals(id);}
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "id=" + id +
+                ", userId='" + userId + '\'' +
+                ", password='" + password + '\'' +
+                ", name='" + name + '\'' +
+                ", email='" + email + '\'' +
+                '}';
+    }
 
 }
