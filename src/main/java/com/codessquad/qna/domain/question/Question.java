@@ -9,6 +9,7 @@ import java.time.format.DateTimeFormatter;
 
 @Entity
 public class Question {
+    private static final String DATE_FORMAT = "yyyy-MM-dd HH:mm:ss";
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -27,7 +28,7 @@ public class Question {
         this.title = title;
         this.contents = contents;
         this.createdTime = LocalDateTime.now()
-                .format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+                .format(DateTimeFormatter.ofPattern(DATE_FORMAT));
     }
 
     public long getIndex() {
