@@ -7,19 +7,18 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 import org.springframework.context.annotation.Primary;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.text.SimpleDateFormat;
+import java.util.Collections;
 import java.util.Date;
+import java.util.List;
 import java.util.Objects;
 
-@ToString
 @Entity
 public class Post {
 
     @Id
+    @Column(name = "POST_ID")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long postId;
 
@@ -27,6 +26,9 @@ public class Post {
     private String author;
     private String body;
     private String date;
+
+    @OneToMany(mappedBy = "post")
+    private List<Comment> comment;
 
     public Post() {
     }
@@ -58,6 +60,10 @@ public class Post {
         return date;
     }
 
+    public List<Comment> getComment() {
+        return Collections.unmodifiableList(comment);
+    }
+
     public boolean isMatchedAuthor(User user) {
         return this.author.equals(user.getUserId());
     }
@@ -66,4 +72,16 @@ public class Post {
         this.title = post.title;
         this.body = post.body;
     }
+
+    @Override
+    public String toString() {
+        return "Post{" +
+                "postId=" + postId +
+                ", title='" + title + '\'' +
+                ", author='" + author + '\'' +
+                ", body='" + body + '\'' +
+                ", date='" + date + '\'' +
+                '}';
+    }
+
 }
