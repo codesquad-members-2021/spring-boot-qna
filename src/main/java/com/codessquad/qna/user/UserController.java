@@ -38,7 +38,7 @@ public class UserController {
     @GetMapping("/{id}/form")
     public ModelAndView getUserUpdateForm(@PathVariable Long id) {
         User user = userRepository.findById(id).get();
-        return new ModelAndView("/user/form", "user", user);
+        return new ModelAndView("/user/updateForm", "user", user);
     }
 
     @PostMapping("/{id}")
