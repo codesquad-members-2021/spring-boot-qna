@@ -1,40 +1,42 @@
 package com.codessquad.qna.controller;
 
 import com.codessquad.qna.domain.Question;
+import com.codessquad.qna.domain.QuestionRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-
-import java.util.ArrayList;
-import java.util.List;
+import org.springframework.web.servlet.ModelAndView;
 
 @Controller
 public class QuestionController {
-    private List<Question> questions = new ArrayList<>();
+
+    private final QuestionRepository questionRepository;
+
+    @Autowired
+    public QuestionController(QuestionRepository questionRepository) {
+        this.questionRepository = questionRepository;
+    }
+
 
     @PostMapping("/questions")
     public String create(Question question) {
-        questions.add(question);
-        System.out.println(question);
+        questionRepository.save(question);
         return "redirect:/";
     }
 
     @GetMapping("/")
     public String list(Model model) {
-        model.addAttribute("questions", questions);
+        model.addAttribute("questions", questionRepository.findAll());
         return "index";
     }
 
-    @GetMapping("/questions/{index}")
-    public String showQuestion(@PathVariable int index, Model model) {
-        for (Question question : questions) {
-            if (questions.indexOf(question) == index - 1) {
-                model.addAttribute("question", question);
-                return "qna/show";
-            }
-        }
-        return "redirect:/";
+    @GetMapping("/questions/{id}")
+    public ModelAndView show(@PathVariable Long id) {
+        ModelAndView modelAndView = new ModelAndView("qna/show");
+        modelAndView.addObject("question", questionRepository.findById(id).get());
+        return modelAndView;
     }
 }

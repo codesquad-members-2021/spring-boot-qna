@@ -15,8 +15,12 @@ import org.springframework.web.servlet.ModelAndView;
 @RequestMapping("/users")
 public class UserController {
 
+    private final UserRepository userRepository;
+
     @Autowired
-    private UserRepository userRepository;
+    public UserController(UserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
 
     @PostMapping("")
     public String create(User user) {
@@ -33,7 +37,7 @@ public class UserController {
     @GetMapping("/{id}")
     public ModelAndView show(@PathVariable Long id) {
         ModelAndView modelAndView = new ModelAndView("/user/profile");
-        modelAndView.addObject("user", userRepository.findById(id).orElseThrow(NullPointerException::new));
+        modelAndView.addObject("user", userRepository.findById(id));
         return modelAndView;
     }
 
