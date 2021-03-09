@@ -32,15 +32,4 @@
 
 {{> fragments/footer}}
 </body>
-<script>
-    function checkInput() {
-        getForm = document.question;
-        if (getForm.writer.value.trim() == "" || getForm.title.value.trim() == "" || getForm.contents.value.trim() == "") {
-            alert("모든 내용을 작성하세요")
-        } else {
-            getForm.submit();
-        }
-    }
-</script>
-
 </html>
