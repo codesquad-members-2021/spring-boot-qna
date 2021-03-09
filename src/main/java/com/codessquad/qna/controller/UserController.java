@@ -21,7 +21,7 @@ import static com.codessquad.qna.controller.HttpSessionUtils.*;
 @Controller
 public class UserController {
 
-    private Logger logger = LoggerFactory.getLogger(UserController.class);
+    private final Logger logger = LoggerFactory.getLogger(UserController.class);
     private final UserService userService;
 
     @Autowired
@@ -46,13 +46,13 @@ public class UserController {
         return "redirect:/";
     }
 
-    @PostMapping("")
+    @PostMapping
     public String create(User user) {
         userService.join(user);
         return "redirect:/users";
     }
 
-    @GetMapping("")
+    @GetMapping
     public String list(Model model) {
         List<User> users = userService.findUsers();
         model.addAttribute("users", users);
@@ -68,29 +68,17 @@ public class UserController {
 
     @GetMapping("/{id}/form")
     public String updateForm(@PathVariable Long id, Model model, HttpSession session) {
-        checkPermission(id, session);
-        User user = userService.findUser(id);
+        User user = userService.findVerifiedUser(id, session);
         model.addAttribute("user", user);
         return "user/updateForm";
     }
 
     @PutMapping("/{id}")
     public String update(@PathVariable Long id, User updatedUser, Model model, HttpSession session) {
-        checkPermission(id, session);
-        User user = userService.findUser(id);
+        User user = userService.findVerifiedUser(id, session);
         user.update(updatedUser);
         userService.update(user);
         return "redirect:/users";
-    }
-
-    private void checkPermission(Long id, HttpSession session) {
-        if (!isLoginUser(session)) {
-            throw new FailedUserLoginException();
-        }
-        User loginUser = getSessionUser(session);
-        if (!loginUser.matchId(id)) {
-            throw new IllegalUserAccessException();
-        }
     }
 }
 
