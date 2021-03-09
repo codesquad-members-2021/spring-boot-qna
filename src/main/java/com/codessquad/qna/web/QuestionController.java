@@ -16,8 +16,12 @@ public class QuestionController {
 
     Logger logger = LoggerFactory.getLogger(QuestionController.class);
 
+    private final QuestionRepository questionRepository;
+
     @Autowired
-    private QuestionRepository questionRepository;
+    public QuestionController(QuestionRepository questionRepository) {
+        this.questionRepository = questionRepository;
+    }
 
     @GetMapping("/questions/form")
     public String getQuestionFormPage() {
