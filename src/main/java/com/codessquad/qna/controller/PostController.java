@@ -94,7 +94,8 @@ public class PostController {
     }
 
     /**
-     *
+     * 해당 id 에 Mapping 되어 있는 게시물을 삭제합니다.
+     * 작성자가 아니라면 IllegalAccessException 이 발생합니다.
      * @param id
      * @return
      */
@@ -112,4 +113,5 @@ public class PostController {
             throw new IllegalAccessException(message);
         }
     }
+
 }
