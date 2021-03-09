@@ -32,6 +32,10 @@ public class User {
         this.email = email;
     }
 
+    public static User of(Long id, User user) {
+        return new User(id, user.userId, user.password, user.name, user.email);
+    }
+
     public static List<User> getDummyData() {
         return Arrays.asList(
                 new User(null, "javajigi", "1234", "자바지기", "javajigi@sample.net"),

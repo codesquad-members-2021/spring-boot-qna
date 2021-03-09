@@ -40,8 +40,7 @@ public class UserController {
 
     @PutMapping("/{id}")
     public String updateUser(@PathVariable Long id, User user) {
-        user.setId(id);
-        userRepository.save(user);
+        userRepository.save(User.of(id, user));
         return "redirect:/users";
     }
 }
