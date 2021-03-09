@@ -35,8 +35,7 @@ public class QuestionController {
 
     @PostMapping()
     public String query(Question question, HttpSession session) {
-        User sessionUser = HttpSessionUtils.getUserFromSession(session)
-                .orElseThrow(NotLoggedInException::new);
+        User sessionUser = HttpSessionUtils.getUserFromSession(session);
         question.setWriter(sessionUser);
         question.setTime(LocalDateTime.now());
         question.setPoint(0);
@@ -57,8 +56,7 @@ public class QuestionController {
 
     @GetMapping("/{id}/form")
     public ModelAndView updateForm(@PathVariable("id") Long id, HttpSession session) {
-        User sessionUser = HttpSessionUtils.getUserFromSession(session)
-                .orElseThrow(NotLoggedInException::new);
+        User sessionUser = HttpSessionUtils.getUserFromSession(session);
         Question question = questionRepository.findById(id)
                 .orElseThrow(NotFoundException::new);
         matchesQuestionWriterWithUser(question, sessionUser);
@@ -69,8 +67,7 @@ public class QuestionController {
 
     @PutMapping("/{id}")
     public String update(@PathVariable("id") Long id, Question updatedQuestion, HttpSession session) {
-        User sessionUser = HttpSessionUtils.getUserFromSession(session)
-                .orElseThrow(NotLoggedInException::new);
+        User sessionUser = HttpSessionUtils.getUserFromSession(session);
         Question question = questionRepository.findById(id)
                 .orElseThrow(NotFoundException::new);
         matchesQuestionWriterWithUser(question, sessionUser);
@@ -81,8 +78,7 @@ public class QuestionController {
 
     @DeleteMapping("/{id}")
     public String delete(@PathVariable("id") Long id, HttpSession session) {
-        User sessionUser = HttpSessionUtils.getUserFromSession(session)
-                .orElseThrow(NotLoggedInException::new);
+        User sessionUser = HttpSessionUtils.getUserFromSession(session);
         questionRepository.findById(id)
                 .ifPresent(question -> {
                     matchesQuestionWriterWithUser(question, sessionUser);

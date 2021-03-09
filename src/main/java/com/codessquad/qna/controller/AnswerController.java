@@ -2,7 +2,6 @@ package com.codessquad.qna.controller;
 
 import com.codessquad.qna.domain.*;
 import com.codessquad.qna.exception.NotFoundException;
-import com.codessquad.qna.exception.NotLoggedInException;
 import com.codessquad.qna.exception.UnauthorizedAccessException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -27,8 +26,7 @@ public class AnswerController {
 
     @PostMapping()
     public String answer(@PathVariable("questionId") Long id, Answer answer, HttpSession session){
-        User writer = HttpSessionUtils.getUserFromSession(session)
-                .orElseThrow(NotLoggedInException::new);
+        User writer = HttpSessionUtils.getUserFromSession(session);
         Question question = questionRepository.findById(id)
                 .orElseThrow(NotFoundException::new);
         answer.setQuestion(question);
@@ -42,8 +40,7 @@ public class AnswerController {
     public String deleteAnswer(@PathVariable("questionId") Long questionId,
                                @PathVariable("answerId") Long answerId,
                                HttpSession session) {
-        User user = HttpSessionUtils.getUserFromSession(session)
-                .orElseThrow(NotLoggedInException::new);
+        User user = HttpSessionUtils.getUserFromSession(session);
         Answer answer = answerRepository.findByIdAndQuestionId(answerId, questionId)
                 .orElseThrow(NotFoundException::new);
         matchesAnswerWriterWithUser(answer, user);
@@ -55,8 +52,7 @@ public class AnswerController {
     public ModelAndView updateAnswerForm(@PathVariable("questionId") Long questionId,
                                          @PathVariable("answerId") Long answerId,
                                          HttpSession session) {
-        User user = HttpSessionUtils.getUserFromSession(session)
-                .orElseThrow(NotLoggedInException::new);
+        User user = HttpSessionUtils.getUserFromSession(session);
         Answer answer = answerRepository.findByIdAndQuestionId(answerId, questionId)
                 .orElseThrow(NotFoundException::new);
         matchesAnswerWriterWithUser(answer, user);
@@ -68,8 +64,7 @@ public class AnswerController {
                                @PathVariable("answerId") Long answerId,
                                Answer updatedAnswer,
                                HttpSession session) {
-        User user = HttpSessionUtils.getUserFromSession(session)
-                .orElseThrow(NotLoggedInException::new);
+        User user = HttpSessionUtils.getUserFromSession(session);
         Answer answer = answerRepository.findByIdAndQuestionId(answerId, questionId)
                 .orElseThrow(NotFoundException::new);
         matchesAnswerWriterWithUser(answer, user);

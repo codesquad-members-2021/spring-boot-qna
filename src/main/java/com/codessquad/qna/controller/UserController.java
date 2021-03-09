@@ -49,8 +49,7 @@ public class UserController {
 
     @GetMapping("/{id}/form")
     public ModelAndView updateUserForm(@PathVariable("id") Long id, HttpSession session) {
-        User sessionUser = HttpSessionUtils.getUserFromSession(session)
-                .orElseThrow(NotLoggedInException::new);
+        User sessionUser = HttpSessionUtils.getUserFromSession(session);
         checkUserWithId(sessionUser, id);
         User user = userRepository.findById(id).orElseThrow(NotFoundException::new);
         return new ModelAndView("users/update_form", "user", user);
@@ -58,8 +57,7 @@ public class UserController {
 
     @PutMapping("/{id}")
     public String updateUser(@PathVariable("id") Long id, String oldPassword, User newUserInfo, HttpSession session) {
-        User sessionUser = HttpSessionUtils.getUserFromSession(session)
-                .orElseThrow(NotLoggedInException::new);
+        User sessionUser = HttpSessionUtils.getUserFromSession(session);
         checkUserWithId(sessionUser, id);
         User user = userRepository.findById(id)
                 .filter(u -> u.isMatchingPassword(oldPassword))
