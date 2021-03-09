@@ -7,6 +7,12 @@ public class User {
     private String name;
     private String email;
 
+    public User(User copyUser) {
+        this.userId = copyUser.userId;
+        this.password = copyUser.password;
+        this.name = copyUser.name;
+        this.email = copyUser.email;
+    }
 
     @Override
     public String toString() {
@@ -56,4 +62,6 @@ public class User {
         this.userId = newUser.userId;
         this.email = newUser.email;
     }
+
+
 }
