@@ -1,6 +1,7 @@
 package com.codessquad.qna.service;
 
 import com.codessquad.qna.domain.Question;
+import com.codessquad.qna.exception.QuestionNotFoundException;
 import com.codessquad.qna.repository.QuestionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -24,7 +25,7 @@ public class QuestionService {
     }
 
     public Question findQuestion(Long id) {
-        return questionRepository.findById(id).orElseThrow(RuntimeException::new);
+        return questionRepository.findById(id).orElseThrow(QuestionNotFoundException::new);
     }
-
 }
+
