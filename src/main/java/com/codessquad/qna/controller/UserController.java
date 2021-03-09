@@ -21,7 +21,7 @@ public class UserController {
     @PostMapping
     public String createUser(User newUser) {
 
-        if (isRedundant(newUser)) {
+        if (userRepository.isRedundant(newUser.getUserId())) {
             return "redirect:/users";
         }
 
@@ -29,11 +29,6 @@ public class UserController {
             return "users/form";
         }
         return "redirect:/users";
-    }
-
-    // TODO: userRepository.isRedundant 다른 걸로 대체할 수 있을 거 같아
-   private boolean isRedundant(User user) {
-        return userRepository.isRedundant(user.getUserId());
     }
 
     @GetMapping
