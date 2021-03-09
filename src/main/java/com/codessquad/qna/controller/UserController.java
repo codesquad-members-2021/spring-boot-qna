@@ -16,16 +16,19 @@ import java.util.List;
 @Controller
 @RequestMapping("users")
 public class UserController {
-    Logger logger = LoggerFactory.getLogger(UserController.class);
+    private static final Logger logger = LoggerFactory.getLogger(UserController.class);
 
     private final List<User> users = new ArrayList<>();
 
     @GetMapping("/{userId}")
     public String profile(@PathVariable String userId, Model model) {
         User user = findUserById(userId);
-        if (user != null) {
-            model.addAttribute(user);
+        if (user == null) {
+            return "redirect:/";
         }
+
+        model.addAttribute(user);
+
         return "/user/profile";
     }
 
@@ -37,14 +40,14 @@ public class UserController {
 
     @PostMapping("/create")
     public String create(User user) {
-        logger.info(user.toString());
+        logger.info("user: {}", user);
 
         user.setId(users.size() + 1);
         users.add(user);
         return "redirect:/users";
     }
 
-    @GetMapping("{userId}/update")
+    @GetMapping("{userId}/form")
     public String form(@PathVariable String userId, Model model) {
         User user = findUserById(userId);
         if (user != null) {
