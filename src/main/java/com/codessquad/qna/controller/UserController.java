@@ -54,8 +54,13 @@ public class UserController {
 
     @PostMapping("{id}/update")
     public String updateUser(@PathVariable int id, User updateUser) {
-        User targetUser = users.get(id - 1);
-        targetUser.setUser(updateUser);
-        return "redirect:/users";
+        try {
+            User targetUser = users.get(id - 1);
+            targetUser.setUser(updateUser);
+            return "redirect:/users";
+        }
+        catch (IndexOutOfBoundsException e){
+            return "redirect:/{id}/form";
+        }
     }
 }
