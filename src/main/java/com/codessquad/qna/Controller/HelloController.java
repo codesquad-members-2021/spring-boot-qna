@@ -17,8 +17,6 @@ public class HelloController {
 
     @GetMapping("/")
     public String welcomepage() {
-
-
         return "index";
     }
 
