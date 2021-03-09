@@ -49,6 +49,14 @@ public class User {
         this.email = email;
     }
 
+
+    public void update(User updateUser) {
+        this.password = updateUser.password;
+        this.userId = updateUser.userId;
+        this.email = updateUser.email;
+        this.name = updateUser.name;
+    }
+
     @Override
     public String toString() {
         return "User{" +
