@@ -1,6 +1,8 @@
 package com.codessquad.qna.controller;
 
 import com.codessquad.qna.domain.User;
+import com.codessquad.qna.repository.UserRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -13,18 +15,20 @@ import java.util.Objects;
 
 @Controller
 public class UserController {
+    @Autowired // 생성자나 세터 등을 사용하여 의존성 주입을 하려고 할 때, 해당 빈을 찾아서 주입?? 나중에 공부하자
+    private UserRepository userRepository;
 
     private List<User> userList = new ArrayList<>();
 
     @PostMapping("/user/create")
     private String register(User user) {
-        userList.add(user);
+        userRepository.save(user);
         return "redirect:/users";
     }
 
     @GetMapping("/users")
     private String getMemberList(Model model) {
-        model.addAttribute("users", userList);
+        model.addAttribute("users", userRepository.findAll());
         return "user/list";
     }
 
@@ -63,12 +67,13 @@ public class UserController {
         return "user/updateForm";
     }
 
+    /*
     @PostMapping("/users/{userId}/update")
     private String updateMemberList(User updateUser, Model model) {
 
         for (int index = 0; index < userList.size(); index++) {
             boolean idCheck = User.checkId(userList.get(index),updateUser); // 아이디 유효성 체크
-            boolean findPasswordCheck = User.chekPassword(userList.get(index),updateUser); // 비밀번호 유효성 체크
+            boolean findPasswordCheck = User.checkPassword(userList.get(index),updateUser); // 비밀번호 유효성 체크
 
             if (idCheck && findPasswordCheck) {
                 model.addAttribute("invalidPassword", false);
@@ -81,5 +86,5 @@ public class UserController {
         }
         return "redirect:/users";
     }
-
+*/
 }
