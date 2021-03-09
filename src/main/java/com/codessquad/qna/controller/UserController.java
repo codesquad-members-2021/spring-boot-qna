@@ -34,7 +34,7 @@ public class UserController {
 
     @GetMapping("/users/{primaryKey}")
     private String displayProfile(@PathVariable Long primaryKey, Model model) {
-        primaryKey = Objects.requireNonNull(primaryKey, "Exception: primaryKey가 NULL 값입니다.");
+        Objects.requireNonNull(primaryKey, "Exception: primaryKey가 NULL 값입니다.");
 
         model.addAttribute("users",userRepository.findById(primaryKey).get());
 
@@ -43,43 +43,28 @@ public class UserController {
         return "user/profile";
     }
 
-    @GetMapping("users/{userId}/form")
-    private String changeMemberInfo(@PathVariable("userId") String userId, Model model) {
-        userId = Objects.requireNonNull(userId, "Exception: userId가 NULL 값입니다.");
+    @GetMapping("users/{primaryKey}/form")
+    private String changeMemberInfo(@PathVariable("primaryKey") Long targetKey, Model model) {
+        Objects.requireNonNull(targetKey, "Exception: targetKey가 NULL 값입니다.");
 
-        for (User findUser : userList) {
-            if (Objects.equals(findUser.getUserId(), userId)) {
-                model.addAttribute("invalidMember", false);
-                model.addAttribute("userID", findUser.getUserId());
-                model.addAttribute("password", findUser.getPassword());
-                model.addAttribute("name", findUser.getName());
-                model.addAttribute("email", findUser.getEmail());
-                break;
-            } else {
-                model.addAttribute("invalidMember", true);
-            }
-        }
+        model.addAttribute("users",userRepository.findById(targetKey).get());
+        //TODO.  model.addAttribute("invalidMember", true);
+
         return "user/updateForm";
     }
 
-    /*
-    @PostMapping("/users/{userId}/update")
-    private String updateMemberList(User updateUser, Model model) {
 
-        for (int index = 0; index < userList.size(); index++) {
-            boolean idCheck = User.checkId(userList.get(index),updateUser); // 아이디 유효성 체크
-            boolean findPasswordCheck = User.checkPassword(userList.get(index),updateUser); // 비밀번호 유효성 체크
+    @PostMapping("/users/{primaryKey}/update")
+    private String updateMemberList(@PathVariable("primaryKey") Long targetKey, User updateUser, Model model) {
+        Objects.requireNonNull(updateUser, "Exception: updateUser이 NULL 값입니다.");
 
-            if (idCheck && findPasswordCheck) {
-                model.addAttribute("invalidPassword", false);
-                userList.get(index).setName(Objects.toString(updateUser.getName(), "")); // null default
-                userList.get(index).setEmail(Objects.toString(updateUser.getEmail(), "")); // null default
-            } else {
-                model.addAttribute("invalidPassword", true);
-            }
-            model.addAttribute("users", userList);
+        //TODO.  model.addAttribute("invalidPassword", true);
+        if(userRepository.existsById(targetKey)){ // 넘어온 primaryKey 가 데이터베이스에 존재한다면
+            User originUser = userRepository.findById(targetKey).get();
+            userRepository.save(User.updateTargetProfile(originUser,updateUser));
+            model.addAttribute("users",userRepository.findAll());
         }
         return "redirect:/users";
     }
-*/
+
 }

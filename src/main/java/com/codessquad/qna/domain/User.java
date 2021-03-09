@@ -68,10 +68,21 @@ public class User {
                 '}';
     }
 
-    public static boolean checkId(User previousId, User updatedId){
-        return Objects.equals(previousId.getUserId(), updatedId.getUserId());
+    private static boolean checkId(String previousID, String updatedId) {
+        return Objects.equals(previousID, updatedId);
     }
-    public static boolean chekPassword(User previousId, User updatedId){
-        return Objects.equals(previousId.getPassword(), updatedId.getPassword());
+
+    private static boolean checkPassword(String previousPassword, String updatedPassword) {
+        return Objects.equals(previousPassword, updatedPassword);
+    }
+
+    public static User updateTargetProfile(User originUser, User updatedUser) {
+        if (!checkId(originUser.getUserId(), updatedUser.getUserId())
+                || !checkPassword(originUser.getPassword(), updatedUser.getPassword())) {
+            return originUser;
+        }
+        originUser.setName(updatedUser.getName());
+        originUser.setEmail(updatedUser.getEmail());
+        return originUser;
     }
 }
