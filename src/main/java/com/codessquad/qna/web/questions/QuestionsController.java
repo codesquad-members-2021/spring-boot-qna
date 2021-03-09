@@ -42,8 +42,6 @@ public class QuestionsController {
     public String getOneQuestion(@PathVariable("questionId") long questionId, Model model) {
         Question foundQuestion = getQuestionById(questionId);
         model.addAttribute("question", foundQuestion);
-        List answers = answersRepository.findByQuestionId(questionId);
-        model.addAttribute("answers", answers);
         return "qna/show";
     }
 

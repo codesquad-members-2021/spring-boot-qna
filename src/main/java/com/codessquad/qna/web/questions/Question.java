@@ -78,4 +78,12 @@ public class Question {
     public void setReportingDate(LocalDateTime reportingDate) {
         this.reportingDate = reportingDate;
     }
+
+    public List<Answer> getAnswers() {
+        return answers;
+    }
+
+    public void setAnswers(List<Answer> answers) {
+        this.answers = answers;
+    }
 }
