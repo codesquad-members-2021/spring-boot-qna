@@ -1,15 +1,20 @@
 package com.codessquad.qna.web.questions;
 
+import com.codessquad.qna.web.answers.Answer;
 import com.codessquad.qna.web.users.User;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 public class Question {
     @ManyToOne
     @JoinColumn(foreignKey = @ForeignKey(name = "fk_question_writer"))
     private User writer;
+
+    @OneToMany(mappedBy = "question", cascade = CascadeType.REMOVE)
+    private List<Answer> answers;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
