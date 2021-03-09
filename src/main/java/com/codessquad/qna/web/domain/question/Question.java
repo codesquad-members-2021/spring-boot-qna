@@ -1,20 +1,27 @@
 package com.codessquad.qna.web.domain.question;
 
+import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
+@Entity
 public class Question {
     private static final DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
-    private Integer id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
+    @Column(nullable=false)
     private String writer;
 
+    @Column(nullable=false)
     private String title;
 
+    @Column(nullable=false)
     private String contents;
 
-    private final LocalDateTime createdAt;
+    private LocalDateTime createdAt;
 
     public Question(String writer, String title, String contents) {
         this.writer = writer;
@@ -23,36 +30,24 @@ public class Question {
         this.createdAt = LocalDateTime.now();
     }
 
-    public Integer getId() {
-        return id;
+    protected Question() {
+
     }
 
-    public void setId(Integer id) {
-        this.id = id;
+    public Long getId() {
+        return id;
     }
 
     public String getWriter() {
         return writer;
     }
 
-    public void setWriter(String writer) {
-        this.writer = writer;
-    }
-
     public String getTitle() {
         return title;
     }
 
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
     public String getContents() {
         return contents;
-    }
-
-    public void setContents(String contents) {
-        this.contents = contents;
     }
 
     public String getCreatedAt() {
@@ -62,9 +57,11 @@ public class Question {
     @Override
     public String toString() {
         return "Question{" +
-                "writer='" + writer + '\'' +
+                "id=" + id +
+                ", writer='" + writer + '\'' +
                 ", title='" + title + '\'' +
                 ", contents='" + contents + '\'' +
+                ", createdAt=" + createdAt +
                 '}';
     }
 }
