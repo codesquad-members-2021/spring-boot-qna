@@ -23,7 +23,7 @@
                     <label for="contents">내용</label>
                     <textarea name="contents" id="contents" rows="5" class="form-control"></textarea>
                 </div>
-                <button type="submit" class="btn btn-success clearfix pull-right">질문하기</button>
+                <button type="button" class="btn btn-success clearfix pull-right" onclick="checkInput()">질문하기</button>
                 <div class="clearfix"/>
             </form>
         </div>
@@ -32,4 +32,15 @@
 
 {{> fragments/footer}}
 </body>
+<script>
+    function checkInput() {
+        getForm = document.question;
+        if (getForm.writer.value == "" || getForm.title.value == "" || getForm.contents.value == "") {
+            alert("모든 내용을 작성하세요")
+        }else {
+            getForm.submit();
+        }
+    }
+</script>
+
 </html>
