@@ -1,8 +1,6 @@
 package com.codessquad.qna.controller;
 
 import com.codessquad.qna.domain.Answer;
-import com.codessquad.qna.domain.Question;
-import com.codessquad.qna.domain.User;
 import com.codessquad.qna.exception.FailedUserLoginException;
 import com.codessquad.qna.service.AnswerService;
 import com.codessquad.qna.service.QuestionService;
@@ -22,7 +20,7 @@ import static com.codessquad.qna.controller.HttpSessionUtils.isLoginUser;
 @Controller
 @RequestMapping("/questions/{questionId}/answers")
 public class AnswerController {
-    private final Logger logger = LoggerFactory.getLogger(UserController.class);
+    private final Logger logger = LoggerFactory.getLogger(AnswerController.class);
     private final QuestionService questionService;
     private final AnswerService answerService;
 
