@@ -19,8 +19,15 @@ public class QuestionService {
 
     @Transactional
     public void write(Question question) {
+        validQuestion(question);
         question.setWriteTime(LocalDateTime.now());
         questionRepository.save(question);
+    }
+
+    private void validQuestion(Question question) {
+        if (question.getWriter() == null || question.getTitle() == null || question.getContents() == null) {
+            throw new NullPointerException();
+        }
     }
 
     public Question findById(Long questionId) {

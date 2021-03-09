@@ -35,9 +35,9 @@
 <script>
     function checkInput() {
         getForm = document.question;
-        if (getForm.writer.value == "" || getForm.title.value == "" || getForm.contents.value == "") {
+        if (getForm.writer.value.trim() == "" || getForm.title.value.trim() == "" || getForm.contents.value.trim() == "") {
             alert("모든 내용을 작성하세요")
-        }else {
+        } else {
             getForm.submit();
         }
     }
