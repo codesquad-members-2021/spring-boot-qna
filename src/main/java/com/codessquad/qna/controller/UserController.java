@@ -59,11 +59,6 @@ public class UserController {
         return "user/userUpdateForm";
     }
 
-    @GetMapping("/loginForm")
-    public String loginForm() {
-        return "/user/login";
-    }
-
     @PostMapping("/login")
     public String login(String userId, String password, HttpSession session) {
         User findUser = userService.login(userId, password);
