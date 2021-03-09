@@ -65,7 +65,7 @@ public class UserController {
     @GetMapping("/{id}")
     public ModelAndView showUserInDetail(@PathVariable long id) {
         ModelAndView modelAndView = new ModelAndView("/users/profile");
-        modelAndView.addObject("user", userRepository.findById(id));
+        modelAndView.addObject("user", userRepository.findById(id).get());
 
         return modelAndView;
     }
