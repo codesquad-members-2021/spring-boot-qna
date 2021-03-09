@@ -1,5 +1,6 @@
 package com.codessquad.qna.question;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -14,25 +15,23 @@ import java.util.List;
 @Controller
 @RequestMapping("/questions")
 public class QuestionController {
-    private List<Question> questions = Collections.synchronizedList(new ArrayList<>(Question.getDummyData()));
+    @Autowired
+    private QuestionRepository questionRepository;
 
     @GetMapping
     public ModelAndView getQuestions() {
-        return new ModelAndView("/qna/list", "questions", questions);
-    }
-
-    @GetMapping("/{id}")
-    public ModelAndView getQuestion(@PathVariable int id) {
-        ModelAndView modelAndView = new ModelAndView("/qna/show");
-        modelAndView.addObject("question", questions.get(id));
-        modelAndView.addObject("id", id);
-
-        return modelAndView;
+        return new ModelAndView("/qna/list", "questions", questionRepository.findAll());
     }
 
     @PostMapping
     public String createQuestions(Question question) {
-        questions.add(question);
+        questionRepository.save(question);
         return "redirect:/questions";
+    }
+
+    @GetMapping("/{id}")
+    public ModelAndView getQuestion(@PathVariable Long id) {
+        Question question = questionRepository.findById(id).get();
+        return new ModelAndView("/qna/show", "question", question);
     }
 }

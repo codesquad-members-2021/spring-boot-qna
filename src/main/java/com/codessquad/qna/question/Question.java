@@ -1,12 +1,23 @@
 package com.codessquad.qna.question;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
 import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
 
+@Entity
 public class Question {
+    @Id
+    @GeneratedValue
+    private Long id;
+    @Column(nullable = false, length = 20)
     private String writer;
+    @Column(nullable = false, length = 100)
     private String title;
+    @Column(nullable = false, length = 5000)
     private String contents;
     private LocalDateTime createDateTime = LocalDateTime.now();
 
@@ -36,6 +47,14 @@ public class Question {
                                 "서버가 가동되면서 bean들이 초기화되는 시점에 B라는 클래스의 afterPropertiesSet 메소드는</p><p>A라는 클래스의 특정 메소드인 afunc()를 호출하고 있습니다.",
                         LocalDateTime.of(2015, 12, 30, 01, 47))
         );
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getWriter() {
