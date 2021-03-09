@@ -2,7 +2,7 @@ package com.codessquad.qna.exception;
 
 public class UserNotFoundException extends RuntimeException {
     public UserNotFoundException() {
-        super("입력하신 아이디의 사용자를 찾을 수 없습니다.");
+        super("등록되지 않은 아이디입니다.");
     }
 }
 

@@ -8,8 +8,9 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 public class GlobalExceptionHandler {
 
     @ExceptionHandler(UserNotFoundException.class)
-    private String handleUserNotFoundException() {
-        return "redirect:/users/loginForm";
+    private String handleUserNotFoundException(Model model, UserNotFoundException e) {
+        model.addAttribute("errorMessage", e.getMessage());
+        return "/user/login";
     }
 
     @ExceptionHandler(QuestionNotFoundException.class)
