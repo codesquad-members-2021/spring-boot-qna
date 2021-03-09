@@ -79,7 +79,7 @@ public class UserController {
         checkPermission(id, session);
         User user = userService.findUser(id);
         user.update(updatedUser);
-        userService.join(user);
+        userService.update(user);
         return "redirect:/users";
     }
 

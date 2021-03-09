@@ -6,6 +6,7 @@ import com.codessquad.qna.exception.UserNotFoundException;
 import com.codessquad.qna.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import sun.util.resources.cldr.aa.CurrencyNames_aa_ER;
 
 import java.util.List;
 
@@ -25,6 +26,10 @@ public class UserService {
                 .ifPresent(u -> {
                     throw new DuplicateUserIdFoundException();
                 });
+        userRepository.save(user);
+    }
+
+    public void update(User user) {
         userRepository.save(user);
     }
 
