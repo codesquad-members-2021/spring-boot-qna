@@ -1,5 +1,6 @@
 package com.codessquad.qna.controller;
 
+import com.codessquad.qna.domain.PasswordVerifier;
 import com.codessquad.qna.domain.User;
 import com.codessquad.qna.service.ExistedUserException;
 import com.codessquad.qna.service.UserService;
@@ -63,10 +64,13 @@ public class UserController {
     }
 
     @PutMapping("/{id}")
-    public String updateUserProfile(@PathVariable Long id, User user, RedirectAttributes redirect) {
+    public String updateUserProfile(@PathVariable Long id, User user,
+        PasswordVerifier passwordVerifier, RedirectAttributes redirect) {
+
         User originUser = userService.findById(id);
 
-        if (userService.confirmPassword(originUser, user)) {
+        if (originUser.confirmPassword(passwordVerifier)) {
+            user.setPassword(passwordVerifier.getReceivedPassword());
             userService.updateUserData(originUser, user);
             return "redirect:/users";
         }

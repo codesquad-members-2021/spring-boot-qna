@@ -93,4 +93,9 @@ public class User {
             ", email='" + email + '\'' +
             '}';
     }
+
+    public boolean confirmPassword(PasswordVerifier passwordVerifier) {
+        return this.isMatchingPassword(passwordVerifier.getReceivedPassword());
+    }
+
 }

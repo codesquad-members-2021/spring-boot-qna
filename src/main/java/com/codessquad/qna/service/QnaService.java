@@ -19,10 +19,10 @@ public class QnaService {
     }
 
     public List<Question> findAll() {
-        return (List<Question>) questionRepository.findAll();
+        return questionRepository.findAll();
     }
 
     public Question findQuestionById(Long id) {
-        return questionRepository.findById(id).get();
+        return questionRepository.findById(id).orElse(null);
     }
 }

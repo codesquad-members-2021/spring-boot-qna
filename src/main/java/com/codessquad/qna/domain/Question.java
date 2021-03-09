@@ -1,7 +1,7 @@
 package com.codessquad.qna.domain;
 
+import com.codessquad.qna.util.DateTimeUtil;
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -10,9 +10,6 @@ import javax.persistence.Id;
 
 @Entity
 public class Question {
-
-    public static final DateTimeFormatter DATE_FORMAT = DateTimeFormatter
-        .ofPattern("yyyy-MM-dd HH:mm");
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -23,7 +20,7 @@ public class Question {
 
     private String title;
     private String contents;
-    private LocalDateTime qnaDateTime = LocalDateTime.now();
+    private LocalDateTime createdDateTime = LocalDateTime.now();
 
     public Long getId() {
         return id;
@@ -53,10 +50,13 @@ public class Question {
         this.contents = contents;
     }
 
-    public String getQnaDateTime() {
-        return qnaDateTime.format(DATE_FORMAT);
+    public LocalDateTime getCreatedDateTime() {
+        return createdDateTime;
     }
 
+    public String getFormattedCreatedTime() {
+        return createdDateTime.format(DateTimeUtil.getTimeFormatter());
+    }
 
     @Override
     public String toString() {
@@ -65,7 +65,7 @@ public class Question {
             ", writer='" + writer + '\'' +
             ", title='" + title + '\'' +
             ", contents='" + contents + '\'' +
-            ", qnaDateTime=" + qnaDateTime +
+            ", createdDateTime=" + createdDateTime +
             '}';
     }
 }

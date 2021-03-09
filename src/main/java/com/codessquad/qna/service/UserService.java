@@ -26,12 +26,10 @@ public class UserService {
     }
 
     public List<User> findUserAll() {
-        return (List<User>) userRepository.findAll();
+        return userRepository.findAll();
     }
 
     public void updateUserData(User originUser, User user) {
-        String newPassword = user.getPassword().split(",")[1];
-        user.setPassword(newPassword);
         originUser.update(user);
         userRepository.save(originUser);
     }
@@ -41,16 +39,7 @@ public class UserService {
     }
 
     public User findById(Long id) {
-        return userRepository.findById(id).get();
+        return userRepository.findById(id).orElse(null);
     }
 
-    public boolean confirmPassword(User originUser, User user) {
-        String receivedPassword = user.getPassword().split(",")[0];
-
-        if (originUser.isMatchingPassword(receivedPassword)) {
-            return true;
-        }
-
-        return false;
-    }
 }
