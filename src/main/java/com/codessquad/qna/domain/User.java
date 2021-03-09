@@ -57,10 +57,6 @@ public class User {
         return this.userId.equals(userId);
     }
 
-    public boolean isMatchingId(int id) {
-        return this.id == id;
-    }
-
     @Override
     public String toString() {
         return "User{" +
