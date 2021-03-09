@@ -64,7 +64,7 @@ public class UserController {
     }
 
     @PutMapping("/{id}")
-    public String updateUser(@PathVariable long id, User userWithUpdatedInfo) {
+    public String updateUser(@PathVariable Long id, User userWithUpdatedInfo) {
         User targetUser = userRepository.findById(id).orElseThrow(
                 () -> new IllegalArgumentException("해당 사용자를 찾을 수 없습니다. id = " + id));
         if (!targetUser.isCorrectPassword(userWithUpdatedInfo.getPassword())) {

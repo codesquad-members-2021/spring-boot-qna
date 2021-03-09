@@ -36,15 +36,18 @@ public class QuestionController {
     }
 
     @PostMapping("/")
-    public String createQuestion(Question question) {
+    public String createQuestion(Question question, HttpSession session) {
         logger.info(question.toString());
+
+        User sessionedUser = (User) session.getAttribute("sessionedUser");
+        question.setWriter(sessionedUser);
         questionRepository.save(question);
 
         return "redirect:/";
     }
 
     @GetMapping("/{id}")
-    public String getQuestion(@PathVariable long id, Model model) {
+    public String getQuestion(@PathVariable Long id, Model model) {
         Question question = questionRepository.findById(id).orElseThrow(
                 () -> new IllegalArgumentException("해당 질문이 없습니다. id = " + id));
         model.addAttribute("question", question);
@@ -62,7 +65,7 @@ public class QuestionController {
             mav.setViewName("redirect:/users/login");
             return mav;
         }
-        if (!sessionedUser.isSameName(question.getWriter())) {
+        if (!sessionedUser.isSameUser(question.getWriter())) {
             throw new IllegalStateException("자신이 작성한 글만 수정할 수 있습니다.");
         }
 
@@ -91,7 +94,7 @@ public class QuestionController {
             return "redirect:/users/login";
         }
 
-        if (!sessionedUser.isSameName(targetQuestion.getWriter())) {
+        if (!sessionedUser.isSameUser(targetQuestion.getWriter())) {
             throw new IllegalStateException("자신이 작성한 글만 삭제할 수 있습니다.");
         }
 
