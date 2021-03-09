@@ -46,24 +46,28 @@ public class UserController {
         return "/user/list";
     }
 
-    @GetMapping("/{userId}")
-    public String profile(@PathVariable String userId, Model model) {
-        return "/qna/profile";
+    @GetMapping("/{id}")
+    public String profile(@PathVariable Long id, Model model) {
+        model.addAttribute("user", getUserBy(id));
+        return "/user/profile";
     }
 
     @GetMapping("/{id}/form")
     public String getForm(@PathVariable Long id, Model model) {
-        User user = userRepository.findById(id).get();
-        model.addAttribute("user", user);
+        model.addAttribute("user", getUserBy(id));
         return "/user/updateForm";
     }
 
     @PutMapping("/{id}")
     public String updateForm(@PathVariable Long id, User updatedUser) {
-        User user = userRepository.findById(id).get();
+        User user = getUserBy(id);
         user.update(updatedUser);
         userRepository.save(user);
         return "redirect:/users";
+    }
+
+    private User getUserBy(Long id) {
+        return userRepository.findById(id).get();
     }
 
 }
