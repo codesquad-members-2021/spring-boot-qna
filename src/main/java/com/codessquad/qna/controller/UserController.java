@@ -19,9 +19,7 @@ public class UserController {
     UserRepository userRepository;
 
     @PostMapping
-    public String createUser(User referenceUser) {
-        User newUser = new User(referenceUser.getUserId());
-        updateUserProperties(newUser, referenceUser);
+    public String createUser(User newUser) {
 
         if (isRedundant(newUser)) {
             return "redirect:/users";

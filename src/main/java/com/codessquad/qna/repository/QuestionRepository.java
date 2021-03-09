@@ -10,9 +10,10 @@ import java.util.List;
 public class QuestionRepository {
     private final List<Question> questionList = new ArrayList<>();
 
-    public void save(Question newQuestion) {
-        newQuestion.setQuestionId(questionList.size() + 1);
-        questionList.add(newQuestion);
+    public void save(Question question) {
+        question.setQuestionId(questionList.size() + 1);
+
+        questionList.add(question);
     }
 
     public List<Question> getAll() {

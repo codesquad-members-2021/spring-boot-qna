@@ -17,12 +17,7 @@ public class QuestionController {
     QuestionRepository questionRepository;
 
     @PostMapping
-    public String createQuestion(Question question) {
-        Question newQuestion = new Question();
-
-        newQuestion.setWriter(question.getWriter());
-        newQuestion.setTitle(question.getTitle());
-        newQuestion.setContents(question.getContents());
+    public String createQuestion(Question newQuestion) {
 
         questionRepository.save(newQuestion);
 
