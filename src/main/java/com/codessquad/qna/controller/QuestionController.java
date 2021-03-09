@@ -34,7 +34,7 @@ public class QuestionController {
         return "/qna/form";
     }
 
-    @PostMapping("")
+    @PostMapping
     public String create(String title, String contents, HttpSession session) {
         if (!isLoginUser(session)) {
             throw new FailedUserLoginException();
@@ -53,16 +53,14 @@ public class QuestionController {
 
     @GetMapping("/{id}/form")
     public String updateForm(@PathVariable Long id, Model model, HttpSession session) {
-        Question question = questionService.findQuestion(id);
-        checkPermission(session, question);
+        Question question = questionService.findQuestion(id, session);
         model.addAttribute("question", question);
         return "/qna/updateForm";
     }
 
     @PutMapping("/{id}")
     public String update(@PathVariable Long id, String title, String contents, Model model, HttpSession session) {
-        Question question = questionService.findQuestion(id);
-        checkPermission(session, question);
+        Question question = questionService.findQuestion(id, session);
         question.update(title, contents);
         questionService.create(question);
         return String.format("redirect:/questions/%d", id);
@@ -70,20 +68,9 @@ public class QuestionController {
 
     @DeleteMapping("/{id}")
     public String delete(@PathVariable Long id, HttpSession session) {
-        Question question = questionService.findQuestion(id);
-        checkPermission(session, question);
+        Question question = questionService.findQuestion(id, session);
         questionService.delete(question);
         return "redirect:/";
-    }
-
-    private void checkPermission(HttpSession session, Question question) {
-        if (!isLoginUser(session)) {
-            throw new FailedUserLoginException();
-        }
-        User loginUser = getSessionUser(session);
-        if (question.isNotSameAuthor(loginUser)) {
-            throw new IllegalUserAccessException();
-        }
     }
 }
 
