@@ -35,7 +35,7 @@ public class QuestionController {
         questionRepository.save(question);
         model.addAttribute(question);
 
-        logger.debug("question : {} ", question.toString());
+        logger.debug("question : {} ", question);
 
         return "redirect:/";
     }
@@ -56,7 +56,7 @@ public class QuestionController {
 
         model.addAttribute("question", question.get());
 
-        logger.debug("question : {} ", question.toString());
+        logger.debug("question : {} ", question);
 
         return "/qna/show";
     }
