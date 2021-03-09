@@ -13,6 +13,8 @@ import java.util.List;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @EqualsAndHashCode(of = {"id"})
 public class Question {
+    public static final String QUESTION_DATETIME_FORMAT = "yyyy.MM.dd HH:mm";
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -41,7 +43,7 @@ public class Question {
         if (date == null) {
             return "";
         }
-        return date.format(DateTimeFormatter.ofPattern("yyyy.MM.dd HH:mm"));
+        return date.format(DateTimeFormatter.ofPattern(QUESTION_DATETIME_FORMAT));
     }
 
     public void update(String title, String contents) {

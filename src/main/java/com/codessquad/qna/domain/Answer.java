@@ -12,6 +12,8 @@ import java.time.format.DateTimeFormatter;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @EqualsAndHashCode(of = {"id"})
 public class Answer {
+    public static final String ANSWER_DATETIME_FORMAT = "yyyy.MM.dd HH:mm";
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -40,7 +42,7 @@ public class Answer {
         if (date == null) {
             return "";
         }
-        return date.format(DateTimeFormatter.ofPattern("yyyy.MM.dd HH:mm"));
+        return date.format(DateTimeFormatter.ofPattern(ANSWER_DATETIME_FORMAT));
     }
 }
 
