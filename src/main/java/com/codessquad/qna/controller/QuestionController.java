@@ -1,7 +1,9 @@
 package com.codessquad.qna.controller;
 
 import com.codessquad.qna.domain.*;
-import com.codessquad.qna.exception.NotLoginException;
+import com.codessquad.qna.exception.NotFoundException;
+import com.codessquad.qna.exception.NotLoggedInException;
+import com.codessquad.qna.exception.UnauthorizedAccessException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -9,7 +11,6 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpSession;
 import java.time.LocalDateTime;
-import java.util.Optional;
 
 @Controller
 @RequestMapping("/questions")
@@ -27,18 +28,15 @@ public class QuestionController {
     @GetMapping("/form")
     public String questionForm(HttpSession session) {
         if (!HttpSessionUtils.isLogined(session)) {
-            return "redirect:/users/login";
+            throw new NotLoggedInException();
         }
         return "qna/form";
     }
 
     @PostMapping()
     public String query(Question question, HttpSession session) {
-        if (!HttpSessionUtils.isLogined(session)) {
-            return "redirect:/users/login";
-        }
         User sessionUser = HttpSessionUtils.getUserFromSession(session)
-                .orElseThrow(NotLoginException::new);
+                .orElseThrow(NotLoggedInException::new);
         question.setWriter(sessionUser);
         question.setTime(LocalDateTime.now());
         question.setPoint(0);
@@ -48,12 +46,9 @@ public class QuestionController {
 
     @GetMapping("/{id}")
     public ModelAndView qnaShow(@PathVariable("id") Long id) {
-        Optional<Question> questionOptional = questionRepository.findById(id);
-        if (!questionOptional.isPresent()) {
-            return new ModelAndView("redirect:/");
-        }
+        Question question = questionRepository.findById(id)
+                .orElseThrow(NotFoundException::new);
         ModelAndView modelAndView = new ModelAndView("qna/show");
-        Question question = questionOptional.get();
         modelAndView.addObject("question", question);
         modelAndView.addObject("comments", answerRepository.findAllByQuestion(question));
         modelAndView.addObject("commentsSize", answerRepository.countByQuestion(question));
@@ -63,12 +58,10 @@ public class QuestionController {
     @GetMapping("/{id}/form")
     public ModelAndView updateForm(@PathVariable("id") Long id, HttpSession session) {
         User sessionUser = HttpSessionUtils.getUserFromSession(session)
-                .orElseThrow(NotLoginException::new);
+                .orElseThrow(NotLoggedInException::new);
         Question question = questionRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 질문"));
-        if (!question.isWriter(sessionUser)) {
-            return new ModelAndView("redirect:/questions/unauthorized");
-        }
+                .orElseThrow(NotFoundException::new);
+        matchesQuestionWriterWithUser(question, sessionUser);
         ModelAndView modelAndView = new ModelAndView("/qna/update_form");
         modelAndView.addObject("question", question);
         return modelAndView;
@@ -77,12 +70,10 @@ public class QuestionController {
     @PutMapping("/{id}")
     public String update(@PathVariable("id") Long id, Question updatedQuestion, HttpSession session) {
         User sessionUser = HttpSessionUtils.getUserFromSession(session)
-                .orElseThrow(NotLoginException::new);
+                .orElseThrow(NotLoggedInException::new);
         Question question = questionRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 질문"));
-        if (!question.isWriter(sessionUser)) {
-            return "redirect:/questions/unauthorized";
-        }
+                .orElseThrow(NotFoundException::new);
+        matchesQuestionWriterWithUser(question, sessionUser);
         question.updateContents(updatedQuestion);
         questionRepository.save(question);
         return "redirect:/questions/" + id;
@@ -91,32 +82,25 @@ public class QuestionController {
     @DeleteMapping("/{id}")
     public String delete(@PathVariable("id") Long id, HttpSession session) {
         User sessionUser = HttpSessionUtils.getUserFromSession(session)
-                .orElseThrow(NotLoginException::new);
-        Question question = questionRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 질문"));
-        if (!question.isWriter(sessionUser)) {
-            return "redirect:/questions/unauthorized";
-        }
-        questionRepository.deleteById(id);
+                .orElseThrow(NotLoggedInException::new);
+        questionRepository.findById(id)
+                .ifPresent(question -> {
+                    matchesQuestionWriterWithUser(question, sessionUser);
+                    questionRepository.deleteById(id);
+                });
         return "redirect:/";
-    }
-
-    @GetMapping("/unauthorized")
-    public String unauthorized() {
-        return "qna/unauthorized";
     }
 
     @PostMapping("/{id}/answers")
     public String answer(@PathVariable("id") Long id, Answer answer, HttpSession session){
         User writer = HttpSessionUtils.getUserFromSession(session)
-                .orElseThrow(NotLoginException::new);
-        questionRepository.findById(id)
-                .ifPresent(question -> {
-                    answer.setQuestion(question);
-                    answer.setWriter(writer);
-                    answer.setTime(LocalDateTime.now());
-                    answerRepository.save(answer);
-                });
+                .orElseThrow(NotLoggedInException::new);
+        Question question = questionRepository.findById(id)
+                .orElseThrow(NotFoundException::new);
+        answer.setQuestion(question);
+        answer.setWriter(writer);
+        answer.setTime(LocalDateTime.now());
+        answerRepository.save(answer);
         return "redirect:/questions/" + id;
     }
 
@@ -125,10 +109,10 @@ public class QuestionController {
                                @PathVariable("answerId") Long answerId,
                                HttpSession session) {
         User user = HttpSessionUtils.getUserFromSession(session)
-                .orElseThrow(NotLoginException::new);
-        answerRepository.findByIdAndQuestionIdAndWriter(answerId, questionId, user)
+                .orElseThrow(NotLoggedInException::new);
+        answerRepository.findByIdAndQuestionId(answerId, questionId)
+                .filter(answer -> answer.matchesWriter(user))
                 .ifPresent(answerRepository::delete);
-
         return "redirect:/questions/" + questionId;
     }
 
@@ -137,10 +121,9 @@ public class QuestionController {
                                          @PathVariable("answerId") Long answerId,
                                          HttpSession session) {
         User user = HttpSessionUtils.getUserFromSession(session)
-                .orElseThrow(NotLoginException::new);
+                .orElseThrow(NotLoggedInException::new);
         Answer answer = answerRepository.findByIdAndQuestionIdAndWriter(answerId, questionId, user)
-                .orElseThrow(() -> new IllegalStateException("잘못된 접근"));
-
+                .orElseThrow(NotFoundException::new);
         return new ModelAndView("qna/update_answer_form", "answer", answer);
     }
 
@@ -150,14 +133,25 @@ public class QuestionController {
                                Answer updatedAnswer,
                                HttpSession session) {
         User user = HttpSessionUtils.getUserFromSession(session)
-                .orElseThrow(NotLoginException::new);
-        answerRepository.findByIdAndQuestionIdAndWriter(answerId, questionId, user)
-                .ifPresent(answer -> {
-                    answer.updateAnswer(updatedAnswer);
-                    answerRepository.save(answer);
-                });
-
+                .orElseThrow(NotLoggedInException::new);
+        Answer answer = answerRepository.findByIdAndQuestionId(answerId, questionId)
+                .orElseThrow(NotFoundException::new);
+        matchesAnswerWriterWithUser(answer, user);
+        answer.updateAnswer(updatedAnswer);
+        answerRepository.save(answer);
         return "redirect:/questions/" + questionId;
+    }
+
+    private void matchesAnswerWriterWithUser(Answer answer, User user) throws UnauthorizedAccessException{
+        if (!answer.matchesWriter(user)) {
+            throw new UnauthorizedAccessException();
+        }
+    }
+
+    private void matchesQuestionWriterWithUser(Question question, User sessionUser) throws UnauthorizedAccessException {
+        if (!question.isWriter(sessionUser)) {
+            throw new UnauthorizedAccessException();
+        }
     }
 
 }

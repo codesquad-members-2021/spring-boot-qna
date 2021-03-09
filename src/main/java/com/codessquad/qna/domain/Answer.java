@@ -63,4 +63,8 @@ public class Answer {
         this.comment = updatedAnswer.comment;
         this.time = LocalDateTime.now();
     }
+
+    public boolean matchesWriter(User user) {
+        return writer.equals(user);
+    }
 }

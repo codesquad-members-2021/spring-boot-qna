@@ -3,7 +3,7 @@ package com.codessquad.qna.controller;
 import com.codessquad.qna.domain.User;
 import com.codessquad.qna.domain.UserRepository;
 import com.codessquad.qna.exception.LoginFailedException;
-import com.codessquad.qna.exception.NotLoginException;
+import com.codessquad.qna.exception.NotLoggedInException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -11,8 +11,6 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpSession;
 import java.util.Optional;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 @Controller
 @RequestMapping("/users")
@@ -52,7 +50,7 @@ public class UserController {
     @GetMapping("/{id}/form")
     public ModelAndView updateUserForm(@PathVariable("id") Long id, HttpSession session) {
         User sessionUser = HttpSessionUtils.getUserFromSession(session)
-                .orElseThrow(NotLoginException::new);
+                .orElseThrow(NotLoggedInException::new);
         if (!sessionUser.isMatchingId(id)) {
             throw new IllegalStateException("다른 유저의 정보를 수정할 수 없습니다.");
         }
@@ -63,7 +61,7 @@ public class UserController {
     @PutMapping("/{id}")
     public String updateUser(@PathVariable("id") Long id, String oldPassword, User newUserInfo, HttpSession session) {
         User sessionUser = HttpSessionUtils.getUserFromSession(session)
-                .orElseThrow(NotLoginException::new);
+                .orElseThrow(NotLoggedInException::new);
         if (!sessionUser.isMatchingId(id)) {
             throw new IllegalStateException("다른 유저의 정보를 수정할 수 없습니다.");
         }
