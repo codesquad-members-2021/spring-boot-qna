@@ -8,24 +8,25 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 public class GlobalExceptionHandler {
 
     @ExceptionHandler(UserNotFoundException.class)
-    protected String handleUserNotFoundException() {
+    private String handleUserNotFoundException() {
         return "redirect:/users/loginForm";
     }
 
     @ExceptionHandler(QuestionNotFoundException.class)
-    protected String handleQuestionNotFoundException() {
+    private String handleQuestionNotFoundException() {
         return "redirect:/";
     }
 
     @ExceptionHandler(IllegalUserAccessException.class)
-    protected String handleIllegalUserAccessException(Model model, IllegalUserAccessException e) {
+    private String handleIllegalUserAccessException(Model model, IllegalUserAccessException e) {
         model.addAttribute("errorMessage", e.getMessage());
         return "/user/login";
     }
 
     @ExceptionHandler(FailedUserLoginException.class)
-    public String handleFailedUserLoginException(Model model, FailedUserLoginException e) {
+    private String handleFailedUserLoginException(Model model, FailedUserLoginException e) {
         model.addAttribute("errorMessage", e.getMessage());
         return "/user/login";
     }
 }
+
