@@ -1,28 +1,29 @@
-package com.codessquad.qna.web;
+package com.codessquad.qna.domain;
 
-import java.util.Date;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import java.time.LocalDateTime;
 
+@Entity
 public class Qna {
+    @Id
+    @GeneratedValue
+    private long id;
 
-    private int id;
     private String writer;
+
+    @Column(nullable = false)
     private String title;
     private String contents;
-    private Date date;
+    private LocalDateTime date;
 
-    public Qna(int id, String writer, String title, String contents) {
-        this.id = id;
-        this.writer = writer;
-        this.title = title;
-        this.contents = contents;
-        this.date = new Date();
-    }
-
-    public int getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(long id) {
         this.id = id;
     }
 
@@ -50,11 +51,11 @@ public class Qna {
         this.contents = contents;
     }
 
-    public Date getDate() {
+    public LocalDateTime getDate() {
         return date;
     }
 
-    public void setDate(Date date) {
+    public void setDate(LocalDateTime date) {
         this.date = date;
     }
 
