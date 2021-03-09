@@ -53,14 +53,14 @@ public class QuestionController {
 
     @GetMapping("/{id}/form")
     public String updateForm(@PathVariable Long id, Model model, HttpSession session) {
-        Question question = questionService.findQuestion(id, session);
+        Question question = questionService.findVerifiedQuestion(id, session);
         model.addAttribute("question", question);
         return "/qna/updateForm";
     }
 
     @PutMapping("/{id}")
     public String update(@PathVariable Long id, String title, String contents, Model model, HttpSession session) {
-        Question question = questionService.findQuestion(id, session);
+        Question question = questionService.findVerifiedQuestion(id, session);
         question.update(title, contents);
         questionService.create(question);
         return String.format("redirect:/questions/%d", id);
@@ -68,7 +68,7 @@ public class QuestionController {
 
     @DeleteMapping("/{id}")
     public String delete(@PathVariable Long id, HttpSession session) {
-        Question question = questionService.findQuestion(id, session);
+        Question question = questionService.findVerifiedQuestion(id, session);
         questionService.delete(question);
         return "redirect:/";
     }
