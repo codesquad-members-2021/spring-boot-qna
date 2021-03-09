@@ -40,11 +40,19 @@ public class UserService {
     public boolean update(User user, String newPassword) {
         UserValidation.validUserInfo(user);
         User getUser = findById(user.getId());
-        if (getUser.checkPassword(user)) {
+        if (getUser.checkPassword(user.getPassword())) {
             getUser.updateUserInfo(user, newPassword);
             return true;
         }
         return false;
+    }
+
+    public User login(String userId, String password) {
+        User findUser = userRepository.findByUserId(userId);
+        if (findUser != null && findUser.checkPassword(password)) {
+            return findUser;
+        }
+        return null;
     }
 
 }
