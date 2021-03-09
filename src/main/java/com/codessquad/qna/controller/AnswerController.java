@@ -30,7 +30,7 @@ public class AnswerController {
         this.answerService = answerService;
     }
 
-    @PostMapping("")
+    @PostMapping
     public String create(@PathVariable Long questionId, String contents, HttpSession session) {
         if (!isLoginUser(session)) {
             throw new FailedUserLoginException();
@@ -41,4 +41,3 @@ public class AnswerController {
         return String.format("redirect:/questions/%d", questionId);
     }
 }
-
