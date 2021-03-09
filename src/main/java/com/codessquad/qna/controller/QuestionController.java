@@ -19,7 +19,9 @@ public class QuestionController {
     @PostMapping
     public String createQuestion(Question newQuestion) {
 
-        questionRepository.save(newQuestion);
+        if (!questionRepository.save(newQuestion)){
+            return "/questions/form";
+        }
 
         return "redirect:/";
     }

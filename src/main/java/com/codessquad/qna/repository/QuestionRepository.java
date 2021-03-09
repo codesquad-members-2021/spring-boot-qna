@@ -10,10 +10,10 @@ import java.util.List;
 public class QuestionRepository {
     private final List<Question> questions = new ArrayList<>();
 
-    public void save(Question question) {
+    public boolean save(Question question) {
         question.setQuestionId(questions.size() + 1);
 
-        questions.add(question);
+        return questions.add(question);
     }
 
     public List<Question> getAll() {

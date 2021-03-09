@@ -25,12 +25,14 @@ public class UserController {
             return "redirect:/users";
         }
 
-        userRepository.save(newUser);
-
+        if(!userRepository.save(newUser)){
+            return "users/form";
+        }
         return "redirect:/users";
     }
 
-    private boolean isRedundant(User user) {
+    // TODO: userRepository.isRedundant 다른 걸로 대체할 수 있을 거 같아
+   private boolean isRedundant(User user) {
         return userRepository.isRedundant(user.getUserId());
     }
 
@@ -69,7 +71,8 @@ public class UserController {
     }
 
     private boolean isValidPassword(String real, String expected) {
-        return real.equals(expected);
+        if (real.equals(expected)) return true;
+        else return false;
     }
 
     private void updateUserProperties(User presentUser, User referenceUser) {

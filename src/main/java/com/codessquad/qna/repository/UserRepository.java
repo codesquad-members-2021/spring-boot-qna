@@ -10,8 +10,8 @@ import java.util.List;
 public class UserRepository {
     private final List<User> users = new ArrayList<>();
 
-    public void save(User user) {
-        users.add(user);
+    public boolean save(User user) {
+        return users.add(user);
     }
 
     public List<User> getAll() {
@@ -30,7 +30,7 @@ public class UserRepository {
                 .anyMatch(user -> user.getUserId().equals(targetId));
     }
 
-    public void deleteOne(User user) {
-        users.remove(user);
+    public boolean deleteOne(User user) {
+        return users.remove(user);
     }
 }
