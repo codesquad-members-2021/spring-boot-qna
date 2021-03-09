@@ -90,7 +90,7 @@ public class UserController {
         return "users/updateForm";
     }
 
-
+    /*
     @PostMapping("{userId}")
     public String updddd(@PathVariable String userId,User newUser) {
         User oldUser = getUserByUserId(userId);
@@ -102,6 +102,8 @@ public class UserController {
         }
         return "redirect:/users";
     }
+    */
+
     private boolean is_sameUser(User u1, User u2) {
         return u1.getUserId().equals(u2.getUserId());
     }
