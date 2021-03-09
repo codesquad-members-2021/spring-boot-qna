@@ -2,8 +2,6 @@ package com.codessquad.qna.controller;
 
 import com.codessquad.qna.domain.User;
 import com.codessquad.qna.repository.UserRepository;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -14,7 +12,7 @@ import java.util.List;
 
 @Controller
 public class UserController {
-    UserRepository userRepository = new UserRepository();
+    UserRepository userRepository;
 
     @PostMapping("/users")
     public String createUser(User referenceUser) {
