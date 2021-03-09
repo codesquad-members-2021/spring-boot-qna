@@ -26,9 +26,7 @@ public class UserController {
         if (user == null) {
             return "redirect:/";
         }
-
         model.addAttribute(user);
-
         return "/user/profile";
     }
 
@@ -38,7 +36,7 @@ public class UserController {
         return "/user/list";
     }
 
-    @PostMapping("/create")
+    @PostMapping()
     public String create(User user) {
         logger.info("user: {}", user);
 
@@ -47,22 +45,23 @@ public class UserController {
         return "redirect:/users";
     }
 
-    @GetMapping("{userId}/form")
+    @GetMapping("{userId}/info")
     public String form(@PathVariable String userId, Model model) {
         User user = findUserById(userId);
-        if (user != null) {
-            model.addAttribute(user);
-            return "/user/updateForm";
+        if (user == null) {
+            return "redirect:/users";
         }
-        return "redirect:/users";
+        model.addAttribute(user);
+        return "/user/updateForm";
     }
 
-    @PostMapping("{userId}/update")
+    @PostMapping("{userId}/info")
     public String update(@PathVariable String userId, User userToUpdate) {
         User user = findUserById(userId);
-        if (user != null) {
-            user.update(userToUpdate);
+        if (user == null) {
+            return "redirect:/users";
         }
+        user.update(userToUpdate);
         return "redirect:/users";
     }
 
