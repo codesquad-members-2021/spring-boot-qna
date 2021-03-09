@@ -33,7 +33,7 @@ public class UserController {
     public String signUp(User user) {
         boolean result = this.userService.save(user);
         logger.info("회원가입 요청");
-        return result ? "redirect:/user/list" : "redirect:/user/singUp";
+        return result ? "redirect:/user/list" : "redirect:/user/form";
     }
 
     @GetMapping("/user/login")
@@ -44,14 +44,15 @@ public class UserController {
 
     @PostMapping("/user/login")
     public String login(String userId, String password, HttpSession session) {
-        boolean isLogin = this.userService.login(userId, password, session);
+        User loginUser = this.userService.login(userId, password);
+        session.setAttribute("loginUser", loginUser);
         logger.info("로그인 요청");
-        return isLogin ? "redirect:/" : "redirect:/user/login_failed";
+        return (loginUser.getId() != null) ? "redirect:/" : "redirect:/user/login_failed";
     }
 
     @GetMapping("/user/logout")
     public String logout(HttpSession session) {
-        session.removeAttribute("user");
+        session.removeAttribute("loginUser");
         logger.info("로그아웃 요청");
         return "redirect:/";
     }
@@ -72,16 +73,16 @@ public class UserController {
     }
 
     @GetMapping("/user/{id}/update")
-    public String viewUpdateProfile(@PathVariable("id") Long id, Model model) {
-        User user = this.userService.findById(id);
+    public String viewUpdateProfile(@PathVariable("id") Long id, Model model, HttpSession session) {
+        User user = this.userService.verifyUser(id, session);
         model.addAttribute("user", user);
         logger.info("유저 정보 수정 페이지 요청");
         return (user.getId() != null) ? "user/updateForm" : "redirect:/user/list";
     }
 
     @PutMapping("/user/{id}/update")
-    public String updateProfile(@PathVariable("id") Long id, User user, String oldPassword) {
-        boolean result = this.userService.update(id, user, oldPassword);
+    public String updateProfile(@PathVariable("id") Long id, User user, String oldPassword, HttpSession session) {
+        boolean result = this.userService.update(id, user, oldPassword, session);
         logger.info("유저 정보 수정 요청");
         return result ? "redirect:/user/list" : "redirect:/user/" + id + "/update";
     }
