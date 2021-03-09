@@ -15,4 +15,10 @@ public class HelloController {
         return "welcome";
     }
 
+    @GetMapping("/")
+    public String welcomepage() {
+
+        return "index";
+    }
+
 }
