@@ -3,16 +3,12 @@ package com.codessquad.qna.web.controller;
 import com.codessquad.qna.web.domain.user.User;
 
 import com.codessquad.qna.web.domain.user.UserRepository;
-import com.codessquad.qna.web.exception.UserNotFoundException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
 @RequestMapping("/users")
@@ -47,25 +43,13 @@ public class UserController {
         return mav;
     }
 
-    @PostMapping("/{userId}/update")
-    public String updateProfile(User updatedUser, String oldPassword){
-        for(int i = 0; i < users.size(); i++){
-            User user = users.get(i);
-            if (user.isMatchingPassword(oldPassword)) {
-                users.set(i, updatedUser);
-                break;
-            }
+    @PutMapping("/{id}/update")
+    public String updateProfile(@PathVariable long id, User updatedUser, String oldPassword) {
+        User user = userRepository.findById(id).get();
+        if(user.isMatchingUserId(updatedUser.getUserId())){
+            userRepository.save(updatedUser);
         }
         return "redirect:/users";
-    }
-
-    private User findUserById(String userId){
-        for(User user : users){
-            if(user.isMatchingUserId(userId)){
-                return user;
-            }
-        }
-        throw new UserNotFoundException(userId);
     }
 
 }
