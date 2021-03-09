@@ -1,4 +1,4 @@
-package com.codessquad.qna.web.qna;
+package com.codessquad.qna.web.questions;
 
 import com.codessquad.qna.web.users.User;
 
