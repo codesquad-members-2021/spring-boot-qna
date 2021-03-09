@@ -1,7 +1,6 @@
 package com.codessquad.qna.controller;
 
 import com.codessquad.qna.domain.Question;
-import com.codessquad.qna.domain.User;
 import com.codessquad.qna.repository.QuestionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -28,10 +27,18 @@ public class QuestionController {
         return getQuestionRepository("/qna/show", id);
     }
 
-    @PostMapping("/questions")
+    @PostMapping("/questions/create")
     public String createQuestion(Question question) {
         questionRepository.save(question);
         return "redirect:/";
+    }
+
+    @PostMapping("/questions")
+    public String checkNull(Question question) {
+        if (question == null) {
+            return "redirect:/";
+        }
+        return "/questions/create";
     }
 
     private ModelAndView getQuestionRepository(String viewName, Long id) {
