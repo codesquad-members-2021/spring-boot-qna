@@ -8,6 +8,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpSession;
 import java.util.List;
 
 @Controller
@@ -54,9 +55,23 @@ public class UserController {
         if (userService.update(user, newPassword)) {
             return "redirect:/";
         }
-        model.addAttribute("fail",true);
+        model.addAttribute("fail", true);
         return "user/userUpdateForm";
     }
 
+    @GetMapping("/loginForm")
+    public String loginForm() {
+        return "/user/login";
+    }
+
+    @PostMapping("/login")
+    public String login(String userId, String password, HttpSession session) {
+        User findUser = userService.login(userId, password);
+        if (findUser == null) {
+            return "redirect:/users/loginForm";
+        }
+        session.setAttribute("user", findUser);
+        return "redirect:/";
+    }
 
 }
