@@ -9,16 +9,12 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
 
 @Controller
 public class UserController {
     @Autowired // 생성자나 세터 등을 사용하여 의존성 주입을 하려고 할 때, 해당 빈을 찾아서 주입?? 나중에 공부하자
     private UserRepository userRepository;
-
-    private List<User> userList = new ArrayList<>();
 
     @PostMapping("/user/create")
     private String register(User user) {
