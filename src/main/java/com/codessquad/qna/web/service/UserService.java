@@ -34,11 +34,10 @@ public class UserService {
     }
 
     public User findUser(String userId) {
-        Optional<User> foundUser = userRepository.findByUserId(userId);
-        if (!foundUser.isPresent()) {
-            throw new IllegalStateException("찾는 아이디가 없습니다");
-        }
-        return foundUser.get();
+        return userRepository
+                .findByUserId(userId)
+                .orElseThrow(()-> new IllegalStateException("찾는 아이디가 없습니다"));
+
     }
 
     public void updateUser(User user) {

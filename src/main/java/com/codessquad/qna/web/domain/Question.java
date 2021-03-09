@@ -10,7 +10,7 @@ public class Question {
     private String writer;
     private String title;
     private String contents;
-    private LocalDateTime createdDate = LocalDateTime.now();
+    private LocalDateTime createdDateTime = LocalDateTime.now();
 
     public void setIndex(int index) {
         this.index = index;
@@ -29,7 +29,7 @@ public class Question {
     }
 
     public void setCreatedDate() {
-        this.createdDate = LocalDateTime.now();
+        this.createdDateTime = LocalDateTime.now();
     }
 
     public int getIndex() {
@@ -49,9 +49,9 @@ public class Question {
     }
 
     public String getFormattedCreatedDate() {
-        if (createdDate == null) {
+        if (createdDateTime == null) {
             return "";
         }
-        return createdDate.format(DATE_TIME_FORMATTER);
+        return createdDateTime.format(DATE_TIME_FORMATTER);
     }
 }
