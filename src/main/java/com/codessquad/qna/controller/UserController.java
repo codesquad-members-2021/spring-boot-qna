@@ -41,7 +41,7 @@ public class UserController {
         List<User> users = userRepository.getAll();
 
         model.addAttribute("users", users);
-        return "users/list";
+        return "/users/list";
     }
 
     @GetMapping("/{userId}")
@@ -49,13 +49,13 @@ public class UserController {
         User targetUser = userRepository.getOne(targetId);
         model.addAttribute("user", targetUser);
 
-        return "users/profile";
+        return "/users/profile";
     }
 
     @GetMapping("/{userId}/form")
     public String createUpdateForm(@PathVariable(name = "userId") String targetId, Model model) {
         model.addAttribute("userId", targetId);
-        return "users/update";
+        return "/users/update";
     }
 
     @PostMapping("/{userId}/update")
