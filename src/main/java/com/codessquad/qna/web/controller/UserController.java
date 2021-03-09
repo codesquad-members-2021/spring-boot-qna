@@ -4,7 +4,6 @@ import com.codessquad.qna.web.domain.user.User;
 
 import com.codessquad.qna.web.domain.user.UserRepository;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -49,8 +48,9 @@ public class UserController {
     @PutMapping("/{id}/update")
     public String updateProfile(@PathVariable long id, User updatedUser, String oldPassword) {
         User user = userRepository.findById(id).get();
-        if(user.isMatchingUserId(updatedUser.getUserId())){
-            userRepository.save(updatedUser);
+        if(user.isMatchingPassword(oldPassword)){
+            user.update(updatedUser);
+            userRepository.save(user);
         }
         return "redirect:/users";
     }

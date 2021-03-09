@@ -60,8 +60,10 @@ public class User {
         return this.password.equals(password);
     }
 
-    public boolean isMatchingUserId(String userId){
-        return this.userId.equals(userId);
+    public void update(User user){
+        this.password = user.password;
+        this.name = user.name;
+        this.email = user.email;
     }
 
     @Override
