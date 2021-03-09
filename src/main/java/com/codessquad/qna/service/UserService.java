@@ -1,6 +1,7 @@
 package com.codessquad.qna.service;
 
 import com.codessquad.qna.domain.User;
+import com.codessquad.qna.exception.UserNotFoundException;
 import com.codessquad.qna.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -27,11 +28,11 @@ public class UserService {
     }
 
     public User findUser(Long id) {
-        return userRepository.findById(id).orElseThrow(RuntimeException::new);
+        return userRepository.findById(id).orElseThrow(UserNotFoundException::new);
     }
 
     public User findByUserId(String userId) {
-        return userRepository.findByUserId(userId);
+        return userRepository.findByUserId(userId).orElseThrow(UserNotFoundException::new);
     }
 }
 
