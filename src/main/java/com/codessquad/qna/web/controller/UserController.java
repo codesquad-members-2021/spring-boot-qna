@@ -7,7 +7,6 @@ import com.codessquad.qna.web.domain.user.UserRepository;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.ModelAndView;
 
 @Controller
 @RequestMapping("/users")
@@ -32,17 +31,15 @@ public class UserController {
     }
 
     @GetMapping("/{id}")
-    public ModelAndView show(@PathVariable long id) {
-        ModelAndView mav = new ModelAndView("user/profile");
-        mav.addObject("user", userRepository.findById(id).get());
-        return mav;
+    public String show(@PathVariable long id, Model model) {
+        model.addAttribute("user", userRepository.findById(id).get());
+        return "user/profile";
     }
 
     @GetMapping("/{id}/form")
-    public ModelAndView updateForm(@PathVariable long id) {
-        ModelAndView mav = new ModelAndView("user/updateForm");
-        mav.addObject("user", userRepository.findById(id).get());
-        return mav;
+    public String updateForm(@PathVariable long id, Model model) {
+        model.addAttribute("user", userRepository.findById(id).get());
+        return "user/updateForm";
     }
 
     @PutMapping("/{id}/update")

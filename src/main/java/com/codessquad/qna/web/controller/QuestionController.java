@@ -2,13 +2,11 @@ package com.codessquad.qna.web.controller;
 
 import com.codessquad.qna.web.domain.question.QuestionRepository;
 import com.codessquad.qna.web.domain.question.Question;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.servlet.ModelAndView;
 
 @Controller
 public class QuestionController {
@@ -26,18 +24,16 @@ public class QuestionController {
     }
 
     @GetMapping("/questions/{id}")
-    public ModelAndView getQuestionDetail(@PathVariable long id){
-        ModelAndView mav = new ModelAndView("/qna/show");
-        mav.addObject("question", questionRepository.findById(id).get());
-        return mav;
+    public String getQuestionDetail(@PathVariable long id, Model model){
+        model.addAttribute("question", questionRepository.findById(id).get());
+        return "/qna/show";
     }
 
 
     @GetMapping("/")
-    public ModelAndView getHome(){
-        ModelAndView mav = new ModelAndView("index");
-        mav.addObject("questions", questionRepository.findAll());
-        return mav;
+    public String getHome(Model model){
+        model.addAttribute("questions", questionRepository.findAll());
+        return "index";
     }
 
     @ExceptionHandler(IllegalArgumentException.class)
