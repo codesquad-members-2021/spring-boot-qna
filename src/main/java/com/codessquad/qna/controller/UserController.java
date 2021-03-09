@@ -61,26 +61,26 @@ public class UserController {
 
     @GetMapping("/{id}")
     public String profile(@PathVariable Long id, Model model) {
-            User user = userService.findUser(id);
-            model.addAttribute("user", user);
-            return "user/profile";
+        User user = userService.findUser(id);
+        model.addAttribute("user", user);
+        return "user/profile";
     }
 
     @GetMapping("/{id}/form")
     public String updateForm(@PathVariable Long id, Model model, HttpSession session) {
-            checkPermission(id, session);
-            User user = userService.findUser(id);
-            model.addAttribute("user", user);
-            return "user/updateForm";
+        checkPermission(id, session);
+        User user = userService.findUser(id);
+        model.addAttribute("user", user);
+        return "user/updateForm";
     }
 
     @PutMapping("/{id}")
     public String update(@PathVariable Long id, User updatedUser, Model model, HttpSession session) {
-            checkPermission(id, session);
-            User user = userService.findUser(id);
-            user.update(updatedUser);
-            userService.join(user);
-            return "redirect:/users";
+        checkPermission(id, session);
+        User user = userService.findUser(id);
+        user.update(updatedUser);
+        userService.join(user);
+        return "redirect:/users";
     }
 
     private void checkPermission(Long id, HttpSession session) {

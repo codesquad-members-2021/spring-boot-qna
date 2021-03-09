@@ -5,3 +5,4 @@ public class FailedUserLoginException extends RuntimeException {
         super("로그인이 필요합니다.");
     }
 }
+

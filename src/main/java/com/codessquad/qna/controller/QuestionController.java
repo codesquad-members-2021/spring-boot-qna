@@ -86,7 +86,5 @@ public class QuestionController {
             throw new IllegalUserAccessException();
         }
     }
-
-
 }
 
