@@ -13,8 +13,11 @@ import org.springframework.web.servlet.ModelAndView;
 @Controller
 public class QuestionController {
 
-    @Autowired
-    private QuestionRepository questionRepository;
+    private final QuestionRepository questionRepository;
+
+    public QuestionController(QuestionRepository questionRepository) {
+        this.questionRepository = questionRepository;
+    }
 
     @PostMapping("/questions")
     public String create(Question question){
