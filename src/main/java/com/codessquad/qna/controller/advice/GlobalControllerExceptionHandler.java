@@ -5,6 +5,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.servlet.ModelAndView;
 
 @ControllerAdvice
 public class GlobalControllerExceptionHandler {
@@ -16,8 +17,8 @@ public class GlobalControllerExceptionHandler {
 
     @ResponseStatus(HttpStatus.UNAUTHORIZED)
     @ExceptionHandler(LoginFailedException.class)
-    public String handleLoginFailed() {
-        return "users/loginFailed";
+    public ModelAndView handleLoginFailed() {
+        return new ModelAndView("users/login", "loginFailed", true);
     }
 
     @ResponseStatus(HttpStatus.NOT_FOUND)
@@ -30,5 +31,11 @@ public class GlobalControllerExceptionHandler {
     @ExceptionHandler(UnauthorizedAccessException.class)
     public String handleUnauthorizedAccess() {
         return "error/401";
+    }
+
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(UserExistException.class)
+    public ModelAndView handleUserExist() {
+        return new ModelAndView("users/form", "signUpFailed", true);
     }
 }
