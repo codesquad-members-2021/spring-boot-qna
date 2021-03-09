@@ -28,9 +28,8 @@ public class QuestionController {
 
     @GetMapping("/{questionId}")
     public String showQuestionInDetail(@PathVariable(name = "questionId") int targetId, Model model) {
-        Question targetQuestion = questionRepository.getOne(targetId);
 
-        model.addAttribute("question", targetQuestion);
+        model.addAttribute("question", questionRepository.getOne(targetId));
 
         return "/questions/show";
     }

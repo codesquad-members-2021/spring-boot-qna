@@ -45,8 +45,7 @@ public class UserController {
 
     @GetMapping("/{userId}")
     public String showUserInDetail(@PathVariable(name = "userId") String targetId, Model model) {
-        User targetUser = userRepository.getOne(targetId);
-        model.addAttribute("user", targetUser);
+        model.addAttribute("user", userRepository.getOne(targetId));
 
         return "/users/profile";
     }
