@@ -1,7 +1,6 @@
 package com.codessquad.qna.Controller;
 
 import com.codessquad.qna.domain.Question;
-import com.codessquad.qna.domain.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
