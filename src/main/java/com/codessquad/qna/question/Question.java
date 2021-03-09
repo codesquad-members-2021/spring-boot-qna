@@ -19,12 +19,16 @@ public class Question {
     private String title;
     @Column(nullable = false, length = 5000)
     private String contents;
-    private LocalDateTime createDateTime = LocalDateTime.now();
+    private LocalDateTime createDateTime;
 
-    public Question() {
+    protected Question() {
     }
 
-    public Question(String writer, String title, String contents, LocalDateTime createDateTime) {
+    public Question(String writer, String title, String contents) {
+        this(writer, title, contents, LocalDateTime.now());
+    }
+
+    private Question(String writer, String title, String contents, LocalDateTime createDateTime) {
         this.writer = writer;
         this.title = title;
         this.contents = contents;
@@ -53,40 +57,20 @@ public class Question {
         return id;
     }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
-
     public String getWriter() {
         return writer;
-    }
-
-    public void setWriter(String writer) {
-        this.writer = writer;
     }
 
     public String getTitle() {
         return title;
     }
 
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
     public String getContents() {
         return contents;
     }
 
-    public void setContents(String contents) {
-        this.contents = contents;
-    }
-
     public LocalDateTime getCreateDateTime() {
         return createDateTime;
-    }
-
-    public void setCreateDateTime(LocalDateTime createDateTime) {
-        this.createDateTime = createDateTime;
     }
 
     @Override
