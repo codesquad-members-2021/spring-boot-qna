@@ -141,4 +141,38 @@ public class QuestionController {
         return "redirect:/questions/" + questionId;
     }
 
+    @GetMapping("/{questionId}/answers/{answerId}/form")
+    public ModelAndView updateAnswerForm(@PathVariable("questionId") Long questionId,
+                                         @PathVariable("answerId") Long answerId,
+                                         HttpSession session) {
+        if (!HttpSessionUtils.isLogined(session)) {
+            //error
+            return new ModelAndView("redirect:/users/login");
+        }
+        User user = HttpSessionUtils.getUserFromSession(session);
+        Answer answer = answerRepository.findByIdAndQuestionIdAndWriter(answerId, questionId, user)
+                .orElseThrow(() -> new IllegalStateException("잘못된 접근"));
+
+        return new ModelAndView("qna/update_answer_form", "answer", answer);
+    }
+
+    @PutMapping("/{questionId}/answers/{answerId}")
+    public String updateAnswer(@PathVariable("questionId") Long questionId,
+                               @PathVariable("answerId") Long answerId,
+                               Answer updatedAnswer,
+                               HttpSession session) {
+        if (!HttpSessionUtils.isLogined(session)) {
+            //error
+            return "redirect:/users/login";
+        }
+        User user = HttpSessionUtils.getUserFromSession(session);
+        answerRepository.findByIdAndQuestionIdAndWriter(answerId, questionId, user)
+                .ifPresent(answer -> {
+                    answer.updateAnswer(updatedAnswer);
+                    answerRepository.save(answer);
+                });
+
+        return "redirect:/questions/" + questionId;
+    }
+
 }

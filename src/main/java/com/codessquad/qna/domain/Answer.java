@@ -59,11 +59,8 @@ public class Answer {
         this.time = time;
     }
 
-    public void updateComment(Answer updatedAnswer) {
+    public void updateAnswer (Answer updatedAnswer) {
         this.comment = updatedAnswer.comment;
-    }
-
-    public boolean isWriter(User user) {
-        return this.writer.equals(user);
+        this.time = LocalDateTime.now();
     }
 }
