@@ -98,6 +98,7 @@ public class UserController {
         return "redirect:/users";
     }
 
+    // TODO: 도메인 객체로 뺄 수 있다
     private boolean isEqualPassword(String real, String expected) {
         return real.equals(expected);
     }
@@ -106,7 +107,7 @@ public class UserController {
 
         referenceUser.setUserId(presentUser.getUserId());
 
-        // TODO: 반환값을 활용하여 예외 처리
+        // TODO: 반환값을 활용하여 예외 처리, 해당 메서드에 아래 로직은 어울리지 않는다.
         userRepository.delete(presentUser);
         userRepository.save(referenceUser);
     }
