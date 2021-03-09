@@ -4,6 +4,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 @Entity
 public class Question {
@@ -17,8 +18,8 @@ public class Question {
     private String contents;
     private LocalDateTime writeTime;
 
-    public LocalDateTime getWriteTime() {
-        return writeTime;
+    public String getWriteTime() {
+        return writeTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd hh:mm:ss"));
     }
 
     public void setWriteTime(LocalDateTime writeTime) {
