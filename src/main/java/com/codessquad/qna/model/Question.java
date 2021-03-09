@@ -26,6 +26,10 @@ public class Question {
     @Column(nullable = false)
     private Date date;
 
+    public boolean notNull() {
+        return this.id != null;
+    }
+
     public Long getId() {
         return id;
     }
