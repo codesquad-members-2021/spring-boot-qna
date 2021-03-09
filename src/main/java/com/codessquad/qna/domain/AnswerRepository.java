@@ -9,7 +9,5 @@ public interface AnswerRepository extends CrudRepository<Answer, Long> {
 
     int countByQuestion(Question question);
 
-    Optional<Answer> findByIdAndQuestionIdAndWriter(Long answerId, Long questionId, User user);
-
     Optional<Answer> findByIdAndQuestionId(Long answerId, Long questionId);
 }
