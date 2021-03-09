@@ -2,6 +2,7 @@ package com.codessquad.qna.service;
 
 import com.codessquad.qna.domain.Question;
 import com.codessquad.qna.repository.QuestionRepository;
+import com.codessquad.qna.valid.QuestionValidation;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -19,15 +20,9 @@ public class QuestionService {
 
     @Transactional
     public void write(Question question) {
-        validQuestion(question);
+        QuestionValidation.validQuestion(question);
         question.setWriteTime(LocalDateTime.now());
         questionRepository.save(question);
-    }
-
-    private void validQuestion(Question question) {
-        if (question.getWriter() == null || question.getTitle() == null || question.getContents() == null) {
-            throw new NullPointerException();
-        }
     }
 
     public Question findById(Long questionId) {
