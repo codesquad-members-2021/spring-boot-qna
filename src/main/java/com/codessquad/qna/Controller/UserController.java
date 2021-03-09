@@ -21,27 +21,54 @@ public class UserController {
     final private List<User> userList = new ArrayList<>();
 
     @GetMapping("users/form.html")
-    public String form() {
-        System.out.println(" form :: in");
+    public String signUpForm() {
+        logger.info("signUpForm >> users/form.html: in");
         return "users/form";
     }
 
     @PostMapping("/users/create")
-    public String create(User user) {
+    public String userCreate(User user) {
         userList.add(user);
-
-        return "redirect:/userslist";
+        return "redirect:/users/list";
     }
 
-
-
-    @GetMapping("/userslist")
+    @GetMapping("/users/list")
     public String list(Model model) {
-        System.out.println("userslist");
+        logger.info("userslist");
         model.addAttribute("userlist",userList);
-
         return "users/list";
     }
+    // 기능 1, 2 회원가입 및 기능 개발
+    //====================================================================
+
+
+    @GetMapping("/users/{userId}")
+    public String showProfile(@PathVariable String userId, Model model) {
+        User currentUser = getUserByUserId(userId);
+        model.addAttribute("user",currentUser);
+        logger.info("update User : " + currentUser.toString());
+        return "/users/profile";
+    }
+
+
+    public User getUserByUserId(String userId) {
+        for(User user: userList) {
+            if(user.getUserId().equals(userId)) {
+                return user;
+            }
+        }
+        return null;
+    }
+
+
+    // 기능 3 회원 프로필 정보 보기 기능 구현 완료
+    //====================================================================
+
+
+
+
+
+//====================================================================
 
     @GetMapping("/users/{userId}/form")
     public String updateForm(@PathVariable(name="userId") String userId, Model model) {
@@ -56,26 +83,9 @@ public class UserController {
 
         return "users/updateForm";
     }
+//====================================================================
 
 
 
-    @PostMapping("/users/{userId}")
-    public String update(@PathVariable String userId, Model model) {
-        User currentUser = getUserByUserId(userId);
-        model.addAttribute("user",currentUser);
-        logger.info("update User : " + currentUser.toString());
 
-        //업데이트를 하고 나서는 이동해야되니까 리다이렉트가 필요함
-        return "redirect:/userslist";
-    }
-
-
-    public User getUserByUserId(String userId) {
-        for(User user: userList) {
-            if(user.getUserId().equals(userId)) {
-                return user;
-            }
-        }
-        return null;
-    }
 }
