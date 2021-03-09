@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
+import java.util.Optional;
+
 @Controller
 public class QuestionController {
 
@@ -46,8 +48,13 @@ public class QuestionController {
 
     @GetMapping("/questions/{index}")
     public String getQuestionDetail(@PathVariable(("index")) long index, Model model) {
-        Question question = questionRepository.findById(index).get();
-        model.addAttribute("question", question);
+        Optional<Question> question = questionRepository.findById(index);
+
+        if (!question.isPresent()) {
+            return "redirect:/";
+        }
+
+        model.addAttribute("question", question.get());
 
         logger.debug("question : {} ", question.toString());
 
