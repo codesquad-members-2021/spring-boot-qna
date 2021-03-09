@@ -32,8 +32,8 @@ public class User {
         this.email = email;
     }
 
-    public static User of(Long id, User user) {
-        return new User(id, user.userId, user.password, user.name, user.email);
+    public static User of(User existedUser, User newUser) {
+        return new User(existedUser.id, existedUser.userId, newUser.password, newUser.name, newUser.email);
     }
 
     public static List<User> getDummyData() {
