@@ -2,35 +2,35 @@ package com.codessquad.qna.domain;
 
 public class Question {
 
-    private int id;
-    private String author;
+    private int index;
+    private String writer;
     private String title;
-    private String article;
+    private String contents;
 
     @Override
     public String toString() {
         return "Question{" +
-                "id=" + id +
-                ", author='" + author + '\'' +
+                "index=" + index +
+                ", writer='" + writer + '\'' +
                 ", title='" + title + '\'' +
-                ", article='" + article + '\'' +
+                ", contents='" + contents + '\'' +
                 '}';
     }
 
-    public int getId() {
-        return id;
+    public int getIndex() {
+        return index;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public void setIndex(int index) {
+        this.index = index;
     }
 
-    public String getAuthor() {
-        return author;
+    public String getWriter() {
+        return writer;
     }
 
-    public void setAuthor(String author) {
-        this.author = author;
+    public void setWriter(String writer) {
+        this.writer = writer;
     }
 
     public String getTitle() {
@@ -41,11 +41,11 @@ public class Question {
         this.title = title;
     }
 
-    public String getArticle() {
-        return article;
+    public String getContents() {
+        return contents;
     }
 
-    public void setArticle(String article) {
-        this.article = article;
+    public void setContents(String contents) {
+        this.contents = contents;
     }
 }
