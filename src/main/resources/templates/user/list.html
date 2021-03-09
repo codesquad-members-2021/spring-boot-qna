@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html lang="kr">
 <head>
-    {{> component/header}}
+    {{> partial/header}}
 </head>
 <body>
-    {{> component/navigation}}
+    {{> partial/navigation}}
     <div class="container" id="main">
        <div class="col-md-10 col-md-offset-1">
           <div class="panel panel-default">
@@ -21,11 +21,11 @@
                   <tbody>
                     {{#users}}
                     <tr>
-                        <th scope="row">1</th>
-                        <td><a href="/users/{{userId}}" role="button">{{userId}}</a></td>
+                        <th scope="row">{{id}}</th>
+                        <td><a href="/users/{{id}}" role="button">{{userId}}</a></td>
                         <td>{{name}}</td>
                         <td>{{email}}</td>
-                        <td><a href="/user/{{userId}}/form" class="btn btn-success" role="button">수정</a></td>
+                        <td><a href="/user/{{id}}/form" class="btn btn-success" role="button">수정</a></td>
                     </tr>
                     {{/users}}
                   </tbody>
@@ -33,6 +33,6 @@
             </div>
         </div>
     </div>
-    {{> component/script}}
+    {{> partial/script}}
 </body>
 </html>

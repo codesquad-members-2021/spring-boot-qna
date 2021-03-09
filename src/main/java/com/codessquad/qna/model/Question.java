@@ -1,21 +1,36 @@
 package com.codessquad.qna.model;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+@Entity
 public class Question {
 
-    private int id;
+    @Id
+    @GeneratedValue
+    private Long id;
+
+    @Column(nullable = false)
     private String writer;
+
+    @Column(nullable = false)
     private String title;
+
+    @Column(nullable = false)
     private String contents;
+
+    @Column(nullable = false)
     private Date date;
 
-    public int getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
