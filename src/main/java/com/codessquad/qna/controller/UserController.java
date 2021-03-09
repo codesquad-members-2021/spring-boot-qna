@@ -33,7 +33,7 @@ public class UserController {
     public String login(String userId, String password, HttpSession session) {
         User user = userService.findByUserId(userId);
         if (!user.matchPassword(password)) {
-            throw new FailedUserLoginException();
+            throw new FailedUserLoginException("비밀번호가 틀렸습니다.");
         }
         session.setAttribute(USER_SESSION_KEY, user);
         logger.info("로그인에 성공했습니다.");
