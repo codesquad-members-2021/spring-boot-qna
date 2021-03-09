@@ -81,4 +81,23 @@ public class AnswerController {
 
         return mav;
     }
+
+    @DeleteMapping("/{id}")
+    public String deleteAnswer(@PathVariable Long questionId, @PathVariable Long id, HttpSession session) {
+        Answer answer = answerRepository.findById(id).orElseThrow(
+                () -> new IllegalStateException("해당 답변이 없습니다. id = " + id));
+
+        User sessionedUser = (User) session.getAttribute("sessionedUser");
+
+        if (sessionedUser == null) {
+            return "redirect:/users/login";
+        }
+        if (!sessionedUser.isSameUser(answer.getWriter())) {
+            throw new IllegalStateException("자신이 작성한 답변만 삭제할 수 있습니다.");
+        }
+
+        answerRepository.delete(answer);
+
+        return "redirect:/questions/" + questionId;
+    }
 }
