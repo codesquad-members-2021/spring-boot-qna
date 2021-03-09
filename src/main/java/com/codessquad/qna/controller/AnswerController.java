@@ -30,7 +30,7 @@ public class AnswerController {
         this.answerService = answerService;
     }
 
-    @PostMapping("")
+    @PostMapping
     public String create(@PathVariable Long questionId, String contents, HttpSession session) {
         if (!isLoginUser(session)) {
             throw new FailedUserLoginException();
@@ -38,7 +38,6 @@ public class AnswerController {
         Answer answer = new Answer(getSessionUser(session), questionService.findQuestion(questionId), contents);
         answerService.create(answer);
         logger.info("답변 작성에 성공했습니다.");
-        return String.format("redirect:/questions/%d", questionId);
+        return "redirect:/questions/" + questionId;
     }
 }
-
