@@ -91,63 +91,6 @@ public class QuestionController {
         return "redirect:/";
     }
 
-    @PostMapping("/{id}/answers")
-    public String answer(@PathVariable("id") Long id, Answer answer, HttpSession session){
-        User writer = HttpSessionUtils.getUserFromSession(session)
-                .orElseThrow(NotLoggedInException::new);
-        Question question = questionRepository.findById(id)
-                .orElseThrow(NotFoundException::new);
-        answer.setQuestion(question);
-        answer.setWriter(writer);
-        answer.setTime(LocalDateTime.now());
-        answerRepository.save(answer);
-        return "redirect:/questions/" + id;
-    }
-
-    @DeleteMapping("/{questionId}/answers/{answerId}")
-    public String deleteAnswer(@PathVariable("questionId") Long questionId,
-                               @PathVariable("answerId") Long answerId,
-                               HttpSession session) {
-        User user = HttpSessionUtils.getUserFromSession(session)
-                .orElseThrow(NotLoggedInException::new);
-        answerRepository.findByIdAndQuestionId(answerId, questionId)
-                .filter(answer -> answer.matchesWriter(user))
-                .ifPresent(answerRepository::delete);
-        return "redirect:/questions/" + questionId;
-    }
-
-    @GetMapping("/{questionId}/answers/{answerId}/form")
-    public ModelAndView updateAnswerForm(@PathVariable("questionId") Long questionId,
-                                         @PathVariable("answerId") Long answerId,
-                                         HttpSession session) {
-        User user = HttpSessionUtils.getUserFromSession(session)
-                .orElseThrow(NotLoggedInException::new);
-        Answer answer = answerRepository.findByIdAndQuestionIdAndWriter(answerId, questionId, user)
-                .orElseThrow(NotFoundException::new);
-        return new ModelAndView("qna/update_answer_form", "answer", answer);
-    }
-
-    @PutMapping("/{questionId}/answers/{answerId}")
-    public String updateAnswer(@PathVariable("questionId") Long questionId,
-                               @PathVariable("answerId") Long answerId,
-                               Answer updatedAnswer,
-                               HttpSession session) {
-        User user = HttpSessionUtils.getUserFromSession(session)
-                .orElseThrow(NotLoggedInException::new);
-        Answer answer = answerRepository.findByIdAndQuestionId(answerId, questionId)
-                .orElseThrow(NotFoundException::new);
-        matchesAnswerWriterWithUser(answer, user);
-        answer.updateAnswer(updatedAnswer);
-        answerRepository.save(answer);
-        return "redirect:/questions/" + questionId;
-    }
-
-    private void matchesAnswerWriterWithUser(Answer answer, User user) throws UnauthorizedAccessException{
-        if (!answer.matchesWriter(user)) {
-            throw new UnauthorizedAccessException();
-        }
-    }
-
     private void matchesQuestionWriterWithUser(Question question, User sessionUser) throws UnauthorizedAccessException {
         if (!question.isWriter(sessionUser)) {
             throw new UnauthorizedAccessException();
