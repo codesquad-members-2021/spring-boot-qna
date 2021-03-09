@@ -40,25 +40,20 @@ public class UserController {
 
     @GetMapping("/{id}")
     public ModelAndView userProfile(@PathVariable("id") Long id) {
-        User user = userRepository.findById(id)
-                .orElseThrow(NotFoundException::new);
-        ModelAndView modelAndView = new ModelAndView("users/profile");
-        modelAndView.addObject(user);
-        return modelAndView;
+        return new ModelAndView("users/profile",
+                "user", userRepository.findById(id).orElseThrow(NotFoundException::new));
     }
 
     @GetMapping("/{id}/form")
     public ModelAndView updateUserForm(@PathVariable("id") Long id, HttpSession session) {
-        User sessionUser = HttpSessionUtils.getUserFromSession(session);
-        checkUserWithId(sessionUser, id);
-        User user = userRepository.findById(id).orElseThrow(NotFoundException::new);
-        return new ModelAndView("users/update_form", "user", user);
+        checkSessionWithId(session, id);
+        return new ModelAndView("users/update_form",
+                "user", userRepository.findById(id).orElseThrow(NotFoundException::new));
     }
 
     @PutMapping("/{id}")
     public String updateUser(@PathVariable("id") Long id, String oldPassword, User newUserInfo, HttpSession session) {
-        User sessionUser = HttpSessionUtils.getUserFromSession(session);
-        checkUserWithId(sessionUser, id);
+        checkSessionWithId(session, id);
         User user = userRepository.findById(id)
                 .filter(u -> u.isMatchingPassword(oldPassword))
                 .orElseThrow(() -> new UnauthorizedAccessException("권한이 존재하지 않습니다."));
@@ -77,7 +72,7 @@ public class UserController {
         User user = userRepository.findByUserId(userId)
                 .filter(u -> u.isMatchingPassword(password))
                 .orElseThrow(LoginFailedException::new);
-        session.setAttribute("sessionUser", user);
+        HttpSessionUtils.setUserSession(session, user);
         return "redirect:/";
     }
 
@@ -87,7 +82,8 @@ public class UserController {
         return "redirect:/";
     }
 
-    private void checkUserWithId(User sessionUser, Long accessId) {
+    private void checkSessionWithId(HttpSession session, Long accessId) {
+        User sessionUser = HttpSessionUtils.getUserFromSession(session);
         if (!sessionUser.isMatchingId(accessId)) {
             throw new UnauthorizedAccessException("다른 사람의 정보를 수정할 수 없습니다.");
         }
