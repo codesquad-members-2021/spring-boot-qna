@@ -1,4 +1,4 @@
-package com.codessquad.qna.web;
+package com.codessquad.qna.web.controllers;
 
 import com.codessquad.qna.User;
 import org.springframework.stereotype.Controller;
@@ -15,14 +15,10 @@ import java.util.Optional;
 public class UserController {
     private List<User> users = new ArrayList<>();
 
-    @GetMapping("/")
-    public String index() {
-        return "index";
-    }
-
-
     @GetMapping("/user/login")
-    public String getLogin() { return "user/login";}
+    public String getLogin() {
+        return "user/login";
+    }
 
     @GetMapping("/user/form")
     public String getForm() {
