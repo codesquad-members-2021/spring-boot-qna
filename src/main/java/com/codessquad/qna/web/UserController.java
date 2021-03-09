@@ -28,8 +28,8 @@ public class UserController {
 
     @PostMapping("/")
     public String createUser(User user) {
-        logger.debug(user.toString());
         userRepository.save(user);
+        logger.debug("user : {}", user.toString());
         return "redirect:/users/";
     }
 
@@ -48,7 +48,7 @@ public class UserController {
         }
 
         model.addAttribute("user", user.get());
-        logger.debug(user.toString());
+        logger.debug("user : {}", user.toString());
 
         return "user/profile";
     }
@@ -58,7 +58,7 @@ public class UserController {
         Optional<User> user = userRepository.findById(id);
 
         model.addAttribute("user", user.get());
-        logger.debug(user.toString());
+        logger.debug("user : {}", user.toString());
 
         return "user/updateForm";
     }
@@ -74,7 +74,7 @@ public class UserController {
         user.update(updateUser);
         userRepository.save(user);
 
-        logger.debug(updateUser.toString());
+        logger.debug("user : {}", updateUser.toString());
 
         return "redirect:/users/";
     }
