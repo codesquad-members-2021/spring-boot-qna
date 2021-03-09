@@ -52,8 +52,8 @@ public class UserController {
     }
 
     @PutMapping("/user/{id}/update")
-    public String updateProfile(@PathVariable("id") Long id, User user, String newPassword) {
-        boolean result = userService.update(id, user, newPassword);
+    public String updateProfile(@PathVariable("id") Long id, User user, String oldPassword) {
+        boolean result = userService.update(id, user, oldPassword);
         logger.info("유저 정보 수정 요청");
         return result ? "redirect:/users" : "redirect:/user/" + id + "/form";
     }
