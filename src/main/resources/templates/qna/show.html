@@ -47,6 +47,7 @@
                     <p class="qna-comment-count"><strong>2</strong>개의 의견</p>
                     <div class="qna-comment-slipp-articles">
 
+                        {{#each answers}}
                         <article class="article" id="answer-1405">
                             <div class="article-header">
                                 <div class="article-header-thumb">
@@ -54,23 +55,23 @@
                                          src="https://graph.facebook.com/v2.3/1324855987/picture">
                                 </div>
                                 <div class="article-header-text">
-                                    <a class="article-author-name" href="/users/1/자바지기">자바지기</a>
-                                    <a class="article-header-time" href="#answer-1434" title="퍼머링크">
+                                    <a class="article-author-name" href="/users/answer.writer.id">{{this.writer.name}}</a>
+                                    <a class="article-header-time" href="#" title="퍼머링크">
                                         2016-01-12 14:06
                                     </a>
                                 </div>
                             </div>
                             <div class="article-doc comment-doc">
-                                <p>이 글만으로는 원인 파악하기 힘들겠다. 소스 코드와 설정을 단순화해서 공유해 주면 같이 디버깅해줄 수도 있겠다.</p>
+                                <p>{{this.contents}}</p>
                             </div>
                             <div class="article-util">
                                 <ul class="article-util-list">
                                     <li>
                                         <a class="link-modify-article"
-                                           href="/questions/413/answers/1405/form">수정</a>
+                                           href="#">수정</a>
                                     </li>
                                     <li>
-                                        <form action="/questions/413/answers/1405" class="delete-answer-form"
+                                        <form action="/answers/{{this.id}}" class="delete-answer-form"
                                               method="POST">
                                             <input name="_method" type="hidden" value="DELETE">
                                             <button class="delete-answer-button" type="submit">삭제</button>
@@ -79,43 +80,13 @@
                                 </ul>
                             </div>
                         </article>
-                        <article class="article" id="answer-1406">
-                            <div class="article-header">
-                                <div class="article-header-thumb">
-                                    <img alt="" class="article-author-thumb"
-                                         src="https://graph.facebook.com/v2.3/1324855987/picture">
-                                </div>
-                                <div class="article-header-text">
-                                    <a class="article-author-name" href="/users/1/자바지기">자바지기</a>
-                                    <a class="article-header-time" href="#answer-1434" title="퍼머링크">
-                                        2016-01-12 14:06
-                                    </a>
-                                </div>
-                            </div>
-                            <div class="article-doc comment-doc">
-                                <p>이 글만으로는 원인 파악하기 힘들겠다. 소스 코드와 설정을 단순화해서 공유해 주면 같이 디버깅해줄 수도 있겠다.</p>
-                            </div>
-                            <div class="article-util">
-                                <ul class="article-util-list">
-                                    <li>
-                                        <a class="link-modify-article"
-                                           href="/questions/413/answers/1405/form">수정</a>
-                                    </li>
-                                    <li>
-                                        <form action="/questions/413/answers/1405" class="form-delete"
-                                              method="POST">
-                                            <input name="_method" type="hidden" value="DELETE">
-                                            <button class="delete-answer-button" type="submit">삭제</button>
-                                        </form>
-                                    </li>
-                                </ul>
-                            </div>
-                        </article>
-                        <form class="submit-write">
+                        {{/each}}
+
+                        <form class="submit-write" action="/questions/{{question.id}}/answers" method="post">
                             <div class="form-group" style="padding:14px;">
-                                <textarea class="form-control" placeholder="Update your status"></textarea>
+                                <textarea type="text" id="answerContents" name="answerContents" class="form-control" placeholder="Update your status"></textarea>
                             </div>
-                            <button class="btn btn-success pull-right" type="button">답변하기</button>
+                            <button type="submit" class="btn btn-success pull-right" type="button">답변하기</button>
                             <div class="clearfix"/>
                         </form>
                     </div>

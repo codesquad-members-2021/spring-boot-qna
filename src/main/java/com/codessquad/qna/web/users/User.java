@@ -7,7 +7,7 @@ public class User {
     public final static String SESSION_KEY_USER_OBJECT = "loginUser";
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private long id;
 
     @Column(nullable = false, length = 20)
     private String userId;
@@ -26,11 +26,11 @@ public class User {
 
     }
 
-    public Long getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(long id) {
         this.id = id;
     }
 

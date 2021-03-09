@@ -1,5 +1,6 @@
 package com.codessquad.qna.web.questions;
 
+import com.codessquad.qna.web.answers.AnswersRepository;
 import com.codessquad.qna.web.users.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -9,20 +10,20 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
+import java.util.List;
 
 @Controller
 public class QuestionsController {
     @Autowired
     private QuestionRepository questionRepository;
-
+    @Autowired
+    private AnswersRepository answersRepository;
     Logger logger = LoggerFactory.getLogger(QuestionsController.class);
 
     @PostMapping("/questions")
     public String createQuestion(Question newQuestion, HttpSession session) {
         User sessionUser = (User) session.getAttribute(User.SESSION_KEY_USER_OBJECT);
         if (sessionUser != null) {
-            //newQuestion.setWriterId(sessionUser.getId());
-            //newQuestion.setWriterUserId(sessionUser.getUserId());
             newQuestion.setWriter(sessionUser);
             questionRepository.save(newQuestion);
             logger.info("question created! [" + newQuestion.getId() + "] " + " title : " + newQuestion.getTitle());
@@ -40,6 +41,8 @@ public class QuestionsController {
     public String getOneQuestion(@PathVariable("questionId") long questionId, Model model) {
         Question foundQuestion = getQuestionById(questionId);
         model.addAttribute("question", foundQuestion);
+        List answers = answersRepository.findByQuestionId(questionId);
+        model.addAttribute("answers", answers);
         return "qna/show";
     }
 
@@ -98,7 +101,7 @@ public class QuestionsController {
     }
 
     private Question getQuestionById(long questionId) {
-        return (Question) questionRepository.findById(questionId).orElse(null);
+        return questionRepository.findById(questionId).orElse(null);
     }
 
 }
