@@ -68,6 +68,7 @@
                 <li><a href="../user/form.html" role="button">회원가입</a></li>
                 <li><a href="#" role="button">로그아웃</a></li>
                 <li><a href="#" role="button">개인정보수정</a></li>
+
             </ul>
         </div>
     </div>
@@ -86,10 +87,11 @@
                 {{#userlist}}
                 <tr>
                     <th scope="row"> </th>
-                    <td>{{userId}}</td>
+                    <td><a href="/users/{{userId}}" />{{userId}}</td>
                     <td>{{name}}</td>
                     <td>{{email}}</td>
                     <td><a href="/users/{{userId}}/form" class="btn btn-success" role="button">수정</a></td>
+
                 </tr>
                 {{/userlist}}
 
