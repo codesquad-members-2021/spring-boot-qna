@@ -25,7 +25,7 @@ public class QuestionController {
     }
 
     @GetMapping("/{questionId}")
-    public String createQuestionInDetail(@PathVariable(name = "questionId") int targetId, Model model) {
+    public String showQuestionInDetail(@PathVariable(name = "questionId") int targetId, Model model) {
         Question targetQuestion = questionRepository.getOne(targetId);
 
         model.addAttribute("question", targetQuestion);

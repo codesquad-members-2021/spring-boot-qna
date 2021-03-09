@@ -8,29 +8,29 @@ import java.util.List;
 
 @Repository
 public class UserRepository {
-    private final List<User> userStorage = new ArrayList<>();
+    private final List<User> users = new ArrayList<>();
 
     public void save(User user) {
-        userStorage.add(user);
+        users.add(user);
     }
 
     public List<User> getAll() {
-        return userStorage;
+        return users;
     }
 
     public User getOne(String targetId) {
-        return userStorage.stream()
+        return users.stream()
                 .filter(user -> user.getUserId().equals(targetId))
                 .findAny()
                 .get();
     }
 
     public boolean isRedundant(String targetId) {
-        return userStorage.stream()
+        return users.stream()
                 .anyMatch(user -> user.getUserId().equals(targetId));
     }
 
     public void deleteOne(User user) {
-        userStorage.remove(user);
+        users.remove(user);
     }
 }

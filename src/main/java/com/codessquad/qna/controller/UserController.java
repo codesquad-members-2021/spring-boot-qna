@@ -35,15 +35,14 @@ public class UserController {
     }
 
     @GetMapping
-    public String createUserList(Model model) {
-        List<User> users = userRepository.getAll();
+    public String showUsers(Model model) {
+        model.addAttribute("users", userRepository.getAll());
 
-        model.addAttribute("users", users);
         return "/users/list";
     }
 
     @GetMapping("/{userId}")
-    public String createProfile(@PathVariable(name = "userId") String targetId, Model model) {
+    public String showUserInDetail(@PathVariable(name = "userId") String targetId, Model model) {
         User targetUser = userRepository.getOne(targetId);
         model.addAttribute("user", targetUser);
 
@@ -51,7 +50,7 @@ public class UserController {
     }
 
     @GetMapping("/{userId}/form")
-    public String createUpdateForm(@PathVariable(name = "userId") String targetId, Model model) {
+    public String passUserId(@PathVariable(name = "userId") String targetId, Model model) {
         model.addAttribute("userId", targetId);
         return "/users/update";
     }

@@ -8,20 +8,20 @@ import java.util.List;
 
 @Repository
 public class QuestionRepository {
-    private final List<Question> questionList = new ArrayList<>();
+    private final List<Question> questions = new ArrayList<>();
 
     public void save(Question question) {
-        question.setQuestionId(questionList.size() + 1);
+        question.setQuestionId(questions.size() + 1);
 
-        questionList.add(question);
+        questions.add(question);
     }
 
     public List<Question> getAll() {
-        return questionList;
+        return questions;
     }
 
     public Question getOne(int targetId) {
-        return questionList.stream()
+        return questions.stream()
                 .filter(question -> question.getQuestionId() == targetId)
                 .findAny()
                 .get();
