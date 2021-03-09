@@ -2,6 +2,7 @@ package com.codessquad.qna.web.questions;
 
 import com.codessquad.qna.web.answers.AnswersRepository;
 import com.codessquad.qna.web.users.User;
+import com.codessquad.qna.web.utils.SessionUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,7 +23,7 @@ public class QuestionsController {
 
     @PostMapping("/questions")
     public String createQuestion(Question newQuestion, HttpSession session) {
-        User sessionUser = (User) session.getAttribute(User.SESSION_KEY_USER_OBJECT);
+        User sessionUser = SessionUtil.getSessionUser(session);
         if (sessionUser != null) {
             newQuestion.setWriter(sessionUser);
             questionRepository.save(newQuestion);
@@ -49,7 +50,7 @@ public class QuestionsController {
     @GetMapping("/questions/modify/{questionId}")
     public String getModifyPage(@PathVariable("questionId") long questionId,
                                 Model model, HttpSession session) {
-        User sessionUser = (User) session.getAttribute(User.SESSION_KEY_USER_OBJECT);
+        User sessionUser = SessionUtil.getSessionUser(session);
         if (sessionUser == null) {
             return "redirect:/";
         }
@@ -68,7 +69,7 @@ public class QuestionsController {
         if (currentQuestion == null) {
             return "redirect:/";
         }
-        User sessionUser = (User) session.getAttribute(User.SESSION_KEY_USER_OBJECT);
+        User sessionUser = SessionUtil.getSessionUser(session);
         if (sessionUser == null) {
             return "redirect:/";
         }
@@ -88,7 +89,7 @@ public class QuestionsController {
         if (currentQuestion == null) {
             return "redirect:/";
         }
-        User sessionUser = (User) session.getAttribute(User.SESSION_KEY_USER_OBJECT);
+        User sessionUser = SessionUtil.getSessionUser(session);
         if (sessionUser == null) {
             return "redirect:/";
         }

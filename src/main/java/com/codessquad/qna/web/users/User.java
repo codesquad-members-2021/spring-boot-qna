@@ -4,13 +4,13 @@ import javax.persistence.*;
 
 @Entity
 public class User {
-    public final static String SESSION_KEY_USER_OBJECT = "loginUser";
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @Column(nullable = false, length = 20)
+    @Column(nullable = false, length = 20, unique = true)
     private String userId;
+
     private String password;
     private String name;
     private String email;

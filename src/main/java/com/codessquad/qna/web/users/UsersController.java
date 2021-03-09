@@ -1,5 +1,6 @@
 package com.codessquad.qna.web.users;
 
+import com.codessquad.qna.web.utils.SessionUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,7 +41,7 @@ public class UsersController {
 
     @GetMapping("/modify")
     public String getModifyUserPage(Model model, HttpSession session) {
-        User sessionUser = (User) session.getAttribute(User.SESSION_KEY_USER_OBJECT);
+        User sessionUser = SessionUtil.getSessionUser(session);
         if (sessionUser == null) {
             return "redirect:/";
         }
@@ -54,7 +55,7 @@ public class UsersController {
     @PutMapping("/modify")
     public String modifyUser(String prevPassword, String newPassword,
                              String name, String email, HttpSession session) {
-        User sessionUser = (User) session.getAttribute(User.SESSION_KEY_USER_OBJECT);
+        User sessionUser = SessionUtil.getSessionUser(session);
         if (sessionUser == null) {
             return "redirect:/";
         }
@@ -79,17 +80,17 @@ public class UsersController {
         if (!foundUser.isMatchingPassword(password)) {
             return "redirect:/users/loginForm";
         }
-        session.setAttribute(User.SESSION_KEY_USER_OBJECT, foundUser);
+        SessionUtil.setSessionUser(session, foundUser);
         logger.info("user login : " + foundUser.getUserId());
         return "redirect:/";
     }
 
     @GetMapping("/logout")
     public String processLogout(HttpSession session) {
-        User sessionUser = (User) session.getAttribute(User.SESSION_KEY_USER_OBJECT);
+        User sessionUser = SessionUtil.getSessionUser(session);
         if (sessionUser != null) {
             logger.info("user logout : " + sessionUser.getUserId());
-            session.removeAttribute(User.SESSION_KEY_USER_OBJECT);
+            SessionUtil.removeSessionUser(session);
         }
         return "redirect:/";
     }

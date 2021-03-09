@@ -3,6 +3,7 @@ package com.codessquad.qna.web.answers;
 import com.codessquad.qna.web.questions.Question;
 import com.codessquad.qna.web.questions.QuestionRepository;
 import com.codessquad.qna.web.users.User;
+import com.codessquad.qna.web.utils.SessionUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -22,7 +23,7 @@ public class AnswersController {
     @PostMapping("/questions/{questionId}/answers")
     public String createAnswer(@PathVariable("questionId") long questionId, String answerContents,
                                HttpSession session, Model model) {
-        User sessionUser = (User) session.getAttribute(User.SESSION_KEY_USER_OBJECT);
+        User sessionUser = SessionUtil.getSessionUser(session);
         if (sessionUser == null) {
             return "redirect:/";
         }
@@ -39,7 +40,7 @@ public class AnswersController {
 
     @DeleteMapping("/answers/{answerId}")
     public String deleteAnswer(@PathVariable("answerId") long answerId, HttpSession session) {
-        User sessionUser = (User) session.getAttribute(User.SESSION_KEY_USER_OBJECT);
+        User sessionUser = SessionUtil.getSessionUser(session);
         if (sessionUser == null) {
             return "redirect:/";
         }
