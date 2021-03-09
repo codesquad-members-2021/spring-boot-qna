@@ -77,7 +77,7 @@ public class UserController {
         return "/users/update";
     }
 
-    @PostMapping("/{userId}/update")
+    @PostMapping("/{userId}")
     public String updateUser(@PathVariable(name = "userId") String userId, User referenceUser) {
         User presentUser = userRepository.getOne(userId);
 
@@ -85,7 +85,7 @@ public class UserController {
             return "redirect:/users";
         }
 
-        if (!isValidPassword(presentUser.getPassword(), referenceUser.getPassword())) {
+        if (!isEqualPassword(presentUser.getPassword(), referenceUser.getPassword())) {
             return "redirect:/users";
         }
 
@@ -94,7 +94,7 @@ public class UserController {
         return "redirect:/users";
     }
 
-    private boolean isValidPassword(String real, String expected) {
+    private boolean isEqualPassword(String real, String expected) {
         return real.equals(expected);
     }
 
