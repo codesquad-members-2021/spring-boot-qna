@@ -20,13 +20,13 @@ public class UserController {
     Logger logger = LoggerFactory.getLogger(UserController.class);
     final private List<User> userList = new ArrayList<>();
 
-    @GetMapping("user/form.html")
+    @GetMapping("users/form.html")
     public String form() {
         System.out.println(" form :: in");
         return "users/form";
     }
 
-    @PostMapping("/user/create")
+    @PostMapping("/users/create")
     public String create(User user) {
         userList.add(user);
 
@@ -46,28 +46,36 @@ public class UserController {
     @GetMapping("/users/{userId}/form")
     public String updateForm(@PathVariable(name="userId") String userId, Model model) {
         System.out.println("updateForm@@@");
-        User currentUser = new User();
+        User currentUser;
         for(User user : userList) {
             if(user.getUserId().equals(userId)) {
-                currentUser = user;
+                model.addAttribute("user",user);
+                break;
             }
         }
-        model.addAttribute("user",currentUser);
+
         return "users/updateForm";
     }
 
 
 
-    @PostMapping("{userId}")
+    @PostMapping("/users/{userId}")
     public String update(@PathVariable String userId, Model model) {
-        for(User user:userList) {
-            if(user.getUserId().equals(userId)) {
-                model.addAttribute("user",user);
-                logger.info("update User : " + user.toString());
-            }
-        }
-        return "user/profile";
+        User currentUser = getUserByUserId(userId);
+        model.addAttribute("user",currentUser);
+        logger.info("update User : " + currentUser.toString());
+
+        //업데이트를 하고 나서는 이동해야되니까 리다이렉트가 필요함
+        return "redirect:/userslist";
     }
 
 
+    public User getUserByUserId(String userId) {
+        for(User user: userList) {
+            if(user.getUserId().equals(userId)) {
+                return user;
+            }
+        }
+        return null;
+    }
 }
