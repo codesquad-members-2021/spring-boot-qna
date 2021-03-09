@@ -41,16 +41,50 @@
                     </div>
                 </article>
 
+
                 <div class="qna-comment">
                     <div class="qna-comment-slipp">
                         <p class="qna-comment-count"><strong>0</strong>개의 의견</p>
                         <div class="qna-comment-slipp-articles">
-                            <form class="submit-write">
-                                <div class="form-group" style="padding:14px;">
-                                    <textarea class="form-control" placeholder="Update your status"></textarea>
+
+                            {{#answers}}
+                            <article class="article" id="answer-1405">
+                                <div class="article-header">
+                                    <div class="article-header-thumb">
+                                        <img src="https://graph.facebook.com/v2.3/1324855987/picture" class="article-author-thumb" alt="">
+                                    </div>
+                                    <div class="article-header-text">
+                                        <a href="/users/1/자바지기" class="article-author-name">{{writer.name}}</a>
+                                        <a href="#answer-1434" class="article-header-time" title="퍼머링크">
+                                            {{date}}
+                                        </a>
+                                    </div>
                                 </div>
-                                <button class="btn btn-success pull-right" type="button">답변하기</button>
+                                <div class="article-doc comment-doc">
+                                    <p>{{contents}}</p>
+                                </div>
+                                <div class="article-util">
+                                    <ul class="article-util-list">
+                                        <li>
+                                            <a class="link-modify-article" href="/questions/413/answers/1405/form">수정</a>
+                                        </li>
+                                        <li>
+                                            <form class="delete-answer-form" action="/questions/413/answers/1405" method="POST">
+                                                <input type="hidden" name="_method" value="DELETE">
+                                                <button type="submit" class="delete-answer-button">삭제</button>
+                                            </form>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </article>
+                            {{/answers}}
+                            <form class="submit-write" action="/questions/{{question.id}}/answers/" method="POST">
+                                <div class="form-group" style="padding:14px;">
+                                    <textarea class="form-control" name="contents" id="contents" placeholder="Update your status"></textarea>
+                                </div>
+                                <input type="submit" class="btn btn-success pull-right pull-right" value="답변하기"/>
                                 <div class="clearfix"/>
+
                             </form>
                         </div>
                     </div>

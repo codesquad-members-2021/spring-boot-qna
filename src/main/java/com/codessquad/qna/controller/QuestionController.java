@@ -1,5 +1,7 @@
 package com.codessquad.qna.controller;
 
+import com.codessquad.qna.domain.answer.Answer;
+import com.codessquad.qna.domain.answer.AnswerRepository;
 import com.codessquad.qna.domain.question.Question;
 import com.codessquad.qna.domain.question.QuestionRepository;
 import com.codessquad.qna.domain.user.User;
@@ -12,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpSession;
+import java.util.List;
 
 @RequestMapping("/questions")
 @Controller
@@ -21,6 +24,9 @@ public class QuestionController {
 
     @Autowired
     private QuestionRepository questionRepository;
+
+    @Autowired
+    private AnswerRepository answerRepository;
 
     @GetMapping("/form")
     public ModelAndView getQuestionForm(HttpSession session) {
@@ -37,10 +43,9 @@ public class QuestionController {
 
     @PostMapping("/")
     public String createQuestion(Question question, HttpSession session) {
-        logger.info(question.toString());
-
         User sessionedUser = (User) session.getAttribute("sessionedUser");
         question.setWriter(sessionedUser);
+        logger.info(question.toString());
         questionRepository.save(question);
 
         return "redirect:/";
@@ -50,7 +55,12 @@ public class QuestionController {
     public String getQuestion(@PathVariable Long id, Model model) {
         Question question = questionRepository.findById(id).orElseThrow(
                 () -> new IllegalArgumentException("해당 질문이 없습니다. id = " + id));
+
+        List<Answer> answers = answerRepository.findAllByQuestionId(id);
+
         model.addAttribute("question", question);
+        model.addAttribute("answers", answers);
+
         return "/qna/show";
     }
 
