@@ -26,6 +26,12 @@ public class QuestionController {
         return "index";
     }
 
+    @GetMapping("/question/form")
+    public String viewQuestion() {
+        logger.info("질문 작성 페이지 요청");
+        return "qna/form";
+    }
+
     @PostMapping("/question/form")
     public String createQuestion(Question question) {
         this.questionService.save(question);
