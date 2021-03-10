@@ -24,7 +24,7 @@ public class QuestionService {
         return questionRepository.findAll();
     }
 
-    public Question findQuestion(int index) {
-        return questionRepository.findByIndex(index);
+    public Question findQuestion(long id) {
+        return questionRepository.findByIndex(id);
     }
 }

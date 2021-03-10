@@ -9,5 +9,5 @@ public interface QuestionRepository  {
 
     List<Question> findAll();
 
-    Question findByIndex(int index);
+    Question findById(long id);
 }

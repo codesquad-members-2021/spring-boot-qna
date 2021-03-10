@@ -13,8 +13,6 @@ public class MemoryQuestionRepository implements QuestionRepository {
 
     @Override
     public void save(Question question) {
-        int index = questions.size() + 1;
-        question.setIndex(index);
         questions.add(question);
     }
 
@@ -23,8 +21,9 @@ public class MemoryQuestionRepository implements QuestionRepository {
         return new ArrayList<>(questions);
     }
 
-    @Override
-    public Question findByIndex(int index) {
-        return questions.get(index - 1);
-    }
+    //jpaRepostiory로 변경 예정
+//    @Override
+//    public Question findById(long id) {
+//        return questions.get();
+//    }
 }

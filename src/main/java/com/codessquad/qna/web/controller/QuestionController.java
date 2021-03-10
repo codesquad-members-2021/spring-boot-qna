@@ -31,9 +31,9 @@ public class QuestionController {
     }
 
     @GetMapping("/questions/{index}")
-    public String getQuestion(@PathVariable int index, Model model) {
+    public String getQuestion(@PathVariable long id, Model model) {
         try {
-            model.addAttribute("question", questionService.findQuestion(index));
+            model.addAttribute("question", questionService.findQuestion(id));
         } catch (IndexOutOfBoundsException e) {
             return "redirect:/";
         }
