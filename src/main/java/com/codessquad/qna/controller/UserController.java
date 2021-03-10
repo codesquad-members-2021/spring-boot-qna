@@ -1,6 +1,8 @@
 package com.codessquad.qna.controller;
 
+import com.codessquad.qna.domain.PasswordVerifier;
 import com.codessquad.qna.domain.User;
+import com.codessquad.qna.service.ExistedUserException;
 import com.codessquad.qna.service.UserService;
 import java.util.List;
 import org.springframework.stereotype.Controller;
@@ -8,6 +10,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -25,7 +28,7 @@ public class UserController {
     public String createUser(User user, RedirectAttributes redirect) {
         try {
             userService.join(user);
-        } catch (IllegalStateException e) {
+        } catch (ExistedUserException e) {
             redirect.addFlashAttribute("fail", true);
             return "redirect:/users/form";
         }
@@ -39,27 +42,13 @@ public class UserController {
         return "/user/list";
     }
 
-    @PostMapping("/{userId}/update")
-    public String updateUserProfile(User user, RedirectAttributes redirect) {
-        User originUser = userService.findUserByUserId(user.getUserId());
-        String[] passwordArray = user.getPassword().split(",");
-
-        String receivedPassword = passwordArray[0];
-        String newPassword = passwordArray[1];
-        if (!originUser.isMatchingPassword(receivedPassword)) {
-            redirect.addFlashAttribute("fail", true);
-            return "redirect:/users/" + originUser.getUserId() + "/form";
-        }
-
-        user.setPassword(newPassword);
-        userService.updateUserData(user);
-        return "redirect:/users";
-    }
-
 
     @GetMapping("/{userId}")
     public String userProfile(@PathVariable String userId, Model model) {
         User user = userService.findUserByUserId(userId);
+        if (user == null) {
+            return "redirect:/users";
+        }
         model.addAttribute("user", user);
         return "/user/profile";
     }
@@ -67,7 +56,26 @@ public class UserController {
     @GetMapping("/{userId}/form")
     public String updateUserForm(@PathVariable String userId, Model model) {
         User user = userService.findUserByUserId(userId);
+        if (user == null) {
+            return "redirect:/users";
+        }
         model.addAttribute("user", user);
         return "/user/updateForm";
+    }
+
+    @PutMapping("/{id}")
+    public String updateUserProfile(@PathVariable Long id, User user,
+        PasswordVerifier passwordVerifier, RedirectAttributes redirect) {
+
+        User originUser = userService.findById(id);
+
+        if (originUser.confirmPassword(passwordVerifier)) {
+            user.setPassword(passwordVerifier.getReceivedPassword());
+            userService.updateUserData(originUser, user);
+            return "redirect:/users";
+        }
+
+        redirect.addFlashAttribute("fail", true);
+        return "redirect:/users/" + originUser.getUserId() + "/form";
     }
 }

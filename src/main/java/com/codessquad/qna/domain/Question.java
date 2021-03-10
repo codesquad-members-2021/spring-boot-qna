@@ -1,24 +1,28 @@
 package com.codessquad.qna.domain;
 
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
+import com.codessquad.qna.util.DateTimeUtil;
+import java.time.LocalDateTime;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 
+@Entity
 public class Question {
 
-    private static int serialCode = 1;
-    public static final String DATE_FORMAT = "yyyy-MM-dd HH:mm";
-    private int id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @Column(nullable = false, length = 20)
     private String writer;
+
     private String title;
     private String contents;
-    private LocalDate date;
+    private LocalDateTime createdDateTime = LocalDateTime.now();
 
-    public Question() {
-        this.date = LocalDate.now();
-        this.id = serialCode++;
-    }
-
-    public int getId() {
+    public Long getId() {
         return id;
     }
 
@@ -46,12 +50,12 @@ public class Question {
         this.contents = contents;
     }
 
-    public String getDate() {
-        return formatTime(date);
+    public LocalDateTime getCreatedDateTime() {
+        return createdDateTime;
     }
 
-    private String formatTime(LocalDate date) {
-        return date.format(DateTimeFormatter.ofPattern(DATE_FORMAT));
+    public String getFormattedCreatedTime() {
+        return createdDateTime.format(DateTimeUtil.getTimeFormatter());
     }
 
     @Override
@@ -61,7 +65,7 @@ public class Question {
             ", writer='" + writer + '\'' +
             ", title='" + title + '\'' +
             ", contents='" + contents + '\'' +
-            ", date=" + date +
+            ", createdDateTime=" + createdDateTime +
             '}';
     }
 }

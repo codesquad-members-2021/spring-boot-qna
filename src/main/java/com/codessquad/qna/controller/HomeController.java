@@ -20,6 +20,6 @@ public class HomeController {
     public String home(Model model) {
         List<Question> questions = qnaService.findAll();
         model.addAttribute("questions", questions);
-        return "home";
+        return "/home";
     }
 }
