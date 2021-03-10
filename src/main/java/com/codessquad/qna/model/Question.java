@@ -30,6 +30,12 @@ public class Question {
         return this.id != null;
     }
 
+    public void update(Question question) {
+        this.title = question.getTitle();
+        this.contents = question.getContents();
+        setDate();
+    }
+
     public Long getId() {
         return id;
     }
