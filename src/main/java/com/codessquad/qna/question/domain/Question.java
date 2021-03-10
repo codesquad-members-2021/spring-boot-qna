@@ -1,9 +1,11 @@
 package com.codessquad.qna.question.domain;
 
+import com.codessquad.qna.common.BaseTimeEntity;
+
 import javax.persistence.*;
 
 @Entity
-public class Question {
+public class Question extends BaseTimeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

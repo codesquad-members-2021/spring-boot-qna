@@ -2,6 +2,8 @@ package com.codessquad.qna;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
+import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.web.WebApplicationInitializer;
 import org.springframework.web.filter.HiddenHttpMethodFilter;
 
@@ -9,6 +11,8 @@ import javax.servlet.DispatcherType;
 import javax.servlet.ServletContext;
 import java.util.EnumSet;
 
+@EnableJpaRepositories
+@EnableJpaAuditing
 @SpringBootApplication
 public class QnaApplication implements WebApplicationInitializer {
 
