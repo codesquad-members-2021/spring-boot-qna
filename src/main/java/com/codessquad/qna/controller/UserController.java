@@ -4,12 +4,14 @@ import com.codessquad.qna.domain.User;
 import com.codessquad.qna.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.servlet.ModelAndView;
 
+import java.util.NoSuchElementException;
 import java.util.Objects;
+import java.util.Optional;
 
 @Controller
 public class UserController {
@@ -23,44 +25,56 @@ public class UserController {
     }
 
     @GetMapping("/users")
-    private String getMemberList(Model model) {
-        model.addAttribute("users", userRepository.findAll());
-        return "user/list";
+    private ModelAndView getMemberList() {
+        ModelAndView mav = new ModelAndView("user/list");
+        mav.addObject("users", userRepository.findAll());
+        return mav;
     }
 
     @GetMapping("/users/{primaryKey}")
-    private String displayProfile(@PathVariable Long primaryKey, Model model) {
-        Objects.requireNonNull(primaryKey, "Exception: primaryKey가 NULL 값입니다.");
+    private ModelAndView displayProfile(@PathVariable("primaryKey") Long targetKey) {
+        Objects.requireNonNull(targetKey, "Exception: targetKey가 NULL 값입니다.");
 
-        model.addAttribute("users",userRepository.findById(primaryKey).get());
+        Optional<User> userOptional = userRepository.findById(targetKey);
+        User findUserData = userOptional.orElseThrow(NoSuchElementException::new);
+
+        ModelAndView mav = new ModelAndView("user/profile");
+        mav.addObject("users", findUserData);
 
         // TODO. model.addAttribute("invalidMember", true);
 
-        return "user/profile";
+        return mav;
     }
 
     @GetMapping("users/{primaryKey}/form")
-    private String changeMemberInfo(@PathVariable("primaryKey") Long targetKey, Model model) {
+    private ModelAndView changeMemberInfo(@PathVariable("primaryKey") Long targetKey) {
         Objects.requireNonNull(targetKey, "Exception: targetKey가 NULL 값입니다.");
 
-        model.addAttribute("users",userRepository.findById(targetKey).get());
+        Optional<User> userOptional = userRepository.findById(targetKey);
+        User originUserData = userOptional.orElseThrow(NoSuchElementException::new); // () -> new NoSuchElementException()
+
+        ModelAndView mav = new ModelAndView("user/updateForm");
+        mav.addObject("users", originUserData);
+
         //TODO.  model.addAttribute("invalidMember", true);
 
-        return "user/updateForm";
+        return mav;
     }
 
 
     @PostMapping("/users/{primaryKey}/update")
-    private String updateMemberList(@PathVariable("primaryKey") Long targetKey, User updateUser, Model model) {
-        Objects.requireNonNull(updateUser, "Exception: updateUser이 NULL 값입니다.");
+    private ModelAndView updateMemberList(User updateUserData) {
+
+        Optional<User> userOptional = userRepository.findById(updateUserData.getPrimaryKey());
+        User originUserData = userOptional.orElseThrow(NoSuchElementException::new); // () -> new NoSuchElementException()
+        userRepository.save(User.updateTargetProfile(originUserData, updateUserData));
+
+        ModelAndView mav = new ModelAndView("redirect:/users");
+        mav.addObject("users", userRepository.findAll());
 
         //TODO.  model.addAttribute("invalidPassword", true);
-        if(userRepository.existsById(targetKey)){ // 넘어온 primaryKey 가 데이터베이스에 존재한다면
-            User originUser = userRepository.findById(targetKey).get();
-            userRepository.save(User.updateTargetProfile(originUser,updateUser));
-            model.addAttribute("users",userRepository.findAll());
-        }
-        return "redirect:/users";
+
+        return mav;
     }
 
 }
