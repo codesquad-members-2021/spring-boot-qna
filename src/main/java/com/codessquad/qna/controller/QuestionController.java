@@ -15,8 +15,12 @@ import java.util.Optional;
 
 @Controller
 public class QuestionController {
+    private final QuestionRepository questionRepository;
+
     @Autowired
-    private QuestionRepository questionRepository;
+    public QuestionController(QuestionRepository questionRepository) {
+        this.questionRepository = questionRepository;
+    }
 
     @PostMapping("/questions")
     private String questions(Question question) {

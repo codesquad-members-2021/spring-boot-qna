@@ -8,8 +8,13 @@ import org.springframework.web.servlet.ModelAndView;
 
 @Controller
 public class IndexController {
+
+    private final QuestionRepository questionRepository;
+
     @Autowired
-    private QuestionRepository questionRepository;
+    public IndexController(QuestionRepository questionRepository) {
+        this.questionRepository = questionRepository;
+    }
 
     @GetMapping("/")
     private ModelAndView questionsList() {
