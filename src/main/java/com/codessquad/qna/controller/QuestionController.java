@@ -49,24 +49,24 @@ public class QuestionController {
         return question.nonNull() ? "qna/show" : "redirect:/";
     }
 
-    @GetMapping("/question/{id}/{writer}/form")
-    public String viewUpdateQuestion(@PathVariable("id") Long id, @PathVariable("writer") String writer, Model model, HttpSession session) {
-        Question question = this.questionService.verifyQuestion(id, writer, session);
+    @GetMapping("/question/{id}/form")
+    public String viewUpdateQuestion(@PathVariable("id") Long id, Model model, HttpSession session) {
+        Question question = this.questionService.verifyQuestion(id, session);
         model.addAttribute("question", question);
         logger.info("질문 수정 페이지 요청");
-        return question.nonNull() ? "qna/updateForm" : "redirect:/";
+        return question.nonNull() ? "qna/updateForm" : "redirect:/question/" + id;
     }
 
-    @PutMapping("/question/{id}/{writer}/form")
-    public String updateQuestion(@PathVariable("id") Long id, @PathVariable("writer") String writer, Question question, HttpSession session) {
-        boolean result = this.questionService.update(id, writer, question, session);
+    @PutMapping("/question/{id}/form")
+    public String updateQuestion(@PathVariable("id") Long id, Question question, HttpSession session) {
+        boolean result = this.questionService.update(id, question, session);
         logger.info("질문 수정 요청");
         return result ? "redirect:/question/" + id : "redirect:/";
     }
 
-    @DeleteMapping("/question/{id}/{writer}")
-    public String deleteQuestion(@PathVariable("id") Long id, @PathVariable("writer") String writer, HttpSession session) {
-        boolean result = this.questionService.delete(id, writer, session);
+    @DeleteMapping("/question/{id}")
+    public String deleteQuestion(@PathVariable("id") Long id, HttpSession session) {
+        boolean result = this.questionService.delete(id, session);
         logger.info("질문 삭제 요청");
         return result ? "redirect:/" : "redirect:/question/" + id;
     }
