@@ -92,7 +92,7 @@ public class UserAcceptanceTest extends AcceptanceTest {
                 .isEqualTo(HttpStatus.OK.value());
     }
 
-    @DisplayName("존재하지 않는 유저 조회한다.")
+    @DisplayName("존재하지 않는 유저를 조회한다.")
     @Test
     void getUser_null() {
         // when
