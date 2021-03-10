@@ -18,7 +18,7 @@ public class QuestionController {
     private Logger logger = LoggerFactory.getLogger(UserController.class);
     final private List<Question> questionList = new ArrayList<>();
 
-    @GetMapping("/qna/form.html")
+    @GetMapping("/qna/form")
     public String questionList() {
         logger.info("askQuestion");
         return "qna/form";
