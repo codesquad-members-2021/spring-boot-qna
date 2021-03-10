@@ -43,7 +43,13 @@ public class UserController {
     }
 
     @GetMapping("/{id}/form")
-    public ModelAndView getUserUpdateForm(@PathVariable Long id) {
+    public ModelAndView getUserUpdateForm(@PathVariable Long id, HttpSession session) {
+        User sessionedUser = (User) session.getAttribute("sessionedUser");
+
+        if (sessionedUser.getId() != id) {
+            throw new IllegalArgumentException("권한이 없습니다.");
+        }
+
         User user = userRepository.findById(id).get();
         return new ModelAndView("/user/updateForm", "user", user.toDTO());
     }
