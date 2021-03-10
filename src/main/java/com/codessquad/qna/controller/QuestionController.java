@@ -32,7 +32,7 @@ public class QuestionController {
         try {
             Question question = questions.get(index - 1);
             model.addAttribute("question", question);
-            return "qna/form";
+            return "qna/show";
         }
         catch (IndexOutOfBoundsException e){
             return "redirect:/";
