@@ -8,6 +8,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -34,9 +35,9 @@ public class UserController {
     public String profile(@PathVariable("id") Long id, Model model) {
         User user = userRepository.findById(id).get();
         model.addAttribute("user", user);
-
         return "users/profile";
     }
+
 
     @GetMapping("/{id}/form")
     public String updateForm(@PathVariable("id") Long id, Model model) {
@@ -46,10 +47,17 @@ public class UserController {
     }
 
     @PutMapping("/{id}")
-    public String update(@PathVariable("id") Long id, User updateUserInfo, Model model) {
+    public String update(@PathVariable("id") Long id, String checkPassword, User updateUserInfo, Model model) {
         User user = userRepository.findById(id).get();
+        if (!user.isMatchingPassword(checkPassword))
+            return "redirect:/users/{id}/form";
+
+        if (updateUserInfo.getPassword() == "")
+            updateUserInfo.setPassword(user.getPassword());
+
         user.update(updateUserInfo);
         userRepository.save(user);
         return "redirect:/users";
+
     }
 }
