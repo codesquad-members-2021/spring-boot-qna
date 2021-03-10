@@ -4,11 +4,11 @@ import com.codessquad.qna.domain.user.User;
 import com.codessquad.qna.domain.user.UserRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpSession;
 import java.util.Optional;
 
 
@@ -46,7 +46,7 @@ public class UserController {
     public String getUserProfile(@PathVariable Long id, Model model) {
         Optional<User> user = userRepository.findById(id);
 
-        if(!user.isPresent()) {
+        if (!user.isPresent()) {
             return "redirect:/users/";
         }
 
@@ -70,7 +70,7 @@ public class UserController {
     public String update(@PathVariable Long id, String prevPassword, User updateUser) {
         User user = userRepository.findById(id).get();
 
-        if(!user.matchPassword(prevPassword)) {
+        if (!user.matchPassword(prevPassword)) {
             return "redirect:/users/";
         }
 
@@ -80,5 +80,30 @@ public class UserController {
         logger.debug("user : {}", updateUser);
 
         return "redirect:/users/";
+    }
+
+    @GetMapping("/loginForm")
+    public String getLoginForm() {
+        return "user/login";
+    }
+
+    @PostMapping("/login")
+    public String login(String userId, String password, HttpSession session) {
+        User user = userRepository.findByUserId(userId);
+
+        if (user == null) {
+            logger.error("등록된 회원이 존재하지 않습니다.");
+            return "user/login_failed";
+        }
+
+        if (!user.matchPassword(password)) {
+            logger.error("로그인에 실패하셨습니다.");
+            return "user/login_failed";
+        }
+
+        logger.debug("login : {}", user);
+        session.setAttribute("user", user);
+
+        return "redirect:/";
     }
 }
