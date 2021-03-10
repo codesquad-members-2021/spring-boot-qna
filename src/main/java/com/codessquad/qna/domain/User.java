@@ -11,12 +11,16 @@ public class User {
 
     @Column(nullable = false, length = 20, unique = true)
     private String userId;
+
     private String password;
+
     private String name;
+
     @Column(nullable = false, unique = true)
     private String email;
 
-    protected User() {}
+    protected User() {
+    }
 
     public boolean matchPassword(String password) {
         if (password == null) {

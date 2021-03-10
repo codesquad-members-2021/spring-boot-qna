@@ -24,8 +24,7 @@ public class Answer {
     private String contents;
     private LocalDateTime date;
 
-    protected Answer() {
-    }
+    protected Answer() {}
 
     public Answer(User author, Question question, String contents) {
         this.author = author;
