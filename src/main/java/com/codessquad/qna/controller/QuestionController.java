@@ -24,8 +24,11 @@ public class QuestionController {
     }
 
     @PostMapping("")
-    public String createQuestion(Question question) {
-        questionService.write(question);
+    public String createQuestion(Question question, HttpSession session) {
+        if (!HttpSessionUtils.isLoginUser(session)) {
+            return "redirect:/users/loginForm";
+        }
+        questionService.write(question, HttpSessionUtils.getUserFromSession(session));
         return "redirect:/";
     }
 
