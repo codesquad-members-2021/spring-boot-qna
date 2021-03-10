@@ -8,11 +8,14 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.servlet.http.HttpSession;
+
 @Controller
 @RequestMapping("/users")
 public class UserController {
     private final String CONFIRM_INFO = "/confirm/{id}";
     private final String UPDATE_INFO = "/update/{id}";
+    private final String LOGIN = "/login";
 
     @Autowired
     private UserRepository userRepository;
@@ -30,6 +33,26 @@ public class UserController {
         System.out.println(model);
         return "user/list";
     }
+
+    @GetMapping(LOGIN)
+    public String loginFrom() {
+        return "/user/login";
+    }
+
+    @PostMapping(LOGIN)
+    public String login(String userId, String password, HttpSession session) {
+        User user = userRepository.findByUserId(userId);
+        if (user == null) {
+            return "redirect:/users/login";
+        }
+
+        if (!password.equals(user.getPassword())) {
+            return "redirect:/users/login";
+        }
+        session.setAttribute("user", user);
+        return "redirect:/";
+    }
+
 
     @GetMapping("/{id}")
     public String viewProfile(@PathVariable Long id, Model model) {
