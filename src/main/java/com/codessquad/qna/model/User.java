@@ -24,7 +24,7 @@ public class User {
     @Column(nullable = false)
     private String email;
 
-    public boolean notNull() {
+    public boolean nonNull() {
         return this.id != null;
     }
 

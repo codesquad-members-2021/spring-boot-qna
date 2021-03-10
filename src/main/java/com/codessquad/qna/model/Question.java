@@ -26,7 +26,7 @@ public class Question {
     @Column(nullable = false)
     private Date date;
 
-    public boolean notNull() {
+    public boolean nonNull() {
         return this.id != null;
     }
 

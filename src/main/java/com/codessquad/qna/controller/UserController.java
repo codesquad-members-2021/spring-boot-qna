@@ -49,7 +49,7 @@ public class UserController {
         User loginUser = this.userService.login(userId, password);
         session.setAttribute(USER_SESSION_KEY, loginUser);
         logger.info("로그인 요청");
-        return loginUser.notNull() ? "redirect:/" : "redirect:/user/login_failed";
+        return loginUser.nonNull() ? "redirect:/" : "redirect:/user/login_failed";
     }
 
     @GetMapping("/user/logout")
@@ -71,7 +71,7 @@ public class UserController {
         User user = this.userService.findByUserId(userId);
         model.addAttribute("user", user);
         logger.info("유저 프로필 페이지 요청");
-        return user.notNull() ? "user/profile" : "redirect:/user/list";
+        return user.nonNull() ? "user/profile" : "redirect:/user/list";
     }
 
     @GetMapping("/user/{id}/update")
@@ -79,7 +79,7 @@ public class UserController {
         User user = this.userService.verifyUser(id, session);
         model.addAttribute("user", user);
         logger.info("유저 정보 수정 페이지 요청");
-        return user.notNull() ? "user/updateForm" : "redirect:/user/list";
+        return user.nonNull() ? "user/updateForm" : "redirect:/user/list";
     }
 
     @PutMapping("/user/{id}/update")

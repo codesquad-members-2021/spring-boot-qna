@@ -44,7 +44,7 @@ public class QuestionController {
         Question question = this.questionService.findById(id);
         model.addAttribute("question", question);
         logger.info("상제 질문 페이지 요청");
-        return question.notNull() ? "qna/show" : "redirect:/";
+        return question.nonNull() ? "qna/show" : "redirect:/";
     }
 
 }

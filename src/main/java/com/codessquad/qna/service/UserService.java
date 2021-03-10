@@ -24,7 +24,7 @@ public class UserService {
 
     public boolean save(User user) {
         User duplicateUser = findByUserId(user.getUserId());
-        if (!duplicateUser.notNull()) {
+        if (!duplicateUser.nonNull()) {
             this.userRepository.save(user);
             return true;
         }
@@ -33,7 +33,7 @@ public class UserService {
 
     public User login(String userId, String password) {
         User targetUser = findByUserId(userId);
-        if (targetUser.notNull() && targetUser.matchPassword(password)) {
+        if (targetUser.nonNull() && targetUser.matchPassword(password)) {
             return targetUser;
         }
         return new User();
@@ -49,7 +49,7 @@ public class UserService {
 
     public boolean update(Long id, User user, String oldPassword, HttpSession session) {
         User loginUser = verifyUser(id, session);
-        if (loginUser.notNull() && loginUser.matchPassword(oldPassword)) {
+        if (loginUser.nonNull() && loginUser.matchPassword(oldPassword)) {
             loginUser.update(user);
             this.userRepository.save(loginUser);
             return true;
