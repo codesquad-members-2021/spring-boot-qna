@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="kr">
+<head>
+    {{> partial/header}}
+</head>
+<body>
+    {{> partial/navigation}}
+    <div class="container" id="main">
+        <div class="col-md-12 col-sm-12 col-lg-12">
+            <div class="panel panel-default">
+                <div class="qna-comment">
+                    <div class="qna-comment-slipp">
+                        <div class="qna-comment-slipp-articles">
+                            {{#answer}}
+                            <form class="submit-write" name="answer" method="post" action="/answer/{{id}}">
+                                <input type="hidden" name="_method" value="PUT">
+                                <div class="form-group" style="padding:14px;">
+                                    <textarea class="form-control" placeholder="Update your status" name="contents">{{contents}}</textarea>
+                                </div>
+                                <button class="btn btn-success pull-right" type="submit">수정하기</button>
+                                <div class="clearfix" />
+                            </form>
+                            {{/answer}}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {{> partial/script}}
+</body>
+</html>
