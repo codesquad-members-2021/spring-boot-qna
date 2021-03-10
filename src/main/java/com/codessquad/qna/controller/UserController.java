@@ -41,8 +41,6 @@ public class UserController {
         ModelAndView mav = new ModelAndView("user/profile");
         mav.addObject("users", findUserData);
 
-        // TODO. model.addAttribute("invalidMember", true);
-
         return mav;
     }
 
@@ -55,8 +53,6 @@ public class UserController {
 
         ModelAndView mav = new ModelAndView("user/updateForm");
         mav.addObject("users", originUserData);
-
-        //TODO.  model.addAttribute("invalidMember", true);
 
         return mav;
     }
@@ -71,8 +67,6 @@ public class UserController {
 
         ModelAndView mav = new ModelAndView("redirect:/users");
         mav.addObject("users", userRepository.findAll());
-
-        //TODO.  model.addAttribute("invalidPassword", true);
 
         return mav;
     }

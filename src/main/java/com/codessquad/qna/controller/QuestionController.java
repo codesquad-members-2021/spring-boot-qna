@@ -34,8 +34,6 @@ public class QuestionController {
         ModelAndView mav = new ModelAndView("qna/show");
         mav.addObject("question", questionData);
 
-        //TODO. model.addAttribute("invalidMember", true);
-
         return mav;
     }
 
