@@ -72,7 +72,7 @@ public class UserController {
         Optional<User> user = userRepository.findByUserId(userId);
 
         if (!user.isPresent()) {
-            return "/user/login_faild";
+            return "/user/login_failed";
         }
 
         user.get().checkPassword(password);
