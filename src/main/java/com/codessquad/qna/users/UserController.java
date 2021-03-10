@@ -13,8 +13,12 @@ import java.util.Optional;
 @Controller
 @RequestMapping("/users")
 public class UserController {
-    @Autowired
     private UserService userService;
+
+    @Autowired
+    public UserController(UserService userService) {
+        this.userService = userService;
+    }
 
     @GetMapping
     private String userList(Model model) {

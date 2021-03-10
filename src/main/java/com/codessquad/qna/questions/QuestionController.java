@@ -14,8 +14,12 @@ import java.util.Optional;
 @Controller
 @RequestMapping("/questions")
 public class QuestionController {
-    @Autowired
     private QuestionService questionService;
+
+    @Autowired
+    public QuestionController(QuestionService questionService) {
+        this.questionService = questionService;
+    }
 
     @PostMapping
     private String createQuestion(Question question) {
