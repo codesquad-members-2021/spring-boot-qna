@@ -67,7 +67,7 @@ public class UserController {
 
         Optional<User> userOptional = userRepository.findById(updateUserData.getPrimaryKey());
         User originUserData = userOptional.orElseThrow(NoSuchElementException::new); // () -> new NoSuchElementException()
-        userRepository.save(User.updateTargetProfile(originUserData, updateUserData));
+        userRepository.save(originUserData.update(updateUserData));
 
         ModelAndView mav = new ModelAndView("redirect:/users");
         mav.addObject("users", userRepository.findAll());

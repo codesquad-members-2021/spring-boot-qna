@@ -6,16 +6,17 @@ import java.util.Objects;
 @Entity //m 데이타베이스의 테이블과 일대일로 매칭되는 객체 단위
 public class User {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY) //m 키 생성 전략 : 기본 키 생성을 데이터베이스에 위임, 새로운 레코드가 생성이 될때마다 마지막 PK 값에서 자동으로 +1
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    //m 키 생성 전략 : 기본 키 생성을 데이터베이스에 위임, 새로운 레코드가 생성이 될때마다 마지막 PK 값에서 자동으로 +1
     private Long primaryKey;
 
-    @Column(nullable=false, length=20)
+    @Column(nullable = false, length = 20)
     private String userId;
-    @Column(nullable=false, length=20)
+    @Column(nullable = false, length = 20)
     private String password;
-    @Column(nullable=false, length=20)
+    @Column(nullable = false, length = 20)
     private String name;
-    @Column(nullable=false, length=20)
+    @Column(nullable = false, length = 20)
     private String email;
 
     public String getUserId() {
@@ -58,22 +59,20 @@ public class User {
         this.primaryKey = primaryKey;
     }
 
-
-    private static boolean checkId(String previousID, String updatedId) {
-        return Objects.equals(previousID, updatedId);
+    private boolean checkId(String updatedId) {
+        return Objects.equals(updatedId, this.getUserId());
     }
 
-    private static boolean checkPassword(String previousPassword, String updatedPassword) {
-        return Objects.equals(previousPassword, updatedPassword);
+    private boolean checkPassword(String updatedPassword) {
+        return Objects.equals(updatedPassword, this.getPassword());
     }
 
-    public static User updateTargetProfile(User originUserData, User updateUserData) {
-        if (!checkId(originUserData.getUserId(), updateUserData.getUserId())
-                || !checkPassword(originUserData.getPassword(), updateUserData.getPassword())) {
-            return originUserData;
+    public User update(User updateUserData) {
+        if (!this.checkId(updateUserData.getUserId()) || !this.checkPassword(updateUserData.getPassword())) {
+            return this;
         }
-        originUserData.setName(updateUserData.getName());
-        originUserData.setEmail(updateUserData.getEmail());
-        return originUserData;
+        this.setName(updateUserData.getName());
+        this.setEmail(updateUserData.getEmail());
+        return this;
     }
 }
