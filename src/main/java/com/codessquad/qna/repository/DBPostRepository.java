@@ -18,8 +18,12 @@ import java.util.Optional;
 @Transactional
 public class DBPostRepository implements PostRepository {
 
+    private final EntityManager entityManager;
+
     @Autowired
-    EntityManager entityManager;
+    public DBPostRepository(EntityManager entityManager) {
+        this.entityManager = entityManager;
+    }
 
     @Override
     public void save(Post post) {

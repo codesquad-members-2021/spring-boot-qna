@@ -15,8 +15,12 @@ import java.util.Optional;
 @Transactional
 public class DBUserRepository implements UserRepository {
 
+    private final EntityManager entityManager;
+
     @Autowired
-    EntityManager entityManager;
+    public DBUserRepository(EntityManager entityManager) {
+        this.entityManager = entityManager;
+    }
 
     @Override
     public void save(User user) {

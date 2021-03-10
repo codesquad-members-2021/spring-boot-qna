@@ -20,10 +20,12 @@ import java.util.Optional;
 public class UserController {
 
     private Logger logger = LoggerFactory.getLogger(UserController.class);
+    private final UserService userService;
 
     @Autowired
-    private UserService userService;
-
+    public UserController(UserService userService) {
+        this.userService = userService;
+    }
 
     /**
      * UserDto 로 받아와서 User 객체로 Mapping 해준뒤 해당 유저를 생성합니다.

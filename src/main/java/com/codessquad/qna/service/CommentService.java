@@ -11,8 +11,12 @@ import javax.transaction.Transactional;
 @Transactional
 public class CommentService {
 
+    private final CommentRepostiory commentRepostiory;
+
     @Autowired
-    CommentRepostiory commentRepostiory;
+    public CommentService(CommentRepostiory commentRepostiory) {
+        this.commentRepostiory = commentRepostiory;
+    }
 
     public void addComment(Comment comment) {
         commentRepostiory.save(comment);

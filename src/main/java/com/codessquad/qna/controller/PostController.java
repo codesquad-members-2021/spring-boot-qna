@@ -23,9 +23,12 @@ import java.util.Optional;
 public class PostController {
 
     private Logger logger = LoggerFactory.getLogger(PostController.class);
+    private final PostService postService;
 
     @Autowired
-    PostService postService;
+    public PostController(PostService postService) {
+        this.postService = postService;
+    }
 
     /**
      * 질문 게시글을 게시판에 등록합니다.

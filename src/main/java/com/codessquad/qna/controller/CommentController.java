@@ -19,12 +19,14 @@ import javax.servlet.http.HttpSession;
 public class CommentController {
 
     private Logger logger = LoggerFactory.getLogger(CommentController.class);
+    private final PostService postService;
+    private final CommentService commentService;
 
     @Autowired
-    PostService postService;
-
-    @Autowired
-    CommentService commentService;
+    public CommentController(PostService postService, CommentService commentService) {
+        this.postService = postService;
+        this.commentService = commentService;
+    }
 
     /**
      * 세션에 로그인 되어 있어야만 작성 가능하며 로그인 되어 있지 않을시 NotExistLoggedUserInSession 발생
