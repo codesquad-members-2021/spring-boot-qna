@@ -7,6 +7,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.util.NoSuchElementException;
@@ -60,7 +61,7 @@ public class UserController {
     }
 
 
-    @PostMapping("/users/{primaryKey}/update")
+    @PutMapping("/users/{primaryKey}/update")
     private ModelAndView updateMemberList(@PathVariable Long primaryKey, User updateUserData) {
 
         updateUserData.setPrimaryKey(primaryKey); //m 테이블이 생성될 때, PK가 생기므로. 임의 지정
