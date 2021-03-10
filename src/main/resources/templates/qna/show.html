@@ -22,7 +22,9 @@
                                  class="article-author-thumb" alt="">
                         </div>
                         <div class="article-header-text">
-                            <a href="/users/92/kimmunsu" class="article-author-name">{{writer}}</a>
+                            {{#writer}}
+                            <a href="/users/92/kimmunsu" class="article-author-name">{{userId}}</a>
+                            {{/writer}}
                             <a href="/questions/413" class="article-header-time" title="퍼머링크">
                                 {{writeTime}}
                                 <i class="icon-link"></i>

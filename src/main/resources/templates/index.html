@@ -22,7 +22,9 @@
                             <div class="auth-info">
                                 <i class="icon-add-comment"></i>
                                 <span class="time">{{writeTime}}</span>
-                                <a href="/users/profile" class="author">{{writer}}</a>
+                                {{#writer}}
+                                <a href="/users/profile" class="author">{{userId}}</a>
+                                {{/writer}}
                             </div>
                             <div class="reply" title="댓글">
                                 <i class="icon-reply"></i>
