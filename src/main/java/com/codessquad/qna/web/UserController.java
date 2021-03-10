@@ -43,31 +43,59 @@ public class UserController {
     }
 
     @GetMapping("/{id}")
-    public String getUserProfile(@PathVariable Long id, Model model) {
-        Optional<User> user = userRepository.findById(id);
+    public String getUserProfile(@PathVariable Long id, HttpSession session) {
+        Object userAsObject = session.getAttribute("user");
 
-        if (!user.isPresent()) {
-            return "redirect:/users/";
+        if (userAsObject == null) {
+            logger.error("user : 해당 회원이 존재하지 않습니다.");
+            return "redirect:/users/form";
         }
 
-        model.addAttribute("user", user.get());
+        User user = (User) userAsObject;
+
+        if (!user.matchId(id)) {
+            logger.error("user : 다른 사용자의 정보를 열람할 수 없습니다.");
+            return "redirect:/";
+        }
+
         logger.debug("user : {}", user);
 
         return "user/profile";
     }
 
     @GetMapping("/{id}/form")
-    public String getUpdateForm(@PathVariable Long id, Model model) {
-        Optional<User> user = userRepository.findById(id);
+    public String getUpdateForm(@PathVariable Long id, Model model,HttpSession session) {
+        User loginedUser = (User) session.getAttribute("user");
 
-        model.addAttribute("user", user.get());
-        logger.debug("user : {}", user);
+        if(loginedUser == null) {
+            throw new IllegalStateException("로그인되지 않았습니다.");
+        }
+
+        if (!loginedUser.matchId(id)) {
+            throw new IllegalStateException("자신의 정보만 수정할 수 있습니다.");
+        }
+
+//        Optional<User> user = userRepository.findById(id);
+
+//        model.addAttribute("user", user.get());
+        logger.debug("user : {}", loginedUser);
 
         return "user/updateForm";
     }
 
     @PutMapping("/{id}")
-    public String update(@PathVariable Long id, String prevPassword, User updateUser) {
+    public String update(@PathVariable Long id, String prevPassword,
+                         User updateUser, HttpSession session) {
+        User loginedUser = (User) session.getAttribute("user");
+
+        if(loginedUser == null) {
+            throw new IllegalStateException("로그인되지 않았습니다.");
+        }
+
+        if(!loginedUser.matchId(id)) {
+            throw new IllegalStateException("자신의 정보만 수정할 수 있습니다.");
+        }
+
         User user = userRepository.findById(id).get();
 
         if (!user.matchPassword(prevPassword)) {

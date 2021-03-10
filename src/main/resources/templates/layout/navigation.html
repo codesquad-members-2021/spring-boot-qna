@@ -25,7 +25,7 @@
                         <li><a href="https://facebook.com" target="_blank">Facebook</a></li>
                     </ul>
                 </li>
-                <li><a href="/users/"><i class="glyphicon glyphicon-user"></i></a></li>
+                <li><a href="/users/{{user.id}}"><i class="glyphicon glyphicon-user"></i></a></li>
             </ul>
         </div>
     </div>
@@ -54,13 +54,9 @@
                 <li><a href="/users/loginForm" role="button">로그인</a></li>
                 <li><a href="/users/form" role="button">회원가입</a></li>
                 {{/user}}
-                <!--
-                <li><a href="#loginModal" role="button" data-toggle="modal">로그인</a></li>
-                <li><a href="#registerModal" role="button" data-toggle="modal">회원가입</a></li>
-                -->
                 {{#user}}
                 <li><a href="/users/logout" role="button">로그아웃</a></li>
-                <li><a href="#" role="button">개인정보수정</a></li>
+                <li><a href="/users/{{user.id}}/form" role="button">개인정보수정</a></li>
                 {{/user}}
             </ul>
         </div>
