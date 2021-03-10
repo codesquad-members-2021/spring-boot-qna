@@ -69,6 +69,10 @@ public class Answer {
         this.date = date;
     }
 
+    public boolean isWrittenBy(User user) {
+        return writer.equals(user);
+    }
+
     public void update(Answer answer) {
         this.contents = answer.contents;
     }

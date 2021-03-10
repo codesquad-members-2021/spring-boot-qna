@@ -31,10 +31,9 @@ public class QuestionController {
     @GetMapping("/form")
     public ModelAndView getQuestionForm(HttpSession session) {
         ModelAndView mav = new ModelAndView("/qna/form");
-        User sessionedUser = (User) session.getAttribute("sessionedUser");
 
-        if (sessionedUser == null) {
-            mav.setViewName("redirect:/users/login"); // 로그인 과정에서 session에 sessionUser가 할당되므로 이후 추가 할당 작업 필요하지 않다.
+        if (!HttpSessionUtils.isLoginUser(session)) {
+            mav.setViewName("redirect:/users/login");
             return mav;
         }
 
@@ -43,7 +42,7 @@ public class QuestionController {
 
     @PostMapping("/")
     public String createQuestion(Question question, HttpSession session) {
-        User sessionedUser = (User) session.getAttribute("sessionedUser");
+        User sessionedUser = (User) session.getAttribute(HttpSessionUtils.USER_SESSION_KEY);
         question.setWriter(sessionedUser);
         logger.info(question.toString());
         questionRepository.save(question);
@@ -67,15 +66,16 @@ public class QuestionController {
     @GetMapping("/{id}/form")
     public ModelAndView getUpdateForm(@PathVariable Long id, HttpSession session) {
         ModelAndView mav = new ModelAndView("/qna/update_form");
-        User sessionedUser = (User) session.getAttribute("sessionedUser");
+
         Question question = (Question) questionRepository.findById(id).orElseThrow(
                 () -> new IllegalArgumentException("해당 질문이 없습니다. id = " + id));
 
-        if (sessionedUser == null) {
+        if (!HttpSessionUtils.isLoginUser(session)) {
             mav.setViewName("redirect:/users/login");
             return mav;
         }
-        if (!sessionedUser.isSameUser(question.getWriter())) {
+        User sessionedUser = HttpSessionUtils.getUserFromSession(session);
+        if (!question.isWrittenBy(sessionedUser)) {
             throw new IllegalStateException("자신이 작성한 글만 수정할 수 있습니다.");
         }
 
@@ -85,30 +85,29 @@ public class QuestionController {
 
     @PutMapping("/{id}")
     public String updateQuestion(@PathVariable Long id, Question questionWithUpdatedInfo) {
-        Question targetQuestion = questionRepository.findById(id).orElseThrow(
+        Question question = questionRepository.findById(id).orElseThrow(
                 () -> new IllegalStateException("해당 글을 찾을 수 없습니다. id = " + id));
 
-        targetQuestion.update(questionWithUpdatedInfo);
-        questionRepository.save(targetQuestion);
+        question.update(questionWithUpdatedInfo);
+        questionRepository.save(question);
 
         return "redirect:/questions/" + id;
     }
 
     @DeleteMapping("/{id}")
     public String deleteQuestion(@PathVariable Long id, HttpSession session) {
-        Question targetQuestion = questionRepository.findById(id).orElseThrow(
+        Question question = questionRepository.findById(id).orElseThrow(
                 () -> new IllegalStateException("해당 글을 찾을 수 없습니다. id = " + id));
-        User sessionedUser = (User) session.getAttribute("sessionedUser");
 
-        if (sessionedUser == null) {
+        if (!HttpSessionUtils.isLoginUser(session)) {
             return "redirect:/users/login";
         }
-
-        if (!sessionedUser.isSameUser(targetQuestion.getWriter())) {
+        User sessionedUser = HttpSessionUtils.getUserFromSession(session);
+        if (!question.isWrittenBy(sessionedUser)) {
             throw new IllegalStateException("자신이 작성한 글만 삭제할 수 있습니다.");
         }
 
-        questionRepository.delete(targetQuestion);
+        questionRepository.delete(question);
         return "redirect:/";
     }
 }

@@ -75,6 +75,10 @@ public class Question {
         this.answerCount = answerCount;
     }
 
+    public boolean isWrittenBy(User user) {
+        return writer.equals(user);
+    }
+
     public void update(Question questionWithUpdatedInfo) {
         this.title = questionWithUpdatedInfo.getTitle();
         this.contents = questionWithUpdatedInfo.getContents();

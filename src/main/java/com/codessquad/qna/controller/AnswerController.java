@@ -28,12 +28,10 @@ public class AnswerController {
 
     @PostMapping("/")
     public String createAnswer(@PathVariable Long questionId, Answer answer, HttpSession session) {
-        User sessionedUser = (User) session.getAttribute("sessionedUser");
-
-        if (sessionedUser == null) {
+        if (!HttpSessionUtils.isLoginUser(session)) {
             return "redirect:/users/login";
         }
-
+        User sessionedUser = HttpSessionUtils.getUserFromSession(session);
         Question question = questionRepository.findById(questionId).orElseThrow(
                 () -> new IllegalStateException("해당 질문을 찾을 수 없습니다. id = " + questionId));
         int answerCount = answerRepository.countAnswersByQuestionId(questionId);
@@ -52,17 +50,17 @@ public class AnswerController {
     @GetMapping("/{id}/form")
     public ModelAndView getUpdateForm(@PathVariable Long questionId, @PathVariable Long id, HttpSession session) {
         ModelAndView mav = new ModelAndView("/answers/update_form");
-        User sessionedUser = (User) session.getAttribute("sessionedUser");
         Question question = questionRepository.findById(questionId).orElseThrow(
                 () -> new IllegalStateException("해당 질문이 없습니다. id = " + questionId));
         Answer answer = answerRepository.findById(id).orElseThrow(
                 () -> new IllegalStateException("해당 답변이 없습니다. id = " + id));
 
-        if (sessionedUser == null) {
+        if (!HttpSessionUtils.isLoginUser(session)) {
             mav.setViewName("redirect:/users/login");
             return mav;
         }
-        if (!sessionedUser.isSameUser(answer.getWriter())) {
+        User sessionedUser = HttpSessionUtils.getUserFromSession(session);
+        if (!answer.isWrittenBy(sessionedUser)) {
             throw new IllegalStateException("자신이 작성한 답변만 수정할 수 있습니다.");
         }
 
@@ -89,12 +87,11 @@ public class AnswerController {
         Answer answer = answerRepository.findById(id).orElseThrow(
                 () -> new IllegalStateException("해당 답변이 없습니다. id = " + id));
 
-        User sessionedUser = (User) session.getAttribute("sessionedUser");
-
-        if (sessionedUser == null) {
+        if (!HttpSessionUtils.isLoginUser(session)) {
             return "redirect:/users/login";
         }
-        if (!sessionedUser.isSameUser(answer.getWriter())) {
+        User sessionedUser = HttpSessionUtils.getUserFromSession(session);
+        if (!answer.isWrittenBy(sessionedUser)) {
             throw new IllegalStateException("자신이 작성한 답변만 삭제할 수 있습니다.");
         }
 

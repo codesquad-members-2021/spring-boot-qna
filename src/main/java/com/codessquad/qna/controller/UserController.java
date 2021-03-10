@@ -47,13 +47,12 @@ public class UserController {
     public ModelAndView getUpdateForm(@PathVariable Long id, HttpSession session) {
         ModelAndView mav = new ModelAndView("/users/updateForm");
 
-        User sessionedUser = (User) session.getAttribute("sessionedUser");
-        if (sessionedUser == null) {
+        if (!HttpSessionUtils.isLoginUser(session)) {
             mav.setViewName("redirect:/users/login");
             return mav;
         }
-
-        if (!id.equals(sessionedUser.getId())) {
+        User sessionedUser = HttpSessionUtils.getUserFromSession(session);
+        if (!sessionedUser.isYourId(id)) {
             throw new IllegalStateException("자신의 정보만 수정할 수 있습니다.");
         }
 
@@ -88,13 +87,13 @@ public class UserController {
         if (user == null || !user.isCorrectPassword(password)) {
             return "/users/login_failed";
         }
-        session.setAttribute("sessionedUser", user);
+        session.setAttribute(HttpSessionUtils.USER_SESSION_KEY, user);
         return "redirect:/";
     }
 
     @GetMapping("/logout")
     public String logout(HttpSession session) {
-        session.removeAttribute("sessionedUser");
+        session.removeAttribute(HttpSessionUtils.USER_SESSION_KEY);
         return "redirect:/";
     }
 }

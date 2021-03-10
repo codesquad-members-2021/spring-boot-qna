@@ -61,8 +61,8 @@ public class User {
         return this.password.equals(password);
     }
 
-    public boolean isSameUser(User user) {
-        return this.id == user.id;
+    public boolean isYourId(Long id) {
+        return this.id.equals(id);
     }
 
     public void update(User user) {
