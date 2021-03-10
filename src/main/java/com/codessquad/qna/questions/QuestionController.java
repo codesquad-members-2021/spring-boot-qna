@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.Optional;
 
 @Controller
@@ -20,7 +19,7 @@ public class QuestionController {
 
     @PostMapping
     private String createQuestion(Question question) {
-        question.setDateTime(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")));
+        question.setDateTime(LocalDateTime.now());
         questionService.addQuestion(question);
 
         return "redirect:/";

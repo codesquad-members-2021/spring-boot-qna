@@ -1,11 +1,14 @@
 package com.codessquad.qna.questions;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+
 public class Question {
     private int index;
     private String writer;
     private String title;
     private String contents;
-    private String dateTime;
+    private LocalDateTime dateTime;
 
     public int getIndex() {
         return index;
@@ -40,10 +43,10 @@ public class Question {
     }
 
     public String getDateTime() {
-        return dateTime;
+        return dateTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"));
     }
 
-    public void setDateTime(String dateTime) {
+    public void setDateTime(LocalDateTime dateTime) {
         this.dateTime = dateTime;
     }
 
