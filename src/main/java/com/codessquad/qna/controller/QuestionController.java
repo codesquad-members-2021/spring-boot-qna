@@ -1,7 +1,7 @@
 package com.codessquad.qna.controller;
 
 import com.codessquad.qna.domain.Question;
-import com.codessquad.qna.repository.QuestionRepository;
+import com.codessquad.qna.service.QuestionService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -9,27 +9,28 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+
 @Controller
 @RequestMapping("/questions")
 public class QuestionController {
 
-    private QuestionRepository questionRepository;
+    private QuestionService questionService;
 
-    public QuestionController(QuestionRepository questionRepository) {
-        this.questionRepository = questionRepository;
+    public QuestionController(QuestionService questionService) {
+        this.questionService = questionService;
     }
 
     @PostMapping("")
     public String createQuestion(Question question) {
-        questionRepository.save(question);
+        questionService.write(question);
         return "redirect:/";
     }
 
     @GetMapping("/{questionId}")
-    public String renderQuestion(@PathVariable int questionId, Model model) {
-        Question getQuestion = questionRepository.findById(questionId);
+    public String renderQuestion(@PathVariable Long questionId, Model model) {
+        Question findQuestion = questionService.findById(questionId);
 
-        model.addAttribute("question", getQuestion);
+        model.addAttribute("question", findQuestion);
         return "qna/show";
     }
 
