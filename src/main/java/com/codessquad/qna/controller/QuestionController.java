@@ -20,7 +20,6 @@ public class QuestionController {
         this.questionRepository = questionRepository;
     }
 
-
     @PostMapping("/questions")
     public String create(Question question) {
         questionRepository.save(question);
