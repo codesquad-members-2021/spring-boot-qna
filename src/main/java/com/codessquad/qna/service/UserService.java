@@ -39,14 +39,6 @@ public class UserService {
         return new User();
     }
 
-    public User verifyUser(Long id, HttpSession session) {
-        User loginUser = getUserFromSession(session);
-        if (loginUser.matchId(id)) {
-            return loginUser;
-        }
-        return new User();
-    }
-
     public boolean update(Long id, User user, String oldPassword, HttpSession session) {
         User loginUser = verifyUser(id, session);
         if (loginUser.nonNull() && loginUser.matchPassword(oldPassword)) {
@@ -55,6 +47,14 @@ public class UserService {
             return true;
         }
         return false;
+    }
+
+    public User verifyUser(Long id, HttpSession session) {
+        User loginUser = getUserFromSession(session);
+        if (loginUser.matchId(id)) {
+            return loginUser;
+        }
+        return new User();
     }
 
     public List<User> findAll() {

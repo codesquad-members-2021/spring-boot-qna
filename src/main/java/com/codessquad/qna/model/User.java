@@ -35,13 +35,6 @@ public class User {
         return this.id.equals(id);
     }
 
-    public boolean matchUserId(String userId) {
-        if (this.userId == null) {
-            return false;
-        }
-        return this.userId.equals(userId);
-    }
-
     public boolean matchPassword(String password) {
         if (this.password == null) {
             return false;

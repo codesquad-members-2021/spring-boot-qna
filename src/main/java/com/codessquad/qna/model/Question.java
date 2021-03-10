@@ -41,7 +41,7 @@ public class Question {
     public void update(Question question) {
         this.title = question.getTitle();
         this.contents = question.getContents();
-        setDate();
+        this.date = new Date();
     }
 
     public Long getId() {
