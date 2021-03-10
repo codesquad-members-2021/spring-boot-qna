@@ -13,6 +13,14 @@ public class User {
     private String name;
     private String email;
 
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
     public void setUserId(String userId) {
         this.userId = userId;
     }
@@ -45,13 +53,14 @@ public class User {
         return email;
     }
 
-    public boolean isUserId(String userId) {
-        return userId.equals(this.userId);
+    public boolean isMatchingPassword(String password) {
+        return password.equals(this.password);
     }
 
-    public void updateUserInfo(User user) {
-        this.name = user.getName();
-        this.email = user.getEmail();
+    public void update(User updateUserInfo) {
+        this.password = updateUserInfo.getPassword();
+        this.name = updateUserInfo.getName();
+        this.email = updateUserInfo.getEmail();
     }
 
     @Override
