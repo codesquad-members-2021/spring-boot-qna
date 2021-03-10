@@ -91,7 +91,7 @@ public class UserController {
      */
     @GetMapping("/user/{id}")
     public String getUserProfile(@PathVariable Long id, Model model) {
-        getUsetIfExist(id, model);
+        getUserIfExist(id, model);
         return "user/profile";
     }
 
@@ -147,13 +147,9 @@ public class UserController {
         return Optional.of(sessionUser);
     }
 
-   private void getUsetIfExist(Long id, Model model) {
-        try {
-            User user = userService.getUserById(id);
-            model.addAttribute("user", user);
-        } catch (CanNotFindUserException e) {
-            logger.error(e.getMessage());
-        }
+   private void getUserIfExist(Long id, Model model) {
+        User user = userService.getUserById(id);
+        model.addAttribute("user", user);
     }
 
 }
