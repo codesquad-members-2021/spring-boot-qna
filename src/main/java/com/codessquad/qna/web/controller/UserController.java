@@ -42,24 +42,24 @@ public class UserController {
         }
         return "/user/profile";
     }
-//
-//    @GetMapping("/{userId}/form")
-//    public String getUpdateForm(@PathVariable String userId, Model model) {
-//        try {
-//            model.addAttribute("user", userService.findUser(userId));
-//        } catch (IllegalStateException e) {
-//            return "redirect:/";
-//        }
-//        return "/user/updateForm";
-//    }
-//
-//    @PostMapping("/{userId}/update")
-//    public String updateUser(User user) {
-//        try {
-//            userService.updateUser(user);
-//        } catch (IllegalStateException e) {
-//            return "redirect:/";
-//        }
-//        return "redirect:/users";
-//    }
+
+    @GetMapping("/{id}/form")
+    public String getUpdateForm(@PathVariable long id, Model model) {
+        try {
+            model.addAttribute("user", userService.findUser(id));
+        } catch (IllegalStateException e) {
+            return "redirect:/";
+        }
+        return "/user/updateForm";
+    }
+
+    @PostMapping("/{id}")
+    public String updateUser(@PathVariable long id, User user) {
+        try {
+            userService.updateUser(id, user);
+        } catch (IllegalStateException e) {
+            return "redirect:/";
+        }
+        return "redirect:/users";
+    }
 }

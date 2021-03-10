@@ -39,15 +39,16 @@ public class UserService {
                 .orElseThrow(()->new IllegalStateException("찾는 user가 없습니다"));
     }
 
-//    public void updateUser(User user) {
-//        User originUser = findUser(user.getUserId());
-//        validatePassword(originUser, user);
-//        userRepository.update(originUser, user);
-//    }
-//
-//    private void validatePassword(User originUser, User user) {
-//        if (!originUser.getPassword().equals(user.getPassword())) {
-//            throw new IllegalStateException("잘못된 비밀번호 입니다");
-//        }
-//    }
+    public void updateUser(long id, User user) {
+        User originUser = findUser(id);
+        validatePassword(originUser, user);
+        originUser.update(user);
+        userRepository.save(originUser);
+    }
+
+    private void validatePassword(User originUser, User user) {
+        if (!originUser.matchPassword(user)) {
+            throw new IllegalStateException("잘못된 비밀번호 입니다");
+        }
+    }
 }
