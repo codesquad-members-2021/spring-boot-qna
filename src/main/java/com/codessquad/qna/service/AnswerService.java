@@ -22,5 +22,6 @@ public class AnswerService {
         UserValidation.validUserInfo(writer);
         Question findQuestion = questionService.findById(questionId);
         Answer answer = new Answer(writer, findQuestion, contents);
+        answerRepository.save(answer);
     }
 }
