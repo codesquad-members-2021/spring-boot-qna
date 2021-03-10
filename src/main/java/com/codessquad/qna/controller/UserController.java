@@ -29,16 +29,14 @@ public class UserController {
 
     @PostMapping("/login")
     public String login(String userId, String password, HttpSession session) {
-        Optional<User> userTemp = userService.findByUserId(userId);
-        if (!userTemp.isPresent()) {
+        User user = userService.findByUserId(userId);
+        if (user == null) {
             logger.info("로그인에 실패했습니다.");
             return "redirect:/users/loginForm";
         }
-        User user = userTemp.get();
         if (!user.matchPassword(password)) {
             return "redirect:/users/loginForm";
         }
-
         session.setAttribute(USER_SESSION_KEY, user);
         logger.info("로그인에 성공했습니다.");
         return "redirect:/";
@@ -51,12 +49,7 @@ public class UserController {
     }
 
     @PostMapping("")
-    public String create(UserForm form) {
-        User user = new User();
-        user.setUserId(form.getUserId());
-        user.setPassword(form.getPassword());
-        user.setName(form.getName());
-        user.setEmail(form.getEmail());
+    public String create(User user) {
         userService.join(user);
         return "redirect:/users";
     }
@@ -70,48 +63,51 @@ public class UserController {
 
     @GetMapping("/{id}")
     public String profile(@PathVariable Long id, Model model) {
-        Optional<User> user = userService.findUser(id);
-        if (!user.isPresent()) {
+        try {
+            User user = userService.findUser(id);
+            model.addAttribute("user", user);
+            return "user/profile";
+        } catch (RuntimeException e) {
+            logger.error(e.getMessage());
             return "redirect:/users";
         }
-        model.addAttribute(user.get());
-        return "user/profile";
+    }
+
+    private void checkPermission(Long id, HttpSession session) {
+        if (!isLoginUser(session)) {
+            throw new IllegalStateException("로그인이 필요합니다.");
+        }
+        User loginUser = getSessionUser(session);
+        if (!loginUser.matchId(id)) {
+            throw new IllegalStateException("수정 및 삭제 권한이 없습니다.");
+        }
     }
 
     @GetMapping("/{id}/form")
     public String updateForm(@PathVariable Long id, Model model, HttpSession session) {
-        if (!isLoginUser(session)) {
-            return "redirect:/users/loginForm";
-        }
-        User sessionUser = getSessionUser(session);
-
-        if (!sessionUser.matchId(id)) {
-            throw new IllegalStateException("잘못된 접근입니다.");
-        }
-
-        if (!userService.findUser(id).isPresent()) {
+        try {
+            checkPermission(id, session);
+            User user = userService.findUser(id);
+            model.addAttribute("user", user);
+            return "user/updateForm";
+        } catch (IllegalStateException e) {
+            model.addAttribute("errorMessage", e.getMessage());
             return "redirect:/users";
         }
-        User user = userService.findUser(id).get();
-        model.addAttribute("user", user);
-        return "user/updateForm";
     }
 
     @PutMapping("/{id}")
-    public String update(@PathVariable Long id, User updatedUser, HttpSession session) {
-        User sessionUser = getSessionUser(session);
-        if (!isLoginUser(session)) {
-            return "redirect:/users/loginForm";
-        }
-        if (!sessionUser.matchId(id)) {
-            throw new IllegalStateException("잘못된 접근입니다.");
-        }
-        if (!userService.findUser(id).isPresent()) {
+    public String update(@PathVariable Long id, User updatedUser, Model model, HttpSession session) {
+        try {
+            checkPermission(id, session);
+            User user = userService.findUser(id);
+            user.update(updatedUser);
+            userService.join(user);
+            return "redirect:/users";
+        } catch (IllegalStateException e) {
+            model.addAttribute("errorMessage", e.getMessage());
             return "redirect:/users";
         }
-        User user = userService.findUser(id).get();
-        user.update(updatedUser);
-        userService.join(user);
-        return "redirect:/users";
     }
 }
+
