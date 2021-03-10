@@ -35,7 +35,7 @@ public class UserController {
             throw new IllegalUserAccessException("비밀번호가 틀렸습니다.");
         }
         session.setAttribute(USER_SESSION_KEY, user);
-        logger.info("로그인에 성공했습니다.");
+        logger.info("user : {}님이 로그인하셨습니다.", user.getUserId());
         return "redirect:/";
     }
 
