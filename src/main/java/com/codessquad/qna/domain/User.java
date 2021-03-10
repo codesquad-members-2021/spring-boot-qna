@@ -9,7 +9,7 @@ import javax.persistence.Id;
 public class User {
     @Id
     @GeneratedValue
-    private long id;
+    private Long id;
 
     @Column(nullable = false, length = 20)
     private String userId;
@@ -17,7 +17,7 @@ public class User {
     private String name;
     private String email;
 
-    public long getId() {
+    public Long getId() {
         return id;
     }
 

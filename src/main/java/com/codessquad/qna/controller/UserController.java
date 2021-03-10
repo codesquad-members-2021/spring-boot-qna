@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import java.util.Optional;
+
 @Controller
 @RequestMapping("/users")
 public class UserController {
@@ -24,13 +26,13 @@ public class UserController {
         this.userService = userService;
     }
 
-    @GetMapping("/{userId}")
-    public String profile(@PathVariable String userId, Model model) {
-        User user = userService.findUserById(userId);
-        if (user == null) {
+    @GetMapping("/{id}")
+    public String profile(@PathVariable Long id, Model model) {
+        Optional<User> user = userService.findUserById(id);
+        if (!user.isPresent()) {
             return "redirect:/users";
         }
-        model.addAttribute(user);
+        model.addAttribute(user.get());
         return "/user/profile";
     }
 
@@ -43,28 +45,32 @@ public class UserController {
     @PostMapping()
     public String account(User user) {
         logger.info("user: {}", user);
-
+        // TODO: null check before create user
         userService.save(user);
         return "redirect:/users";
     }
 
-    @GetMapping("{userId}/info")
-    public String form(@PathVariable String userId, Model model) {
-        User user = userService.findUserById(userId);
-        if (user == null) {
+    @GetMapping("{id}/form")
+    public String form(@PathVariable Long id, Model model) {
+        Optional<User> user = userService.findUserById(id);
+        if (!user.isPresent()) {
             return "redirect:/users";
         }
-        model.addAttribute(user);
+        model.addAttribute(user.get());
         return "/user/updateForm";
     }
 
-    @PostMapping("{userId}/info")
-    public String update(@PathVariable String userId, User userToUpdate) {
-        User user = userService.findUserById(userId);
-        if (user == null) {
+    @PostMapping("{id}/form")
+    public String update(@PathVariable Long id, User newUser) {
+        Optional<User> userOptional = userService.findUserById(id);
+        if (!userOptional.isPresent()) {
             return "redirect:/users";
         }
-        user.update(userToUpdate);
+        User user = userOptional.get();
+
+        user.update(newUser);
+        userService.save(user);
+
         return "redirect:/users";
     }
 
