@@ -1,9 +1,6 @@
 package com.codessquad.qna.domain;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
@@ -14,7 +11,10 @@ public class Question {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String writer;
+    @ManyToOne()
+    @JoinColumn(name = "user_id")
+    private User writer;
+
     private String title;
     private String contents;
     private LocalDateTime writeTime;
@@ -35,11 +35,11 @@ public class Question {
         this.id = id;
     }
 
-    public void setWriter(String writer) {
+    public void setWriter(User writer) {
         this.writer = writer;
     }
 
-    public String getWriter() {
+    public User getWriter() {
         return writer;
     }
 
