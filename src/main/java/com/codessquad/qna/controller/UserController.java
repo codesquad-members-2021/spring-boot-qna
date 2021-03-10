@@ -70,11 +70,10 @@ public class UserController {
 
     @GetMapping("/{id}/changeInfo")
     public String changeInfo(@PathVariable Long id, HttpSession httpSession) {
-        Object sessionUser = httpSession.getAttribute("user");
-        if (sessionUser == null) {
+        if (!HttpSessionUtils.isLoginUser(httpSession)) {
             return "redirect:/users/login";
         }
-        User tempUser = (User) sessionUser;
+        User tempUser = HttpSessionUtils.getSessionUser(httpSession);
         if (!id.equals(tempUser.getId())) {
             throw new IllegalStateException("자신의 정보만 수정 가능합니다.");
         }
