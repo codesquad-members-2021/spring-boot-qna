@@ -53,6 +53,7 @@ public class User {
         return email;
     }
 
+    //isMatching...으로 메서드명 변경
     public boolean matchPassword(User user) {
         return user.password.equals(this.password);
     }

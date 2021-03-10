@@ -53,7 +53,7 @@ public class UserController {
         return "/user/updateForm";
     }
 
-    @PostMapping("/{id}")
+    @PutMapping("/{id}")
     public String updateUser(@PathVariable long id, User user) {
         try {
             userService.updateUser(id, user);
