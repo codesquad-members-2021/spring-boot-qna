@@ -17,21 +17,20 @@ public class UserService {
         this.userRepository = userRepository;
     }
 
-    public List<User> getUsers() {
-        return userRepository.getUsers();
-    }
-
-    public void addUser(User user) {
-        user.setId(userRepository.getUsers().size() + 1);
-        userRepository.addUser(user);
+    public void save(User user) {
+        userRepository.save(user);
     }
 
     public User findUserById(String userId) {
-        for (User user : userRepository.getUsers()) {
+        for (User user : userRepository.findAll()) {
             if (user.matchUserId(userId)) {
                 return user;
             }
         }
         return null;
+    }
+
+    public List<User> findAll() {
+        return userRepository.findAll();
     }
 }

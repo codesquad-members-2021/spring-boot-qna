@@ -1,20 +1,7 @@
 package com.codessquad.qna.repository;
 
 import com.codessquad.qna.domain.User;
-import org.springframework.stereotype.Repository;
+import org.springframework.data.jpa.repository.JpaRepository;
 
-import java.util.ArrayList;
-import java.util.List;
-
-@Repository
-public class UserRepository {
-    private final List<User> users = new ArrayList<>();
-
-    public List<User> getUsers() {
-        return users;
-    }
-
-    public void addUser(User user) {
-        users.add(user);
-    }
+public interface UserRepository extends JpaRepository<User, Long> {
 }

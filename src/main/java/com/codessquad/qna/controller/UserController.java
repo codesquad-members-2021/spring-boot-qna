@@ -36,7 +36,7 @@ public class UserController {
 
     @GetMapping()
     public String list(Model model) {
-        model.addAttribute("users", userService.getUsers());
+        model.addAttribute("users", userService.findAll());
         return "/user/list";
     }
 
@@ -44,7 +44,7 @@ public class UserController {
     public String account(User user) {
         logger.info("user: {}", user);
 
-        userService.addUser(user);
+        userService.save(user);
         return "redirect:/users";
     }
 
