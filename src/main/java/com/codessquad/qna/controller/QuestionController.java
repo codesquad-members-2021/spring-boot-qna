@@ -5,6 +5,7 @@ import com.codessquad.qna.domain.QuestionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -36,7 +37,12 @@ public class QuestionController {
     @GetMapping("/questions/{id}")
     public ModelAndView show(@PathVariable Long id) {
         ModelAndView modelAndView = new ModelAndView("qna/show");
-        modelAndView.addObject("question", questionRepository.findById(id).get());
+        modelAndView.addObject("question", questionRepository.findById(id).orElseThrow(NullPointerException::new));
         return modelAndView;
+    }
+
+    @ExceptionHandler(NullPointerException.class)
+    public String nullException() {
+        return "nullError";
     }
 }
