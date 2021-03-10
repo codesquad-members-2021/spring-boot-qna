@@ -15,16 +15,19 @@ public class UserServiceImpl implements UserService {
         return users;
     }
 
-    public void addUser(User user) {
-        if (!users.contains(user)) {
-            users.add(user);
+    public void addUser(User newUser) {
+        for (User user : users) {
+            if (user.getUserId().equals(newUser.getUserId())) {
+                return;
+            }
         }
-        return;
+
+        users.add(newUser);
     }
 
     public void updateUser(User toUpdate) {
         for (User user : users) {
-            if (user.getUserId().equals(toUpdate.getUserId()) && user.getPassword().equals(toUpdate.getPassword())) {
+            if (user.equals(toUpdate)) {
                 user.update(toUpdate);
                 return;
             }
