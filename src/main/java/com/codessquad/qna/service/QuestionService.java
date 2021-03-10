@@ -1,13 +1,17 @@
 package com.codessquad.qna.service;
 
 import com.codessquad.qna.model.Question;
+import com.codessquad.qna.model.User;
 import com.codessquad.qna.repository.QuestionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+
+import static com.codessquad.qna.controller.HttpSessionUtils.getUserFromSession;
 
 @Service
 public class QuestionService {
@@ -19,9 +23,44 @@ public class QuestionService {
         this.questionRepository = questionRepository;
     }
 
-    public void save(Question question) {
-        question.setDate();
-        this.questionRepository.save(question);
+    public boolean save(Question question, HttpSession session) {
+        User loginUser = getUserFromSession(session);
+        if (loginUser.nonNull()) {
+            question.setWriter(loginUser.getUserId());
+            question.setDate();
+            this.questionRepository.save(question);
+            return true;
+        }
+        return false;
+    }
+
+    public Question verifyQuestion(Long id, String writer, HttpSession session) {
+        User loginUser = getUserFromSession(session);
+        if (loginUser.nonNull() && loginUser.matchUserId(writer)) {
+            return findById(id);
+        }
+        return new Question();
+    }
+
+    public boolean update(Long id, String writer, Question question, HttpSession session) {
+        User loginUser = getUserFromSession(session);
+        Question currentQuestion = findById(id);
+        if (loginUser.nonNull() && loginUser.matchUserId(writer) && currentQuestion.nonNull()) {
+            currentQuestion.update(question);
+            this.questionRepository.save(currentQuestion);
+            return true;
+        }
+        return false;
+    }
+
+    public boolean delete(Long id, String writer, HttpSession session) {
+        User loginUser = getUserFromSession(session);
+        Question question = findById(id);
+        if (loginUser.nonNull() && loginUser.matchUserId(writer) && question.nonNull()) {
+            this.questionRepository.delete(question);
+            return true;
+        }
+        return false;
     }
 
     public List<Question> findAll() {
