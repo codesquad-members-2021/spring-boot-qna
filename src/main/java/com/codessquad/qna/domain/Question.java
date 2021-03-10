@@ -32,6 +32,12 @@ public class Question {
         this.currentDateTime = LocalDateTime.now();
     }
 
+    public void updateQuestion(String title, String contents) {
+        this.title = title;
+        this.contents = contents;
+        this.currentDateTime = LocalDateTime.now();
+    }
+
     public void setWriter(String writer) {
         this.writer = writer;
     }
@@ -66,6 +72,14 @@ public class Question {
 
     public String getCurrentDateTime() {
         return currentDateTime.format(pattern);
+    }
+
+    public boolean matchUser(User loginUser) {
+        Long userId = loginUser.getId();
+        if(this.id.equals(userId)) {
+            return true;
+        }
+        return false;
     }
 
 }

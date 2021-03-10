@@ -6,10 +6,7 @@ import com.codessquad.qna.repository.QuestionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpSession;
@@ -47,6 +44,28 @@ public class QuestionController {
     @GetMapping("/{id}")
     public ModelAndView viewQuestion(@PathVariable Long id) {
         return getQuestionRepository("/qna/show", id);
+    }
+
+    @GetMapping("/{id}/confirm")
+    public String confirmQuestion(@PathVariable Long id, HttpSession session, Model model) {
+        if (!HttpSessionUtils.isLoginUser(session)) {
+            return "/user/login";
+        }
+        User loginUser = HttpSessionUtils.getSessionUser(session);
+        Question question = questionRepository.findById(id).orElse(null);
+        if (question.matchUser(loginUser)) {
+            model.addAttribute("question", question);
+            return "/qna/updateForm";
+        }
+        return "redirect:/";
+    }
+
+    @PutMapping("/{id}/update")
+    public String updateQuestion(@PathVariable Long id, String title, String contents) {
+        Question question = questionRepository.findById(id).orElse(null);
+        question.updateQuestion(title, contents);
+        questionRepository.save(question);
+        return "redirect:/";
     }
 
     private ModelAndView getQuestionRepository(String viewName, Long id) {
