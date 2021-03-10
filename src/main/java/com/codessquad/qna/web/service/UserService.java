@@ -32,15 +32,13 @@ public class UserService {
     public List<User> findUsers() {
         return userRepository.findAll();
     }
-//
-//    public User findUser(String userId) {
-//        Optional<User> foundUser = userRepository.findByUserId(userId);
-//        if (!foundUser.isPresent()) {
-//            throw new IllegalStateException("찾는 아이디가 없습니다");
-//        }
-//        return foundUser.get();
-//    }
-//
+
+    public User findUser(long id) {
+        return userRepository
+                .findById(id)
+                .orElseThrow(()->new IllegalStateException("찾는 user가 없습니다"));
+    }
+
 //    public void updateUser(User user) {
 //        User originUser = findUser(user.getUserId());
 //        validatePassword(originUser, user);
