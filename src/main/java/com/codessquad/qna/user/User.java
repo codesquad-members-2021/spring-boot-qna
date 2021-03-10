@@ -63,6 +63,12 @@ public class User {
         return email;
     }
 
+    public void update(User newUser) {
+        this.name= newUser.name;
+        this.password= newUser.password;
+        this.email= newUser.email;
+    }
+
     @Override
     public String toString() {
         return "User{" +

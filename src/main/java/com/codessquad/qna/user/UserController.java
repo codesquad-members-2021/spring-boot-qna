@@ -41,7 +41,8 @@ public class UserController {
     @PutMapping("/{id}")
     public String updateUser(@PathVariable Long id, User newUser) {
         User existedUser = userRepository.findById(id).get();
-        userRepository.save(User.of(existedUser, newUser));
+        existedUser.update(newUser);
+        userRepository.save(existedUser);
         return "redirect:/users";
     }
 }
