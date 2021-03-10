@@ -11,34 +11,34 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpSession;
 
 import static com.codessquad.qna.controller.HttpSessionUtils.getSessionUser;
 import static com.codessquad.qna.controller.HttpSessionUtils.isLoginUser;
 
-@Controller
-@RequestMapping("/questions/{questionId}/answers")
-public class AnswerController {
-    private final Logger logger = LoggerFactory.getLogger(AnswerController.class);
+@RestController
+@RequestMapping("api/questions/{questionId}/answers")
+public class ApiAnswerController {
+    private final Logger logger = LoggerFactory.getLogger(ApiAnswerController.class);
     private final QuestionService questionService;
     private final AnswerService answerService;
 
     @Autowired
-    public AnswerController(QuestionService questionService, AnswerService answerService) {
+    public ApiAnswerController(QuestionService questionService, AnswerService answerService) {
         this.questionService = questionService;
         this.answerService = answerService;
     }
 
     @PostMapping
-    public String create(@PathVariable Long questionId, String contents, HttpSession session) {
+    public Answer create(@PathVariable Long questionId, String contents, HttpSession session) {
         if (!isLoginUser(session)) {
             throw new IllegalUserAccessException("로그인이 필요합니다.");
         }
         Answer answer = new Answer(getSessionUser(session), questionService.findQuestion(questionId), contents);
-        answerService.create(answer);
         logger.info("답변 작성에 성공했습니다.");
-        return "redirect:/questions/" + questionId;
+        return answerService.create(answer);
     }
 }
 

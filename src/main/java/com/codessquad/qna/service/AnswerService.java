@@ -14,8 +14,8 @@ public class AnswerService {
         this.answerRepository = answerRepository;
     }
 
-    public void create(Answer answer) {
-        answerRepository.save(answer);
+    public Answer create(Answer answer) {
+        return answerRepository.save(answer);
     }
 }
 
