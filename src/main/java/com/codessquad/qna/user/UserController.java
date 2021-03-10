@@ -7,7 +7,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.servlet.http.HttpSession;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
@@ -47,14 +49,29 @@ public class UserController {
     }
 
     @PutMapping("/{id}")
-    public String updateUser(@PathVariable Long id, UserDTO newUser) {
+    public String updateUser(@PathVariable Long id, UserDTO newUser, HttpSession session) {
         User existedUser = userRepository.findById(id).get();
 
         existedUser.checkPassword(newUser.getPassword());
         existedUser.update(newUser);
 
         userRepository.save(existedUser);
+        session.setAttribute("sessionedUser", existedUser);
 
         return "redirect:/users";
+    }
+
+    @PostMapping("/login")
+    public String login(String userId, String password, HttpSession session) {
+        Optional<User> user = userRepository.findByUserId(userId);
+
+        if (!user.isPresent()) {
+            return "/user/login_faild";
+        }
+
+        user.get().checkPassword(password);
+        session.setAttribute("sessionedUser", user.get());
+
+        return "redirect:/";
     }
 }
