@@ -27,7 +27,7 @@ public class QuestionController {
     @PostMapping("/qna/questions")
     public String askQuestion(Question question) {
         //qList.add();
-        question.setIndex(questionList.size()+1);
+        question.setIndex(questionList.size() + 1);
         questionList.add(question);
         return "redirect:/qna/list";
     }
