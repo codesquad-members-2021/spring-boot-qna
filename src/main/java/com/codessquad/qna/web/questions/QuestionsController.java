@@ -1,6 +1,5 @@
 package com.codessquad.qna.web.questions;
 
-import com.codessquad.qna.web.answers.AnswersRepository;
 import com.codessquad.qna.web.users.User;
 import com.codessquad.qna.web.utils.SessionUtil;
 import org.slf4j.Logger;
@@ -11,14 +10,11 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
-import java.util.List;
 
 @Controller
 public class QuestionsController {
     @Autowired
     private QuestionRepository questionRepository;
-    @Autowired
-    private AnswersRepository answersRepository;
     Logger logger = LoggerFactory.getLogger(QuestionsController.class);
 
     @PostMapping("/questions")
