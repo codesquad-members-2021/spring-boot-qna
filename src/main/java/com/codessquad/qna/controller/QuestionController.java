@@ -6,9 +6,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
+
+import javax.servlet.http.HttpSession;
+
+import static com.codessquad.qna.controller.HttpSessionUtils.isLoginUser;
 
 @Controller
 public class QuestionController {
@@ -27,16 +29,16 @@ public class QuestionController {
     }
 
     @GetMapping("/question/form")
-    public String viewQuestion() {
+    public String viewQuestion(HttpSession session) {
         logger.info("질문 작성 페이지 요청");
-        return "qna/form";
+        return isLoginUser(session) ? "qna/form" : "redirect:/user/login";
     }
 
     @PostMapping("/question/form")
-    public String createQuestion(Question question) {
-        this.questionService.save(question);
+    public String createQuestion(Question question, HttpSession session) {
+        boolean result = this.questionService.save(question, session);
         logger.info("질문 등록 요청");
-        return "redirect:/";
+        return result ? "redirect:/" : "redirect:/user/login";
     }
 
     @GetMapping("/question/{id}")
@@ -45,6 +47,28 @@ public class QuestionController {
         model.addAttribute("question", question);
         logger.info("상제 질문 페이지 요청");
         return question.nonNull() ? "qna/show" : "redirect:/";
+    }
+
+    @GetMapping("/question/{id}/{writer}/form")
+    public String viewUpdateQuestion(@PathVariable("id") Long id, @PathVariable("writer") String writer, Model model, HttpSession session) {
+        Question question = this.questionService.verifyQuestion(id, writer, session);
+        model.addAttribute("question", question);
+        logger.info("질문 수정 페이지 요청");
+        return question.nonNull() ? "qna/updateForm" : "redirect:/";
+    }
+
+    @PutMapping("/question/{id}/{writer}/form")
+    public String updateQuestion(@PathVariable("id") Long id, @PathVariable("writer") String writer, Question question, HttpSession session) {
+        boolean result = this.questionService.update(id, writer, question, session);
+        logger.info("질문 수정 요청");
+        return result ? "redirect:/question/" + id : "redirect:/";
+    }
+
+    @DeleteMapping("/question/{id}/{writer}")
+    public String deleteQuestion(@PathVariable("id") Long id, @PathVariable("writer") String writer, HttpSession session) {
+        boolean result = this.questionService.delete(id, writer, session);
+        logger.info("질문 삭제 요청");
+        return result ? "redirect:/" : "redirect:/question/" + id;
     }
 
 }
