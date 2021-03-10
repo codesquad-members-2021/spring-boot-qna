@@ -36,7 +36,6 @@ public class UserService {
 
     @Transactional(readOnly = true)
     public UserResponse getUser(Long id) {
-        // TODO: 조회 실패에 대한 예외처리
         User user = userRepository.getOne(id);
         return UserResponse.of(user);
     }

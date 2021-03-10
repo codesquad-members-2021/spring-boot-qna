@@ -14,8 +14,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.springframework.http.HttpStatus.CREATED;
-import static org.springframework.http.HttpStatus.OK;
 
 public class UserAcceptanceTest extends AcceptanceTest {
     private final static String PATH = "/users";
@@ -34,7 +32,7 @@ public class UserAcceptanceTest extends AcceptanceTest {
 
         // then
         assertThat(response.statusCode())
-                .isEqualTo(CREATED.value());
+                .isEqualTo(HttpStatus.CREATED.value());
     }
 
     @Test
@@ -71,10 +69,10 @@ public class UserAcceptanceTest extends AcceptanceTest {
 
         // then
         assertThat(actualResponse.statusCode())
-                .isEqualTo(OK.value());
+                .isEqualTo(HttpStatus.OK.value());
     }
 
-    @DisplayName("유저 조회한다.")
+    @DisplayName("유저를 조회한다.")
     @Test
     void getUser() {
         // given
@@ -91,7 +89,21 @@ public class UserAcceptanceTest extends AcceptanceTest {
 
         // then
         assertThat(actualResponse.statusCode())
-                .isEqualTo(OK.value());
+                .isEqualTo(HttpStatus.OK.value());
+    }
+
+    @DisplayName("존재하지 않는 유저 조회한다.")
+    @Test
+    void getUser_null() {
+        // when
+        ExtractableResponse<Response> actualResponse = RestAssured.given().log().all()
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .when().get(PATH + "/{id}", 100)
+                .then().log().all().extract();
+
+        // then
+        assertThat(actualResponse.statusCode())
+                .isEqualTo(HttpStatus.NOT_FOUND.value());
     }
 
     private Map<String, String> createParam(String userId, String password, String name, String email) {

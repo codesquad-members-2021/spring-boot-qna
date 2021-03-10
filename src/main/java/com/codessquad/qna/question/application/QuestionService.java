@@ -34,7 +34,6 @@ public class QuestionService {
 
     @Transactional(readOnly = true)
     public QuestionResponse getQuestion(Long id) {
-        // TODO: 조회 실패에 대한 예외처리
         Question question = questionRepository.getOne(id);
         return QuestionResponse.of(question);
     }

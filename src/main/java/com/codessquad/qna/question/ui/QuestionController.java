@@ -9,6 +9,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import javax.persistence.EntityNotFoundException;
 import java.net.URI;
 
 @Controller
@@ -44,5 +45,10 @@ public class QuestionController {
     public String getQuestion(@PathVariable Long id, Model model) {
         model.addAttribute("question", questionService.getQuestion(id));
         return "question/show";
+    }
+
+    @ExceptionHandler(EntityNotFoundException.class)
+    public ResponseEntity handleNotFoundException(EntityNotFoundException e) {
+        return ResponseEntity.notFound().build();
     }
 }
