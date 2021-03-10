@@ -1,7 +1,7 @@
 package com.codessquad.qna.controller;
 
 import com.codessquad.qna.domain.User;
-import com.codessquad.qna.repository.UserRepository;
+import com.codessquad.qna.service.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,14 +13,14 @@ import org.springframework.web.servlet.ModelAndView;
 @Controller
 @RequestMapping("/users")
 public class UserController {
-    @Autowired
-    private final UserRepository userRepository;
+    private final UserService userService;
+    Logger logger = LoggerFactory.getLogger(UserController.class);
 
-    public UserController(UserRepository userRepository) {
-        this.userRepository = userRepository;
+    @Autowired
+    public UserController(UserService userService) {
+        this.userService = userService;
     }
 
-    Logger logger = LoggerFactory.getLogger(UserController.class);
 
     @PostMapping
     public String createUser(User newUser) {
@@ -29,8 +29,8 @@ public class UserController {
             return "user/form";
         }
 
-        // TODO: 기존 회원과의 중복 여부 확인 로직 추가
-        userRepository.save(newUser);
+        //TODO: join의 반환값으로 id를 받아서 정상 join 여부 확인
+        userService.join(newUser);
 
         return "redirect:/users";
     }
@@ -57,7 +57,7 @@ public class UserController {
 
     @GetMapping
     public String showUsers(Model model) {
-        model.addAttribute("users", userRepository.findAll());
+        model.addAttribute("users", userService.findAll());
 
         return "/user/list";
     }
@@ -65,14 +65,14 @@ public class UserController {
     @GetMapping("/{id}")
     public ModelAndView showUserInDetail(@PathVariable long id) {
         ModelAndView modelAndView = new ModelAndView("/user/profile");
-        modelAndView.addObject("user", userRepository.findById(id).get());
+        modelAndView.addObject("user", userService.findById(id));
 
         return modelAndView;
     }
 
     @GetMapping("/{id}/form")
     public String passUserId(@PathVariable long id, Model model) {
-        User user = userRepository.findById(id).get();
+        User user = userService.findById(id);
 
         model.addAttribute("id", user.getId());
         model.addAttribute("userId", user.getUserId());
@@ -82,7 +82,7 @@ public class UserController {
 
     @PutMapping("/{id}")
     public String updateUser(@PathVariable long id, User referenceUser) {
-        User presentUser = userRepository.findById(id).get();
+        User presentUser = userService.findById(id);
 
         if(!isValidUser(presentUser)){
             logger.info("isValidUser");
@@ -94,21 +94,12 @@ public class UserController {
             return "redirect:/users";
         }
         logger.info("updateUserProperties");
-        updateUserProperties(presentUser, referenceUser);
+        userService.updateInfo(presentUser, referenceUser);
         return "redirect:/users";
     }
 
     // TODO: 도메인 객체로 뺄 수 있다
     private boolean isEqualPassword(String real, String expected) {
         return real.equals(expected);
-    }
-
-    private void updateUserProperties(User presentUser, User referenceUser) {
-
-        referenceUser.setUserId(presentUser.getUserId());
-
-        // TODO: 반환값을 활용하여 예외 처리, 해당 메서드에 아래 로직은 어울리지 않는다.
-        userRepository.delete(presentUser);
-        userRepository.save(referenceUser);
     }
 }
