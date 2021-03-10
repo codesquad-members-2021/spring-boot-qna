@@ -21,7 +21,7 @@
                         <div class="article-header-text">
                             <a href="/users/92/kimmunsu" class="article-author-name">{{author.name}}</a>
                             <a href="/questions/413" class="article-header-time" title="퍼머링크">
-                                {{date}}
+                                {{formattedDate}}
                                 <i class="icon-link"></i>
                             </a>
                         </div>
@@ -61,7 +61,7 @@
                                     <div class="article-header-text">
                                         <a href="/users/1/자바지기" class="article-author-name">{{author.name}}</a>
                                         <a href="#answer-1434" class="article-header-time" title="퍼머링크">
-                                            {{date}}
+                                            {{formattedDate}}
                                         </a>
                                     </div>
                                 </div>
@@ -85,7 +85,7 @@
                                 </div>
                             </article>
                             {{/answers}}
-                            <form class="submit-write" method="post" action="/questions/{{id}}/answers">
+                            <form class="answer-write" method="post" action="/questions/{{id}}/answers">
                                 <div class="form-group" style="padding:14px;">
                                     <textarea class="form-control" placeholder="Update your status"
                                               name="contents"></textarea>

@@ -16,9 +16,12 @@ public class Question {
     @ManyToOne
     @JoinColumn(foreignKey = @ForeignKey(name = "fk_question_author"))
     private User author;
+
     private String title;
+
     @Lob
     private String contents;
+
     private LocalDateTime date;
 
     @OneToMany(mappedBy = "question", cascade = CascadeType.ALL)
@@ -52,11 +55,15 @@ public class Question {
         return author;
     }
 
-    public String getDate() {
+    public String getFormattedDate() {
         if (date == null) {
             return "";
         }
         return date.format(DateTimeFormatter.ofPattern(QUESTION_DATETIME_FORMAT));
+    }
+
+    public LocalDateTime getDate() {
+        return date;
     }
 
     public String getTitle() {
