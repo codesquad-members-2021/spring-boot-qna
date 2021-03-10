@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 
 @Controller
 public class HomeController {
-    private QuestionRepository questionRepository;
+    private final QuestionRepository questionRepository;
 
     @Autowired
     public HomeController(QuestionRepository questionRepository) {
