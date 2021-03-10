@@ -57,6 +57,10 @@ public class User {
         this.email = newUser.email;
     }
 
+    public boolean matchPassword(String inputPassword){
+        return inputPassword.equals(password);
+    }
+
     @Override
     public String toString() {
         return "User{" +
