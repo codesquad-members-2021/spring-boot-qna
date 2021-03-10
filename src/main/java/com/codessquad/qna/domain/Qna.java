@@ -5,6 +5,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 @Entity
 public class Qna {
@@ -12,12 +13,13 @@ public class Qna {
     @GeneratedValue
     private long id;
 
+    @Column(nullable = false)
     private String writer;
-
     @Column(nullable = false)
     private String title;
+    @Column(nullable = false)
     private String contents;
-    private LocalDateTime date;
+    private LocalDateTime date = LocalDateTime.now();
 
     public long getId() {
         return id;
@@ -51,8 +53,8 @@ public class Qna {
         this.contents = contents;
     }
 
-    public LocalDateTime getDate() {
-        return date;
+    public String getDate() {
+        return date.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
     }
 
     public void setDate(LocalDateTime date) {
