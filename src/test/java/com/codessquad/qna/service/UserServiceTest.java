@@ -27,7 +27,7 @@ class UserServiceTest {
     void save() {
         User user = new User("roach", "1234", "roach", "dev0jsh@gmail.com");
         userService.save(user);
-        assertThat(userService.getUserById(1L).getId()).isEqualTo(user.getId());
+        assertThat(userService.getUserById(1L)).isEqualTo(user);
     }
 
     @Test
@@ -38,8 +38,8 @@ class UserServiceTest {
         userService.save(user);
         userService.save(user1);
         Assertions.assertAll(
-                ()->assertThat(userService.getUsers().get(0).getId()).isEqualTo(user.getId()),
-                ()->assertThat(userService.getUsers().get(1).getId()).isEqualTo(user1.getId())
+                ()->assertThat(userService.getUsers().get(0)).isEqualTo(user),
+                ()->assertThat(userService.getUsers().get(1)).isEqualTo(user1)
         );
     }
 
@@ -50,7 +50,7 @@ class UserServiceTest {
         User honux = new User("honux", "12345", "honux", "1234@naver.com");
         userService.save(user);
         userService.save(honux);
-        assertThat(userService.getUserById(1L).getId()).isEqualTo(user.getId());
+        assertThat(userService.getUserById(1L)).isEqualTo(user);
     }
 
     @Test
