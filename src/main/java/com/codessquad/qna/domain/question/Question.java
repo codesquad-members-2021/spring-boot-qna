@@ -1,5 +1,7 @@
 package com.codessquad.qna.domain.question;
 
+import org.springframework.format.datetime.standard.DateTimeFormatterRegistrar;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -9,7 +11,8 @@ import java.time.format.DateTimeFormatter;
 
 @Entity
 public class Question {
-    private static final String DATE_FORMAT = "yyyy-MM-dd HH:mm:ss";
+    private static final DateTimeFormatter DATE_TIME_FORMATTER
+            = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -28,7 +31,7 @@ public class Question {
         this.title = title;
         this.contents = contents;
         this.createdTime = LocalDateTime.now()
-                .format(DateTimeFormatter.ofPattern(DATE_FORMAT));
+                .format(DATE_TIME_FORMATTER);
     }
 
     public long getIndex() {
