@@ -18,7 +18,8 @@ public class Question {
     private User author;
 
     private String title;
-    
+
+    @Lob
     private String contents;
 
     private LocalDateTime date;

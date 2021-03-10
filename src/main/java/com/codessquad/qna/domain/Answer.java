@@ -20,6 +20,7 @@ public class Answer {
     @JoinColumn(foreignKey = @ForeignKey(name = "fk_answer"))
     private Question question;
 
+    @Lob
     private String contents;
 
     private LocalDateTime date;
