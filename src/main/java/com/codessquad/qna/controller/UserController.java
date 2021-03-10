@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.servlet.ModelAndView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -37,15 +38,11 @@ public class UserController {
         return "user/list";
     }
 
-    @GetMapping("/{userId}")
-    public String viewUserProfile(@PathVariable String userId, Model model) {
-        for (User user : users) {
-            if (user.isMatchingUserId(userId)) {
-                model.addAttribute("user", user);
-                return "user/profile";
-            }
-        }
-        return "redirect:/users";
+    @GetMapping("/{id}")
+    public ModelAndView viewUserProfile(@PathVariable Long id) {
+        ModelAndView modelAndView = new ModelAndView("user/profile");
+        modelAndView.addObject("user", userRepository.findById(id).get());
+        return modelAndView;
     }
 
     @GetMapping("{id}/form")
