@@ -57,6 +57,6 @@ public class UserController {
 
     @ExceptionHandler(NullPointerException.class)
     public String nullException() {
-        return "nullError";
+        return "nullErrorHandle";
     }
 }
