@@ -15,7 +15,7 @@ import java.util.List;
 @Controller
 public class QuestionController {
 
-    Logger logger = LoggerFactory.getLogger(UserController.class);
+    private Logger logger = LoggerFactory.getLogger(UserController.class);
     final private List<Question> questionList = new ArrayList<>();
 
     @GetMapping("/qna/form.html")
