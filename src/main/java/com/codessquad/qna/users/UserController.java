@@ -18,7 +18,7 @@ public class UserController {
     private UserService userService;
 
     @GetMapping
-    private String getUsers(Model model) {
+    private String userList(Model model) {
         model.addAttribute("users", userService.getUsers());
         return "user/list";
     }
@@ -30,7 +30,7 @@ public class UserController {
     }
 
     @GetMapping("/{userId}/profile")
-    private String getProfile(@PathVariable String userId, Model model) {
+    private String userProfile(@PathVariable String userId, Model model) {
         Optional<User> user = userService.getUser(userId);
         if (user.isPresent()) {
             model.addAttribute("user", user.get());

@@ -27,7 +27,7 @@ public class QuestionController {
     }
 
     @GetMapping("/{index}")
-    private String showQuestionDetail(@PathVariable int index, Model model) {
+    private String questionDetail(@PathVariable int index, Model model) {
         Optional<Question> question = questionService.getQuestion(index);
         if (question.isPresent()) {
             model.addAttribute("question", question.get());
