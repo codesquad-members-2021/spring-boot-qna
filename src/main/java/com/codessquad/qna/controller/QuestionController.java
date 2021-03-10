@@ -13,13 +13,11 @@ import org.springframework.web.servlet.ModelAndView;
 @Controller
 public class QuestionController {
 
-    @Autowired
-    private QuestionRepository questionRepository;
+    private final QuestionRepository questionRepository;
 
-    @GetMapping("/")
-    public String viewQuestionList(Model model) {
-        model.addAttribute("questions", questionRepository.findAll());
-        return "index";
+    @Autowired
+    public QuestionController(QuestionRepository questionRepository) {
+        this.questionRepository = questionRepository;
     }
 
     @GetMapping("/questions/{id}")

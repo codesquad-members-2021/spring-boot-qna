@@ -17,9 +17,12 @@ public class UserController {
     private final String UPDATE_INFO = "/update/{id}";
     private final String LOGIN = "/login";
     private final String LOGOUT = "/logout";
+    private final UserRepository userRepository;
 
     @Autowired
-    private UserRepository userRepository;
+    public UserController(UserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
 
     @PostMapping("")
     public String create(User user) {
@@ -71,7 +74,7 @@ public class UserController {
         if (sessionUser == null) {
             return "redirect:/users/login";
         }
-        User tempUser = (User)sessionUser;
+        User tempUser = (User) sessionUser;
         if (!id.equals(tempUser.getId())) {
             throw new IllegalStateException("자신의 정보만 수정 가능합니다.");
         }
@@ -95,6 +98,7 @@ public class UserController {
 
     @GetMapping(UPDATE_INFO)
     public ModelAndView updateUserInfo(@PathVariable Long id) {
+
         return getUserRepository("user/updateForm", id);
     }
 
