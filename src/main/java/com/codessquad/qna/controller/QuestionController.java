@@ -24,7 +24,7 @@ public class QuestionController {
     @GetMapping()
     public String list(Model model) {
         model.addAttribute("questions", questionService.getQuestions());
-        return "qna/list";
+        return "/qna/list";
     }
 
     @PostMapping()

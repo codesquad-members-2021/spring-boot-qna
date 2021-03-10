@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
-@RequestMapping("users")
+@RequestMapping("/users")
 public class UserController {
     private static final Logger logger = LoggerFactory.getLogger(UserController.class);
 
@@ -28,7 +28,7 @@ public class UserController {
     public String profile(@PathVariable String userId, Model model) {
         User user = userService.findUserById(userId);
         if (user == null) {
-            return "redirect:/";
+            return "redirect:/users";
         }
         model.addAttribute(user);
         return "/user/profile";
