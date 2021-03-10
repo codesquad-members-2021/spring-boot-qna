@@ -1,6 +1,7 @@
 package com.codessquad.qna.user;
 
 import com.codessquad.qna.AcceptanceTest;
+import com.codessquad.qna.user.dto.UserResponse;
 import io.restassured.RestAssured;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
@@ -14,6 +15,7 @@ import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.http.HttpStatus.CREATED;
+import static org.springframework.http.HttpStatus.OK;
 
 public class UserAcceptanceTest extends AcceptanceTest {
     private final static String PATH = "/users";
@@ -46,12 +48,50 @@ public class UserAcceptanceTest extends AcceptanceTest {
 
         // when
         // 유저_생성_요청
-        ExtractableResponse<Response> response = requestCreateUser(userId, "password", "name", "email@b.com");
+        ExtractableResponse<Response> response = requestCreateUser(userId, "password", "nick", "email@b.com");
 
         // then
         // 유저_노선_생성_실패됨
         assertThat(response.statusCode())
                 .isEqualTo(HttpStatus.BAD_REQUEST.value());
+    }
+
+    @DisplayName("유저 목록을 조회한다.")
+    @Test
+    void getUsers() {
+        // given
+        requestCreateUser("userId1", "password1", "name1", "email1");
+        requestCreateUser("userId2", "password2", "name2", "email2");
+
+        // when
+        ExtractableResponse<Response> actualResponse = RestAssured.given().log().all()
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .when().get(PATH)
+                .then().log().all().extract();
+
+        // then
+        assertThat(actualResponse.statusCode())
+                .isEqualTo(OK.value());
+    }
+
+    @DisplayName("유저 조회한다.")
+    @Test
+    void getUser() {
+        // given
+        requestCreateUser("userId1", "password1", "name1", "email1");
+        Long id = requestCreateUser("userId2", "password2", "name2", "email2")
+                .as(UserResponse.class)
+                .getId();
+
+        // when
+        ExtractableResponse<Response> actualResponse = RestAssured.given().log().all()
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .when().get(PATH + "/{id}", id)
+                .then().log().all().extract();
+
+        // then
+        assertThat(actualResponse.statusCode())
+                .isEqualTo(OK.value());
     }
 
     private Map<String, String> createParam(String userId, String password, String name, String email) {

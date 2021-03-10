@@ -1,6 +1,7 @@
 package com.codessquad.qna.question;
 
 import com.codessquad.qna.AcceptanceTest;
+import com.codessquad.qna.question.dto.QuestionResponse;
 import io.restassured.RestAssured;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
@@ -13,6 +14,7 @@ import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.http.HttpStatus.CREATED;
+import static org.springframework.http.HttpStatus.OK;
 
 public class QuestionAcceptanceTest extends AcceptanceTest {
     private final static String PATH = "/questions";
@@ -31,6 +33,44 @@ public class QuestionAcceptanceTest extends AcceptanceTest {
         // then
         assertThat(response.statusCode())
                 .isEqualTo(CREATED.value());
+    }
+
+    @DisplayName("질문 목록을 조회한다.")
+    @Test
+    void getQuestions() {
+        // given
+        requestCreateQuestion("writer1", "title1", "contents1");
+        requestCreateQuestion("writer2", "title2", "contents2");
+
+        // when
+        ExtractableResponse<Response> actualResponse = RestAssured.given().log().all()
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .when().get(PATH)
+                .then().log().all().extract();
+
+        // then
+        assertThat(actualResponse.statusCode())
+                .isEqualTo(OK.value());
+    }
+
+    @DisplayName("질문을 조회한다.")
+    @Test
+    void getQuestion() {
+        // given
+        requestCreateQuestion("writer1", "title1", "contents1");
+        Long id = requestCreateQuestion("writer2", "title2", "contents2")
+                .as(QuestionResponse.class)
+                .getId();
+
+        // when
+        ExtractableResponse<Response> actualResponse = RestAssured.given().log().all()
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .when().get(PATH + "/{id}", id)
+                .then().log().all().extract();
+
+        // then
+        assertThat(actualResponse.statusCode())
+                .isEqualTo(OK.value());
     }
 
     private Map<String, String> createParam(String writer, String title, String contents) {
