@@ -35,11 +35,15 @@ public class Answer {
         this.date = LocalDateTime.now();
     }
 
-    public String getDate() {
+    public String getFormattedDate() {
         if (date == null) {
             return "";
         }
         return date.format(DateTimeFormatter.ofPattern(ANSWER_DATETIME_FORMAT));
+    }
+
+    public LocalDateTime getDate() {
+        return date;
     }
 
     public Long getId() {
