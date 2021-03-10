@@ -1,6 +1,5 @@
 package com.codessquad.qna.user.application;
 
-
 import com.codessquad.qna.user.domain.User;
 import com.codessquad.qna.user.domain.UserRepository;
 import com.codessquad.qna.user.dto.UserRequest;
