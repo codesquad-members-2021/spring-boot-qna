@@ -21,7 +21,7 @@ public class Question {
     @Column(nullable = false, length = 20)
     // ZonedDateTime 타임존 또는 시차 개념이 필요한 날짜와 시간 정보를 나타낼 때 사용: https://www.daleseo.com/java8-zoned-date-time/
     // 배포서버가 미국에 있기 때문에 타임존을 사용하였습니다.
-    private final String time = ZonedDateTime.now(ZoneId.of("Asia/Seoul")).format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+    private final ZonedDateTime time = ZonedDateTime.now(ZoneId.of("Asia/Seoul"));
 
     public String getWriter() {
         return writer;
@@ -39,7 +39,7 @@ public class Question {
     }
 
     public String getTime() {
-        return time;
+        return time.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
     }
 
     public void setWriter(String writer) {
@@ -55,17 +55,5 @@ public class Question {
     }
     public void setId(Long id) {
         this.id = id;
-    }
-
-
-    @Override
-    public String toString() {
-        return "Question{" +
-                "writer='" + writer + '\'' +
-                ", title='" + title + '\'' +
-                ", contents='" + contents + '\'' +
-                ", id=" + id +
-                ", time=" + time +
-                '}';
     }
 }
