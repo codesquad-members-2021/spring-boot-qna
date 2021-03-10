@@ -28,39 +28,39 @@ public class QuestionService {
         if (loginUser.nonNull()) {
             question.setWriter(loginUser.getUserId());
             question.setDate();
+            question.setUser(loginUser);
             this.questionRepository.save(question);
             return true;
         }
         return false;
     }
 
-    public Question verifyQuestion(Long id, String writer, HttpSession session) {
-        User loginUser = getUserFromSession(session);
-        if (loginUser.nonNull() && loginUser.matchUserId(writer)) {
-            return findById(id);
-        }
-        return new Question();
-    }
-
-    public boolean update(Long id, String writer, Question question, HttpSession session) {
-        User loginUser = getUserFromSession(session);
-        Question currentQuestion = findById(id);
-        if (loginUser.nonNull() && loginUser.matchUserId(writer) && currentQuestion.nonNull()) {
-            currentQuestion.update(question);
-            this.questionRepository.save(currentQuestion);
+    public boolean update(Long id, Question question, HttpSession session) {
+        Question targetQuestion = verifyQuestion(id, session);
+        if (targetQuestion.nonNull()) {
+            targetQuestion.update(question);
+            this.questionRepository.save(targetQuestion);
             return true;
         }
         return false;
     }
 
-    public boolean delete(Long id, String writer, HttpSession session) {
+    public boolean delete(Long id, HttpSession session) {
+        Question targetQuestion = verifyQuestion(id, session);
+        if (targetQuestion.nonNull()) {
+            this.questionRepository.delete(targetQuestion);
+            return true;
+        }
+        return false;
+    }
+
+    public Question verifyQuestion(Long id, HttpSession session) {
         User loginUser = getUserFromSession(session);
         Question question = findById(id);
-        if (loginUser.nonNull() && loginUser.matchUserId(writer) && question.nonNull()) {
-            this.questionRepository.delete(question);
-            return true;
+        if (loginUser.nonNull() && question.nonNull() && question.matchUser(loginUser)) {
+            return question;
         }
-        return false;
+        return new Question();
     }
 
     public List<Question> findAll() {
