@@ -1,5 +1,7 @@
 package com.codessquad.qna.user;
 
+import org.springframework.util.StringUtils;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -32,10 +34,6 @@ public class User {
         this.email = email;
     }
 
-    public static User of(User existedUser, User newUser) {
-        return new User(existedUser.id, existedUser.userId, newUser.password, newUser.name, newUser.email);
-    }
-
     public static List<User> getDummyData() {
         return Arrays.asList(
                 new User(null, "javajigi", "1234", "자바지기", "javajigi@sample.net"),
@@ -63,10 +61,20 @@ public class User {
         return email;
     }
 
-    public void update(User newUser) {
-        this.name= newUser.name;
-        this.password= newUser.password;
-        this.email= newUser.email;
+    public void update(UserDTO newUser) {
+        name = newUser.getName();
+        password = newUser.hasNewPassword() ? newUser.getNewPassword() : password;
+        email = newUser.getEmail();
+    }
+
+    public void checkPassword(String password) {
+        if (!this.password.equals(password)) {
+            throw new IllegalArgumentException("비밀번호가 일치하지 않습니다.");
+        }
+    }
+
+    public UserDTO toDTO() {
+        return new UserDTO(id, userId, password, name, email);
     }
 
     @Override

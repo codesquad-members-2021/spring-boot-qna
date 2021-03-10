@@ -1,5 +1,7 @@
 package com.codessquad.qna.user;
 
+import org.springframework.util.StringUtils;
+
 public class UserDTO {
     private Long id;
     private String userId;
@@ -11,11 +13,10 @@ public class UserDTO {
     public UserDTO(){
     }
 
-    public UserDTO(Long id, String userId, String password, String newPassword, String name, String email) {
+    public UserDTO(Long id, String userId, String password, String name, String email) {
         this.id = id;
         this.userId = userId;
         this.password = password;
-        this.newPassword = newPassword;
         this.name = name;
         this.email = email;
     }
@@ -66,6 +67,14 @@ public class UserDTO {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public boolean hasNewPassword() {
+        return StringUtils.hasText(newPassword);
+    }
+
+    public User toEntity() {
+        return new User(id, userId, password, name, email);
     }
 
     @Override
