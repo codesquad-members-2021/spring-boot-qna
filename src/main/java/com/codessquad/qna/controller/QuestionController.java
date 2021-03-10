@@ -1,6 +1,8 @@
 package com.codessquad.qna.controller;
 
+import com.codessquad.qna.model.Answer;
 import com.codessquad.qna.model.Question;
+import com.codessquad.qna.service.AnswerService;
 import com.codessquad.qna.service.QuestionService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -10,16 +12,20 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
 
+import java.util.List;
+
 import static com.codessquad.qna.controller.HttpSessionUtils.isLoginUser;
 
 @Controller
 public class QuestionController {
 
     private Logger logger = LoggerFactory.getLogger(UserController.class);
-    private QuestionService questionService;
+    private final QuestionService questionService;
+    private final AnswerService answerService;
 
-    public QuestionController(QuestionService questionService) {
+    public QuestionController(QuestionService questionService, AnswerService answerService) {
         this.questionService = questionService;
+        this.answerService = answerService;
     }
 
     @GetMapping("/")
@@ -44,8 +50,10 @@ public class QuestionController {
     @GetMapping("/question/{id}")
     public String viewQuestion(@PathVariable("id") Long id, Model model) {
         Question question = this.questionService.findById(id);
+        List<Answer> answers = this.answerService.findAll(id);
         model.addAttribute("question", question);
-        logger.info("상제 질문 페이지 요청");
+        model.addAttribute("answers", answers);
+        logger.info("상세 질문 페이지 요청");
         return question.nonNull() ? "qna/show" : "redirect:/";
     }
 
