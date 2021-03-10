@@ -28,7 +28,7 @@ public class QuestionController {
     public String createQuestion(Question newQuestion) {
 
         if(!isValidQuestion(newQuestion)){
-            return "/questions/form";
+            return "/question/form";
         }
 
         Question question = questionRepository.save(newQuestion);
@@ -57,7 +57,7 @@ public class QuestionController {
 
     @GetMapping("/{id}")
     public ModelAndView showQuestionInDetail(@PathVariable long id){
-        ModelAndView modelAndView = new ModelAndView("/questions/show");
+        ModelAndView modelAndView = new ModelAndView("/question/show");
         modelAndView.addObject("question", questionRepository.findById(id).get());
 
         return modelAndView;

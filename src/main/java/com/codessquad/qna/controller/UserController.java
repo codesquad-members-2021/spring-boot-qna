@@ -26,7 +26,7 @@ public class UserController {
     public String createUser(User newUser) {
 
         if (!isValidUser(newUser)) {
-            return "users/form";
+            return "user/form";
         }
 
         // TODO: 기존 회원과의 중복 여부 확인 로직 추가
@@ -59,12 +59,12 @@ public class UserController {
     public String showUsers(Model model) {
         model.addAttribute("users", userRepository.findAll());
 
-        return "/users/list";
+        return "/user/list";
     }
 
     @GetMapping("/{id}")
     public ModelAndView showUserInDetail(@PathVariable long id) {
-        ModelAndView modelAndView = new ModelAndView("/users/profile");
+        ModelAndView modelAndView = new ModelAndView("/user/profile");
         modelAndView.addObject("user", userRepository.findById(id).get());
 
         return modelAndView;
@@ -77,7 +77,7 @@ public class UserController {
         model.addAttribute("id", user.getId());
         model.addAttribute("userId", user.getUserId());
 
-        return "/users/update";
+        return "/user/update";
     }
 
     @PutMapping("/{id}")
