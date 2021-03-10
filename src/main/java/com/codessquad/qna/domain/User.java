@@ -1,22 +1,19 @@
 package com.codessquad.qna.domain;
 
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
 
 @Entity
 public class User {
-    private int id;
+    @Id
+    @GeneratedValue
+    private Long id;
+
     private String userId;
     private String password;
     private String name;
     private String email;
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public int getId() {
-        return id;
-    }
 
     public void setUserId(String userId) {
         this.userId = userId;

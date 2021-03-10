@@ -21,7 +21,6 @@ public class UserController {
 
     @PostMapping
     public String signup(User user) {
-        user.setId(users.size() + 1);
         users.add(user);
         logger.info(user.toString());
         return "redirect:/users";
