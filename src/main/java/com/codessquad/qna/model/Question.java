@@ -1,9 +1,6 @@
 package com.codessquad.qna.model;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -26,8 +23,19 @@ public class Question {
     @Column(nullable = false)
     private Date date;
 
+    @ManyToOne
+    @JoinColumn(foreignKey = @ForeignKey(name = "user"), nullable = false)
+    private User user;
+
     public boolean nonNull() {
         return this.id != null;
+    }
+
+    public boolean matchUser(User user) {
+        if (this.user == null) {
+            return false;
+        }
+        return this.user.matchId(user.getId());
     }
 
     public void update(Question question) {
@@ -77,10 +85,19 @@ public class Question {
         this.date = new Date();
     }
 
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
     @Override
     public String toString() {
         return "writer: " + this.writer + ", " +
                 "title: " + this.title + ", " +
                 "contents: " + this.contents;
     }
+
 }
