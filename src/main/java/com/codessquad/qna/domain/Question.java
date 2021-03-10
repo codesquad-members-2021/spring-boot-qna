@@ -24,6 +24,13 @@ public class Question {
         currentDateTime = LocalDateTime.now();
     }
 
+    public Question(String writer, String title, String contents) {
+        super();
+        this.writer = writer;
+        this.title = title;
+        this.contents = contents;
+    }
+
     public void setWriter(String writer) {
         this.writer = writer;
     }
