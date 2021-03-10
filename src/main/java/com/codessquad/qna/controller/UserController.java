@@ -41,6 +41,8 @@ public class UserController {
         ModelAndView mav = new ModelAndView("user/profile");
         mav.addObject("users", findUserData);
 
+        // TODO. model.addAttribute("invalidMember", true);
+
         return mav;
     }
 
@@ -59,9 +61,10 @@ public class UserController {
 
 
     @PostMapping("/users/{primaryKey}/update")
-    private ModelAndView updateMemberList(User updateUserData) {
+    private ModelAndView updateMemberList(@PathVariable Long primaryKey, User updateUserData) {
 
-        Optional<User> userOptional = userRepository.findById(updateUserData.getPrimaryKey());
+        updateUserData.setPrimaryKey(primaryKey); //m 테이블이 생성될 때, PK가 생기므로. 임의 지정
+        Optional<User> userOptional = userRepository.findById(primaryKey);
         User originUserData = userOptional.orElseThrow(NoSuchElementException::new); // () -> new NoSuchElementException()
         userRepository.save(originUserData.update(updateUserData));
 

@@ -14,6 +14,7 @@ public class User {
     private String userId;
     @Column(nullable = false, length = 20)
     private String password;
+    private String newPassword;
     @Column(nullable = false, length = 20)
     private String name;
     @Column(nullable = false, length = 20)
@@ -39,6 +40,14 @@ public class User {
         return primaryKey;
     }
 
+    public String getNewPassword() {
+        return newPassword;
+    }
+
+    public void setPrimaryKey(Long primaryKey) {
+        this.primaryKey = primaryKey;
+    }
+
     public void setUserId(String userId) {
         this.userId = userId;
     }
@@ -55,8 +64,8 @@ public class User {
         this.email = email;
     }
 
-    public void setPrimaryKey(Long primaryKey) {
-        this.primaryKey = primaryKey;
+    public void setNewPassword(String newPassword) {
+        this.newPassword = newPassword;
     }
 
     private boolean checkId(String updatedId) {
@@ -72,6 +81,7 @@ public class User {
             return this;
         }
         this.setName(updateUserData.getName());
+        this.setPassword(updateUserData.getNewPassword());
         this.setEmail(updateUserData.getEmail());
         return this;
     }

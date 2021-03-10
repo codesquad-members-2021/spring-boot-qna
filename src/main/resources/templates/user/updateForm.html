@@ -10,8 +10,12 @@
                            readonly>
                 </div>
                 <div class="form-group">
-                    <label for="password">비밀번호</label>
+                    <label for="password">비밀번호 확인</label>
                     <input type="password" class="form-control" id="password" name="password" placeholder="Password">
+                </div>
+                <div class="form-group">
+                    <label for="password">새 비밀번호</label>
+                    <input type="password" class="form-control" id="newPassword" name="newPassword" placeholder="Password">
                 </div>
                 <div class="form-group">
                     <label for="name">이름</label>
@@ -22,7 +26,7 @@
                     <input type="email" class="form-control" id="email" name="email" placeholder="Email"
                            value={{email}}>
                 </div>
-                <button type="submit" class="btn btn-success clearfix pull-right">수정하기</button>
+                <button type="submit" class="btn btn-success clearfix pull-right">정보수정</button>
                 <div class="clearfix"/>
                 {{/users}}
             </form>
