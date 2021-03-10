@@ -1,6 +1,7 @@
 package com.codessquad.qna.valid;
 
 import com.codessquad.qna.domain.Question;
+import com.codessquad.qna.domain.User;
 
 public class QuestionValidation {
 
@@ -15,8 +16,8 @@ public class QuestionValidation {
         }
     }
 
-    private static void validWriter(String writer) {
-        if (writer.trim().isEmpty()) {
+    private static void validWriter(User writer) {
+        if (writer.getUserId().trim().isEmpty()) {
             throw new NullPointerException("글쓴이가 비었습니다.");
         }
     }
