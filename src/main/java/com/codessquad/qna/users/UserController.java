@@ -18,19 +18,19 @@ public class UserController {
     private UserService userService;
 
     @GetMapping
-    String getUsers(Model model) {
+    private String getUsers(Model model) {
         model.addAttribute("users", userService.getUsers());
         return "user/list";
     }
 
     @PostMapping
-    String createUser(User user) {
+    private String createUser(User user) {
         userService.addUser(user);
         return "redirect:/users";
     }
 
     @GetMapping("/{userId}/profile")
-    String getProfile(@PathVariable String userId, Model model) {
+    private String getProfile(@PathVariable String userId, Model model) {
         Optional<User> user = userService.getUser(userId);
         if (user.isPresent()) {
             model.addAttribute("user", user.get());
@@ -40,7 +40,7 @@ public class UserController {
     }
 
     @GetMapping("/{userId}/form")
-    String updateForm(@PathVariable String userId, Model model) {
+    private String updateForm(@PathVariable String userId, Model model) {
         Optional<User> user = userService.getUser(userId);
         if (user.isPresent()) {
             model.addAttribute("user", user.get());
@@ -50,7 +50,7 @@ public class UserController {
     }
 
     @PostMapping("/{id}/update")
-    String updateUser(User user) {
+    private String updateUser(User user) {
         userService.updateUser(user);
         return "redirect:/users";
     }

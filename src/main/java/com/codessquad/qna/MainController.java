@@ -11,10 +11,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping("/")
 public class MainController {
     @Autowired
-    QuestionService questionService;
+    private QuestionService questionService;
 
     @GetMapping
-    String getMainPage(Model model) {
+    private String getMainPage(Model model) {
         model.addAttribute("questions", questionService.getQuestions());
         return "index";
     }

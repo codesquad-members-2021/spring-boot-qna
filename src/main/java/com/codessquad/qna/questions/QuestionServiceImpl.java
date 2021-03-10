@@ -1,10 +1,7 @@
 package com.codessquad.qna.questions;
 
-import com.codessquad.qna.users.User;
 import org.springframework.stereotype.Component;
 
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
