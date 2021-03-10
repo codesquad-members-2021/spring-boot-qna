@@ -25,8 +25,8 @@ public class UserController {
     private UserRepository userRepository;
 
     @PostMapping
-    public String signup(User user) {
-        users.add(user);
+    public String signUp(User user) {
+        userRepository.save(user);
         logger.info(user.toString());
         return "redirect:/users";
     }
