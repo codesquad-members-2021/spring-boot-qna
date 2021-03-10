@@ -39,7 +39,7 @@ public class UserController {
     }
 
     @GetMapping("/{id}/form")
-    public ModelAndView update(@PathVariable Long id, Model model) {
+    public ModelAndView update(@PathVariable Long id) {
         ModelAndView modelAndView = new ModelAndView("/user/updateForm");
         modelAndView.addObject("user", userRepository.findById(id).orElseThrow(NullPointerException::new));
         return modelAndView;

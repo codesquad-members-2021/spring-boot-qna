@@ -1,6 +1,8 @@
 package com.codessquad.qna.domain;
 
 import javax.persistence.*;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 @Entity
 public class Question {
@@ -8,14 +10,14 @@ public class Question {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false, length = 20)
     private String writer;
-
-    @Column(nullable = false, length = 30)
     private String title;
-
-    @Column(nullable = false, length = 500)
     private String contents;
+    private String postTime;
+
+    public void setId(Long id) {
+        this.id = id;
+    }
 
     public Long getId() {
         return id;
@@ -45,6 +47,15 @@ public class Question {
         this.contents = contents;
     }
 
+    public String getPostTime() {
+        return postTime;
+    }
+
+    public void setPostTime() {
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd hh:mm");
+        postTime = formatter.format(new Date());
+    }
+
     @Override
     public String toString() {
         return "Question{" +
@@ -52,6 +63,7 @@ public class Question {
                 ", writer='" + writer + '\'' +
                 ", title='" + title + '\'' +
                 ", contents='" + contents + '\'' +
+                ", postTime=" + postTime +
                 '}';
     }
 }

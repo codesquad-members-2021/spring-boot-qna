@@ -22,6 +22,7 @@ public class QuestionController {
 
     @PostMapping("/questions")
     public String create(Question question) {
+        question.setPostTime();
         questionRepository.save(question);
         return "redirect:/";
     }
