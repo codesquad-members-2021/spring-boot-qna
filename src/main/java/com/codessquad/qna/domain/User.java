@@ -65,4 +65,8 @@ public class User {
         this.email = user.getEmail();
         this.password = newPassword;
     }
+
+    public boolean checkId(Long newId) {
+        return this.id == newId;
+    }
 }
