@@ -24,8 +24,7 @@ public class QuestionService {
 
     @Transactional
     public void write(Question question, User user) {
-        //todo : 관계메소드로 변경
-        question.setWriter(user);
+        question.changeWriter(user);
         question.setWriteTime(LocalDateTime.now());
         QuestionValidation.validQuestion(question);
 

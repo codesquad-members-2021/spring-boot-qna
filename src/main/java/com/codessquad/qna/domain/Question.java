@@ -11,7 +11,7 @@ public class Question {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne()
+    @ManyToOne
     @JoinColumn(name = "user_id")
     private User writer;
 
@@ -35,7 +35,7 @@ public class Question {
         this.id = id;
     }
 
-    public void setWriter(User writer) {
+    public void changeWriter(User writer) {
         this.writer = writer;
     }
 
@@ -58,5 +58,6 @@ public class Question {
     public String getContents() {
         return contents;
     }
+
 
 }
