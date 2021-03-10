@@ -49,7 +49,7 @@ public class UserController {
         if (user == null) {
             return "redirect:/users/login";
         }
-        if (!password.equals(user.getPassword())) {
+        if (!user.matchPassword(password)) {
             return "redirect:/users/login";
         }
         session.setAttribute("user", user);
@@ -74,7 +74,7 @@ public class UserController {
             return "redirect:/users/login";
         }
         User tempUser = HttpSessionUtils.getSessionUser(httpSession);
-        if (!id.equals(tempUser.getId())) {
+        if (!tempUser.matchId(id)) {
             throw new IllegalStateException("자신의 정보만 수정 가능합니다.");
         }
         return "redirect:/users/confirm/{id}";
@@ -88,8 +88,7 @@ public class UserController {
     @PostMapping(CONFIRM_INFO)
     public String confirmUserInfo(@PathVariable Long id, String password) {
         User user = userRepository.findById(id).orElse(null);
-        String userPassword = user.getPassword();
-        if (userPassword.equals(password)) {
+        if (user.matchPassword(password)) {
             return "redirect:/users/update/{id}";
         }
         return "redirect:/users/confirm/{id}";
