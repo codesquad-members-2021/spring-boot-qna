@@ -29,11 +29,13 @@ public class UserService {
         // TODO: 반환값으로 Long id(.getId) 설정해서 컨트롤러에서 정상 join 여부 확인할 수 있도록
     }
 
+    // TODO: showAll 어때?
     public Iterable<User> findAll() {
         return userRepository.findAll();
     }
 
-    // TODO: Optional 객체에서 원 객체 추출하는 방법 학
+    // TODO: Optional 객체에서 원 객체 추출하는 방법 학습
+    // TODO: showOneById
     public User findById(Long id) {
         return userRepository.findById(id).get();
     }
