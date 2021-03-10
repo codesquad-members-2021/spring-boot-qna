@@ -49,7 +49,6 @@ public class QuestionController {
         ModelAndView modelAndView = new ModelAndView("qna/show");
         modelAndView.addObject("question", question);
         modelAndView.addObject("comments", answerRepository.findAllByQuestion(question));
-        modelAndView.addObject("commentsSize", answerRepository.countByQuestion(question));
         return modelAndView;
     }
 
