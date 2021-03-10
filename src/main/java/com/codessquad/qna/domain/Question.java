@@ -7,15 +7,7 @@ public class Question {
     private String title;
     private String contents;
 
-    @Override
-    public String toString() {
-        return "Question{" +
-                "index=" + index +
-                ", writer='" + writer + '\'' +
-                ", title='" + title + '\'' +
-                ", contents='" + contents + '\'' +
-                '}';
-    }
+
 
     public int getIndex() {
         return index;
@@ -48,4 +40,16 @@ public class Question {
     public void setContents(String contents) {
         this.contents = contents;
     }
+
+
+    @Override
+    public String toString() {
+        return "Question{" +
+                "index=" + index +
+                ", writer='" + writer + '\'' +
+                ", title='" + title + '\'' +
+                ", contents='" + contents + '\'' +
+                '}';
+    }
+
 }

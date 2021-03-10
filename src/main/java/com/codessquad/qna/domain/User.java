@@ -18,16 +18,6 @@ public class User {
         this.email = copyUser.email;
     }
 
-    @Override
-    public String toString() {
-        return "User{" +
-                "userId='" + userId + '\'' +
-                ", password='" + password + '\'' +
-                ", name='" + name + '\'' +
-                ", email='" + email + '\'' +
-                '}';
-    }
-
     public String getUserId() {
         return userId;
     }
@@ -65,5 +55,17 @@ public class User {
         this.userId = newUser.userId;
         this.email = newUser.email;
     }
+
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "userId='" + userId + '\'' +
+                ", password='" + password + '\'' +
+                ", name='" + name + '\'' +
+                ", email='" + email + '\'' +
+                '}';
+    }
+
 
 }
