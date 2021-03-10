@@ -2,6 +2,7 @@ package com.codessquad.qna.domain;
 
 import javax.persistence.*;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.Date;
 
 @Entity
@@ -13,7 +14,7 @@ public class Question {
     private String writer;
     private String title;
     private String contents;
-    private String postTime;
+    private LocalDate postTime;
 
     public void setId(Long id) {
         this.id = id;
@@ -47,13 +48,12 @@ public class Question {
         this.contents = contents;
     }
 
-    public String getPostTime() {
+    public LocalDate getPostTime() {
         return postTime;
     }
 
     public void setPostTime() {
-        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd hh:mm");
-        postTime = formatter.format(new Date());
+        postTime = LocalDate.now();
     }
 
     @Override
