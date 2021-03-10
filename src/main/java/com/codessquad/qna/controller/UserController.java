@@ -16,6 +16,7 @@ public class UserController {
     private final String CONFIRM_INFO = "/confirm/{id}";
     private final String UPDATE_INFO = "/update/{id}";
     private final String LOGIN = "/login";
+    private final String LOGOUT = "/logout";
 
     @Autowired
     private UserRepository userRepository;
@@ -53,6 +54,11 @@ public class UserController {
         return "redirect:/";
     }
 
+    @GetMapping(LOGOUT)
+    public String logout(HttpSession session) {
+        session.removeAttribute("user");
+        return "redirect:/";
+    }
 
     @GetMapping("/{id}")
     public String viewProfile(@PathVariable Long id, Model model) {
