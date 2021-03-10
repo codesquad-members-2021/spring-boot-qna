@@ -1,57 +1,55 @@
 package com.codessquad.qna.controller;
 
-import com.codessquad.qna.model.User;
+import com.codessquad.qna.domain.User;
+import com.codessquad.qna.repository.UserRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Controller
+@RequestMapping("/users")
 public class UserController {
-    private List<User> users = new ArrayList<>();
 
-    @PostMapping("/users")
+    @Autowired
+    private UserRepository userRepository;
+
+    @PostMapping("")
     public String create(User user) {
-        users.add(user);
+        userRepository.save(user);
         return "redirect:/users";
     }
 
-    @GetMapping("/users")
+    @GetMapping("")
     public String list(Model model) {
-        model.addAttribute("users", users);
+        model.addAttribute("users", userRepository.findAll());
         return "users/list";
     }
 
-    @GetMapping("/users/{userId}")
-    public String profile(@PathVariable("userId") String userId, Model model) {
-        for (User user : users) {
-            if (user.isUserId(userId))
-                model.addAttribute("user", user);
-        }
+    @GetMapping("/{id}")
+    public String profile(@PathVariable("id") Long id, Model model) {
+        User user = userRepository.findById(id).get();
+        model.addAttribute("user", user);
+
         return "users/profile";
     }
 
-    @GetMapping("/users/{userId}/form")
-    public String updateForm(@PathVariable("userId") String userId, Model model) {
-        for (User user : users) {
-            if (user.isUserId(userId))
-                model.addAttribute("user", user);
-        }
+    @GetMapping("/{id}/form")
+    public String updateForm(@PathVariable("id") Long id, Model model) {
+        User user = userRepository.findById(id).get();
+        model.addAttribute("user", user);
         return "users/updateForm";
     }
 
-    @PostMapping("/users/{userId}/update")
-    public String update(@PathVariable("userId") String userId, User updateUserInfo, Model model) {
-        for (User user : users) {
-            if (user.isUserId(userId)) {
-                user.updateUserInfo(updateUserInfo);
-            }
-            model.addAttribute("user", user);
-        }
+    @PutMapping("/{id}")
+    public String update(@PathVariable("id") Long id, User updateUserInfo, Model model) {
+        User user = userRepository.findById(id).get();
+        user.update(updateUserInfo);
+        userRepository.save(user);
         return "redirect:/users";
     }
 }
