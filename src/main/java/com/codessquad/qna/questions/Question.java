@@ -1,20 +1,17 @@
 package com.codessquad.qna.questions;
 
-import java.util.Calendar;
-import java.util.Date;
-
 public class Question {
-    private Integer index;
+    private int index;
     private String writer;
     private String title;
     private String contents;
     private String dateTime;
 
-    public Integer getIndex() {
+    public int getIndex() {
         return index;
     }
 
-    public void setIndex(Integer index) {
+    public void setIndex(int index) {
         this.index = index;
     }
 
