@@ -71,10 +71,6 @@ public class UserController {
         return "users/updateForm";
     }
 
-    private boolean is_sameUser(User u1, User u2) {
-        return u1.getUserId().equals(u2.getUserId());
-    }
-
     @PostMapping("/users/update")
     public String updateConfirm(User newUser) {
         return "redirect:/users";

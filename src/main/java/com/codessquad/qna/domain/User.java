@@ -54,6 +54,9 @@ public class User {
         this.email = newUser.email;
     }
 
+    public boolean equals(User unknownUser) {
+        return userId.equals(unknownUser.getUserId());
+    }
 
     @Override
     public String toString() {
