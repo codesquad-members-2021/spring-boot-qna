@@ -33,7 +33,7 @@ public class QuestionController {
     @GetMapping("qna/show/{qnaId}")
     public ModelAndView getOneQuestion(@PathVariable long qnaId) {
         ModelAndView modelAndView = new ModelAndView("qna/show");
-        modelAndView.addObject("Qna", qnaRepository.findById(qnaId).get());
+        modelAndView.addObject("Qna", qnaRepository.findById(qnaId).orElse(null));
         return modelAndView;
     }
 }

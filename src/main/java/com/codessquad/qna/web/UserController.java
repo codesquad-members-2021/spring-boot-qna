@@ -33,20 +33,20 @@ public class UserController {
     @GetMapping("/users/{id}")
     public ModelAndView getOneUserProfile(@PathVariable long id) {
         ModelAndView modelAndView = new ModelAndView("user/profile");
-        modelAndView.addObject("user", userRepository.findById(id).get());
+        modelAndView.addObject("user", userRepository.findById(id).orElse(null));
         return modelAndView;
     }
 
     @GetMapping("/create/{id}")
     public ModelAndView editUserInfo(@PathVariable long id) {
         ModelAndView modelAndView = new ModelAndView("user/updateForm");
-        modelAndView.addObject("user", userRepository.findById(id).get());
+        modelAndView.addObject("user", userRepository.findById(id).orElse(null));
         return modelAndView;
     }
 
     @PostMapping("/{id}")
     public String update(@PathVariable long id, User updateUser) {
-        User user = userRepository.findById(id).get();
+        User user = userRepository.findById(id).orElse(null);
         user.update(updateUser);
 
         userRepository.save(user);
