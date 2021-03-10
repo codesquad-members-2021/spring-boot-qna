@@ -29,6 +29,7 @@ public class Question {
         this.writer = writer;
         this.title = title;
         this.contents = contents;
+        this.currentDateTime = LocalDateTime.now();
     }
 
     public void setWriter(String writer) {
