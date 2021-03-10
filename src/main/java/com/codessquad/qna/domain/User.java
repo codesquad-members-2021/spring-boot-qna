@@ -58,15 +58,6 @@ public class User {
         this.primaryKey = primaryKey;
     }
 
-    @Override
-    public String toString() {
-        return "User{" +
-                "userId='" + userId + '\'' +
-                ", password='" + password + '\'' +
-                ", name='" + name + '\'' +
-                ", email='" + email + '\'' +
-                '}';
-    }
 
     private static boolean checkId(String previousID, String updatedId) {
         return Objects.equals(previousID, updatedId);
@@ -76,13 +67,13 @@ public class User {
         return Objects.equals(previousPassword, updatedPassword);
     }
 
-    public static User updateTargetProfile(User originUser, User updatedUser) {
-        if (!checkId(originUser.getUserId(), updatedUser.getUserId())
-                || !checkPassword(originUser.getPassword(), updatedUser.getPassword())) {
-            return originUser;
+    public static User updateTargetProfile(User originUserData, User updateUserData) {
+        if (!checkId(originUserData.getUserId(), updateUserData.getUserId())
+                || !checkPassword(originUserData.getPassword(), updateUserData.getPassword())) {
+            return originUserData;
         }
-        originUser.setName(updatedUser.getName());
-        originUser.setEmail(updatedUser.getEmail());
-        return originUser;
+        originUserData.setName(updateUserData.getName());
+        originUserData.setEmail(updateUserData.getEmail());
+        return originUserData;
     }
 }
