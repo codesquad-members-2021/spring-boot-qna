@@ -27,7 +27,7 @@ public class QuestionController {
     @PostMapping("/qna/questions")
     public String askQuestion(Question question) {
         //qList.add();
-        question.setIndex(questionList.size()+1);
+        question.setIndex(questionList.size() + 1);
         questionList.add(question);
         return "redirect:/qna/list";
     }
@@ -39,7 +39,7 @@ public class QuestionController {
 
     @GetMapping("/qna/{index}")
     public String showProfile(@PathVariable int index, Model model) {
-        Question currentQuestion = questionList.get(index-1);
+        Question currentQuestion = questionList.get(index - 1);
         model.addAttribute("question",currentQuestion);
         logger.info("update Question : " + currentQuestion.toString());
         return "/qna/show";
