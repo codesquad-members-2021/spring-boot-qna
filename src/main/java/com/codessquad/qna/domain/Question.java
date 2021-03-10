@@ -15,6 +15,8 @@ public class Question {
     @Column(nullable = false, length = 20)
     private String writer;
     private String title;
+
+    @Column(nullable = false, length = 2000)
     private String contents;
     private LocalDateTime currentDateTime;
 

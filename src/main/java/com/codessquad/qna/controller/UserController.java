@@ -46,7 +46,6 @@ public class UserController {
         if (user == null) {
             return "redirect:/users/login";
         }
-
         if (!password.equals(user.getPassword())) {
             return "redirect:/users/login";
         }
@@ -66,13 +65,26 @@ public class UserController {
         return "user/profile";
     }
 
+    @GetMapping("/{id}/changeInfo")
+    public String changeInfo(@PathVariable Long id, HttpSession httpSession) {
+        Object sessionUser = httpSession.getAttribute("user");
+        if (sessionUser == null) {
+            return "redirect:/users/login";
+        }
+        User tempUser = (User)sessionUser;
+        if (!id.equals(tempUser.getId())) {
+            throw new IllegalStateException("자신의 정보만 수정 가능합니다.");
+        }
+        return "redirect:/users/confirm/{id}";
+    }
+
     @GetMapping(CONFIRM_INFO)
     public ModelAndView confirmUserInfo(@PathVariable Long id) {
         return getUserRepository("/user/confirmUserInfo", id);
     }
 
     @PostMapping(CONFIRM_INFO)
-    public String confirmUserInfo(@PathVariable("id") Long id, String password) {
+    public String confirmUserInfo(@PathVariable Long id, String password) {
         User user = userRepository.findById(id).orElse(null);
         String userPassword = user.getPassword();
         if (userPassword.equals(password)) {
@@ -87,7 +99,7 @@ public class UserController {
     }
 
     @PutMapping(UPDATE_INFO)
-    public String updateUserInfo(@PathVariable("id") Long id, String password, String name, String email) {
+    public String updateUserInfo(@PathVariable Long id, String password, String name, String email) {
         User user = userRepository.findById(id).orElse(null);
         user.updateUserInfo(password, name, email);
         userRepository.save(user);
