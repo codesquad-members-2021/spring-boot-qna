@@ -33,7 +33,7 @@ public class UserController {
 
     @GetMapping
     public String list(Model model) {
-        model.addAttribute("users", users);
+        model.addAttribute("users", userRepository.findAll());
         return "user/list";
     }
 
