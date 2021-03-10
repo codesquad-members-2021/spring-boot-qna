@@ -61,7 +61,7 @@ public class QuestionController {
         Question question = questionService.findVerifiedQuestion(id, session);
         question.update(title, contents);
         questionService.create(question);
-        return String.format("redirect:/questions/%d", id);
+        return "redirect:/questions/" + id;
     }
 
     @DeleteMapping("/{id}")
