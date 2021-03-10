@@ -1,17 +1,11 @@
 package com.codessquad.qna.domain;
 
-import lombok.*;
-
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 @Entity
-@Getter
-@Setter
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
-@EqualsAndHashCode(of = {"id"})
 public class Question {
     public static final String QUESTION_DATETIME_FORMAT = "yyyy.MM.dd HH:mm";
 
@@ -31,19 +25,14 @@ public class Question {
     @OrderBy("id asc")
     private List<Answer> answers;
 
-    @Builder
+    protected Question() {
+    }
+
     public Question(User author, String title, String contents) {
         this.author = author;
         this.title = title;
         this.contents = contents;
         this.date = LocalDateTime.now();
-    }
-
-    public String getDate() {
-        if (date == null) {
-            return "";
-        }
-        return date.format(DateTimeFormatter.ofPattern(QUESTION_DATETIME_FORMAT));
     }
 
     public void update(String title, String contents) {
@@ -53,6 +42,41 @@ public class Question {
 
     public boolean isNotSameAuthor(User loginUser) {
         return !this.author.equals(loginUser);
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public User getAuthor() {
+        return author;
+    }
+
+    public String getDate() {
+        if (date == null) {
+            return "";
+        }
+        return date.format(DateTimeFormatter.ofPattern(QUESTION_DATETIME_FORMAT));
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public String getContents() {
+        return contents;
+    }
+
+    public List<Answer> getAnswers() {
+        return answers;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public void setContents(String contents) {
+        this.contents = contents;
     }
 }
 
