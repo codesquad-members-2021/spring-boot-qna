@@ -41,15 +41,12 @@ public class UserAcceptanceTest extends AcceptanceTest {
         String userId = "pyro";
 
         // given
-        // 유저_등록되어_있음
         requestCreateUser(userId, "pw", "na", "em@a.com");
 
         // when
-        // 유저_생성_요청
         ExtractableResponse<Response> response = requestCreateUser(userId, "password", "nick", "email@b.com");
 
         // then
-        // 유저_노선_생성_실패됨
         assertThat(response.statusCode())
                 .isEqualTo(HttpStatus.BAD_REQUEST.value());
     }
