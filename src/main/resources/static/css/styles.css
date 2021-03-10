@@ -39,7 +39,7 @@ button {
 }
 textarea {
  resize: none;
- outline: 0; 
+ outline: 0;
 }
 .panel .btn i,.btn span{
  color:#666666;
@@ -68,8 +68,8 @@ textarea {
 .list-group-item:first-child,.list-group-item:last-child {
  border-radius:0;
 }
-h3,h4,h5 { 
- border:0 solid #efefef; 
+h3,h4,h5 {
+ border:0 solid #efefef;
  border-bottom-width:1px;
  padding-bottom:10px;
 }
