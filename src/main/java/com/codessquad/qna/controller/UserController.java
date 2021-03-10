@@ -45,7 +45,7 @@ public class UserController {
         return modelAndView;
     }
 
-    @PostMapping("/{id}")
+    @PutMapping("/{id}")
     public String updateForm(@PathVariable Long id, User newUser) {
         User user = userRepository.findById(id).orElseThrow(NullPointerException::new);
         user.update(newUser);
