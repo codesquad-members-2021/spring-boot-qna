@@ -3,6 +3,7 @@ package com.codessquad.qna.domain;
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 
 @Entity
 public class Question {
@@ -15,9 +16,17 @@ public class Question {
     @JoinColumn(name = "user_id")
     private User writer;
 
+    @OneToMany(mappedBy = "question")
+    @OrderBy("id ASC ")
+    private List<Answer> answerList;
+
     private String title;
     private String contents;
     private LocalDateTime writeTime;
+
+    public List<Answer> getAnswerList() {
+        return answerList;
+    }
 
     public String getWriteTime() {
         return writeTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd hh:mm:ss"));
