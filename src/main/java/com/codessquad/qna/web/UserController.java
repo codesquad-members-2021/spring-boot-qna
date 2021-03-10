@@ -19,8 +19,6 @@ public class UserController {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(QuestionController.class.getName());
 
-    private List<User> userList = new ArrayList<>();
-
     @Autowired
     private UserRepository userRepository;
 
