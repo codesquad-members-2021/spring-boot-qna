@@ -17,6 +17,9 @@ public class QuestionController {
 
     @PostMapping("/qna")
     public String qnaMain(Qna qna) {
+        if(qna == null){
+            return "redirect:/qna";
+        }
         qnaRepository.save(qna);
         return "redirect:/";
     }

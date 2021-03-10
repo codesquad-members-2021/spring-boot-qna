@@ -17,6 +17,9 @@ public class UserController {
 
     @PostMapping("/create")
     public String create(User user) {
+        if(user == null){
+            return "redirect:/create";
+        }
         userRepository.save(user);
         return "redirect:/list";
     }
