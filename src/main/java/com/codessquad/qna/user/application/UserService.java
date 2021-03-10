@@ -21,7 +21,6 @@ public class UserService {
     }
 
     public UserResponse saveUser(UserRequest userRequest) {
-        // TODO: 동일한 userId 룰 추가하려 할 경우에 대한 예외처리
         User user = userRepository.save(userRequest.toUser());
         return UserResponse.of(user);
     }
