@@ -1,7 +1,7 @@
 package com.codessquad.qna.controller;
 
 import com.codessquad.qna.domain.Question;
-import com.codessquad.qna.repository.QuestionRepository;
+import com.codessquad.qna.service.QuestionService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,31 +15,28 @@ import org.springframework.web.servlet.ModelAndView;
 @Controller
 @RequestMapping("/questions")
 public class QuestionController {
-    @Autowired
-    private final QuestionRepository questionRepository;
-
-    public QuestionController(QuestionRepository questionRepository) {
-        this.questionRepository = questionRepository;
-    }
-
+    private final QuestionService questionService;
     Logger logger = LoggerFactory.getLogger(UserController.class);
+
+    @Autowired
+    public QuestionController(QuestionService questionService) {
+        this.questionService = questionService;
+    }
 
     @PostMapping
     public String createQuestion(Question newQuestion) {
 
-        if(!isValidQuestion(newQuestion)){
+        if (!isValidQuestion(newQuestion)) {
             return "/question/form";
         }
 
-        Question question = questionRepository.save(newQuestion);
-
-        logger.info("after save" + question.toString());
+        questionService.add(newQuestion);
 
         return "redirect:/";
     }
 
     private boolean isValidQuestion(Question question) {
-        if (question == null){
+        if (question == null) {
             return false;
         }
         if ("".equals(question.getWriter()) || question.getWriter() == null) {
@@ -56,9 +53,9 @@ public class QuestionController {
     }
 
     @GetMapping("/{id}")
-    public ModelAndView showQuestionInDetail(@PathVariable long id){
+    public ModelAndView showQuestionInDetail(@PathVariable long id) {
         ModelAndView modelAndView = new ModelAndView("/question/show");
-        modelAndView.addObject("question", questionRepository.findById(id).get());
+        modelAndView.addObject("question", questionService.showOneById(id));
 
         return modelAndView;
     }
