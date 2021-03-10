@@ -65,8 +65,20 @@ public class QuestionController {
         Question question = questionRepository.findById(id).orElse(null);
         question.updateQuestion(title, contents);
         questionRepository.save(question);
+        return "redirect:/questions/" + id;
+    }
+
+    @DeleteMapping("/{id}/delete")
+    public String deleteQuestion(@PathVariable Long id, HttpSession session) {
+        Question question = questionRepository.findById(id).orElse(null);
+        User loginUser = HttpSessionUtils.getSessionUser(session);
+        if (question.matchUser(loginUser)) {
+            questionRepository.delete(question);
+            return "redirect:/";
+        }
         return "redirect:/";
     }
+
 
     private ModelAndView getQuestionRepository(String viewName, Long id) {
         ModelAndView modelAndView = new ModelAndView(viewName);
