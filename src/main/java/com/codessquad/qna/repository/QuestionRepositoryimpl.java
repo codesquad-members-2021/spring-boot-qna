@@ -1,11 +1,14 @@
 package com.codessquad.qna.repository;
 
 import com.codessquad.qna.domain.Question;
+import org.springframework.stereotype.Repository;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
+@Repository
 public class QuestionRepositoryimpl implements QuestionRepository {
 
     private List<Question> questions = new ArrayList<>();
@@ -18,14 +21,16 @@ public class QuestionRepositoryimpl implements QuestionRepository {
     }
 
     @Override
-    public Question findQuestionByIndex(int index) {
+    public Optional<Question> findQuestionByIndex(int index) {
 
-        return questions.get(index - 1);
+        return Optional.ofNullable(questions.get(index - 1));
     }
 
     @Override
     public List<Question> findQuestionList() {
 
-        return questions;
+        return Optional.ofNullable(questions).get();
+
+//        return questions;
     }
 }

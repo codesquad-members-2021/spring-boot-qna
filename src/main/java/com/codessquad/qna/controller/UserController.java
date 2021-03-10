@@ -8,11 +8,14 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
-
 @Controller
 public class UserController {
 
-    private UserService userService = new UserService();
+    private UserService userService;
+
+    public UserController(UserService userService) {
+        this.userService = userService;
+    }
 
     @PostMapping ("/users/create")
     public String create(User user) {
@@ -53,15 +56,16 @@ public class UserController {
             model.addAttribute("user", user);
             return "/user/updateForm";
         }
+
         return "/user/validation_user";
     }
 
     @PostMapping("/users/update")
     public String userUpdate(User user){
 
-        userService.findUser(user.getUserId()).setPassword(user.getPassword());
-        userService.findUser(user.getUserId()).setEmail(user.getEmail());
-        userService.findUser(user.getUserId()).setName(user.getName());
+        userService.findUser(user.getUserId()).get().setPassword(user.getPassword());
+        userService.findUser(user.getUserId()).get().setEmail(user.getEmail());
+        userService.findUser(user.getUserId()).get().setName(user.getName());
 
         return "redirect:/users/list";
     }

@@ -11,7 +11,11 @@ import org.springframework.web.bind.annotation.PostMapping;
 @Controller
 public class QuestionController {
 
-    private QuestionService questionService = new QuestionService();
+    private QuestionService questionService;
+
+    public QuestionController(QuestionService questionService) {
+        this.questionService = questionService;
+    }
 
     @PostMapping("/questions")
     public String question(Question question){
@@ -32,7 +36,7 @@ public class QuestionController {
     @GetMapping("/questions/{index}")
     public String showQuestionDetail(@PathVariable int index, Model model) {
 
-        model.addAttribute("question", questionService.findQuestion(index));
+        model.addAttribute("question", questionService.findQuestion(index).get());
 
         return "/qna/show";
     }

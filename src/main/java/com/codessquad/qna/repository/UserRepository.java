@@ -1,19 +1,17 @@
 package com.codessquad.qna.repository;
 
 import com.codessquad.qna.domain.User;
-import org.springframework.stereotype.Repository;
-
 import java.util.List;
+import java.util.Optional;
 
-@Repository
 public interface UserRepository {
 
     void save(User user);
 
     List<User> findUserList();
 
-    User findById(String userId);
+    Optional<User> findById(String userId);
 
-    User findByName(String name);
+    Optional<User> findByName(String name);
 
 }

@@ -1,10 +1,13 @@
 package com.codessquad.qna.repository;
 
 import com.codessquad.qna.domain.User;
+import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
+@Repository
 public class UserRepositoryimpl implements UserRepository {
 
     private List<User> users = new ArrayList<>();
@@ -15,27 +18,20 @@ public class UserRepositoryimpl implements UserRepository {
     }
 
     @Override
-    public User findById(String userId) {
-        for (User user : users){
-            if(user.getUserId().equals(userId)){
-                return user;
-            }
-        }
-        return null;
+    public Optional<User> findById(String userId) {
+
+        return users.stream().filter(user -> user.getUserId().equals(userId)).findAny();
     }
 
     @Override
-    public User findByName(String name) {
-        for(User user : users){
-            if (user.getName().equals(name)) {
-                return user;
-            }
-        }
-        return null;
+    public Optional<User> findByName(String name) {
+
+        return users.stream().filter(user -> user.getName().equals(user.getName())).findAny();
     }
 
     @Override
     public List<User> findUserList() {
+
         return users;
     }
 
