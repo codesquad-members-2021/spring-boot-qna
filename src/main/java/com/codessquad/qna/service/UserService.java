@@ -2,20 +2,22 @@ package com.codessquad.qna.service;
 
 import com.codessquad.qna.domain.User;
 import com.codessquad.qna.repository.UserRepository;
+import com.codessquad.qna.util.HttpSessionUtils;
 import com.codessquad.qna.valid.UserValidation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.servlet.http.HttpSession;
 import java.util.List;
 
 @Service
 @Transactional(readOnly = true)
 public class UserService {
 
-    private UserRepository userRepository;
-    Logger logger = LoggerFactory.getLogger(UserService.class);
+    private final UserRepository userRepository;
+    private final Logger logger = LoggerFactory.getLogger(UserService.class);
 
     public UserService(UserRepository userRepository) {
         this.userRepository = userRepository;
@@ -53,6 +55,21 @@ public class UserService {
             return findUser;
         }
         return null;
+    }
+
+    public boolean checkSession(HttpSession session, Long id) {
+        if (!HttpSessionUtils.isLoginUser(session)) {
+            return false;
+        }
+        checkSameUser(session, id);
+        return true;
+    }
+
+    private void checkSameUser(HttpSession session, Long id) {
+        User sessionedUser = HttpSessionUtils.getUserFromSession(session);
+        if (!sessionedUser.checkId(id)) {
+            throw new IllegalStateException("자신의 정보만 수정 가능");
+        }
     }
 
 }
