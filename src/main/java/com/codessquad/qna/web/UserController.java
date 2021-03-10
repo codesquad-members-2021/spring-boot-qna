@@ -1,24 +1,29 @@
 package com.codessquad.qna.web;
 
-import com.codessquad.qna.domain.User;
+import com.codessquad.qna.domain.user.User;
+import com.codessquad.qna.domain.user.UserRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.bind.annotation.RequestMapping;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Optional;
 
 
 @Controller
 @RequestMapping("/users")
 public class UserController {
 
-    Logger logger = LoggerFactory.getLogger(UserController.class);
+    private Logger logger = LoggerFactory.getLogger(UserController.class);
 
-    private List<User> userList = new ArrayList<>();
+    private UserRepository userRepository;
+
+    @Autowired
+    public UserController(UserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
 
     @GetMapping("/form")
     public String getUserFormPage() {
@@ -27,26 +32,54 @@ public class UserController {
 
     @PostMapping("/")
     public String createUser(User user) {
-        logger.info(user.toString());
-        userList.add(user);
+        userRepository.save(user);
+        logger.debug("user : {}", user.toString());
         return "redirect:/users/";
     }
 
     @GetMapping("/")
     public String getUserList(Model model) {
-        model.addAttribute("userList", userList);
+        model.addAttribute("userList", userRepository.findAll());
         return "user/list";
     }
 
-    @GetMapping("/{userId}")
-    public String getUserProfile(@PathVariable String userId, Model model) {
-        for (User user : userList) {
-            if(user.matchId(userId)) {
-                model.addAttribute("user", user);
-            }
-            logger.info(user.toString());
+    @GetMapping("/{id}")
+    public String getUserProfile(@PathVariable Long id, Model model) {
+        Optional<User> user = userRepository.findById(id);
+
+        if(!user.isPresent()) {
+            return "redirect:/users/";
         }
 
+        model.addAttribute("user", user.get());
+        logger.debug("user : {}", user.toString());
+
         return "user/profile";
+    }
+
+    @GetMapping("/{id}/form")
+    public String getUpdateForm(@PathVariable Long id, Model model) {
+        Optional<User> user = userRepository.findById(id);
+
+        model.addAttribute("user", user.get());
+        logger.debug("user : {}", user.toString());
+
+        return "user/updateForm";
+    }
+
+    @PutMapping("/{id}")
+    public String update(@PathVariable Long id, String prevPassword, User updateUser) {
+        User user = userRepository.findById(id).get();
+
+        if(!user.matchPassword(prevPassword)) {
+            return "redirect:/users/";
+        }
+
+        user.update(updateUser);
+        userRepository.save(user);
+
+        logger.debug("user : {}", updateUser.toString());
+
+        return "redirect:/users/";
     }
 }

@@ -23,11 +23,11 @@
                 <tbody>
                 {{#userList}}
                 <tr>
-                    <th scope="row">{{rowNumber @index}}</th>
-                    <td><a href="/users/{{userId}}">{{userId}}</a></td>
+                    <th scope="row">{{id}}</th>
+                    <td><a href="/users/{{id}}">{{userId}}</a></td>
                     <td>{{name}}</td>
                     <td>{{email}}</td>
-                    <td><a href="#" class="btn btn-success" role="button">수정</a></td>
+                    <td><a href="/users/{{id}}/form" class="btn btn-success" role="button">수정</a></td>
                 </tr>
                 {{/userList}}
                 </tbody>

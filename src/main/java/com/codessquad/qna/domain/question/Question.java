@@ -1,22 +1,34 @@
-package com.codessquad.qna.domain;
+package com.codessquad.qna.domain.question;
 
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
+@Entity
 public class Question {
+    private static final String DATE_FORMAT = "yyyy-MM-dd HH:mm:ss";
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long index;
+
     private String writer;
     private String title;
     private String contents;
     private String createdTime;
 
-    public Question(long index, String writer, String title, String contents) {
-        this.index = index;
+    protected Question() {
+    }
+
+    public Question(String writer, String title, String contents) {
         this.writer = writer;
         this.title = title;
         this.contents = contents;
         this.createdTime = LocalDateTime.now()
-                .format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));;
+                .format(DateTimeFormatter.ofPattern(DATE_FORMAT));
     }
 
     public long getIndex() {
