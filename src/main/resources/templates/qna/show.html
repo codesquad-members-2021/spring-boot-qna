@@ -14,8 +14,8 @@
                           <img src="https://graph.facebook.com/v2.3/100000059371774/picture" class="article-author-thumb" alt="">
                       </div>
                       <div class="article-header-text">
-                          <a href="/users/92/kimmunsu" class="article-author-name">{{question.writer}}</a>
-                          <a href="/questions/413" class="article-header-time" title="퍼머링크">
+                          <a href="/users/{{question.writer.id}}" class="article-author-name">{{question.writer.name}}</a>
+                          <a href="/questions/{{question.id}}" class="article-header-time" title="퍼머링크">
                               {{formatDate question.createDateTime "yyyy-MM-dd HH:mm"}}
                               <i class="icon-link"></i>
                           </a>
@@ -26,11 +26,13 @@
                   </div>
                   <div class="article-util">
                       <ul class="article-util-list">
+                          {{#equals sessionedUser.id question.writer.id}}
                           <li>
-                              <a class="link-modify-article" href="/questions/{{user.id}}/form">수정</a>
+                              <a class="link-modify-article" href="/questions/{{question.writer.id}}/form">수정</a>
                           </li>
+                          {{/equals}}
                           <li>
-                              <form class="form-delete" action="/questions/{{user.id}}" method="delete">
+                              <form class="form-delete" action="/questions/{{question.writer.id}}" method="delete">
                                   <input type="hidden" name="_method" value="DELETE">
                                   <button class="link-delete-article" type="submit">삭제</button>
                               </form>
