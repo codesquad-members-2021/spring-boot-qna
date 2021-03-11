@@ -25,16 +25,16 @@ public class Question {
 
     private String contents;
 
-    private LocalDateTime reportingDate;
+    private LocalDateTime reportingDateTime;
 
     public Question(String title, String contents) {
         this.title = title;
         this.contents = contents;
-        this.reportingDate = LocalDateTime.now();
+        this.reportingDateTime = LocalDateTime.now();
     }
 
     public Question() {
-        this.reportingDate = LocalDateTime.now();
+        this.reportingDateTime = LocalDateTime.now();
     }
 
     public boolean isMatchingWriterId(long anotherWriterId) {
@@ -77,12 +77,12 @@ public class Question {
         this.contents = contents;
     }
 
-    public LocalDateTime getReportingDate() {
-        return reportingDate;
+    public LocalDateTime getreportingDateTime() {
+        return reportingDateTime;
     }
 
-    public void setReportingDate(LocalDateTime reportingDate) {
-        this.reportingDate = reportingDate;
+    public void setreportingDateTime(LocalDateTime reportingDateTime) {
+        this.reportingDateTime = reportingDateTime;
     }
 
     public List<Answer> getAnswers() {

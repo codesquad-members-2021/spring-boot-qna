@@ -23,7 +23,7 @@ public class Answer {
     @Column(nullable = false, length = 400)
     private String contents;
 
-    private LocalDateTime reportingDate;
+    private LocalDateTime reportingDateTime;
 
     public boolean isMatchingWriter(User anotherWriter) {
         return writer.isMatchingId(anotherWriter);
@@ -31,11 +31,11 @@ public class Answer {
 
     public Answer(String contents) {
         this.contents = contents;
-        reportingDate = LocalDateTime.now();
+        reportingDateTime = LocalDateTime.now();
     }
 
     public Answer() {
-        reportingDate = LocalDateTime.now();
+        reportingDateTime = LocalDateTime.now();
     }
 
     public Long getId() {
@@ -70,11 +70,11 @@ public class Answer {
         this.question = question;
     }
 
-    public LocalDateTime getReportingDate() {
-        return reportingDate;
+    public LocalDateTime getreportingDateTime() {
+        return reportingDateTime;
     }
 
-    public void setReportingDate(LocalDateTime reportingDate) {
-        this.reportingDate = reportingDate;
+    public void setreportingDateTime(LocalDateTime reportingDateTime) {
+        this.reportingDateTime = reportingDateTime;
     }
 }
