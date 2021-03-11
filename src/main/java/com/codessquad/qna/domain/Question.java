@@ -12,8 +12,11 @@ public class Question {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @ManyToOne
+    @JoinColumn(foreignKey = @ForeignKey(name = "fk_question_writer"))
+    private User writer;
+
     @Column(nullable = false, length = 20)
-    private String writer;
     private String title;
 
     @Column(nullable = false, length = 2000)
@@ -24,7 +27,7 @@ public class Question {
         currentDateTime = LocalDateTime.now();
     }
 
-    public Question(String writer, String title, String contents) {
+    public Question(User writer, String title, String contents) {
         super();
         this.writer = writer;
         this.title = title;
@@ -38,7 +41,7 @@ public class Question {
         this.currentDateTime = LocalDateTime.now();
     }
 
-    public void setWriter(String writer) {
+    public void setWriter(User writer) {
         this.writer = writer;
     }
 
@@ -59,7 +62,7 @@ public class Question {
     }
 
     public String getWriter() {
-        return writer;
+        return writer.getUserId();
     }
 
     public String getTitle() {
@@ -76,7 +79,7 @@ public class Question {
 
     public boolean matchUser(User loginUser) {
         String userId = loginUser.getUserId();
-        if(this.writer.equals(userId)) {
+        if(this.writer.getUserId().equals(userId)) {
             return true;
         }
         return false;
