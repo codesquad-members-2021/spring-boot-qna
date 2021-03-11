@@ -14,6 +14,7 @@ public class Question {
     public String getWriter() {
         return writer;
     }
+
     public void setWriter(String writer) {
         this.writer = writer;
     }
@@ -21,6 +22,7 @@ public class Question {
     public String getTitle() {
         return title;
     }
+
     public void setTitle(String title) {
         this.title = title;
     }
@@ -28,15 +30,24 @@ public class Question {
     public String getContents() {
         return contents;
     }
+
     public void setContents(String contents) {
         this.contents = contents;
     }
 
-    public int getId() { return id;  }
-    public void setId(int id) { this.id = id; }
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
 
     public String getDateTime() {
         return dateTime;
     }
-    public void setDateTime(String dateTime) { this.dateTime = dateTime; }
+
+    public void setDateTime(String dateTime) {
+        this.dateTime = dateTime;
+    }
 }
