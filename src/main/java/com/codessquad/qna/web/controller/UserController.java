@@ -4,7 +4,7 @@ import com.codessquad.qna.web.domain.user.User;
 
 import com.codessquad.qna.web.domain.user.UserRepository;
 
-import com.codessquad.qna.web.exception.UserNotFoundException;
+import javassist.NotFoundException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -32,22 +32,22 @@ public class UserController {
     }
 
     @GetMapping("/{id}")
-    public String show(@PathVariable long id, Model model) {
-        User user = userRepository.findById(id).orElseThrow(() -> new UserNotFoundException(id));
+    public String show(@PathVariable long id, Model model) throws NotFoundException {
+        User user = userRepository.findById(id).orElseThrow(() -> new NotFoundException("No user with id number " + id));
         model.addAttribute("user", user);
         return "user/profile";
     }
 
     @GetMapping("/{id}/form")
-    public String updateForm(@PathVariable long id, Model model) {
-        User user = userRepository.findById(id).orElseThrow(() -> new UserNotFoundException(id));
+    public String updateForm(@PathVariable long id, Model model) throws NotFoundException{
+        User user = userRepository.findById(id).orElseThrow(() -> new NotFoundException("No user with id number " + id));
         model.addAttribute("user", user);
         return "user/updateForm";
     }
 
     @PutMapping("/{id}/update")
-    public String updateProfile(@PathVariable long id, User updatedUser, String oldPassword) {
-        User user = userRepository.findById(id).orElseThrow(() -> new UserNotFoundException(id));
+    public String updateProfile(@PathVariable long id, User updatedUser, String oldPassword) throws NotFoundException{
+        User user = userRepository.findById(id).orElseThrow(() -> new NotFoundException("No user with id number " + id));
         if(user.isMatchingPassword(oldPassword)){
             user.update(updatedUser);
             userRepository.save(user);
