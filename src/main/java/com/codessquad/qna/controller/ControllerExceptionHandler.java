@@ -6,7 +6,6 @@ import com.codessquad.qna.exception.UserNotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -25,19 +24,18 @@ public class ControllerExceptionHandler {
      */
     @ResponseStatus(HttpStatus.NOT_FOUND)
     @ExceptionHandler(UserNotFoundException.class)
-    public String handleCanNotFindUserException(UserNotFoundException e, Model model) {
+    public String handleCanNotFindUserException(UserNotFoundException e) {
         return "error/404";
     }
 
     /**
      * 없는 페이지에 대한 요청이 므로 404 페이지를 리턴하도록 해줌
      * @param e
-     * @param model
      * @return 404 page
      */
     @ResponseStatus(HttpStatus.NOT_FOUND)
     @ExceptionHandler(CanNotFindPostException.class)
-    public String handleCanNotFindPostException(CanNotFindPostException e, Model model) {
+    public String handleCanNotFindPostException(CanNotFindPostException e) {
         return "error/404";
     }
 
@@ -55,7 +53,7 @@ public class ControllerExceptionHandler {
 
     /**
      * 해당 권한이 있는 유저가 아닐시 index.html 창으로 redirect 시킨다.
-     * @return 401 Status code
+     * @return
      */
     @ExceptionHandler(IllegalAccessException.class)
     public String handleIllegalAccessException(IllegalAccessException e) {

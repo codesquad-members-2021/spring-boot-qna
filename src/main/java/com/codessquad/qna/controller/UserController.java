@@ -36,6 +36,10 @@ public class UserController {
         return "redirect:/users";
     }
 
+    /**
+     * 유저가 회원가입할 수 있는 창으로 이동합니다.
+     * @return
+     */
     @GetMapping("/form")
     public String goUserCreateAccountForm() {
         return "user/form";
@@ -78,6 +82,7 @@ public class UserController {
     }
 
     /**
+     * 모든 유저 목록을 가져옵니다.
      * @param model
      * @return All User Accounts to List
      */

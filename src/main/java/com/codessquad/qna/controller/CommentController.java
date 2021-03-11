@@ -1,8 +1,5 @@
 package com.codessquad.qna.controller;
 
-import com.codessquad.qna.entity.Comment;
-import com.codessquad.qna.entity.Post;
-import com.codessquad.qna.entity.User;
 import com.codessquad.qna.service.CommentService;
 import com.codessquad.qna.service.PostService;
 import com.codessquad.qna.util.HttpSessionUtils;
@@ -41,4 +38,5 @@ public class CommentController {
         commentService.addComment(id, HttpSessionUtils.getUserFromSession(httpSession).getUserId(), body);
         return "redirect:/questions/"+id;
     }
+
 }
