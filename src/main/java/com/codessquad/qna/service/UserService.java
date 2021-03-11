@@ -7,9 +7,11 @@ import com.codessquad.qna.repository.UserRepository;
 import com.codessquad.qna.util.Mapper;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.List;
 
 @Service
+@Transactional
 public class UserService {
 
     private final UserRepository userRepository;
@@ -20,6 +22,10 @@ public class UserService {
 
     public void save(User user) {
         userRepository.save(user);
+    }
+
+    public void save(UserDto userDto) {
+        userRepository.save(Mapper.mapToUser(userDto));
     }
 
     public List<User> getUsers() {

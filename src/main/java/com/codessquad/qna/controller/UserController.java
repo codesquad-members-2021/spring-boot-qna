@@ -32,9 +32,8 @@ public class UserController {
      */
     @PostMapping("")
     public String createAccount(@ModelAttribute UserDto userDto) {
-        User user = Mapper.mapToUser(userDto);
-        userService.save(user);
-        logger.info(user.toString());
+        userService.save(userDto);
+        logger.info(userDto.toString());
         return "redirect:/users";
     }
 
