@@ -1,16 +1,8 @@
 package com.codessquad.qna.entity;
 
-import com.codessquad.qna.dto.PostDto;
-import com.codessquad.qna.util.DateFormat;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
-import org.springframework.context.annotation.Primary;
-
 import javax.persistence.*;
-import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
 import java.util.Collections;
-import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 
@@ -25,7 +17,7 @@ public class Post {
     private String title;
     private String author;
     private String body;
-    private String date;
+    private LocalDateTime date;
 
     @OneToMany(mappedBy = "post")
     private List<Comment> comments;
@@ -37,7 +29,7 @@ public class Post {
         this.title = title;
         this.author = author;
         this.body = body;
-        this.date = DateFormat.ISO8601.format(new Date());
+        this.date = LocalDateTime.now();
     }
 
     public Long getPostId() {
@@ -56,7 +48,7 @@ public class Post {
         return body;
     }
 
-    public String getDate() {
+    public LocalDateTime getDate() {
         return date;
     }
 

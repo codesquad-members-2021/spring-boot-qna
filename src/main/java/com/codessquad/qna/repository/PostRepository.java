@@ -16,7 +16,7 @@ import java.util.Optional;
 
 @Repository
 @Transactional
-public interface PostRepository extends CrudRepository<Post, Long> {
+public interface PostRepository extends CrudRepository<Post, Long>  {
 
     List<Post> findAll();
 

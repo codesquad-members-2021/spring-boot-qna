@@ -1,8 +1,7 @@
 package com.codessquad.qna.entity;
 
-import com.codessquad.qna.util.DateFormat;
-
 import javax.persistence.*;
+import java.time.LocalDateTime;
 import java.util.Date;
 
 @Entity
@@ -19,17 +18,17 @@ public class Comment {
 
     private String author;
     private String body;
-    private String date;
+    private LocalDateTime date;
 
     public Comment() {
-        this.date = DateFormat.ISO8601.format(new Date());
+        this.date = LocalDateTime.now();
     }
 
     public Comment(Post post, String author, String body) {
         this.post = post;
         this.author = author;
         this.body = body;
-        this.date = DateFormat.ISO8601.format(new Date());
+        this.date = LocalDateTime.now();
     }
 
     public Long getId() {
@@ -44,7 +43,7 @@ public class Comment {
         return body;
     }
 
-    public String getDate() {
+    public LocalDateTime getDate() {
         return date;
     }
 
