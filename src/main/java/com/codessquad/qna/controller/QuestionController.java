@@ -58,4 +58,10 @@ public class QuestionController {
         return "qna/updateForm";
     }
 
+    @PutMapping("/{id}")
+    public String questionUpdate(@PathVariable Long id, Question question) {
+        questionService.update(id, question);
+        return "redirect:/questions/" + id;
+    }
+    
 }
