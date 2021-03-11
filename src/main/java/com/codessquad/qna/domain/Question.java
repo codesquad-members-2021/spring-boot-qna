@@ -69,4 +69,8 @@ public class Question {
     }
 
 
+    public void questionUpdate(Question question) {
+        this.title = question.getTitle();
+        this.contents = question.getContents();
+    }
 }
