@@ -56,11 +56,6 @@ public class User {
         this.email = newUser.email;
     }
 
-    //@Override
-    //public boolean equals(User unknownUser) {
-    //    return userId.equals(unknownUser.getUserId());
-    //}
-
     @Override
     public boolean equals(Object object) {
         if (this == object) return true;
