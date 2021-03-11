@@ -2,6 +2,7 @@ package com.codessquad.qna.web;
 
 import com.codessquad.qna.domain.User;
 import com.codessquad.qna.domain.UserRepository;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,8 +11,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
-import java.util.ArrayList;
-import java.util.List;
 
 @Controller
 @RequestMapping("/users")
@@ -41,14 +40,14 @@ public class UserController {
         }
 
         LOGGER.info("Login Success!");
-        session.setAttribute("user", user);
+        session.setAttribute("sessionedUser", user);
 
         return "redirect:/";
     }
 
     @GetMapping("/logout")
     public String logout(HttpSession session) {
-        session.removeAttribute("user");
+        session.removeAttribute("sessionedUser");
         return "redirect:/";
     }
 
@@ -82,7 +81,17 @@ public class UserController {
     }
 
     @GetMapping("/{id}/form")
-    public String getForm(@PathVariable Long id, Model model) {
+    public String getForm(@PathVariable Long id, Model model, HttpSession session) {
+        Object tempUser = session.getAttribute("sessionedUser");
+        if (tempUser == null) {
+            return "redirect:/users/login";
+        }
+
+        User sessionedUser = (User) tempUser;
+        if (!id.equals(sessionedUser.getId())) {
+            throw new IllegalStateException("자신의 정보만 수정 가능합니다");
+        }
+
         model.addAttribute("user", getUserBy(id));
         return "/user/updateForm";
     }
