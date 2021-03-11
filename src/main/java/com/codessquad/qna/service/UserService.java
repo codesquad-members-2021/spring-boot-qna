@@ -8,6 +8,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
 public class UserService {
 
@@ -33,9 +35,8 @@ public class UserService {
         return userRepository.findAll();
     }
 
-    // TODO: Optional 객체에서 원 객체 추출하는 방법 학습
-    public User showOneById(Long id) {
-        return userRepository.findById(id).get();
+    public Optional<User> showOneById(Long id) {
+        return userRepository.findById(id);
     }
 
     public void updateInfo(User presentUser, User referenceUser) {

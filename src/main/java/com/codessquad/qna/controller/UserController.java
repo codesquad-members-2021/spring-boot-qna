@@ -63,14 +63,14 @@ public class UserController {
 
     @GetMapping("/{id}")
     public String showUserInDetail(@PathVariable long id, Model model) {
-        model.addAttribute("user", userService.showOneById(id));
+        model.addAttribute("user", userService.showOneById(id).orElse(null));
 
         return "/user/profile";
     }
 
     @GetMapping("/{id}/form")
     public String passUserId(@PathVariable long id, Model model) {
-        User user = userService.showOneById(id);
+        User user = userService.showOneById(id).orElse(null);
 
         model.addAttribute("id", user.getId());
         model.addAttribute("userId", user.getUserId());
@@ -80,7 +80,7 @@ public class UserController {
 
     @PutMapping("/{id}")
     public String updateUser(@PathVariable long id, User referenceUser) {
-        User presentUser = userService.showOneById(id);
+        User presentUser = userService.showOneById(id).orElse(null);
 
         if(!isValidUser(presentUser)){
             logger.info("isValidUser");
