@@ -4,7 +4,6 @@ import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.List;
-import java.util.Objects;
 
 @Entity
 public class Post {
@@ -74,19 +73,6 @@ public class Post {
                 ", body='" + body + '\'' +
                 ", createDateTime='" + createDateTime + '\'' +
                 '}';
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof Post)) return false;
-        Post post = (Post) o;
-        return Objects.equals(postId, post.postId);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(postId);
     }
 
 }

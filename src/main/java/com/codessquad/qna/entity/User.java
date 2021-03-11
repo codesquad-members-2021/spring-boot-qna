@@ -1,10 +1,6 @@
 package com.codessquad.qna.entity;
 
-import com.codessquad.qna.dto.UserDto;
-import lombok.ToString;
-
 import javax.persistence.*;
-import java.util.Objects;
 
 @Entity
 public class User {
@@ -72,19 +68,6 @@ public class User {
                 ", name='" + name + '\'' +
                 ", email='" + email + '\'' +
                 '}';
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof User)) return false;
-        User user = (User) o;
-        return Objects.equals(id, user.id);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id);
     }
 
 }
