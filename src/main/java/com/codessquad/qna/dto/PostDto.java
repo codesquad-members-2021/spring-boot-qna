@@ -7,11 +7,9 @@ public class PostDto {
     private String title;
     private String author;
     private String body;
-    private LocalDateTime date;
+    private final LocalDateTime date = LocalDateTime.now();;
 
-    public PostDto() {
-        this.date = LocalDateTime.now();
-    }
+    public PostDto() { }
 
     public String getTitle() {
         return title;

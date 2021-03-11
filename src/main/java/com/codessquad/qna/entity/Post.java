@@ -17,7 +17,7 @@ public class Post {
     private String title;
     private String author;
     private String body;
-    private LocalDateTime date;
+    private LocalDateTime createDateTime = LocalDateTime.now();
 
     @OneToMany(mappedBy = "post")
     private List<Comment> comments;
@@ -29,7 +29,6 @@ public class Post {
         this.title = title;
         this.author = author;
         this.body = body;
-        this.date = LocalDateTime.now();
     }
 
     public Long getPostId() {
@@ -48,8 +47,8 @@ public class Post {
         return body;
     }
 
-    public LocalDateTime getDate() {
-        return date;
+    public LocalDateTime getCreateDateTime() {
+        return createDateTime;
     }
 
     public List<Comment> getComment() {
@@ -63,6 +62,7 @@ public class Post {
     public void change(Post post) {
         this.title = post.title;
         this.body = post.body;
+        this.createDateTime = post.createDateTime;
     }
 
     @Override
@@ -72,10 +72,9 @@ public class Post {
                 ", title='" + title + '\'' +
                 ", author='" + author + '\'' +
                 ", body='" + body + '\'' +
-                ", date='" + date + '\'' +
+                ", createDateTime='" + createDateTime + '\'' +
                 '}';
     }
-
 
     @Override
     public boolean equals(Object o) {
