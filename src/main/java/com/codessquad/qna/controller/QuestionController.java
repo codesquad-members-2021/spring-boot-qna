@@ -24,6 +24,8 @@ public class QuestionController {
 
     @PostMapping("/questions")
     private String questions(Question question) {
+        Objects.requireNonNull(question, "Exception: question이 NULL 값입니다.");
+
         questionRepository.save(question);
         return "redirect:/";
     }
