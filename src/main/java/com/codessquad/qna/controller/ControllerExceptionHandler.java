@@ -2,13 +2,12 @@ package com.codessquad.qna.controller;
 
 import com.codessquad.qna.exception.CanNotFindPostException;
 import com.codessquad.qna.exception.CanNotFindUserException;
-import com.codessquad.qna.exception.NotExistLoggedUserInSession;
+import com.codessquad.qna.exception.NotExistLoggedUserInSessionException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.ResponseStatus;
 
 @ControllerAdvice
 public class ControllerExceptionHandler {
@@ -51,8 +50,8 @@ public class ControllerExceptionHandler {
      * 세션에 로그인 된 유저가 없을시 발생하는 에러
      * 로그인 창으로 redirect
      */
-    @ExceptionHandler(NotExistLoggedUserInSession.class)
-    public String handleNotExistLoggedUserInSession(NotExistLoggedUserInSession e) {
+    @ExceptionHandler(NotExistLoggedUserInSessionException.class)
+    public String handleNotExistLoggedUserInSession(NotExistLoggedUserInSessionException e) {
         logger.error(e.getMessage());
         return "redirect:/user/login";
     }
