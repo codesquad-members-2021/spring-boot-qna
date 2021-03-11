@@ -19,7 +19,7 @@ public class UserController {
         this.userRepository = userRepository;
     }
 
-    @PostMapping("")
+    @PostMapping
     public String create(User user) {
         userRepository.save(user);
         return "redirect:/users";
