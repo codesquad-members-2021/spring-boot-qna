@@ -1,6 +1,8 @@
 package com.codessquad.qna.web.controllers;
 
 import com.codessquad.qna.web.domain.User;
+import com.codessquad.qna.web.repository.UserRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -12,7 +14,9 @@ import java.util.List;
 
 @Controller
 public class UserController {
-    private List<User> users = new ArrayList<>();
+
+    @Autowired
+    private UserRepository userRepository;
 
     @GetMapping("/user/login")
     public String getLogin() {
@@ -26,27 +30,22 @@ public class UserController {
 
     @PostMapping("/user/form")
     public String createUser(User user) {
-        users.add(user);
+        userRepository.save(user);
         return "redirect:/users";
     }
 
     @GetMapping("/users")
     public String getUserList(Model model) {
-        model.addAttribute("users", users);
+        model.addAttribute("users", userRepository.findAll());
         return "user/list";
     }
 
-    @GetMapping("/users/{userId}")
-    public String getSpecificUser(@PathVariable("userId") String userId, Model model) {
-        User foundUser = findUserById(userId);
+
+    @GetMapping("/users/{id}")
+    public String getUserById(@PathVariable Long id, Model model) {
+        User foundUser = userRepository.findById(id).get();
         model.addAttribute("user", foundUser);
         return "user/profile";
-    }
-
-    private User findUserById(String userId) {
-        return users.stream()
-                .filter(user -> user.getUserId().equals(userId))
-                .findAny().orElse(null);
     }
 
 }
