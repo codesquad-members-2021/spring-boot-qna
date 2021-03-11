@@ -1,7 +1,7 @@
 package com.codessquad.qna.controller;
 
 import com.codessquad.qna.exception.CanNotFindPostException;
-import com.codessquad.qna.exception.CanNotFindUserException;
+import com.codessquad.qna.exception.UserNotFoundException;
 import com.codessquad.qna.exception.NotExistLoggedUserInSessionException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -30,8 +30,8 @@ public class ControllerExceptionHandler {
      * 일단 ErrorPage 로 ErrorMessage 리턴해줌
      * @return
      */
-    @ExceptionHandler(CanNotFindUserException.class)
-    public String handleCanNotFindUserException(CanNotFindUserException e, Model model) {
+    @ExceptionHandler(UserNotFoundException.class)
+    public String handleCanNotFindUserException(UserNotFoundException e, Model model) {
         return handleException(e, model);
     }
 

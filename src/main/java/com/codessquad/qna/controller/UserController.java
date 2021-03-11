@@ -2,7 +2,7 @@ package com.codessquad.qna.controller;
 
 import com.codessquad.qna.dto.UserDto;
 import com.codessquad.qna.entity.User;
-import com.codessquad.qna.exception.CanNotFindUserException;
+import com.codessquad.qna.exception.UserNotFoundException;
 import com.codessquad.qna.service.UserService;
 import com.codessquad.qna.util.HttpSessionUtils;
 import com.codessquad.qna.util.Mapper;
@@ -13,7 +13,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
-import java.util.Optional;
 
 @Controller
 @RequestMapping("/users")
@@ -95,7 +94,7 @@ public class UserController {
      * 만약 해당 유저를 찾을 수 없다면 CanNotFindUserException 을 리턴합니다.
      * @param id userId
      * @param model
-     * @throws CanNotFindUserException
+     * @throws UserNotFoundException
      * @return only for users with the same id
      */
     @GetMapping("/{id}")

@@ -3,7 +3,6 @@ package com.codessquad.qna.service;
 import com.codessquad.qna.MvcConfig;
 import com.codessquad.qna.entity.Post;
 import com.codessquad.qna.exception.CanNotFindPostException;
-import com.codessquad.qna.exception.CanNotFindUserException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
