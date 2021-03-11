@@ -1,19 +1,34 @@
 package com.codessquad.qna.question;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
 import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
 
+@Entity
 public class Question {
+    @Id
+    @GeneratedValue
+    private Long id;
+    @Column(nullable = false, length = 20)
     private String writer;
+    @Column(nullable = false, length = 100)
     private String title;
+    @Column(nullable = false, length = 5000)
     private String contents;
-    private LocalDateTime createDateTime = LocalDateTime.now();
+    private LocalDateTime createDateTime;
 
-    public Question() {
+    protected Question() {
     }
 
-    public Question(String writer, String title, String contents, LocalDateTime createDateTime) {
+    public Question(String writer, String title, String contents) {
+        this(writer, title, contents, LocalDateTime.now());
+    }
+
+    private Question(String writer, String title, String contents, LocalDateTime createDateTime) {
         this.writer = writer;
         this.title = title;
         this.contents = contents;
@@ -38,36 +53,24 @@ public class Question {
         );
     }
 
-    public String getWriter() {
-        return writer;
+    public Long getId() {
+        return id;
     }
 
-    public void setWriter(String writer) {
-        this.writer = writer;
+    public String getWriter() {
+        return writer;
     }
 
     public String getTitle() {
         return title;
     }
 
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
     public String getContents() {
         return contents;
     }
 
-    public void setContents(String contents) {
-        this.contents = contents;
-    }
-
     public LocalDateTime getCreateDateTime() {
         return createDateTime;
-    }
-
-    public void setCreateDateTime(LocalDateTime createDateTime) {
-        this.createDateTime = createDateTime;
     }
 
     @Override

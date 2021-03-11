@@ -16,7 +16,7 @@
                       <div class="article-header-text">
                           <a href="/users/92/kimmunsu" class="article-author-name">{{question.writer}}</a>
                           <a href="/questions/413" class="article-header-time" title="퍼머링크">
-                              {{#formatDate question.createDateTime "yyyy-MM-dd HH:mm"}}{{/formatDate}}
+                              {{formatDate question.createDateTime "yyyy-MM-dd HH:mm"}}
                               <i class="icon-link"></i>
                           </a>
                       </div>
@@ -27,10 +27,10 @@
                   <div class="article-util">
                       <ul class="article-util-list">
                           <li>
-                              <a class="link-modify-article" href="/questions/{{id}}/form">수정</a>
+                              <a class="link-modify-article" href="/questions/{{user.id}}/form">수정</a>
                           </li>
                           <li>
-                              <form class="form-delete" action="/questions/{{id}}" method="delete">
+                              <form class="form-delete" action="/questions/{{user.id}}" method="delete">
                                   <input type="hidden" name="_method" value="DELETE">
                                   <button class="link-delete-article" type="submit">삭제</button>
                               </form>
