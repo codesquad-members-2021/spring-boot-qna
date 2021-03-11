@@ -19,6 +19,7 @@ import javax.servlet.http.HttpSession;
 import java.util.Optional;
 
 @Controller
+@RequestMapping("/questions")
 public class PostController {
 
     private static final Logger logger = LoggerFactory.getLogger(PostController.class);
@@ -33,7 +34,7 @@ public class PostController {
      * @param postDto
      * @return
      */
-    @PostMapping("/questions")
+    @PostMapping("")
     public String addPost(@ModelAttribute PostDto postDto) {
         Post post = Mapper.mapToPost(postDto);
         postService.addPost(post);
@@ -45,7 +46,7 @@ public class PostController {
      * @param model
      * @return
      */
-    @GetMapping("/")
+    @GetMapping("")
     public String getAllPosts(Model model) {
         model.addAttribute("posts", postService.getPosts());
         return "index";
@@ -59,7 +60,7 @@ public class PostController {
      * @throws CanNotFindPostException
      * @return
      */
-    @GetMapping("/questions/{id}")
+    @GetMapping("/{id}")
     public String getPost(@PathVariable Long id, Model model) {
         model.addAttribute("post", postService.getPost(id));
         return "qna/show";
@@ -73,7 +74,7 @@ public class PostController {
      * @throws IllegalAccessException
      * @return
      */
-    @GetMapping("/questions/{id}/form")
+    @GetMapping("/{id}/form")
     public String updatePostForm(@PathVariable Long id, HttpSession httpSession, Model model) throws IllegalAccessException {
         Post post = postService.getPost(id);
         isMatchedAuthor(httpSession, post, "다른 사람의 글을 수정할 수 없습니다");
@@ -87,7 +88,7 @@ public class PostController {
      * @param postDto
      * @return
      */
-    @PutMapping("/questions/{id}")
+    @PutMapping("/{id}")
     public String updatePost(@PathVariable Long id, @ModelAttribute PostDto postDto) {
         Post post = postService.getPost(id);
         postService.updatePost(post, Mapper.mapToPost(postDto));
@@ -100,7 +101,7 @@ public class PostController {
      * @param id Post id
      * @return
      */
-    @DeleteMapping("/questions/{id}")
+    @DeleteMapping("/{id}")
     public String deletePost(@PathVariable Long id, HttpSession httpSession) throws IllegalAccessException {
         Post post = postService.getPost(id);
         isMatchedAuthor(httpSession, post, "다른 사람의 글을 삭제할 수 없습니다");
