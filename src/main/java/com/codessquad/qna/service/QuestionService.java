@@ -41,4 +41,9 @@ public class QuestionService {
         //todo : 업데이트 질문의 검증 필요 -> 기존의 검증은 writer까지 검증 -> 오류 발생
         findQuestion.questionUpdate(question);
     }
+
+    @Transactional
+    public void delete(Long id) {
+        questionRepository.deleteById(id);
+    }
 }

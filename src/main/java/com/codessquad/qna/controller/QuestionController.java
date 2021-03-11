@@ -3,6 +3,8 @@ package com.codessquad.qna.controller;
 import com.codessquad.qna.domain.Question;
 import com.codessquad.qna.service.QuestionService;
 import com.codessquad.qna.util.HttpSessionUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -15,6 +17,7 @@ import javax.servlet.http.HttpSession;
 public class QuestionController {
 
     private QuestionService questionService;
+    private final Logger logger = LoggerFactory.getLogger(QuestionController.class);
 
     public QuestionController(QuestionService questionService) {
         this.questionService = questionService;
@@ -62,6 +65,13 @@ public class QuestionController {
     public String questionUpdate(@PathVariable Long id, Question question) {
         questionService.update(id, question);
         return "redirect:/questions/" + id;
+    }
+
+    @DeleteMapping("/{id}")
+    public String questionDelete(@PathVariable Long id) {
+        questionService.delete(id);
+        //todo : 삭제하려는 사람이 작성자이어야 한다.
+        return "redirect:/";
     }
 
 }

@@ -17,7 +17,7 @@ public class Question {
     @JoinColumn(name = "user_id")
     private User writer;
 
-    @OneToMany(mappedBy = "question")
+    @OneToMany(mappedBy = "question", cascade = CascadeType.ALL)
     @OrderBy("id ASC ")
     private List<Answer> answerList = new ArrayList<>();
 
