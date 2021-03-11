@@ -68,12 +68,12 @@ public class User {
         this.email = email;
     }
 
-    public boolean isMatchingPassword(String suggestedPassword) {
-        return password.equals(suggestedPassword);
+    public boolean isMatchingPassword(String anotherPassword) {
+        return password.equals(anotherPassword);
     }
 
-    public boolean isMatchingId(long suggestedId) {
-        return id == suggestedId;
+    public boolean isMatchingId(User anotherUser) {
+        return id == anotherUser.getId();
     }
 
     @Override

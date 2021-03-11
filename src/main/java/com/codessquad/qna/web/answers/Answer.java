@@ -25,8 +25,8 @@ public class Answer {
 
     private LocalDateTime reportingDate;
 
-    public boolean isMatchingWriter(User suggestedWriter) {
-        return writer.isMatchingId(suggestedWriter.getId());
+    public boolean isMatchingWriter(User anotherWriter) {
+        return writer.isMatchingId(anotherWriter);
     }
 
     public Answer(String contents) {
