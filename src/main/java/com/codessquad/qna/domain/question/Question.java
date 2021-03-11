@@ -80,8 +80,8 @@ public class Question {
     }
 
     public void update(Question questionWithUpdatedInfo) {
-        this.title = questionWithUpdatedInfo.getTitle();
-        this.contents = questionWithUpdatedInfo.getContents();
+        this.title = questionWithUpdatedInfo.title;
+        this.contents = questionWithUpdatedInfo.contents;
     }
 
     @Override

@@ -66,9 +66,9 @@ public class User {
     }
 
     public void update(User user) {
-        this.name = user.getName();
-        this.password = user.getPassword();
-        this.email = user.getEmail();
+        this.name = user.name;
+        this.password = user.password;;
+        this.email = user.email;
     }
 
     @Override
