@@ -21,14 +21,9 @@ public class UserService {
         this.userRepository = userRepository;
     }
 
-    public void join(User newUser) {
-
-        // TODO: 기존 회원과의 중복 여부 확인 로직 추가
-
-        userRepository.save(newUser);
-
-        logger.info("saved user: " + newUser.toString());
-        // TODO: 반환값으로 Long id(.getId) 설정해서 컨트롤러에서 정상 join 여부 확인할 수 있도록
+    public User join(User newUser) {
+        // TODO: 중복가입여부 확인 로직 추
+        return userRepository.save(newUser);
     }
 
     public Iterable<User> showAll() {

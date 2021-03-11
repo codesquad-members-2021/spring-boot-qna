@@ -33,7 +33,6 @@ public class Question {
         return contents;
     }
 
-    //TODO: 삭제할 것
     public void setId(Long id) {
         this.id = id;
     }
