@@ -39,7 +39,7 @@ public class QuestionController {
     public String deleteQuestion(@PathVariable Long id, HttpSession session) {
         Question question = questionRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("질문을 찾을 수 없습니다."));
 
-        long questionWriterId = question.getId().longValue();
+        long questionWriterId = question.getWriter().getId().longValue();
 
         User sessionUser = ((User) session.getAttribute("sessionedUser"));
         if (sessionUser == null) {
