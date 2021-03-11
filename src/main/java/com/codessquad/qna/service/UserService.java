@@ -23,12 +23,12 @@ public class UserService {
     }
 
     public User join(User newUser) {
-        isExist(newUser);
+        checkRedundancy(newUser);
 
         return userRepository.save(newUser);
     }
 
-    private void isExist(User user) {
+    private void checkRedundancy(User user) {
         userRepository.findByUserId(user.getUserId())
                 .ifPresent(u -> {
                     throw new UserExistException();
@@ -47,7 +47,6 @@ public class UserService {
 
         referenceUser.setUserId(presentUser.getUserId());
 
-        // TODO: 반환값을 활용하여 예외 처리, 해당 메서드에 아래 로직은 어울리지 않는다.
         userRepository.delete(presentUser);
         userRepository.save(referenceUser);
     }
