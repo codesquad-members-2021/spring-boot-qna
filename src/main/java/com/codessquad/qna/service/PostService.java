@@ -1,9 +1,11 @@
 package com.codessquad.qna.service;
 
+import com.codessquad.qna.dto.PostDto;
 import com.codessquad.qna.entity.Post;
 import com.codessquad.qna.exception.CanNotFindPostException;
 import com.codessquad.qna.repository.CommentRepostiory;
 import com.codessquad.qna.repository.PostRepository;
+import com.codessquad.qna.util.Mapper;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -33,8 +35,9 @@ public class PostService {
         return (List<Post>) postRepository.findAll();
     }
 
-    public void updatePost(Post oldPost, Post updatePost) {
-        oldPost.change(updatePost);
+    public void updatePost(Long id, PostDto postDto) {
+        Post oldPost = getPost(id);
+        oldPost.change(Mapper.mapToPost(postDto));
         postRepository.save(oldPost);
     }
 

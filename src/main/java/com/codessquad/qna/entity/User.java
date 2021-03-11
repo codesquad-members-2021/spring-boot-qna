@@ -30,11 +30,11 @@ public class User {
         this.email = email;
     }
 
-    public void change(String id, String password, String name, String email) {
-        this.userId = id;
-        this.password = password;
-        this.name = name;
-        this.email = email;
+    public void change(User updateUser) {
+        this.userId = updateUser.userId;
+        this.password = updateUser.password;
+        this.name = updateUser.name;
+        this.email = updateUser.email;
     }
 
     public Long getId() {

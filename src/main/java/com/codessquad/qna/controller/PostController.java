@@ -92,8 +92,7 @@ public class PostController {
      */
     @PutMapping("/{id}")
     public String updatePost(@PathVariable Long id, @ModelAttribute PostDto postDto) {
-        Post post = postService.getPost(id);
-        postService.updatePost(post, Mapper.mapToPost(postDto));
+        postService.updatePost(id, postDto);
         return "redirect:/";
     }
 

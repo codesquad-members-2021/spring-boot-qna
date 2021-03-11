@@ -1,8 +1,10 @@
 package com.codessquad.qna.service;
 
+import com.codessquad.qna.dto.UserDto;
 import com.codessquad.qna.entity.User;
 import com.codessquad.qna.exception.CanNotFindUserException;
 import com.codessquad.qna.repository.UserRepository;
+import com.codessquad.qna.util.Mapper;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.NoResultException;
@@ -34,8 +36,9 @@ public class UserService {
         return userRepository.findByUserId(userId).orElseThrow(CanNotFindUserException::new);
     }
 
-    public void change(User oldUser, User updateUserInfo) {
-        oldUser.change(updateUserInfo.getUserId(), updateUserInfo.getPassword(), updateUserInfo.getName(), updateUserInfo.getEmail());
+    public void change(Long id, UserDto updateUserDto) {
+        User oldUser = getUserById(id);
+        oldUser.change(Mapper.mapToUser(updateUserDto));
         userRepository.save(oldUser);
     }
 

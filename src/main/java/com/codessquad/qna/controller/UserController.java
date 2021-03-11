@@ -131,8 +131,7 @@ public class UserController {
     public String updateUserProfile(@PathVariable Long id, @ModelAttribute UserDto userDto, HttpSession httpSession) {
         Optional<User> sessionUser = isMatchedSessionUserById(id, httpSession);
         if (sessionUser.isPresent()) {
-            User changeUser = Mapper.mapToUser(userDto);
-            userService.change(userService.getUserById(id), changeUser);
+            userService.change(id, userDto);
             return "redirect:/users";
         }
         return "redirect:/users/loginForm";
