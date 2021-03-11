@@ -8,6 +8,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
+import java.util.logging.Logger;
+
 @Controller
 public class UserController {
 
@@ -29,22 +31,22 @@ public class UserController {
     public String list(Model model){
 
         model.addAttribute("users", userService.findUsers());
-
+        System.out.println(userService.findUsers());
         return "/user/list";
     }
 
-    @GetMapping("/users/{userId}")
-    public String profile(@PathVariable("userId") String userId, Model model) {
+    @GetMapping("/users/{id}")
+    public String profile(@PathVariable("userId") Long id, Model model) {
 
-        model.addAttribute("user", userService.findUser(userId));
-
+        model.addAttribute("user", userService.findUser(id));
+        System.out.println("이거머"+userService.findUser(id).get().getId());
         return "/user/profile";
     }
 
-    @GetMapping("/users/{userId}/validation")
-    public String userValidation(@PathVariable String userId, Model model){
-
-        model.addAttribute("userId", userId);
+    @GetMapping("/users/{id}/validation")
+    public String userValidation(@PathVariable Long id, Model model){
+        System.out.println("userValidation   : " + id);
+        model.addAttribute("id", id);
 
         return "/user/validation_user";
     }
@@ -52,20 +54,26 @@ public class UserController {
     @PostMapping("/validation")
     public String validationUser(User user, Model model) {
 
-        if(userService.validationUserInfo(user.getUserId(), user.getPassword())){
+        System.out.println("validationUser : " + user);
+
+        if(userService.validationUserInfo(user.getId(), user.getPassword())){
+
             model.addAttribute("user", user);
+
             return "/user/updateForm";
         }
 
         return "/user/validation_user";
     }
 
-    @PostMapping("/users/update")
-    public String userUpdate(User user){
+    @PostMapping("/users/{id}")
+    public String userUpdate(@PathVariable Long id, User newUser){
 
-        userService.findUser(user.getUserId()).get().setPassword(user.getPassword());
-        userService.findUser(user.getUserId()).get().setEmail(user.getEmail());
-        userService.findUser(user.getUserId()).get().setName(user.getName());
+        User user = userService.findUser(id).get();
+
+        user.update(newUser);
+
+        userService.create(user);
 
         return "redirect:/users/list";
     }

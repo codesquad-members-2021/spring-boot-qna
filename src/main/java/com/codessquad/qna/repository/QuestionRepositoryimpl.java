@@ -30,7 +30,6 @@ public class QuestionRepositoryimpl implements QuestionRepository {
     public List<Question> findQuestionList() {
 
         return Optional.ofNullable(questions).get();
-
-//        return questions;
     }
+
 }

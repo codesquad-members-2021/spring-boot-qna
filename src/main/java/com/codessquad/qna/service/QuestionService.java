@@ -16,7 +16,6 @@ public class QuestionService {
     }
 
     public void registerQuestion(Question question) {
-
         questionRepository.save(question);
     }
 
