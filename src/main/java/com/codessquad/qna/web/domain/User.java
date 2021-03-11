@@ -7,6 +7,7 @@ import javax.persistence.Id;
 
 @Entity
 public class User {
+
     @Id
     @GeneratedValue
     private Long id;
@@ -23,6 +24,13 @@ public class User {
     @Column(nullable=false, length=20)
     private String email;
 
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
 
     public void setUserId(String userId) {
         this.userId = userId;
