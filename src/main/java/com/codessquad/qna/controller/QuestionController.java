@@ -53,25 +53,37 @@ public class QuestionController {
         if (!HttpSessionUtils.isLoginUser(session)) {
             return "redirect:/";
         }
-        //todo : 작성 유저가 맞는지
-
-        Question findQuestion = questionService.findById(id);
-
-        model.addAttribute("question", findQuestion);
-        return "qna/updateForm";
+        if (questionService.checkChangeable(id, HttpSessionUtils.getUserFromSession(session))) {
+            Question findQuestion = questionService.findById(id);
+            model.addAttribute("question", findQuestion);
+            return "qna/updateForm";
+        }
+        return "";//todo : 에러 페이지로
     }
 
     @PutMapping("/{id}")
-    public String questionUpdate(@PathVariable Long id, Question question) {
-        questionService.update(id, question);
-        return "redirect:/questions/" + id;
+    public String questionUpdate(@PathVariable Long id, Question question, HttpSession session) {
+        if (!HttpSessionUtils.isLoginUser(session)) {
+            return "redirect:/";
+        }
+        if (questionService.checkChangeable(id, HttpSessionUtils.getUserFromSession(session))) {
+            questionService.update(id, question);
+            return "redirect:/questions/" + id;
+        }
+        return "";//todo : 에러 페이지로
     }
 
     @DeleteMapping("/{id}")
-    public String questionDelete(@PathVariable Long id) {
-        questionService.delete(id);
-        //todo : 삭제하려는 사람이 작성자이어야 한다.
-        return "redirect:/";
+    public String questionDelete(@PathVariable Long id, HttpSession session) {
+        if (!HttpSessionUtils.isLoginUser(session)) {
+            return "redirect:/";
+        }
+
+        if (questionService.checkChangeable(id, HttpSessionUtils.getUserFromSession(session))) {
+            questionService.delete(id);
+            return "redirect:/";
+        }
+        return "";//todo : 에러 페이지로
     }
 
 }
