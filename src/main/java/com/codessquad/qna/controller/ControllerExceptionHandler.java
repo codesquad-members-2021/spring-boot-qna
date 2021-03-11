@@ -8,6 +8,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.ResponseStatus;
 
 @ControllerAdvice
 public class ControllerExceptionHandler {
@@ -48,13 +49,11 @@ public class ControllerExceptionHandler {
 
     /**
      * 세션에 로그인 된 유저가 없을시 발생하는 에러
-     * @param e
-     * @param model
-     * @return
+     * 로그인 창으로 redirect
      */
     @ExceptionHandler(NotExistLoggedUserInSession.class)
-    public String handleNotExistLoggedUserInSession(Exception e, Model model) {
-        return handleException(e, model);
+    public String handleNotExistLoggedUserInSession() {
+        return "redirect:/user/login";
     }
 
     @ExceptionHandler(IllegalAccessException.class)

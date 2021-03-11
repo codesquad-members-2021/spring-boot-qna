@@ -3,7 +3,6 @@ package com.codessquad.qna.service;
 import com.codessquad.qna.entity.User;
 import com.codessquad.qna.exception.CanNotFindUserException;
 import com.codessquad.qna.repository.UserRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.NoResultException;
@@ -15,7 +14,6 @@ public class UserService {
 
     private final UserRepository userRepository;
 
-    @Autowired
     public UserService(UserRepository userRepository) {
         this.userRepository = userRepository;
     }
