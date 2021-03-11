@@ -77,7 +77,9 @@ public class PostController {
     @GetMapping("/{id}/form")
     public String updatePostForm(@PathVariable Long id, HttpSession httpSession, Model model) throws IllegalAccessException {
         Post post = postService.getPost(id);
-        isMatchedAuthor(httpSession, post, "다른 사람의 글을 수정할 수 없습니다");
+        if(!post.isMatchedAuthor(HttpSessionUtils.getUserFromSession(httpSession))){
+            throw new IllegalAccessException("다른 사람의 글을 수정할 수 없습니다");
+        }
         model.addAttribute("post", post);
         return "qna/updateForm";
     }
@@ -104,16 +106,11 @@ public class PostController {
     @DeleteMapping("/{id}")
     public String deletePost(@PathVariable Long id, HttpSession httpSession) throws IllegalAccessException {
         Post post = postService.getPost(id);
-        isMatchedAuthor(httpSession, post, "다른 사람의 글을 삭제할 수 없습니다");
+        if(!post.isMatchedAuthor(HttpSessionUtils.getUserFromSession(httpSession))){
+            throw new IllegalAccessException("다른 사람의 글을 삭제할 수 없습니다");
+        }
         postService.deletePost(post);
         return "redirect:/";
-    }
-
-    private void isMatchedAuthor(HttpSession httpSession, Post post, String message) throws IllegalAccessException {
-        User userFromSession = HttpSessionUtils.getUserFromSession(httpSession);
-        if(!post.isMatchedAuthor(userFromSession)) {
-            throw new IllegalAccessException(message);
-        }
     }
 
 }
