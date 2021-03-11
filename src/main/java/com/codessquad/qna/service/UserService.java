@@ -2,6 +2,7 @@ package com.codessquad.qna.service;
 
 import com.codessquad.qna.controller.UserController;
 import com.codessquad.qna.domain.User;
+import com.codessquad.qna.exception.UserExistException;
 import com.codessquad.qna.repository.UserRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,8 +23,16 @@ public class UserService {
     }
 
     public User join(User newUser) {
-        // TODO: 중복가입여부 확인 로직 추
+        isExist(newUser);
+
         return userRepository.save(newUser);
+    }
+
+    private void isExist(User user) {
+        userRepository.findByUserId(user.getUserId())
+                .ifPresent(u -> {
+                    throw new UserExistException();
+                });
     }
 
     public Iterable<User> showAll() {
