@@ -38,6 +38,10 @@ public class User {
         return password;
     }
 
+    public boolean isRightPassword(String inputPassword) {
+        return inputPassword.equals(password);
+    }
+
     public String getName() {
         return name;
     }
@@ -48,6 +52,10 @@ public class User {
 
     public Long getId() {
         return id;
+    }
+
+    public boolean isRightId(Long inputId) {
+        return inputId.equals(id);
     }
 
     public void setId(Long id) {
