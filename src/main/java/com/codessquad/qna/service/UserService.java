@@ -40,8 +40,12 @@ public class UserService {
         userRepository.save(oldUser);
     }
 
-    public void removeUser(Long id) {userRepository.deleteUserById(id);}
+    public void removeUser(Long id) {
+        userRepository.deleteUserById(id);
+    }
 
-    public int countOfUsers() {return (int) userRepository.count();}
+    public int countOfUsers() {
+        return (int) userRepository.count();
+    }
 
 }
