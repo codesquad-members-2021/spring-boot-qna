@@ -42,7 +42,7 @@ public class QuestionController {
     }
 
     @ExceptionHandler(NullPointerException.class)
-    public String nullException() {
-        return "nullError";
+    public String nullExceptionHandle() {
+        return "nullErrorHandle";
     }
 }
