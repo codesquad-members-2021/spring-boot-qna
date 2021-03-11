@@ -79,7 +79,6 @@ public class QuestionController {
         return "redirect:/";
     }
 
-
     private ModelAndView getQuestionRepository(String viewName, Long id) {
         ModelAndView modelAndView = new ModelAndView(viewName);
         modelAndView.addObject("question", questionRepository.findById(id).orElse(null));

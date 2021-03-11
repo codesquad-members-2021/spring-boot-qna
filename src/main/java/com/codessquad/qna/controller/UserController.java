@@ -52,19 +52,20 @@ public class UserController {
         if (!user.matchPassword(password)) {
             return "redirect:/users/login";
         }
-        session.setAttribute("user", user);
+        session.setAttribute("sessionUser", user);
         return "redirect:/";
     }
 
     @GetMapping(LOGOUT)
     public String logout(HttpSession session) {
-        session.removeAttribute("user");
+        session.removeAttribute("sessionUser");
         return "redirect:/";
     }
 
     @GetMapping("/{id}")
-    public String viewProfile(@PathVariable Long id, Model model) {
-        model.addAttribute("user", userRepository.findById(id).orElse(null));
+    public String profile(@PathVariable Long id, Model model) {
+        User user = userRepository.findById(id).orElse(null);
+        model.addAttribute("user", user);
         return "user/profile";
     }
 

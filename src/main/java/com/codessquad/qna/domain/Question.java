@@ -75,8 +75,8 @@ public class Question {
     }
 
     public boolean matchUser(User loginUser) {
-        Long userId = loginUser.getId();
-        if(this.id.equals(userId)) {
+        String userId = loginUser.getUserId();
+        if(this.writer.equals(userId)) {
             return true;
         }
         return false;
