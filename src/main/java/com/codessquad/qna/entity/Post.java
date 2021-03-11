@@ -28,7 +28,7 @@ public class Post {
     private String date;
 
     @OneToMany(mappedBy = "post")
-    private List<Comment> comment;
+    private List<Comment> comments;
 
     public Post() {
     }
@@ -61,7 +61,7 @@ public class Post {
     }
 
     public List<Comment> getComment() {
-        return Collections.unmodifiableList(comment);
+        return Collections.unmodifiableList(comments);
     }
 
     public boolean isMatchedAuthor(User user) {
