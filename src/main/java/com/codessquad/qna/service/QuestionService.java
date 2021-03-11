@@ -46,4 +46,9 @@ public class QuestionService {
     public void delete(Long id) {
         questionRepository.deleteById(id);
     }
+
+    public boolean checkChangeable(Long id, User sessionedUser) {
+        Question findQuestion = findById(id);
+        return sessionedUser.checkId(findQuestion.getId());
+    }
 }
