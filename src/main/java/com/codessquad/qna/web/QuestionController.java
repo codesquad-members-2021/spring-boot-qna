@@ -9,10 +9,12 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.Optional;
 
 @Controller
+@RequestMapping("/questions")
 public class QuestionController {
 
     private static Logger logger = LoggerFactory.getLogger(QuestionController.class);
@@ -23,12 +25,12 @@ public class QuestionController {
         this.questionRepository = questionRepository;
     }
 
-    @GetMapping("/questions/form")
+    @GetMapping("/form")
     public String getQuestionFormPage() {
         return "qna/form";
     }
 
-    @PostMapping("/questions")
+    @PostMapping("/")
     public String submitQuestion(Question question, Model model) {
         questionRepository.save(question);
         model.addAttribute(question);
@@ -44,7 +46,7 @@ public class QuestionController {
         return "home";
     }
 
-    @GetMapping("/questions/{index}")
+    @GetMapping("/{index}")
     public String getQuestionDetail(@PathVariable(("index")) long index, Model model) {
         Optional<Question> question = questionRepository.findById(index);
 
