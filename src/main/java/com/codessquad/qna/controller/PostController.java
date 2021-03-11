@@ -21,7 +21,7 @@ import java.util.Optional;
 @Controller
 public class PostController {
 
-    private Logger logger = LoggerFactory.getLogger(PostController.class);
+    private static final Logger logger = LoggerFactory.getLogger(PostController.class);
     private final PostService postService;
 
     public PostController(PostService postService) {

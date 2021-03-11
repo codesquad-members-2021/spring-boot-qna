@@ -17,7 +17,7 @@ import javax.servlet.http.HttpSession;
 @Controller
 public class CommentController {
 
-    private Logger logger = LoggerFactory.getLogger(CommentController.class);
+    private static final Logger logger = LoggerFactory.getLogger(CommentController.class);
     private final PostService postService;
     private final CommentService commentService;
 
