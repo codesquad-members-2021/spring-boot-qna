@@ -59,12 +59,4 @@ public class Answer {
         this.contents = contents;
     }
 
-    public boolean matchUser(User loginUser) {
-        String userId = loginUser.getUserId();
-        if (this.writer.getUserId().equals(userId)) {
-            return true;
-        }
-        return false;
-    }
-
 }
