@@ -7,10 +7,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Optional;
 
@@ -26,6 +23,20 @@ public class UserController {
         this.userService = userService;
     }
 
+    @GetMapping()
+    public String list(Model model) {
+        model.addAttribute("users", userService.findAll());
+        return "/user/list";
+    }
+
+    @PostMapping()
+    public String account(User user) {
+        logger.debug("user: {}", user);
+        // TODO: null check before create user
+        userService.save(user);
+        return "redirect:/users";
+    }
+
     @GetMapping("/{id}")
     public String profile(@PathVariable Long id, Model model) {
         Optional<User> user = userService.findUserById(id);
@@ -36,21 +47,7 @@ public class UserController {
         return "/user/profile";
     }
 
-    @GetMapping()
-    public String list(Model model) {
-        model.addAttribute("users", userService.findAll());
-        return "/user/list";
-    }
-
-    @PostMapping()
-    public String account(User user) {
-        logger.info("user: {}", user);
-        // TODO: null check before create user
-        userService.save(user);
-        return "redirect:/users";
-    }
-
-    @GetMapping("{id}/form")
+    @GetMapping("/{id}/form")
     public String form(@PathVariable Long id, Model model) {
         Optional<User> user = userService.findUserById(id);
         if (!user.isPresent()) {
@@ -60,13 +57,14 @@ public class UserController {
         return "/user/updateForm";
     }
 
-    @PostMapping("{id}/form")
+    @PutMapping("/{id}")
     public String update(@PathVariable Long id, User newUser) {
         Optional<User> userOptional = userService.findUserById(id);
         if (!userOptional.isPresent()) {
             return "redirect:/users";
         }
         User user = userOptional.get();
+        logger.debug("user : {}", (user));
 
         user.update(newUser);
         userService.save(user);
