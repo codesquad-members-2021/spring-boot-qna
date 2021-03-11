@@ -58,6 +58,11 @@ public class User {
         this.email = email;
     }
 
+    // TODO: 도메인 객체로 뺄 수 있다
+    public boolean isEqualPassword(String expected) {
+        return this.password.equals(expected);
+    }
+
     @Override
     public String toString() {
         return "User{" +
