@@ -17,6 +17,10 @@ dependencies {
 	developmentOnly 'org.springframework.boot:spring-boot-devtools'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	compile 'pl.allegro.tech.boot:handlebars-spring-boot-starter:0.3.2'
+
+	implementation group: 'com.h2database', name: 'h2', version: '1.4.200'
+	implementation group: 'org.springframework.boot', name: 'spring-boot-starter-data-jpa', version: '2.4.3'
+	implementation 'com.h2database:h2'
 }
 
 test {
