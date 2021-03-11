@@ -14,7 +14,6 @@ public class MvcConfig extends WebMvcConfigurerAdapter {
     public void addViewControllers(ViewControllerRegistry registry) {
         registry.setOrder(Ordered.HIGHEST_PRECEDENCE);
 
-        registry.addViewController("/qna/form").setViewName("qna/form");
         registry.addViewController("/").setViewName("/questions");
     }
 }

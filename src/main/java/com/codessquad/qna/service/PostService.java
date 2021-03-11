@@ -27,6 +27,11 @@ public class PostService {
         postRepository.save(post);
     }
 
+    //Overload addPost
+    public void addPost(PostDto postDto) {
+        postRepository.save(Mapper.mapToPost(postDto));
+    }
+
     public Post getPost(Long id) {
         return postRepository.findById(id).orElseThrow(CanNotFindPostException::new);
     }

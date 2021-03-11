@@ -2,6 +2,7 @@ package com.codessquad.qna.controller;
 
 import com.codessquad.qna.dto.PostDto;
 import com.codessquad.qna.entity.Post;
+import com.codessquad.qna.entity.User;
 import com.codessquad.qna.exception.CanNotFindPostException;
 import com.codessquad.qna.service.PostService;
 import com.codessquad.qna.util.HttpSessionUtils;
@@ -25,15 +26,20 @@ public class PostController {
         this.postService = postService;
     }
 
+    @GetMapping("/form")
+    public String getQnaForm() {
+        return "qna/form";
+    }
+
     /**
      * 질문 게시글을 게시판에 등록합니다.
      * @param postDto
      * @return
      */
     @PostMapping("")
-    public String addPost(@ModelAttribute PostDto postDto) {
-        Post post = Mapper.mapToPost(postDto);
-        postService.addPost(post);
+    public String addPost(@ModelAttribute PostDto postDto, HttpSession httpSession) {
+        postDto.setAuthor(HttpSessionUtils.getUserFromSession(httpSession).getUserId());
+        postService.addPost(postDto);
         return "redirect:/";
     }
 
