@@ -54,14 +54,13 @@ public class ControllerExceptionHandler {
     }
 
     /**
-     * 해당 권한이 있는 유저가 아닐시 login 창으로 redirect 시킨다.
+     * 해당 권한이 있는 유저가 아닐시 index.html 창으로 redirect 시킨다.
      * @return 401 Status code
      */
-    @ResponseStatus(HttpStatus.UNAUTHORIZED)
     @ExceptionHandler(IllegalAccessException.class)
-    public String handleIllegalAccessException(IllegalAccessException e, Model model) {
+    public String handleIllegalAccessException(IllegalAccessException e) {
         logger.error(e.getMessage());
-        return "index";
+        return "redirect:/";
     }
 
 }
