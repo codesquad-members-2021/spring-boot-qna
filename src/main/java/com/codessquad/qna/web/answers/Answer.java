@@ -20,7 +20,7 @@ public class Answer {
     @JoinColumn(foreignKey = @ForeignKey(name = "fk_answer_to_question"))
     private Question question;
 
-    @Column(nullable = false, length = 20)
+    @Column(nullable = false, length = 400)
     private String contents;
 
     private LocalDateTime reportingDate;
