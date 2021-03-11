@@ -29,7 +29,7 @@ public class QuestionController {
         ).body(questionResponse);
     }
 
-    @PostMapping(value = "create")
+    @PostMapping("create")
     public String createQuestion(Question question) {
         questionService.saveQuestion(QuestionRequest.of(question));
         return "redirect:/questions";
@@ -41,7 +41,7 @@ public class QuestionController {
         return "question/list";
     }
 
-    @GetMapping(value = "{id}")
+    @GetMapping("{id}")
     public String getQuestion(@PathVariable Long id, Model model) {
         model.addAttribute("question", questionService.getQuestion(id));
         return "question/show";

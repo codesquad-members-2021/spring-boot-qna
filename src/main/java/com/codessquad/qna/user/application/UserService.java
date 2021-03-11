@@ -5,13 +5,11 @@ import com.codessquad.qna.user.domain.UserRepository;
 import com.codessquad.qna.user.dto.UserRequest;
 import com.codessquad.qna.user.dto.UserResponse;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-@Transactional
 public class UserService {
     private UserRepository userRepository;
 
@@ -24,15 +22,13 @@ public class UserService {
         return UserResponse.of(user);
     }
 
-    @Transactional(readOnly = true)
     public List<UserResponse> getUsers() {
         return userRepository.findAll()
                 .stream()
                 .map(UserResponse::of)
                 .collect(Collectors.toList());
     }
-
-    @Transactional(readOnly = true)
+    
     public UserResponse getUser(Long id) {
         User user = userRepository.getOne(id);
         return UserResponse.of(user);

@@ -31,7 +31,7 @@ public class UserController {
                 .body(userResponse);
     }
 
-    @PostMapping(value = "create")
+    @PostMapping("create")
     public String createUser(User user) {
         userService.saveUser(UserRequest.of(user));
         return "redirect:/users";
@@ -43,19 +43,19 @@ public class UserController {
         return "user/list";
     }
 
-    @GetMapping(value = "{id}")
+    @GetMapping("{id}")
     public String user_profile(@PathVariable Long id, Model model) {
         model.addAttribute("user", userService.getUser(id));
         return "user/profile";
     }
 
-    @GetMapping(value = "{id}/form")
+    @GetMapping("{id}/form")
     public String user_form(@PathVariable Long id, Model model) {
         model.addAttribute("user", userService.getUser(id));
         return "user/updateForm";
     }
 
-    @PutMapping(value = "{id}")
+    @PutMapping("{id}")
     public String updateUser(@PathVariable Long id, User user) {
         userService.updateUser(id, UserRequest.of(user));
         return "redirect:/users";
