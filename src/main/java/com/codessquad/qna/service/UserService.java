@@ -33,7 +33,7 @@ public class UserService {
     }
 
     public boolean validationUserInfo(Long id, String password) {
-        System.out.println(id+" : "+password);
+
         User user = repository.findById(id).get();
 
         return Optional.ofNullable(user.matchPassword(password)).get();

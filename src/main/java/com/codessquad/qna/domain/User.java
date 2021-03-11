@@ -67,6 +67,7 @@ public class User {
         this.name = newUser.name;
         this.email = newUser.email;
         this.password = newUser.password;
+
     }
 
     @Override
