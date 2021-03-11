@@ -8,7 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.ModelAndView;
 
 @Controller
 @RequestMapping("/users")
@@ -63,11 +62,10 @@ public class UserController {
     }
 
     @GetMapping("/{id}")
-    public ModelAndView showUserInDetail(@PathVariable long id) {
-        ModelAndView modelAndView = new ModelAndView("/user/profile");
-        modelAndView.addObject("user", userService.showOneById(id));
+    public String showUserInDetail(@PathVariable long id, Model model) {
+        model.addAttribute("user", userService.showOneById(id));
 
-        return modelAndView;
+        return "/user/profile";
     }
 
     @GetMapping("/{id}/form")
