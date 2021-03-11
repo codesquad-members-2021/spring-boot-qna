@@ -24,6 +24,7 @@ public class Question {
     private LocalDateTime updateDateTime;
 
     @ManyToOne
+    @JoinColumn(foreignKey = @ForeignKey(name = "fk_question_writer"))
     private User writer;
 
     protected Question() {
