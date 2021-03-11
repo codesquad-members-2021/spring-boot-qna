@@ -5,7 +5,6 @@ import com.codessquad.qna.entity.User;
 import com.codessquad.qna.exception.UserNotFoundException;
 import com.codessquad.qna.service.UserService;
 import com.codessquad.qna.util.HttpSessionUtils;
-import com.codessquad.qna.util.Mapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
@@ -111,8 +110,11 @@ public class UserController {
      * @return
      */
     @GetMapping("/{id}/form")
-    public String updateUserProfileForm(@PathVariable Long id, Model model, HttpSession httpSession) {
-        User sessionUser = isMatchedSessionUserById(id, httpSession);
+    public String updateUserProfileForm(@PathVariable Long id, Model model, HttpSession httpSession) throws IllegalAccessException {
+        User sessionUser = HttpSessionUtils.getUserFromSession(httpSession);
+        if(!sessionUser.isMatchedId(id)){
+            throw new IllegalAccessException("다른 유저의 프로필을 수정할 수 없습니다.");
+        }
         model.addAttribute("user", sessionUser);
         return "user/updateForm";
     }
@@ -124,28 +126,10 @@ public class UserController {
      * @return
      */
     @PutMapping("/{id}")
-    public String updateUserProfile(@PathVariable Long id, @ModelAttribute UserDto userDto, HttpSession httpSession) {
-        User sessionUser = isMatchedSessionUserById(id, httpSession);
+    public String updateUserProfile(@PathVariable Long id, @ModelAttribute UserDto userDto) throws IllegalAccessException {
         userService.change(id, userDto);
         return "redirect:/users";
     }
 
-    /**
-     * HttpSession 상의 유저와 url 에 주어진 id 로 mapping 된 유저가 같은 유저인지 테스트 하는 메소드
-     * @param id userId
-     * @param httpSession
-     * if Matched Session User and User from id
-     * @return Optional<User>
-     *     else
-     * @return Optional.empty();
-     */
-    private User isMatchedSessionUserById(Long id, HttpSession httpSession) {
-        User sessionUser = HttpSessionUtils.getUserFromSession(httpSession);
-        if(!sessionUser.isMatchedId(id)){
-            logger.error("sessionId : " + sessionUser.getId() + " 와 userId : + " + id + " 가 다릅니다. ");
-            throw new IllegalArgumentException("자신의 정보만 수정할 수 있습니다.");
-        }
-        return sessionUser;
-    }
 
 }
