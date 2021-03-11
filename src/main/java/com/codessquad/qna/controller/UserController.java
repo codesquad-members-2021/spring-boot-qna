@@ -5,11 +5,11 @@ import com.codessquad.qna.service.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.Optional;
+import org.springframework.web.server.ResponseStatusException;
 
 @Controller
 @RequestMapping("/users")
@@ -30,40 +30,36 @@ public class UserController {
     }
 
     @PostMapping()
-    public String account(User user) {
+    public String create(User user) {
         logger.debug("user: {}", user);
-        // TODO: null check before create user
+
         userService.save(user);
         return "redirect:/users";
     }
 
     @GetMapping("/{id}")
     public String profile(@PathVariable Long id, Model model) {
-        Optional<User> user = userService.findUserById(id);
-        if (!user.isPresent()) {
-            return "redirect:/users";
-        }
-        model.addAttribute(user.get());
+        User user = userService.findUserById(id)
+                .orElseThrow(() -> (new ResponseStatusException(HttpStatus.NOT_FOUND, "User Not Found.")));
+
+        model.addAttribute(user);
         return "/user/profile";
     }
 
     @GetMapping("/{id}/form")
     public String form(@PathVariable Long id, Model model) {
-        Optional<User> user = userService.findUserById(id);
-        if (!user.isPresent()) {
-            return "redirect:/users";
-        }
-        model.addAttribute(user.get());
+        User user = userService.findUserById(id)
+                .orElseThrow(() -> (new ResponseStatusException(HttpStatus.NOT_FOUND, "User Not Found.")));
+
+        model.addAttribute(user);
         return "/user/updateForm";
     }
 
     @PutMapping("/{id}")
     public String update(@PathVariable Long id, User newUser) {
-        Optional<User> userOptional = userService.findUserById(id);
-        if (!userOptional.isPresent()) {
-            return "redirect:/users";
-        }
-        User user = userOptional.get();
+        User user = userService.findUserById(id)
+                .orElseThrow(() -> (new ResponseStatusException(HttpStatus.NOT_FOUND, "User Not Found.")));
+
         logger.debug("user : {}", (user));
 
         user.update(newUser);
