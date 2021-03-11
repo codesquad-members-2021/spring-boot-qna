@@ -43,12 +43,20 @@ public class Answer {
         return question;
     }
 
-    public String getWriter() {
-        return writer.getUserId();
+    public User getWriter() {
+        return writer;
     }
 
     public String getCurrentDateTime() {
         return currentDateTime.format(pattern);
+    }
+
+    public String getContents() {
+        return contents;
+    }
+
+    public void setContents(String contents) {
+        this.contents = contents;
     }
 
     public boolean matchUser(User loginUser) {

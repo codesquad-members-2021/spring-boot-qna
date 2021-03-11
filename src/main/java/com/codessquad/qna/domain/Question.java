@@ -3,6 +3,7 @@ package com.codessquad.qna.domain;
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 
 @Entity
 public class Question {
@@ -22,6 +23,12 @@ public class Question {
     @Column(nullable = false, length = 2000)
     private String contents;
     private LocalDateTime currentDateTime;
+
+    @OneToMany(mappedBy = "question")
+    @OrderBy("id ASC")
+    private List<Answer> answers;
+
+    private int answerCount;
 
     public Question() {
         currentDateTime = LocalDateTime.now();
@@ -77,9 +84,22 @@ public class Question {
         return currentDateTime.format(pattern);
     }
 
+    public List<Answer> getAnswers() {
+        return answers;
+    }
+
+    public void setAnswers(List<Answer> answers) {
+        this.answers = answers;
+    }
+
+    public int getAnswerCount() {
+        answerCount = answers.size();
+        return answerCount;
+    }
+
     public boolean matchUser(User loginUser) {
         String userId = loginUser.getUserId();
-        if(this.writer.getUserId().equals(userId)) {
+        if (this.writer.getUserId().equals(userId)) {
             return true;
         }
         return false;
