@@ -35,4 +35,10 @@ public class QuestionService {
         return questionRepository.findById(questionId).orElseThrow(NullPointerException::new);
     }
 
+    @Transactional
+    public void update(Long id, Question question) {
+        Question findQuestion = findById(id);
+        //todo : 업데이트 질문의 검증 필요 -> 기존의 검증은 writer까지 검증 -> 오류 발생
+        findQuestion.questionUpdate(question);
+    }
 }
