@@ -1,16 +1,13 @@
 package com.codessquad.qna.controller;
 
 import com.codessquad.qna.domain.answer.Answer;
-import com.codessquad.qna.domain.answer.AnswerRepository;
 import com.codessquad.qna.domain.question.Question;
-import com.codessquad.qna.domain.question.QuestionRepository;
 import com.codessquad.qna.domain.user.User;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.codessquad.qna.service.AnswerService;
+import com.codessquad.qna.service.QuestionService;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpSession;
 
@@ -18,84 +15,54 @@ import javax.servlet.http.HttpSession;
 @Controller
 public class AnswerController {
 
-    Logger logger = LoggerFactory.getLogger(QuestionController.class);
+    private final AnswerService answerService;
+    private final QuestionService questionService;
 
-    @Autowired
-    private QuestionRepository questionRepository;
-
-    @Autowired
-    private AnswerRepository answerRepository;
+    public AnswerController(AnswerService answerService, QuestionService questionService) {
+        this.answerService = answerService;
+        this.questionService = questionService;
+    }
 
     @PostMapping("/")
     public String createAnswer(@PathVariable Long questionId, Answer answer, HttpSession session) {
         if (!HttpSessionUtils.isLoginUser(session)) {
             return "redirect:/users/login";
         }
-        User sessionedUser = HttpSessionUtils.getUserFromSession(session);
-        Question question = questionRepository.findById(questionId).orElseThrow(
-                () -> new IllegalStateException("해당 질문을 찾을 수 없습니다. id = " + questionId));
-        int answerCount = answerRepository.countAnswersByQuestionId(questionId);
-        question.setAnswerCount(++answerCount);
-
-        answer.setQuestion(question);
-        answer.setWriter(sessionedUser);
-
-        answerRepository.save(answer);
-
-        logger.info(answer.toString());
-
+        answerService.create(questionId, answer, session);
         return "redirect:/questions/" + questionId;
     }
 
     @GetMapping("/{id}/form")
-    public ModelAndView getUpdateForm(@PathVariable Long questionId, @PathVariable Long id, HttpSession session) {
-        ModelAndView mav = new ModelAndView("/answers/update_form");
-        Question question = questionRepository.findById(questionId).orElseThrow(
-                () -> new IllegalStateException("해당 질문이 없습니다. id = " + questionId));
-        Answer answer = answerRepository.findById(id).orElseThrow(
-                () -> new IllegalStateException("해당 답변이 없습니다. id = " + id));
-
+    public String getUpdateForm(@PathVariable Long questionId, @PathVariable Long id, Model model, HttpSession session) {
         if (!HttpSessionUtils.isLoginUser(session)) {
-            mav.setViewName("redirect:/users/login");
-            return mav;
+            return "redirect:/users/login";
         }
+        Question question = questionService.findById(questionId);
+        Answer answer = answerService.findById(id);
         User sessionedUser = HttpSessionUtils.getUserFromSession(session);
         if (!answer.isWrittenBy(sessionedUser)) {
             throw new IllegalStateException("자신이 작성한 답변만 수정할 수 있습니다.");
         }
 
-        mav.addObject("question", question);
-        mav.addObject("answer", answer);
+        model.addAttribute("question", question);
+        model.addAttribute("answer", answer);
 
-        return mav;
+        return "/answers/update_form";
     }
 
     @PutMapping("/{id}")
-    public ModelAndView updateAnswer(@PathVariable Long questionId, @PathVariable Long id, Answer answerWithUpdateInfo) {
-        ModelAndView mav = new ModelAndView("redirect:/questions/" + questionId);
-        Answer answer = answerRepository.findById(id).orElseThrow(
-                () -> new IllegalStateException("해당 답변이 없습니다. id = " + id));
+    public String updateAnswer(@PathVariable Long questionId, @PathVariable Long id, Answer answerWithUpdateInfo) {
+        answerService.update(id, answerWithUpdateInfo);
 
-        answer.update(answerWithUpdateInfo);
-        answerRepository.save(answer);
-
-        return mav;
+        return "redirect:/questions/" + questionId;
     }
 
     @DeleteMapping("/{id}")
     public String deleteAnswer(@PathVariable Long questionId, @PathVariable Long id, HttpSession session) {
-        Answer answer = answerRepository.findById(id).orElseThrow(
-                () -> new IllegalStateException("해당 답변이 없습니다. id = " + id));
-
         if (!HttpSessionUtils.isLoginUser(session)) {
             return "redirect:/users/login";
         }
-        User sessionedUser = HttpSessionUtils.getUserFromSession(session);
-        if (!answer.isWrittenBy(sessionedUser)) {
-            throw new IllegalStateException("자신이 작성한 답변만 삭제할 수 있습니다.");
-        }
-
-        answerRepository.delete(answer);
+        answerService.delete(questionId, id, session);
 
         return "redirect:/questions/" + questionId;
     }
