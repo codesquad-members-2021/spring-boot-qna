@@ -21,11 +21,20 @@ public class QuestionController {
 
     @PostMapping
     public String createQuestions(Question question, HttpSession session) {
-        if (session.getAttribute("sessionedUser") == null) {
+        long questionWriterId = question.getWriter().getId().longValue();
+
+        User sessionUser = ((User) session.getAttribute("sessionedUser"));
+        if (sessionUser == null) {
             return "redirect:/users/login/form";
+        }
+        long sessionUserId = sessionUser.getId().longValue();
+
+        if (questionWriterId != sessionUserId) {
+            throw new IllegalArgumentException("본인이 작성한 글이 아닙니다.");
         }
 
         questionRepository.save(question);
+
         return "redirect:/questions";
     }
 

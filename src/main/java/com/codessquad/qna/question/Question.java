@@ -65,6 +65,10 @@ public class Question {
         return writer;
     }
 
+    public void setWriter(User writer) {
+        this.writer = writer;
+    }
+
     public String getTitle() {
         return title;
     }
