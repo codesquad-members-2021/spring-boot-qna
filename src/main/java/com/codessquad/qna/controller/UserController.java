@@ -19,7 +19,7 @@ import static com.codessquad.qna.controller.HttpSessionUtils.isLoginUser;
 @Controller
 public class UserController {
 
-    private Logger logger = LoggerFactory.getLogger(UserController.class);
+    private final Logger logger = LoggerFactory.getLogger(UserController.class);
     private final UserService userService;
 
     public UserController(UserService userService) {

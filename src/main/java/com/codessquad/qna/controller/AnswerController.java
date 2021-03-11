@@ -13,7 +13,7 @@ import javax.servlet.http.HttpSession;
 @Controller
 public class AnswerController {
 
-    private Logger logger = LoggerFactory.getLogger(AnswerController.class);
+    private final Logger logger = LoggerFactory.getLogger(AnswerController.class);
     private final AnswerService answerService;
 
     public AnswerController(AnswerService answerService) {
