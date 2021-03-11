@@ -100,7 +100,8 @@ public class UserController {
      */
     @GetMapping("/{id}")
     public String getUserProfile(@PathVariable Long id, Model model) {
-        getUserIfExist(id, model);
+        User user = userService.getUserById(id);
+        model.addAttribute("user", user);
         return "user/profile";
     }
 
@@ -113,12 +114,9 @@ public class UserController {
      */
     @GetMapping("/{id}/form")
     public String updateUserProfileForm(@PathVariable Long id, Model model, HttpSession httpSession) {
-        Optional<User> sessionUser = isMatchedSessionUserById(id, httpSession);
-        if (sessionUser.isPresent()) {
-            model.addAttribute("user", sessionUser);
-            return "user/updateForm";
-        }
-        return "redirect:/users/loginForm";
+        User sessionUser = isMatchedSessionUserById(id, httpSession);
+        model.addAttribute("user", sessionUser);
+        return "user/updateForm";
     }
 
     /**
@@ -129,12 +127,9 @@ public class UserController {
      */
     @PutMapping("/{id}")
     public String updateUserProfile(@PathVariable Long id, @ModelAttribute UserDto userDto, HttpSession httpSession) {
-        Optional<User> sessionUser = isMatchedSessionUserById(id, httpSession);
-        if (sessionUser.isPresent()) {
-            userService.change(id, userDto);
-            return "redirect:/users";
-        }
-        return "redirect:/users/loginForm";
+        User sessionUser = isMatchedSessionUserById(id, httpSession);
+        userService.change(id, userDto);
+        return "redirect:/users";
     }
 
     /**
@@ -146,18 +141,13 @@ public class UserController {
      *     else
      * @return Optional.empty();
      */
-    private Optional<User> isMatchedSessionUserById(Long id, HttpSession httpSession) {
+    private User isMatchedSessionUserById(Long id, HttpSession httpSession) {
         User sessionUser = HttpSessionUtils.getUserFromSession(httpSession);
         if(!sessionUser.isMatchedId(id)){
             logger.error("sessionId : " + sessionUser.getId() + " 와 userId : + " + id + " 가 다릅니다. ");
             throw new IllegalArgumentException("자신의 정보만 수정할 수 있습니다.");
         }
-        return Optional.of(sessionUser);
-    }
-
-   private void getUserIfExist(Long id, Model model) {
-        User user = userService.getUserById(id);
-        model.addAttribute("user", user);
+        return sessionUser;
     }
 
 }
