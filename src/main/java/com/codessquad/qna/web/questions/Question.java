@@ -22,7 +22,9 @@ public class Question {
 
     @Column(nullable = false)
     private String title;
+
     private String contents;
+
     private LocalDateTime reportingDate;
 
     public Question(String title, String contents) {

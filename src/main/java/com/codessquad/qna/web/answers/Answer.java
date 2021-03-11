@@ -22,6 +22,7 @@ public class Answer {
 
     @Column(nullable = false, length = 20)
     private String contents;
+
     private LocalDateTime reportingDate;
 
     public boolean isMatchingWriter(User suggestedWriter) {
