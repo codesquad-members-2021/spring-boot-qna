@@ -1,7 +1,8 @@
 package com.codessquad.qna.controller;
 
+import com.codessquad.qna.exception.NoUserException;
 import com.codessquad.qna.domain.User;
-import com.codessquad.qna.domain.UserRepository;
+import com.codessquad.qna.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -34,20 +35,20 @@ public class UserController {
     @GetMapping("/{id}")
     public ModelAndView show(@PathVariable Long id) {
         ModelAndView modelAndView = new ModelAndView("/user/profile");
-        modelAndView.addObject("user", userRepository.findById(id).orElseThrow(NullPointerException::new));
+        modelAndView.addObject("user", userRepository.findById(id).orElseThrow(NoUserException::new));
         return modelAndView;
     }
 
     @GetMapping("/{id}/form")
     public ModelAndView update(@PathVariable Long id) {
         ModelAndView modelAndView = new ModelAndView("/user/updateForm");
-        modelAndView.addObject("user", userRepository.findById(id).orElseThrow(NullPointerException::new));
+        modelAndView.addObject("user", userRepository.findById(id).orElseThrow(NoUserException::new));
         return modelAndView;
     }
 
     @PutMapping("/{id}")
     public String updateForm(@PathVariable Long id, @RequestParam("inputPassword") String inputPassword, User newUser) {
-        User user = userRepository.findById(id).orElseThrow(NullPointerException::new);
+        User user = userRepository.findById(id).orElseThrow(NoUserException::new);
         if (user.isPasswordMatching(inputPassword)) {
             user.update(newUser);
             return "redirect:/users";
@@ -55,8 +56,8 @@ public class UserController {
         return "redirect:/users/{id}/form";
     }
 
-    @ExceptionHandler(NullPointerException.class)
-    public String nullExceptionHandle() {
-        return "nullErrorHandle";
+    @ExceptionHandler(NoUserException.class)
+    public String handleException() {
+        return "exceptionHandle";
     }
 }
