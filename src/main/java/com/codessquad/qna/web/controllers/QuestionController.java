@@ -1,6 +1,8 @@
 package com.codessquad.qna.web.controllers;
 
 import com.codessquad.qna.web.domain.Question;
+import com.codessquad.qna.web.repository.QuestionRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -12,14 +14,15 @@ import java.util.*;
 
 @Controller
 public class QuestionController {
-    private List<Question> questions = new ArrayList<>();
+
+    @Autowired
+    private QuestionRepository questionRepository;
 
     @PostMapping("/questions")
     public String postQuestionForm(Question question) {
-        question.setId(questions.size()+1);
         question.setDateTime(presentDateTime());
 
-        questions.add(question);
+        questionRepository.save(question);
         return "redirect:/";
     }
 
@@ -31,14 +34,13 @@ public class QuestionController {
 
     @GetMapping("/")
     public String getIndex(Model model) {
-        model.addAttribute("questions", questions);
+        model.addAttribute("questions", questionRepository.findAll());
         return "index";
     }
 
     @GetMapping( "/questions/{id}")
-    public String getQuestionShow(@PathVariable("id") int id, Model model) {
-
-        Question question = questions.get(id-1);
+    public String getQuestionShow(@PathVariable("id") Long id, Model model) {
+        Question question = questionRepository.findById(id).get();
         model.addAttribute("question", question);
         return "qna/show";
     }
