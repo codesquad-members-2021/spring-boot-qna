@@ -8,7 +8,9 @@ import java.time.format.DateTimeFormatter;
 @HandlebarsHelper
 public class HandlebarHelper {
 
-    public CharSequence formatDateTime(LocalDateTime time) {
+    private HandlebarHelper() {}
+
+    public static CharSequence formatDateTime(LocalDateTime time) {
         return time.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"));
     }
 
