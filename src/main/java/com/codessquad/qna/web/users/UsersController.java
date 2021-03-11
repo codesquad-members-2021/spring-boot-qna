@@ -3,7 +3,6 @@ package com.codessquad.qna.web.users;
 import com.codessquad.qna.web.utils.SessionUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -14,8 +13,11 @@ import javax.servlet.http.HttpSession;
 @RequestMapping("/users")
 public class UsersController {
 
-    @Autowired
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
+
+    public UsersController(UserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
 
     Logger logger = LoggerFactory.getLogger(UsersController.class);
 

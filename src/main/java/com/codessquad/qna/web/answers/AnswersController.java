@@ -4,7 +4,6 @@ import com.codessquad.qna.web.questions.Question;
 import com.codessquad.qna.web.questions.QuestionRepository;
 import com.codessquad.qna.web.users.User;
 import com.codessquad.qna.web.utils.SessionUtil;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -15,10 +14,16 @@ import javax.servlet.http.HttpSession;
 
 @Controller
 public class AnswersController {
-    @Autowired
-    QuestionRepository questionRepository;
-    @Autowired
-    AnswersRepository answersRepository;
+
+    private final QuestionRepository questionRepository;
+
+    private final AnswersRepository answersRepository;
+
+    public AnswersController(QuestionRepository questionRepository,
+                             AnswersRepository answersRepository) {
+        this.questionRepository = questionRepository;
+        this.answersRepository = answersRepository;
+    }
 
     @PostMapping("/questions/{questionId}/answers")
     public String createAnswer(@PathVariable("questionId") long questionId, String answerContents,
