@@ -82,7 +82,7 @@ public class UserController {
     /**
      * 해당 유저의 프로파일로 이동합니다.
      * 만약 해당 유저를 찾을 수 없다면 CanNotFindUserException 을 리턴합니다.
-     * @param id
+     * @param id userId
      * @param model
      * @throws CanNotFindUserException
      * @return only for users with the same id
@@ -96,7 +96,7 @@ public class UserController {
     /**
      * 유저 프로필 수정이 가능한 창으로 이동합니다.
      * 만약 해당 유저를 찾을 수 없다면 CanNotFindUserException 을 리턴합니다.
-     * @param id
+     * @param id userId
      * @param model
      * @return
      */
@@ -112,7 +112,7 @@ public class UserController {
 
     /**
      * 유저 프로필을 해당 userDto로 온 값으로 업데이트 합니다.
-     * @param id
+     * @param id userId
      * @param userDto
      * @return
      */
@@ -129,7 +129,7 @@ public class UserController {
 
     /**
      * HttpSession 상의 유저와 url 에 주어진 id 로 mapping 된 유저가 같은 유저인지 테스트 하는 메소드
-     * @param id
+     * @param id userId
      * @param httpSession
      * if Matched Session User and User from id
      * @return Optional<User>
