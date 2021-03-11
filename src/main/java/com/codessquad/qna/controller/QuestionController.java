@@ -54,13 +54,11 @@ public class QuestionController {
         if (!HttpSessionUtils.isLoginUser(session)) {
             return "redirect:/users/login";
         }
-
         Question question = questionService.findById(id);
         User sessionedUser = HttpSessionUtils.getUserFromSession(session);
         if (!question.isWrittenBy(sessionedUser)) {
             throw new IllegalStateException("자신이 작성한 글만 수정할 수 있습니다.");
         }
-
         model.addAttribute("question", question);
         return "/qna/update_form";
     }

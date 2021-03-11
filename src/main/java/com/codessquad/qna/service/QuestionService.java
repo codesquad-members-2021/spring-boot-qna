@@ -27,7 +27,8 @@ public class QuestionService {
 
     @Transactional
     public Long update(Long id, Question questionWithUpdatedInfo) {
-        Question question = questionRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("해당 질문이 없습니다. id = " + id));
+        Question question = questionRepository.findById(id).orElseThrow(
+                () -> new IllegalArgumentException("해당 질문이 없습니다. id = " + id));
         question.update(questionWithUpdatedInfo);
 
         return id;
@@ -46,7 +47,8 @@ public class QuestionService {
 
     @Transactional
     public void delete(Long id, HttpSession session) {
-        Question question = questionRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("해당 질문이 없습니다. id = " + id));
+        Question question = questionRepository.findById(id).orElseThrow(
+                () -> new IllegalArgumentException("해당 질문이 없습니다. id = " + id));
         User sessionedUser = HttpSessionUtils.getUserFromSession(session);
         if (!question.isWrittenBy(sessionedUser)) {
             throw new IllegalStateException("자신이 작성한 글만 삭제할 수 있습니다.");
