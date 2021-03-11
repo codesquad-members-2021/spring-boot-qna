@@ -42,6 +42,12 @@ public class Answer {
         return (long) -1;
     }
 
+    public void save(String userId, Question question) {
+        this.writer = userId;
+        this.date = new Date();
+        this.question = question;
+    }
+
     public void update(Answer answer) {
         this.contents = answer.getContents();
         this.date = new Date();

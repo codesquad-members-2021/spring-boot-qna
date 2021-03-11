@@ -38,6 +38,12 @@ public class Question {
         return this.user.matchId(user.getId());
     }
 
+    public void save(User user) {
+        this.writer = user.getUserId();
+        this.date = new Date();
+        this.user = user;
+    }
+
     public void update(Question question) {
         this.title = question.getTitle();
         this.contents = question.getContents();
