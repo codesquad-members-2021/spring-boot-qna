@@ -8,6 +8,6 @@ import java.util.List;
 
 public interface AnswerRepository extends CrudRepository<Answer, Long> {
 
-    List<Answer> findAllByQuestion(Question questionId);
+    List<Answer> findAllByQuestion(Question question);
 
 }
