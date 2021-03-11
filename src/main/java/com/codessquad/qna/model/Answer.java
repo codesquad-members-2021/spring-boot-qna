@@ -21,7 +21,7 @@ public class Answer {
     private Date date;
 
     @ManyToOne
-    @JoinColumn(foreignKey = @ForeignKey(name = "question_id"))
+    @JoinColumn(foreignKey = @ForeignKey(name = "fk_answer_to_question"))
     private Question question;
 
     public boolean nonNull() {

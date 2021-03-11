@@ -24,7 +24,7 @@ public class Question {
     private Date date;
 
     @ManyToOne
-    @JoinColumn(foreignKey = @ForeignKey(name = "user"), nullable = false)
+    @JoinColumn(foreignKey = @ForeignKey(name = "fk_question_to_user"), nullable = false)
     private User user;
 
     public boolean nonNull() {
