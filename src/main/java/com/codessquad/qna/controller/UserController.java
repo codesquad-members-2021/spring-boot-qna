@@ -39,6 +39,11 @@ public class UserController {
         return "redirect:/users";
     }
 
+    @GetMapping("/form")
+    public String goUserCreateAccountForm() {
+        return "user/form";
+    }
+
     /**
      * 유저 로그인 동작 로직
      * 만약 비밀번호가 일치 하지않는다면 로그인폼으로 redirect 시킨다.
@@ -51,11 +56,16 @@ public class UserController {
         User user = userService.getUserByUserId(userId);
         if(!user.isMatchedPassword(password)) {
             logger.info("User password not matched : " + user.toString());
-            return "redirect:/user/loginForm";
+            return "redirect:/users/loginForm";
         }
         httpSession.setAttribute(HttpSessionUtils.USER_SESSION_KEY, user);
         logger.info("Success User login : " + user.toString());
         return "redirect:/";
+    }
+
+    @GetMapping("/loginForm")
+    public String getLoginFormPage() {
+        return "user/login";
     }
 
     /**
@@ -108,7 +118,7 @@ public class UserController {
             model.addAttribute("user", sessionUser);
             return "user/updateForm";
         }
-        return "redirect:/user/loginForm";
+        return "redirect:/users/loginForm";
     }
 
     /**
@@ -125,7 +135,7 @@ public class UserController {
             userService.change(userService.getUserById(id), changeUser);
             return "redirect:/users";
         }
-        return "redirect:/user/loginForm";
+        return "redirect:/users/loginForm";
     }
 
     /**
