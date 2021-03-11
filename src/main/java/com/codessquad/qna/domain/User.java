@@ -1,5 +1,7 @@
 package com.codessquad.qna.domain;
 
+import java.util.Objects;
+
 public class User {
 
     private String userId;
@@ -54,10 +56,24 @@ public class User {
         this.email = newUser.email;
     }
 
-    public boolean equals(User unknownUser) {
-        return userId.equals(unknownUser.getUserId());
+    //@Override
+    //public boolean equals(User unknownUser) {
+    //    return userId.equals(unknownUser.getUserId());
+    //}
+
+    @Override
+    public boolean equals(Object object) {
+        if (this == object) return true;
+        if (object == null || getClass() != object.getClass()) return false;
+        User user = (User) object;
+        return Objects.equals(getUserId(), user.getUserId());
     }
 
+    @Override
+    public int hashCode() {
+        return Objects.hash(getUserId());
+    }
+    
     @Override
     public String toString() {
         return "User{" +
