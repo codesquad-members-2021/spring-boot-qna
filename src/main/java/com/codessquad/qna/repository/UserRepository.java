@@ -1,25 +1,20 @@
 package com.codessquad.qna.repository;
 
 import com.codessquad.qna.entity.User;
+import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.Optional;
 
-public interface UserRepository {
+public interface UserRepository extends CrudRepository<User, Long> {
 
-    public void save(User user);
+    Optional<User> findByUserId(String id);
 
-    public List<User> findAll();
+    Optional<User> deleteUserById(Long id);
 
-    public Optional<User> findById(Long id);
+    Optional<User> deleteUserByUserId(String id);
 
-    public Optional<User> findByUserId(String userId);
-
-    public void update(User oldUserInfo, User updateUserInfo);
-
-    public void remove(Long id);
-
-    public int size();
+    List<User> findAll();
 
 }

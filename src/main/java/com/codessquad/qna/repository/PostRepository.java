@@ -1,24 +1,23 @@
 package com.codessquad.qna.repository;
 
 import com.codessquad.qna.entity.Post;
+import com.codessquad.qna.entity.User;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.EntityManager;
+import javax.persistence.EntityTransaction;
 import java.util.List;
 import java.util.Optional;
 
-public interface PostRepository {
+@Repository
+@Transactional
+public interface PostRepository extends CrudRepository<Post, Long> {
 
-    public void save(Post post);
-
-    public Optional<Post> findById(Long postId);
-
-    public List<Post> findAll();
-
-    public int size();
-
-    public void update(Post oldPost, Post updatePost);
-
-    public void delete(Post post);
+    List<Post> findAll();
 
 }

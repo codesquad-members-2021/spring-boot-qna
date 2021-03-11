@@ -38,11 +38,7 @@ public class CommentController {
      */
     @PostMapping("/comments")
     public String addComment(@PathVariable Long id, String body, HttpSession httpSession) {
-        Post post = postService.getPost(id);
-        User commentAuthor = HttpSessionUtils.getUserFromSession(httpSession);
-        Comment comment = new Comment(post, commentAuthor.getUserId(), body);
-        commentService.addComment(comment);
-        logger.info("add Comment : " , comment.toString());
+        commentService.addComment(id, HttpSessionUtils.getUserFromSession(httpSession).getUserId(), body);
         return "redirect:/questions/"+id;
     }
 }

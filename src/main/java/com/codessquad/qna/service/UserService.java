@@ -23,7 +23,7 @@ public class UserService {
     }
 
     public List<User> getUsers() {
-        return userRepository.findAll();
+        return (List<User>) userRepository.findAll();
     }
 
     public User getUserById(Long id) {
@@ -31,19 +31,16 @@ public class UserService {
     }
 
     public User getUserByUserId(String userId) {
-        try {
-            return userRepository.findByUserId(userId).orElseThrow(CanNotFindUserException::new);
-        }catch (NoResultException e){
-            throw new CanNotFindUserException();
-        }
+        return userRepository.findByUserId(userId).orElseThrow(CanNotFindUserException::new);
     }
 
-    public void change(User oldUserInfo, User updateUserInfo) {
-        userRepository.update(oldUserInfo, updateUserInfo);
+    public void change(User oldUser, User updateUserInfo) {
+        oldUser.change(updateUserInfo.getUserId(), updateUserInfo.getPassword(), updateUserInfo.getName(), updateUserInfo.getEmail());
+        userRepository.save(oldUser);
     }
 
-    public void removeUser(Long id) {userRepository.remove(id);}
+    public void removeUser(Long id) {userRepository.deleteUserById(id);}
 
-    public int countOfUsers() {return userRepository.size();}
+    public int countOfUsers() {return (int) userRepository.count();}
 
 }

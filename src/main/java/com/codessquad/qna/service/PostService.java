@@ -1,7 +1,6 @@
 package com.codessquad.qna.service;
 
 import com.codessquad.qna.entity.Post;
-import com.codessquad.qna.entity.User;
 import com.codessquad.qna.exception.CanNotFindPostException;
 import com.codessquad.qna.repository.PostRepository;
 import org.springframework.stereotype.Service;
@@ -28,11 +27,12 @@ public class PostService {
     }
 
     public List<Post> getPosts() {
-        return postRepository.findAll();
+        return (List<Post>) postRepository.findAll();
     }
 
     public void updatePost(Post oldPost, Post updatePost) {
-        postRepository.update(oldPost, updatePost);
+        oldPost.change(updatePost);
+        postRepository.save(oldPost);
     }
 
     public void deletePost(Post post) {
