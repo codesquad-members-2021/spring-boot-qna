@@ -16,6 +16,7 @@ import javax.servlet.http.HttpSession;
 import java.util.Optional;
 
 @Controller
+@RequestMapping("/users")
 public class UserController {
 
     private static final Logger logger = LoggerFactory.getLogger(UserController.class);
@@ -30,7 +31,7 @@ public class UserController {
      * @param userDto
      * @return redirect User list (/users)
      */
-    @PostMapping("/user")
+    @PostMapping("")
     public String createAccount(@ModelAttribute UserDto userDto) {
         User user = Mapper.mapToUser(userDto);
         userService.save(user);
@@ -45,7 +46,7 @@ public class UserController {
      * @param password
      * @return
      */
-    @PostMapping("/user/login")
+    @PostMapping("/login")
     public String login(String userId, String password, HttpSession httpSession) {
         User user = userService.getUserByUserId(userId);
         if(!user.isMatchedPassword(password)) {
@@ -63,7 +64,7 @@ public class UserController {
      * @param httpSession
      * @return
      */
-    @GetMapping("/user/logout")
+    @GetMapping("/logout")
     public String logout(HttpSession httpSession) {
         httpSession.removeAttribute(HttpSessionUtils.USER_SESSION_KEY);
         return "redirect:/";
@@ -73,7 +74,7 @@ public class UserController {
      * @param model
      * @return All User Accounts to List
      */
-    @GetMapping("/users")
+    @GetMapping("")
     public String getUsers(Model model) {
         model.addAttribute("users", userService.getUsers());
         return "user/list";
@@ -87,7 +88,7 @@ public class UserController {
      * @throws CanNotFindUserException
      * @return only for users with the same id
      */
-    @GetMapping("/user/{id}")
+    @GetMapping("/{id}")
     public String getUserProfile(@PathVariable Long id, Model model) {
         getUserIfExist(id, model);
         return "user/profile";
@@ -100,7 +101,7 @@ public class UserController {
      * @param model
      * @return
      */
-    @GetMapping("/user/{id}/form")
+    @GetMapping("/{id}/form")
     public String updateUserProfileForm(@PathVariable Long id, Model model, HttpSession httpSession) {
         Optional<User> sessionUser = isMatchedSessionUserById(id, httpSession);
         if (sessionUser.isPresent()) {
@@ -116,7 +117,7 @@ public class UserController {
      * @param userDto
      * @return
      */
-    @PutMapping("/user/{id}")
+    @PutMapping("/{id}")
     public String updateUserProfile(@PathVariable Long id, @ModelAttribute UserDto userDto, HttpSession httpSession) {
         Optional<User> sessionUser = isMatchedSessionUserById(id, httpSession);
         if (sessionUser.isPresent()) {
