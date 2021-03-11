@@ -13,7 +13,7 @@ public class Question {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private Long id;
 
     private String writer;
     private String title;
@@ -36,7 +36,7 @@ public class Question {
         this.createdDateTime = LocalDateTime.now();
     }
 
-    public long getId() {
+    public Long getId() {
         return id;
     }
 

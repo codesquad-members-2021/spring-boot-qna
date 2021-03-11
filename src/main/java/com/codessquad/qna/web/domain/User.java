@@ -50,13 +50,12 @@ public class User {
         return email;
     }
 
-    //isMatching...으로 메서드명 변경
-    public boolean matchPassword(User user) {
-        return user.password.equals(this.password);
+    public boolean isMatchingPassword(String testPassword) {
+        return password.equals(testPassword);
     }
 
-    //지금 다 바꿔주고 있는데, 사실은 mail과 password만 바꾸지 (이거분리, 로그인 베서드 구현 안해서)
     public void update(User user) {
+        this.setPassword(user.getPassword());
         this.setName(user.getName());
         this.setEmail(user.getEmail());
     }

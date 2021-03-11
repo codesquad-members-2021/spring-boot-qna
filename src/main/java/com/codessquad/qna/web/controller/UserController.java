@@ -54,9 +54,9 @@ public class UserController {
     }
 
     @PutMapping("/{id}")
-    public String updateUser(@PathVariable long id, User user) {
+    public String updateUser(@PathVariable long id, String testPassword, User user) {
         try {
-            userService.updateUser(id, user);
+            userService.updateUser(id, testPassword, user);
         } catch (IllegalStateException e) {
             return "redirect:/";
         }

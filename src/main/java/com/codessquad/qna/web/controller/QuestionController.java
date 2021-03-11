@@ -30,11 +30,11 @@ public class QuestionController {
         return "/index";
     }
 
-    @GetMapping("/questions/{index}")
+    @GetMapping("/questions/{id}")
     public String getQuestion(@PathVariable long id, Model model) {
         try {
             model.addAttribute("question", questionService.findQuestion(id));
-        } catch (IndexOutOfBoundsException e) {
+        } catch (IllegalStateException e) {
             return "redirect:/";
         }
         return "/qna/show";
