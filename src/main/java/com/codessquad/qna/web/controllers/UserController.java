@@ -1,6 +1,6 @@
 package com.codessquad.qna.web.controllers;
 
-import com.codessquad.qna.User;
+import com.codessquad.qna.web.domain.User;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Controller
 public class UserController {

@@ -1,4 +1,4 @@
-package com.codessquad.qna;
+package com.codessquad.qna.web.domain;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
