@@ -20,7 +20,7 @@ public class Comment {
     private String body;
     private LocalDateTime date;
 
-    public Comment() {
+    protected Comment() {
         this.date = LocalDateTime.now();
     }
 

@@ -22,7 +22,7 @@ public class Post {
     @OneToMany(mappedBy = "post")
     private List<Comment> comments;
 
-    public Post() {
+    protected Post() {
     }
 
     public Post(String title, String author, String body) {
