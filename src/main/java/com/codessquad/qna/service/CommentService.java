@@ -1,7 +1,6 @@
 package com.codessquad.qna.service;
 
 import com.codessquad.qna.entity.Comment;
-import com.codessquad.qna.entity.Post;
 import com.codessquad.qna.entity.User;
 import com.codessquad.qna.repository.CommentRepostiory;
 import org.springframework.stereotype.Service;
@@ -20,8 +19,8 @@ public class CommentService {
         this.postService = postService;
     }
 
-    public void addComment(Long postId, String userId, String body) {
-        Comment comment = new Comment(postService.getPost(postId), userId, body);
+    public void addComment(Long postId, User user, String body) {
+        Comment comment = new Comment(postService.getPost(postId), user.getUserId(), body);
         commentRepostiory.save(comment);
     }
 

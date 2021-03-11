@@ -1,7 +1,6 @@
 package com.codessquad.qna.controller;
 
 import com.codessquad.qna.service.CommentService;
-import com.codessquad.qna.service.PostService;
 import com.codessquad.qna.util.HttpSessionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,11 +16,10 @@ import javax.servlet.http.HttpSession;
 public class CommentController {
 
     private static final Logger logger = LoggerFactory.getLogger(CommentController.class);
-    private final PostService postService;
+
     private final CommentService commentService;
 
-    public CommentController(PostService postService, CommentService commentService) {
-        this.postService = postService;
+    public CommentController(CommentService commentService) {
         this.commentService = commentService;
     }
 
@@ -35,8 +33,8 @@ public class CommentController {
      */
     @PostMapping("/comments")
     public String addComment(@PathVariable Long id, String body, HttpSession httpSession) {
-        commentService.addComment(id, HttpSessionUtils.getUserFromSession(httpSession).getUserId(), body);
-        return "redirect:/questions/"+id;
+        commentService.addComment(id, HttpSessionUtils.getUserFromSession(httpSession), body);
+        return "redirect:/questions/" + id;
     }
 
 }
