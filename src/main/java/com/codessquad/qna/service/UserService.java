@@ -22,15 +22,6 @@ public class UserService {
         userRepository.save(user);
     }
 
-    public User findUserById(String userId) {
-        for (User user : userRepository.findAll()) {
-            if (user.matchUserId(userId)) {
-                return user;
-            }
-        }
-        return null;
-    }
-
     public List<User> findAll() {
         return userRepository.findAll();
     }

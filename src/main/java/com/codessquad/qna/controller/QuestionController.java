@@ -7,9 +7,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
-import java.util.List;
-
 @Controller
 @RequestMapping("/questions")
 public class QuestionController {
@@ -23,19 +20,20 @@ public class QuestionController {
 
     @GetMapping()
     public String list(Model model) {
-        model.addAttribute("questions", questionService.getQuestions());
+        model.addAttribute("questions", questionService.findAll());
         return "/qna/list";
     }
 
     @PostMapping()
     public String question(Question question) {
-        questionService.addQuestion(question);
+        questionService.save(question);
         return "redirect:/";
     }
 
     @GetMapping("/{id}")
     public String show(@PathVariable("id") long id, Model model) {
-        model.addAttribute("question", questionService.getQuestionById(id));
+        Question question = questionService.findQuestionById(id).get();
+        model.addAttribute("question", question);
         return "/qna/show";
     }
 }

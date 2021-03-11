@@ -2,11 +2,21 @@ package com.codessquad.qna.domain;
 
 import com.codessquad.qna.util.DateTimeUtils;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
 import java.time.LocalDateTime;
 
+@Entity
 public class Question {
+    @Id
+    @GeneratedValue
     private long id;
+
+    @Column(nullable = false, length = 20)
     private String writer;
+
     private String title;
     private String contents;
     private LocalDateTime createdDateTime;
@@ -16,6 +26,9 @@ public class Question {
         this.title = title;
         this.contents = contents;
         this.createdDateTime = LocalDateTime.now();
+    }
+
+    protected Question() {
     }
 
     public long getId() {

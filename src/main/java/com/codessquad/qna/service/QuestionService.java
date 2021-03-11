@@ -5,7 +5,7 @@ import com.codessquad.qna.repository.QuestionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
+import java.util.Optional;
 
 @Service
 public class QuestionService {
@@ -17,16 +17,15 @@ public class QuestionService {
         this.questionRepository = questionRepository;
     }
 
-    public List<Question> getQuestions() {
-        return questionRepository.getQuestions();
+    public Iterable<Question> findAll() {
+        return questionRepository.findAll();
     }
 
-    public void addQuestion(Question question) {
-        question.setId(questionRepository.getQuestions().size() + 1);
-        questionRepository.addQuestion(question);
+    public void save(Question question) {
+        questionRepository.save(question);
     }
 
-    public Question getQuestionById(long id) {
-        return questionRepository.getQuestions().get((int) id - 1);
+    public Optional<Question> findQuestionById(long id) {
+        return questionRepository.findById(id);
     }
 }
