@@ -63,5 +63,5 @@ public class QuestionController {
         questionService.update(id, question);
         return "redirect:/questions/" + id;
     }
-    
+
 }
