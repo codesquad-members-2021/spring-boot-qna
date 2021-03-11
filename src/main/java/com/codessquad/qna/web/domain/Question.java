@@ -1,14 +1,21 @@
 package com.codessquad.qna.web.domain;
 
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
+@Entity
 public class Question {
+    @Id
+    @GeneratedValue
+    private int id;
+
     private String writer;
     private String title;
     private String contents;
 
-    private int id;
     private String dateTime;
 
     public String getWriter() {
