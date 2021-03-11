@@ -23,34 +23,19 @@ public class UserController {
     @PostMapping
     public String createUser(User newUser) {
 
-        if (!isValidUser(newUser)) {
+        // newUser가 null이거나 속성이 빈값일 경우
+        if (newUser.isEmpty()) {
             return "user/form";
         }
 
-        //TODO: join의 반환값으로 id를 받아서 정상 join 여부 확인
-        userService.join(newUser);
+        User savedUser = userService.join(newUser);
+
+        // 회원의 속성을 비교하여 정상적으로 회원가입 되었는 지 확인하는 로직으로 변경
+        if (!savedUser.sameAs(newUser)) {
+            return "user/form";
+        }
 
         return "redirect:/users";
-    }
-
-    private boolean isValidUser(User user) {
-        if (user == null){
-            return false;
-        }
-        if ("".equals(user.getUserId()) || user.getUserId() == null) {
-            return false;
-        }
-        if ("".equals(user.getEmail()) || user.getEmail() == null) {
-            return false;
-        }
-        if ("".equals(user.getPassword()) || user.getPassword() == null) {
-            return false;
-        }
-        if ("".equals(user.getName()) || user.getName() == null) {
-            return false;
-        }
-
-        return true;
     }
 
     @GetMapping
@@ -81,8 +66,8 @@ public class UserController {
     public String updateUser(@PathVariable long id, User referenceUser) {
         User presentUser = userService.showOneById(id).orElse(null);
 
-        if(!isValidUser(presentUser)){
-            logger.info("isValidUser");
+        if (presentUser == null || presentUser.isEmpty()) {
+            logger.info("null or empty");
             return "redirect:/users";
         }
 
@@ -90,6 +75,7 @@ public class UserController {
             logger.info("isEqualPassword");
             return "redirect:/users";
         }
+
         logger.info("updateUserProperties");
         userService.updateInfo(presentUser, referenceUser);
         return "redirect:/users";

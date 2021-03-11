@@ -58,9 +58,42 @@ public class User {
         this.email = email;
     }
 
-    // TODO: 도메인 객체로 뺄 수 있다
     public boolean isEqualPassword(String expected) {
         return this.password.equals(expected);
+    }
+
+    public boolean isEmpty() {
+        if ("".equals(this.userId) || this.userId == null) {
+            return true;
+        }
+        if ("".equals(this.email) || this.email == null) {
+            return true;
+        }
+        if ("".equals(this.password) || this.password == null) {
+            return true;
+        }
+        if ("".equals(this.name) || this.name == null) {
+            return true;
+        }
+
+        return false;
+    }
+
+    public boolean sameAs(User user) {
+        if (!this.userId.equals(user.getUserId())) {
+            return false;
+        }
+        if (!this.password.equals(user.getPassword())) {
+            return false;
+        }
+        if (!this.name.equals(user.getName())) {
+            return false;
+        }
+        if (!this.email.equals(user.getEmail())) {
+            return false;
+        }
+
+        return true;
     }
 
     @Override
