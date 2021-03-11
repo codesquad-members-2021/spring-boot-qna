@@ -1,5 +1,6 @@
 package com.codessquad.qna.web.domain;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -10,12 +11,18 @@ import java.util.Calendar;
 public class Question {
     @Id
     @GeneratedValue
-    private int id;
+    private Long id;
 
+    @Column(nullable=false, length=20)
     private String writer;
+
+    @Column(nullable=false, length=20)
     private String title;
+
+    @Column(nullable=false, length=500)
     private String contents;
 
+    @Column(nullable=false, length=20)
     private String dateTime;
 
     public String getWriter() {
@@ -42,11 +49,11 @@ public class Question {
         this.contents = contents;
     }
 
-    public int getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
