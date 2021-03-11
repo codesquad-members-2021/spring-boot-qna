@@ -61,7 +61,7 @@ public class ControllerExceptionHandler {
     @ExceptionHandler(IllegalAccessException.class)
     public String handleIllegalAccessException(IllegalAccessException e, Model model) {
         logger.error(e.getMessage());
-        return "user/login";
+        return "index";
     }
 
 }
