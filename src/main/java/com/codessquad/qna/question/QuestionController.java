@@ -1,17 +1,12 @@
 package com.codessquad.qna.question;
 
+import com.codessquad.qna.user.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpSession;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
 
 @Controller
 @RequestMapping("/questions")
@@ -38,5 +33,26 @@ public class QuestionController {
     public ModelAndView getQuestion(@PathVariable Long id) {
         Question question = questionRepository.findById(id).get();
         return new ModelAndView("/qna/show", "question", question);
+    }
+
+    @DeleteMapping("/{id}")
+    public String deleteQuestion(@PathVariable Long id, HttpSession session) {
+        Question question = questionRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("질문을 찾을 수 없습니다."));
+
+        long questionWriterId = question.getId().longValue();
+
+        User sessionUser = ((User) session.getAttribute("sessionedUser"));
+        if (sessionUser == null) {
+            return "redirect:/users/login/form";
+        }
+        long sessionUserId = sessionUser.getId().longValue();
+
+        if (questionWriterId != sessionUserId) {
+            throw new IllegalArgumentException("본인이 작성한 글이 아닙니다.");
+        }
+
+        questionRepository.delete(question);
+
+        return "redirect:/questions";
     }
 }
