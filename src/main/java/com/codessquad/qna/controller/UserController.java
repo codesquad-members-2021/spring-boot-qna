@@ -20,7 +20,6 @@ public class UserController {
         this.userService = userService;
     }
 
-
     @PostMapping
     public String createUser(User newUser) {
 
@@ -87,17 +86,12 @@ public class UserController {
             return "redirect:/users";
         }
 
-        if (!isEqualPassword(presentUser.getPassword(), referenceUser.getPassword())) {
+        if (!presentUser.isEqualPassword(referenceUser.getPassword())) {
             logger.info("isEqualPassword");
             return "redirect:/users";
         }
         logger.info("updateUserProperties");
         userService.updateInfo(presentUser, referenceUser);
         return "redirect:/users";
-    }
-
-    // TODO: 도메인 객체로 뺄 수 있다
-    private boolean isEqualPassword(String real, String expected) {
-        return real.equals(expected);
     }
 }
