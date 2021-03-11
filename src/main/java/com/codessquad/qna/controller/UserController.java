@@ -66,8 +66,12 @@ public class UserController {
     public String updateUser(@PathVariable long id, User referenceUser) {
         User presentUser = userService.showOneById(id).orElse(null);
 
-        if (presentUser == null || presentUser.isEmpty()) {
-            logger.info("null or empty");
+        if (presentUser == null) {
+            logger.info("present empty");
+            return "redirect:/users";
+        }
+        if (referenceUser.isEmpty()) {
+            logger.info("reference empty");
             return "redirect:/users";
         }
 
@@ -76,8 +80,9 @@ public class UserController {
             return "redirect:/users";
         }
 
-        logger.info("updateUserProperties");
         userService.updateInfo(presentUser, referenceUser);
+        logger.info("updateUserProperties");
+
         return "redirect:/users";
     }
 }
