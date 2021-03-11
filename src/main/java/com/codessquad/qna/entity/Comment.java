@@ -2,7 +2,6 @@ package com.codessquad.qna.entity;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
-import java.util.Date;
 
 @Entity
 public class Comment {
@@ -18,11 +17,9 @@ public class Comment {
 
     private String author;
     private String body;
-    private LocalDateTime date;
+    private LocalDateTime date = LocalDateTime.now();
 
-    protected Comment() {
-        this.date = LocalDateTime.now();
-    }
+    protected Comment() { }
 
     public Comment(Post post, String author, String body) {
         this.post = post;
