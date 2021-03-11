@@ -38,9 +38,4 @@ public class QuestionController {
         return "index";
     }
 
-    @ExceptionHandler(IllegalArgumentException.class)
-    public String handleIllegalArgumentException(){
-        return "/errors/invalidInput";
-    }
-
 }
