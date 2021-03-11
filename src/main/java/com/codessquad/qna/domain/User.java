@@ -64,7 +64,7 @@ public class User {
         setEmail(user.email);
     }
 
-    public boolean matchUserId(String userId) {
-        return this.userId.equals(userId);
+    public boolean matchPassword(User user) {
+        return password.equals(user.password);
     }
 }

@@ -31,7 +31,7 @@ public class UserController {
 
     @PostMapping()
     public String create(User user) {
-        logger.debug("user: {}", user);
+        logger.info("User: {}", user);
 
         userService.save(user);
         return "redirect:/users";
@@ -60,7 +60,12 @@ public class UserController {
         User user = userService.findUserById(id)
                 .orElseThrow(() -> (new ResponseStatusException(HttpStatus.NOT_FOUND, "User Not Found.")));
 
-        logger.debug("user : {}", (user));
+        logger.info("User : {}", (user));
+
+        if (!user.matchPassword(newUser)) {
+            logger.info("Password : \"{}\" does not match \"{}\"", newUser.getPassword(), user.getPassword());
+            return "redirect:/users";
+        }
 
         user.update(newUser);
         userService.save(user);
