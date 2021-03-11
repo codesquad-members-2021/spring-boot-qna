@@ -19,6 +19,7 @@ public class Question {
     @Column(nullable = false, length = 5000)
     private String contents;
     private LocalDateTime createDateTime;
+    private LocalDateTime updateDateTime;
 
     protected Question() {
     }
@@ -85,5 +86,11 @@ public class Question {
                 ", contents='" + contents + '\'' +
                 ", createDateTime=" + createDateTime +
                 '}';
+    }
+
+    public void update(Question newQuestion) {
+        this.title = newQuestion.title;
+        this.contents = newQuestion.contents;
+        this.updateDateTime = LocalDateTime.now();
     }
 }

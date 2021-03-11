@@ -28,15 +28,15 @@
                       <ul class="article-util-list">
                           {{#equals sessionedUser.id question.writer.id}}
                           <li>
-                              <a class="link-modify-article" href="/questions/{{question.writer.id}}/form">수정</a>
+                              <a class="link-modify-article" href="/questions/{{question.id}}/form">수정</a>
                           </li>
-                          {{/equals}}
                           <li>
-                              <form class="form-delete" action="/questions/{{question.writer.id}}" method="post">
+                              <form class="form-delete" action="/questions/{{question.id}}" method="post">
                                   <input type="hidden" name="_method" value="DELETE">
                                   <button class="link-delete-article" type="submit">삭제</button>
                               </form>
                           </li>
+                          {{/equals}}
                           <li>
                               <a class="link-modify-article" href="/questions">목록</a>
                           </li>
