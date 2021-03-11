@@ -31,9 +31,7 @@ public class AnswerService {
         User loginUser = getUserFromSession(session);
         Question question = questionService.findById(id);
         if (loginUser.nonNull() && question.nonNull()) {
-            answer.setWriter(loginUser.getUserId());
-            answer.setDate();
-            answer.setQuestion(question);
+            answer.save(loginUser.getUserId(), question);
             this.answerRepository.save(answer);
         }
     }

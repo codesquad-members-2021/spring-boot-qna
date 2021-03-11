@@ -26,9 +26,7 @@ public class QuestionService {
     public boolean save(Question question, HttpSession session) {
         User loginUser = getUserFromSession(session);
         if (loginUser.nonNull()) {
-            question.setWriter(loginUser.getUserId());
-            question.setDate();
-            question.setUser(loginUser);
+            question.save(loginUser);
             this.questionRepository.save(question);
             return true;
         }
