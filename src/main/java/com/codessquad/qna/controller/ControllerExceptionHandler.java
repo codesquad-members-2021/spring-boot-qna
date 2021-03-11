@@ -53,7 +53,7 @@ public class ControllerExceptionHandler {
     @ExceptionHandler(NotExistLoggedUserInSessionException.class)
     public String handleNotExistLoggedUserInSession(NotExistLoggedUserInSessionException e) {
         logger.error(e.getMessage());
-        return "redirect:/user/login";
+        return "redirect:/users/loginForm";
     }
 
     /**
@@ -62,7 +62,7 @@ public class ControllerExceptionHandler {
     @ExceptionHandler(IllegalAccessException.class)
     public String handleIllegalAccessException(IllegalAccessException e, Model model) {
         logger.error(e.getMessage());
-        return "redirect:/user/login";
+        return "redirect:/users/loginForm";
     }
 
     private String handleException(Exception e, Model model) {
