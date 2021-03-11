@@ -57,7 +57,7 @@ public class User {
         this.email = newUser.email;
     }
 
-    public boolean matchPassword(String inputPassword){
+    public boolean isPasswordMatching(String inputPassword){
         return inputPassword.equals(password);
     }
 

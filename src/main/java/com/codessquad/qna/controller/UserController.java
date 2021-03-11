@@ -48,7 +48,7 @@ public class UserController {
     @PutMapping("/{id}")
     public String updateForm(@PathVariable Long id, @RequestParam("inputPassword") String inputPassword, User newUser) {
         User user = userRepository.findById(id).orElseThrow(NullPointerException::new);
-        if (user.matchPassword(inputPassword)) {
+        if (user.isPasswordMatching(inputPassword)) {
             user.update(newUser);
             return "redirect:/users";
         }
