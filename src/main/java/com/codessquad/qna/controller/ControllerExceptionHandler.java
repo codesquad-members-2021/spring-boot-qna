@@ -22,7 +22,7 @@ public class ControllerExceptionHandler {
      * @return
      */
     @ExceptionHandler(IllegalArgumentException.class)
-    public String handleIllegalArgumentException(Exception e, Model model) {
+    public String handleIllegalArgumentException(IllegalArgumentException e, Model model) {
         return handleException(e, model);
     }
 
@@ -32,7 +32,7 @@ public class ControllerExceptionHandler {
      * @return
      */
     @ExceptionHandler(CanNotFindUserException.class)
-    public String handleCanNotFindUserException(Exception e, Model model) {
+    public String handleCanNotFindUserException(CanNotFindUserException e, Model model) {
         return handleException(e, model);
     }
 
@@ -43,7 +43,7 @@ public class ControllerExceptionHandler {
      * @return handleCanNotFindPostException message to error page
      */
     @ExceptionHandler(CanNotFindPostException.class)
-    public String handleCanNotFindPostException(Exception e, Model model) {
+    public String handleCanNotFindPostException(CanNotFindPostException e, Model model) {
         return handleException(e, model);
     }
 
@@ -52,13 +52,18 @@ public class ControllerExceptionHandler {
      * 로그인 창으로 redirect
      */
     @ExceptionHandler(NotExistLoggedUserInSession.class)
-    public String handleNotExistLoggedUserInSession() {
+    public String handleNotExistLoggedUserInSession(NotExistLoggedUserInSession e) {
+        logger.error(e.getMessage());
         return "redirect:/user/login";
     }
 
+    /**
+     * 해당 권한이 있는 유저가 아닐시 login 창으로 redirect 시킨다.
+     */
     @ExceptionHandler(IllegalAccessException.class)
-    public String handleIllegalAccessException(Exception e, Model model) {
-        return handleException(e, model);
+    public String handleIllegalAccessException(IllegalAccessException e, Model model) {
+        logger.error(e.getMessage());
+        return "redirect:/user/login";
     }
 
     private String handleException(Exception e, Model model) {
