@@ -1,7 +1,5 @@
 package com.codessquad.qna.user;
 
-import org.springframework.util.StringUtils;
-
 import javax.persistence.*;
 import java.util.Arrays;
 import java.util.List;
@@ -34,7 +32,9 @@ public class User {
     public static List<User> getDummyData() {
         return Arrays.asList(
                 new User(null, "javajigi", "1234", "자바지기", "javajigi@sample.net"),
-                new User(null, "slipp", "1234", "슬립", "slipp@sample.net")
+                new User(null, "slipp", "1234", "슬립", "slipp@sample.net"),
+                new User(null, "mskim", "1234", "김문수", "mskim@sample.net"),
+                new User(null, "test", "test", "test", "test@test.net")
         );
     }
 
