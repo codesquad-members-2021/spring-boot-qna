@@ -3,6 +3,7 @@ package com.codessquad.qna.domain;
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -18,11 +19,15 @@ public class Question {
 
     @OneToMany(mappedBy = "question")
     @OrderBy("id ASC ")
-    private List<Answer> answerList;
+    private List<Answer> answerList = new ArrayList<>();
 
     private String title;
     private String contents;
     private LocalDateTime writeTime;
+
+    public void addAnswer(Answer answer) {
+        answerList.add(answer);
+    }
 
     public List<Answer> getAnswerList() {
         return answerList;

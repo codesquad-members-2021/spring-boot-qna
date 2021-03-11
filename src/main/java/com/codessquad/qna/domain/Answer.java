@@ -30,7 +30,7 @@ public class Answer {
         this.contents = contents;
         this.createDate = LocalDateTime.now();
         this.question = question;
-        question.getAnswerList().add(this);
+        question.addAnswer(this);
     }
 
     public String getCreateDate() {
