@@ -1,4 +1,4 @@
-function checkInput() {
+function validate() {
     getInput = document.question.getElementsByTagName("input");
 
     for (var i = 0; i < getInput.length; i++) {
