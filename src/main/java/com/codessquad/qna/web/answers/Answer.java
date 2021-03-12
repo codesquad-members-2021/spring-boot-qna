@@ -34,6 +34,13 @@ public class Answer {
         reportingDateTime = LocalDateTime.now();
     }
 
+    public Answer(String contents, Question question, User writer) {
+        this.contents = contents;
+        this.question = question;
+        this.writer = writer;
+        reportingDateTime = LocalDateTime.now();
+    }
+
     public Answer() {
         reportingDateTime = LocalDateTime.now();
     }

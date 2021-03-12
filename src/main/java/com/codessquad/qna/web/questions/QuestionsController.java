@@ -1,6 +1,7 @@
 package com.codessquad.qna.web.questions;
 
-import com.codessquad.qna.web.exceptions.QuestionNotFoundException;
+import com.codessquad.qna.web.exceptions.questions.QuestionNotFoundException;
+import com.codessquad.qna.web.exceptions.auth.UnauthorizedAccessException;
 import com.codessquad.qna.web.users.User;
 import com.codessquad.qna.web.utils.SessionUtil;
 import org.slf4j.Logger;
@@ -53,7 +54,7 @@ public class QuestionsController {
         Question currentQuestion = questionRepository.findById(questionId)
                 .orElseThrow(QuestionNotFoundException::new);
         if (!currentQuestion.isMatchingWriterId(sessionUser.getId())) {
-            return "redirect:/";
+            throw new UnauthorizedAccessException();
         }
         model.addAttribute("currentQuestion", currentQuestion);
         return "qna/modify-form";

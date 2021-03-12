@@ -28,6 +28,18 @@ public class User {
 
     }
 
+    public void update(String newPassword, String newName, String newEmail) {
+        if (!password.equals(newPassword)) {
+            password = newPassword;
+        }
+        if (!name.equals(newName)) {
+            name = newName;
+        }
+        if (!email.equals(newEmail)) {
+            email = newEmail;
+        }
+    }
+
     public long getId() {
         return id;
     }

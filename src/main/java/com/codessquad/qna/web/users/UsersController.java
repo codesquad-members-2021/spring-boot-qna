@@ -1,6 +1,6 @@
 package com.codessquad.qna.web.users;
 
-import com.codessquad.qna.web.exceptions.UserNotFoundException;
+import com.codessquad.qna.web.exceptions.users.UserNotFoundException;
 import com.codessquad.qna.web.utils.SessionUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -53,11 +53,7 @@ public class UsersController {
                              String name, String email, HttpSession session) {
         User sessionUser = SessionUtil.getLoginUser(session);
         if (sessionUser.isMatchingPassword(prevPassword)) {
-            if (!prevPassword.equals(newPassword)) {
-                sessionUser.setPassword(newPassword);
-            }
-            sessionUser.setName(name);
-            sessionUser.setEmail(email);
+            sessionUser.update(newPassword, name, email);
             userRepository.save(sessionUser);
             return "redirect:/users/" + sessionUser.getId();
         }

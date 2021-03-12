@@ -1,7 +1,8 @@
 package com.codessquad.qna.web.answers;
 
-import com.codessquad.qna.web.exceptions.AnswerNotFoundException;
-import com.codessquad.qna.web.exceptions.QuestionNotFoundException;
+import com.codessquad.qna.web.exceptions.answers.AnswerNotFoundException;
+import com.codessquad.qna.web.exceptions.questions.QuestionNotFoundException;
+import com.codessquad.qna.web.exceptions.auth.UnauthorizedAccessException;
 import com.codessquad.qna.web.questions.Question;
 import com.codessquad.qna.web.questions.QuestionRepository;
 import com.codessquad.qna.web.users.User;
@@ -30,15 +31,11 @@ public class AnswersController {
     public String createAnswer(@PathVariable("questionId") long questionId, String answerContents,
                                HttpSession session) {
         User sessionUser = SessionUtil.getLoginUser(session);
+
         Question targetQuestion = questionRepository.findById(questionId)
                 .orElseThrow(QuestionNotFoundException::new);
-        if (targetQuestion == null) {
-            return "redirect:/";
-        }
-        Answer answer = new Answer(answerContents);
-        answer.setQuestion(targetQuestion);
-        answer.setWriter(sessionUser);
-        answersRepository.save(answer);
+
+        answersRepository.save(new Answer(answerContents, targetQuestion, sessionUser));
         return "redirect:/questions/" + questionId;
     }
 
@@ -47,13 +44,12 @@ public class AnswersController {
         User sessionUser = SessionUtil.getLoginUser(session);
         Answer targetAnswer = answersRepository.findById(answerId)
                 .orElseThrow(AnswerNotFoundException::new);
-        if (targetAnswer == null) {
-            return "redirect:/";
-        }
+
         Question targetQuestion = targetAnswer.getQuestion();
         if (!targetAnswer.isMatchingWriter(sessionUser)) {
-            return "redirect:/questions/" + targetQuestion.getId();
+            throw new UnauthorizedAccessException();
         }
+
         this.answersRepository.delete(targetAnswer);
         return "redirect:/questions/" + targetQuestion.getId();
     }
