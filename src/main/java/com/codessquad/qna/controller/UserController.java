@@ -54,9 +54,9 @@ public class UserController {
     }
 
     @PostMapping("{id}/update")
-    public String updateUser(@PathVariable int id, User updateUser) {
+    public String updateUser(@PathVariable Long id, User updateUser) {
         try {
-            User targetUser = users.get(id - 1);
+            User targetUser = userRepository.findById(id).get();
             targetUser.setUser(updateUser);
             return "redirect:/users";
         }
