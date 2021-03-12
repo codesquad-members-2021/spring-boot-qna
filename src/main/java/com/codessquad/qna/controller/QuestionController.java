@@ -3,7 +3,6 @@ package com.codessquad.qna.controller;
 import com.codessquad.qna.exception.NoQuestionException;
 import com.codessquad.qna.domain.Question;
 import com.codessquad.qna.repository.QuestionRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -35,10 +34,9 @@ public class QuestionController {
     }
 
     @GetMapping("/questions/{id}")
-    public ModelAndView show(@PathVariable Long id) {
-        ModelAndView modelAndView = new ModelAndView("qna/show");
-        modelAndView.addObject("question", questionRepository.findById(id).orElseThrow(NoQuestionException::new));
-        return modelAndView;
+    public String show(@PathVariable Long id, Model model) {
+        model.addAttribute("question", questionRepository.findById(id).orElseThrow(NoQuestionException::new));
+        return "qna/show";
     }
 
     @ExceptionHandler(NoQuestionException.class)

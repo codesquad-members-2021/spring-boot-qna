@@ -6,7 +6,6 @@ import com.codessquad.qna.repository.UserRepository;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpSession;
 
@@ -33,21 +32,19 @@ public class UserController {
     }
 
     @GetMapping("/{id}")
-    public ModelAndView show(@PathVariable Long id) {
-        ModelAndView modelAndView = new ModelAndView("/user/profile");
-        modelAndView.addObject("user", userRepository.findById(id).orElseThrow(NoUserException::new));
-        return modelAndView;
+    public String show(@PathVariable Long id,Model model) {
+        model.addAttribute("user", userRepository.findById(id).orElseThrow(NoUserException::new));
+        return "/user/profile";
     }
 
     @GetMapping("/{id}/form")
-    public ModelAndView update(@PathVariable Long id) {
-        ModelAndView modelAndView = new ModelAndView("/user/updateForm");
-        modelAndView.addObject("user", userRepository.findById(id).orElseThrow(NoUserException::new));
-        return modelAndView;
+    public String update(@PathVariable Long id, Model model) {
+        model.addAttribute("user", userRepository.findById(id).orElseThrow(NoUserException::new));
+        return "/user/updateForm";
     }
 
     @PutMapping("/{id}")
-    public String updateForm(@PathVariable Long id, @RequestParam("inputPassword") String inputPassword, User newUser) {
+    public String updateForm(@PathVariable Long id, String inputPassword, User newUser) {
         User user = userRepository.findById(id).orElseThrow(NoUserException::new);
         if (user.isPasswordMatching(inputPassword)) {
             user.update(newUser);
@@ -66,6 +63,12 @@ public class UserController {
             return "redirect:/users/login";
         }
         session.setAttribute("sessionedUser", user);
+        return "redirect:/";
+    }
+
+    @GetMapping("/logout")
+    public String logout(HttpSession session){
+        session.removeAttribute("sessionedUser");
         return "redirect:/";
     }
 
