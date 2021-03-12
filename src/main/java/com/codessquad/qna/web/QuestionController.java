@@ -2,6 +2,7 @@ package com.codessquad.qna.web;
 
 import com.codessquad.qna.domain.Qna;
 import com.codessquad.qna.domain.QnaRepository;
+import com.codessquad.qna.exception.NoQuestionException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -33,7 +34,7 @@ public class QuestionController {
 
     @GetMapping("qna/{qnaId}")
     public String showOneQuestion(@PathVariable long qnaId, Model model) {
-        model.addAttribute("Qna", qnaRepository.findById(qnaId).orElseThrow(NullPointerException::new));
+        model.addAttribute("Qna", qnaRepository.findById(qnaId).orElseThrow(NoQuestionException::new));
         return "qna/show";
     }
 }
