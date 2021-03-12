@@ -74,21 +74,19 @@ public class UserController {
         return "redirect:/users";
     }
 
-
-    @GetMapping("/user/login")
+    @PostMapping("/user/login")
     public String login(String userId, String password, HttpSession session){
 
         User findUser = userRepository.findByUserId(userId);
-        Objects.requireNonNull(findUser,"Exception: findUser의 값이 null입니다.");
 
-        if(!findUser.checkId(userId)){
+        if(findUser == null){
             return "user/login_failed";
         }
-        if(!findUser.checkPassword(password)){
+        if(!findUser.checkId(userId) || !findUser.checkPassword(password)){
             return "user/login_failed";
         }
+        session.setAttribute("sessionedUser",findUser);
         return "index";
     }
-
 
 }
