@@ -2,7 +2,6 @@ package com.codessquad.qna.web;
 
 import com.codessquad.qna.domain.User;
 import com.codessquad.qna.domain.UserRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -10,21 +9,27 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.inject.Inject;
+
 @Controller
 public class UserController {
-    @Autowired
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
 
-    @PostMapping("/create")
-    public String create(User user) {
-        if(user == null){
-            return "redirect:/create";
-        }
-        userRepository.save(user);
-        return "redirect:/list";
+    @Inject
+    public UserController(UserRepository userRepository) {
+        this.userRepository = userRepository;
     }
 
-    @GetMapping("/list")
+    @PostMapping("/")
+    public String create(User user) {
+        if (user == null) {
+            return "redirect:/";
+        }
+        userRepository.save(user);
+        return "redirect:/users";
+    }
+
+    @GetMapping("/users")
     public String getList(Model model) {
         model.addAttribute("users", userRepository.findAll());
         return "user/list";
@@ -37,7 +42,7 @@ public class UserController {
         return modelAndView;
     }
 
-    @GetMapping("/create/{id}")
+    @GetMapping("/{id}")
     public ModelAndView editUserInfo(@PathVariable long id) {
         ModelAndView modelAndView = new ModelAndView("user/updateForm");
         modelAndView.addObject("user", userRepository.findById(id).orElse(null));
@@ -50,7 +55,7 @@ public class UserController {
         user.update(updateUser);
 
         userRepository.save(user);
-        return "redirect:/list";
+        return "redirect:/users";
     }
 
 }
