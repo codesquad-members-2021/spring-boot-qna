@@ -51,6 +51,7 @@ public class UserController {
         try {
             User targetUser = userRepository.findById(id).get();
             targetUser.setUser(updateUser);
+            userRepository.save(targetUser);
             return "redirect:/users";
         }
         catch (IndexOutOfBoundsException e){
