@@ -34,6 +34,22 @@ public class QuestionAcceptanceTest extends AcceptanceTest {
                 .isEqualTo(HttpStatus.CREATED.value());
     }
 
+    @Test
+    @DisplayName("비어있는 값으로 질문을 생성하면 실패한다.")
+    void createQuestionWithBlank() {
+        // given
+        String writer = " ";
+        String title = "  ";
+        String contents = "   ";
+
+        // when
+        ExtractableResponse<Response> response = requestCreateQuestion(writer, title, contents);
+
+        // then
+        assertThat(response.statusCode())
+                .isEqualTo(HttpStatus.BAD_REQUEST.value());
+    }
+
     @DisplayName("질문 목록을 조회한다.")
     @Test
     void getQuestions() {
@@ -72,9 +88,9 @@ public class QuestionAcceptanceTest extends AcceptanceTest {
                 .isEqualTo(HttpStatus.OK.value());
     }
 
-    @DisplayName("존재하지 않는 질문을 조회한다.")
+    @DisplayName("존재하지 않는 질문을 조회하면 실패한다.")
     @Test
-    void getQuestion_null() {
+    void getQuestionNotExist() {
         // when
         ExtractableResponse<Response> actualResponse = RestAssured.given().log().all()
                 .contentType(MediaType.APPLICATION_JSON_VALUE)

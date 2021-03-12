@@ -2,9 +2,17 @@ package com.codessquad.qna.question.dto;
 
 import com.codessquad.qna.question.domain.Question;
 
+import javax.validation.constraints.NotBlank;
+
 public class QuestionRequest {
+
+    @NotBlank(message = "writer is blank")
     private String writer;
+
+    @NotBlank(message = "title is blank")
     private String title;
+
+    @NotBlank(message = "contents is blank")
     private String contents;
 
     protected QuestionRequest() {}

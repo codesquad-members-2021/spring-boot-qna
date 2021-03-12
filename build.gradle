@@ -20,6 +20,9 @@ dependencies {
     // handlebars
     implementation 'pl.allegro.tech.boot:handlebars-spring-boot-starter:0.3.2'
 
+    // form-validator
+    implementation group: 'org.hibernate', name: 'hibernate-validator', version: '7.0.1.Final'
+
     // h2
     runtimeOnly 'com.h2database:h2'
 

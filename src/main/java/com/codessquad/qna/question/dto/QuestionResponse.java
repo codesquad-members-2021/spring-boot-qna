@@ -20,6 +20,8 @@ public class QuestionResponse {
         this.writer = writer;
         this.title = title;
         this.contents = contents;
+
+        // FIXME: dto 에서의 로직을 삭제해야한다; 프론트에서 자바스크립트로 format 할수 있도록 한다.
         this.createdDate = format(createdDate);
         this.modifiedDate = format(modifiedDate);
     }

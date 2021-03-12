@@ -2,10 +2,22 @@ package com.codessquad.qna.user.dto;
 
 import com.codessquad.qna.user.domain.User;
 
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
+
 public class UserRequest {
+
+    @NotBlank(message = "userId is blank")
     private String userId;
+
+    @NotBlank(message = "password is blank")
     private String password;
+
+    @NotBlank(message = "name is blank")
     private String name;
+
+    @NotBlank(message = "email is blank")
+    @Email(message = "email form is inappropriate")
     private String email;
 
     protected UserRequest() {}
