@@ -5,9 +5,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 
 // FIXME: MvcConfig 에서 index 의 리다이렉션을 유도할 수는 없을까?
 @Controller
-public class RootController {
+public class HomeController {
     @GetMapping("/")
-    public String rootRedirect() {
-        return "redirect:/questions";
+    public String home() {
+        return "question/list";
     }
 }
