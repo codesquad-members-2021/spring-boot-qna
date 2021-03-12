@@ -13,12 +13,12 @@
             </thead>
             <tbody>
             {{#users}}
-            <tr onClick="location.pathname='/users/{{userId}}'" style="cursor:pointer">
-                <th scope="row">{{@index}}</th>
+            <tr onClick="location.pathname='/users/{{id}}'" style="cursor:pointer">
+                <th scope="row">{{id}}</th>
                 <td>{{userId}}</td>
                 <td>{{name}}</td>
                 <td>{{email}}</td>
-                <td><a href="/users/{{userId}}/form" class="btn btn-success" role="button">수정</a></td>
+                <td><a href="/users/{{id}}/form" class="btn btn-success" role="button">수정</a></td>
             </tr>
             {{/users}}
             </tbody>

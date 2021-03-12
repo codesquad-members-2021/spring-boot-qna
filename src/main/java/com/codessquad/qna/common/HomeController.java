@@ -1,13 +1,13 @@
-package com.codessquad.qna.web;
+package com.codessquad.qna.common;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 
 // FIXME: MvcConfig 에서 index 의 리다이렉션을 유도할 수는 없을까?
 @Controller
-public class IndexController {
+public class HomeController {
     @GetMapping("/")
-    public String index_redirect() {
-        return "redirect:/questions/list";
+    public String home() {
+        return "question/list";
     }
 }

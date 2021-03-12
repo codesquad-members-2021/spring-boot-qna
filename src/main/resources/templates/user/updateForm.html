@@ -1,25 +1,33 @@
 {{#partial "content"}}
 <div class="col-md-6 col-md-offset-3">
     <div class="panel panel-default content-main">
-        <form name="question" method="post" action="/users/{{user.userId}}">
-            <input type="hidden" name="_method" value="PUT"/>
-            <input type="hidden" name="userId" value="{{user.userId}}">
+        {{#user}}
+        <form name="question" method="post" action="/users/{{id}}">
+            <input readonly type="hidden" name="_method" value="PUT"/>
+            <input readonly type="hidden" name="id" value="{{id}}">
+            <input readonly type="hidden" name="userId" value="{{userId}}">
             <div class="form-group">
                 <label for="password">비밀번호</label>
                 <input type="password"
                        class="form-control"
                        id="password"
                        name="password"
-                       placeholder="Password"
-                       value="{{user.password}}">
+                       placeholder="Password">
             </div>
-            <!-- TODO: 비밀번호 확인 기능을 추가해야한다. 귀찮아서 나중에 구현하기로 했다. -->
+            <div class="form-group">
+                <label for="password">비밀번호 확인</label>
+                <input type="password"
+                       class="form-control"
+                       id="password-check"
+                       placeholder="Password Check">
+            </div>
             <div class="form-group">
                 <label for="name">이름</label>
                 <input class="form-control"
-                       id="name" name="name"
+                       id="name"
+                       name="name"
                        placeholder="Name"
-                       value="{{user.name}}">
+                       value="{{name}}">
             </div>
             <div class="form-group">
                 <label for="email">이메일</label>
@@ -28,12 +36,37 @@
                        id="email"
                        name="email"
                        placeholder="Email"
-                       value="{{user.email}}">
+                       value="{{email}}">
             </div>
-            <button type="submit" class="btn btn-success clearfix pull-right">회원정보 수정</button>
+            <button type="submit" disabled id="submit-btn" class="btn btn-success clearfix pull-right">회원정보 수정</button>
             <div class="clearfix"/>
         </form>
+        {{/user}}
     </div>
 </div>
+<script>
+    var inputs = document.getElementsByClassName("form-control");
+    for (var i = 0; i < inputs.length; i++) {
+        addKeyupListener(inputs.item(i));
+    }
+
+    function addKeyupListener(element) {
+        element.addEventListener("keyup", function (event) {
+            var submitBtn = document.getElementById("submit-btn");
+            submitBtn.disabled = !isValidForm();
+        });
+    }
+
+    function isValidForm() {
+        var password = document.getElementById("password").value;
+        var passwordCheck = document.getElementById("password-check").value;
+        var name = document.getElementById("name").value;
+        var email = document.getElementById("email").value;
+        return password.length > 0
+            && name.length > 0
+            && email.length > 0
+            && password === passwordCheck
+    }
+</script>
 {{/partial}}
 {{> layout/base}}
