@@ -44,10 +44,9 @@ public class UserController {
     }
 
     @GetMapping("{id}/form")
-    public String viewUpdateUserForm(@PathVariable int id, Model model) {
+    public String viewUpdateUserForm(@PathVariable Long id, Model model) {
         try {
-            User user = users.get(id - 1);
-            model.addAttribute("user", user);
+            model.addAttribute("user", userRepository.findById(id).get());
             return "user/updateForm";
         } catch (IndexOutOfBoundsException e) {
             return "redircet:/users";
