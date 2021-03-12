@@ -57,10 +57,6 @@ public class User {
         this.email = updateUser.email;
     }
 
-    public boolean isMatchingUserId(String userId) {
-        return this.userId.equals(userId);
-    }
-
     @Override
     public String toString() {
         return "User{" +
