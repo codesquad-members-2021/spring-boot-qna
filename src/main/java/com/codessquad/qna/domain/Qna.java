@@ -15,18 +15,16 @@ public class Qna {
 
     @Column(nullable = false)
     private String writer;
-    @Column(nullable = false)
+
     private String title;
+
     @Column(nullable = false)
     private String contents;
-    private LocalDateTime date = LocalDateTime.now();
+
+    private LocalDateTime createdDateTime = LocalDateTime.now();
 
     public long getId() {
         return id;
-    }
-
-    public void setId(long id) {
-        this.id = id;
     }
 
     public String getWriter() {
@@ -53,12 +51,12 @@ public class Qna {
         this.contents = contents;
     }
 
-    public String getDate() {
-        return date.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+    public LocalDateTime getDate() {
+        return createdDateTime;
     }
 
     public void setDate(LocalDateTime date) {
-        this.date = date;
+        this.createdDateTime = date;
     }
 
     @Override
