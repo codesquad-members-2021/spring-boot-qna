@@ -24,6 +24,7 @@ public class Question {
         this.writer = writer;
         this.title = title;
         this.contents = contents;
+        this.time = LocalDateTime.now();
     }
 
     public LocalDateTime getTime() {
