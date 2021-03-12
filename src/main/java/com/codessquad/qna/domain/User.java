@@ -1,7 +1,16 @@
 package com.codessquad.qna.domain;
 
+import javax.persistence.*;
+
+@Entity
 public class User {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private long id;
+
+    @Column(nullable = false, length = 20, unique = true)
     private String userId;
+
     private String name;
     private String password;
     private String email;
@@ -20,6 +29,10 @@ public class User {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public long getId() {
+        return id;
     }
 
     public String getUserId() {
