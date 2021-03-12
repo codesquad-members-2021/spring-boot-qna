@@ -68,8 +68,8 @@ public class Question {
         return id;
     }
 
-    public String getWriter() {
-        return writer.getUserId();
+    public User getWriter() {
+        return writer;
     }
 
     public String getTitle() {

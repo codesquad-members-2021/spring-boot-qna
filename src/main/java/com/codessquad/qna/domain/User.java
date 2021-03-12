@@ -1,6 +1,7 @@
 package com.codessquad.qna.domain;
 
 import javax.persistence.*;
+import java.util.Objects;
 
 @Entity
 public class User {
