@@ -17,18 +17,16 @@ public class QuestionsController {
 
     private final QuestionRepository questionRepository;
 
-    public QuestionsController(QuestionRepository questionRepository){
+    public QuestionsController(QuestionRepository questionRepository) {
         this.questionRepository = questionRepository;
     }
 
     @PostMapping("/questions")
     public String createQuestion(Question newQuestion, HttpSession session) {
         User sessionUser = SessionUtil.getLoginUser(session);
-        if (sessionUser != null) {
-            newQuestion.setWriter(sessionUser);
-            questionRepository.save(newQuestion);
-            logger.info("question created! [" + newQuestion.getId() + "] " + " title : " + newQuestion.getTitle());
-        }
+        newQuestion.setWriter(sessionUser);
+        questionRepository.save(newQuestion);
+        logger.info("question created! [" + newQuestion.getId() + "] " + " title : " + newQuestion.getTitle());
         return "redirect:/";
     }
 
@@ -50,9 +48,6 @@ public class QuestionsController {
     public String getModifyPage(@PathVariable("questionId") long questionId,
                                 Model model, HttpSession session) {
         User sessionUser = SessionUtil.getLoginUser(session);
-        if (sessionUser == null) {
-            return "redirect:/";
-        }
         Question currentQuestion = getQuestionById(questionId);
         if (!currentQuestion.isMatchingWriterId(sessionUser.getId())) {
             return "redirect:/";
@@ -69,9 +64,6 @@ public class QuestionsController {
             return "redirect:/";
         }
         User sessionUser = SessionUtil.getLoginUser(session);
-        if (sessionUser == null) {
-            return "redirect:/";
-        }
         if (!currentQuestion.isMatchingWriterId(sessionUser.getId())) {
             return "redirect:/";
         }
@@ -89,9 +81,6 @@ public class QuestionsController {
             return "redirect:/";
         }
         User sessionUser = SessionUtil.getLoginUser(session);
-        if (sessionUser == null) {
-            return "redirect:/";
-        }
         if (!currentQuestion.isMatchingWriterId(sessionUser.getId())) {
             return "redirect:/";
         }

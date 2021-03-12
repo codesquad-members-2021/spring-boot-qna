@@ -1,5 +1,6 @@
 package com.codessquad.qna.web.utils;
 
+import com.codessquad.qna.web.exceptions.NoLoginUserException;
 import com.codessquad.qna.web.users.User;
 
 import javax.servlet.http.HttpSession;
@@ -15,7 +16,11 @@ public class SessionUtil {
     }
 
     public static User getLoginUser(HttpSession session) {
-        return (User) session.getAttribute(SESSION_KEY_LOGIN_USER);
+        User loginUser = (User) session.getAttribute(SESSION_KEY_LOGIN_USER);
+        if (loginUser == null) {
+            throw new NoLoginUserException();
+        }
+        return loginUser;
     }
 
     public static void setLoginUser(HttpSession session, User user) {

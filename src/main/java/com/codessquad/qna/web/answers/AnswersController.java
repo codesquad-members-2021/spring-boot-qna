@@ -29,9 +29,6 @@ public class AnswersController {
     public String createAnswer(@PathVariable("questionId") long questionId, String answerContents,
                                HttpSession session, Model model) {
         User sessionUser = SessionUtil.getLoginUser(session);
-        if (sessionUser == null) {
-            return "redirect:/";
-        }
         Question targetQuestion = questionRepository.findById(questionId).orElse(null);
         if (targetQuestion == null) {
             return "redirect:/";
@@ -46,9 +43,6 @@ public class AnswersController {
     @DeleteMapping("/answers/{answerId}")
     public String deleteAnswer(@PathVariable("answerId") long answerId, HttpSession session) {
         User sessionUser = SessionUtil.getLoginUser(session);
-        if (sessionUser == null) {
-            return "redirect:/";
-        }
         Answer targetAnswer = answersRepository.findById(answerId).orElse(null);
         if (targetAnswer == null) {
             return "redirect:/";

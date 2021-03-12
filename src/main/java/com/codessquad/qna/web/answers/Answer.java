@@ -70,11 +70,11 @@ public class Answer {
         this.question = question;
     }
 
-    public LocalDateTime getreportingDateTime() {
+    public LocalDateTime getReportingDateTime() {
         return reportingDateTime;
     }
 
-    public void setreportingDateTime(LocalDateTime reportingDateTime) {
+    public void setReportingDateTime(LocalDateTime reportingDateTime) {
         this.reportingDateTime = reportingDateTime;
     }
 }
