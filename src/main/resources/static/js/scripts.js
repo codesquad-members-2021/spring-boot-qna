@@ -32,9 +32,35 @@ function onSuccess(data, status) {
     $("textarea[name=contents]").val("");
 }
 
-String.prototype.format = function() {
+$(document).on('click', '.link-delete-article', deleteAnswer);
+
+function deleteAnswer(e) {
+    e.preventDefault();
+    var deleteButton = $(this);
+    var url = deleteButton.attr("href");
+    console.log("url : " + url)
+
+    $.ajax({
+        type: 'delete',
+        url: url,
+        dataType: 'json',
+        error: function (xhr, status) {
+            console.log("error")
+        },
+        success: function (data, status) {
+            console.log("success")
+            if (data) {
+                deleteButton.closest("article").remove();
+            } else {
+                alert("작성자 본인만 삭제 가능합니다.");
+            }
+        }
+    });
+}
+
+String.prototype.format = function () {
     var args = arguments;
-    return this.replace(/{(\d+)}/g, function(match, number) {
+    return this.replace(/{(\d+)}/g, function (match, number) {
         return typeof args[number] != 'undefined'
             ? args[number]
             : match

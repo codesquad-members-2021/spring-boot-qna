@@ -17,5 +17,13 @@ public class AnswerService {
     public Answer create(Answer answer) {
         return answerRepository.save(answer);
     }
+
+    public void delete(Long id) {
+        answerRepository.deleteById(id);
+    }
+
+    public Answer findAnswer(Long id) {
+        return answerRepository.findById(id).orElseThrow(RuntimeException::new);
+    }
 }
 

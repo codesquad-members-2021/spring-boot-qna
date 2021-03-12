@@ -42,6 +42,10 @@ public class Answer {
         return date.format(DateTimeFormatter.ofPattern(ANSWER_DATETIME_FORMAT));
     }
 
+    public boolean isSameAuthor(User loginUser) {
+        return this.author.equals(loginUser);
+    }
+
     public Long getId() {
         return id;
     }
