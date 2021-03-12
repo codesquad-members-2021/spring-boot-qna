@@ -8,7 +8,8 @@ import org.springframework.web.servlet.ModelAndView;
 
 @Controller
 public class HomeController {
-    QuestionRepository questionRepository;
+
+    private final QuestionRepository questionRepository;
 
     @Autowired
     public HomeController(QuestionRepository questionRepository) {
