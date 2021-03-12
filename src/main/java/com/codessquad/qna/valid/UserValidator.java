@@ -5,33 +5,15 @@ import com.codessquad.qna.domain.User;
 public class UserValidator {
 
     public static void validate(User user) {
-        validUserId(user.getUserId());
-        validPasssword(user.getPassword());
-        validUserName(user.getName());
-        validUserEmail(user.getEmail());
+        validInfo(user.getUserId());
+        validInfo(user.getPassword());
+        validInfo(user.getName());
+        validInfo(user.getEmail());
 
     }
 
-    private static void validUserEmail(String email) {
-        if (email.trim().isEmpty()) {
-            throw new NullPointerException();
-        }
-    }
-
-    private static void validUserName(String name) {
-        if (name.trim().isEmpty()) {
-            throw new NullPointerException();
-        }
-    }
-
-    private static void validPasssword(String password) {
-        if (password.trim().isEmpty()) {
-            throw new NullPointerException();
-        }
-    }
-
-    private static void validUserId(String userId) {
-        if (userId.trim().isEmpty()) {
+    private static void validInfo(String info) {
+        if (info.trim().isEmpty()) {
             throw new NullPointerException();
         }
     }
