@@ -19,7 +19,7 @@ public class AnswerController {
         this.answerService = answerService;
     }
 
-    @PostMapping("")
+    @PostMapping
     public String create(@PathVariable Long questionId, String contents, HttpSession session) {
         if (!HttpSessionUtils.isLoginUser(session)) {
             return "redirect:/users/loginForm";

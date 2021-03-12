@@ -24,13 +24,13 @@ public class UserController {
         this.userService = userService;
     }
 
-    @PostMapping("")
+    @PostMapping
     public String createUser(User user) {
         userService.join(user);
         return "redirect:/users";
     }
 
-    @GetMapping("")
+    @GetMapping
     public String renderUserList(Model model) {
         List<User> getUsers = userService.findAll();
         model.addAttribute("users", getUsers);

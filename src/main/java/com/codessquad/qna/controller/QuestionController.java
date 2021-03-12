@@ -23,7 +23,7 @@ public class QuestionController {
         this.questionService = questionService;
     }
 
-    @PostMapping("")
+    @PostMapping
     public String createQuestion(Question question, HttpSession session) {
         if (!HttpSessionUtils.isLoginUser(session)) {
             return "redirect:/users/loginForm";
