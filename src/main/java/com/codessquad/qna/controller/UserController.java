@@ -53,7 +53,7 @@ public class UserController {
         return "user/userUpdateForm";
     }
 
-    @PutMapping("/update")
+    @PutMapping("/{id}")
     public String userUpdate(User user, String newPassword, Model model, HttpSession session) {
         if (!userService.checkSession(session, user.getId())) {
             return "redirect:/users/loginForm";
