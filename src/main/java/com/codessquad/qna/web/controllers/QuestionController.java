@@ -27,7 +27,7 @@ public class QuestionController {
     }
 
     private String presentDateTime() {
-        SimpleDateFormat format = new SimpleDateFormat( "yyyy-MM-dd HH:mm");
+        SimpleDateFormat format = new SimpleDateFormat(Question.DATE_PATTERN);
         Calendar time = Calendar.getInstance();
         return format.format(time.getTime());
     }

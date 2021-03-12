@@ -9,6 +9,7 @@ import java.util.Calendar;
 
 @Entity
 public class Question {
+    public static final String DATE_PATTERN = "yyyy-MM-dd HH:mm";
     @Id
     @GeneratedValue
     private Long id;
