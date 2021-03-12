@@ -1,12 +1,16 @@
 package com.codessquad.qna.domain;
 
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
 @Entity
 public class Question {
     @Id
-    private long index;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private long id;
+
     private String writer;
     private String title;
     private String contents;
