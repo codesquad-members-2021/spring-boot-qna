@@ -24,7 +24,7 @@ public class HttpSessionUtils {
      * @return User
      */
     public static User getUserFromSession(HttpSession httpSession) {
-        if(!isLoggedUser(httpSession)){
+        if(!isLoggedUser(httpSession)) {
             throw new NotExistLoggedUserInSessionException();
         }
         return (User) httpSession.getAttribute(USER_SESSION_KEY);

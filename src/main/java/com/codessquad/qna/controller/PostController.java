@@ -19,6 +19,7 @@ import javax.servlet.http.HttpSession;
 public class PostController {
 
     private static final Logger logger = LoggerFactory.getLogger(PostController.class);
+
     private final PostService postService;
 
     public PostController(PostService postService) {
