@@ -3,6 +3,8 @@ package com.codessquad.qna.controller;
 import com.codessquad.qna.domain.User;
 import com.codessquad.qna.domain.Question;
 import com.codessquad.qna.repository.QuestionRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -15,7 +17,7 @@ import javax.servlet.http.HttpSession;
 @Controller
 @RequestMapping("/questions")
 public class QuestionController {
-
+    private static final Logger logger = LoggerFactory.getLogger(UserController.class);
     private final QuestionRepository questionRepository;
 
     @Autowired
@@ -39,6 +41,7 @@ public class QuestionController {
         User loginUser = HttpSessionUtils.getSessionUser(session);
         Question question = new Question(loginUser, title, contents);
         QuestionValidation.validQuestion(question);
+        logger.info(question.toString());
         questionRepository.save(question);
         return "redirect:/";
     }
@@ -67,6 +70,7 @@ public class QuestionController {
         Question question = questionRepository.findById(id).orElse(null);
         question.updateQuestion(title, contents);
         QuestionValidation.validQuestion(question);
+        logger.info(question.toString());
         questionRepository.save(question);
         return "redirect:/questions/" + id;
     }

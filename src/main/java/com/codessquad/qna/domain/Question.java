@@ -105,4 +105,15 @@ public class Question {
         return false;
     }
 
+    @Override
+    public String toString() {
+        return "Question{" +
+                "id=" + id +
+                ", writer=" + writer +
+                ", title='" + title + '\'' +
+                ", contents='" + contents + '\'' +
+                ", currentDateTime=" + currentDateTime +
+                '}';
+    }
+
 }
