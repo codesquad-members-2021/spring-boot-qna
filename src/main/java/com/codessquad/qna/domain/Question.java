@@ -17,12 +17,9 @@ public class Question {
     @Column(nullable = false)
     private String contents;
 
-    public void setIndex(int index) {
-        this.index = index;
-    }
 
-    public int getIndex() {
-        return index;
+    public long getId() {
+        return id;
     }
 
     public void setWriter(String writer) {
@@ -48,7 +45,6 @@ public class Question {
     public String getContents() {
         return contents;
     }
-
 
     @Override
     public String toString() {
