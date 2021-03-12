@@ -7,7 +7,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.servlet.ModelAndView;
 
 import javax.inject.Inject;
 
@@ -36,22 +35,20 @@ public class UserController {
     }
 
     @GetMapping("/users/{id}")
-    public ModelAndView getOneUserProfile(@PathVariable long id) {
-        ModelAndView modelAndView = new ModelAndView("user/profile");
-        modelAndView.addObject("user", userRepository.findById(id).orElse(null));
-        return modelAndView;
+    public String getOneUserProfile(@PathVariable long id, Model model) {
+        model.addAttribute("user", userRepository.findById(id).orElseThrow(NullPointerException::new));
+        return "user/profile";
     }
 
     @GetMapping("/{id}")
-    public ModelAndView editUserInfo(@PathVariable long id) {
-        ModelAndView modelAndView = new ModelAndView("user/updateForm");
-        modelAndView.addObject("user", userRepository.findById(id).orElse(null));
-        return modelAndView;
+    public String editUserInfo(@PathVariable long id, Model model) {
+        model.addAttribute("user", userRepository.findById(id).orElseThrow(NullPointerException::new));
+        return "user/updateForm";
     }
 
     @PostMapping("/{id}")
     public String update(@PathVariable long id, User updateUser) {
-        User user = userRepository.findById(id).orElse(null);
+        User user = userRepository.findById(id).orElseThrow(NullPointerException::new);
         user.update(updateUser);
 
         userRepository.save(user);

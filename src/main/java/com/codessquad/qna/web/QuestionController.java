@@ -7,7 +7,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.servlet.ModelAndView;
 
 import javax.inject.Inject;
 
@@ -36,9 +35,8 @@ public class QuestionController {
     }
 
     @GetMapping("qna/{qnaId}")
-    public ModelAndView showOneQuestion(@PathVariable long qnaId) {
-        ModelAndView modelAndView = new ModelAndView("qna/show");
-        modelAndView.addObject("Qna", qnaRepository.findById(qnaId).orElse(null));
-        return modelAndView;
+    public String showOneQuestion(@PathVariable long qnaId, Model model) {
+        model.addAttribute("Qna", qnaRepository.findById(qnaId).orElseThrow(NullPointerException::new));
+        return "qna/show";
     }
 }
