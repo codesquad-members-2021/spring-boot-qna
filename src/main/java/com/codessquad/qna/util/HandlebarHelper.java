@@ -10,8 +10,10 @@ public class HandlebarHelper {
 
     private HandlebarHelper() {}
 
+    private static final String ISO8601 = "yyyy-MM-dd HH:mm";
+
     public static CharSequence formatDateTime(LocalDateTime time) {
-        return time.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"));
+        return time.format(DateTimeFormatter.ofPattern(ISO8601));
     }
 
 }
