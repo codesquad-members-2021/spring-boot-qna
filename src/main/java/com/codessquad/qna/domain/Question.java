@@ -1,10 +1,12 @@
 package com.codessquad.qna.domain;
 
 import javax.persistence.Entity;
+import javax.persistence.Id;
 
 @Entity
 public class Question {
-    private int index;
+    @Id
+    private long index;
     private String writer;
     private String title;
     private String contents;
