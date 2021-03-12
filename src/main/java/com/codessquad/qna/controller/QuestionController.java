@@ -39,7 +39,7 @@ public class QuestionController {
         }
         User sessionUser = getSessionUser(session);
         Question question = new Question(sessionUser, title, contents);
-        questionService.create(question);
+        questionService.update(question);
         return "redirect:/";
     }
 
@@ -60,7 +60,7 @@ public class QuestionController {
     public String update(@PathVariable Long id, String title, String contents, Model model, HttpSession session) {
         Question question = questionService.findVerifiedQuestion(id, session);
         question.update(title, contents);
-        questionService.create(question);
+        questionService.update(question);
         return "redirect:/questions/" + id;
     }
 

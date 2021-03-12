@@ -24,8 +24,11 @@ public class Question {
 
     private String title;
 
-    @Lob
+    @Column(length = 2000)
     private String contents;
+
+    @JsonProperty
+    private Integer countOfAnswer = 0;
 
     @JsonProperty
     private LocalDateTime date;
@@ -54,6 +57,13 @@ public class Question {
         return !this.author.equals(loginUser);
     }
 
+    public void addAnswer() {
+        this.countOfAnswer++;
+    }
+
+    public void deleteAnswer() {
+        this.countOfAnswer--;
+    }
     public Long getId() {
         return id;
     }

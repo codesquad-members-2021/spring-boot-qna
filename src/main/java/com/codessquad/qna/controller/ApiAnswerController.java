@@ -9,7 +9,6 @@ import com.codessquad.qna.service.QuestionService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
@@ -38,6 +37,7 @@ public class ApiAnswerController {
         User user = getSessionUser(session);
         Question question = questionService.findQuestion(questionId);
         Answer answer = new Answer(user, question, contents);
+        question.addAnswer();
         logger.info("{}님께서 답변 작성에 성공하셨습니다.", user.getUserId());
         return answerService.create(answer);
     }
@@ -53,6 +53,9 @@ public class ApiAnswerController {
             return false;
         }
         answerService.delete(id);
+        Question question = questionService.findQuestion(questionId);
+        question.deleteAnswer();
+        questionService.update(question);
         return true;
     }
 
