@@ -20,6 +20,10 @@ public class Question {
 
     private LocalDateTime time;
 
+    protected Question() {
+
+    }
+
     public Question(String writer, String title, String contents) {
         this.writer = writer;
         this.title = title;
