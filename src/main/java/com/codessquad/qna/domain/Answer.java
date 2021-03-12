@@ -42,24 +42,44 @@ public class Answer {
         return date.format(DateTimeFormatter.ofPattern(ANSWER_DATETIME_FORMAT));
     }
 
-    public LocalDateTime getDate() {
-        return date;
-    }
-
     public Long getId() {
         return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public User getAuthor() {
         return author;
     }
 
+    public void setAuthor(User author) {
+        this.author = author;
+    }
+
     public Question getQuestion() {
         return question;
     }
 
+    public void setQuestion(Question question) {
+        this.question = question;
+    }
+
     public String getContents() {
         return contents;
+    }
+
+    public void setContents(String contents) {
+        this.contents = contents;
+    }
+
+    public LocalDateTime getDate() {
+        return date;
+    }
+
+    public void setDate(LocalDateTime date) {
+        this.date = date;
     }
 }
 

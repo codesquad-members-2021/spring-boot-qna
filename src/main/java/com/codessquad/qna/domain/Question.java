@@ -1,5 +1,9 @@
 package com.codessquad.qna.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -11,6 +15,7 @@ public class Question {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @JsonProperty
     private Long id;
 
     @ManyToOne
@@ -22,10 +27,12 @@ public class Question {
     @Lob
     private String contents;
 
+    @JsonProperty
     private LocalDateTime date;
 
     @OneToMany(mappedBy = "question", cascade = CascadeType.ALL)
-    @OrderBy("id asc")
+    @JsonIgnore
+    @OrderBy("id desc")
     private List<Answer> answers;
 
     protected Question() {
