@@ -2,6 +2,7 @@ package com.codessquad.qna.service;
 
 import com.codessquad.qna.dto.PostDto;
 import com.codessquad.qna.entity.Post;
+import com.codessquad.qna.entity.User;
 import com.codessquad.qna.exception.CanNotFindPostException;
 import com.codessquad.qna.repository.CommentRepostiory;
 import com.codessquad.qna.repository.PostRepository;
@@ -46,8 +47,10 @@ public class PostService {
         postRepository.save(oldPost);
     }
 
-    public void deletePost(Post post) {
-        commentRepostiory.deleteAllByPost(post);
+    public void deletePost(Post post, User sessionUser) throws IllegalAccessException {
+        if(!post.isMatchedAuthor(sessionUser)){
+            throw new IllegalAccessException("다른 사람의 글을 삭제할 수 없습니다");
+        }
         postRepository.delete(post);
     }
 

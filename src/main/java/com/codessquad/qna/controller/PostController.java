@@ -6,7 +6,6 @@ import com.codessquad.qna.entity.User;
 import com.codessquad.qna.exception.CanNotFindPostException;
 import com.codessquad.qna.service.PostService;
 import com.codessquad.qna.util.HttpSessionUtils;
-import com.codessquad.qna.util.Mapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
@@ -79,7 +78,8 @@ public class PostController {
     @GetMapping("/{id}/form")
     public String updatePostForm(@PathVariable Long id, HttpSession httpSession, Model model) throws IllegalAccessException {
         Post post = postService.getPost(id);
-        if(!post.isMatchedAuthor(HttpSessionUtils.getUserFromSession(httpSession))){
+        User sessionUser = HttpSessionUtils.getUserFromSession(httpSession);
+        if(!post.isMatchedAuthor(sessionUser)){
             throw new IllegalAccessException("다른 사람의 글을 수정할 수 없습니다");
         }
         model.addAttribute("post", post);
@@ -107,10 +107,8 @@ public class PostController {
     @DeleteMapping("/{id}")
     public String deletePost(@PathVariable Long id, HttpSession httpSession) throws IllegalAccessException {
         Post post = postService.getPost(id);
-        if(!post.isMatchedAuthor(HttpSessionUtils.getUserFromSession(httpSession))){
-            throw new IllegalAccessException("다른 사람의 글을 삭제할 수 없습니다");
-        }
-        postService.deletePost(post);
+        User sessionUser = HttpSessionUtils.getUserFromSession(httpSession);
+        postService.deletePost(post, sessionUser);
         return "redirect:/";
     }
 
