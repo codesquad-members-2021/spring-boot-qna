@@ -38,24 +38,16 @@ public class UserController {
 
     @GetMapping("{id}/form")
     public String viewUpdateUserForm(@PathVariable Long id, Model model) {
-        try {
-            model.addAttribute("user", userRepository.findById(id).get());
-            return "user/updateForm";
-        } catch (IndexOutOfBoundsException e) {
-            return "redircet:/users";
-        }
+        model.addAttribute("user", userRepository.findById(id).get());
+        return "user/updateForm";
     }
 
     @PutMapping("{id}/update")
     public String updateUser(@PathVariable Long id, User updateUser) {
-        try {
-            User targetUser = userRepository.findById(id).get();
-            targetUser.setUser(updateUser);
-            userRepository.save(targetUser);
-            return "redirect:/users";
-        }
-        catch (IndexOutOfBoundsException e){
-            return "redirect:/{id}/form";
-        }
+        User targetUser = userRepository.findById(id).get();
+        targetUser.setUser(updateUser);
+        userRepository.save(targetUser);
+        return "redirect:/users";
+
     }
 }
