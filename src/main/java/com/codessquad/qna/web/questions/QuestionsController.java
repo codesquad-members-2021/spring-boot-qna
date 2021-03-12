@@ -29,7 +29,7 @@ public class QuestionsController {
         User sessionUser = SessionUtil.getLoginUser(session);
         newQuestion.setWriter(sessionUser);
         questionRepository.save(newQuestion);
-        logger.info("question created! [" + newQuestion.getId() + "] " + " title : " + newQuestion.getTitle());
+        logger.info("question created " + newQuestion);
         return "redirect:/";
     }
 
@@ -73,7 +73,7 @@ public class QuestionsController {
         currentQuestion.setTitle(newTitle);
         currentQuestion.setContents(newContents);
         questionRepository.save(currentQuestion);
-        logger.info("question modified! title : " + currentQuestion.getTitle());
+        logger.info("question modified " + currentQuestion);
         return "redirect:/questions/" + currentQuestion.getId();
     }
 
@@ -86,7 +86,7 @@ public class QuestionsController {
             return "redirect:/";
         }
         questionRepository.delete(currentQuestion);
-        logger.info("question deleted! title : " + currentQuestion.getTitle());
+        logger.info("question deleted " + currentQuestion);
         return "redirect:/";
     }
 
