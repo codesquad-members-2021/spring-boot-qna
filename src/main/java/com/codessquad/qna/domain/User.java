@@ -23,6 +23,10 @@ public class User {
     @Column(nullable = false)
     private String email;
 
+    public long getId() {
+        return id;
+    }
+
     public String getUserId() {
         return userId;
     }
