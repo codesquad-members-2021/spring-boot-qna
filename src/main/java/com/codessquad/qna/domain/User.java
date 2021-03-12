@@ -73,10 +73,10 @@ public class User {
     }
 
     public void update(User updateUser) {
-        this.userId = updateUser.userId;
-        this.email = updateUser.email;
-        this.name = updateUser.name;
         if(checkPassword(updateUser.password)){
+            setUserId(updateUser.userId);
+            setEmail(updateUser.email);
+            setName(updateUser.name);
             setPassword(updateUser.newPassword);
         }
     }

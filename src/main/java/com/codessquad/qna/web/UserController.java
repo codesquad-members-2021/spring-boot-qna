@@ -52,7 +52,7 @@ public class UserController {
     public String update(@PathVariable long id, User updateUser) {
         User user = userRepository.findById(id).orElseThrow(NoUserException::new);
         if(user.checkPassword(updateUser.getPassword())){
-            logger.info(updateUser.getPassword() + ": 올바르지 않은 패스워드입니다.비밀번호가 유지됩니다.");
+            logger.info(updateUser.getPassword() + ": 올바르지 않은 패스워드입니다.정보가 유지됩니다.");
         }
         user.update(updateUser);
 
