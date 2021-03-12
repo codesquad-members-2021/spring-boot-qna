@@ -8,6 +8,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -62,7 +63,7 @@ public class UserController {
         return user;
     }
 
-    @PostMapping("/users/{id}")
+    @PutMapping("/users/{id}")
     public String updateUser(@PathVariable Long id, User newInfoUser) {
         User user = findUserById(id);
         user.update(newInfoUser);
