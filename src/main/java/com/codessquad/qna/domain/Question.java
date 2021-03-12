@@ -20,9 +20,16 @@ public class Question {
 
     private LocalDateTime time;
 
+    public Question(String writer, String title, String contents){
+        this.writer = writer;
+        this.title = title;
+        this.contents = contents;
+    }
+
     public LocalDateTime getTime() {
         return this.time;
     }
+
 
     public long getId() {
         return id;
