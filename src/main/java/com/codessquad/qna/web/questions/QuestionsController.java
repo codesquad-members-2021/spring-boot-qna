@@ -48,7 +48,7 @@ public class QuestionsController {
         return "qna/show";
     }
 
-    @GetMapping("/modify/{questionId}")
+    @GetMapping("/{questionId}/modify-form")
     public String getModifyPage(@PathVariable("questionId") long questionId,
                                 Model model, HttpSession session) {
         User sessionUser = SessionUtil.getLoginUser(session);
@@ -61,8 +61,9 @@ public class QuestionsController {
         return "qna/modify-form";
     }
 
-    @PutMapping("/modify")
-    public String modifyQuestion(long questionId, String newTitle, String newContents, HttpSession session) {
+    @PutMapping("/{questionId}")
+    public String modifyQuestion(@PathVariable("questionId") long questionId,
+                                 String newTitle, String newContents, HttpSession session) {
         Question currentQuestion = questionRepository.findById(questionId)
                 .orElseThrow(QuestionNotFoundException::new);
         User sessionUser = SessionUtil.getLoginUser(session);

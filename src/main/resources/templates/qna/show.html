@@ -26,7 +26,7 @@
                     <ul class="article-util-list">
                         {{#loginUser}}
                         <li>
-                            <a class="link-modify-article" href="/questions/modify/{{question.id}}">수정</a>
+                            <a class="link-modify-article" href="/questions/{{question.id}}/modify-form">수정</a>
                         </li>
                         <li>
                             <form action="/questions/{{question.id}}" class="form-delete" method="POST">
