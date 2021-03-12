@@ -39,25 +39,21 @@ public class UserController {
 
     @GetMapping("/{userId}")
     public String renderProfile(@PathVariable Long userId, Model model) {
-        User findUser = userService.findById(userId);
-        model.addAttribute("user", findUser);
+        User user = userService.findById(userId);
+        model.addAttribute("user", user);
         return "user/profile";
     }
 
     @GetMapping("/{id}/form")
     public String renderUpdateForm(@PathVariable Long id, Model model, HttpSession session) {
-        if (!userService.checkSession(session, id)) {
-            return "redirect:/users/loginForm";
-        }
+        userService.checkSession(session, id);
         model.addAttribute("user", HttpSessionUtils.getUserFromSession(session));
         return "user/userUpdateForm";
     }
 
     @PutMapping("/{id}")
     public String userUpdate(User user, String newPassword, Model model, HttpSession session) {
-        if (!userService.checkSession(session, user.getId())) {
-            return "redirect:/users/loginForm";
-        }
+        userService.checkSession(session, user.getId());
         if (userService.update(user, newPassword)) {
             return "redirect:/";
         }
