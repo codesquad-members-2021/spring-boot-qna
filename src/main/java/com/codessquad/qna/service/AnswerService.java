@@ -20,8 +20,8 @@ public class AnswerService {
 
     public void write(User writer, String contents, Long questionId) {
         UserValidator.validUserInfo(writer);
-        Question findQuestion = questionService.findById(questionId);
-        Answer answer = new Answer(writer, findQuestion, contents);
+        Question question = questionService.findById(questionId);
+        Answer answer = new Answer(writer, question, contents);
         answerRepository.save(answer);
     }
 }

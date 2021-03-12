@@ -26,8 +26,7 @@ public class UserService {
     @Transactional
     public Long join(User user) {
         UserValidator.validUserInfo(user);
-        User DBUser = userRepository.save(user);
-        return DBUser.getId();
+        return userRepository.save(user).getId();
     }
 
     public User findById(Long userId) {
