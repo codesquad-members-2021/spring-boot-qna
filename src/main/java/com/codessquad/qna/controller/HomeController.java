@@ -8,8 +8,12 @@ import org.springframework.web.bind.annotation.GetMapping;
 
 @Controller
 public class HomeController {
+    private final QuestionRepository questionRepository;
+
     @Autowired
-    private QuestionRepository questionRepository;
+    public HomeController(QuestionRepository questionRepository) {
+        this.questionRepository = questionRepository;
+    }
 
     @GetMapping("/")
     public String home(Model model) {

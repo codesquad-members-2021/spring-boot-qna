@@ -1,10 +1,9 @@
 package com.codessquad.qna.controller;
 
 import com.codessquad.qna.domain.Answer;
-import com.codessquad.qna.domain.Question;
-import com.codessquad.qna.domain.User;
-import com.codessquad.qna.repository.AnswerRepository;
-import com.codessquad.qna.repository.QuestionRepository;
+import com.codessquad.qna.exception.IllegalUserAccessException;
+import com.codessquad.qna.service.AnswerService;
+import com.codessquad.qna.service.QuestionService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,36 +14,31 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.servlet.http.HttpSession;
 
-import java.util.Optional;
-
 import static com.codessquad.qna.controller.HttpSessionUtils.getSessionUser;
 import static com.codessquad.qna.controller.HttpSessionUtils.isLoginUser;
 
 @Controller
 @RequestMapping("/questions/{questionId}/answers")
 public class AnswerController {
-    private final Logger logger = LoggerFactory.getLogger(UserController.class);
-    private QuestionRepository questionRepository;
-    private AnswerRepository answerRepository;
+    private final Logger logger = LoggerFactory.getLogger(AnswerController.class);
+    private final QuestionService questionService;
+    private final AnswerService answerService;
 
     @Autowired
-    public AnswerController(QuestionRepository questionRepository, AnswerRepository answerRepository) {
-        this.questionRepository = questionRepository;
-        this.answerRepository = answerRepository;
+    public AnswerController(QuestionService questionService, AnswerService answerService) {
+        this.questionService = questionService;
+        this.answerService = answerService;
     }
 
-    @PostMapping("")
+    @PostMapping
     public String create(@PathVariable Long questionId, String contents, HttpSession session) {
         if (!isLoginUser(session)) {
-            logger.info("로그인 된 사용자가 아닙니다.");
-            return "redirect:/users/loginForm";
+            throw new IllegalUserAccessException("로그인이 필요합니다.");
         }
-        User loginUser = getSessionUser(session);
-        Question question = questionRepository.getOne(questionId);
-        Answer answer = new Answer(loginUser, question, contents);
-        answerRepository.save(answer);
+        Answer answer = new Answer(getSessionUser(session), questionService.findQuestion(questionId), contents);
+        answerService.create(answer);
         logger.info("답변 작성에 성공했습니다.");
-        return String.format("redirect:/questions/%d", questionId);
+        return "redirect:/questions/" + questionId;
     }
 }
 

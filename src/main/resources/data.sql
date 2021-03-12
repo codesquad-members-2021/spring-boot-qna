@@ -14,3 +14,4 @@ INSERT INTO QUESTION(AUTHOR_ID, TITLE, CONTENTS, DATE)
 VALUES (2, 'Unique index or primary key violation: "PRIMARY KEY ON PUBLIC.CAR(ID) : While calling the POST service',
         'When I hit the RESTAPI post service, I get the below exception. \n Unique index or primary key violh2-1.4.197.jar:1.4.197] at org.h2.jdbc.JdbcPreparedStatement.executeUpdateInternal(JdbcPreparedStatement.java:199) ~[h2-1.4.197.jar:1.4.197] at org.h2.jdbc.JdbcPreparedStatement.executeUpdate(JdbcPreparedStatement.java:153) Any idea what is wrong in the code?',
         CURRENT_TIMESTAMP);
+
