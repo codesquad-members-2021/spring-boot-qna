@@ -19,31 +19,31 @@ public class ControllerExceptionHandler {
     @ExceptionHandler(UnauthorizedAccessException.class)
     @ResponseStatus(HttpStatus.UNAUTHORIZED)
     public String handleUnauthorizedAccessException() {
-        logger.error("허가되지 않은 접근이 발견됨!");
+        logger.warn("허가되지 않은 접근이 발견됨!");
         return "redirect:/";
     }
 
     @ExceptionHandler(NoLoginUserException.class)
     public String handleNoLoginUserException() {
-        logger.error("현재 로그인된 상태가 아님");
+        logger.warn("현재 로그인된 상태가 아님");
         return "redirect:/";
     }
 
     @ExceptionHandler(UserNotFoundException.class)
     public String handleUserNotFoundException() {
-        logger.error("요청한 사용자 정보를 찾을 수 없음");
+        logger.warn("요청한 사용자 정보를 찾을 수 없음");
         return "redirect:/";
     }
 
     @ExceptionHandler(QuestionNotFoundException.class)
     public String handleQuestionNotFoundException() {
-        logger.error("요청한 질문 정보를 찾을 수 없음");
+        logger.warn("요청한 질문 정보를 찾을 수 없음");
         return "redirect:/";
     }
 
     @ExceptionHandler(AnswerNotFoundException.class)
     public String handleAnswerNotFoundException() {
-        logger.error("요청한 답변 정보를 찾을 수 없음");
+        logger.warn("요청한 답변 정보를 찾을 수 없음");
         return "redirect:/";
     }
 
