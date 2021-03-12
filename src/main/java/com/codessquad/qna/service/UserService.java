@@ -49,12 +49,13 @@ public class UserService {
         return false;
     }
 
-    public User login(String userId, String password) {
-        User findUser = userRepository.findByUserId(userId);
-        if (findUser != null && findUser.checkPassword(password)) {
-            return findUser;
-        }
-        return null;
+    public boolean checkLoginable(String userId, String password) {
+        User findUser = findByUserId(userId);
+        return findUser != null && findUser.checkPassword(password);
+    }
+
+    public User findByUserId(String userId) {
+        return userRepository.findByUserId(userId);
     }
 
     public boolean checkSession(HttpSession session, Long id) {

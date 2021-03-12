@@ -24,13 +24,11 @@ public class LoginController {
 
     @PostMapping("/login")
     public String login(String userId, String password, HttpSession session) {
-        User findUser = userService.login(userId, password);
-        if (findUser == null) {
-            logger.debug("로그인 실패");
+        if (!userService.checkLoginable(userId, password)){
             return "redirect:/users/loginForm";
         }
-        logger.debug("로그인 성공");
-        session.setAttribute("sessionedUser", findUser);
+        User user = userService.findByUserId(userId);
+        session.setAttribute("sessionedUser", user);
         return "redirect:/";
     }
 
