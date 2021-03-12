@@ -125,4 +125,25 @@ public class QuestionController {
 
         return "redirect:/questions/" + questionId;
     }
+
+    @DeleteMapping("/{questionId}/answers/{id}")
+    public String deleteAnswer(@PathVariable Long questionId, @PathVariable Long id, HttpSession session) {
+        User sessionUser = (User) session.getAttribute("sessionedUser");
+        Answer answer = answerRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("존재하지 않는 답변입니다."));
+
+        long answerWriterId = answer.getWriter().getId().longValue();
+
+        if (sessionUser == null) {
+            return "redirect:/users/login/form";
+        }
+        long sessionUserId = sessionUser.getId().longValue();
+
+        if (answerWriterId != sessionUserId) {
+            throw new IllegalArgumentException("본인이 작성한 글이 아닙니다.");
+        }
+
+        answerRepository.deleteById(id);
+
+        return "redirect:/questions/" + questionId;
+    }
 }
