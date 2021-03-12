@@ -8,12 +8,16 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import com.codessquad.qna.valid.UserValidation;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.servlet.http.HttpSession;
 
 @Controller
 @RequestMapping("/users")
 public class UserController {
+    private static final Logger logger = LoggerFactory.getLogger(UserController.class);
+
     private final String CONFIRM_INFO = "/confirm/{id}";
     private final String UPDATE_INFO = "/update/{id}";
     private final String LOGIN = "/login";
@@ -25,18 +29,18 @@ public class UserController {
         this.userRepository = userRepository;
     }
 
-    @PostMapping("")
+    @PostMapping
     public String create(User user) {
-        System.out.println("user Info: " + user);
+        logger.info(user.toString());
         UserValidation.validUserInfo(user);
         userRepository.save(user);
         return "redirect:/";
     }
 
-    @GetMapping("")
+    @GetMapping
     public String list(Model model) {
         model.addAttribute("users", userRepository.findAll());
-        System.out.println(model);
+        logger.info(model.toString());
         return "user/list";
     }
 
@@ -99,7 +103,6 @@ public class UserController {
 
     @GetMapping(UPDATE_INFO)
     public ModelAndView updateUserInfo(@PathVariable Long id) {
-
         return getUserRepository("user/updateForm", id);
     }
 

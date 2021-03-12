@@ -18,7 +18,9 @@
                             <img src="https://graph.facebook.com/v2.3/100000059371774/picture" class="article-author-thumb" alt="">
                         </div>
                         <div class="article-header-text">
-                            <a href="/users/{{id}}/profile" class="article-author-name">{{writer}}</a>
+                            {{#writer}}
+                            <a href="/users/{{id}}/" class="article-author-name">{{userId}}</a>
+                            {{/writer}}
                             <a href="/questions/413" class="article-header-time" title="퍼머링크">
                                 {{currentDateTime}}
                                 <i class="icon-link"></i>
