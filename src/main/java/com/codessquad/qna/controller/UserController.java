@@ -22,7 +22,6 @@ public class UserController {
 
     @PostMapping("/user/create")
     public String createUser(User user) {
-        System.out.println(user);
         users.add(user);
         return "redirect:/users";
     }
@@ -44,3 +43,4 @@ public class UserController {
         return "profile";
     }
 }
+

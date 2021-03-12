@@ -1,8 +1,17 @@
 package com.codessquad.qna;
 
 public class Question {
+    private String writer;
     private String title;
-    private String content;
+    private String contents;
+
+    public String getWriter() {
+        return writer;
+    }
+
+    public void setWriter(String writer) {
+        this.writer = writer;
+    }
 
     public String getTitle() {
         return title;
@@ -12,19 +21,20 @@ public class Question {
         this.title = title;
     }
 
-    public String getContent() {
-        return content;
+    public String getContents() {
+        return contents;
     }
 
-    public void setContent(String content) {
-        this.content = content;
+    public void setContents(String contents) {
+        this.contents = contents;
     }
 
     @Override
     public String toString() {
         return "Question{" +
-                "title='" + title + '\'' +
-                ", content='" + content + '\'' +
+                "writer='" + writer + '\'' +
+                ", title='" + title + '\'' +
+                ", contents='" + contents + '\'' +
                 '}';
     }
 }
