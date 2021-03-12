@@ -25,7 +25,6 @@ public class PostService {
         postRepository.save(post);
     }
 
-    //Overload addPost
     public void addPost(PostDto postDto) {
         postRepository.save(Mapper.mapToPost(postDto));
     }

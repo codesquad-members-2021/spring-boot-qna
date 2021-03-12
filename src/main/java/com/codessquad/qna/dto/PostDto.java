@@ -4,7 +4,7 @@ import java.time.LocalDateTime;
 
 public class PostDto {
 
-    private final LocalDateTime date = LocalDateTime.now();
+    private final LocalDateTime updateDateTime = LocalDateTime.now();
     private String title;
     private String author;
     private String body;
@@ -36,8 +36,8 @@ public class PostDto {
         this.body = body;
     }
 
-    public LocalDateTime getDate() {
-        return date;
+    public LocalDateTime getUpdateDateTime() {
+        return updateDateTime;
     }
 
 }
