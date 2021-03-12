@@ -23,7 +23,7 @@ public class QuestionController {
 
     @PostMapping
     public String createQuestion(Question question) {
-        question.setDateTime(LocalDateTime.now());
+        question.setWriteDateTime(LocalDateTime.now());
         questionService.addQuestion(question);
 
         return "redirect:/";

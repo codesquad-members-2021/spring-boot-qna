@@ -8,7 +8,7 @@ public class Question {
     private String writer;
     private String title;
     private String contents;
-    private LocalDateTime dateTime;
+    private LocalDateTime writeDateTime;
 
     public int getIndex() {
         return index;
@@ -42,12 +42,16 @@ public class Question {
         this.contents = contents;
     }
 
-    public String getDateTime() {
-        return dateTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"));
+    public LocalDateTime getWriteDateTime() {
+        return writeDateTime;
     }
 
-    public void setDateTime(LocalDateTime dateTime) {
-        this.dateTime = dateTime;
+    public String getFormattedWriteDateTime() {
+        return writeDateTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"));
+    }
+
+    public void setWriteDateTime(LocalDateTime writeDateTime) {
+        this.writeDateTime = writeDateTime;
     }
 
     @Override
@@ -57,7 +61,7 @@ public class Question {
                 ", writer='" + writer + '\'' +
                 ", title='" + title + '\'' +
                 ", contents='" + contents + '\'' +
-                ", dateTime='" + dateTime + '\'' +
+                ", dateTime='" + writeDateTime + '\'' +
                 '}';
     }
 }
