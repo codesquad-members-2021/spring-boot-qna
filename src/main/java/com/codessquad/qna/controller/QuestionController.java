@@ -14,6 +14,7 @@ import javax.servlet.http.HttpSession;
 
 import java.util.List;
 
+import static com.codessquad.qna.controller.HttpSessionUtils.getUserFromSession;
 import static com.codessquad.qna.controller.HttpSessionUtils.isLoginUser;
 
 @Controller
@@ -42,7 +43,7 @@ public class QuestionController {
 
     @PostMapping("/question/form")
     public String createQuestion(Question question, HttpSession session) {
-        boolean result = this.questionService.save(question, session);
+        boolean result = this.questionService.save(question, getUserFromSession(session));
         logger.info("질문 등록 요청");
         return result ? "redirect:/" : "redirect:/user/login";
     }
@@ -59,7 +60,7 @@ public class QuestionController {
 
     @GetMapping("/question/{id}/form")
     public String viewUpdateQuestion(@PathVariable("id") Long id, Model model, HttpSession session) {
-        Question question = this.questionService.verifyQuestion(id, session);
+        Question question = this.questionService.verifyQuestion(id, getUserFromSession(session));
         model.addAttribute("question", question);
         logger.info("질문 수정 페이지 요청");
         return question.nonNull() ? "qna/updateForm" : "redirect:/question/" + id;
@@ -67,14 +68,14 @@ public class QuestionController {
 
     @PutMapping("/question/{id}/form")
     public String updateQuestion(@PathVariable("id") Long id, Question question, HttpSession session) {
-        boolean result = this.questionService.update(id, question, session);
+        boolean result = this.questionService.update(id, question, getUserFromSession(session));
         logger.info("질문 수정 요청");
         return result ? "redirect:/question/" + id : "redirect:/";
     }
 
     @DeleteMapping("/question/{id}")
     public String deleteQuestion(@PathVariable("id") Long id, HttpSession session) {
-        boolean result = this.questionService.delete(id, session);
+        boolean result = this.questionService.delete(id, getUserFromSession(session));
         logger.info("질문 삭제 요청");
         return result ? "redirect:/" : "redirect:/question/" + id;
     }

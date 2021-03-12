@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
 
+import static com.codessquad.qna.controller.HttpSessionUtils.getUserFromSession;
+
 @Controller
 public class AnswerController {
 
@@ -22,14 +24,14 @@ public class AnswerController {
 
     @PostMapping("/answer/{questionId}")
     public String createAnswer(@PathVariable("questionId") Long questionId, Answer answer, HttpSession session) {
-        this.answerService.save(questionId, answer, session);
+        this.answerService.save(questionId, answer, getUserFromSession(session));
         logger.info("댓글 등록 요청");
         return "redirect:/question/" + questionId;
     }
 
     @GetMapping("/answer/{id}")
     public String viewUpdateAnswer(@PathVariable("id") Long id, Model model, HttpSession session) {
-        Answer answer = this.answerService.verifyAnswer(id, session);
+        Answer answer = this.answerService.verifyAnswer(id, getUserFromSession(session));
         Long questionId = this.answerService.findQuestionId(id);
         model.addAttribute("answer", answer);
         logger.info("댓글 수정 페이지 요청");
@@ -38,7 +40,7 @@ public class AnswerController {
 
     @PutMapping("/answer/{id}")
     public String updateAnswer(@PathVariable("id") Long id, Answer answer, HttpSession session) {
-        boolean result = this.answerService.update(id, answer, session);
+        boolean result = this.answerService.update(id, answer, getUserFromSession(session));
         Long questionId = this.answerService.findQuestionId(id);
         logger.info("댓글 수정 요청");
         return result ? "redirect:/question/" + questionId : "redirect:/answer/" + id;
@@ -47,7 +49,7 @@ public class AnswerController {
     @DeleteMapping("/answer/{id}")
     public String deleteAnswer(@PathVariable("id") Long id, HttpSession session) {
         Long questionId = this.answerService.findQuestionId(id);
-        this.answerService.delete(id, session);
+        this.answerService.delete(id, getUserFromSession(session));
         return (questionId != -1) ? "redirect:/question/" + questionId : "redirect:/";
     }
 

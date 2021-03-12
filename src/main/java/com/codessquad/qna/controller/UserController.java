@@ -13,8 +13,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 
 import javax.servlet.http.HttpSession;
 
-import static com.codessquad.qna.controller.HttpSessionUtils.USER_SESSION_KEY;
-import static com.codessquad.qna.controller.HttpSessionUtils.isLoginUser;
+import static com.codessquad.qna.controller.HttpSessionUtils.*;
 
 @Controller
 public class UserController {
@@ -77,7 +76,7 @@ public class UserController {
 
     @GetMapping("/user/{id}/form")
     public String viewUpdateProfile(@PathVariable("id") Long id, Model model, HttpSession session) {
-        User user = this.userService.verifyUser(id, session);
+        User user = this.userService.verifyUser(id, getUserFromSession(session));
         model.addAttribute("user", user);
         logger.info("유저 정보 수정 페이지 요청");
         return user.nonNull() ? "user/updateForm" : "redirect:/user/list";
@@ -85,7 +84,7 @@ public class UserController {
 
     @PutMapping("/user/{id}/form")
     public String updateProfile(@PathVariable("id") Long id, User user, String oldPassword, HttpSession session) {
-        boolean result = this.userService.update(id, user, oldPassword, session);
+        boolean result = this.userService.update(id, user, oldPassword, getUserFromSession(session));
         logger.info("유저 정보 수정 요청");
         return result ? "redirect:/user/list" : "redirect:/user/" + id + "/form";
     }
