@@ -26,7 +26,7 @@ public class QuestionService {
     public void write(Question question, User user) {
         question.changeWriter(user);
         question.setCreateDateTime(LocalDateTime.now());
-        QuestionValidator.validQuestion(question);
+        QuestionValidator.validate(question);
 
         questionRepository.save(question);
     }
@@ -39,7 +39,7 @@ public class QuestionService {
     public void update(Long id, Question question) {
         Question findQuestion = findById(id);
         findQuestion.questionUpdate(question);
-        QuestionValidator.validQuestion(findQuestion);
+        QuestionValidator.validate(findQuestion);
     }
 
     @Transactional

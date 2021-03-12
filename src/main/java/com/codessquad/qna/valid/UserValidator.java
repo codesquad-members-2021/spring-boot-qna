@@ -4,7 +4,7 @@ import com.codessquad.qna.domain.User;
 
 public class UserValidator {
 
-    public static void validUserInfo(User user) {
+    public static void validate(User user) {
         validUserId(user.getUserId());
         validPasssword(user.getPassword());
         validUserName(user.getName());

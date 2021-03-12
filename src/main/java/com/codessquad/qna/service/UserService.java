@@ -25,7 +25,7 @@ public class UserService {
 
     @Transactional
     public Long join(User user) {
-        UserValidator.validUserInfo(user);
+        UserValidator.validate(user);
         return userRepository.save(user).getId();
     }
 
@@ -39,7 +39,7 @@ public class UserService {
 
     @Transactional
     public boolean update(User user, String newPassword) {
-        UserValidator.validUserInfo(user);
+        UserValidator.validate(user);
         User getUser = findById(user.getId());
         if (getUser.checkPassword(user.getPassword())) {
             getUser.updateUserInfo(user, newPassword);

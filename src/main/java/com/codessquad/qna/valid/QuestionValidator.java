@@ -5,7 +5,7 @@ import com.codessquad.qna.domain.User;
 
 public class QuestionValidator {
 
-    public static void validQuestion(Question question) {
+    public static void validate(Question question) {
         validTitle(question.getTitle());
         validWriter(question.getWriter());
     }

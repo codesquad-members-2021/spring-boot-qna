@@ -19,7 +19,7 @@ public class AnswerService {
     }
 
     public void write(User writer, String contents, Long questionId) {
-        UserValidator.validUserInfo(writer);
+        UserValidator.validate(writer);
         Question question = questionService.findById(questionId);
         Answer answer = new Answer(writer, question, contents);
         answerRepository.save(answer);
