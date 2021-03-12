@@ -1,5 +1,6 @@
 package com.codessquad.qna.web.users;
 
+import com.codessquad.qna.web.exceptions.UserNotFoundException;
 import com.codessquad.qna.web.utils.SessionUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -36,19 +37,15 @@ public class UsersController {
 
     @GetMapping("/{userId}")
     public String getOneUser(@PathVariable("userId") long id, Model model) {
-        User foundUser = getUserById(id);
+        User foundUser = userRepository.findById(id)
+                .orElseThrow(UserNotFoundException::new);
         model.addAttribute("foundUser", foundUser);
         return "user/profile";
     }
 
     @GetMapping("/modify")
     public String getModifyUserPage(Model model, HttpSession session) {
-        User sessionUser = SessionUtil.getLoginUser(session);
         return "user/modify-form";
-    }
-
-    private User getUserById(long id) {
-        return userRepository.findById(id).orElse(null);
     }
 
     @PutMapping("/modify")
@@ -69,10 +66,9 @@ public class UsersController {
 
     @PostMapping("/login")
     public String processLogin(String userId, String password, HttpSession session) {
-        User foundUser = userRepository.findByUserId(userId);
-        if (foundUser == null) {
-            return "redirect:/users/loginForm";
-        }
+        User foundUser = userRepository.findByUserId(userId)
+                .orElseThrow(UserNotFoundException::new);
+
         if (!foundUser.isMatchingPassword(password)) {
             return "redirect:/users/loginForm";
         }
