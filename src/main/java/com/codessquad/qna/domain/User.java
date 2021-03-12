@@ -1,10 +1,23 @@
-package com.codessquad.qna.web;
+package com.codessquad.qna.domain;
 
+import javax.persistence.*;
+
+@Entity
 public class User {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @Column(nullable = false)
     private String userId;
     private String password;
     private String name;
     private String email;
+
+    public Long getId() {
+        return id;
+    }
 
     public void setUserId(String userId) {
         this.userId = userId;
@@ -19,6 +32,12 @@ public class User {
     }
 
     public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public void updateUserInfo(String password, String name, String email) {
+        this.password = password;
+        this.name = name;
         this.email = email;
     }
 
@@ -41,7 +60,8 @@ public class User {
     @Override
     public String toString() {
         return "User{" +
-                "userId='" + userId + '\'' +
+                "id=" + id +
+                ", userId='" + userId + '\'' +
                 ", password='" + password + '\'' +
                 ", name='" + name + '\'' +
                 ", email='" + email + '\'' +

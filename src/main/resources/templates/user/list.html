@@ -15,11 +15,11 @@
                 <tbody>
                 {{#users}}
                 <tr>
-                    <th scope="row">{{@index}}</th>
-                    <td><a href="/users/{{userId}}">{{userId}}</a></td>
+                    <th scope="row">{{id}}</th>
+                    <td><a href="/users/{{id}}">{{userId}}</a></td>
                     <td>{{name}}</td>
                     <td>{{email}}</td>
-                    <td><a class="btn btn-success" href="/users/confirm" role="button">수정</a></td>
+                    <td><a class="btn btn-success" href="/users/confirm/{{id}}" role="button">수정</a></td>
                 </tr>
                 {{/users}}
                 </tbody>
