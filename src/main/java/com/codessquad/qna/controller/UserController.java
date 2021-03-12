@@ -42,5 +42,16 @@ public class UserController {
         }
         return "profile";
     }
+
+    @GetMapping("/users/{userId}/updateForm")
+    public String updateForm(@PathVariable("userId") String userId, Model model) {
+        for (User user : users) {
+            if (user.getUserId().equals(userId)) {
+                model.addAttribute("user", user);
+                break;
+            }
+        }
+        return "updateForm";
+    }
 }
 
