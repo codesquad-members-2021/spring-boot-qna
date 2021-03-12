@@ -37,8 +37,8 @@ public class Question {
         this.reportingDateTime = LocalDateTime.now();
     }
 
-    public boolean isMatchingWriterId(long anotherWriterId) {
-        return writer.getId() == anotherWriterId;
+    public boolean isMatchingWriter(User anotherWriter) {
+        return writer.getId() == anotherWriter.getId();
     }
 
     public int getSizeOfAnswers() {
