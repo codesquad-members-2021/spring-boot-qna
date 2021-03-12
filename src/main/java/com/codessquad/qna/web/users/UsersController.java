@@ -66,7 +66,7 @@ public class UsersController {
                 .orElseThrow(UserNotFoundException::new);
 
         if (!foundUser.isMatchingPassword(password)) {
-            return "redirect:/users/loginForm";
+            return "redirect:/users/login-form";
         }
         SessionUtil.setLoginUser(session, foundUser);
         logger.info("user login : " + foundUser.getUserId());
