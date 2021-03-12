@@ -1,9 +1,6 @@
 package com.codessquad.qna.domain;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @Entity
 public class Question {
@@ -11,8 +8,13 @@ public class Question {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
+    @Column(nullable = false, length = 20)
     private String writer;
+
+    @Column(nullable = false, length = 20)
     private String title;
+
+    @Column(nullable = false)
     private String contents;
 
     public void setIndex(int index) {
