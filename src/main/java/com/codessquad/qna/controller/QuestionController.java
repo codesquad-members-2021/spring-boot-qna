@@ -27,7 +27,7 @@ public class QuestionController {
 
     @GetMapping("/")
     public String list(Model model) {
-        model.addAttribute("questions", questions);
+        model.addAttribute("questions", questionRepository.findAll());
         return "index";
     }
 
