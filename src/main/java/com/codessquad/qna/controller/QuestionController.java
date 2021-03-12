@@ -8,6 +8,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
+import com.codessquad.qna.valid.QuestionValidation;
 
 import javax.servlet.http.HttpSession;
 
@@ -37,6 +38,7 @@ public class QuestionController {
         }
         User loginUser = HttpSessionUtils.getSessionUser(session);
         Question question = new Question(loginUser, title, contents);
+        QuestionValidation.validQuestion(question);
         questionRepository.save(question);
         return "redirect:/";
     }
@@ -64,6 +66,7 @@ public class QuestionController {
     public String updateQuestion(@PathVariable Long id, String title, String contents) {
         Question question = questionRepository.findById(id).orElse(null);
         question.updateQuestion(title, contents);
+        QuestionValidation.validQuestion(question);
         questionRepository.save(question);
         return "redirect:/questions/" + id;
     }

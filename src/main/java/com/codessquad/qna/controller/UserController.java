@@ -7,6 +7,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
+import com.codessquad.qna.valid.UserValidation;
 
 import javax.servlet.http.HttpSession;
 
@@ -27,6 +28,7 @@ public class UserController {
     @PostMapping("")
     public String create(User user) {
         System.out.println("user Info: " + user);
+        UserValidation.validUserInfo(user);
         userRepository.save(user);
         return "redirect:/";
     }
@@ -105,6 +107,7 @@ public class UserController {
     public String updateUserInfo(@PathVariable Long id, String password, String name, String email) {
         User user = userRepository.findById(id).orElse(null);
         user.updateUserInfo(password, name, email);
+        UserValidation.validUserInfo(user);
         userRepository.save(user);
         return "redirect:/users";
     }
