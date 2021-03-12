@@ -1,0 +1,42 @@
+package com.codessquad.qna.controller.advice;
+
+import com.codessquad.qna.exception.*;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.ControllerAdvice;
+import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.servlet.ModelAndView;
+
+@ControllerAdvice
+public class GlobalControllerExceptionHandler {
+
+    @ExceptionHandler(NotLoggedInException.class)
+    public String handleNotLoggedIn() {
+        return "redirect:/users/login";
+    }
+
+    @ResponseStatus(HttpStatus.UNAUTHORIZED)
+    @ExceptionHandler(LoginFailedException.class)
+    public ModelAndView handleLoginFailed() {
+        return new ModelAndView("users/login", "loginFailed", true);
+    }
+
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    @ExceptionHandler(NotFoundException.class)
+    public String handleNotFound() {
+        return "error/404";
+    }
+
+    @ResponseStatus(HttpStatus.UNAUTHORIZED)
+    @ExceptionHandler(UnauthorizedAccessException.class)
+    public ModelAndView handleUnauthorizedAccess(UnauthorizedAccessException unauthorizedAccessException) {
+        return new ModelAndView("error/401",
+                "errorMessage", unauthorizedAccessException.getMessage());
+    }
+
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(UserExistException.class)
+    public ModelAndView handleUserExist() {
+        return new ModelAndView("users/form", "signUpFailed", true);
+    }
+}
