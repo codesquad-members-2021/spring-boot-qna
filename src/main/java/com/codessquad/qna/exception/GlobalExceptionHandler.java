@@ -4,6 +4,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
+import javax.validation.ConstraintViolationException;
+
 @ControllerAdvice
 public class GlobalExceptionHandler {
 
@@ -28,6 +30,11 @@ public class GlobalExceptionHandler {
     private String handleDuplicateUserIdFoundException(Model model, DuplicateUserIdFoundException e) {
         model.addAttribute("errorMessage", e.getMessage());
         return "/user/login";
+    }
+
+    @ExceptionHandler(ConstraintViolationException.class)
+    private String handleConstraintViolationException(Model model, Exception e) {
+        return "redirect:/users/{id}/form";
     }
 }
 
