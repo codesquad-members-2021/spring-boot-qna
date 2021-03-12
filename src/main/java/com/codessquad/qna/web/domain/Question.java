@@ -1,14 +1,12 @@
 package com.codessquad.qna.web.domain;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
 @Entity
 public class Question {
+    @Transient
     public static final String DATE_PATTERN = "yyyy-MM-dd HH:mm";
     @Id
     @GeneratedValue
