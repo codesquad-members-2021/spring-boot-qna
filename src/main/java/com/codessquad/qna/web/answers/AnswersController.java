@@ -7,7 +7,6 @@ import com.codessquad.qna.web.questions.QuestionRepository;
 import com.codessquad.qna.web.users.User;
 import com.codessquad.qna.web.utils.SessionUtil;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -29,7 +28,7 @@ public class AnswersController {
 
     @PostMapping("/questions/{questionId}/answers")
     public String createAnswer(@PathVariable("questionId") long questionId, String answerContents,
-                               HttpSession session, Model model) {
+                               HttpSession session) {
         User sessionUser = SessionUtil.getLoginUser(session);
         Question targetQuestion = questionRepository.findById(questionId)
                 .orElseThrow(QuestionNotFoundException::new);

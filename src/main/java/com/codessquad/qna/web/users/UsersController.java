@@ -30,7 +30,7 @@ public class UsersController {
     }
 
     @GetMapping()
-    public String getUserList(Model model, HttpSession session) {
+    public String getUserList(Model model) {
         model.addAttribute("users", userRepository.findAll());
         return "user/list";
     }
@@ -44,7 +44,7 @@ public class UsersController {
     }
 
     @GetMapping("/modify")
-    public String getModifyUserPage(Model model, HttpSession session) {
+    public String getModifyUserPage() {
         return "user/modify-form";
     }
 
