@@ -76,7 +76,8 @@ public class UserController {
 
     @PostMapping("/user/login")
     public String login(String userId, String password, HttpSession session){
-
+        userId = Objects.toString(userId,""); //m userId의 값이 null일 경우 ""으로 초기화
+        password = Objects.toString(password,""); //m userId의 값이 null일 경우 ""으로 초기화
         User findUser = userRepository.findByUserId(userId);
 
         if(findUser == null){
