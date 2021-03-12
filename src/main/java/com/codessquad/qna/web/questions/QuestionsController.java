@@ -23,7 +23,7 @@ public class QuestionsController {
 
     @PostMapping("/questions")
     public String createQuestion(Question newQuestion, HttpSession session) {
-        User sessionUser = SessionUtil.getSessionUser(session);
+        User sessionUser = SessionUtil.getLoginUser(session);
         if (sessionUser != null) {
             newQuestion.setWriter(sessionUser);
             questionRepository.save(newQuestion);
@@ -49,7 +49,7 @@ public class QuestionsController {
     @GetMapping("/questions/modify/{questionId}")
     public String getModifyPage(@PathVariable("questionId") long questionId,
                                 Model model, HttpSession session) {
-        User sessionUser = SessionUtil.getSessionUser(session);
+        User sessionUser = SessionUtil.getLoginUser(session);
         if (sessionUser == null) {
             return "redirect:/";
         }
@@ -68,7 +68,7 @@ public class QuestionsController {
         if (currentQuestion == null) {
             return "redirect:/";
         }
-        User sessionUser = SessionUtil.getSessionUser(session);
+        User sessionUser = SessionUtil.getLoginUser(session);
         if (sessionUser == null) {
             return "redirect:/";
         }
@@ -88,7 +88,7 @@ public class QuestionsController {
         if (currentQuestion == null) {
             return "redirect:/";
         }
-        User sessionUser = SessionUtil.getSessionUser(session);
+        User sessionUser = SessionUtil.getLoginUser(session);
         if (sessionUser == null) {
             return "redirect:/";
         }

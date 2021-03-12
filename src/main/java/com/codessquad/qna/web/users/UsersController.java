@@ -43,7 +43,7 @@ public class UsersController {
 
     @GetMapping("/modify")
     public String getModifyUserPage(Model model, HttpSession session) {
-        User sessionUser = SessionUtil.getSessionUser(session);
+        User sessionUser = SessionUtil.getLoginUser(session);
         if (sessionUser == null) {
             return "redirect:/";
         }
@@ -57,7 +57,7 @@ public class UsersController {
     @PutMapping("/modify")
     public String modifyUser(String prevPassword, String newPassword,
                              String name, String email, HttpSession session) {
-        User sessionUser = SessionUtil.getSessionUser(session);
+        User sessionUser = SessionUtil.getLoginUser(session);
         if (sessionUser == null) {
             return "redirect:/";
         }
@@ -82,17 +82,17 @@ public class UsersController {
         if (!foundUser.isMatchingPassword(password)) {
             return "redirect:/users/loginForm";
         }
-        SessionUtil.setSessionUser(session, foundUser);
+        SessionUtil.setLoginUser(session, foundUser);
         logger.info("user login : " + foundUser.getUserId());
         return "redirect:/";
     }
 
     @GetMapping("/logout")
     public String processLogout(HttpSession session) {
-        User sessionUser = SessionUtil.getSessionUser(session);
+        User sessionUser = SessionUtil.getLoginUser(session);
         if (sessionUser != null) {
             logger.info("user logout : " + sessionUser.getUserId());
-            SessionUtil.removeSessionUser(session);
+            SessionUtil.removeLoginUser(session);
         }
         return "redirect:/";
     }

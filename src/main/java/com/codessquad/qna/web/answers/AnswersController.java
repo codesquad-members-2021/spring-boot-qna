@@ -28,7 +28,7 @@ public class AnswersController {
     @PostMapping("/questions/{questionId}/answers")
     public String createAnswer(@PathVariable("questionId") long questionId, String answerContents,
                                HttpSession session, Model model) {
-        User sessionUser = SessionUtil.getSessionUser(session);
+        User sessionUser = SessionUtil.getLoginUser(session);
         if (sessionUser == null) {
             return "redirect:/";
         }
@@ -45,7 +45,7 @@ public class AnswersController {
 
     @DeleteMapping("/answers/{answerId}")
     public String deleteAnswer(@PathVariable("answerId") long answerId, HttpSession session) {
-        User sessionUser = SessionUtil.getSessionUser(session);
+        User sessionUser = SessionUtil.getLoginUser(session);
         if (sessionUser == null) {
             return "redirect:/";
         }
