@@ -64,9 +64,6 @@ public class QuestionsController {
     public String modifyQuestion(long questionId, String newTitle, String newContents, HttpSession session) {
         Question currentQuestion = questionRepository.findById(questionId)
                 .orElseThrow(QuestionNotFoundException::new);
-        if (currentQuestion == null) {
-            return "redirect:/";
-        }
         User sessionUser = SessionUtil.getLoginUser(session);
         if (!currentQuestion.isMatchingWriterId(sessionUser.getId())) {
             return "redirect:/";
@@ -82,9 +79,6 @@ public class QuestionsController {
     public String deleteQuestion(@PathVariable("questionId") long questionId, HttpSession session) {
         Question currentQuestion = questionRepository.findById(questionId)
                 .orElseThrow(QuestionNotFoundException::new);
-        if (currentQuestion == null) {
-            return "redirect:/";
-        }
         User sessionUser = SessionUtil.getLoginUser(session);
         if (!currentQuestion.isMatchingWriterId(sessionUser.getId())) {
             return "redirect:/";
