@@ -1,23 +1,12 @@
 package com.codessquad.qna.domain;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
-import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.*;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 @Entity
-public class Question {
-    public static final String QUESTION_DATETIME_FORMAT = "yyyy.MM.dd HH:mm";
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @JsonProperty
-    private Long id;
-
+public class Question extends AbstractEntity {
     @ManyToOne
     @JoinColumn(foreignKey = @ForeignKey(name = "fk_question_author"))
     private User author;
@@ -29,9 +18,6 @@ public class Question {
 
     @JsonProperty
     private Integer countOfAnswer = 0;
-
-    @JsonProperty
-    private LocalDateTime date;
 
     @OneToMany(mappedBy = "question", cascade = CascadeType.ALL)
     @JsonIgnore
@@ -45,7 +31,6 @@ public class Question {
         this.author = author;
         this.title = title;
         this.contents = contents;
-        this.date = LocalDateTime.now();
     }
 
     public void update(String title, String contents) {
@@ -64,23 +49,9 @@ public class Question {
     public void deleteAnswer() {
         this.countOfAnswer--;
     }
-    public Long getId() {
-        return id;
-    }
 
     public User getAuthor() {
         return author;
-    }
-
-    public String getFormattedDate() {
-        if (date == null) {
-            return "";
-        }
-        return date.format(DateTimeFormatter.ofPattern(QUESTION_DATETIME_FORMAT));
-    }
-
-    public LocalDateTime getDate() {
-        return date;
     }
 
     public String getTitle() {
