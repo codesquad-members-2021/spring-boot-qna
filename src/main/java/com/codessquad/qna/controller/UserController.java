@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 
+import javax.servlet.http.HttpSession;
 import java.util.NoSuchElementException;
 import java.util.Objects;
 import java.util.Optional;
@@ -72,5 +73,22 @@ public class UserController {
 
         return "redirect:/users";
     }
+
+
+    @GetMapping("/user/login")
+    public String login(String userId, String password, HttpSession session){
+
+        User findUser = userRepository.findByUserId(userId);
+        Objects.requireNonNull(findUser,"Exception: findUser의 값이 null입니다.");
+
+        if(!findUser.checkId(userId)){
+            return "user/login_failed";
+        }
+        if(!findUser.checkPassword(password)){
+            return "user/login_failed";
+        }
+        return "index";
+    }
+
 
 }
