@@ -40,7 +40,7 @@ public class PostService {
     }
 
     public List<Post> getPosts() {
-        return (List<Post>) postRepository.findAll();
+        return postRepository.findAll();
     }
 
     @Transactional
