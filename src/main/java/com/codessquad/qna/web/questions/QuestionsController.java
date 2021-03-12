@@ -1,7 +1,7 @@
 package com.codessquad.qna.web.questions;
 
-import com.codessquad.qna.web.exceptions.questions.QuestionNotFoundException;
 import com.codessquad.qna.web.exceptions.auth.UnauthorizedAccessException;
+import com.codessquad.qna.web.exceptions.questions.QuestionNotFoundException;
 import com.codessquad.qna.web.users.User;
 import com.codessquad.qna.web.utils.SessionUtil;
 import org.slf4j.Logger;
@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpSession;
 
 @Controller
+@RequestMapping("/questions")
 public class QuestionsController {
 
     Logger logger = LoggerFactory.getLogger(QuestionsController.class);
@@ -23,7 +24,7 @@ public class QuestionsController {
         this.questionRepository = questionRepository;
     }
 
-    @PostMapping("/questions")
+    @PostMapping
     public String createQuestion(Question newQuestion, HttpSession session) {
         User sessionUser = SessionUtil.getLoginUser(session);
         newQuestion.setWriter(sessionUser);
@@ -32,13 +33,13 @@ public class QuestionsController {
         return "redirect:/";
     }
 
-    @GetMapping("/")
+    @GetMapping
     public String getQuestionList(Model model) {
         model.addAttribute("questions", questionRepository.findAll());
         return "index";
     }
 
-    @GetMapping("/questions/{questionId}")
+    @GetMapping("/{questionId}")
     public String getOneQuestion(@PathVariable("questionId") long questionId, Model model) {
         Question foundQuestion = questionRepository.findById(questionId)
                 .orElseThrow(QuestionNotFoundException::new);
@@ -47,25 +48,25 @@ public class QuestionsController {
         return "qna/show";
     }
 
-    @GetMapping("/questions/modify/{questionId}")
+    @GetMapping("/modify/{questionId}")
     public String getModifyPage(@PathVariable("questionId") long questionId,
                                 Model model, HttpSession session) {
         User sessionUser = SessionUtil.getLoginUser(session);
         Question currentQuestion = questionRepository.findById(questionId)
                 .orElseThrow(QuestionNotFoundException::new);
-        if (!currentQuestion.isMatchingWriterId(sessionUser.getId())) {
+        if (!currentQuestion.isMatchingWriter(sessionUser)) {
             throw new UnauthorizedAccessException();
         }
         model.addAttribute("currentQuestion", currentQuestion);
         return "qna/modify-form";
     }
 
-    @PutMapping("/questions/modify")
+    @PutMapping("/modify")
     public String modifyQuestion(long questionId, String newTitle, String newContents, HttpSession session) {
         Question currentQuestion = questionRepository.findById(questionId)
                 .orElseThrow(QuestionNotFoundException::new);
         User sessionUser = SessionUtil.getLoginUser(session);
-        if (!currentQuestion.isMatchingWriterId(sessionUser.getId())) {
+        if (!currentQuestion.isMatchingWriter(sessionUser)) {
             return "redirect:/";
         }
         currentQuestion.setTitle(newTitle);
@@ -75,12 +76,12 @@ public class QuestionsController {
         return "redirect:/questions/" + currentQuestion.getId();
     }
 
-    @DeleteMapping("/questions/{questionId}")
+    @DeleteMapping("/{questionId}")
     public String deleteQuestion(@PathVariable("questionId") long questionId, HttpSession session) {
         Question currentQuestion = questionRepository.findById(questionId)
                 .orElseThrow(QuestionNotFoundException::new);
         User sessionUser = SessionUtil.getLoginUser(session);
-        if (!currentQuestion.isMatchingWriterId(sessionUser.getId())) {
+        if (!currentQuestion.isMatchingWriter(sessionUser)) {
             return "redirect:/";
         }
         questionRepository.delete(currentQuestion);
