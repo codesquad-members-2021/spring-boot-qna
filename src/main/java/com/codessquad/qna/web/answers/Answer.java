@@ -84,4 +84,15 @@ public class Answer {
     public void setReportingDateTime(LocalDateTime reportingDateTime) {
         this.reportingDateTime = reportingDateTime;
     }
+
+    @Override
+    public String toString() {
+        return "Answer{" +
+                "id=" + id +
+                ", writer=" + writer +
+                ", question=" + question +
+                ", contents='" + contents + '\'' +
+                ", reportingDateTime=" + reportingDateTime +
+                '}';
+    }
 }

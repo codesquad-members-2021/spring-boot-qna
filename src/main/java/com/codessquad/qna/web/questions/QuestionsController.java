@@ -70,8 +70,7 @@ public class QuestionsController {
         if (!currentQuestion.isMatchingWriter(sessionUser)) {
             return "redirect:/";
         }
-        currentQuestion.setTitle(newTitle);
-        currentQuestion.setContents(newContents);
+        currentQuestion.update(newTitle, newContents);
         questionRepository.save(currentQuestion);
         logger.info("question modified " + currentQuestion);
         return "redirect:/questions/" + currentQuestion.getId();

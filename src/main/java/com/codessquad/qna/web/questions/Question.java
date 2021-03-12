@@ -41,6 +41,15 @@ public class Question {
         return writer.getId() == anotherWriter.getId();
     }
 
+    public void update(String newTitle, String newContents) {
+        if (!title.equals(newTitle)) {
+            title = newTitle;
+        }
+        if (!contents.equals(newContents)) {
+            contents = newContents;
+        }
+    }
+
     public int getSizeOfAnswers() {
         return answers.size();
     }
@@ -91,5 +100,17 @@ public class Question {
 
     public void setAnswers(List<Answer> answers) {
         this.answers = answers;
+    }
+
+    @Override
+    public String toString() {
+        return "Question{" +
+                "id=" + id +
+                ", writer=" + writer +
+                ", answers=" + answers +
+                ", title='" + title + '\'' +
+                ", contents='" + contents + '\'' +
+                ", reportingDateTime=" + reportingDateTime +
+                '}';
     }
 }
