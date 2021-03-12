@@ -22,6 +22,7 @@ public class Answer {
 
     @Column(nullable = false, length = 2000)
     private String contents;
+
     private LocalDateTime currentDateTime;
 
     public Answer() {

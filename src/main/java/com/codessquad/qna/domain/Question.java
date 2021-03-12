@@ -22,6 +22,7 @@ public class Question {
 
     @Column(nullable = false, length = 2000)
     private String contents;
+
     private LocalDateTime currentDateTime;
 
     @OneToMany(mappedBy = "question")
