@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 @Controller
 public class UserController {
@@ -43,15 +44,22 @@ public class UserController {
 
     @GetMapping("/users/{id}")
     public String getUserById(@PathVariable Long id, Model model) {
-        User foundUser = userRepository.findById(id).get();
-        model.addAttribute("user", foundUser);
+        User user = findUserById(id);
+        model.addAttribute("user", user);
         return "user/profile";
     }
 
     @GetMapping("/users/{id}/form")
     public String updateUserForm(@PathVariable Long id, Model model) {
-        model.addAttribute("user", userRepository.findById(id).get());
+        User user = findUserById(id);
+        model.addAttribute("user", user );
         return  "user/updateForm";
+    }
+
+    public User findUserById(Long id) {
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new NoSuchElementException("해당 id의 사용자가 존재하지 않습니다."));
+        return user;
     }
 
 }
