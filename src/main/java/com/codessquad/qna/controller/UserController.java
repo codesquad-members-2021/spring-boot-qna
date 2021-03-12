@@ -1,63 +1,67 @@
 package com.codessquad.qna.controller;
 
 import com.codessquad.qna.domain.User;
+import com.codessquad.qna.domain.UserRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Controller
-@RequestMapping("/user")
+@RequestMapping("/users")
 public class UserController {
-    private List<User> users = new ArrayList<>();
+    private final UserRepository userRepository;
 
-    @PostMapping("/")
-    public String create(User user) {
-        users.add(user);
-        System.out.println(user);
-        return "redirect:/user/";
+    @Autowired
+    public UserController(UserRepository userRepository) {
+        this.userRepository = userRepository;
     }
 
-    @GetMapping("/")
+    @PostMapping
+    public String create(User user) {
+        userRepository.save(user);
+        System.out.println(user);
+        return "redirect:/users";
+    }
+
+    @GetMapping
     public String list(Model model) {
-        model.addAttribute("users", users);
+        model.addAttribute("users", userRepository.findAll());
         return "user/list";
     }
 
-    @GetMapping("/{userId}")
-    public String profile(@PathVariable String userId, Model model) {
-        for (User user : users) {
-            if (user.getUserId().equals(userId)) {
-                model.addAttribute("user", user);
-            }
+    @GetMapping("/{id}")
+    public String profile(@PathVariable long id, Model model) {
+        Optional<User> user = userRepository.findById(id);
+        if (!user.isPresent()) {
+            return "user/list";
         }
+        model.addAttribute("user", user.get());
         return "user/profile";
     }
 
-    @GetMapping("/{userId}/form")
-    public String showModifyProfile(@PathVariable String userId, Model model) {
-        for (User user : users) {
-            if (user.getUserId().equals(userId)) {
-                model.addAttribute(user);
-            }
+    @GetMapping("/{id}/form")
+    public String showModifyProfile(@PathVariable long id, Model model) {
+        Optional<User> user = userRepository.findById(id);
+        if (!user.isPresent()) {
+            return "redirect:/users";
         }
+        model.addAttribute("user", user.get());
         return "user/updateForm";
     }
 
-    @PostMapping("/{userId}/update")
-    public String modifyProfile(User updatedUser, Model model) {
-        for (User user : users) {
-            if (user.getUserId().equals(updatedUser.getUserId())) {
-                user.setName(updatedUser.getName());
-                user.setEmail(updatedUser.getEmail());
-            }
+    @PutMapping("/{id}/update")
+    public String modifyProfile(@PathVariable long id, User updatedUser, String oldPassword) {
+        Optional<User> user = userRepository.findById(id);
+        if (!user.isPresent() || !user.get().verifyPassword(oldPassword)) {
+            return "redirect:/users";
         }
-        model.addAttribute("users", users);
-        return "redirect:/user/";
+        System.out.println("new password" + updatedUser.getPassword());
+        userRepository.save(user.get().updateProfile(updatedUser));
+        return "redirect:/users";
     }
 }

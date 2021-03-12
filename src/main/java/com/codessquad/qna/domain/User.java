@@ -51,6 +51,17 @@ public class User {
         return email;
     }
 
+    public User updateProfile(User updatedUser) {
+        this.password = updatedUser.password;
+        this.name = updatedUser.name;
+        this.email = updatedUser.email;
+        return this;
+    }
+
+    public boolean verifyPassword(String oldPassword) {
+        return this.password.equals(oldPassword);
+    }
+
     @Override
     public String toString() {
         return "User{" +
