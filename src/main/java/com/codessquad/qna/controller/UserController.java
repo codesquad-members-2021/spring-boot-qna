@@ -32,7 +32,7 @@ public class UserController {
     }
 
     @GetMapping("/{id}")
-    public String show(@PathVariable Long id,Model model) {
+    public String show(@PathVariable Long id, Model model) {
         model.addAttribute("user", userRepository.findById(id).orElseThrow(NoUserException::new));
         return "/user/profile";
     }
@@ -55,10 +55,7 @@ public class UserController {
 
     @PostMapping("/login")
     public String login(String userId, String password, HttpSession session) {
-        User user = userRepository.findByUserId(userId);
-        if (user == null) {
-            return "redirect:/users/login";
-        }
+        User user = userRepository.findByUserId(userId).orElseThrow(NoUserException::new);
         if (!password.equals(user.getPassword())) {
             return "redirect:/users/login";
         }
@@ -67,7 +64,7 @@ public class UserController {
     }
 
     @GetMapping("/logout")
-    public String logout(HttpSession session){
+    public String logout(HttpSession session) {
         session.removeAttribute("sessionedUser");
         return "redirect:/";
     }
