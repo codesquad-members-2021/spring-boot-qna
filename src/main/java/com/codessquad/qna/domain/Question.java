@@ -14,10 +14,12 @@ public class Question {
     @GeneratedValue
     private long id;
 
-    @Column(nullable = false, length = 20)
+    @Column(nullable = false, length = 32, unique = true)
     private String writer;
 
+    @Column(nullable = false)
     private String title;
+
     private String contents;
     private LocalDateTime createdDateTime;
 
