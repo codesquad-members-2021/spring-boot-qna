@@ -38,8 +38,8 @@ public class QuestionService {
     @Transactional
     public void update(Long id, Question question) {
         Question findQuestion = findById(id);
-        //todo : 업데이트 질문의 검증 필요 -> 기존의 검증은 writer까지 검증 -> 오류 발생
         findQuestion.questionUpdate(question);
+        QuestionValidation.validQuestion(findQuestion);
     }
 
     @Transactional
@@ -47,8 +47,4 @@ public class QuestionService {
         questionRepository.deleteById(id);
     }
 
-    public boolean checkChangeable(Long id, User sessionedUser) {
-        Question findQuestion = findById(id);
-        return sessionedUser.checkId(findQuestion.getId());
-    }
 }

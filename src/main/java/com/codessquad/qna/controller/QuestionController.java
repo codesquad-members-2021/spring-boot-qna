@@ -2,6 +2,7 @@ package com.codessquad.qna.controller;
 
 import com.codessquad.qna.domain.Question;
 import com.codessquad.qna.service.QuestionService;
+import com.codessquad.qna.service.UserService;
 import com.codessquad.qna.util.HttpSessionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,10 +18,12 @@ import javax.servlet.http.HttpSession;
 public class QuestionController {
 
     private final QuestionService questionService;
+    private final UserService userService;
     private final Logger logger = LoggerFactory.getLogger(QuestionController.class);
 
-    public QuestionController(QuestionService questionService) {
+    public QuestionController(QuestionService questionService, UserService userService) {
         this.questionService = questionService;
+        this.userService = userService;
     }
 
     @PostMapping
@@ -50,40 +53,29 @@ public class QuestionController {
 
     @GetMapping("/{id}/form")
     public String renderUpdateForm(@PathVariable Long id, Model model, HttpSession session) {
-        if (!HttpSessionUtils.isLoginUser(session)) {
-            return "redirect:/";
-        }
-        if (questionService.checkChangeable(id, HttpSessionUtils.getUserFromSession(session))) {
-            Question findQuestion = questionService.findById(id);
-            model.addAttribute("question", findQuestion);
-            return "qna/updateForm";
-        }
-        return "";//todo : 에러 페이지로
+        Question findQuestion = questionService.findById(id);
+        userService.checkSession(session, findQuestion.getWriter().getId());
+        model.addAttribute("question", findQuestion);
+        return "qna/updateForm";
+
     }
 
     @PutMapping("/{id}")
-    public String questionUpdate(@PathVariable Long id, Question question, HttpSession session) {
-        if (!HttpSessionUtils.isLoginUser(session)) {
-            return "redirect:/";
-        }
-        if (questionService.checkChangeable(id, HttpSessionUtils.getUserFromSession(session))) {
-            questionService.update(id, question);
-            return "redirect:/questions/" + id;
-        }
-        return "";//todo : 에러 페이지로
+    public String questionUpdate(@PathVariable Long id, Question updateQuestion, HttpSession session) {
+        Question findQuestion = questionService.findById(id);
+        userService.checkSession(session, findQuestion.getWriter().getId());
+        questionService.update(id, updateQuestion);
+        return "redirect:/questions/" + id;
+
     }
 
     @DeleteMapping("/{id}")
     public String questionDelete(@PathVariable Long id, HttpSession session) {
-        if (!HttpSessionUtils.isLoginUser(session)) {
-            return "redirect:/";
-        }
+        Question question = questionService.findById(id);
+        userService.checkSession(session, question.getWriter().getId());
+        questionService.delete(id);
+        return "redirect:/";
 
-        if (questionService.checkChangeable(id, HttpSessionUtils.getUserFromSession(session))) {
-            questionService.delete(id);
-            return "redirect:/";
-        }
-        return "";//todo : 에러 페이지로
     }
 
 }
