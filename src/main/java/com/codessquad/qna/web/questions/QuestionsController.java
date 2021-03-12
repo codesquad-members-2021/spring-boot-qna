@@ -1,5 +1,6 @@
 package com.codessquad.qna.web.questions;
 
+import com.codessquad.qna.web.exceptions.QuestionNotFoundException;
 import com.codessquad.qna.web.users.User;
 import com.codessquad.qna.web.utils.SessionUtil;
 import org.slf4j.Logger;
@@ -38,7 +39,8 @@ public class QuestionsController {
 
     @GetMapping("/questions/{questionId}")
     public String getOneQuestion(@PathVariable("questionId") long questionId, Model model) {
-        Question foundQuestion = getQuestionById(questionId);
+        Question foundQuestion = questionRepository.findById(questionId)
+                .orElseThrow(QuestionNotFoundException::new);
         model.addAttribute("question", foundQuestion);
         model.addAttribute("numberOfAnswers", foundQuestion.getSizeOfAnswers());
         return "qna/show";
@@ -48,7 +50,8 @@ public class QuestionsController {
     public String getModifyPage(@PathVariable("questionId") long questionId,
                                 Model model, HttpSession session) {
         User sessionUser = SessionUtil.getLoginUser(session);
-        Question currentQuestion = getQuestionById(questionId);
+        Question currentQuestion = questionRepository.findById(questionId)
+                .orElseThrow(QuestionNotFoundException::new);
         if (!currentQuestion.isMatchingWriterId(sessionUser.getId())) {
             return "redirect:/";
         }
@@ -59,7 +62,8 @@ public class QuestionsController {
     @PutMapping("/questions/modify")
     public String modifyQuestion(long questionId, String newTitle, String newContents,
                                  Model model, HttpSession session) {
-        Question currentQuestion = getQuestionById(questionId);
+        Question currentQuestion = questionRepository.findById(questionId)
+                .orElseThrow(QuestionNotFoundException::new);
         if (currentQuestion == null) {
             return "redirect:/";
         }
@@ -76,7 +80,8 @@ public class QuestionsController {
 
     @DeleteMapping("/questions/{questionId}")
     public String deleteQuestion(@PathVariable("questionId") long questionId, HttpSession session) {
-        Question currentQuestion = getQuestionById(questionId);
+        Question currentQuestion = questionRepository.findById(questionId)
+                .orElseThrow(QuestionNotFoundException::new);
         if (currentQuestion == null) {
             return "redirect:/";
         }
@@ -87,10 +92,6 @@ public class QuestionsController {
         questionRepository.delete(currentQuestion);
         logger.info("question deleted! title : " + currentQuestion.getTitle());
         return "redirect:/";
-    }
-
-    private Question getQuestionById(long questionId) {
-        return questionRepository.findById(questionId).orElse(null);
     }
 
 }
