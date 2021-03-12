@@ -4,7 +4,6 @@ import com.codessquad.qna.util.DateTimeUtils;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,7 +24,7 @@ public class Question {
 
     private String title;
     private String contents;
-    private LocalDateTime writeTime;
+    private LocalDateTime createDateTime;
 
     public void addAnswer(Answer answer) {
         answerList.add(answer);
@@ -35,12 +34,12 @@ public class Question {
         return answerList;
     }
 
-    public String getWriteTime() {
-        return writeTime.format(DateTimeUtils.dateTimeFormatter);
+    public String getCreateDateTime() {
+        return createDateTime.format(DateTimeUtils.dateTimeFormatter);
     }
 
-    public void setWriteTime(LocalDateTime writeTime) {
-        this.writeTime = writeTime;
+    public void setCreateDateTime(LocalDateTime createDateTime) {
+        this.createDateTime = createDateTime;
     }
 
     public Long getId() {

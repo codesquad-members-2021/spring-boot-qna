@@ -25,7 +25,7 @@ public class QuestionService {
     @Transactional
     public void write(Question question, User user) {
         question.changeWriter(user);
-        question.setWriteTime(LocalDateTime.now());
+        question.setCreateDateTime(LocalDateTime.now());
         QuestionValidation.validQuestion(question);
 
         questionRepository.save(question);
