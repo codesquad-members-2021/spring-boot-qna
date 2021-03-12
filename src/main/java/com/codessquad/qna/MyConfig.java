@@ -12,7 +12,7 @@ public class MyConfig implements WebMvcConfigurer {
         registry.setOrder(Ordered.HIGHEST_PRECEDENCE);
 
         registry.addViewController("/users/signUp").setViewName("user/form");
-        registry.addViewController("/user/login").setViewName("user/login");
+        registry.addViewController("/users/loginForm").setViewName("user/login");
         registry.addViewController("/questions/form").setViewName("qna/form");
     }
 }

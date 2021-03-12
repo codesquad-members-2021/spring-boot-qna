@@ -17,7 +17,6 @@ public class QuestionController {
 
     private final QuestionRepository questionRepository;
 
-    @Autowired
     public QuestionController(QuestionRepository questionRepository) {
         this.questionRepository = questionRepository;
     }

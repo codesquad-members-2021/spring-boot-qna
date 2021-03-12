@@ -3,11 +3,12 @@ package com.codessquad.qna.controller;
 import com.codessquad.qna.exception.NoUserException;
 import com.codessquad.qna.domain.User;
 import com.codessquad.qna.repository.UserRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
+
+import javax.servlet.http.HttpSession;
 
 @Controller
 @RequestMapping("/users")
@@ -15,7 +16,6 @@ public class UserController {
 
     private final UserRepository userRepository;
 
-    @Autowired
     public UserController(UserRepository userRepository) {
         this.userRepository = userRepository;
     }
@@ -54,6 +54,19 @@ public class UserController {
             return "redirect:/users";
         }
         return "redirect:/users/{id}/form";
+    }
+
+    @PostMapping("/login")
+    public String login(String userId, String password, HttpSession session) {
+        User user = userRepository.findByUserId(userId);
+        if (user == null) {
+            return "redirect:/users/login";
+        }
+        if (!password.equals(user.getPassword())) {
+            return "redirect:/users/login";
+        }
+        session.setAttribute("sessionedUser", user);
+        return "redirect:/";
     }
 
     @ExceptionHandler(NoUserException.class)
