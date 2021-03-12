@@ -29,10 +29,16 @@ public class User {
     }
 
     public boolean matchId(Long id) {
+        if (this.id == null) {
+            return false;
+        }
         return this.id.equals(id);
     }
 
     public boolean matchPassword(String password) {
+        if (this.password == null) {
+            return false;
+        }
         return this.password.equals(password);
     }
 

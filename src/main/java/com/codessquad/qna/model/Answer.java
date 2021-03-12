@@ -29,6 +29,9 @@ public class Answer {
     }
 
     public boolean matchWriter(User loginUser) {
+        if (this.writer == null) {
+            return false;
+        }
         return this.writer.equals(loginUser.getUserId());
     }
 
