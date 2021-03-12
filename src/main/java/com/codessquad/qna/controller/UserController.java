@@ -5,11 +5,9 @@ import com.codessquad.qna.service.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.server.ResponseStatusException;
 
 @Controller
 @RequestMapping("/users")
@@ -39,34 +37,27 @@ public class UserController {
 
     @GetMapping("/{id}")
     public String profile(@PathVariable Long id, Model model) {
-        User user = userService.findUserById(id)
-                .orElseThrow(() -> (new ResponseStatusException(HttpStatus.NOT_FOUND, "User Not Found.")));
-
+        User user = userService.findUserById(id);
         model.addAttribute(user);
         return "/user/profile";
     }
 
     @GetMapping("/{id}/form")
     public String form(@PathVariable Long id, Model model) {
-        User user = userService.findUserById(id)
-                .orElseThrow(() -> (new ResponseStatusException(HttpStatus.NOT_FOUND, "User Not Found.")));
-
+        User user = userService.findUserById(id);
         model.addAttribute(user);
         return "/user/updateForm";
     }
 
     @PutMapping("/{id}")
     public String update(@PathVariable Long id, User newUser) {
-        User user = userService.findUserById(id)
-                .orElseThrow(() -> (new ResponseStatusException(HttpStatus.NOT_FOUND, "User Not Found.")));
-
+        User user = userService.findUserById(id);
         logger.info("User : {}", (user));
 
         if (!user.matchPassword(newUser)) {
             logger.info("Password : \"{}\" does not match \"{}\"", newUser.getPassword(), user.getPassword());
             return "redirect:/users";
         }
-
         user.update(newUser);
         userService.save(user);
 

@@ -3,9 +3,9 @@ package com.codessquad.qna.service;
 import com.codessquad.qna.domain.Question;
 import com.codessquad.qna.repository.QuestionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-
-import java.util.Optional;
+import org.springframework.web.server.ResponseStatusException;
 
 @Service
 public class QuestionService {
@@ -25,7 +25,8 @@ public class QuestionService {
         questionRepository.save(question);
     }
 
-    public Optional<Question> findQuestionById(long id) {
-        return questionRepository.findById(id);
+    public Question findQuestionById(long id) {
+        return questionRepository.findById(id)
+                .orElseThrow(() -> (new ResponseStatusException(HttpStatus.NOT_FOUND, "Question Not Found.")));
     }
 }
