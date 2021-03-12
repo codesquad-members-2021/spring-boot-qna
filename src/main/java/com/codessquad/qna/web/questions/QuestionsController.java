@@ -60,8 +60,7 @@ public class QuestionsController {
     }
 
     @PutMapping("/questions/modify")
-    public String modifyQuestion(long questionId, String newTitle, String newContents,
-                                 Model model, HttpSession session) {
+    public String modifyQuestion(long questionId, String newTitle, String newContents, HttpSession session) {
         Question currentQuestion = questionRepository.findById(questionId)
                 .orElseThrow(QuestionNotFoundException::new);
         if (currentQuestion == null) {
