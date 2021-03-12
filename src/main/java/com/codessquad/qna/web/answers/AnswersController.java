@@ -1,5 +1,7 @@
 package com.codessquad.qna.web.answers;
 
+import com.codessquad.qna.web.exceptions.AnswerNotFoundException;
+import com.codessquad.qna.web.exceptions.QuestionNotFoundException;
 import com.codessquad.qna.web.questions.Question;
 import com.codessquad.qna.web.questions.QuestionRepository;
 import com.codessquad.qna.web.users.User;
@@ -29,7 +31,8 @@ public class AnswersController {
     public String createAnswer(@PathVariable("questionId") long questionId, String answerContents,
                                HttpSession session, Model model) {
         User sessionUser = SessionUtil.getLoginUser(session);
-        Question targetQuestion = questionRepository.findById(questionId).orElse(null);
+        Question targetQuestion = questionRepository.findById(questionId)
+                .orElseThrow(QuestionNotFoundException::new);
         if (targetQuestion == null) {
             return "redirect:/";
         }
@@ -43,7 +46,8 @@ public class AnswersController {
     @DeleteMapping("/answers/{answerId}")
     public String deleteAnswer(@PathVariable("answerId") long answerId, HttpSession session) {
         User sessionUser = SessionUtil.getLoginUser(session);
-        Answer targetAnswer = answersRepository.findById(answerId).orElse(null);
+        Answer targetAnswer = answersRepository.findById(answerId)
+                .orElseThrow(AnswerNotFoundException::new);
         if (targetAnswer == null) {
             return "redirect:/";
         }
