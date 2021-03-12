@@ -15,7 +15,7 @@ import java.time.LocalDateTime;
 @Transactional(readOnly = true)
 public class QuestionService {
 
-    private QuestionRepository questionRepository;
+    private final QuestionRepository questionRepository;
     private final Logger logger = LoggerFactory.getLogger(QuestionService.class);
 
     public QuestionService(QuestionRepository questionRepository) {
