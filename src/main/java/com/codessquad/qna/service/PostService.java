@@ -4,24 +4,21 @@ import com.codessquad.qna.dto.PostDto;
 import com.codessquad.qna.entity.Post;
 import com.codessquad.qna.entity.User;
 import com.codessquad.qna.exception.CanNotFindPostException;
-import com.codessquad.qna.repository.CommentRepostiory;
 import com.codessquad.qna.repository.PostRepository;
 import com.codessquad.qna.util.Mapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.*;
+import java.util.List;
 
 @Service
 @Transactional(readOnly = true)
 public class PostService {
 
     private final PostRepository postRepository;
-    private final CommentRepostiory commentRepostiory;
 
-    public PostService(PostRepository postRepository, CommentRepostiory commentRepostiory) {
+    public PostService(PostRepository postRepository) {
         this.postRepository = postRepository;
-        this.commentRepostiory = commentRepostiory;
     }
 
     public void addPost(Post post) {
