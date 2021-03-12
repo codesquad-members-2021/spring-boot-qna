@@ -31,11 +31,10 @@ public class QuestionController {
         return "index";
     }
 
-    @GetMapping("/questions/{index}")
-    public String viewQuestion(@PathVariable int index, Model model) {
+    @GetMapping("/questions/{id}")
+    public String viewQuestion(@PathVariable long id, Model model) {
         try {
-            Question question = questions.get(index - 1);
-            model.addAttribute("question", question);
+            model.addAttribute("question", questionRepository.findById(id).get());
             return "qna/show";
         }
         catch (IndexOutOfBoundsException e){
