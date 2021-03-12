@@ -4,7 +4,7 @@ import com.codessquad.qna.domain.Answer;
 import com.codessquad.qna.domain.Question;
 import com.codessquad.qna.domain.User;
 import com.codessquad.qna.repository.AnswerRepository;
-import com.codessquad.qna.valid.UserValidation;
+import com.codessquad.qna.valid.UserValidator;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -19,7 +19,7 @@ public class AnswerService {
     }
 
     public void write(User writer, String contents, Long questionId) {
-        UserValidation.validUserInfo(writer);
+        UserValidator.validUserInfo(writer);
         Question findQuestion = questionService.findById(questionId);
         Answer answer = new Answer(writer, findQuestion, contents);
         answerRepository.save(answer);

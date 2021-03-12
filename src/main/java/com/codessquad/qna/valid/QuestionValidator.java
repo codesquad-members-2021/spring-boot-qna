@@ -3,7 +3,7 @@ package com.codessquad.qna.valid;
 import com.codessquad.qna.domain.Question;
 import com.codessquad.qna.domain.User;
 
-public class QuestionValidation {
+public class QuestionValidator {
 
     public static void validQuestion(Question question) {
         validTitle(question.getTitle());

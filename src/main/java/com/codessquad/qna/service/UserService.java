@@ -3,7 +3,7 @@ package com.codessquad.qna.service;
 import com.codessquad.qna.domain.User;
 import com.codessquad.qna.repository.UserRepository;
 import com.codessquad.qna.util.HttpSessionUtils;
-import com.codessquad.qna.valid.UserValidation;
+import com.codessquad.qna.valid.UserValidator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -25,7 +25,7 @@ public class UserService {
 
     @Transactional
     public Long join(User user) {
-        UserValidation.validUserInfo(user);
+        UserValidator.validUserInfo(user);
         User DBUser = userRepository.save(user);
         return DBUser.getId();
     }
@@ -40,7 +40,7 @@ public class UserService {
 
     @Transactional
     public boolean update(User user, String newPassword) {
-        UserValidation.validUserInfo(user);
+        UserValidator.validUserInfo(user);
         User getUser = findById(user.getId());
         if (getUser.checkPassword(user.getPassword())) {
             getUser.updateUserInfo(user, newPassword);

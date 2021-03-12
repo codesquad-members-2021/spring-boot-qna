@@ -3,7 +3,7 @@ package com.codessquad.qna.service;
 import com.codessquad.qna.domain.Question;
 import com.codessquad.qna.domain.User;
 import com.codessquad.qna.repository.QuestionRepository;
-import com.codessquad.qna.valid.QuestionValidation;
+import com.codessquad.qna.valid.QuestionValidator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -26,7 +26,7 @@ public class QuestionService {
     public void write(Question question, User user) {
         question.changeWriter(user);
         question.setCreateDateTime(LocalDateTime.now());
-        QuestionValidation.validQuestion(question);
+        QuestionValidator.validQuestion(question);
 
         questionRepository.save(question);
     }
@@ -39,7 +39,7 @@ public class QuestionService {
     public void update(Long id, Question question) {
         Question findQuestion = findById(id);
         findQuestion.questionUpdate(question);
-        QuestionValidation.validQuestion(findQuestion);
+        QuestionValidator.validQuestion(findQuestion);
     }
 
     @Transactional

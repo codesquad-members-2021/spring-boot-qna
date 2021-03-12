@@ -2,10 +2,9 @@ package com.codessquad.qna.valid;
 
 import com.codessquad.qna.domain.User;
 
-public class UserValidation {
+public class UserValidator {
 
     public static void validUserInfo(User user) {
-//        validID(user.getId());
         validUserId(user.getUserId());
         validPasssword(user.getPassword());
         validUserName(user.getName());
