@@ -1,5 +1,8 @@
 package com.codessquad.qna.domain;
 
+import javax.persistence.Entity;
+
+@Entity
 public class Question {
     private int index;
     private String writer;
