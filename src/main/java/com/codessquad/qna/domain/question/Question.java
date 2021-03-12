@@ -1,7 +1,5 @@
 package com.codessquad.qna.domain.question;
 
-import org.springframework.format.datetime.standard.DateTimeFormatterRegistrar;
-
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -16,7 +14,7 @@ public class Question {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long index;
+    private long id;
 
     private String writer;
     private String title;
@@ -34,8 +32,8 @@ public class Question {
                 .format(DATE_TIME_FORMATTER);
     }
 
-    public long getIndex() {
-        return index;
+    public long getId() {
+        return id;
     }
 
     public String getWriter() {
@@ -54,10 +52,14 @@ public class Question {
         return createdTime;
     }
 
+    public boolean isSameWriter(String userId) {
+        return writer.equals(userId);
+    }
+
     @Override
     public String toString() {
         return "Question{" +
-                "id=" + index +
+                "id=" + id +
                 ", writer='" + writer + '\'' +
                 ", title='" + title + '\'' +
                 ", contents='" + contents + '\'' +
