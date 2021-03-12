@@ -2,6 +2,7 @@ package com.codessquad.qna.domain;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 @Entity
 public class Question {
@@ -18,7 +19,7 @@ public class Question {
     @Column(nullable = false)
     private String contents;
 
-    private LocalDateTime time;
+    private String time;
 
     protected Question() {
 
@@ -28,10 +29,10 @@ public class Question {
         this.writer = writer;
         this.title = title;
         this.contents = contents;
-        this.time = LocalDateTime.now();
+        this.time = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"));
     }
 
-    public LocalDateTime getTime() {
+    public String getTime() {
         return this.time;
     }
 
