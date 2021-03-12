@@ -8,7 +8,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
-import javax.inject.Inject;
 
 @Controller
 public class UserController {
@@ -39,13 +38,13 @@ public class UserController {
         return "user/profile";
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/users/{id}/form")
     public String editUserInfo(@PathVariable long id, Model model) {
         model.addAttribute("user", userRepository.findById(id).orElseThrow(NullPointerException::new));
         return "user/updateForm";
     }
 
-    @PostMapping("/{id}")
+    @PostMapping("/users/{id}/form")
     public String update(@PathVariable long id, User updateUser) {
         User user = userRepository.findById(id).orElseThrow(NullPointerException::new);
         user.update(updateUser);

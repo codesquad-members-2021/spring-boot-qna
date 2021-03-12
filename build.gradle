@@ -21,7 +21,7 @@ dependencies {
     developmentOnly 'org.springframework.boot:spring-boot-devtools'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation group: 'com.h2database', name: 'h2', version: '1.4.197'
-    runtimeOnly 'com.h2database:h2' 
+    runtimeOnly 'com.h2database:h2'
 }
 
 test {
