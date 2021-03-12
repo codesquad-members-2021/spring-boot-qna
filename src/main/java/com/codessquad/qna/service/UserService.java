@@ -59,7 +59,7 @@ public class UserService {
 
     public boolean checkSession(HttpSession session, Long id) {
         if (!HttpSessionUtils.isLoginUser(session)) {
-            return false;
+            throw new IllegalStateException("자신의 정보만 수정 가능");
         }
         checkSameUser(session, id);
         return true;
