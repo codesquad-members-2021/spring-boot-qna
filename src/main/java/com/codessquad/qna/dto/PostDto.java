@@ -4,12 +4,13 @@ import java.time.LocalDateTime;
 
 public class PostDto {
 
+    private final LocalDateTime date = LocalDateTime.now();
     private String title;
     private String author;
     private String body;
-    private final LocalDateTime date = LocalDateTime.now();;
 
-    public PostDto() { }
+    public PostDto() {
+    }
 
     public String getTitle() {
         return title;

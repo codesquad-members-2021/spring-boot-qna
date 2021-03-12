@@ -47,7 +47,7 @@ public class PostService {
 
     @Transactional
     public void deletePost(Post post, User sessionUser) throws IllegalAccessException {
-        if(!post.isMatchedAuthor(sessionUser)){
+        if (!post.isMatchedAuthor(sessionUser)) {
             throw new IllegalAccessException("다른 사람의 글을 삭제할 수 없습니다");
         }
         postRepository.delete(post);

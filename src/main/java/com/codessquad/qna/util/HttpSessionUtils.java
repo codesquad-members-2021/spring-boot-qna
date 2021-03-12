@@ -9,10 +9,12 @@ public class HttpSessionUtils {
 
     public final static String USER_SESSION_KEY = "sessionUser";
 
-    private HttpSessionUtils() {}
+    private HttpSessionUtils() {
+    }
 
     /**
      * 유저가 로그인 되어있는지를 판단하는 메소드로, 로그인된 유저가 없다면 false 를 리턴한다.
+     *
      * @param httpSession
      * @return 세션에 로그인한 유저가 있다면 True, 없으면 False 를 리턴한다.
      */
@@ -24,12 +26,13 @@ public class HttpSessionUtils {
     /**
      * 세션에 로그인된 사용자가 없으면 NotExistLoggedUserInSession 를 throw
      * 있으면 정상적인 유저를 리턴함 따라서 사용하는 곳에서 get() 을 사용해도됨.
+     *
      * @param httpSession
-     * @throws NotExistLoggedUserInSessionException
      * @return User
+     * @throws NotExistLoggedUserInSessionException
      */
     public static User getUserFromSession(HttpSession httpSession) {
-        if(!isLoggedUser(httpSession)) {
+        if (!isLoggedUser(httpSession)) {
             throw new NotExistLoggedUserInSessionException();
         }
         return (User) httpSession.getAttribute(USER_SESSION_KEY);

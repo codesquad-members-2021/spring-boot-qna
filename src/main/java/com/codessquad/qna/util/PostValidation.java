@@ -17,6 +17,7 @@ public class PostValidation {
         }
     }
 
+
     private static void validateAuthor(String author) {
         if(author.isEmpty()) {
             throw new IllegalArgumentException("유효하지 않은 작가명 입니다.");

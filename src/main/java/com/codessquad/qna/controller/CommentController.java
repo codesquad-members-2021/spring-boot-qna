@@ -26,8 +26,9 @@ public class CommentController {
     /**
      * 세션에 로그인 되어 있어야만 작성 가능하며 로그인 되어 있지 않을시 NotExistLoggedUserInSession 발생
      * 로그인 되어 있다면 정상적으로 댓글 작성 가능함
-     * @param id Post Id
-     * @param body 댓글 내용
+     *
+     * @param id          Post Id
+     * @param body        댓글 내용
      * @param httpSession
      * @return redirect:/questions/%d
      */

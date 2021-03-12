@@ -20,6 +20,7 @@ public class ControllerExceptionHandler {
     /**
      * 유저를 가져오지 못할시 처리할 로직 생성
      * 없는 페이지에 대한 요청이 므로 404 페이지를 리턴하도록 해줌
+     *
      * @return 404 page
      */
     @ResponseStatus(HttpStatus.NOT_FOUND)
@@ -30,6 +31,7 @@ public class ControllerExceptionHandler {
 
     /**
      * 없는 페이지에 대한 요청이 므로 404 페이지를 리턴하도록 해줌
+     *
      * @param e
      * @return 404 page
      */
@@ -42,6 +44,7 @@ public class ControllerExceptionHandler {
     /**
      * 세션에 로그인 된 유저가 없는데 유저 권한의 활동을 하려할 시 발생하는 에러
      * 로그인 창으로 redirect
+     *
      * @return 401 Status code
      */
     @ResponseStatus(HttpStatus.UNAUTHORIZED)
@@ -53,6 +56,7 @@ public class ControllerExceptionHandler {
 
     /**
      * 해당 권한이 있는 유저가 아닐시 index.html 창으로 redirect 시킨다.
+     *
      * @return
      */
     @ExceptionHandler(IllegalAccessException.class)

@@ -23,7 +23,8 @@ public class Comment {
     private String body;
     private LocalDateTime date = LocalDateTime.now();
 
-    protected Comment() { }
+    protected Comment() {
+    }
 
     public Comment(Post post, String author, String body) {
         this.post = post;

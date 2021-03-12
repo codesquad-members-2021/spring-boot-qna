@@ -52,7 +52,7 @@ public class UserService {
     }
 
     public boolean isMatchedUserAndPassword(User user, String password) {
-        if(!user.isMatchedPassword(password)) {
+        if (!user.isMatchedPassword(password)) {
             logger.info("User password not matched : {}", user);
             return false;
         }

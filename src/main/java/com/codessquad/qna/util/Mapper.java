@@ -7,7 +7,8 @@ import com.codessquad.qna.entity.User;
 
 public class Mapper {
 
-    private Mapper(){}
+    private Mapper() {
+    }
 
     public static User mapToUser(UserDto userDto) {
         UserValidation.validate(userDto);

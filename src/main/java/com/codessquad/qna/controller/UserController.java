@@ -27,6 +27,7 @@ public class UserController {
 
     /**
      * UserDto 로 받아와서 User 객체로 Mapping 해준뒤 해당 유저를 생성합니다.
+     *
      * @param userDto
      * @return redirect User list (/users)
      */
@@ -39,6 +40,7 @@ public class UserController {
 
     /**
      * 유저가 회원가입할 수 있는 창으로 이동합니다.
+     *
      * @return
      */
     @GetMapping("/form")
@@ -49,6 +51,7 @@ public class UserController {
     /**
      * 유저 로그인 동작 로직
      * 만약 비밀번호가 일치 하지않는다면 로그인폼으로 redirect 시킨다.
+     *
      * @param userId
      * @param password
      * @return
@@ -57,7 +60,7 @@ public class UserController {
     public String login(String userId, String password, HttpSession httpSession) {
         User user = userService.getUserByUserId(userId);
         logger.info("user : {}", user);
-        if(userService.isMatchedUserAndPassword(user, password)) {
+        if (userService.isMatchedUserAndPassword(user, password)) {
             httpSession.setAttribute(HttpSessionUtils.USER_SESSION_KEY, user);
             return "redirect:/";
         }
@@ -72,6 +75,7 @@ public class UserController {
     /**
      * User 가 logout 한다.
      * Session 에서 sessionUser 의 data 또한 삭제한다.
+     *
      * @param httpSession
      * @return
      */
@@ -83,6 +87,7 @@ public class UserController {
 
     /**
      * 모든 유저 목록을 가져옵니다.
+     *
      * @param model
      * @return All User Accounts to List
      */
@@ -95,10 +100,11 @@ public class UserController {
     /**
      * 해당 유저의 프로파일로 이동합니다.
      * 만약 해당 유저를 찾을 수 없다면 CanNotFindUserException 을 리턴합니다.
-     * @param id userId
+     *
+     * @param id    userId
      * @param model
-     * @throws UserNotFoundException
      * @return only for users with the same id
+     * @throws UserNotFoundException
      */
     @GetMapping("/{id}")
     public String getUserProfile(@PathVariable Long id, Model model) {
@@ -110,14 +116,15 @@ public class UserController {
     /**
      * 유저 프로필 수정이 가능한 창으로 이동합니다.
      * 만약 해당 유저를 찾을 수 없다면 CanNotFindUserException 을 리턴합니다.
-     * @param id userId
+     *
+     * @param id    userId
      * @param model
      * @return
      */
     @GetMapping("/{id}/form")
     public String updateUserProfileForm(@PathVariable Long id, Model model, HttpSession httpSession) throws IllegalAccessException {
         User sessionUser = HttpSessionUtils.getUserFromSession(httpSession);
-        if(!sessionUser.isMatchedId(id)){
+        if (!sessionUser.isMatchedId(id)) {
             throw new IllegalAccessException("다른 유저의 프로필을 수정할 수 없습니다.");
         }
         model.addAttribute("user", sessionUser);
@@ -126,7 +133,8 @@ public class UserController {
 
     /**
      * 유저 프로필을 해당 userDto로 온 값으로 업데이트 합니다.
-     * @param id userId
+     *
+     * @param id      userId
      * @param userDto
      * @return
      */
