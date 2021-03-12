@@ -2,15 +2,14 @@ package com.codessquad.qna.web;
 
 import com.codessquad.qna.domain.question.Question;
 import com.codessquad.qna.domain.question.QuestionRepository;
+import com.codessquad.qna.domain.user.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpSession;
 import java.util.Optional;
 
 @Controller
@@ -26,7 +25,13 @@ public class QuestionController {
     }
 
     @GetMapping("/form")
-    public String getQuestionFormPage() {
+    public String getQuestionFormPage(HttpSession session) {
+        User user = (User) session.getAttribute("sessionedUser");
+
+        if(user == null) {
+            return "redirect:/users/loginForm";
+        }
+
         return "qna/form";
     }
 
@@ -47,8 +52,13 @@ public class QuestionController {
     }
 
     @GetMapping("/{index}")
-    public String getQuestionDetail(@PathVariable(("index")) long index, Model model) {
+    public String getQuestionDetail(@PathVariable(("index")) long index, Model model, HttpSession session) {
+        User loginedUser = (User) session.getAttribute("sessionedUser");
         Optional<Question> question = questionRepository.findById(index);
+
+        if(loginedUser == null) {
+            return "/users/loginForm";
+        }
 
         if (!question.isPresent()) {
             return "redirect:/";
@@ -60,4 +70,19 @@ public class QuestionController {
 
         return "/qna/show";
     }
+
+    @DeleteMapping("{id}")
+    public String delete(@PathVariable Long id, HttpSession session) {
+        User loginedUser = (User) session.getAttribute("sessionedUser");
+        Optional<Question> question = questionRepository.findById(id);
+
+        if(!question.get().isSameWriter(loginedUser.getUserId())) {
+            return "redirect:/";
+        }
+
+        questionRepository.deleteById(id);
+
+        return "redirect:/";
+    }
+
 }

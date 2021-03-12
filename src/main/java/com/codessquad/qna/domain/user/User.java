@@ -50,6 +50,10 @@ public class User {
         return this.id == id;
     }
 
+    public boolean matchUserId(String userId) {
+        return this.userId.equals(userId);
+    }
+
     public boolean matchPassword(String password) {
         return this.password.equals(password);
     }
