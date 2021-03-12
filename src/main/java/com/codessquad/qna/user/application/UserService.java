@@ -4,10 +4,11 @@ import com.codessquad.qna.user.domain.User;
 import com.codessquad.qna.user.domain.UserRepository;
 import com.codessquad.qna.user.dto.UserRequest;
 import com.codessquad.qna.user.dto.UserResponse;
+import com.codessquad.qna.user.exception.UserNotFoundException;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 public class UserService {
@@ -23,19 +24,22 @@ public class UserService {
     }
 
     public List<UserResponse> getUsers() {
-        return userRepository.findAll()
-                .stream()
-                .map(UserResponse::of)
-                .collect(Collectors.toList());
+        List<UserResponse> userResponses = new ArrayList<>();
+        for (User user : userRepository.findAll()) {
+            userResponses.add(UserResponse.of(user));
+        }
+        return userResponses;
     }
-    
+
     public UserResponse getUser(Long id) {
-        User user = userRepository.getOne(id);
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new UserNotFoundException("존재하지 않는 유저입니다; id: " + id));
         return UserResponse.of(user);
     }
 
     public UserResponse updateUser(Long id, UserRequest userRequest) {
-        User user = userRepository.getOne(id);
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new UserNotFoundException("존재하지 않는 유저는 수정이 불가능합니다; id: " + id));
         user.update(userRequest.toUser());
         return UserResponse.of(user);
     }

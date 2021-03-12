@@ -4,10 +4,11 @@ import com.codessquad.qna.question.domain.Question;
 import com.codessquad.qna.question.domain.QuestionRepository;
 import com.codessquad.qna.question.dto.QuestionRequest;
 import com.codessquad.qna.question.dto.QuestionResponse;
+import com.codessquad.qna.question.exception.QuestionNotFoundException;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 public class QuestionService {
@@ -23,14 +24,16 @@ public class QuestionService {
     }
 
     public List<QuestionResponse> getQuestions() {
-        return questionRepository.findAll()
-                .stream()
-                .map(QuestionResponse::of)
-                .collect(Collectors.toList());
+        List<QuestionResponse> questionResponses = new ArrayList<>();
+        for (Question question : questionRepository.findAll()) {
+            questionResponses.add(QuestionResponse.of(question));
+        }
+        return questionResponses;
     }
-    
+
     public QuestionResponse getQuestion(Long id) {
-        Question question = questionRepository.getOne(id);
+        Question question = questionRepository.findById(id)
+                .orElseThrow(() -> new QuestionNotFoundException("존재하지 않는 질문입니다. id: " + id));
         return QuestionResponse.of(question);
     }
 }

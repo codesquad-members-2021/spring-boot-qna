@@ -1,15 +1,14 @@
 package com.codessquad.qna.question.ui;
 
+import com.codessquad.qna.question.exception.QuestionNotFoundException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
-import javax.persistence.EntityNotFoundException;
-
 @ControllerAdvice
 public class QuestionHandler {
-    @ExceptionHandler(EntityNotFoundException.class)
-    public ResponseEntity handleNotFoundException(EntityNotFoundException e) {
+    @ExceptionHandler(QuestionNotFoundException.class)
+    public ResponseEntity handleQuestionNotFound(QuestionNotFoundException e) {
         return ResponseEntity.notFound().build();
     }
 }

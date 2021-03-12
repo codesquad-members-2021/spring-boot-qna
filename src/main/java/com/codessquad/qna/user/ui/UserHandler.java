@@ -1,22 +1,14 @@
 package com.codessquad.qna.user.ui;
 
-import org.springframework.dao.DataIntegrityViolationException;
+import com.codessquad.qna.user.exception.UserNotFoundException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
-import javax.persistence.EntityNotFoundException;
-
 @ControllerAdvice
 public class UserHandler {
-
-    @ExceptionHandler(DataIntegrityViolationException.class)
-    public ResponseEntity handleIllegalArgsException(DataIntegrityViolationException e) {
-        return ResponseEntity.badRequest().build();
-    }
-
-    @ExceptionHandler(EntityNotFoundException.class)
-    public ResponseEntity handleNotFoundException(EntityNotFoundException e) {
+    @ExceptionHandler(UserNotFoundException.class)
+    public ResponseEntity handleUserNotFound(UserNotFoundException e) {
         return ResponseEntity.notFound().build();
     }
 }
