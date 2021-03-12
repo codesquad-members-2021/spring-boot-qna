@@ -16,7 +16,6 @@ public class Question extends AbstractEntity {
     @Column(length = 2000)
     private String contents;
 
-    @JsonProperty
     private Integer countOfAnswer = 0;
 
     @OneToMany(mappedBy = "question", cascade = CascadeType.ALL)
@@ -64,6 +63,10 @@ public class Question extends AbstractEntity {
 
     public List<Answer> getAnswers() {
         return answers;
+    }
+
+    public Integer getCountOfAnswer() {
+        return countOfAnswer;
     }
 
     public void setTitle(String title) {
