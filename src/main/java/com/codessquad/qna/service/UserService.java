@@ -24,12 +24,10 @@ public class UserService {
         this.userRepository = userRepository;
     }
 
-    @Transactional
     public void save(User user) {
         userRepository.save(user);
     }
 
-    @Transactional
     public void save(UserDto userDto) {
         userRepository.save(Mapper.mapToUser(userDto));
     }
@@ -61,7 +59,6 @@ public class UserService {
         return true;
     }
 
-    @Transactional
     public void removeUser(Long id) {
         userRepository.deleteUserById(id);
     }

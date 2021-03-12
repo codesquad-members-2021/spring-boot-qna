@@ -24,13 +24,11 @@ public class PostService {
         this.commentRepostiory = commentRepostiory;
     }
 
-    @Transactional
     public void addPost(Post post) {
         postRepository.save(post);
     }
 
     //Overload addPost
-    @Transactional
     public void addPost(PostDto postDto) {
         postRepository.save(Mapper.mapToPost(postDto));
     }
