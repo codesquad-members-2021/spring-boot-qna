@@ -55,7 +55,7 @@ public class UserService {
     }
 
     public User findByUserId(String userId) {
-        return userRepository.findByUserId(userId);
+        return userRepository.findByUserId(userId).orElseThrow(NullPointerException::new);
     }
 
     public boolean checkSession(HttpSession session, Long id) {
