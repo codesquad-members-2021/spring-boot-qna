@@ -5,6 +5,8 @@ import com.codessquad.qna.entity.User;
 import com.codessquad.qna.exception.UserNotFoundException;
 import com.codessquad.qna.repository.UserRepository;
 import com.codessquad.qna.util.Mapper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -13,6 +15,8 @@ import java.util.List;
 @Service
 @Transactional
 public class UserService {
+
+    private static final Logger logger = LoggerFactory.getLogger(UserService.class);
 
     private final UserRepository userRepository;
 
@@ -44,6 +48,14 @@ public class UserService {
         User oldUser = getUserById(id);
         oldUser.change(Mapper.mapToUser(updateUserDto));
         userRepository.save(oldUser);
+    }
+
+    public boolean isMatchedUserAndPassword(User user, String password) {
+        if(!user.isMatchedPassword(password)) {
+            logger.info("User password not matched : {}", user);
+            return false;
+        }
+        return true;
     }
 
     public void removeUser(Long id) {

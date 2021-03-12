@@ -32,7 +32,7 @@ public class UserController {
     @PostMapping("")
     public String createAccount(@ModelAttribute UserDto userDto) {
         userService.save(userDto);
-        logger.info(userDto.toString());
+        logger.info("user: {} ", userDto);
         return "redirect:/users";
     }
 
@@ -55,13 +55,12 @@ public class UserController {
     @PostMapping("/login")
     public String login(String userId, String password, HttpSession httpSession) {
         User user = userService.getUserByUserId(userId);
-        if(!user.isMatchedPassword(password)) {
-            logger.info("User password not matched : " + user.toString());
-            return "redirect:/users/loginForm";
+        logger.info("user : {}", user);
+        if(userService.isMatchedUserAndPassword(user, password)) {
+            httpSession.setAttribute(HttpSessionUtils.USER_SESSION_KEY, user);
+            return "redirect:/";
         }
-        httpSession.setAttribute(HttpSessionUtils.USER_SESSION_KEY, user);
-        logger.info("Success User login : " + user.toString());
-        return "redirect:/";
+        return "redirect:/users/loginForm";
     }
 
     @GetMapping("/loginForm")
