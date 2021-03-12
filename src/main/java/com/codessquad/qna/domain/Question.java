@@ -1,5 +1,7 @@
 package com.codessquad.qna.domain;
 
+import com.codessquad.qna.util.DateTimeUtils;
+
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -34,7 +36,7 @@ public class Question {
     }
 
     public String getWriteTime() {
-        return writeTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd hh:mm:ss"));
+        return writeTime.format(DateTimeUtils.dateTimeFormatter);
     }
 
     public void setWriteTime(LocalDateTime writeTime) {

@@ -1,5 +1,7 @@
 package com.codessquad.qna.domain;
 
+import com.codessquad.qna.util.DateTimeUtils;
+
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -20,7 +22,7 @@ public class Answer {
     private Question question;
 
     private String contents;
-    private LocalDateTime createDate;
+    private LocalDateTime createDateTime;
 
     public Answer() {
     }
@@ -28,13 +30,13 @@ public class Answer {
     public Answer(User writer, Question question, String contents) {
         this.writer = writer;
         this.contents = contents;
-        this.createDate = LocalDateTime.now();
+        this.createDateTime = LocalDateTime.now();
         this.question = question;
         question.addAnswer(this);
     }
 
-    public String getCreateDate() {
-        return createDate.format(DateTimeFormatter.ofPattern("yyyy-MM-dd hh:mm:ss"));
+    public String getCreateDateTime() {
+        return createDateTime.format(DateTimeUtils.dateTimeFormatter);
     }
 
     public User getWriter() {
