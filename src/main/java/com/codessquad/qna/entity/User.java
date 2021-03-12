@@ -57,7 +57,9 @@ public class User {
         return this.password.equals(password);
     }
 
-    public boolean isMatchedId(Long id) {return this.getId().equals(id);}
+    public boolean isMatchedId(Long id) {
+        return this.getId().equals(id);
+    }
 
     @Override
     public String toString() {
