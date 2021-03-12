@@ -8,12 +8,12 @@ import com.codessquad.qna.util.Mapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import javax.transaction.Transactional;
 import java.util.List;
 
 @Service
-@Transactional
+@Transactional(readOnly = true)
 public class UserService {
 
     private static final Logger logger = LoggerFactory.getLogger(UserService.class);
@@ -24,10 +24,12 @@ public class UserService {
         this.userRepository = userRepository;
     }
 
+    @Transactional
     public void save(User user) {
         userRepository.save(user);
     }
 
+    @Transactional
     public void save(UserDto userDto) {
         userRepository.save(Mapper.mapToUser(userDto));
     }
@@ -44,6 +46,7 @@ public class UserService {
         return userRepository.findByUserId(userId).orElseThrow(UserNotFoundException::new);
     }
 
+    @Transactional
     public void change(Long id, UserDto updateUserDto) {
         User oldUser = getUserById(id);
         oldUser.change(Mapper.mapToUser(updateUserDto));
@@ -58,6 +61,7 @@ public class UserService {
         return true;
     }
 
+    @Transactional
     public void removeUser(Long id) {
         userRepository.deleteUserById(id);
     }
