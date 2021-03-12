@@ -38,7 +38,14 @@ public class UserController {
     }
 
     @GetMapping("/{id}/form")
-    public String update(@PathVariable Long id, Model model) {
+    public String update(@PathVariable Long id, Model model, HttpSession session) {
+        User sessionedUser = (User) session.getAttribute("sessionedUser");
+        if (sessionedUser == null) {
+            return "redirect:/users/form";
+        }
+        if (!id.equals(sessionedUser.getId())) {
+            throw new IllegalStateException("자신의 정보만 수정할 수 있습니다.");
+        }
         model.addAttribute("user", userRepository.findById(id).orElseThrow(NoUserException::new));
         return "/user/updateForm";
     }
@@ -57,7 +64,7 @@ public class UserController {
     public String login(String userId, String password, HttpSession session) {
         User user = userRepository.findByUserId(userId).orElseThrow(NoUserException::new);
         if (!password.equals(user.getPassword())) {
-            return "redirect:/users/login";
+            return "redirect:/users/loginForm";
         }
         session.setAttribute("sessionedUser", user);
         return "redirect:/";
@@ -69,7 +76,7 @@ public class UserController {
         return "redirect:/";
     }
 
-    @ExceptionHandler(NoUserException.class)
+    @ExceptionHandler({NoUserException.class, IllegalStateException.class})
     public String handleException() {
         return "exceptionHandle";
     }
