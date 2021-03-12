@@ -14,6 +14,9 @@ public class QuestionController {
     @Autowired
     private QuestionRepository questionRepository;
 
+    @Autowired
+    private AnswerRepository answerRepository;
+
     @GetMapping
     public ModelAndView getQuestions() {
         return new ModelAndView("/qna/list", "questions", questionRepository.findAll());
@@ -103,5 +106,23 @@ public class QuestionController {
         questionRepository.delete(question);
 
         return "redirect:/questions";
+    }
+
+    @PostMapping("/{questionId}/answers")
+    public String createAnswer(@PathVariable Long questionId, Answer answer, HttpSession session) {
+        Question question = questionRepository.findById(questionId).orElseThrow(() -> new IllegalArgumentException("질문을 찾을 수 없습니다."));
+
+        User sessionUser = (User) session.getAttribute("sessionedUser");
+
+        if (sessionUser == null) {
+            return "redirect:/users/login/form";
+        }
+
+        answer.setWriter(sessionUser);
+        answer.setQuestion(question);
+
+        answerRepository.save(answer);
+
+        return "redirect:/questions/" + questionId;
     }
 }

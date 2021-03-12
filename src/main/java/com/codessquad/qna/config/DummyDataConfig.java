@@ -1,5 +1,7 @@
 package com.codessquad.qna.config;
 
+import com.codessquad.qna.question.Answer;
+import com.codessquad.qna.question.AnswerRepository;
 import com.codessquad.qna.question.Question;
 import com.codessquad.qna.question.QuestionRepository;
 import com.codessquad.qna.user.User;
@@ -18,5 +20,10 @@ public class DummyDataConfig {
     @Bean
     public ApplicationRunner addQuestionDummyData(QuestionRepository questionRepository) {
         return args -> questionRepository.saveAll(Question.getDummyData());
+    }
+
+    @Bean
+    public ApplicationRunner addAnswerDummyData(AnswerRepository answerRepository) {
+        return args -> answerRepository.saveAll(Answer.getDummyData());
     }
 }

@@ -19,7 +19,7 @@ public class Question {
     @Column(nullable = false, length = 5000)
     private String contents;
 
-    private LocalDateTime createDateTime;
+    private LocalDateTime createDateTime = LocalDateTime.now();
 
     private LocalDateTime updateDateTime;
 
@@ -27,7 +27,15 @@ public class Question {
     @JoinColumn(foreignKey = @ForeignKey(name = "fk_question_writer"))
     private User writer;
 
+    @OneToMany(mappedBy = "question")
+//    @JoinColumn(foreignKey = @ForeignKey(name = "fk_answer_question"), insertable = false, updatable = false)
+    private List<Answer> answers;
+
     protected Question() {
+    }
+
+    public Question(Long id) {
+        this(id, null, null, null, null, null, null);
     }
 
     public Question(String title, String contents, User writer) {
@@ -35,10 +43,17 @@ public class Question {
     }
 
     private Question(String title, String contents, LocalDateTime createDateTime, User writer) {
+        this(null, title, contents, createDateTime, null, writer, null);
+    }
+
+    public Question(Long id, String title, String contents, LocalDateTime createDateTime, LocalDateTime updateDateTime, User writer, List<Answer> answers) {
+        this.id = id;
         this.title = title;
         this.contents = contents;
         this.createDateTime = createDateTime;
+        this.updateDateTime = updateDateTime;
         this.writer = writer;
+        this.answers = answers;
     }
 
     public static List<Question> getDummyData() {
@@ -67,16 +82,40 @@ public class Question {
         return id;
     }
 
+    public void setId(Long id) {
+        this.id = id;
+    }
+
     public String getTitle() {
         return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
     }
 
     public String getContents() {
         return contents;
     }
 
+    public void setContents(String contents) {
+        this.contents = contents;
+    }
+
     public LocalDateTime getCreateDateTime() {
         return createDateTime;
+    }
+
+    public void setCreateDateTime(LocalDateTime createDateTime) {
+        this.createDateTime = createDateTime;
+    }
+
+    public LocalDateTime getUpdateDateTime() {
+        return updateDateTime;
+    }
+
+    public void setUpdateDateTime(LocalDateTime updateDateTime) {
+        this.updateDateTime = updateDateTime;
     }
 
     public User getWriter() {
@@ -85,6 +124,14 @@ public class Question {
 
     public void setWriter(User writer) {
         this.writer = writer;
+    }
+
+    public List<Answer> getAnswers() {
+        return answers;
+    }
+
+    public void setAnswers(List<Answer> answers) {
+        this.answers = answers;
     }
 
     @Override
@@ -96,6 +143,7 @@ public class Question {
                 ", createDateTime=" + createDateTime +
                 ", updateDateTime=" + updateDateTime +
                 ", writer=" + writer +
+                ", answers=" + answers +
                 '}';
     }
 
