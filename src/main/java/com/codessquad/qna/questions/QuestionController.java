@@ -22,7 +22,7 @@ public class QuestionController {
     }
 
     @PostMapping
-    private String createQuestion(Question question) {
+    public String createQuestion(Question question) {
         question.setDateTime(LocalDateTime.now());
         questionService.addQuestion(question);
 
@@ -30,7 +30,7 @@ public class QuestionController {
     }
 
     @GetMapping("/{index}")
-    private String questionDetail(@PathVariable int index, Model model) {
+    public String questionDetail(@PathVariable int index, Model model) {
         Optional<Question> question = questionService.getQuestion(index);
         if (question.isPresent()) {
             model.addAttribute("question", question.get());

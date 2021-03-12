@@ -18,7 +18,7 @@ public class MainController {
     }
 
     @GetMapping
-    private String mainPage(Model model) {
+    public String mainPage(Model model) {
         model.addAttribute("questions", questionService.getQuestions());
         return "index";
     }
