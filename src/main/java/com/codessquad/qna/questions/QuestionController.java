@@ -14,7 +14,7 @@ import java.util.Optional;
 @Controller
 @RequestMapping("/questions")
 public class QuestionController {
-    private QuestionService questionService;
+    private final QuestionService questionService;
 
     @Autowired
     public QuestionController(QuestionService questionService) {

@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @Controller
 @RequestMapping("/")
 public class MainController {
-    private QuestionService questionService;
+    private final QuestionService questionService;
 
     @Autowired
     public MainController(QuestionService questionService) {
