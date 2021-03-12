@@ -59,6 +59,10 @@ public class Qna {
         this.createdDateTime = date;
     }
 
+    public String getFormattedDateTime() {
+        return createdDateTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+    }
+
     @Override
     public String toString() {
         return "Qna{" +
