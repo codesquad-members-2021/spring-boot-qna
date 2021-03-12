@@ -4,21 +4,15 @@ import com.codessquad.qna.model.Answer;
 import com.codessquad.qna.model.Question;
 import com.codessquad.qna.model.User;
 import com.codessquad.qna.repository.AnswerRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import javax.servlet.http.HttpSession;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import static com.codessquad.qna.controller.HttpSessionUtils.getUserFromSession;
-
 @Service
 public class AnswerService {
 
-    @Autowired
     private final AnswerRepository answerRepository;
     private final QuestionService questionService;
 
@@ -27,17 +21,16 @@ public class AnswerService {
         this.questionService = questionService;
     }
 
-    public void save(Long id, Answer answer, HttpSession session) {
-        User loginUser = getUserFromSession(session);
+    public void save(Long id, Answer answer, User sessionUser) {
         Question question = questionService.findById(id);
-        if (loginUser.nonNull() && question.nonNull()) {
-            answer.save(loginUser.getUserId(), question);
+        if (sessionUser.nonNull() && question.nonNull()) {
+            answer.save(sessionUser.getUserId(), question);
             this.answerRepository.save(answer);
         }
     }
 
-    public boolean update(Long id, Answer answer, HttpSession session) {
-        Answer targetAnswer = verifyAnswer(id, session);
+    public boolean update(Long id, Answer answer, User sessionUser) {
+        Answer targetAnswer = verifyAnswer(id, sessionUser);
         if (targetAnswer.nonNull()) {
             targetAnswer.update(answer);
             this.answerRepository.save(targetAnswer);
@@ -46,17 +39,16 @@ public class AnswerService {
         return false;
     }
 
-    public void delete(Long id, HttpSession session) {
-        Answer targetAnswer = verifyAnswer(id, session);
+    public void delete(Long id, User sessionUser) {
+        Answer targetAnswer = verifyAnswer(id, sessionUser);
         if (targetAnswer.nonNull()) {
             this.answerRepository.delete(targetAnswer);
         }
     }
 
-    public Answer verifyAnswer(Long id, HttpSession session) {
-        User loginUser = getUserFromSession(session);
+    public Answer verifyAnswer(Long id, User sessionUser) {
         Answer targetAnswer = findById(id);
-        if (loginUser.nonNull() && targetAnswer.nonNull() && targetAnswer.matchWriter(loginUser)) {
+        if (sessionUser.nonNull() && targetAnswer.nonNull() && targetAnswer.matchWriter(sessionUser)) {
             return targetAnswer;
         }
         return new Answer();

@@ -2,20 +2,15 @@ package com.codessquad.qna.service;
 
 import com.codessquad.qna.model.User;
 import com.codessquad.qna.repository.UserRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import static com.codessquad.qna.controller.HttpSessionUtils.getUserFromSession;
-
 @Service
 public class UserService {
 
-    @Autowired
     private final UserRepository userRepository;
 
     public UserService(UserRepository userRepository) {
@@ -39,8 +34,8 @@ public class UserService {
         return new User();
     }
 
-    public boolean update(Long id, User user, String oldPassword, HttpSession session) {
-        User loginUser = verifyUser(id, session);
+    public boolean update(Long id, User user, String oldPassword, User sessionUser) {
+        User loginUser = verifyUser(id, sessionUser);
         if (loginUser.nonNull() && loginUser.matchPassword(oldPassword)) {
             loginUser.update(user);
             this.userRepository.save(loginUser);
@@ -49,10 +44,9 @@ public class UserService {
         return false;
     }
 
-    public User verifyUser(Long id, HttpSession session) {
-        User loginUser = getUserFromSession(session);
-        if (loginUser.matchId(id)) {
-            return loginUser;
+    public User verifyUser(Long id, User sessionUser) {
+        if (sessionUser.matchId(id)) {
+            return sessionUser;
         }
         return new User();
     }
