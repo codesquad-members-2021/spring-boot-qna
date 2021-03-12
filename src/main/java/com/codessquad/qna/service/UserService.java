@@ -2,7 +2,6 @@ package com.codessquad.qna.service;
 
 import com.codessquad.qna.model.User;
 import com.codessquad.qna.repository.UserRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -12,7 +11,6 @@ import java.util.Optional;
 @Service
 public class UserService {
 
-    @Autowired
     private final UserRepository userRepository;
 
     public UserService(UserRepository userRepository) {
@@ -20,12 +18,37 @@ public class UserService {
     }
 
     public boolean save(User user) {
-        Optional<User> duplicateUser = userRepository.findByUserId(user.getUserId());
-        if (!duplicateUser.isPresent()) {
+        User duplicateUser = findByUserId(user.getUserId());
+        if (!duplicateUser.nonNull()) {
             this.userRepository.save(user);
             return true;
         }
         return false;
+    }
+
+    public User login(String userId, String password) {
+        User targetUser = findByUserId(userId);
+        if (targetUser.nonNull() && targetUser.matchPassword(password)) {
+            return targetUser;
+        }
+        return new User();
+    }
+
+    public boolean update(Long id, User user, String oldPassword, User sessionUser) {
+        User loginUser = verifyUser(id, sessionUser);
+        if (loginUser.nonNull() && loginUser.matchPassword(oldPassword)) {
+            loginUser.update(user);
+            this.userRepository.save(loginUser);
+            return true;
+        }
+        return false;
+    }
+
+    public User verifyUser(Long id, User sessionUser) {
+        if (sessionUser.matchId(id)) {
+            return sessionUser;
+        }
+        return new User();
     }
 
     public List<User> findAll() {
@@ -34,19 +57,9 @@ public class UserService {
         return userList;
     }
 
-    public User findById(Long id) {
-        Optional<User> user = this.userRepository.findById(id);
+    public User findByUserId(String userId) {
+        Optional<User> user = this.userRepository.findByUserId(userId);
         return user.orElseGet(User::new);
-    }
-
-    public boolean update(Long id, User user, String oldPassword) {
-        User targetUser = findById(id);
-        if (targetUser.getPassword().equals(oldPassword)) {
-            targetUser.update(user);
-            this.userRepository.save(targetUser);
-            return true;
-        }
-        return false;
     }
 
 }

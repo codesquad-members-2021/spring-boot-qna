@@ -5,7 +5,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 @Entity
-public class Question {
+public class Answer {
 
     @Id
     @GeneratedValue
@@ -15,38 +15,38 @@ public class Question {
     private String writer;
 
     @Column(nullable = false)
-    private String title;
-
-    @Column(nullable = false)
     private String contents;
 
     @Column(nullable = false)
     private Date date;
 
     @ManyToOne
-    @JoinColumn(foreignKey = @ForeignKey(name = "fk_question_to_user"), nullable = false)
-    private User user;
+    @JoinColumn(foreignKey = @ForeignKey(name = "fk_answer_to_question"))
+    private Question question;
 
     public boolean nonNull() {
         return this.id != null;
     }
 
-    public boolean matchUser(User user) {
-        if (this.user == null) {
-            return false;
+    public boolean matchWriter(User loginUser) {
+        return this.writer.equals(loginUser.getUserId());
+    }
+
+    public Long getQuestionId() {
+        if (this.question.nonNull()) {
+            return this.question.getId();
         }
-        return this.user.matchId(user.getId());
+        return (long) -1;
     }
 
-    public void save(User user) {
-        this.writer = user.getUserId();
+    public void save(String userId, Question question) {
+        this.writer = userId;
         this.date = new Date();
-        this.user = user;
+        this.question = question;
     }
 
-    public void update(Question question) {
-        this.title = question.getTitle();
-        this.contents = question.getContents();
+    public void update(Answer answer) {
+        this.contents = answer.getContents();
         this.date = new Date();
     }
 
@@ -66,14 +66,6 @@ public class Question {
         this.writer = writer;
     }
 
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
     public String getContents() {
         return contents;
     }
@@ -91,19 +83,12 @@ public class Question {
         this.date = new Date();
     }
 
-    public User getUser() {
-        return user;
+    public Question getQuestion() {
+        return question;
     }
 
-    public void setUser(User user) {
-        this.user = user;
-    }
-
-    @Override
-    public String toString() {
-        return "writer: " + this.writer + ", " +
-                "title: " + this.title + ", " +
-                "contents: " + this.contents;
+    public void setQuestion(Question question) {
+        this.question = question;
     }
 
 }
