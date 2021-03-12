@@ -16,6 +16,7 @@ public class User {
 
     @Column(nullable = false)
     private String password;
+    private String newPassword;
 
     @Column(nullable = false)
     private String name;
@@ -59,12 +60,25 @@ public class User {
         this.email = email;
     }
 
+    public String getNewPassword() {
+        return newPassword;
+    }
+
+    public void setNewPassword(String newPassword) {
+        this.newPassword = newPassword;
+    }
+
+    public boolean checkPassword(String password){
+        return !this.password.equals(password);
+    }
 
     public void update(User updateUser) {
-        this.password = updateUser.password;
         this.userId = updateUser.userId;
         this.email = updateUser.email;
         this.name = updateUser.name;
+        if(checkPassword(updateUser.password)){
+            setPassword(updateUser.newPassword);
+        }
     }
 
     @Override
