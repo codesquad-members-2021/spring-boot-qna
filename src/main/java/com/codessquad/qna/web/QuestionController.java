@@ -14,7 +14,6 @@ import javax.inject.Inject;
 public class QuestionController {
     private final QnaRepository qnaRepository;
 
-    @Inject
     public QuestionController(QnaRepository qnaRepository) {
         this.qnaRepository = qnaRepository;
     }

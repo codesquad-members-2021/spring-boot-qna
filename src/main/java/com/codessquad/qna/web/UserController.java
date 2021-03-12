@@ -14,7 +14,6 @@ import javax.inject.Inject;
 public class UserController {
     private final UserRepository userRepository;
 
-    @Inject
     public UserController(UserRepository userRepository) {
         this.userRepository = userRepository;
     }
