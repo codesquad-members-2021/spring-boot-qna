@@ -42,7 +42,6 @@ public class UserController {
         return "user/list";
     }
 
-
     @GetMapping("/users/{id}")
     public String getUserById(@PathVariable Long id, Model model) {
         User user = findUserById(id);

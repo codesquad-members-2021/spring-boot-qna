@@ -12,16 +12,16 @@ public class User {
     @GeneratedValue
     private Long id;
 
-    @Column(nullable=false, length=20)
+    @Column(nullable=false)
     private String userId;
 
-    @Column(nullable=false, length=20)
+    @Column(nullable=false)
     private String password;
 
-    @Column(nullable=false, length=20)
+    @Column(nullable=false)
     private String name;
 
-    @Column(nullable=false, length=20)
+    @Column(nullable=false)
     private String email;
 
     public Long getId() {
