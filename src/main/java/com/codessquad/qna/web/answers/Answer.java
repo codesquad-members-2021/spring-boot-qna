@@ -89,8 +89,8 @@ public class Answer {
     public String toString() {
         return "Answer{" +
                 "id=" + id +
-                ", writer=" + writer +
-                ", question=" + question +
+                ", writerId=" + writer.getId() +
+                ", questionId=" + question.getId() +
                 ", contents='" + contents + '\'' +
                 ", reportingDateTime=" + reportingDateTime +
                 '}';

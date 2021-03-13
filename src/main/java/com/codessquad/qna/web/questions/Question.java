@@ -105,8 +105,7 @@ public class Question {
     public String toString() {
         return "Question{" +
                 "id=" + id +
-                ", writer=" + writer +
-                ", answers=" + answers +
+                ", writer=" + writer.getId() +
                 ", title='" + title + '\'' +
                 ", contents='" + contents + '\'' +
                 ", reportingDateTime=" + reportingDateTime +
