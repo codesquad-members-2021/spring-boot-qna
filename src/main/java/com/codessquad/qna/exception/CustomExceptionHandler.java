@@ -11,8 +11,13 @@ public class CustomExceptionHandler {
 
     private final Logger logger = LoggerFactory.getLogger(CustomExceptionHandler.class);
 
-    @ExceptionHandler(NullPointerException.class)
+    @ExceptionHandler({NullPointerException.class, IllegalArgumentException.class})
     public String loginException() {
         return "/user/login";
+    }
+
+    @ExceptionHandler({IllegalUserAccessException.class})
+    public String noSameUser() {
+        return "redirect:/";
     }
 }
