@@ -63,13 +63,13 @@ public class UserController {
         existedUser.update(newUser);
 
         userRepository.save(existedUser);
-        session.setAttribute("sessionedUser", existedUser);
+        SessionUtils.setSessionUser(session, existedUser);
 
         return "redirect:/users";
     }
 
     @PostMapping("/login")
-    public String login(String userId, String password, HttpSession session) {
+    public String login(String userId, String password, HttpServletRequest request, HttpSession session) {
         Optional<User> user = userRepository.findByUserId(userId);
 
         if (!user.isPresent()) {
@@ -77,7 +77,7 @@ public class UserController {
         }
 
         user.get().checkPassword(password);
-        session.setAttribute("sessionedUser", user.get());
+        SessionUtils.setSessionUser(session, user.get());
 
         return "redirect:/";
     }
