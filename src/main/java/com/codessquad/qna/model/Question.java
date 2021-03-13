@@ -3,6 +3,7 @@ package com.codessquad.qna.model;
 import javax.persistence.*;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 
 @Entity
 public class Question {
@@ -11,8 +12,9 @@ public class Question {
     @GeneratedValue
     private Long id;
 
-    @Column(nullable = false)
-    private String writer;
+    @ManyToOne
+    @JoinColumn(foreignKey = @ForeignKey(name = "fk_question_to_user"), nullable = false)
+    private User writer;
 
     @Column(nullable = false)
     private String title;
@@ -23,25 +25,23 @@ public class Question {
     @Column(nullable = false)
     private Date date;
 
-    @ManyToOne
-    @JoinColumn(foreignKey = @ForeignKey(name = "fk_question_to_user"), nullable = false)
-    private User user;
+    @OneToMany(mappedBy = "question", cascade = CascadeType.REMOVE)
+    private List<Answer> answers;
 
     public boolean nonNull() {
         return this.id != null;
     }
 
-    public boolean matchUser(User user) {
-        if (this.user == null) {
+    public boolean matchWriter(User writer) {
+        if (this.writer == null) {
             return false;
         }
-        return this.user.matchId(user.getId());
+        return this.writer.matchId(writer.getId());
     }
 
-    public void save(User user) {
-        this.writer = user.getUserId();
+    public void save(User writer) {
         this.date = new Date();
-        this.user = user;
+        this.writer = writer;
     }
 
     public void update(Question question) {
@@ -58,12 +58,12 @@ public class Question {
         this.id = id;
     }
 
-    public String getWriter() {
+    public User getWriter() {
         return writer;
     }
 
-    public void setWriter(String writer) {
-        this.writer = writer;
+    public void setWriter(User user) {
+        this.writer = user;
     }
 
     public String getTitle() {
@@ -87,23 +87,24 @@ public class Question {
         return simpleDate.format(this.date);
     }
 
-    public void setDate() {
-        this.date = new Date();
+    public void setDate(Date date) {
+        this.date = date;
     }
 
-    public User getUser() {
-        return user;
+    public List<Answer> getAnswers() {
+        return answers;
     }
 
-    public void setUser(User user) {
-        this.user = user;
+    public void setAnswers(List<Answer> answers) {
+        this.answers = answers;
     }
 
     @Override
     public String toString() {
-        return "writer: " + this.writer + ", " +
+        return "writer: " + this.writer.getUserId() + ", " +
                 "title: " + this.title + ", " +
-                "contents: " + this.contents;
+                "contents: " + this.contents + ", " +
+                "date: " + this.date;
     }
 
 }
