@@ -8,6 +8,9 @@ public class HttpSessionUtils {
 
     public static final String USER_SESSION_KEY = "sessionedUser";
 
+    private HttpSessionUtils() {
+    }
+
     public static User getUserFromSession(HttpSession session) {
         if (!isLoginUser(session)) {
             throw new IllegalArgumentException("로그인 되어 있지 않음");
