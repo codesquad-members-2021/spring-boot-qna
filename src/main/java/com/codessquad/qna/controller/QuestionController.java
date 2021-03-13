@@ -1,8 +1,6 @@
 package com.codessquad.qna.controller;
 
-import com.codessquad.qna.model.Answer;
 import com.codessquad.qna.model.Question;
-import com.codessquad.qna.service.AnswerService;
 import com.codessquad.qna.service.QuestionService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -12,7 +10,6 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
 
-import java.util.List;
 
 import static com.codessquad.qna.controller.HttpSessionUtils.getUserFromSession;
 import static com.codessquad.qna.controller.HttpSessionUtils.isLoginUser;
@@ -22,11 +19,9 @@ public class QuestionController {
 
     private final Logger logger = LoggerFactory.getLogger(UserController.class);
     private final QuestionService questionService;
-    private final AnswerService answerService;
 
-    public QuestionController(QuestionService questionService, AnswerService answerService) {
+    public QuestionController(QuestionService questionService) {
         this.questionService = questionService;
-        this.answerService = answerService;
     }
 
     @GetMapping("/")
@@ -36,7 +31,7 @@ public class QuestionController {
     }
 
     @GetMapping("/question/form")
-    public String viewQuestion(HttpSession session) {
+    public String viewCreateQuestion(HttpSession session) {
         logger.info("질문 작성 페이지 요청");
         return isLoginUser(session) ? "qna/form" : "redirect:/user/login";
     }
@@ -51,9 +46,7 @@ public class QuestionController {
     @GetMapping("/question/{id}")
     public String viewQuestion(@PathVariable("id") Long id, Model model) {
         Question question = this.questionService.findById(id);
-        List<Answer> answers = this.answerService.findAll(id);
         model.addAttribute("question", question);
-        model.addAttribute("answers", answers);
         logger.info("상세 질문 페이지 요청");
         return question.nonNull() ? "qna/show" : "redirect:/";
     }
