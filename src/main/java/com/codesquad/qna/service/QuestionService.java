@@ -1,7 +1,7 @@
-package com.codessquad.qna.service;
+package com.codesquad.qna.service;
 
-import com.codessquad.qna.domain.Question;
-import com.codessquad.qna.repository.QuestionRepository;
+import com.codesquad.qna.domain.Question;
+import com.codesquad.qna.repository.QuestionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -10,7 +10,7 @@ import org.springframework.web.server.ResponseStatusException;
 @Service
 public class QuestionService {
 
-    private QuestionRepository questionRepository;
+    private final QuestionRepository questionRepository;
 
     @Autowired
     public QuestionService(QuestionRepository questionRepository) {

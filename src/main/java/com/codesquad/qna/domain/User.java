@@ -1,4 +1,4 @@
-package com.codessquad.qna.domain;
+package com.codesquad.qna.domain;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -22,10 +22,6 @@ public class User {
 
     @Column(length = 64)
     private String email;
-
-    public Long getId() {
-        return id;
-    }
 
     public String getUserId() {
         return userId;
@@ -64,9 +60,9 @@ public class User {
     }
 
     public void update(User user) {
-        setUserId(user.userId);
-        setName(user.name);
-        setEmail(user.email);
+        this.userId = user.userId;
+        this.name = user.name;
+        this.email = user.email;
     }
 
     public boolean matchPassword(User user) {

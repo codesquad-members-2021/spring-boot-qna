@@ -1,7 +1,7 @@
-package com.codessquad.qna.service;
+package com.codesquad.qna.service;
 
-import com.codessquad.qna.domain.User;
-import com.codessquad.qna.repository.UserRepository;
+import com.codesquad.qna.domain.User;
+import com.codesquad.qna.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -12,7 +12,7 @@ import java.util.List;
 @Service
 public class UserService {
 
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
 
     @Autowired
     public UserService(UserRepository userRepository) {

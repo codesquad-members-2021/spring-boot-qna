@@ -1,6 +1,6 @@
-package com.codessquad.qna.domain;
+package com.codesquad.qna.domain;
 
-import com.codessquad.qna.util.DateTimeUtils;
+import com.codesquad.qna.util.DateTimeUtils;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -15,6 +15,7 @@ public class Question {
     private long id;
 
     @Column(nullable = false, length = 32, unique = true)
+
     private String writer;
 
     @Column(nullable = false)
@@ -26,15 +27,12 @@ public class Question {
     public Question(String writer, String title, String contents) {
         this.writer = writer;
         this.title = title;
+        // validate space by String::trim -> title.trim.isEmpty()
         this.contents = contents;
         this.createdDateTime = LocalDateTime.now();
     }
 
     protected Question() {
-    }
-
-    public long getId() {
-        return id;
     }
 
     public void setId(long id) {

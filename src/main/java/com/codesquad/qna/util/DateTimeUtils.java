@@ -1,4 +1,4 @@
-package com.codessquad.qna.util;
+package com.codesquad.qna.util;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;

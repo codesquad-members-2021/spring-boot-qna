@@ -1,7 +1,7 @@
-package com.codessquad.qna.controller;
+package com.codesquad.qna.controller;
 
-import com.codessquad.qna.domain.User;
-import com.codessquad.qna.service.UserService;
+import com.codesquad.qna.domain.User;
+import com.codesquad.qna.service.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.*;
 public class UserController {
     private static final Logger logger = LoggerFactory.getLogger(UserController.class);
 
-    private UserService userService;
+    private final UserService userService;
 
     @Autowired
     public UserController(UserService userService) {
@@ -52,14 +52,13 @@ public class UserController {
     @PutMapping("/{id}")
     public String update(@PathVariable Long id, User newUser) {
         User user = userService.findUserById(id);
-        logger.info("User : {}", (user));
+        logger.debug("User : {}", (user));
 
-        if (!user.matchPassword(newUser)) {
-            logger.info("Password : \"{}\" does not match \"{}\"", newUser.getPassword(), user.getPassword());
+       if (!user.matchPassword(newUser)) {
+            logger.debug("Password : \"{}\" does not match \"{}\"", newUser.getPassword(), user.getPassword());
             return "redirect:/users";
         }
         user.update(newUser);
-        userService.save(user);
 
         return "redirect:/users";
     }

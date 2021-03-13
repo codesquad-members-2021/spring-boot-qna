@@ -1,6 +1,6 @@
-package com.codessquad.qna.repository;
+package com.codesquad.qna.repository;
 
-import com.codessquad.qna.domain.User;
+import com.codesquad.qna.domain.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface UserRepository extends JpaRepository<User, Long> {

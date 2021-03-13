@@ -1,6 +1,6 @@
-package com.codessquad.qna.repository;
+package com.codesquad.qna.repository;
 
-import com.codessquad.qna.domain.Question;
+import com.codesquad.qna.domain.Question;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
