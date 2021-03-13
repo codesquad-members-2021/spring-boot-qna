@@ -1,0 +1,23 @@
+{{#partial "content" }}
+<div id="main">
+    <!-- https://goddaehee.tistory.com/214 참고 -->
+
+    <br>
+    <h1 style="text-align: center">⛔ 404 : 요청한 페이지를 찾을 수 없습니다. </h1>
+    <br>
+    <br>
+    <div style="text-align: center">
+        <img src="https://i.imgur.com/KWctEzH.jpg" width="300" height="300"/>
+    </div>
+    <br>
+    <h1 style="text-align: center"><a href="#" onclick="goBack()">◀ 뒤로가기</a></h1>
+    <script>
+        function goBack(){
+            window.history.back(-1);
+        }
+
+
+    </script>
+</div>
+{{/partial}}
+{{> common/base}}
