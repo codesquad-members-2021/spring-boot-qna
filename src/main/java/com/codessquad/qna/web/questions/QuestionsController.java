@@ -1,5 +1,7 @@
 package com.codessquad.qna.web.questions;
 
+import com.codessquad.qna.web.answers.Answer;
+import com.codessquad.qna.web.answers.AnswersRepository;
 import com.codessquad.qna.web.exceptions.auth.UnauthorizedAccessException;
 import com.codessquad.qna.web.exceptions.questions.QuestionNotFoundException;
 import com.codessquad.qna.web.users.User;
@@ -19,9 +21,12 @@ public class QuestionsController {
     Logger logger = LoggerFactory.getLogger(QuestionsController.class);
 
     private final QuestionRepository questionRepository;
+    private final AnswersRepository answersRepository;
 
-    public QuestionsController(QuestionRepository questionRepository) {
+    public QuestionsController(QuestionRepository questionRepository,
+                               AnswersRepository answersRepository) {
         this.questionRepository = questionRepository;
+        this.answersRepository = answersRepository;
     }
 
     @PostMapping
@@ -32,6 +37,19 @@ public class QuestionsController {
         logger.info("question created " + newQuestion);
         return "redirect:/";
     }
+
+    @PostMapping("/questions/{questionId}/answers")
+    public String createAnswer(@PathVariable("questionId") long questionId, String answerContents,
+                               HttpSession session) {
+        User sessionUser = SessionUtil.getLoginUser(session);
+
+        Question targetQuestion = questionRepository.findById(questionId)
+                .orElseThrow(QuestionNotFoundException::new);
+
+        answersRepository.save(new Answer(answerContents, targetQuestion, sessionUser));
+        return "redirect:/questions/" + questionId;
+    }
+
 
     @GetMapping
     public String getQuestionList(Model model) {
