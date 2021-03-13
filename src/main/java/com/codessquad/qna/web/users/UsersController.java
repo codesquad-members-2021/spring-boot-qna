@@ -73,7 +73,7 @@ public class UsersController {
         return "redirect:/";
     }
 
-    @GetMapping("/logout")
+    @PostMapping("/logout")
     public String processLogout(HttpSession session) {
         User sessionUser = SessionUtil.getLoginUser(session);
         logger.info("user logout : " + sessionUser.getUserId());

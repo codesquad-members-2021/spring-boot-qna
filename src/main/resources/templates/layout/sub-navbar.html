@@ -29,7 +29,14 @@
                 {{/loginUser}}
 
                 {{#loginUser}}
-                <li class="sub-nav-li"><a href="/users/logout" role="button">로그아웃</a></li>
+                <li class="sub-nav-li"><a href="javascript:;"
+                                          onclick="document.getElementById('sub-nav-form-logout-submit').submit();"
+                                          role="button">로그아웃</a></li>
+                <div style="display: none">
+                    <form id="sub-nav-form-logout-submit" action="/users/logout" method="post">
+                        <input type="submit">
+                    </form>
+                </div>
                 <li class="sub-nav-li"><a href="/users//modify" role="button">개인정보수정</a></li>
                 {{/loginUser}}
             </ul>
