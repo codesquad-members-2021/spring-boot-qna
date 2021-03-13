@@ -39,7 +39,7 @@ public class PostController {
      */
     @PostMapping("")
     public String addPost(@ModelAttribute PostDto postDto, HttpSession httpSession) {
-        postDto.setAuthor(HttpSessionUtils.getUserFromSession(httpSession).getUserId());
+        postDto.setAuthor(HttpSessionUtils.getUserFromSession(httpSession));
         postService.addPost(postDto);
         return "redirect:/";
     }

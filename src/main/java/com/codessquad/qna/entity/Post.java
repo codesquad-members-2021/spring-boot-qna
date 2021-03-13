@@ -1,5 +1,8 @@
 package com.codessquad.qna.entity;
 
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
+
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.Collections;
@@ -14,7 +17,12 @@ public class Post {
     private Long postId;
 
     private String title;
-    private String author;
+
+    @ManyToOne
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    @JoinColumn(name = "USER_PK")
+    private User author;
+
     private String body;
     private LocalDateTime createDateTime = LocalDateTime.now();
 
@@ -24,7 +32,7 @@ public class Post {
     protected Post() {
     }
 
-    public Post(String title, String author, String body) {
+    public Post(String title, User author, String body) {
         this.title = title;
         this.author = author;
         this.body = body;
@@ -38,7 +46,7 @@ public class Post {
         return title;
     }
 
-    public String getAuthor() {
+    public User getAuthor() {
         return author;
     }
 
@@ -69,7 +77,7 @@ public class Post {
         return "Post{" +
                 "postId=" + postId +
                 ", title='" + title + '\'' +
-                ", author='" + author + '\'' +
+                ", author='" + author.toString() + '\'' +
                 ", body='" + body + '\'' +
                 ", createDateTime='" + createDateTime + '\'' +
                 '}';

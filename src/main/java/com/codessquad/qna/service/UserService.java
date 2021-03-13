@@ -59,6 +59,7 @@ public class UserService {
         return true;
     }
 
+    @Transactional
     public void removeUser(Long id) {
         userRepository.deleteUserById(id);
     }
