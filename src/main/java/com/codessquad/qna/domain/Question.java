@@ -34,7 +34,7 @@ public class Question {
         return answerList;
     }
 
-    public String getCreateDateTime() {
+    public String getFormatCreateDateTime() {
         return createDateTime.format(DateTimeUtils.dateTimeFormatter);
     }
 
