@@ -53,5 +53,17 @@ public class UserController {
         }
         return "updateForm";
     }
+
+    @PostMapping("/user/{user.userId}/update")
+    public String updateUser(@PathVariable("user.userId") String userId, User user) {
+        for (User u : users) {
+            if (u.getUserId().equals(userId)) {
+                users.remove(u);
+                break;
+            }
+        }
+        users.add(user);
+        return "redirect:/users";
+    }
 }
 
