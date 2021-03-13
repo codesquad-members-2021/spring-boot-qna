@@ -91,7 +91,13 @@ public class UserController {
             return "user/login_failed";
         }
         session.setAttribute("sessionedUser",findUser);
-        return "index";
+        return "redirect:/";
+    }
+    @GetMapping("/logout")
+    private String logout(HttpSession session){
+        session.removeAttribute("sessionedUser");
+
+        return "redirect:/";
     }
 
 }
