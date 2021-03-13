@@ -3,14 +3,15 @@ package com.codessquad.qna.service;
 import com.codessquad.qna.MvcConfig;
 import com.codessquad.qna.entity.User;
 import com.codessquad.qna.exception.UserNotFoundException;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.Assertions;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
-import static org.assertj.core.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 
 class UserServiceTest {
 
@@ -27,7 +28,7 @@ class UserServiceTest {
     void save() {
         User user = new User("roach", "1234", "roach", "dev0jsh@gmail.com");
         userService.save(user);
-        assertThat(userService.getUserById(1L)).isEqualTo(user);
+        assertThat(userService.getUserById(1L).getUserId()).isEqualTo(user.getUserId());
     }
 
     @Test
@@ -38,8 +39,8 @@ class UserServiceTest {
         userService.save(user);
         userService.save(user1);
         Assertions.assertAll(
-                ()->assertThat(userService.getUsers().get(0)).isEqualTo(user),
-                ()->assertThat(userService.getUsers().get(1)).isEqualTo(user1)
+                () -> assertThat(userService.getUsers().get(0).getUserId()).isEqualTo(user.getUserId()),
+                () -> assertThat(userService.getUsers().get(1).getUserId()).isEqualTo(user1.getUserId())
         );
     }
 
@@ -50,7 +51,7 @@ class UserServiceTest {
         User honux = new User("honux", "12345", "honux", "1234@naver.com");
         userService.save(user);
         userService.save(honux);
-        assertThat(userService.getUserById(1L)).isEqualTo(user);
+        assertThat(userService.getUserById(1L).getUserId()).isEqualTo(user.getUserId());
     }
 
     @Test
