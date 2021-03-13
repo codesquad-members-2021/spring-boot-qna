@@ -20,8 +20,6 @@ public class UserController {
 
     private final String CONFIRM_INFO = "/confirm/{id}";
     private final String UPDATE_INFO = "/update/{id}";
-    private final String LOGIN = "/login";
-    private final String LOGOUT = "/logout";
     private final UserRepository userRepository;
 
     @Autowired
@@ -44,12 +42,12 @@ public class UserController {
         return "user/list";
     }
 
-    @GetMapping(LOGIN)
+    @GetMapping("/login")
     public String loginFrom() {
         return "/user/login";
     }
 
-    @PostMapping(LOGIN)
+    @PostMapping("/login")
     public String login(String userId, String password, HttpSession session) {
         User user = userRepository.findByUserId(userId);
         if (user == null) {
@@ -62,7 +60,7 @@ public class UserController {
         return "redirect:/";
     }
 
-    @GetMapping(LOGOUT)
+    @GetMapping("/logout")
     public String logout(HttpSession session) {
         session.removeAttribute("sessionUser");
         return "redirect:/";

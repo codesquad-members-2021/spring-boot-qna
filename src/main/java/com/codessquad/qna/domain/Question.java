@@ -7,7 +7,7 @@ import java.util.List;
 
 @Entity
 public class Question {
-    private static final DateTimeFormatter pattern = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+    private static final DateTimeFormatter FORMATTER_PATTERN = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -82,7 +82,7 @@ public class Question {
     }
 
     public String getCurrentDateTime() {
-        return currentDateTime.format(pattern);
+        return currentDateTime.format(FORMATTER_PATTERN);
     }
 
     public List<Answer> getAnswers() {

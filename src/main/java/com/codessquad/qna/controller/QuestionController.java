@@ -17,7 +17,7 @@ import javax.servlet.http.HttpSession;
 @Controller
 @RequestMapping("/questions")
 public class QuestionController {
-    private static final Logger logger = LoggerFactory.getLogger(UserController.class);
+    private static final Logger logger = LoggerFactory.getLogger(QuestionController.class);
     private final QuestionRepository questionRepository;
 
     @Autowired
