@@ -49,7 +49,7 @@ public class AnswerController {
     public ModelAndView updateForm(@PathVariable("questionId") Long questionId,
                                          @PathVariable("answerId") Long answerId,
                                          HttpSession session) {
-        return new ModelAndView("qna/update_answer_form",
+        return new ModelAndView("qna/updateAnswerForm",
                 "answer", getAnswerWithCheckSession(questionId, answerId, session));
     }
 

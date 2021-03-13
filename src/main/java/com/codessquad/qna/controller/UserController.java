@@ -47,7 +47,7 @@ public class UserController {
     @GetMapping("/{id}/form")
     public ModelAndView updateUserForm(@PathVariable("id") Long id, HttpSession session) {
         checkSessionWithId(session, id);
-        return new ModelAndView("users/update_form",
+        return new ModelAndView("users/updateForm",
                 "user", userRepository.findById(id).orElseThrow(NotFoundException::new));
     }
 

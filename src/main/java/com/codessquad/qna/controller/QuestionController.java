@@ -51,7 +51,7 @@ public class QuestionController {
 
     @GetMapping("/{questionId}/form")
     public ModelAndView updateForm(@PathVariable("questionId") Long id, HttpSession session) {
-        return new ModelAndView("/qna/update_form",
+        return new ModelAndView("/qna/updateForm",
                 "question", getQuestionWithCheckSession(id, session));
     }
 

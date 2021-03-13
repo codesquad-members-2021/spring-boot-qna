@@ -7,11 +7,10 @@ import java.time.format.DateTimeFormatter;
 
 @HandlebarsHelper
 public class handlebarsHelper {
-    public CharSequence rowNumber(int value) {
-        return String.valueOf(value + 1);
-    }
+
+    private final DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
 
     public CharSequence formatDateTime(LocalDateTime time) {
-        return time.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"));
+        return time.format(dateTimeFormatter);
     }
 }
