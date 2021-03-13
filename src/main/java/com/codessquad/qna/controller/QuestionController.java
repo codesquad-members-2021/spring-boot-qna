@@ -51,7 +51,8 @@ public class QuestionController {
     @GetMapping("/{id}/form")
     public String renderUpdateForm(@PathVariable Long id, Model model, HttpSession session) {
         Question findQuestion = questionService.findById(id);
-        userService.checkSession(session, findQuestion.getWriter().getId());
+        User user = HttpSessionUtils.getUserFromSession(session);
+        userService.checkSameUser(user, findQuestion.getWriter().getId());
         model.addAttribute("question", findQuestion);
         return "qna/updateForm";
 
@@ -60,7 +61,8 @@ public class QuestionController {
     @PutMapping("/{id}")
     public String questionUpdate(@PathVariable Long id, Question updateQuestion, HttpSession session) {
         Question findQuestion = questionService.findById(id);
-        userService.checkSession(session, findQuestion.getWriter().getId());
+        User user = HttpSessionUtils.getUserFromSession(session);
+        userService.checkSameUser(user, findQuestion.getWriter().getId());
         questionService.update(id, updateQuestion);
         return "redirect:/questions/" + id;
 
@@ -69,7 +71,8 @@ public class QuestionController {
     @DeleteMapping("/{id}")
     public String questionDelete(@PathVariable Long id, HttpSession session) {
         Question question = questionService.findById(id);
-        userService.checkSession(session, question.getWriter().getId());
+        User user = HttpSessionUtils.getUserFromSession(session);
+        userService.checkSameUser(user, question.getWriter().getId());
         questionService.delete(id);
         return "redirect:/";
 
