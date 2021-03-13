@@ -22,7 +22,7 @@ public class UserService {
     }
 
     private void validateUserID(User user) {
-        userRepository.findByName(user.getName())
+        userRepository.findByUserId(user.getUserId())
                 .ifPresent(x -> {
                     throw new IllegalStateException("이미 존재하는 아이디입니다");
                 });
@@ -35,7 +35,7 @@ public class UserService {
     public User findUser(long id) {
         return userRepository
                 .findById(id)
-                .orElseThrow(()->new IllegalStateException("찾는 user가 없습니다"));
+                .orElseThrow(() -> new IllegalStateException("찾는 user가 없습니다"));
     }
 
     public void updateUser(long id, String testPassword, User user) {
