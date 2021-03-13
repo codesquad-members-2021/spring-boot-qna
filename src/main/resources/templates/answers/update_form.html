@@ -1,0 +1,66 @@
+{{#partial "content"}}
+<div class="container" id="main">
+    <div class="col-md-12 col-sm-12 col-lg-12">
+        <div class="panel panel-default">
+            <header class="qna-header">
+                <h2 class="qna-title">{{question.title}}</h2>
+            </header>
+            <div class="content-main">
+                <article class="article">
+                    <div class="article-header">
+                        <div class="article-header-thumb">
+                            <img src="https://graph.facebook.com/v2.3/100000059371774/picture"
+                                 class="article-author-thumb" alt="">
+                        </div>
+                        <div class="article-header-text">
+                            <a href="#" class="article-author-name">{{question.writer.name}}</a>
+                            <a href="#" class="article-header-time" title="퍼머링크">
+                                {{question.date}}
+                                <i class="icon-link"></i>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="article-doc">
+                        {{question.contents}}
+                    </div>
+                    <div class="article-util">
+                        <ul class="article-util-list">
+                            <li>
+                                <a class="link-modify-article" href="/questions/{{question.id}}/form">수정</a>
+                            </li>
+                            <li>
+                                <form class="form-delete" action="/questions/{{question.id}}" method="POST">
+                                    <input type="hidden" name="_method" value="DELETE">
+                                    <button class="link-delete-article" type="submit">삭제</button>
+                                </form>
+                            </li>
+                            <li>
+                                <a class="link-modify-article" href="/">목록</a>
+                            </li>
+                        </ul>
+                    </div>
+                </article>
+
+                <div class="qna-comment">
+                    <div class="qna-comment-slipp">
+                        <div class="qna-comment-slipp-articles">
+                            <form class="submit-write" action="/questions/{{question.id}}/answers/{{answer.id}}" method="POST">
+                                <input type="hidden" name="_method" value="PUT" />
+                                <div class="form-group" style="padding:14px;">
+                                    <textarea class="form-control" name="contents" id="contents" placeholder="Update your status">{{answer.contents}}</textarea>
+                                </div>
+                                <input type="submit" class="btn btn-success pull-right pull-right" value="수정하기"/>
+                                <div class="clearfix"/>
+
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{{/partial}}
+
+{{> component/base}}

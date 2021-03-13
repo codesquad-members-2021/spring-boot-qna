@@ -1,5 +1,7 @@
 package com.codessquad.qna.domain.question;
 
+import com.codessquad.qna.domain.user.User;
+
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -11,8 +13,9 @@ public class Question {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @Column(nullable = false, length=20)
-    private String writer;
+    @ManyToOne
+    @JoinColumn(foreignKey = @ForeignKey(name = "fk_question_writer"))
+    private User writer;
 
     @Column(nullable = false, length=500)
     private String title;
@@ -21,6 +24,8 @@ public class Question {
     private String contents;
 
     private String date;
+
+    private int answerCount;
 
     public Question() {
         this.date = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"));
@@ -34,11 +39,11 @@ public class Question {
         this.id = id;
     }
 
-    public String getWriter() {
+    public User getWriter() {
         return writer;
     }
 
-    public void setWriter(String writer) {
+    public void setWriter(User writer) {
         this.writer = writer;
     }
 
@@ -60,6 +65,23 @@ public class Question {
 
     public String getDate() {
         return date;
+    }
+
+    public int getAnswerCount() {
+        return answerCount;
+    }
+
+    public void setAnswerCount(int answerCount) {
+        this.answerCount = answerCount;
+    }
+
+    public boolean isWrittenBy(User user) {
+        return writer.equals(user);
+    }
+
+    public void update(Question questionWithUpdatedInfo) {
+        this.title = questionWithUpdatedInfo.title;
+        this.contents = questionWithUpdatedInfo.contents;
     }
 
     @Override
