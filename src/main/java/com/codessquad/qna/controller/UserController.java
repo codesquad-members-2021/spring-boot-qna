@@ -62,9 +62,9 @@ public class UserController {
                 return "user/updateForm";
             }
         }
-        return "redirect:/http404"; //m 세션아이디와 다를 경우 이동
+        model.addAttribute("errorMessage","타인의 정보는 열람할 수 없습니다!");
+        return "error/404"; //m 세션아이디와 다를 경우 이동
     }
-
     @PutMapping("/users/{primaryKey}/update")
     private String updateMemberList(@PathVariable Long primaryKey, User updateUserData, Model model) {
 
