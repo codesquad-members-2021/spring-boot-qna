@@ -24,7 +24,7 @@ public class UserService {
 
     public List<User> findUsers(){
 
-        return (List)repository.findAll();
+        return (List<User>)repository.findAll();
     }
 
     public Optional<User> findUser(Long id) {
@@ -36,7 +36,7 @@ public class UserService {
 
         User user = repository.findById(id).get();
 
-        return Optional.ofNullable(user.matchPassword(password)).get();
+        return Optional.of(user.matchPassword(password)).get();
     }
 
 
