@@ -58,8 +58,7 @@ public class UserController {
             logger.debug("Password : \"{}\" does not match \"{}\"", newUser.getPassword(), user.getPassword());
             return "redirect:/users";
         }
-        user.update(newUser);
-        userService.save(user);
+        userService.update(user, newUser);
 
         return "redirect:/users";
     }

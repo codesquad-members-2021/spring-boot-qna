@@ -22,6 +22,12 @@ public class UserService {
         userRepository.save(user);
     }
 
+    public void update(User user, User newUser) {
+        user.update(newUser);
+        save(user);
+    }
+
+
     public List<User> findAll() {
         return userRepository.findAll();
     }
