@@ -4,11 +4,12 @@ import com.codessquad.qna.domain.User;
 
 public class UserValidation {
 
-    public static void validUserInfo(User user) {
+    public static String validUserInfo(User user) {
         validInfo("UserId", user.getUserId());
         validInfo("Password", user.getPassword());
         validInfo("Name", user.getName());
         validInfo("Email", user.getEmail());
+        return "complete user null check ";
     }
 
     private static void validInfo(String entity, String info) {

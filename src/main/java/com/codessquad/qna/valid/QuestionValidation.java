@@ -4,9 +4,10 @@ import com.codessquad.qna.domain.Question;
 
 public class QuestionValidation {
 
-    public static void validQuestion(Question question) {
+    public static String validQuestion(Question question) {
         validInfo("title", question.getTitle());
         validInfo("contents", question.getContents());
+        return "complete user null check ";
     }
 
     private static void validInfo(String entity, String info) {

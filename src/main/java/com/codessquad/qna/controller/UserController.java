@@ -29,7 +29,7 @@ public class UserController {
 
     @PostMapping
     public String create(User user) {
-        UserValidation.validUserInfo(user);
+        logger.info(UserValidation.validUserInfo(user));
         logger.info("users {}.", user);
         userRepository.save(user);
         return "redirect:/";
@@ -108,7 +108,7 @@ public class UserController {
     public String updateUserInfo(@PathVariable Long id, String password, String name, String email) {
         User user = userRepository.findById(id).orElse(null);
         user.updateUserInfo(password, name, email);
-        UserValidation.validUserInfo(user);
+        logger.info(UserValidation.validUserInfo(user));
         logger.info("users {}.", user);
         userRepository.save(user);
         return "redirect:/users";

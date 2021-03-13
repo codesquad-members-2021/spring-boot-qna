@@ -40,7 +40,7 @@ public class QuestionController {
         }
         User loginUser = HttpSessionUtils.getSessionUser(session);
         Question question = new Question(loginUser, title, contents);
-        QuestionValidation.validQuestion(question);
+        logger.info(QuestionValidation.validQuestion(question));
         logger.info("question {}. ", question);
         questionRepository.save(question);
         return "redirect:/";
@@ -69,7 +69,7 @@ public class QuestionController {
     public String updateQuestion(@PathVariable Long id, String title, String contents) {
         Question question = questionRepository.findById(id).orElse(null);
         question.updateQuestion(title, contents);
-        QuestionValidation.validQuestion(question);
+        logger.info(QuestionValidation.validQuestion(question));
         logger.info("question {}. ", question);
         questionRepository.save(question);
         return "redirect:/questions/" + id;
