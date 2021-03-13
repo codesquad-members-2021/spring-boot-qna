@@ -12,7 +12,7 @@ public class UserValidation {
     }
 
     private static void validInfo(String entity, String info) {
-        if (info.trim().isEmpty()) {
+        if (info == null || info.trim().isEmpty()) {
             String error = String.format("%s is empty", entity);
             throw new NullPointerException(error);
         }
