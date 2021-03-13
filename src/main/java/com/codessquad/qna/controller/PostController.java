@@ -3,7 +3,6 @@ package com.codessquad.qna.controller;
 import com.codessquad.qna.dto.PostDto;
 import com.codessquad.qna.entity.Post;
 import com.codessquad.qna.entity.User;
-import com.codessquad.qna.exception.CanNotFindPostException;
 import com.codessquad.qna.service.PostService;
 import com.codessquad.qna.util.HttpSessionUtils;
 import org.slf4j.Logger;
@@ -15,7 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpSession;
 
 @Controller
-@RequestMapping("/questions")
+@RequestMapping("/posts")
 public class PostController {
 
     private static final Logger logger = LoggerFactory.getLogger(PostController.class);
@@ -63,11 +62,13 @@ public class PostController {
      * @param id    Post Id
      * @param model
      * @return
-     * @throws CanNotFindPostException
+     * @throws PostNotFoundException
      */
     @GetMapping("/{id}")
     public String getPost(@PathVariable Long id, Model model) {
-        model.addAttribute("post", postService.getPost(id));
+        Post post = postService.getPost(id);
+        model.addAttribute("post", post);
+        model.addAttribute("comments", post.getComment());
         return "qna/show";
     }
 
