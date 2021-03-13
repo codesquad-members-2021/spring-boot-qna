@@ -29,8 +29,6 @@ public class Question {
     @OrderBy("id ASC")
     private List<Answer> answers;
 
-    private int answerCount;
-
     public Question() {
         currentDateTime = LocalDateTime.now();
     }
@@ -94,8 +92,7 @@ public class Question {
     }
 
     public int getAnswerCount() {
-        answerCount = answers.size();
-        return answerCount;
+        return answers.size();
     }
 
     public boolean matchUser(User loginUser) {
