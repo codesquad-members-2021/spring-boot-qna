@@ -17,12 +17,10 @@ import java.time.LocalDateTime;
 public class QuestionController {
 
     private final QuestionRepository questionRepository;
-    private final AnswerRepository answerRepository;
 
     @Autowired
-    public QuestionController(QuestionRepository questionRepository, AnswerRepository answerRepository) {
+    public QuestionController(QuestionRepository questionRepository) {
         this.questionRepository = questionRepository;
-        this.answerRepository = answerRepository;
     }
 
     @GetMapping("/form")
@@ -48,7 +46,6 @@ public class QuestionController {
         Question question = questionRepository.findById(id).orElseThrow(NotFoundException::new);
         ModelAndView modelAndView = new ModelAndView("qna/show");
         modelAndView.addObject("question", question);
-        modelAndView.addObject("comments", answerRepository.findAllByQuestion(question));
         return modelAndView;
     }
 

@@ -2,6 +2,7 @@ package com.codessquad.qna.domain;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 public class Question {
@@ -18,6 +19,9 @@ public class Question {
     private String contents;
     private LocalDateTime time;
     private int point;
+
+    @OneToMany(mappedBy = "question")
+    private List<Answer> answers;
 
     protected Question() {}
 
@@ -60,6 +64,10 @@ public class Question {
 
     public int getPoint() {
         return point;
+    }
+
+    public List<Answer> getAnswers() {
+        return answers;
     }
 
     public boolean isWriter(User user) {
