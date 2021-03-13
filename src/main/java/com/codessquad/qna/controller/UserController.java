@@ -52,9 +52,9 @@ public class UserController {
     }
 
     @PutMapping("/{id}")
-    public String userUpdate(User user, String newPassword, Model model, HttpSession session) {
-        userService.checkSession(session, user.getId());
-        if (userService.update(user, newPassword)) {
+    public String userUpdate(@PathVariable Long id, User user, String newPassword, Model model, HttpSession session) {
+        userService.checkSession(session, id);
+        if (userService.update(user, newPassword, id)) {
             return "redirect:/";
         }
         model.addAttribute("fail", true);

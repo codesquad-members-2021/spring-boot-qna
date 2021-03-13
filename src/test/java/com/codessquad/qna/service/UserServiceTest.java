@@ -51,7 +51,7 @@ class UserServiceTest {
         updateUser.setId(1L);
 
         Long userID = userService.join(user);
-        userService.update(updateUser, "newPassword");
+        userService.update(updateUser, "newPassword", 1L);
         User findUser = userRepository.findById(userID).orElseThrow(NullPointerException::new);
 
         assertThat(findUser.getPassword()).isEqualTo("newPassword");

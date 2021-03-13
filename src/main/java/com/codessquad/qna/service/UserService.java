@@ -38,22 +38,25 @@ public class UserService {
     }
 
     @Transactional
-    public boolean update(User user, String newPassword) {
-        UserValidator.validate(user);
-        User getUser = findById(user.getId());
-        if (getUser.checkPassword(user.getPassword())) {
-            getUser.updateUserInfo(user, newPassword);
+    public boolean update(User updatedUser, String newPassword, Long id) {
+        UserValidator.validate(updatedUser);
+        User user = findById(id);
+        if (user.checkPassword(updatedUser.getPassword())) {
+            user.updateUserInfo(updatedUser, newPassword);
             return true;
         }
         return false;
     }
 
-    public boolean checkLoginable(String userId, String password) {
+    public void checkLoginable(String userId, String password) {
         User findUser = findByUserId(userId);
-        return findUser != null && findUser.checkPassword(password);
+        if (!findUser.checkPassword(password)) {
+            throw new IllegalArgumentException("비밀번호가 다름");
+        }
     }
 
     public User findByUserId(String userId) {
+        //todo : 일치하는 userId가 없을 떄 예외 발생
         return userRepository.findByUserId(userId).orElseThrow(NullPointerException::new);
     }
 
