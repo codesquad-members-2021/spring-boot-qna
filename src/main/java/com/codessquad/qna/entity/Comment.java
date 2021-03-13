@@ -19,25 +19,29 @@ public class Comment {
     @JoinColumn(name = "POST_ID")
     private Post post;
 
-    private String author;
+    @ManyToOne
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    @JoinColumn(name = "USER_PK")
+    private User author;
+
     private String body;
-    private LocalDateTime date = LocalDateTime.now();
+    private LocalDateTime createDateTime = LocalDateTime.now();
 
     protected Comment() {
     }
 
-    public Comment(Post post, String author, String body) {
+    public Comment(Post post, User author, String body) {
         this.post = post;
         this.author = author;
         this.body = body;
-        this.date = LocalDateTime.now();
+        this.createDateTime = LocalDateTime.now();
     }
 
     public Long getId() {
         return id;
     }
 
-    public String getAuthor() {
+    public User getAuthor() {
         return author;
     }
 
@@ -45,8 +49,8 @@ public class Comment {
         return body;
     }
 
-    public LocalDateTime getDate() {
-        return date;
+    public LocalDateTime getCreateDateTime() {
+        return createDateTime;
     }
 
     public Post getPost() {
@@ -60,8 +64,17 @@ public class Comment {
                 ", post=" + post +
                 ", author='" + author + '\'' +
                 ", body='" + body + '\'' +
-                ", date='" + date + '\'' +
+                ", createDateTime='" + createDateTime + '\'' +
                 '}';
+    }
+
+    public boolean isMatchedUser(User user) {
+        return author.isMatchedId(user.getId());
+    }
+
+    public void update(String body, LocalDateTime updateDateTime) {
+        this.body = body;
+        this.createDateTime = updateDateTime;
     }
 
 }
