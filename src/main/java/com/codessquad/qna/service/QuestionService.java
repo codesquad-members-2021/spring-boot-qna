@@ -1,13 +1,10 @@
 package com.codessquad.qna.service;
 
-import com.codessquad.qna.utils.HttpSessionUtils;
 import com.codessquad.qna.domain.question.Question;
 import com.codessquad.qna.domain.question.QuestionRepository;
-import com.codessquad.qna.domain.user.User;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.servlet.http.HttpSession;
 import java.util.List;
 
 @Service
@@ -20,9 +17,7 @@ public class QuestionService {
     }
 
     @Transactional
-    public Long create(Question question, HttpSession session) {
-        User sessionedUser = (User) session.getAttribute(HttpSessionUtils.USER_SESSION_KEY);
-        question.setWriter(sessionedUser);
+    public Long create(Question question) {
         return questionRepository.save(question).getId();
     }
 
@@ -47,13 +42,7 @@ public class QuestionService {
     }
 
     @Transactional
-    public void delete(Long id, HttpSession session) {
-        Question question = questionRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("해당 질문이 없습니다. id = " + id));
-        User sessionedUser = HttpSessionUtils.getUserFromSession(session);
-        if (!question.isWrittenBy(sessionedUser)) {
-            throw new IllegalStateException("자신이 작성한 글만 삭제할 수 있습니다.");
-        }
-        questionRepository.delete(question);
+    public void deleteById(Long id) {
+        questionRepository.deleteById(id);
     }
 }

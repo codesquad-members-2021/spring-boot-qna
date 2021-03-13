@@ -1,15 +1,12 @@
 package com.codessquad.qna.service;
 
-import com.codessquad.qna.utils.HttpSessionUtils;
 import com.codessquad.qna.domain.answer.Answer;
 import com.codessquad.qna.domain.answer.AnswerRepository;
 import com.codessquad.qna.domain.question.Question;
 import com.codessquad.qna.domain.question.QuestionRepository;
-import com.codessquad.qna.domain.user.User;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.servlet.http.HttpSession;
 import java.util.List;
 
 @Service
@@ -23,23 +20,24 @@ public class AnswerService {
         this.questionRepository = questionRepository;
     }
 
-    @Transactional
-    public Long create(Long questionId, Answer answer, HttpSession session) {
-        User sessionedUser = HttpSessionUtils.getUserFromSession(session);
-        Question question = questionRepository.findById(questionId)
-                .orElseThrow(() -> new IllegalStateException("해당 질문을 찾을 수 없습니다. id = " + questionId));
-        int answerCount = answerRepository.countAnswersByQuestionId(questionId);
-        question.setAnswerCount(++answerCount);
-        answer.setQuestion(question);
-        answer.setWriter(sessionedUser);
 
-        return answerRepository.save(answer).getId();
+    public Long create(Long questionId, Answer answer) {
+        Question question = questionRepository.findById(questionId)
+                .orElseThrow(() -> new IllegalStateException("해당 질문이 없습니다. id = " + questionId));
+        answer.setQuestion(question);
+
+        Answer savedAnswer = answerRepository.save(answer);
+
+        int answerCount = answerRepository.countAnswersByQuestionId(questionId);
+        question.setAnswerCount(answerCount);
+
+        return savedAnswer.getId();
     }
 
     @Transactional
     public Answer findById(Long id) {
         return answerRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("해당 질문이 없습니다. id = " + id));
+                .orElseThrow(() -> new IllegalStateException("해당 답변이 없습니다. id = " + id));
     }
 
     @Transactional
@@ -52,21 +50,16 @@ public class AnswerService {
         Answer answer = answerRepository.findById(id)
                 .orElseThrow(() -> new IllegalStateException("해당 답변이 없습니다. id = " + id));
         answer.update(answerWithUpdateInfo);
+
         return id;
     }
 
     @Transactional
-    public Long delete(Long questionId, Long id, HttpSession session) {
-        Question question = questionRepository.findById(questionId)
-                .orElseThrow(() -> new IllegalStateException("해당 글이 없습니다. id = " + id));
-        Answer answer = answerRepository.findById(id)
-                .orElseThrow(() -> new IllegalStateException("해당 답변이 없습니다. id = " + id));
-        User sessionedUser = HttpSessionUtils.getUserFromSession(session);
-        if (!answer.isWrittenBy(sessionedUser)) {
-            throw new IllegalStateException("자신이 작성한 답변만 삭제할 수 있습니다.");
-        }
-        answerRepository.delete(answer);
+    public Long deleteById(Long questionId, Long id) {
+        answerRepository.deleteById(id);
 
+        Question question = questionRepository.findById(questionId)
+                .orElseThrow(() -> new IllegalStateException("해당 질문이 없습니다. id = " + id));
         int answerCount = answerRepository.countAnswersByQuestionId(questionId);
         question.setAnswerCount(answerCount);
 

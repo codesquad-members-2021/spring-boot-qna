@@ -35,7 +35,9 @@ public class QuestionController {
 
     @PostMapping("/")
     public String createQuestion(Question question, HttpSession session) {
-        questionService.create(question, session);
+        User sessionedUser = (User) session.getAttribute(HttpSessionUtils.USER_SESSION_KEY);
+        question.setWriter(sessionedUser);
+        questionService.create(question);
         return "redirect:/";
     }
 
@@ -75,7 +77,12 @@ public class QuestionController {
         if (!HttpSessionUtils.isLoginUser(session)) {
             return "redirect:/users/login";
         }
-        questionService.delete(id, session);
+        Question question = questionService.findById(id);
+        User sessionedUser = HttpSessionUtils.getUserFromSession(session);
+        if (!question.isWrittenBy(sessionedUser)) {
+            throw new IllegalStateException("자신이 작성한 글만 삭제할 수 있습니다.");
+        }
+        questionService.deleteById(id);
         return "redirect:/";
     }
 }

@@ -29,7 +29,9 @@ public class AnswerController {
         if (!HttpSessionUtils.isLoginUser(session)) {
             return "redirect:/users/login";
         }
-        answerService.create(questionId, answer, session);
+        User sessionedUser = HttpSessionUtils.getUserFromSession(session);
+        answer.setWriter(sessionedUser);
+        answerService.create(questionId, answer);
         return "redirect:/questions/" + questionId;
     }
 
@@ -63,7 +65,12 @@ public class AnswerController {
         if (!HttpSessionUtils.isLoginUser(session)) {
             return "redirect:/users/login";
         }
-        answerService.delete(questionId, id, session);
+        Answer answer = answerService.findById(id);
+        User sessionedUser = HttpSessionUtils.getUserFromSession(session);
+        if (!answer.isWrittenBy(sessionedUser)) {
+            throw new IllegalStateException("자신이 작성한 답변만 삭제할 수 있습니다.");
+        }
+        answerService.deleteById(questionId, id);
 
         return "redirect:/questions/" + questionId;
     }
