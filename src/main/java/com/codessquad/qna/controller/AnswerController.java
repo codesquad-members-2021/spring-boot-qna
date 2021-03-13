@@ -41,7 +41,9 @@ public class AnswerController {
     public String delete(@PathVariable("questionId") Long questionId,
                                @PathVariable("answerId") Long answerId,
                                HttpSession session) {
-        answerRepository.delete(getAnswerWithCheckSession(questionId, answerId, session));
+        Answer answer = getAnswerWithCheckSession(questionId, answerId, session);
+        answer.delete();
+        answerRepository.save(answer);
         return "redirect:/questions/" + questionId;
     }
 

@@ -25,10 +25,13 @@ public class Answer {
     private String comment;
     private LocalDateTime time;
 
+    private boolean deleted;
+
     protected Answer() {}
 
     public Answer(String comment) {
         this.comment = comment;
+        this.deleted = false;
     }
 
     public Long getId() {
@@ -45,6 +48,10 @@ public class Answer {
 
     public String getComment() {
         return comment;
+    }
+
+    public boolean isDeleted() {
+        return deleted;
     }
 
     public LocalDateTime getTime() {
@@ -70,5 +77,9 @@ public class Answer {
 
     public boolean matchesWriter(User user) {
         return writer.equals(user);
+    }
+
+    public void delete() {
+        deleted = true;
     }
 }
