@@ -1,8 +1,7 @@
 package com.codessquad.qna.controller;
 
-import com.codessquad.qna.exception.CanNotFindPostException;
 import com.codessquad.qna.exception.NotExistLoggedUserInSessionException;
-import com.codessquad.qna.exception.UserNotFoundException;
+import com.codessquad.qna.exception.NotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -18,26 +17,14 @@ public class ControllerExceptionHandler {
     private static final Logger logger = LoggerFactory.getLogger(ControllerExceptionHandler.class);
 
     /**
-     * 유저를 가져오지 못할시 처리할 로직 생성
-     * 없는 페이지에 대한 요청이 므로 404 페이지를 리턴하도록 해줌
-     *
-     * @return 404 page
-     */
-    @ResponseStatus(HttpStatus.NOT_FOUND)
-    @ExceptionHandler(UserNotFoundException.class)
-    public String handleCanNotFindUserException(UserNotFoundException e) {
-        return "error/404";
-    }
-
-    /**
      * 없는 페이지에 대한 요청이 므로 404 페이지를 리턴하도록 해줌
      *
      * @param e
      * @return 404 page
      */
     @ResponseStatus(HttpStatus.NOT_FOUND)
-    @ExceptionHandler(CanNotFindPostException.class)
-    public String handleCanNotFindPostException(CanNotFindPostException e) {
+    @ExceptionHandler(NotFoundException.class)
+    public String handleNotFoundException(NotFoundException e) {
         return "error/404";
     }
 
