@@ -3,45 +3,36 @@ package com.codessquad.qna.user;
 import com.codessquad.qna.utils.SessionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpSession;
-import java.nio.charset.StandardCharsets;
-import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.StreamSupport;
 
 @Controller
 @RequestMapping("/users")
 public class UserController {
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
-    @Autowired
-    private UserRepository userRepository;
+    private final UserService userService;
+
+    public UserController(UserService userService) {
+        this.userService = userService;
+    }
 
     @GetMapping
     public ModelAndView getUsers() {
-        List<UserDTO> users = StreamSupport.stream(userRepository.findAll().spliterator(), true)
-                .map(User::toDTO)
-                .collect(Collectors.toList());
-
-        return new ModelAndView("/user/list", "users", users);
+        return new ModelAndView("/user/list", "users", userService.getUsers());
     }
 
     @GetMapping("/{id}")
     public ModelAndView getUser(@PathVariable Long id) {
-        User user = userRepository.findById(id).get();
-        return new ModelAndView("/user/profile", "user", user.toDTO());
+        return new ModelAndView("/user/profile", "user", userService.getUser(id));
     }
 
     @PostMapping
     public String createUser(UserDTO user) {
-        userRepository.save(user.toEntity());
+        userService.createUser(user);
         return "redirect:/users";
     }
 
@@ -49,37 +40,19 @@ public class UserController {
     public ModelAndView getUserUpdateForm(@PathVariable Long id, HttpSession session) {
         SessionUtils.verifyWithSessionUserId(session, id);
 
-        User user = userRepository.findById(id).get();
-        return new ModelAndView("/user/updateForm", "user", user.toDTO());
+        return new ModelAndView("/user/updateForm", "user", userService.getUser(id));
     }
 
     @PutMapping("/{id}")
     public String updateUser(@PathVariable Long id, UserDTO newUser, HttpSession session) {
-        User existedUser = userRepository.findById(id).get();
-
-        existedUser.checkPassword(newUser.getPassword());
-        existedUser.update(newUser);
-
-        userRepository.save(existedUser);
-        SessionUtils.setSessionUser(session, existedUser);
+        SessionUtils.setSessionUser(session, userService.updateUser(id, newUser).toEntity());
 
         return "redirect:/users";
     }
 
     @PostMapping("/login")
     public String login(String userId, String password, HttpSession session) {
-        User user = userRepository.findByUserId(userId)
-                .orElseThrow(() -> HttpClientErrorException.create(
-                        User.LOGIN_FAIL_MESSAGE,
-                        HttpStatus.UNAUTHORIZED,
-                        "",
-                        null,
-                        null,
-                        StandardCharsets.UTF_8
-                ));
-
-        user.checkPassword(password);
-        SessionUtils.setSessionUser(session, user);
+        SessionUtils.setSessionUser(session, userService.getUserWithVerifyPassword(userId, password).toEntity());
 
         return "redirect:/";
     }
