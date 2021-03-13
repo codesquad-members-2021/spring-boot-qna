@@ -29,7 +29,7 @@ public class UsersController {
         return "redirect:/users";
     }
 
-    @GetMapping()
+    @GetMapping
     public String getUserList(Model model) {
         model.addAttribute("users", userRepository.findAll());
         return "user/list";
