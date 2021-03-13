@@ -1,8 +1,6 @@
 package com.codessquad.qna.entity;
 
 import javax.persistence.*;
-import java.util.Collections;
-import java.util.List;
 
 @Entity
 public class User {
@@ -18,9 +16,6 @@ public class User {
     private String password;
     private String name;
     private String email;
-
-    @OneToMany(mappedBy = "author")
-    private List<Post> posts;
 
     protected User() {
     }
@@ -57,10 +52,6 @@ public class User {
 
     public String getEmail() {
         return email;
-    }
-
-    public List<Post> getPosts() {
-        return Collections.unmodifiableList(posts);
     }
 
     public boolean isMatchedPassword(String password) {
