@@ -1,11 +1,17 @@
 package com.codessquad.qna.user;
 
+import org.springframework.http.HttpStatus;
+import org.springframework.web.client.HttpClientErrorException;
+
 import javax.persistence.*;
+import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.List;
 
 @Entity
 public class User {
+    public static final String LOGIN_FAIL_MESSAGE = "아이디 또는 비밀번호가 틀립니다. 다시 로그인 해주세요.";
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -78,7 +84,14 @@ public class User {
 
     public void checkPassword(String password) {
         if (!this.password.equals(password)) {
-            throw new IllegalArgumentException("비밀번호가 일치하지 않습니다.");
+            throw HttpClientErrorException.create(
+                    LOGIN_FAIL_MESSAGE,
+                    HttpStatus.UNAUTHORIZED,
+                    "",
+                    null,
+                    null,
+                    StandardCharsets.UTF_8
+            );
         }
     }
 

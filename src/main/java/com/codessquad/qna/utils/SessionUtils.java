@@ -1,6 +1,5 @@
 package com.codessquad.qna.utils;
 
-import com.codessquad.qna.exception.UserNotFoundException;
 import com.codessquad.qna.user.User;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.client.HttpClientErrorException;
@@ -18,7 +17,14 @@ public class SessionUtils {
         User sessionUser = ((User) session.getAttribute(SESSION_USER));
 
         if (sessionUser == null) {
-            throw new UserNotFoundException();
+            throw HttpClientErrorException.create(
+                    "로그인이 필요합니다.",
+                    HttpStatus.UNAUTHORIZED,
+                    "",
+                    null,
+                    null,
+                    StandardCharsets.UTF_8
+            );
         }
 
         return sessionUser;

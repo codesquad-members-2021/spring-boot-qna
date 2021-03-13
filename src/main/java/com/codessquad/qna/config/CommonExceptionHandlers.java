@@ -1,11 +1,11 @@
 package com.codessquad.qna.config;
 
-import com.codessquad.qna.exception.UserNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.client.HttpClientErrorException;
+import org.springframework.web.servlet.ModelAndView;
 
 @ControllerAdvice
 public class CommonExceptionHandlers {
@@ -16,9 +16,9 @@ public class CommonExceptionHandlers {
     }
 
     @ResponseStatus(HttpStatus.UNAUTHORIZED)
-    @ExceptionHandler(UserNotFoundException.class)
-    public String userNotFoundExceptionHandler() {
-        return "/user/login_failed";
+    @ExceptionHandler(HttpClientErrorException.Unauthorized.class)
+    public ModelAndView httpClientUnauthorizedExceptionHandler(HttpClientErrorException.Unauthorized e) {
+        return new ModelAndView("/user/login_failed", "errMessage", e.getMessage());
     }
 
     @ResponseStatus(HttpStatus.FORBIDDEN)

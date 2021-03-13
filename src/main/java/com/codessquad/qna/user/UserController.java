@@ -1,15 +1,17 @@
 package com.codessquad.qna.user;
 
-import com.codessquad.qna.exception.UserNotFoundException;
 import com.codessquad.qna.utils.SessionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpSession;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
@@ -66,7 +68,15 @@ public class UserController {
 
     @PostMapping("/login")
     public String login(String userId, String password, HttpSession session) {
-        User user = userRepository.findByUserId(userId).orElseThrow(() -> new UserNotFoundException("존재하지 않는 사용자입니다."));
+        User user = userRepository.findByUserId(userId)
+                .orElseThrow(() -> HttpClientErrorException.create(
+                        User.LOGIN_FAIL_MESSAGE,
+                        HttpStatus.UNAUTHORIZED,
+                        "",
+                        null,
+                        null,
+                        StandardCharsets.UTF_8
+                ));
 
         user.checkPassword(password);
         SessionUtils.setSessionUser(session, user);
