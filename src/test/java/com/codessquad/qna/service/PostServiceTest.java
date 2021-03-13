@@ -4,35 +4,28 @@ import com.codessquad.qna.MvcConfig;
 import com.codessquad.qna.entity.Post;
 import com.codessquad.qna.entity.User;
 import com.codessquad.qna.exception.CanNotFindPostException;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
-import org.springframework.test.annotation.Rollback;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 
-
-@Rollback(value = true)
 class PostServiceTest {
 
-    static ApplicationContext applicationContext = new AnnotationConfigApplicationContext(MvcConfig.class);
-    static UserService userService;
-    static User user;
-    PostService postService;
+    ApplicationContext applicationContext = new AnnotationConfigApplicationContext(MvcConfig.class);
 
-    @BeforeAll
-    static void saveUser() {
-        user = new User("roach", "1234", "roach", "123@naver.com");
-        userService = applicationContext.getBean("userService", UserService.class);
-        userService.save(user);
-    }
+    UserService userService;
+    PostService postService;
+    User user;
 
     @BeforeEach
     void rollback() {
+        user = new User("roach", "1234", "roach", "123@naver.com");
+        userService = applicationContext.getBean("userService", UserService.class);
+        userService.save(user);
         postService = applicationContext.getBean("postService", PostService.class);
     }
 
