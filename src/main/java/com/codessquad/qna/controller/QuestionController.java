@@ -34,7 +34,7 @@ public class QuestionController {
     }
 
     @GetMapping("/questions/{index}")
-    public String showQuestionDetail(@PathVariable int index, Model model) {
+    public String showQuestionDetail(@PathVariable Long index, Model model) {
 
         model.addAttribute("question", questionService.findQuestion(index).get());
 
