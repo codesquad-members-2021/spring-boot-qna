@@ -21,7 +21,7 @@
             <ul class="nav navbar-nav navbar-right">
                 <li class="active"><a href="/questions">Posts</a></li>
                 {{#if sessionedUser}}
-                <li><a href="#" role="button">로그아웃</a></li>
+                <li><a href="/users/logout" role="button">로그아웃</a></li>
                 <li><a href="/users/{{sessionedUser.id}}/form" role="button">개인정보수정</a></li>
                 {{else}}
                 <li><a href="/users/form" role="button">회원가입</a></li>
