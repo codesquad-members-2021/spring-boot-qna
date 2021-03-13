@@ -46,7 +46,7 @@ public class UserController {
     @GetMapping("/users/{userId}/updateForm")
     public String updateForm(@PathVariable("userId") String userId, Model model) {
         for (User user : users) {
-            if (user.getUserId().equals(userId)) {
+            if (user.isSameId(userId)) {
                 model.addAttribute("user", user);
                 break;
             }
@@ -56,9 +56,9 @@ public class UserController {
 
     @PostMapping("/user/{user.userId}/update")
     public String updateUser(@PathVariable("user.userId") String userId, User user) {
-        for (User u : users) {
-            if (u.getUserId().equals(userId)) {
-                users.remove(u);
+        for (User temp : users) {
+            if (temp.isSameId(userId)) {
+                users.remove(temp);
                 break;
             }
         }

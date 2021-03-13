@@ -15,6 +15,10 @@ public class QuestionController {
 
     private static List<Question> questions = new ArrayList<>();
 
+    public static List<Question> getQuestions() {
+        return questions;
+    }
+
     @GetMapping("/questions")
     public String goToCreateQuestion() {
         return "qnaForm";
@@ -23,13 +27,8 @@ public class QuestionController {
     @PostMapping("/questions")
     public String createQuestion(Question question) {
         question.setIndex(questions.size() + 1);
-        System.out.println(question);
         questions.add(question);
         return "redirect:/";
-    }
-
-    public static List<Question> getQuestions() {
-        return questions;
     }
 
     @GetMapping("/questions/{index}")
