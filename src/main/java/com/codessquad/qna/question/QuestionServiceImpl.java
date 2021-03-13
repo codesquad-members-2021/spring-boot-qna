@@ -15,11 +15,11 @@ import java.util.stream.StreamSupport;
 @Service
 public class QuestionServiceImpl implements QuestionService {
     private final QuestionRepository questionRepository;
-    private final AnswerRepository answerRepository;
+    private final AnswerService answerService;
 
-    public QuestionServiceImpl(QuestionRepository questionRepository, AnswerRepository answerRepository) {
+    public QuestionServiceImpl(QuestionRepository questionRepository, AnswerService answerService) {
         this.questionRepository = questionRepository;
-        this.answerRepository = answerRepository;
+        this.answerService = answerService;
     }
 
     @Override
@@ -67,7 +67,7 @@ public class QuestionServiceImpl implements QuestionService {
 
         verifyWriter(question, currentSessionUser.toEntity());
 
-        answerRepository.deleteAll(question.getAnswers());
+        answerService.deleteAnswers(question.getAnswers());
         questionRepository.delete(question);
     }
 
