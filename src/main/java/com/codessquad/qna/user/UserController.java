@@ -1,5 +1,6 @@
 package com.codessquad.qna.user;
 
+import com.codessquad.qna.exception.UserNotFoundException;
 import com.codessquad.qna.utils.SessionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,7 +17,7 @@ import java.util.stream.StreamSupport;
 @Controller
 @RequestMapping("/users")
 public class UserController {
-    Logger logger = LoggerFactory.getLogger(this.getClass());
+    private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     @Autowired
     private UserRepository userRepository;
@@ -68,7 +69,7 @@ public class UserController {
     }
 
     @PostMapping("/login")
-    public String login(String userId, String password, HttpServletRequest request, HttpSession session) {
+    public String login(String userId, String password, HttpSession session) {
         User user = userRepository.findByUserId(userId).orElseThrow(() -> new UserNotFoundException("존재하지 않는 사용자입니다."));
 
         user.checkPassword(password);
