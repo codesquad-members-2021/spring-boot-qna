@@ -25,7 +25,7 @@ public class HttpSessionUtils {
 
     /**
      * 세션에 로그인된 사용자가 없으면 NotExistLoggedUserInSession 를 throw
-     * 있으면 정상적인 유저를 리턴함 따라서 사용하는 곳에서 get() 을 사용해도됨.
+     * 있으면 정상적인 유저를 리턴함
      *
      * @param httpSession
      * @return User
