@@ -26,7 +26,7 @@ public class Post {
     private String body;
     private LocalDateTime createDateTime = LocalDateTime.now();
 
-    @OneToMany(mappedBy = "post")
+    @OneToMany(mappedBy = "post", fetch = FetchType.EAGER)
     private List<Comment> comments;
 
     protected Post() {
@@ -63,7 +63,7 @@ public class Post {
     }
 
     public boolean isMatchedAuthor(User user) {
-        return this.author.equals(user.getUserId());
+        return this.author.isMatchedId(user.getId());
     }
 
     public void change(Post post) {
