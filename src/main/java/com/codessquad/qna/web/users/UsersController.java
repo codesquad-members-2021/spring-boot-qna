@@ -16,11 +16,11 @@ public class UsersController {
 
     private final UserRepository userRepository;
 
+    private final Logger logger = LoggerFactory.getLogger(UsersController.class);
+
     public UsersController(UserRepository userRepository) {
         this.userRepository = userRepository;
     }
-
-    Logger logger = LoggerFactory.getLogger(UsersController.class);
 
     @PostMapping
     public String createUser(User createdUser) {

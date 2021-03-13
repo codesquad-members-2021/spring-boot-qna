@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 
 @ControllerAdvice
 public class ControllerExceptionHandler {
-    Logger logger = LoggerFactory.getLogger(ControllerExceptionHandler.class);
+    private final Logger logger = LoggerFactory.getLogger(ControllerExceptionHandler.class);
 
     @ExceptionHandler(UnauthorizedAccessException.class)
     @ResponseStatus(HttpStatus.UNAUTHORIZED)

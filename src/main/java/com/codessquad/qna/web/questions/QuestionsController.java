@@ -18,7 +18,7 @@ import javax.servlet.http.HttpSession;
 @RequestMapping("/questions")
 public class QuestionsController {
 
-    Logger logger = LoggerFactory.getLogger(QuestionsController.class);
+    private final Logger logger = LoggerFactory.getLogger(QuestionsController.class);
 
     private final QuestionRepository questionRepository;
     private final AnswersRepository answersRepository;
