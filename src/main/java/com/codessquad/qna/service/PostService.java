@@ -3,7 +3,7 @@ package com.codessquad.qna.service;
 import com.codessquad.qna.dto.PostDto;
 import com.codessquad.qna.entity.Post;
 import com.codessquad.qna.entity.User;
-import com.codessquad.qna.exception.CanNotFindPostException;
+import com.codessquad.qna.exception.NotFoundException;
 import com.codessquad.qna.repository.PostRepository;
 import com.codessquad.qna.util.Mapper;
 import org.springframework.stereotype.Service;
@@ -30,7 +30,9 @@ public class PostService {
     }
 
     public Post getPost(Long id) {
-        return postRepository.findById(id).orElseThrow(CanNotFindPostException::new);
+        return postRepository.findById(id).orElseThrow(() -> {
+            return new NotFoundException("해당 게시물을 찾을 수 없습니다.");
+        });
     }
 
     public List<Post> getPosts() {

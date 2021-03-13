@@ -2,7 +2,6 @@ package com.codessquad.qna.controller;
 
 import com.codessquad.qna.dto.UserDto;
 import com.codessquad.qna.entity.User;
-import com.codessquad.qna.exception.UserNotFoundException;
 import com.codessquad.qna.service.UserService;
 import com.codessquad.qna.util.HttpSessionUtils;
 import org.slf4j.Logger;
@@ -104,7 +103,7 @@ public class UserController {
      * @param id    userId
      * @param model
      * @return only for users with the same id
-     * @throws UserNotFoundException
+     * @throws com.codessquad.qna.exception.NotFoundException
      */
     @GetMapping("/{id}")
     public String getUserProfile(@PathVariable Long id, Model model) {

@@ -3,7 +3,7 @@ package com.codessquad.qna.service;
 import com.codessquad.qna.MvcConfig;
 import com.codessquad.qna.entity.Post;
 import com.codessquad.qna.entity.User;
-import com.codessquad.qna.exception.CanNotFindPostException;
+import com.codessquad.qna.exception.NotFoundException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -50,9 +50,9 @@ class PostServiceTest {
     @Test
     @DisplayName("없는 포스트를 가져오려고 할때 CanNotFindPostException 이 발생하는지 확인한다.")
     void failGetPost() {
-        assertThatExceptionOfType(CanNotFindPostException.class)
+        assertThatExceptionOfType(NotFoundException.class)
                 .isThrownBy(() -> postService.getPost(100L))
-                .withMessage("해당 POST 를 찾을 수 없습니다.");
+                .withMessage("해당 게시물을 찾을 수 없습니다.");
     }
 
 }

@@ -2,7 +2,7 @@ package com.codessquad.qna.service;
 
 import com.codessquad.qna.dto.UserDto;
 import com.codessquad.qna.entity.User;
-import com.codessquad.qna.exception.UserNotFoundException;
+import com.codessquad.qna.exception.NotFoundException;
 import com.codessquad.qna.repository.UserRepository;
 import com.codessquad.qna.util.Mapper;
 import org.slf4j.Logger;
@@ -37,11 +37,15 @@ public class UserService {
     }
 
     public User getUserById(Long id) {
-        return userRepository.findById(id).orElseThrow(UserNotFoundException::new);
+        return userRepository.findById(id).orElseThrow(() -> {
+            return new NotFoundException("해당 유저를 찾을 수 없습니다.");
+        });
     }
 
     public User getUserByUserId(String userId) {
-        return userRepository.findByUserId(userId).orElseThrow(UserNotFoundException::new);
+        return userRepository.findByUserId(userId).orElseThrow(() -> {
+            return new NotFoundException("해당 유저를 찾을 수 없습니다.");
+        });
     }
 
     @Transactional
