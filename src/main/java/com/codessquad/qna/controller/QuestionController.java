@@ -2,6 +2,7 @@ package com.codessquad.qna.controller;
 
 import com.codessquad.qna.domain.Question;
 import com.codessquad.qna.service.QuestionService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
