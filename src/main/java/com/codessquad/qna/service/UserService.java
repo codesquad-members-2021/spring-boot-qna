@@ -61,17 +61,15 @@ public class UserService {
     }
 
     public boolean checkSession(HttpSession session, Long id) {
-        if (!HttpSessionUtils.isLoginUser(session)) {
-            throw new IllegalStateException("자신의 정보만 수정 가능");
-        }
-        checkSameUser(session, id);
+        User user = HttpSessionUtils.getUserFromSession(session);
+        checkSameUser(user, id);
         return true;
     }
 
-    private void checkSameUser(HttpSession session, Long id) {
-        User sessionedUser = HttpSessionUtils.getUserFromSession(session);
-        if (!sessionedUser.checkId(id)) {
+    private void checkSameUser(User user, Long id) {
+        if (!user.checkId(id)) {
             throw new IllegalStateException("자신의 정보만 수정 가능");
+            //todo : 에러 메세지 하드코딩 되어있음 변경 방법은?
         }
     }
 

@@ -1,6 +1,7 @@
 package com.codessquad.qna.controller;
 
 import com.codessquad.qna.domain.Question;
+import com.codessquad.qna.domain.User;
 import com.codessquad.qna.service.QuestionService;
 import com.codessquad.qna.service.UserService;
 import com.codessquad.qna.util.HttpSessionUtils;
@@ -28,10 +29,8 @@ public class QuestionController {
 
     @PostMapping
     public String createQuestion(Question question, HttpSession session) {
-        if (!HttpSessionUtils.isLoginUser(session)) {
-            return "redirect:/users/loginForm";
-        }
-        questionService.write(question, HttpSessionUtils.getUserFromSession(session));
+        User user = HttpSessionUtils.getUserFromSession(session);
+        questionService.write(question, user);
         return "redirect:/";
     }
 
@@ -45,9 +44,7 @@ public class QuestionController {
 
     @GetMapping("/form")
     public String renderQuestionForm(HttpSession session) {
-        if (!HttpSessionUtils.isLoginUser(session)) {
-            return "redirect:/users/loginForm";
-        }
+        HttpSessionUtils.getUserFromSession(session);
         return "qna/form";
     }
 

@@ -6,7 +6,6 @@ import com.codessquad.qna.util.HttpSessionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -25,9 +24,7 @@ public class LoginController {
 
     @PostMapping("/login")
     public String login(String userId, String password, HttpSession session) {
-        if (!userService.checkLoginable(userId, password)) {
-            return "redirect:/users/loginForm";
-        }
+        userService.checkLoginable(userId, password);
         User user = userService.findByUserId(userId);
         session.setAttribute(HttpSessionUtils.USER_SESSION_KEY, user);
         return "redirect:/";

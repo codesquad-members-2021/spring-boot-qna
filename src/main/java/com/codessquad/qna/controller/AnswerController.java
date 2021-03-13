@@ -1,5 +1,6 @@
 package com.codessquad.qna.controller;
 
+import com.codessquad.qna.domain.User;
 import com.codessquad.qna.service.AnswerService;
 import com.codessquad.qna.util.HttpSessionUtils;
 import org.springframework.stereotype.Controller;
@@ -21,10 +22,8 @@ public class AnswerController {
 
     @PostMapping
     public String create(@PathVariable Long questionId, String contents, HttpSession session) {
-        if (!HttpSessionUtils.isLoginUser(session)) {
-            return "redirect:/users/loginForm";
-        }
-        answerService.write(HttpSessionUtils.getUserFromSession(session), contents, questionId);
+        User user = HttpSessionUtils.getUserFromSession(session);
+        answerService.write(user, contents, questionId);
         return "redirect:/questions/" + questionId;
     }
 
