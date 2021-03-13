@@ -69,7 +69,8 @@ public class QuestionController {
         questionRepository.findById(id)
                 .ifPresent(question -> {
                     matchesQuestionWriterWithUser(question, sessionUser);
-                    questionRepository.deleteById(id);
+                    question.delete();
+                    questionRepository.save(question);
                 });
         return "redirect:/";
     }

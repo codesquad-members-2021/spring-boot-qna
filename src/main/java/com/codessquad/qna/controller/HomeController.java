@@ -19,7 +19,7 @@ public class HomeController {
     @GetMapping("/")
     public ModelAndView index() {
         ModelAndView modelAndView = new ModelAndView("index");
-        modelAndView.addObject("questions", questionRepository.findAll());
+        modelAndView.addObject("questions", questionRepository.findAllByDeleted(false));
         return modelAndView;
     }
 }

@@ -19,6 +19,7 @@ public class Question {
     private String contents;
     private LocalDateTime time;
     private int point;
+    private boolean deleted;
 
     @OneToMany(mappedBy = "question")
     private List<Answer> answers;
@@ -28,6 +29,7 @@ public class Question {
     public Question(String title, String contents) {
         this.title = title;
         this.contents = contents;
+        this.deleted = false;
     }
 
     public void setWriter(User writer) {
@@ -70,6 +72,10 @@ public class Question {
         return answers;
     }
 
+    public boolean isDeleted() {
+        return deleted;
+    }
+
     public boolean isWriter(User user) {
         return writer.equals(user);
     }
@@ -78,5 +84,9 @@ public class Question {
         this.title = updatedQuestion.title;
         this.contents = updatedQuestion.contents;
         this.time = LocalDateTime.now();
+    }
+
+    public void delete(){
+        this.deleted = true;
     }
 }
