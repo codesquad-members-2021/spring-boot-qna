@@ -1,44 +1,34 @@
 package com.codessquad.qna.controller;
 
 import com.codessquad.qna.domain.User;
-import com.codessquad.qna.repository.UserRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.codessquad.qna.service.UserService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
-import com.codessquad.qna.valid.UserValidation;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import javax.servlet.http.HttpSession;
 
 @Controller
 @RequestMapping("/users")
 public class UserController {
-    private static final Logger logger = LoggerFactory.getLogger(UserController.class);
-
     private final String CONFIRM_INFO = "/confirm/{id}";
     private final String UPDATE_INFO = "/update/{id}";
-    private final UserRepository userRepository;
+    private final UserService userService;
 
-    @Autowired
-    public UserController(UserRepository userRepository) {
-        this.userRepository = userRepository;
+    public UserController(UserService userService) {
+        this.userService = userService;
     }
 
     @PostMapping
     public String create(User user) {
-        logger.info(UserValidation.validUserInfo(user));
-        logger.info("users {}.", user);
-        userRepository.save(user);
+        userService.create(user);
         return "redirect:/";
     }
 
     @GetMapping
     public String list(Model model) {
-        model.addAttribute("users", userRepository.findAll());
-        logger.info("model {}." , model);
+        model.addAttribute("users", userService.findAll());
         return "user/list";
     }
 
@@ -49,7 +39,7 @@ public class UserController {
 
     @PostMapping("/login")
     public String login(String userId, String password, HttpSession session) {
-        User user = userRepository.findByUserId(userId);
+        User user = userService.findByUserId(userId);
         if (user == null) {
             return "redirect:/users/login";
         }
@@ -68,7 +58,7 @@ public class UserController {
 
     @GetMapping("/{id}")
     public String profile(@PathVariable Long id, Model model) {
-        User user = userRepository.findById(id).orElse(null);
+        User user = userService.findById(id);
         model.addAttribute("user", user);
         return "user/profile";
     }
@@ -92,7 +82,7 @@ public class UserController {
 
     @PostMapping(CONFIRM_INFO)
     public String confirmUserInfo(@PathVariable Long id, String password) {
-        User user = userRepository.findById(id).orElse(null);
+        User user = userService.findById(id);
         if (user.matchPassword(password)) {
             return "redirect:/users/update/{id}";
         }
@@ -106,17 +96,13 @@ public class UserController {
 
     @PutMapping(UPDATE_INFO)
     public String updateUserInfo(@PathVariable Long id, String password, String name, String email) {
-        User user = userRepository.findById(id).orElse(null);
-        user.updateUserInfo(password, name, email);
-        logger.info(UserValidation.validUserInfo(user));
-        logger.info("users {}.", user);
-        userRepository.save(user);
+        userService.update(id, password, name, email);
         return "redirect:/users";
     }
 
     private ModelAndView getUserRepository(String viewName, Long id) {
         ModelAndView modelAndView = new ModelAndView(viewName);
-        User user = userRepository.findById(id).orElse(null);
+        User user = userService.findById(id);
         modelAndView.addObject("userId", user.getUserId());
         return modelAndView;
     }
