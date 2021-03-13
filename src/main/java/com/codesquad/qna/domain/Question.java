@@ -37,6 +37,10 @@ public class Question {
         this.id = id;
     }
 
+    public long getId() {
+        return id;
+    }
+
     public String getWriter() {
         return writer;
     }

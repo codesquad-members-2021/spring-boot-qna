@@ -3,11 +3,10 @@ package com.codesquad.qna.service;
 import com.codesquad.qna.domain.User;
 import com.codesquad.qna.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 
 @Service
 public class UserService {
@@ -29,6 +28,6 @@ public class UserService {
 
     public User findUserById(Long id) {
         return userRepository.findById(id)
-                .orElseThrow(() -> (new ResponseStatusException(HttpStatus.NOT_FOUND, "User Not Found.")));
+                .orElseThrow(NoSuchElementException::new);
     }
 }

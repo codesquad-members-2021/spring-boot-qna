@@ -26,6 +26,10 @@ public class User {
     @Column(length = 64)
     private String email;
 
+    public Long getId() {
+        return id;
+    }
+
     public String getUserId() {
         return userId;
     }

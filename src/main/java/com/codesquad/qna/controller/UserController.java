@@ -21,13 +21,13 @@ public class UserController {
         this.userService = userService;
     }
 
-    @GetMapping()
+    @GetMapping
     public String list(Model model) {
         model.addAttribute("users", userService.findAll());
         return "/user/list";
     }
 
-    @PostMapping()
+    @PostMapping
     public String create(User user) {
         logger.info("User: {}", user);
 
@@ -59,6 +59,7 @@ public class UserController {
             return "redirect:/users";
         }
         user.update(newUser);
+        userService.save(user);
 
         return "redirect:/users";
     }

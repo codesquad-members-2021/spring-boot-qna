@@ -3,9 +3,10 @@ package com.codesquad.qna.service;
 import com.codesquad.qna.domain.Question;
 import com.codesquad.qna.repository.QuestionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
+
+import java.util.List;
+import java.util.NoSuchElementException;
 
 @Service
 public class QuestionService {
@@ -17,7 +18,7 @@ public class QuestionService {
         this.questionRepository = questionRepository;
     }
 
-    public Iterable<Question> findAll() {
+    public List<Question> findAll() {
         return questionRepository.findAll();
     }
 
@@ -27,6 +28,6 @@ public class QuestionService {
 
     public Question findQuestionById(long id) {
         return questionRepository.findById(id)
-                .orElseThrow(() -> (new ResponseStatusException(HttpStatus.NOT_FOUND, "Question Not Found.")));
+                .orElseThrow(NoSuchElementException::new);
     }
 }
