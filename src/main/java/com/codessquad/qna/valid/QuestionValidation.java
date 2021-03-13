@@ -7,7 +7,7 @@ public class QuestionValidation {
     public static String validQuestion(Question question) {
         validInfo("title", question.getTitle());
         validInfo("contents", question.getContents());
-        return "complete user null check ";
+        return "complete question null check ";
     }
 
     private static void validInfo(String entity, String info) {
