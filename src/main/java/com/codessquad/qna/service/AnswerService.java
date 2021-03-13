@@ -6,8 +6,6 @@ import com.codessquad.qna.model.User;
 import com.codessquad.qna.repository.AnswerRepository;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -24,7 +22,7 @@ public class AnswerService {
     public void save(Long id, Answer answer, User sessionUser) {
         Question question = questionService.findById(id);
         if (sessionUser.nonNull() && question.nonNull()) {
-            answer.save(sessionUser.getUserId(), question);
+            answer.save(sessionUser, question);
             this.answerRepository.save(answer);
         }
     }
@@ -52,14 +50,6 @@ public class AnswerService {
             return targetAnswer;
         }
         return new Answer();
-    }
-
-    public List<Answer> findAll(Long questionId) {
-        Question question = this.questionService.findById(questionId);
-        if (question.nonNull()) {
-            return answerRepository.findAllByQuestion(question);
-        }
-        return new ArrayList<>();
     }
 
     public Answer findById(Long id) {
