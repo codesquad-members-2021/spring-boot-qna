@@ -1,5 +1,6 @@
 package com.codessquad.qna.user;
 
+import com.codessquad.qna.utils.SessionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,9 +45,9 @@ public class UserController {
 
     @GetMapping("/{id}/form")
     public ModelAndView getUserUpdateForm(@PathVariable Long id, HttpSession session) {
-        User sessionedUser = (User) session.getAttribute("sessionedUser");
+        User sessionUser = SessionUtils.getSessionUser(session);
 
-        if (sessionedUser.getId() != id) {
+        if (sessionUser.getId() != id) {
             throw new IllegalArgumentException("권한이 없습니다.");
         }
 

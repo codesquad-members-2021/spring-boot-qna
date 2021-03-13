@@ -1,6 +1,7 @@
 package com.codessquad.qna.question;
 
 import com.codessquad.qna.user.User;
+import com.codessquad.qna.utils.SessionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -24,13 +25,10 @@ public class QuestionController {
 
     @PostMapping
     public String createQuestions(Question question, HttpSession session) {
-        long questionWriterId = question.getWriter().getId().longValue();
+        User sessionUser = SessionUtils.getSessionUser(session);
 
-        User sessionUser = ((User) session.getAttribute("sessionedUser"));
-        if (sessionUser == null) {
-            return "redirect:/users/login/form";
-        }
         long sessionUserId = sessionUser.getId().longValue();
+        long questionWriterId = question.getWriter().getId().longValue();
 
         if (questionWriterId != sessionUserId) {
             throw new IllegalArgumentException("본인이 작성한 글이 아닙니다.");
@@ -53,10 +51,8 @@ public class QuestionController {
 
         long questionWriterId = question.getWriter().getId().longValue();
 
-        User sessionUser = ((User) session.getAttribute("sessionedUser"));
-        if (sessionUser == null) {
-            return new ModelAndView("redirect:/users/login/form");
-        }
+        User sessionUser = SessionUtils.getSessionUser(session);
+
         long sessionUserId = sessionUser.getId().longValue();
 
         if (questionWriterId != sessionUserId) {
@@ -71,10 +67,8 @@ public class QuestionController {
 
         long questionWriterId = existedQuestion.getWriter().getId().longValue();
 
-        User sessionUser = ((User) session.getAttribute("sessionedUser"));
-        if (sessionUser == null) {
-            return "redirect:/users/login/form";
-        }
+        User sessionUser = SessionUtils.getSessionUser(session);
+
         long sessionUserId = sessionUser.getId().longValue();
 
         if (questionWriterId != sessionUserId) {
@@ -93,10 +87,8 @@ public class QuestionController {
 
         long questionWriterId = question.getWriter().getId().longValue();
 
-        User sessionUser = ((User) session.getAttribute("sessionedUser"));
-        if (sessionUser == null) {
-            return "redirect:/users/login/form";
-        }
+        User sessionUser = SessionUtils.getSessionUser(session);
+
         long sessionUserId = sessionUser.getId().longValue();
 
         if (questionWriterId != sessionUserId) {
@@ -112,11 +104,7 @@ public class QuestionController {
     public String createAnswer(@PathVariable Long questionId, Answer answer, HttpSession session) {
         Question question = questionRepository.findById(questionId).orElseThrow(() -> new IllegalArgumentException("질문을 찾을 수 없습니다."));
 
-        User sessionUser = (User) session.getAttribute("sessionedUser");
-
-        if (sessionUser == null) {
-            return "redirect:/users/login/form";
-        }
+        User sessionUser = SessionUtils.getSessionUser(session);
 
         answer.setWriter(sessionUser);
         answer.setQuestion(question);
@@ -128,14 +116,12 @@ public class QuestionController {
 
     @DeleteMapping("/{questionId}/answers/{id}")
     public String deleteAnswer(@PathVariable Long questionId, @PathVariable Long id, HttpSession session) {
-        User sessionUser = (User) session.getAttribute("sessionedUser");
+        User sessionUser = SessionUtils.getSessionUser(session);
+
         Answer answer = answerRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("존재하지 않는 답변입니다."));
 
         long answerWriterId = answer.getWriter().getId().longValue();
 
-        if (sessionUser == null) {
-            return "redirect:/users/login/form";
-        }
         long sessionUserId = sessionUser.getId().longValue();
 
         if (answerWriterId != sessionUserId) {
