@@ -48,7 +48,7 @@ public class QuestionService {
 
     public Question verifyQuestion(Long id, User sessionUser) {
         Question question = findById(id);
-        if (sessionUser.nonNull() && question.nonNull() && question.matchUser(sessionUser)) {
+        if (sessionUser.nonNull() && question.nonNull() && question.matchWriter(sessionUser)) {
             return question;
         }
         return new Question();
