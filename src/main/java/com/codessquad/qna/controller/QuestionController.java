@@ -2,27 +2,21 @@ package com.codessquad.qna.controller;
 
 import com.codessquad.qna.domain.User;
 import com.codessquad.qna.domain.Question;
-import com.codessquad.qna.repository.QuestionRepository;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.codessquad.qna.service.QuestionService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
-import com.codessquad.qna.valid.QuestionValidation;
 
 import javax.servlet.http.HttpSession;
 
 @Controller
 @RequestMapping("/questions")
 public class QuestionController {
-    private static final Logger logger = LoggerFactory.getLogger(QuestionController.class);
-    private final QuestionRepository questionRepository;
+    private final QuestionService questionService;
 
-    @Autowired
-    public QuestionController(QuestionRepository questionRepository) {
-        this.questionRepository = questionRepository;
+    public QuestionController(QuestionService questionService) {
+        this.questionService = questionService;
     }
 
     @GetMapping("/form")
@@ -38,11 +32,7 @@ public class QuestionController {
         if (!HttpSessionUtils.isLoginUser(session)) {
             return "/users/login";
         }
-        User loginUser = HttpSessionUtils.getSessionUser(session);
-        Question question = new Question(loginUser, title, contents);
-        logger.info(QuestionValidation.validQuestion(question));
-        logger.info("question {}. ", question);
-        questionRepository.save(question);
+        questionService.create(title, contents, session);
         return "redirect:/";
     }
 
@@ -57,7 +47,7 @@ public class QuestionController {
             return "/user/login";
         }
         User loginUser = HttpSessionUtils.getSessionUser(session);
-        Question question = questionRepository.findById(id).orElse(null);
+        Question question = questionService.findById(id);
         if (question.matchUser(loginUser)) {
             model.addAttribute("question", question);
             return "/qna/updateForm";
@@ -67,20 +57,16 @@ public class QuestionController {
 
     @PutMapping("/{id}/update")
     public String updateQuestion(@PathVariable Long id, String title, String contents) {
-        Question question = questionRepository.findById(id).orElse(null);
-        question.updateQuestion(title, contents);
-        logger.info(QuestionValidation.validQuestion(question));
-        logger.info("question {}. ", question);
-        questionRepository.save(question);
+        questionService.update(id, title, contents);
         return "redirect:/questions/" + id;
     }
 
     @DeleteMapping("/{id}/delete")
     public String deleteQuestion(@PathVariable Long id, HttpSession session) {
-        Question question = questionRepository.findById(id).orElse(null);
+        Question question = questionService.findById(id);
         User loginUser = HttpSessionUtils.getSessionUser(session);
         if (question.matchUser(loginUser)) {
-            questionRepository.delete(question);
+            questionService.delete(question);
             return "redirect:/";
         }
         return "redirect:/";
@@ -88,7 +74,7 @@ public class QuestionController {
 
     private ModelAndView getQuestionRepository(String viewName, Long id) {
         ModelAndView modelAndView = new ModelAndView(viewName);
-        modelAndView.addObject("question", questionRepository.findById(id).orElse(null));
+        modelAndView.addObject("question", questionService.findById(id));
         return modelAndView;
     }
 

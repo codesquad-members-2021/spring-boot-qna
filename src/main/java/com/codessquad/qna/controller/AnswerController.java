@@ -1,8 +1,5 @@
 package com.codessquad.qna.controller;
 
-import com.codessquad.qna.domain.Answer;
-import com.codessquad.qna.domain.Question;
-import com.codessquad.qna.domain.User;
 import com.codessquad.qna.service.AnswerService;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
