@@ -5,6 +5,8 @@ import com.codessquad.qna.domain.user.UserRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Service
 public class UserService {
 
@@ -20,14 +22,14 @@ public class UserService {
     }
 
     @Transactional
-    public Iterable<User> findAll() {
-        return userRepository.findAll();
+    public List<User> findAll() {
+        return (List<User>) userRepository.findAll();
     }
 
     @Transactional
     public User findById(Long id) {
-        return userRepository.findById(id).orElseThrow(
-                () -> new IllegalArgumentException("해당 사용자를 찾을 수 없습니다. id = " + id));
+        return userRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("해당 사용자를 찾을 수 없습니다. id = " + id));
     }
 
     @Transactional
@@ -37,8 +39,8 @@ public class UserService {
 
     @Transactional
     public Long update(Long id, User userWithUpdatedInfo) {
-        User user = userRepository.findById(id).orElseThrow(
-                () -> new IllegalArgumentException("해당 사용자를 찾을 수 없습니다. id = " + id));
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("해당 사용자를 찾을 수 없습니다. id = " + id));
         if (!user.isCorrectPassword(userWithUpdatedInfo.getPassword())) {
             throw new IllegalArgumentException("비밀번호가 일치하지 않습니다.");
         }

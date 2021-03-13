@@ -1,4 +1,4 @@
-package com.codessquad.qna.controller;
+package com.codessquad.qna.utils;
 
 import com.codessquad.qna.domain.user.User;
 
@@ -13,10 +13,7 @@ public class HttpSessionUtils {
 
     public static boolean isLoginUser(HttpSession session) {
         User user = (User) session.getAttribute(USER_SESSION_KEY);
-        if (user == null) {
-            return false;
-        }
-        return true;
+        return user != null;
     }
 
     public static User getUserFromSession(HttpSession session) {

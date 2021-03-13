@@ -5,6 +5,7 @@ import com.codessquad.qna.domain.question.Question;
 import com.codessquad.qna.domain.user.User;
 import com.codessquad.qna.service.AnswerService;
 import com.codessquad.qna.service.QuestionService;
+import com.codessquad.qna.utils.HttpSessionUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;

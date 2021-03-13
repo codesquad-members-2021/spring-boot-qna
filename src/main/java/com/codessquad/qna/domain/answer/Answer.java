@@ -2,10 +2,10 @@ package com.codessquad.qna.domain.answer;
 
 import com.codessquad.qna.domain.question.Question;
 import com.codessquad.qna.domain.user.User;
+import com.codessquad.qna.utils.DateFormat;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 
 @Entity
 public class Answer {
@@ -26,7 +26,7 @@ public class Answer {
     private String date;
 
     public Answer() {
-        this.date = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"));
+        this.date = LocalDateTime.now().format(DateFormat.DEFAULT);
     }
 
     public Long getId() {

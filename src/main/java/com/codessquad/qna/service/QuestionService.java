@@ -1,6 +1,6 @@
 package com.codessquad.qna.service;
 
-import com.codessquad.qna.controller.HttpSessionUtils;
+import com.codessquad.qna.utils.HttpSessionUtils;
 import com.codessquad.qna.domain.question.Question;
 import com.codessquad.qna.domain.question.QuestionRepository;
 import com.codessquad.qna.domain.user.User;
@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.http.HttpSession;
+import java.util.List;
 
 @Service
 public class QuestionService {
@@ -27,8 +28,8 @@ public class QuestionService {
 
     @Transactional
     public Long update(Long id, Question questionWithUpdatedInfo) {
-        Question question = questionRepository.findById(id).orElseThrow(
-                () -> new IllegalArgumentException("해당 질문이 없습니다. id = " + id));
+        Question question = questionRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("해당 질문이 없습니다. id = " + id));
         question.update(questionWithUpdatedInfo);
 
         return id;
@@ -36,19 +37,19 @@ public class QuestionService {
 
     @Transactional
     public Question findById(Long id) {
-        return questionRepository.findById(id).orElseThrow(
-                () -> new IllegalArgumentException("해당 질문이 없습니다. id = " + id));
+        return questionRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("해당 질문이 없습니다. id = " + id));
     }
 
     @Transactional
-    public Iterable<Question> findAll() {
-        return questionRepository.findAll();
+    public List<Question> findAll() {
+        return (List<Question>) questionRepository.findAll();
     }
 
     @Transactional
     public void delete(Long id, HttpSession session) {
-        Question question = questionRepository.findById(id).orElseThrow(
-                () -> new IllegalArgumentException("해당 질문이 없습니다. id = " + id));
+        Question question = questionRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("해당 질문이 없습니다. id = " + id));
         User sessionedUser = HttpSessionUtils.getUserFromSession(session);
         if (!question.isWrittenBy(sessionedUser)) {
             throw new IllegalStateException("자신이 작성한 글만 삭제할 수 있습니다.");
