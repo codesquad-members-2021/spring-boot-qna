@@ -24,6 +24,17 @@ public class QuestionController {
         this.questionRepository = questionRepository;
     }
 
+    @GetMapping("/qna/form")
+    private String questionButton(Model model, HttpSession session){
+        final Object sessionValue = session.getAttribute("sessionedUser");
+        if(sessionValue != null) {
+            return "qna/form";
+        }
+        // 비로그인 사용자가 질문하기 버튼에 접근할 경우
+        model.addAttribute("errorMessage","로그인 후 질문기능을 사용할 수 있습니다.");
+        return "error/404"; //m 세션아이디와 다를 경우 이동
+    }
+
     @PostMapping("/questions")
     private String questions(Question question, Model model, HttpSession session) {
         Objects.requireNonNull(question, "Exception: question이 NULL 값입니다.");
