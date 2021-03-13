@@ -38,7 +38,7 @@ public class QuestionsController {
         return "redirect:/";
     }
 
-    @PostMapping("/questions/{questionId}/answers")
+    @PostMapping("/{questionId}/answers")
     public String createAnswer(@PathVariable("questionId") long questionId, String answerContents,
                                HttpSession session) {
         User sessionUser = SessionUtil.getLoginUser(session);
