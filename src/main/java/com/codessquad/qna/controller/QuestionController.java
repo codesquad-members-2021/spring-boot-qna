@@ -41,7 +41,7 @@ public class QuestionController {
         User loginUser = HttpSessionUtils.getSessionUser(session);
         Question question = new Question(loginUser, title, contents);
         QuestionValidation.validQuestion(question);
-        logger.info(question.toString());
+        logger.info("question {}. ", question);
         questionRepository.save(question);
         return "redirect:/";
     }
@@ -70,7 +70,7 @@ public class QuestionController {
         Question question = questionRepository.findById(id).orElse(null);
         question.updateQuestion(title, contents);
         QuestionValidation.validQuestion(question);
-        logger.info(question.toString());
+        logger.info("question {}. ", question);
         questionRepository.save(question);
         return "redirect:/questions/" + id;
     }

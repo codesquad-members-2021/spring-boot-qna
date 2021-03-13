@@ -29,8 +29,8 @@ public class UserController {
 
     @PostMapping
     public String create(User user) {
-        logger.info(user.toString());
         UserValidation.validUserInfo(user);
+        logger.info("users {}.", user);
         userRepository.save(user);
         return "redirect:/";
     }
@@ -38,7 +38,7 @@ public class UserController {
     @GetMapping
     public String list(Model model) {
         model.addAttribute("users", userRepository.findAll());
-        logger.info(model.toString());
+        logger.info("model {}." , model);
         return "user/list";
     }
 
@@ -109,6 +109,7 @@ public class UserController {
         User user = userRepository.findById(id).orElse(null);
         user.updateUserInfo(password, name, email);
         UserValidation.validUserInfo(user);
+        logger.info("users {}.", user);
         userRepository.save(user);
         return "redirect:/users";
     }
