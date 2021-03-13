@@ -1,5 +1,7 @@
 package com.codessquad.qna.domain;
 
+import org.hibernate.annotations.Where;
+
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -22,6 +24,7 @@ public class Question {
     private boolean deleted;
 
     @OneToMany(mappedBy = "question")
+    @Where(clause = "deleted = false")
     private List<Answer> answers;
 
     protected Question() {}
