@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 @Controller
 public class UserController {
 
-    private UserService userService;
+    private final UserService userService;
 
     public UserController(UserService userService) {
         this.userService = userService;
@@ -46,13 +46,12 @@ public class UserController {
 
         model.addAttribute("id", id);
 
-        return "/user/validation_user";
+        return "/user/validationUser";
     }
 
     @PostMapping("/validation")
     public String validationUser(User user, Model model) {
 
-        System.out.println("validationUser : " + user);
 
         if(userService.validationUserInfo(user.getId(), user.getPassword())){
 
