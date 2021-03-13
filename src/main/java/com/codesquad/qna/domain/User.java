@@ -1,20 +1,23 @@
 package com.codesquad.qna.domain;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotEmpty;
 
 @Entity
 public class User {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(nullable = false, length = 32, unique = true)
+    @NotEmpty(message = "Name may not be empty")
+    @NotBlank(message = "Name may not be blank")
     private String userId;
 
     @Column(nullable = false, length = 64)
+    @NotEmpty(message = "Password may not be empty")
+    @NotBlank(message = "Password may not be blank")
     private String password;
 
     @Column(length = 32)
