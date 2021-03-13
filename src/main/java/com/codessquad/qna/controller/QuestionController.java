@@ -65,27 +65,19 @@ public class QuestionController {
 
     @DeleteMapping("/{id}")
     public String delete(@PathVariable("id") Long id, HttpSession session) {
-        User sessionUser = HttpSessionUtils.getUserFromSession(session);
-        questionRepository.findById(id)
-                .ifPresent(question -> {
-                    matchesQuestionWriterWithUser(question, sessionUser);
-                    question.delete();
-                    questionRepository.save(question);
-                });
+        Question question = getQuestionWithCheckSession(id, session);
+        question.delete();
+        questionRepository.save(question);
         return "redirect:/";
     }
 
     private Question getQuestionWithCheckSession(Long id, HttpSession session) {
         User sessionUser = HttpSessionUtils.getUserFromSession(session);
-        Question question = questionRepository.findById(id).orElseThrow(NotFoundException::new);
-        matchesQuestionWriterWithUser(question, sessionUser);
-        return question;
-    }
-
-    private void matchesQuestionWriterWithUser(Question question, User sessionUser) {
+        Question question = questionRepository.findByIdAndDeleted(id, false).orElseThrow(NotFoundException::new);
         if (!question.isWriter(sessionUser)) {
             throw new UnauthorizedAccessException("다른 사람의 질문을 수정하거나 삭제할 수 없습니다.");
         }
+        return question;
     }
 
 }

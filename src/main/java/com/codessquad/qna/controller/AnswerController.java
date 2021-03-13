@@ -69,7 +69,7 @@ public class AnswerController {
     private Answer getAnswerWithCheckSession (Long questionId, Long answerId, HttpSession session)
             throws NotLoggedInException, NotFoundException {
         User user = HttpSessionUtils.getUserFromSession(session);
-        Answer answer = answerRepository.findByIdAndQuestionId(answerId, questionId)
+        Answer answer = answerRepository.findByIdAndQuestionIdAndDeleted(answerId, questionId, false)
                 .orElseThrow(NotFoundException::new);
         if (!answer.matchesWriter(user)) {
             throw new UnauthorizedAccessException("다른 사람의 답변을 수정하거나 삭제할 수 없습니다.");
