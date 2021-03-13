@@ -1,0 +1,14 @@
+{{#partial "content" }}
+<div id="main">
+    <h1>404 : 요청한 페이지를 찾을 수 없습니다. </h1>
+    <br>
+    <br>
+    <button id="backBtn" onclick="goBack()">뒤로가기</button>
+    <script>
+        function goBack(){
+            window.history.back();
+        }
+    </script>
+</div>
+{{/partial}}
+{{> common/base}}

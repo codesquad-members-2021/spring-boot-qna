@@ -48,18 +48,22 @@ public class UserController {
         return "user/profile";
     }
 
-    @GetMapping("users/{primaryKey}/form")
-    private String changeMemberInfo(@PathVariable("primaryKey") Long targetKey, Model model) {
+    @GetMapping("users/{primaryKey}/form") //m 개인정보 수정
+    private String changeMemberInfo(@PathVariable("primaryKey") Long targetKey, Model model, HttpSession session) {
         Objects.requireNonNull(targetKey, "Exception: targetKey가 NULL 값입니다.");
 
-        Optional<User> userOptional = userRepository.findById(targetKey);
-        User originUserData = userOptional.orElseThrow(NoSuchElementException::new); // () -> new NoSuchElementException()
+        final User targetUserData = userRepository.findById(targetKey).orElseThrow(NoSuchElementException::new); // () -> new NoSuchElementException()
+        final Object sessionValue = session.getAttribute("sessionedUser");
 
-        model.addAttribute("users", originUserData);
-
-        return "user/updateForm";
+        if(sessionValue != null){
+            User sessionUser = (User)sessionValue;
+            if (targetUserData.eqaulId(sessionUser.getUserId())) {
+                model.addAttribute("users", targetUserData);
+                return "user/updateForm";
+            }
+        }
+        return "redirect:/http404"; //m 세션아이디와 다를 경우 이동
     }
-
 
     @PutMapping("/users/{primaryKey}/update")
     private String updateMemberList(@PathVariable Long primaryKey, User updateUserData, Model model) {
@@ -83,7 +87,7 @@ public class UserController {
         if(findUser == null){
             return "user/login_failed";
         }
-        if(!findUser.checkId(userId) || !findUser.checkPassword(password)){
+        if(!findUser.eqaulId(userId) || !findUser.equalPassword(password)){
             return "user/login_failed";
         }
         session.setAttribute("sessionedUser",findUser);

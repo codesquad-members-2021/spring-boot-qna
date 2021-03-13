@@ -68,16 +68,16 @@ public class User {
         this.newPassword = newPassword;
     }
 
-    public boolean checkId(String inputId) {
-        return Objects.equals(inputId, this.getUserId());
+    public boolean eqaulId(String inputUserId) {
+        return Objects.equals(inputUserId, this.getUserId());
     }
 
-    public boolean checkPassword(String inputPassword) {
+    public boolean equalPassword(String inputPassword) {
         return Objects.equals(inputPassword, this.getPassword());
     }
 
     public User update(User updateUserData) {
-        if (!this.checkId(updateUserData.getUserId()) || !this.checkPassword(updateUserData.getPassword())) {
+        if (!this.eqaulId(updateUserData.getUserId()) || !this.equalPassword(updateUserData.getPassword())) {
             return this;
         }
         this.setName(updateUserData.getName());
