@@ -1,6 +1,7 @@
 package com.codessquad.qna.service;
 
 import com.codessquad.qna.domain.User;
+import com.codessquad.qna.exception.IllegalUserAccessException;
 import com.codessquad.qna.repository.UserRepository;
 import com.codessquad.qna.util.HttpSessionUtils;
 import com.codessquad.qna.valid.UserValidator;
@@ -56,14 +57,12 @@ public class UserService {
     }
 
     public User findByUserId(String userId) {
-        //todo : 일치하는 userId가 없을 떄 예외 발생
         return userRepository.findByUserId(userId).orElseThrow(NullPointerException::new);
     }
 
     public void checkSameUser(User user, Long id) {
         if (!user.checkId(id)) {
-            throw new IllegalStateException("자신의 정보만 수정 가능");
-            //todo : 에러 메세지 하드코딩 되어있음 변경 방법은?
+            throw new IllegalUserAccessException("자신의 정보만 수정 가능");
         }
     }
 
