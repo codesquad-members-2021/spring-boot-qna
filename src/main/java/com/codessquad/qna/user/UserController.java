@@ -10,7 +10,6 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpSession;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
@@ -70,14 +69,10 @@ public class UserController {
 
     @PostMapping("/login")
     public String login(String userId, String password, HttpServletRequest request, HttpSession session) {
-        Optional<User> user = userRepository.findByUserId(userId);
+        User user = userRepository.findByUserId(userId).orElseThrow(() -> new UserNotFoundException("존재하지 않는 사용자입니다."));
 
-        if (!user.isPresent()) {
-            return "/user/login_failed";
-        }
-
-        user.get().checkPassword(password);
-        SessionUtils.setSessionUser(session, user.get());
+        user.checkPassword(password);
+        SessionUtils.setSessionUser(session, user);
 
         return "redirect:/";
     }
