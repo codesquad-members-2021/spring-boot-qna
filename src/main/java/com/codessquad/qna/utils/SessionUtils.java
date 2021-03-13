@@ -1,9 +1,12 @@
 package com.codessquad.qna.utils;
 
-import com.codessquad.qna.user.User;
 import com.codessquad.qna.exception.UserNotFoundException;
+import com.codessquad.qna.user.User;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.client.HttpClientErrorException;
 
 import javax.servlet.http.HttpSession;
+import java.nio.charset.StandardCharsets;
 
 public class SessionUtils {
     private static final String SESSION_USER = "sessionedUser";
@@ -27,5 +30,23 @@ public class SessionUtils {
 
     public static void removeSessionUser(HttpSession session) {
         session.removeAttribute(SESSION_USER);
+    }
+
+    public static void verifyWithSessionUser(HttpSession session, User user) {
+        verifyWithSessionUserId(session, user.getId());
+    }
+
+    public static void verifyWithSessionUserId(HttpSession session, Long id) {
+        User user = getSessionUser(session);
+
+        if (!user.isIdSameAs(id)) {
+            throw HttpClientErrorException.create(
+                    HttpStatus.FORBIDDEN,
+                    "",
+                    null,
+                    null,
+                    StandardCharsets.UTF_8
+            );
+        }
     }
 }

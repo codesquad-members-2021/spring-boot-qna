@@ -45,11 +45,7 @@ public class UserController {
 
     @GetMapping("/{id}/form")
     public ModelAndView getUserUpdateForm(@PathVariable Long id, HttpSession session) {
-        User sessionUser = SessionUtils.getSessionUser(session);
-
-        if (sessionUser.getId() != id) {
-            throw new IllegalArgumentException("권한이 없습니다.");
-        }
+        SessionUtils.verifyWithSessionUserId(session, id);
 
         User user = userRepository.findById(id).get();
         return new ModelAndView("/user/updateForm", "user", user.toDTO());

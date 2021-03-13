@@ -18,7 +18,7 @@ public class User {
 
     @Column(nullable = false, length = 20)
     private String name;
-    
+
     @Column(nullable = false, length = 40, unique = true)
     private String email;
 
@@ -80,6 +80,10 @@ public class User {
         if (!this.password.equals(password)) {
             throw new IllegalArgumentException("비밀번호가 일치하지 않습니다.");
         }
+    }
+
+    public boolean isIdSameAs(Long id) {
+        return this.id == id;
     }
 
     public UserDTO toDTO() {

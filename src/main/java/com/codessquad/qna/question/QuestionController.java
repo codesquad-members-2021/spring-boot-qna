@@ -25,14 +25,7 @@ public class QuestionController {
 
     @PostMapping
     public String createQuestions(Question question, HttpSession session) {
-        User sessionUser = SessionUtils.getSessionUser(session);
-
-        long sessionUserId = sessionUser.getId().longValue();
-        long questionWriterId = question.getWriter().getId().longValue();
-
-        if (questionWriterId != sessionUserId) {
-            throw new IllegalArgumentException("본인이 작성한 글이 아닙니다.");
-        }
+        SessionUtils.verifyWithSessionUser(session, question.getWriter());
 
         questionRepository.save(question);
 
@@ -49,15 +42,8 @@ public class QuestionController {
     public ModelAndView getQuestionUpdateForm(@PathVariable Long id, HttpSession session) {
         Question question = questionRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("질문을 찾을 수 없습니다."));
 
-        long questionWriterId = question.getWriter().getId().longValue();
+        SessionUtils.verifyWithSessionUser(session, question.getWriter());
 
-        User sessionUser = SessionUtils.getSessionUser(session);
-
-        long sessionUserId = sessionUser.getId().longValue();
-
-        if (questionWriterId != sessionUserId) {
-            throw new IllegalArgumentException("본인이 작성한 글이 아닙니다.");
-        }
         return new ModelAndView("/qna/updateForm", "question", question);
     }
 
@@ -65,15 +51,7 @@ public class QuestionController {
     public String updateQuestion(@PathVariable Long id, Question newQuestion, HttpSession session) {
         Question existedQuestion = questionRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("질문을 찾을 수 없습니다."));
 
-        long questionWriterId = existedQuestion.getWriter().getId().longValue();
-
-        User sessionUser = SessionUtils.getSessionUser(session);
-
-        long sessionUserId = sessionUser.getId().longValue();
-
-        if (questionWriterId != sessionUserId) {
-            throw new IllegalArgumentException("본인이 작성한 글이 아닙니다.");
-        }
+        SessionUtils.verifyWithSessionUser(session, existedQuestion.getWriter());
 
         existedQuestion.update(newQuestion);
         questionRepository.save(existedQuestion);
@@ -85,15 +63,7 @@ public class QuestionController {
     public String deleteQuestion(@PathVariable Long id, HttpSession session) {
         Question question = questionRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("질문을 찾을 수 없습니다."));
 
-        long questionWriterId = question.getWriter().getId().longValue();
-
-        User sessionUser = SessionUtils.getSessionUser(session);
-
-        long sessionUserId = sessionUser.getId().longValue();
-
-        if (questionWriterId != sessionUserId) {
-            throw new IllegalArgumentException("본인이 작성한 글이 아닙니다.");
-        }
+        SessionUtils.verifyWithSessionUser(session, question.getWriter());
 
         questionRepository.delete(question);
 
@@ -116,17 +86,9 @@ public class QuestionController {
 
     @DeleteMapping("/{questionId}/answers/{id}")
     public String deleteAnswer(@PathVariable Long questionId, @PathVariable Long id, HttpSession session) {
-        User sessionUser = SessionUtils.getSessionUser(session);
-
         Answer answer = answerRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("존재하지 않는 답변입니다."));
 
-        long answerWriterId = answer.getWriter().getId().longValue();
-
-        long sessionUserId = sessionUser.getId().longValue();
-
-        if (answerWriterId != sessionUserId) {
-            throw new IllegalArgumentException("본인이 작성한 글이 아닙니다.");
-        }
+        SessionUtils.verifyWithSessionUser(session, answer.getWriter());
 
         answerRepository.deleteById(id);
 
