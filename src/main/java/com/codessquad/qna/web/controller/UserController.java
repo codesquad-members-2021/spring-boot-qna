@@ -1,65 +1,58 @@
 package com.codessquad.qna.web.controller;
 
-import com.codessquad.qna.web.exception.UserNotFoundException;
-import com.codessquad.qna.web.model.User;
+import com.codessquad.qna.web.domain.user.User;
+
+import com.codessquad.qna.web.domain.user.UserRepository;
+
+import javassist.NotFoundException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-
-import java.util.ArrayList;
-import java.util.List;
+import org.springframework.web.bind.annotation.*;
 
 @Controller
 @RequestMapping("/users")
 public class UserController {
-    private List<User> users = new ArrayList<>();
+
+    private final UserRepository userRepository;
+
+    public UserController(UserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
 
     @PostMapping("/create")
-    public String create(User user){
-        users.add(user);
+    public String create(User user) {
+        userRepository.save(user);
         return "redirect:/users";
     }
 
     @GetMapping()
-    public String getUserList(Model model){
-        model.addAttribute("users", users);
+    public String list(Model model) {
+        model.addAttribute("users", userRepository.findAll());
         return "user/list";
     }
 
-    @GetMapping("/{userId}")
-    public String getUserProfile(@PathVariable("userId") String userId, Model model){
-        model.addAttribute("user", findUserById(userId));
+    @GetMapping("/{id}")
+    public String show(@PathVariable long id, Model model) throws NotFoundException {
+        User user = userRepository.findById(id).orElseThrow(() -> new NotFoundException("No user with id number " + id));
+        model.addAttribute("user", user);
         return "user/profile";
     }
 
-    @GetMapping("/{userId}/form")
-    public String getEditProfileForm(@PathVariable("userId") String userId, Model model){
-        model.addAttribute("user", findUserById(userId));
+    @GetMapping("/{id}/form")
+    public String updateForm(@PathVariable long id, Model model) throws NotFoundException{
+        User user = userRepository.findById(id).orElseThrow(() -> new NotFoundException("No user with id number " + id));
+        model.addAttribute("user", user);
         return "user/updateForm";
     }
 
-    @PostMapping("/{userId}/update")
-    public String updateProfile(User updatedUser, String oldPassword){
-        for(int i = 0; i < users.size(); i++){
-            User user = users.get(i);
-            if (user.isMatchingPassword(oldPassword)) {
-                users.set(i, updatedUser);
-                break;
-            }
+    @PutMapping("/{id}/update")
+    public String updateProfile(@PathVariable long id, User updatedUser, String oldPassword) throws NotFoundException{
+        User user = userRepository.findById(id).orElseThrow(() -> new NotFoundException("No user with id number " + id));
+        if(user.isMatchingPassword(oldPassword)){
+            user.update(updatedUser);
+            userRepository.save(user);
         }
         return "redirect:/users";
-    }
-
-    private User findUserById(String userId){
-        for(User user : users){
-            if(user.isMatchingId(userId)){
-                return user;
-            }
-        }
-        throw new UserNotFoundException(userId);
     }
 
 }
