@@ -42,14 +42,14 @@ public class UserController {
     public String showUsers(Model model) {
         model.addAttribute("users", userService.showAll());
 
-        return "/user/list";
+        return "user/list";
     }
 
     @GetMapping("/{id}")
     public String showUserInDetail(@PathVariable long id, Model model) {
         model.addAttribute("user", userService.showOneById(id).orElse(null));
 
-        return "/user/profile";
+        return "user/profile";
     }
 
     @GetMapping("/{id}/form")
@@ -59,7 +59,7 @@ public class UserController {
         model.addAttribute("id", user.getId());
         model.addAttribute("userId", user.getUserId());
 
-        return "/user/update";
+        return "user/update";
     }
 
     @PutMapping("/{id}")

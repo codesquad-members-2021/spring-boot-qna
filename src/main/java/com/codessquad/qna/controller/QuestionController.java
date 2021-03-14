@@ -27,7 +27,7 @@ public class QuestionController {
     public String createQuestion(Question newQuestion) {
 
         if (!isValidQuestion(newQuestion)) {
-            return "/question/form";
+            return "question/form";
         }
 
         questionService.add(newQuestion);
@@ -56,6 +56,6 @@ public class QuestionController {
     public String showQuestionInDetail(@PathVariable long id, Model model) {
         model.addAttribute("question", questionService.showOneById(id).orElse(null));
 
-        return "/question/show";
+        return "question/show";
     }
 }
