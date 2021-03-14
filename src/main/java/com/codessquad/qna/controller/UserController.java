@@ -2,6 +2,8 @@ package com.codessquad.qna.controller;
 
 import com.codessquad.qna.domain.User;
 import com.codessquad.qna.domain.UserRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -14,6 +16,8 @@ import java.util.Optional;
 @Controller
 @RequestMapping("/users")
 public class UserController {
+    private static final Logger logger = LoggerFactory.getLogger(UserController.class);
+
     private final UserRepository userRepository;
 
     @Autowired
@@ -24,7 +28,7 @@ public class UserController {
     @PostMapping
     public String create(User user) {
         userRepository.save(user);
-        System.out.println(user);
+        logger.info("New User Created: {}", user);
         return "redirect:/users";
     }
 
@@ -58,10 +62,10 @@ public class UserController {
     public String modifyProfile(@PathVariable long id, User updatedUser, String oldPassword) {
         User user = userRepository.findById(id).get();
         if (!user.verifyPassword(oldPassword)) {
-            System.out.println("Password does not match");
+            logger.debug("Old Password Does Not Match");
             return "redirect:/users";
         }
-        System.out.println("new password: " + updatedUser.getPassword());
+        logger.info("Updated info: {}", updatedUser);
         userRepository.save(user.updateProfile(updatedUser));
         return "redirect:/users";
     }
