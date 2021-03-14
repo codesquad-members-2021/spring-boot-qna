@@ -1,12 +1,12 @@
 package com.codessquad.qna.controller;
 
 import com.codessquad.qna.domain.User;
-import com.codessquad.qna.domain.UserRepository;
 import com.codessquad.qna.exception.*;
+import com.codessquad.qna.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpSession;
 
@@ -14,51 +14,42 @@ import javax.servlet.http.HttpSession;
 @RequestMapping("/users")
 public class UserController {
 
-    private final UserRepository userRepository;
+    private final UserService userService;
 
     @Autowired
-    public UserController(UserRepository userRepository) {
-        this.userRepository = userRepository;
+    public UserController(UserService userService) {
+        this.userService = userService;
     }
 
     @GetMapping()
-    public ModelAndView userList() {
-        ModelAndView modelAndView = new ModelAndView("users/list");
-        modelAndView.addObject("users", userRepository.findAll());
-        return modelAndView;
+    public String userList(Model model) {
+        model.addAttribute("users", userService.getUserList());
+        return "users/list";
     }
 
     @PostMapping()
     public String registerUser(User user) {
-        userRepository.findByUserId(user.getUserId())
-                .ifPresent(u -> {
-                    throw new UserExistException();
-                });
-        userRepository.save(user);
+        userService.register(user);
         return "redirect:/users";
     }
 
     @GetMapping("/{id}")
-    public ModelAndView userProfile(@PathVariable("id") Long id) {
-        return new ModelAndView("users/profile",
-                "user", userRepository.findById(id).orElseThrow(NotFoundException::new));
+    public String userProfile(@PathVariable("id") Long id, Model model) {
+        model.addAttribute("user", userService.getUserById(id));
+        return "users/profile";
     }
 
     @GetMapping("/{id}/form")
-    public ModelAndView updateUserForm(@PathVariable("id") Long id, HttpSession session) {
+    public String updateUserForm(@PathVariable("id") Long id, HttpSession session, Model model) {
         checkSessionWithId(session, id);
-        return new ModelAndView("users/updateForm",
-                "user", userRepository.findById(id).orElseThrow(NotFoundException::new));
+        model.addAttribute(userService.getUserById(id));
+        return "users/updateForm";
     }
 
     @PutMapping("/{id}")
     public String updateUser(@PathVariable("id") Long id, String oldPassword, User newUserInfo, HttpSession session) {
         checkSessionWithId(session, id);
-        User user = userRepository.findById(id)
-                .filter(u -> u.isMatchingPassword(oldPassword))
-                .orElseThrow(() -> new UnauthorizedAccessException("권한이 존재하지 않습니다."));
-        user.update(newUserInfo);
-        userRepository.save(user);
+        userService.updateUserInfo(id, oldPassword, newUserInfo);
         return "redirect:/users";
     }
 
@@ -69,9 +60,7 @@ public class UserController {
 
     @PostMapping("/login")
     public String login(String userId, String password, HttpSession session) {
-        User user = userRepository.findByUserId(userId)
-                .filter(u -> u.isMatchingPassword(password))
-                .orElseThrow(LoginFailedException::new);
+        User user = userService.authenticate(userId, password);
         HttpSessionUtils.setUserSession(session, user);
         return "redirect:/";
     }
