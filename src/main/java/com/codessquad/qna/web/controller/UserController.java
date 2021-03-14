@@ -9,6 +9,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpSession;
+
 @Controller
 @RequestMapping("/users")
 public class UserController {
@@ -17,6 +19,19 @@ public class UserController {
 
     public UserController(UserRepository userRepository) {
         this.userRepository = userRepository;
+    }
+
+    @PostMapping("/login")
+    public String login(String userId, String password, HttpSession session) throws NotFoundException {
+        User user = userRepository.findByUserId(userId);
+        if (user == null) {
+            return "redirect:/users/login-form";
+        }
+        if (!user.isMatchingPassword(password)) {
+            return "redirect:/users/login-form";
+        }
+        session.setAttribute("user", user);
+        return "redirect:/";
     }
 
     @PostMapping("/create")
@@ -39,16 +54,16 @@ public class UserController {
     }
 
     @GetMapping("/{id}/form")
-    public String updateForm(@PathVariable long id, Model model) throws NotFoundException{
+    public String updateForm(@PathVariable long id, Model model) throws NotFoundException {
         User user = userRepository.findById(id).orElseThrow(() -> new NotFoundException("No user with id number " + id));
         model.addAttribute("user", user);
         return "user/updateForm";
     }
 
     @PutMapping("/{id}/update")
-    public String updateProfile(@PathVariable long id, User updatedUser, String oldPassword) throws NotFoundException{
+    public String updateProfile(@PathVariable long id, User updatedUser, String oldPassword) throws NotFoundException {
         User user = userRepository.findById(id).orElseThrow(() -> new NotFoundException("No user with id number " + id));
-        if(user.isMatchingPassword(oldPassword)){
+        if (user.isMatchingPassword(oldPassword)) {
             user.update(updatedUser);
             userRepository.save(user);
         }
