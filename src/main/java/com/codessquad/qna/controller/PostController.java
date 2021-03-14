@@ -57,12 +57,12 @@ public class PostController {
 
     /**
      * 매개변수로 오는 id 값을 기반으로 해당 포스트를 불러옵니다.
-     * 만약 해당 유저가 없다면 CanNotFindPostException를 리턴합니다.
+     * 만약 해당 유저가 없다면 NotFoundException을 리턴합니다.
      *
      * @param id    Post Id
      * @param model
      * @return
-     * @throws PostNotFoundException
+     * @throws NotFoundException
      */
     @GetMapping("/{id}")
     public String getPost(@PathVariable Long id, Model model) {
