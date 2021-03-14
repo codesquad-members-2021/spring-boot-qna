@@ -10,7 +10,7 @@ import java.util.Optional;
 @Service
 public class QuestionService {
 
-    private QuestionRepository questionRepository;
+    private final QuestionRepository questionRepository;
 
     public QuestionService(QuestionRepository questionRepository) {
         this.questionRepository = questionRepository;

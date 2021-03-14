@@ -62,7 +62,7 @@ public class UserController {
             return "/user/updateForm";
         }
 
-        return "/user/validation_user";
+        return "/user/validationUser";
     }
 
     @PostMapping("/{id}")

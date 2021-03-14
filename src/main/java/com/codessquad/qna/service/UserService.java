@@ -10,7 +10,7 @@ import java.util.Optional;
 @Service
 public class UserService {
 
-    private UserRepository repository;
+    private final UserRepository repository;
 
     public UserService(UserRepository repository) {
         this.repository = repository;
@@ -34,7 +34,7 @@ public class UserService {
 
         User user = repository.findById(id).get();
 
-        return Optional.of(user.matchPassword(password)).get();
+        return user.matchPassword(password);
     }
 
 
