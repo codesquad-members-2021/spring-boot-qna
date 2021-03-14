@@ -31,7 +31,7 @@ public class QuestionController {
 
     @PostMapping()
     public String query(Question question, HttpSession session) {
-        questionService.registerQuestion(question, HttpSessionUtils.getUserFromSession(session));
+        questionService.registerQuestion(question, HttpSessionUtils.getLoginUser(session));
         return "redirect:/";
     }
 
@@ -43,21 +43,21 @@ public class QuestionController {
 
     @GetMapping("/{questionId}/form")
     public String updateForm(@PathVariable("questionId") Long id, HttpSession session, Model model) {
-        User loginUser = HttpSessionUtils.getUserFromSession(session);
+        User loginUser = HttpSessionUtils.getLoginUser(session);
         model.addAttribute("question", questionService.getQuestionWithAuthentication(id, loginUser));
         return "/qna/updateForm";
     }
 
     @PutMapping("/{questionId}")
     public String update(@PathVariable("questionId") Long id, Question updatedQuestion, HttpSession session) {
-        User loginUser = HttpSessionUtils.getUserFromSession(session);
+        User loginUser = HttpSessionUtils.getLoginUser(session);
         questionService.updateQuestion(id, loginUser, updatedQuestion);
         return "redirect:/questions/" + id;
     }
 
     @DeleteMapping("/{id}")
     public String delete(@PathVariable("id") Long id, HttpSession session) {
-        User loginUser = HttpSessionUtils.getUserFromSession(session);
+        User loginUser = HttpSessionUtils.getLoginUser(session);
         questionService.deleteQuestion(id, loginUser);
         return "redirect:/";
     }
