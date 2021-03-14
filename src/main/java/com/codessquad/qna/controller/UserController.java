@@ -30,8 +30,8 @@ public class UserController {
 
         User savedUser = userService.join(newUser);
 
-        // 회원의 속성을 비교하여 정상적으로 회원가입 되었는 지 확인하는 로직으로 변경
-        if (!savedUser.sameAs(newUser)) {
+        // 회원의 속성을 비교하여 정상적으로 회원가입 되었는 지 확인
+        if (!savedUser.equals(newUser)) {
             return "user/form";
         }
 
