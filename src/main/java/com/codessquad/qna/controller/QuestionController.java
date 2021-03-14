@@ -6,10 +6,7 @@ import com.codessquad.qna.repository.QuestionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
 import java.util.NoSuchElementException;
@@ -82,7 +79,7 @@ public class QuestionController {
     }
 
 
-    @PutMapping("/questions/{id}/update")
+    @PutMapping("/questions/{id}")  // 질문 수정: 접근경로가 다른 메서드와 동일해도, 맵핑이 다르면 함수의 오버로드 같이 요청에 따라 다르게 인식하는건가?
     private String modifyQuestion(@PathVariable("id") Long id, String title, String contents) {
 
         Question findQuestion = questionRepository.findById(id).orElseThrow(NoSuchElementException::new);
@@ -91,5 +88,25 @@ public class QuestionController {
         questionRepository.save(findQuestion);
 
         return "redirect:/questions/{id}";
+    }
+
+    @DeleteMapping("/questions/{id}") // 질문 삭제: 접근경로가 다른 메서드와 동일해도, 맵핑이 다르면 함수의 오버로드 같이 요청에 따라 다르게 인식하는건가?
+    private String deleteQuestion(@PathVariable Long id, HttpSession session, Model model){
+
+        Objects.requireNonNull(id, "Exception: id가 NULL 값입니다.");
+
+        Object sessionUser = session.getAttribute("sessionedUser");
+
+        if (sessionUser != null) {
+            User q = (User)sessionUser;
+            Question q2 = questionRepository.findById(id).orElseThrow(NoSuchElementException::new);
+
+            if(Objects.equals(q.getName(),q2.getWriter())){
+                questionRepository.deleteById(id);
+                return "redirect:/";
+            }
+        }
+        model.addAttribute("errorMessage", "로그인 정보가 유효하지 않습니다.");
+        return "error/404"; //m 세션아이디와 다를 경우 이동
     }
 }
