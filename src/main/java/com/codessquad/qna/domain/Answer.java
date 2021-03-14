@@ -31,6 +31,7 @@ public class Answer {
 
     public Answer(String comment) {
         this.comment = comment;
+        this.time = LocalDateTime.now();
         this.deleted = false;
     }
 
