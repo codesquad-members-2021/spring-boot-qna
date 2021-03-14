@@ -13,10 +13,9 @@ import org.springframework.web.bind.annotation.*;
 @Controller
 public class QuestionController {
 
-    private QuestionRepository questionRepository;
+    private final QuestionRepository questionRepository;
     private static final Logger logger = LoggerFactory.getLogger(QuestionController.class);
-
-    @Autowired
+    
     public QuestionController(QuestionRepository questionRepository) {
         this.questionRepository = questionRepository;
     }

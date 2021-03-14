@@ -14,10 +14,9 @@ import org.slf4j.Logger;
 @RequestMapping("/users")
 public class UserController {
 
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
     private static final Logger logger = LoggerFactory.getLogger(UserController.class);
 
-    @Autowired
     public UserController(UserRepository userRepository) {
         this.userRepository = userRepository;
     }
