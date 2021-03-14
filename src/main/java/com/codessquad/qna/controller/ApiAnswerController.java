@@ -37,7 +37,6 @@ public class ApiAnswerController {
         User user = getSessionUser(session);
         Question question = questionService.findQuestion(questionId);
         Answer answer = new Answer(user, question, contents);
-        question.addAnswer();
         logger.info("{}님께서 답변 작성에 성공하셨습니다.", user.getUserId());
         return answerService.create(answer);
     }
@@ -54,7 +53,6 @@ public class ApiAnswerController {
         }
         answerService.delete(id);
         Question question = questionService.findQuestion(questionId);
-        question.deleteAnswer();
         questionService.update(question);
         return true;
     }

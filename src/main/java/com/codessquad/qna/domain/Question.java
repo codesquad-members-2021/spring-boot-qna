@@ -16,8 +16,6 @@ public class Question extends AbstractEntity {
     @Column(length = 2000)
     private String contents;
 
-    private Integer countOfAnswer = 0;
-
     @OneToMany(mappedBy = "question", cascade = CascadeType.ALL)
     @JsonIgnore
     @OrderBy("id desc")
@@ -41,12 +39,8 @@ public class Question extends AbstractEntity {
         return !this.author.equals(loginUser);
     }
 
-    public void addAnswer() {
-        this.countOfAnswer++;
-    }
-
-    public void deleteAnswer() {
-        this.countOfAnswer--;
+    public int getAnswerSize() {
+        return answers.size();
     }
 
     public User getAuthor() {
@@ -63,10 +57,6 @@ public class Question extends AbstractEntity {
 
     public List<Answer> getAnswers() {
         return answers;
-    }
-
-    public Integer getCountOfAnswer() {
-        return countOfAnswer;
     }
 
     public void setTitle(String title) {
