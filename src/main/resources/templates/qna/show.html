@@ -23,7 +23,7 @@
                                  class="article-author-thumb" alt="">
                         </div>
                         <div class="article-header-text">
-                            <a href="/users/92/kimmunsu" class="article-author-name">{{question.writer}}</a>
+                            <a href="/users/92/kimmunsu" class="article-author-name">{{question.writer.userId}}</a>
                             <a href="/questions/413" class="article-header-time" title="퍼머링크">
                                 {{question.createdTime}}
                                 <i class="icon-link"></i>
@@ -36,7 +36,7 @@
                     <div class="article-util">
                         <ul class="article-util-list">
                             <li>
-                                <a class="link-modify-article" href="/questions/423/form">수정</a>
+                                <a class="link-modify-article" href="/questions/{{question.id}}/form">수정</a>
                             </li>
                             <li>
                                 <form class="form-delete" action="/questions/{{question.id}}" method="POST">

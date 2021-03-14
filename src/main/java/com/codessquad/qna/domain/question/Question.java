@@ -1,42 +1,36 @@
 package com.codessquad.qna.domain.question;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
+import com.codessquad.qna.domain.BaseTimeEntity;
+import com.codessquad.qna.domain.user.User;
+
+import javax.persistence.*;
 
 @Entity
-public class Question {
-    private static final DateTimeFormatter DATE_TIME_FORMATTER
-            = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+public class Question extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    private String writer;
+    @ManyToOne
+    @JoinColumn(foreignKey = @ForeignKey(name = "fk_question_writer"))
+    private User writer;
     private String title;
     private String contents;
-    private String createdTime;
 
     protected Question() {
     }
 
-    public Question(String writer, String title, String contents) {
-        this.writer = writer;
+    public Question(String title, String contents) {
         this.title = title;
         this.contents = contents;
-        this.createdTime = LocalDateTime.now()
-                .format(DATE_TIME_FORMATTER);
     }
 
     public long getId() {
         return id;
     }
 
-    public String getWriter() {
+    public User getWriter() {
         return writer;
     }
 
@@ -48,12 +42,12 @@ public class Question {
         return contents;
     }
 
-    public String getCreatedTime() {
-        return createdTime;
+    public void setWriter(User writer) {
+        this.writer = writer;
     }
 
-    public boolean isSameWriter(String userId) {
-        return writer.equals(userId);
+    public boolean isSameWriter(User user) {
+        return writer.equals(user);
     }
 
     @Override
@@ -63,7 +57,11 @@ public class Question {
                 ", writer='" + writer + '\'' +
                 ", title='" + title + '\'' +
                 ", contents='" + contents + '\'' +
-                ", createdTime='" + createdTime + '\'' +
                 '}';
+    }
+
+    public void update(Question updateQuestion) {
+        this.title = updateQuestion.title;
+        this.contents = updateQuestion.contents;
     }
 }

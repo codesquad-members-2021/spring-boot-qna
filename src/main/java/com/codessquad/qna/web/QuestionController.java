@@ -36,7 +36,10 @@ public class QuestionController {
     }
 
     @PostMapping("/")
-    public String submitQuestion(Question question, Model model) {
+    public String submitQuestion(Question question, Model model, HttpSession session) {
+        User loginedUser = (User) session.getAttribute("sessionedUser");
+        question.setWriter(loginedUser);
+
         questionRepository.save(question);
         model.addAttribute(question);
 
@@ -71,12 +74,48 @@ public class QuestionController {
         return "/qna/show";
     }
 
+    @GetMapping("/{id}/form")
+    public String getUpdateForm(@PathVariable Long id, Model model, HttpSession session) {
+        User loginedUser = (User)session.getAttribute("sessionedUser");
+        Question question = questionRepository.findById(id).get();
+
+        if(loginedUser == null) {
+            throw new IllegalStateException("로그인되지 않았습니다.");
+        }
+
+        if(!loginedUser.matchUser(question.getWriter())) {
+            throw new IllegalStateException("른 사람의 글을 수정할 수 없다");
+        }
+
+        model.addAttribute("question", question);
+        return "qna/updateForm";
+    }
+
+    @PutMapping("/{id}")
+    public String updateQuestion(@PathVariable Long id, Question updateQuestion, HttpSession session) {
+        User loginedUser = (User) session.getAttribute("sessionedUser");
+        Question question = questionRepository.findById(id).get();
+
+        if(loginedUser == null) {
+            throw new IllegalStateException("로그인되지 않았습니다.");
+        }
+
+        if(!loginedUser.matchUser(question.getWriter())) {
+            throw new IllegalStateException("자신의 정보만 수정할 수 있습니다.");
+        }
+
+        question.update(updateQuestion);
+        questionRepository.save(question);
+
+        return "redirect:/";
+    }
+
     @DeleteMapping("{id}")
     public String delete(@PathVariable Long id, HttpSession session) {
         User loginedUser = (User) session.getAttribute("sessionedUser");
         Optional<Question> question = questionRepository.findById(id);
 
-        if(!question.get().isSameWriter(loginedUser.getUserId())) {
+        if(!question.get().isSameWriter(loginedUser)) {
             return "redirect:/";
         }
 
