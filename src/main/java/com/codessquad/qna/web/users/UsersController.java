@@ -1,24 +1,35 @@
 package com.codessquad.qna.web.users;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import com.codessquad.qna.web.exceptions.users.UserNotFoundException;
+import com.codessquad.qna.web.utils.SessionUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpSession;
+
 @Controller
-@RequestMapping("users")
+@RequestMapping("/users")
 public class UsersController {
 
-    @Autowired
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
 
-    @PostMapping()
+    private final Logger logger = LoggerFactory.getLogger(UsersController.class);
+
+    public UsersController(UserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
+
+    @PostMapping
     public String createUser(User createdUser) {
         userRepository.save(createdUser);
+        logger.info("user created : " + createdUser.getUserId());
         return "redirect:/users";
     }
 
-    @GetMapping()
+    @GetMapping
     public String getUserList(Model model) {
         model.addAttribute("users", userRepository.findAll());
         return "user/list";
@@ -26,35 +37,47 @@ public class UsersController {
 
     @GetMapping("/{userId}")
     public String getOneUser(@PathVariable("userId") long id, Model model) {
-        User foundUser = getUserById(id);
-        model.addAttribute("user", foundUser);
+        User foundUser = userRepository.findById(id)
+                .orElseThrow(UserNotFoundException::new);
+        model.addAttribute("foundUser", foundUser);
         return "user/profile";
     }
 
-    @GetMapping("/modify/{userId}")
-    public String getModifyUserPage(@PathVariable("userId") long id, Model model) {
-        User foundUser = getUserById(id);
-        model.addAttribute("user", foundUser);
+    @GetMapping("/modify")
+    public String getModifyUserPage() {
         return "user/modify-form";
     }
 
-    private User getUserById(long id) {
-        return userRepository.findById(id).orElse(null);
-    }
-
     @PutMapping("/modify")
-    public String modifyUser(long id, String userId, String prevPassword, String newPassword,
-                             String name, String email) {
-        User foundUser = getUserById(id);
-        if (foundUser != null && foundUser.getPassword().equals(prevPassword)) {
-            if (!prevPassword.equals(newPassword)) {
-                foundUser.setPassword(newPassword);
-            }
-            foundUser.setName(name);
-            foundUser.setEmail(email);
-            userRepository.save(foundUser);
-            return "redirect:/users/" + foundUser.getId();
+    public String modifyUser(String prevPassword, String newPassword,
+                             String name, String email, HttpSession session) {
+        User sessionUser = SessionUtil.getLoginUser(session);
+        if (sessionUser.isMatchingPassword(prevPassword)) {
+            sessionUser.update(newPassword, name, email);
+            userRepository.save(sessionUser);
+            return "redirect:/users/" + sessionUser.getId();
         }
         return "redirect:/users";
+    }
+
+    @PostMapping("/login")
+    public String processLogin(String userId, String password, HttpSession session) {
+        User foundUser = userRepository.findByUserId(userId)
+                .orElseThrow(UserNotFoundException::new);
+
+        if (!foundUser.isMatchingPassword(password)) {
+            return "redirect:/users/login-form";
+        }
+        SessionUtil.setLoginUser(session, foundUser);
+        logger.info("user login : " + foundUser.getUserId());
+        return "redirect:/";
+    }
+
+    @PostMapping("/logout")
+    public String processLogout(HttpSession session) {
+        User sessionUser = SessionUtil.getLoginUser(session);
+        logger.info("user logout : " + sessionUser.getUserId());
+        SessionUtil.removeLoginUser(session);
+        return "redirect:/";
     }
 }

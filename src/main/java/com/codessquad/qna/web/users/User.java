@@ -8,10 +8,13 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false, length = 20)
+    @Column(nullable = false, length = 20, unique = true)
     private String userId;
+
     private String password;
+
     private String name;
+
     private String email;
 
     public User(String userId, String password, String name, String email) {
@@ -23,6 +26,18 @@ public class User {
 
     public User() {
 
+    }
+
+    public void update(String newPassword, String newName, String newEmail) {
+        if (!password.equals(newPassword)) {
+            password = newPassword;
+        }
+        if (!name.equals(newName)) {
+            name = newName;
+        }
+        if (!email.equals(newEmail)) {
+            email = newEmail;
+        }
     }
 
     public Long getId() {
@@ -63,6 +78,14 @@ public class User {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public boolean isMatchingPassword(String anotherPassword) {
+        return password.equals(anotherPassword);
+    }
+
+    public boolean isMatchingId(User anotherUser) {
+        return id == anotherUser.getId();
     }
 
     @Override

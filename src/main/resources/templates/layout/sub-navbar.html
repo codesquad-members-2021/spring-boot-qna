@@ -1,17 +1,17 @@
 <div class="navbar navbar-default" id="subnav">
     <div class="col-md-12">
         <div class="navbar-header">
-            {{#user}}
-            <a class="navbar-btn btn btn-default btn-plus dropdown-toggle" data-toggle="dropdown" href="#"
+            {{#loginUser}}
+            <a class="navbar-btn btn btn-default btn-plus dropdown-toggle" data-toggle="dropdown" href="javascript:;"
                style="margin-left:15px;"><i class="glyphicon glyphicon-home" style="color:#dd1111;"></i> Home <small><i
                     class="glyphicon glyphicon-chevron-down"></i></small></a>
             <ul class="nav dropdown-menu">
-                <li><a href="/users/{{user.userId}}"><i class="glyphicon glyphicon-user" style="color:#1111dd;"></i> Profile</a>
+                <li><a href="/users/{{loginUser.id}}"><i class="glyphicon glyphicon-user" style="color:#1111dd;"></i> Profile</a>
                 </li>
                 <li class="nav-divider"></li>
-                <li><a href="#"><i class="glyphicon glyphicon-cog" style="color:#dd1111;"></i> Settings</a></li>
+                <li><a href="javascript:;"><i class="glyphicon glyphicon-cog" style="color:#dd1111;"></i> Settings</a></li>
             </ul>
-            {{/user}}
+            {{/loginUser}}
 
             <button class="navbar-toggle" data-target="#navbar-collapse2" data-toggle="collapse" type="button">
                 <span class="sr-only">Toggle navigation</span>
@@ -23,16 +23,22 @@
         <div class="collapse navbar-collapse" id="navbar-collapse2">
             <ul class="nav navbar-nav navbar-right">
                 <li class="sub-nav-li"><a href="/">Posts</a></li>
-                <li class="sub-nav-li"><a href="/users/login" role="button">로그인</a></li>
+                {{^loginUser}}
+                <li class="sub-nav-li"><a href="/users/login-form" role="button">로그인</a></li>
                 <li class="sub-nav-li"><a href="/users/form" role="button">회원가입</a></li>
-                <!--
-                <li><a href="#loginModal" role="button" data-toggle="modal">로그인</a></li>
-                <li><a href="#registerModal" role="button" data-toggle="modal">회원가입</a></li>
-                -->
-                {{#user}}
-                <li class="sub-nav-li"><a href="#" role="button">로그아웃</a></li>
-                <li class="sub-nav-li"><a href="#" role="button">개인정보수정</a></li>
-                {{/user}}
+                {{/loginUser}}
+
+                {{#loginUser}}
+                <li class="sub-nav-li"><a href="javascript:;"
+                                          onclick="document.getElementById('sub-nav-form-logout-submit').submit();"
+                                          role="button">로그아웃</a></li>
+                <div style="display: none">
+                    <form id="sub-nav-form-logout-submit" action="/users/logout" method="post">
+                        <input type="submit">
+                    </form>
+                </div>
+                <li class="sub-nav-li"><a href="/users//modify" role="button">개인정보수정</a></li>
+                {{/loginUser}}
             </ul>
         </div>
     </div>
