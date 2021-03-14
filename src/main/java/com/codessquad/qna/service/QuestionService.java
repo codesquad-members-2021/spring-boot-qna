@@ -1,6 +1,5 @@
 package com.codessquad.qna.service;
 
-import com.codessquad.qna.controller.UserController;
 import com.codessquad.qna.domain.Question;
 import com.codessquad.qna.repository.QuestionRepository;
 import org.slf4j.Logger;
@@ -12,9 +11,8 @@ import java.util.Optional;
 
 @Service
 public class QuestionService {
-
+    private final Logger logger = LoggerFactory.getLogger(QuestionService.class);
     private final QuestionRepository questionRepository;
-    Logger logger = LoggerFactory.getLogger(UserController.class);
 
     @Autowired
     public QuestionService(QuestionRepository questionRepository) {
