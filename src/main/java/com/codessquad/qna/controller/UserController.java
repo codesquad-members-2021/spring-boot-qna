@@ -1,84 +1,75 @@
 package com.codessquad.qna.controller;
 
 import com.codessquad.qna.domain.User;
+import com.codessquad.qna.repository.UserRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Objects;
+import java.util.Optional;
 
 @Controller
 public class UserController {
+    private final UserRepository userRepository;
 
-    private List<User> userList = new ArrayList<>();
+    @Autowired // 생성자나 세터 등을 사용하여 의존성 주입을 하려고 할 때, 해당 빈을 찾아서 주입?? 나중에 공부하자
+    public UserController(UserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
 
     @PostMapping("/user/create")
     private String register(User user) {
-        userList.add(user);
+        userRepository.save(user);
         return "redirect:/users";
     }
 
     @GetMapping("/users")
     private String getMemberList(Model model) {
-        model.addAttribute("users", userList);
-        return "/user/list";
+        model.addAttribute("users", userRepository.findAll());
+        return "user/list";
     }
 
-    @GetMapping("/users/{userId}")
-    private String displayProfile(@PathVariable("userId") String userId, Model model) {
-        userId = Objects.requireNonNull(userId, "Exception: userId가 NULL 값입니다.");
+    @GetMapping("/users/{primaryKey}")
+    private String displayProfile(@PathVariable("primaryKey") Long targetKey, Model model) {
+        Objects.requireNonNull(targetKey, "Exception: targetKey가 NULL 값입니다.");
 
-        for (User findUser : userList) {
-            if (findUser.getUserId().equals(userId)) {
-                model.addAttribute("invalidMember", false);
-                model.addAttribute("userID", findUser.getUserId());
-                model.addAttribute("email", findUser.getEmail());
-            } else {
-                model.addAttribute("invalidMember", true);
-            }
-        }
-        return "/user/profile";
+        Optional<User> userOptional = userRepository.findById(targetKey);
+        User findUserData = userOptional.orElseThrow(NoSuchElementException::new);
+
+        model.addAttribute("users", findUserData);
+
+        return "user/profile";
     }
 
-    @GetMapping("users/{userId}/form")
-    private String changeMemberInfo(@PathVariable("userId") String userId, Model model) {
-        userId = Objects.requireNonNull(userId, "Exception: userId가 NULL 값입니다.");
+    @GetMapping("users/{primaryKey}/form")
+    private String changeMemberInfo(@PathVariable("primaryKey") Long targetKey, Model model) {
+        Objects.requireNonNull(targetKey, "Exception: targetKey가 NULL 값입니다.");
 
-        for (User findUser : userList) {
-            if (Objects.equals(findUser.getUserId(), userId)) {
-                model.addAttribute("invalidMember", false);
-                model.addAttribute("userID", findUser.getUserId());
-                model.addAttribute("password", findUser.getPassword());
-                model.addAttribute("name", findUser.getName());
-                model.addAttribute("email", findUser.getEmail());
-                break;
-            } else {
-                model.addAttribute("invalidMember", true);
-            }
-        }
-        return "/user/updateForm";
+        Optional<User> userOptional = userRepository.findById(targetKey);
+        User originUserData = userOptional.orElseThrow(NoSuchElementException::new); // () -> new NoSuchElementException()
+
+        model.addAttribute("users", originUserData);
+
+        return "user/updateForm";
     }
 
-    @PostMapping("/users/{userId}/update")
-    private String updateMemberList(User updateUser, Model model) {
 
-        for (int index = 0; index < userList.size(); index++) {
-            boolean idCheck = User.checkId(userList.get(index),updateUser); // 아이디 유효성 체크
-            boolean findPasswordCheck = User.chekPassword(userList.get(index),updateUser); // 비밀번호 유효성 체크
+    @PutMapping("/users/{primaryKey}/update")
+    private String updateMemberList(@PathVariable Long primaryKey, User updateUserData, Model model) {
 
-            if (idCheck && findPasswordCheck) {
-                model.addAttribute("invalidPassword", false);
-                userList.get(index).setName(Objects.toString(updateUser.getName(), "")); // null default
-                userList.get(index).setEmail(Objects.toString(updateUser.getEmail(), "")); // null default
-            } else {
-                model.addAttribute("invalidPassword", true);
-            }
-            model.addAttribute("users", userList);
-        }
+        updateUserData.setPrimaryKey(primaryKey); //m 테이블이 생성될 때, PK가 생기므로. 임의 지정
+        Optional<User> userOptional = userRepository.findById(primaryKey);
+        User originUserData = userOptional.orElseThrow(NoSuchElementException::new); // () -> new NoSuchElementException()
+        userRepository.save(originUserData.update(updateUserData));
+
+        model.addAttribute("users", userRepository.findAll());
+
         return "redirect:/users";
     }
 
