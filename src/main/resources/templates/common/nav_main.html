@@ -13,12 +13,18 @@
                 <div class="input-group" style="max-width:470px;">
                     <input type="text" class="form-control" placeholder="검색어를 입력하세요." name="srch-term" id="srch-term">
                     <div class="input-group-btn">
-                        <button class="btn btn-default btn-primary" type="submit"><i
-                                class="glyphicon glyphicon-search"></i></button>
+                        <button class="btn btn-default btn-primary" type="submit"><i class="glyphicon glyphicon-search"></i></button>
                     </div>
                 </div>
             </form>
             <ul class="nav navbar-nav navbar-right">
+                {{#sessionedUser}}
+                <li>
+                    <div class="align-middle badge badge-primary text-wrap" style="width: 20rem;">
+                        {{name}}님 환영합니다! 😁
+                    </div>
+                </li>
+                {{/sessionedUser}}
                 <li>
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="glyphicon glyphicon-bell"></i></a>
                     <ul class="dropdown-menu">
