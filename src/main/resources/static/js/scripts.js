@@ -21,13 +21,13 @@ function addAnswer(e) {
 }
 
 function onError() {
-    console.log("error");
+    alert("로그인이 필요합니다.");
 }
 
 function onSuccess(data, status) {
     console.log(data);
     var answerTemplate = $("#answerTemplate").html();
-    var template = answerTemplate.format(data.author.name, data.formattedDate, data.contents, data.question.id, data.id);
+    var template = answerTemplate.format(data.author.name, data.formattedCreatedDate, data.contents, data.question.id, data.id);
     $(".qna-comment-slipp-articles").prepend(template);
     $("textarea[name=contents]").val("");
 }
