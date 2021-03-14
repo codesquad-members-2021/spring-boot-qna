@@ -18,7 +18,7 @@ public class Question {
     private String contents;
     private LocalDateTime timeCreated;
 
-    private static final DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd kk:mm");
+    private static final DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd kk:mm");
 
     public Question() {}
 
@@ -62,7 +62,7 @@ public class Question {
     }
 
     public String getFormattedTimeCreated() {
-        return timeCreated.format(dateTimeFormatter);
+        return timeCreated.format(DATE_TIME_FORMATTER);
     }
 
     @Override
