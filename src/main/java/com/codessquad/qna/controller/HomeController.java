@@ -20,6 +20,6 @@ public class HomeController {
 
         model.addAttribute("questions", questionService.showAll());
 
-        return "/index";
+        return "index";
     }
 }
