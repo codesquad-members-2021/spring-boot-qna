@@ -1,36 +1,43 @@
 package com.codessquad.qna.controller;
 
 import com.codessquad.qna.domain.Question;
+import com.codessquad.qna.domain.QuestionRepository;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Optional;
 
 @Controller
 public class QnaController {
-    private List<Question> questions = new ArrayList<>();
+    private final QuestionRepository questionRepository;
+
+    public QnaController(QuestionRepository questionRepository) {
+        this.questionRepository = questionRepository;
+    }
 
     @PostMapping("/questions")
     public String createQuestion(String writer, String title, String contents) {
-        Question question = new Question(writer, title, contents, questions.size() + 1);
-        System.out.println(question);
-        questions.add(question);
+        Question question = new Question(writer, title, contents);
+        questionRepository.save(question);
         return "redirect:/";
     }
 
     @GetMapping("/")
     public String getQuestionList(Model model) {
-        model.addAttribute("questions", questions);
+        model.addAttribute("questions", questionRepository.findAll());
         return "index";
     }
 
     @GetMapping("/questions/{id}")
     public String getDetailedQuestion(@PathVariable long id, Model model) {
-        model.addAttribute("question", questions.get((int) (id - 1)));
+        Optional<Question> question = questionRepository.findById(id);
+        if (!question.isPresent()) {
+            return "redirect:/";
+        }
+        model.addAttribute("question", question.get());
         return "qna/show";
     }
 }
