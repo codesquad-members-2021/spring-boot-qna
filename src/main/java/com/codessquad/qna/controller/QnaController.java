@@ -25,7 +25,7 @@ public class QnaController {
         return "redirect:/";
     }
 
-    @GetMapping("/")
+    @GetMapping("/questions")
     public String getQuestionList(Model model) {
         model.addAttribute("questions", questionRepository.findAll());
         return "index";
