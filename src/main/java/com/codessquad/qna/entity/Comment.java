@@ -1,7 +1,6 @@
 package com.codessquad.qna.entity;
 
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
+import org.hibernate.annotations.ColumnDefault;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -15,14 +14,15 @@ public class Comment {
     private Long id;
 
     @ManyToOne
-    @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "POST_ID")
     private Post post;
 
     @ManyToOne
-    @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "USER_PK")
     private User author;
+
+    @ColumnDefault("false")
+    private boolean deleteFlag = false;
 
     private String body;
     private LocalDateTime createDateTime = LocalDateTime.now();
@@ -55,6 +55,15 @@ public class Comment {
 
     public Post getPost() {
         return post;
+    }
+
+    public void delete() {
+        post = null;
+        deleteFlag = true;
+    }
+
+    public boolean isDeleteFlag() {
+        return deleteFlag;
     }
 
     @Override
