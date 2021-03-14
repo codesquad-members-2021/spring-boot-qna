@@ -15,8 +15,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @Controller
 @RequestMapping("/questions")
 public class QuestionController {
+    private final Logger logger = LoggerFactory.getLogger(QuestionController.class);
     private final QuestionService questionService;
-    Logger logger = LoggerFactory.getLogger(UserController.class);
 
     @Autowired
     public QuestionController(QuestionService questionService) {

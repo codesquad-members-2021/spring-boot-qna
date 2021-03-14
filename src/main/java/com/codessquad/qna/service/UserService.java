@@ -1,6 +1,5 @@
 package com.codessquad.qna.service;
 
-import com.codessquad.qna.controller.UserController;
 import com.codessquad.qna.domain.User;
 import com.codessquad.qna.exception.UserExistException;
 import com.codessquad.qna.repository.UserRepository;
@@ -13,9 +12,8 @@ import java.util.Optional;
 
 @Service
 public class UserService {
-
+    private final Logger logger = LoggerFactory.getLogger(UserService.class);
     private final UserRepository userRepository;
-    Logger logger = LoggerFactory.getLogger(UserController.class);
 
     @Autowired
     public UserService(UserRepository userRepository) {

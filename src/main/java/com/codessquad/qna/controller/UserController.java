@@ -12,8 +12,8 @@ import org.springframework.web.bind.annotation.*;
 @Controller
 @RequestMapping("/users")
 public class UserController {
+    private final Logger logger = LoggerFactory.getLogger(UserController.class);
     private final UserService userService;
-    Logger logger = LoggerFactory.getLogger(UserController.class);
 
     @Autowired
     public UserController(UserService userService) {
@@ -81,8 +81,6 @@ public class UserController {
         }
 
         userService.updateInfo(presentUser, referenceUser);
-        logger.info("updateUserProperties");
-
         return "redirect:/users";
     }
 }
