@@ -30,7 +30,7 @@ public class UserController {
         if (!user.isMatchingPassword(password)) {
             return "redirect:/users/login-form";
         }
-        session.setAttribute("user", user);
+        session.setAttribute("sessionedUser", user);
         return "redirect:/";
     }
 
