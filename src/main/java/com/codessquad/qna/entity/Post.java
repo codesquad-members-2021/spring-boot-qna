@@ -1,10 +1,8 @@
 package com.codessquad.qna.entity;
 
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
-
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -19,15 +17,17 @@ public class Post {
     private String title;
 
     @ManyToOne
-    @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "USER_PK")
     private User author;
 
+    private boolean deleteFlag = false;
     private String body;
-    private LocalDateTime createDateTime = LocalDateTime.now();
+
 
     @OneToMany(mappedBy = "post", fetch = FetchType.EAGER)
-    private List<Comment> comments;
+    private final List<Comment> comments = new ArrayList<>();
+
+    private LocalDateTime createDateTime = LocalDateTime.now();
 
     protected Post() {
     }
@@ -60,6 +60,14 @@ public class Post {
 
     public List<Comment> getComment() {
         return Collections.unmodifiableList(comments);
+    }
+
+    public void delete() {
+        deleteFlag = true;
+    }
+
+    public boolean isDeleteFlag() {
+        return deleteFlag;
     }
 
     public boolean isMatchedAuthor(User user) {
