@@ -2,25 +2,35 @@ package com.codessquad.qna.controller;
 
 import com.codessquad.qna.domain.User;
 import com.codessquad.qna.repository.UserRepository;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import org.slf4j.Logger;
+
 @Controller
 @RequestMapping("/users")
 public class UserController {
 
-    @Autowired
     private UserRepository userRepository;
+    private static final Logger logger = LoggerFactory.getLogger(UserController.class);
 
-    @PostMapping("")
+    @Autowired
+    public UserController(UserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
+
+
+    @PostMapping
     public String create(User user) {
         userRepository.save(user);
+        logger.debug("createUser : {}", user.toString());
         return "redirect:/users";
     }
 
-    @GetMapping("")
+    @GetMapping
     public String list(Model model) {
         model.addAttribute("users", userRepository.findAll());
         return "users/list";
