@@ -1,40 +1,78 @@
 package com.codessquad.qna.controller;
 
 import com.codessquad.qna.domain.User;
-import com.codessquad.qna.repository.UserRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.codessquad.qna.service.UserService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
+
+import javax.servlet.http.HttpSession;
 
 @Controller
 @RequestMapping("/users")
 public class UserController {
     private final String CONFIRM_INFO = "/confirm/{id}";
     private final String UPDATE_INFO = "/update/{id}";
+    private final UserService userService;
 
-    @Autowired
-    private UserRepository userRepository;
+    public UserController(UserService userService) {
+        this.userService = userService;
+    }
 
-    @PostMapping("")
+    @PostMapping
     public String create(User user) {
-        System.out.println("user Info: " + user);
-        userRepository.save(user);
+        userService.create(user);
         return "redirect:/";
     }
 
-    @GetMapping("")
+    @GetMapping
     public String list(Model model) {
-        model.addAttribute("users", userRepository.findAll());
-        System.out.println(model);
+        model.addAttribute("users", userService.findAll());
         return "user/list";
     }
 
+    @GetMapping("/login")
+    public String loginFrom() {
+        return "/user/login";
+    }
+
+    @PostMapping("/login")
+    public String login(String userId, String password, HttpSession session) {
+        User user = userService.findByUserId(userId);
+        if (user == null) {
+            return "redirect:/users/login";
+        }
+        if (!user.matchPassword(password)) {
+            return "redirect:/users/login";
+        }
+        session.setAttribute("sessionUser", user);
+        return "redirect:/";
+    }
+
+    @GetMapping("/logout")
+    public String logout(HttpSession session) {
+        session.removeAttribute("sessionUser");
+        return "redirect:/";
+    }
+
     @GetMapping("/{id}")
-    public String viewProfile(@PathVariable Long id, Model model) {
-        model.addAttribute("user", userRepository.findById(id).orElse(null));
+    public String profile(@PathVariable Long id, Model model) {
+        User user = userService.findById(id);
+        model.addAttribute("user", user);
         return "user/profile";
+    }
+
+    @GetMapping("/{id}/changeInfo")
+    public String changeInfo(@PathVariable Long id, HttpSession httpSession) {
+        if (!HttpSessionUtils.isLoginUser(httpSession)) {
+            return "redirect:/users/login";
+        }
+        User tempUser = HttpSessionUtils.getSessionUser(httpSession);
+        if (!tempUser.matchId(id)) {
+            throw new IllegalStateException("자신의 정보만 수정 가능합니다.");
+        }
+        return "redirect:/users/confirm/{id}";
     }
 
     @GetMapping(CONFIRM_INFO)
@@ -43,10 +81,9 @@ public class UserController {
     }
 
     @PostMapping(CONFIRM_INFO)
-    public String confirmUserInfo(@PathVariable("id") Long id, String password) {
-        User user = userRepository.findById(id).orElse(null);
-        String userPassword = user.getPassword();
-        if (userPassword.equals(password)) {
+    public String confirmUserInfo(@PathVariable Long id, String password) {
+        User user = userService.findById(id);
+        if (user.matchPassword(password)) {
             return "redirect:/users/update/{id}";
         }
         return "redirect:/users/confirm/{id}";
@@ -58,16 +95,14 @@ public class UserController {
     }
 
     @PutMapping(UPDATE_INFO)
-    public String updateUserInfo(@PathVariable("id") Long id, String password, String name, String email) {
-        User user = userRepository.findById(id).orElse(null);
-        user.updateUserInfo(password, name, email);
-        userRepository.save(user);
+    public String updateUserInfo(@PathVariable Long id, String password, String name, String email) {
+        userService.update(id, password, name, email);
         return "redirect:/users";
     }
 
     private ModelAndView getUserRepository(String viewName, Long id) {
         ModelAndView modelAndView = new ModelAndView(viewName);
-        User user = userRepository.findById(id).orElse(null);
+        User user = userService.findById(id);
         modelAndView.addObject("userId", user.getUserId());
         return modelAndView;
     }

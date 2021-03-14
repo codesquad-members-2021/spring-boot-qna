@@ -1,49 +1,80 @@
 package com.codessquad.qna.controller;
 
+import com.codessquad.qna.domain.User;
 import com.codessquad.qna.domain.Question;
-import com.codessquad.qna.repository.QuestionRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.codessquad.qna.service.QuestionService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.servlet.http.HttpSession;
+
 @Controller
+@RequestMapping("/questions")
 public class QuestionController {
+    private final QuestionService questionService;
 
-    @Autowired
-    private QuestionRepository questionRepository;
-
-    @GetMapping("/")
-    public String viewQuestionList(Model model) {
-        model.addAttribute("questions", questionRepository.findAll());
-        return "index";
+    public QuestionController(QuestionService questionService) {
+        this.questionService = questionService;
     }
 
-    @GetMapping("/questions/{id}")
+    @GetMapping("/form")
+    public String createQuestion(HttpSession session) {
+        if (!HttpSessionUtils.isLoginUser(session)) {
+            return "/user/login";
+        }
+        return "/qna/form";
+    }
+
+    @PostMapping("/form")
+    public String createQuestion(String title, String contents, HttpSession session) {
+        if (!HttpSessionUtils.isLoginUser(session)) {
+            return "/users/login";
+        }
+        questionService.create(title, contents, session);
+        return "redirect:/";
+    }
+
+    @GetMapping("/{id}")
     public ModelAndView viewQuestion(@PathVariable Long id) {
         return getQuestionRepository("/qna/show", id);
     }
 
-    @PostMapping("/questions/create")
-    public String createQuestion(Question question) {
-        questionRepository.save(question);
+    @GetMapping("/{id}/confirm")
+    public String confirmQuestion(@PathVariable Long id, HttpSession session, Model model) {
+        if (!HttpSessionUtils.isLoginUser(session)) {
+            return "/user/login";
+        }
+        User loginUser = HttpSessionUtils.getSessionUser(session);
+        Question question = questionService.findById(id);
+        if (question.matchUser(loginUser)) {
+            model.addAttribute("question", question);
+            return "/qna/updateForm";
+        }
         return "redirect:/";
     }
 
-    @PostMapping("/questions")
-    public String checkNull(Question question) {
-        if (question == null) {
+    @PutMapping("/{id}/update")
+    public String updateQuestion(@PathVariable Long id, String title, String contents) {
+        questionService.update(id, title, contents);
+        return "redirect:/questions/" + id;
+    }
+
+    @DeleteMapping("/{id}/delete")
+    public String deleteQuestion(@PathVariable Long id, HttpSession session) {
+        Question question = questionService.findById(id);
+        User loginUser = HttpSessionUtils.getSessionUser(session);
+        if (question.matchUser(loginUser)) {
+            questionService.delete(question);
             return "redirect:/";
         }
-        return "/questions/create";
+        return "redirect:/";
     }
 
     private ModelAndView getQuestionRepository(String viewName, Long id) {
         ModelAndView modelAndView = new ModelAndView(viewName);
-        modelAndView.addObject("question", questionRepository.findById(id).orElse(null));
+        modelAndView.addObject("question", questionService.findById(id));
         return modelAndView;
     }
 
