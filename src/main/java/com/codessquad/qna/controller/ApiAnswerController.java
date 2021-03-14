@@ -44,12 +44,12 @@ public class ApiAnswerController {
     @DeleteMapping("/{id}")
     public boolean delete(@PathVariable Long questionId, @PathVariable Long id, HttpSession session) {
         if (!isLoginUser(session)) {
-            throw new IllegalUserAccessException("로그인이 필요합니다.");
+            return false;
         }
         Answer answer = answerService.findAnswer(id);
         User loginUser = getSessionUser(session);
         if (!answer.isSameAuthor(loginUser)) {
-            throw new IllegalUserAccessException();
+            return false;
         }
         answerService.delete(id);
         Question question = questionService.findQuestion(questionId);
