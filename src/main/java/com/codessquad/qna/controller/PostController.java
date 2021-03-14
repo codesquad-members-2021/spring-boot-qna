@@ -2,36 +2,44 @@ package com.codessquad.qna.controller;
 
 import com.codessquad.qna.dto.PostDto;
 import com.codessquad.qna.entity.Post;
+import com.codessquad.qna.entity.User;
 import com.codessquad.qna.exception.CanNotFindPostException;
 import com.codessquad.qna.service.PostService;
-import com.codessquad.qna.util.Mapper;
-import com.sun.org.apache.xpath.internal.operations.Mod;
+import com.codessquad.qna.util.HttpSessionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Optional;
+import javax.servlet.http.HttpSession;
 
 @Controller
+@RequestMapping("/questions")
 public class PostController {
 
-    private Logger logger = LoggerFactory.getLogger(PostController.class);
+    private static final Logger logger = LoggerFactory.getLogger(PostController.class);
 
-    @Autowired
-    PostService postService;
+    private final PostService postService;
+
+    public PostController(PostService postService) {
+        this.postService = postService;
+    }
+
+    @GetMapping("/form")
+    public String getQnaForm() {
+        return "qna/form";
+    }
 
     /**
      * 질문 게시글을 게시판에 등록합니다.
      * @param postDto
      * @return
      */
-    @PostMapping("/questions")
-    public String addPost(@ModelAttribute PostDto postDto) {
-        Post post = Mapper.mapToPost(postDto);
-        postService.addPost(post);
+    @PostMapping("")
+    public String addPost(@ModelAttribute PostDto postDto, HttpSession httpSession) {
+        postDto.setAuthor(HttpSessionUtils.getUserFromSession(httpSession).getUserId());
+        postService.addPost(postDto);
         return "redirect:/";
     }
 
@@ -40,7 +48,7 @@ public class PostController {
      * @param model
      * @return
      */
-    @GetMapping("/")
+    @GetMapping("")
     public String getAllPosts(Model model) {
         model.addAttribute("posts", postService.getPosts());
         return "index";
@@ -49,33 +57,60 @@ public class PostController {
     /**
      * 매개변수로 오는 id 값을 기반으로 해당 포스트를 불러옵니다.
      * 만약 해당 유저가 없다면 CanNotFindPostException를 리턴합니다.
-     * @param id
+     * @param id Post Id
      * @param model
      * @throws CanNotFindPostException
      * @return
      */
-    @GetMapping("/questions/{id}")
+    @GetMapping("/{id}")
     public String getPost(@PathVariable Long id, Model model) {
-        try{
-            Post post = postService.getPost(id);
-            model.addAttribute("post", post);
-        }catch (CanNotFindPostException e){
-            logger.error(e.getMessage());
-        }
+        model.addAttribute("post", postService.getPost(id));
         return "qna/show";
     }
 
     /**
-     * IllegalArgumentException 을 핸들링 해주는 메소드
-     * 지금은 그냥 redirect 를 하지만 나중에는 다른 페이지로 넘겨주는 작업이 필요할듯함.
-     * @param e
+     * Post UpdateForm 으로 이동할 수 있음.
+     * 세션에 로그인 되어 있는 유저와 작성자를 비교하여 틀릴시 IllegalAccessException 을 리턴함
+     * @param id Post id
+     * @param model
+     * @throws IllegalAccessException
      * @return
      */
-    @ExceptionHandler(IllegalArgumentException.class)
-    public String handleException(Exception e, Model model) {
-        logger.error(e.getMessage());
-        model.addAttribute("exception", e);
-        return "error";
+    @GetMapping("/{id}/form")
+    public String updatePostForm(@PathVariable Long id, HttpSession httpSession, Model model) throws IllegalAccessException {
+        Post post = postService.getPost(id);
+        User sessionUser = HttpSessionUtils.getUserFromSession(httpSession);
+        if(!post.isMatchedAuthor(sessionUser)){
+            throw new IllegalAccessException("다른 사람의 글을 수정할 수 없습니다");
+        }
+        model.addAttribute("post", post);
+        return "qna/updateForm";
+    }
+
+    /**
+     * postDto 를 받아 기존의 post 를 업데이트 할 수 있도록 하였음
+     * @param id Post id
+     * @param postDto
+     * @return
+     */
+    @PutMapping("/{id}")
+    public String updatePost(@PathVariable Long id, @ModelAttribute PostDto postDto) {
+        postService.updatePost(id, postDto);
+        return "redirect:/";
+    }
+
+    /**
+     * 해당 id 에 Mapping 되어 있는 게시물을 삭제합니다.
+     * 작성자가 아니라면 IllegalAccessException 이 발생합니다.
+     * @param id Post id
+     * @return
+     */
+    @DeleteMapping("/{id}")
+    public String deletePost(@PathVariable Long id, HttpSession httpSession) throws IllegalAccessException {
+        Post post = postService.getPost(id);
+        User sessionUser = HttpSessionUtils.getUserFromSession(httpSession);
+        postService.deletePost(post, sessionUser);
+        return "redirect:/";
     }
 
 }

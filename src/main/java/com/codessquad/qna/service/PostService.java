@@ -1,22 +1,22 @@
 package com.codessquad.qna.service;
 
+import com.codessquad.qna.dto.PostDto;
 import com.codessquad.qna.entity.Post;
 import com.codessquad.qna.entity.User;
 import com.codessquad.qna.exception.CanNotFindPostException;
 import com.codessquad.qna.repository.PostRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.codessquad.qna.util.Mapper;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import javax.transaction.Transactional;
-import java.util.*;
+import java.util.List;
 
 @Service
-@Transactional
+@Transactional(readOnly = true)
 public class PostService {
 
     private final PostRepository postRepository;
 
-    @Autowired
     public PostService(PostRepository postRepository) {
         this.postRepository = postRepository;
     }
@@ -25,12 +25,32 @@ public class PostService {
         postRepository.save(post);
     }
 
+    //Overload addPost
+    public void addPost(PostDto postDto) {
+        postRepository.save(Mapper.mapToPost(postDto));
+    }
+
     public Post getPost(Long id) {
         return postRepository.findById(id).orElseThrow(CanNotFindPostException::new);
     }
 
     public List<Post> getPosts() {
         return postRepository.findAll();
+    }
+
+    @Transactional
+    public void updatePost(Long id, PostDto postDto) {
+        Post oldPost = getPost(id);
+        oldPost.change(Mapper.mapToPost(postDto));
+        postRepository.save(oldPost);
+    }
+
+    @Transactional
+    public void deletePost(Post post, User sessionUser) throws IllegalAccessException {
+        if(!post.isMatchedAuthor(sessionUser)){
+            throw new IllegalAccessException("다른 사람의 글을 삭제할 수 없습니다");
+        }
+        postRepository.delete(post);
     }
 
 }

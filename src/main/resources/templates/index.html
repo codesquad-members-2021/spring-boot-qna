@@ -29,12 +29,12 @@
                           </strong>
                           <div class="auth-info">
                               <i class="icon-add-comment"></i>
-                              <span class="time">{{date}}</span>
+                              <span class="time">{{formatDateTime createDateTime}}</span>
                               <a href="users/{{author}}" class="author">{{author}}</a>
                           </div>
                           <div class="reply" title="댓글">
                               <i class="icon-reply"></i>
-                              <span class="point">{{comment}}</span>
+                              <span class="point"></span>
                           </div>
                       </div>
                   </div>
@@ -55,7 +55,7 @@
                 </ul>
               </div>
               <div class="col-md-3 qna-write">
-                  <a href="../qna/form" class="btn btn-primary pull-right" role="button">질문하기</a>
+                  <a href="/questions/form" class="btn btn-primary pull-right" role="button">질문하기</a>
               </div>
           </div>
         </div>
@@ -139,9 +139,6 @@
 </div>
 -->
 
-<!-- script references -->
-<script src="../js/jquery-2.2.0.min.js"></script>
-<script src="../js/bootstrap.min.js"></script>
-<script src="../js/scripts.js"></script>
+{{> base/reference}}
 	</body>
 </html>

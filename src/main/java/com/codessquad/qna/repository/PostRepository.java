@@ -1,20 +1,12 @@
 package com.codessquad.qna.repository;
 
 import com.codessquad.qna.entity.Post;
-import org.springframework.data.jpa.repository.Query;
-import org.springframework.stereotype.Repository;
+import org.springframework.data.repository.CrudRepository;
 
 import java.util.List;
-import java.util.Optional;
 
-public interface PostRepository {
+public interface PostRepository extends CrudRepository<Post, Long> {
 
-    public void save(Post post);
-
-    public Optional<Post> findById(Long postId);
-
-    public List<Post> findAll();
-
-    public int size();
+    List<Post> findAll();
 
 }

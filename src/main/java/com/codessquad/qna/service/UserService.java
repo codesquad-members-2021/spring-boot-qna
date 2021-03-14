@@ -1,20 +1,25 @@
 package com.codessquad.qna.service;
 
+import com.codessquad.qna.dto.UserDto;
 import com.codessquad.qna.entity.User;
-import com.codessquad.qna.exception.CanNotFindUserException;
+import com.codessquad.qna.exception.UserNotFoundException;
 import com.codessquad.qna.repository.UserRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.codessquad.qna.util.Mapper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
+@Transactional(readOnly = true)
 public class UserService {
+
+    private static final Logger logger = LoggerFactory.getLogger(UserService.class);
 
     private final UserRepository userRepository;
 
-    @Autowired
     public UserService(UserRepository userRepository) {
         this.userRepository = userRepository;
     }
@@ -23,21 +28,43 @@ public class UserService {
         userRepository.save(user);
     }
 
+    public void save(UserDto userDto) {
+        userRepository.save(Mapper.mapToUser(userDto));
+    }
+
     public List<User> getUsers() {
         return userRepository.findAll();
     }
 
-    public User getUser(Long userId) {
-        return userRepository.findById(userId).orElseThrow(CanNotFindUserException::new);
+    public User getUserById(Long id) {
+        return userRepository.findById(id).orElseThrow(UserNotFoundException::new);
     }
 
-
-    public void change(User oldUserInfo, User updateUserInfo) {
-        userRepository.update(oldUserInfo, updateUserInfo);
+    public User getUserByUserId(String userId) {
+        return userRepository.findByUserId(userId).orElseThrow(UserNotFoundException::new);
     }
 
-    public void removeUser(Long userId) {userRepository.remove(userId);}
+    @Transactional
+    public void change(Long id, UserDto updateUserDto) {
+        User oldUser = getUserById(id);
+        oldUser.change(Mapper.mapToUser(updateUserDto));
+        userRepository.save(oldUser);
+    }
 
-    public int countOfUsers() {return userRepository.size();}
+    public boolean isMatchedUserAndPassword(User user, String password) {
+        if(!user.isMatchedPassword(password)) {
+            logger.info("User password not matched : {}", user);
+            return false;
+        }
+        return true;
+    }
+
+    public void removeUser(Long id) {
+        userRepository.deleteUserById(id);
+    }
+
+    public int countOfUsers() {
+        return (int) userRepository.count();
+    }
 
 }

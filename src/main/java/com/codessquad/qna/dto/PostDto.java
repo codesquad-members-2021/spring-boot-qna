@@ -1,20 +1,15 @@
 package com.codessquad.qna.dto;
 
-import com.codessquad.qna.entity.Post;
-import com.codessquad.qna.util.DateFormat;
-
-import java.util.Date;
+import java.time.LocalDateTime;
 
 public class PostDto {
 
     private String title;
     private String author;
     private String body;
-    private String date;
+    private final LocalDateTime date = LocalDateTime.now();;
 
-    public PostDto() {
-        this.date = DateFormat.ISO8601.format(new Date());
-    }
+    public PostDto() { }
 
     public String getTitle() {
         return title;
@@ -40,12 +35,8 @@ public class PostDto {
         this.body = body;
     }
 
-    public String getDate() {
+    public LocalDateTime getDate() {
         return date;
-    }
-
-    public void setDate(String date) {
-        this.date = date;
     }
 
 }

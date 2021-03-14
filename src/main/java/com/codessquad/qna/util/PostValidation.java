@@ -12,13 +12,13 @@ public class PostValidation {
     }
 
     private static void validateTitle(String title) {
-        if(title.isEmpty()){
+        if(title.isEmpty()) {
             throw new IllegalArgumentException("유효하지 않은 제목입니다.");
         }
     }
 
     private static void validateAuthor(String author) {
-        if(author.isEmpty()){
+        if(author.isEmpty()) {
             throw new IllegalArgumentException("유효하지 않은 작가명 입니다.");
         }
     }

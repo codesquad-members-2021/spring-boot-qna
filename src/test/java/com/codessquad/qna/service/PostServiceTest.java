@@ -3,7 +3,6 @@ package com.codessquad.qna.service;
 import com.codessquad.qna.MvcConfig;
 import com.codessquad.qna.entity.Post;
 import com.codessquad.qna.exception.CanNotFindPostException;
-import com.codessquad.qna.exception.CanNotFindUserException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -28,7 +27,7 @@ class PostServiceTest {
     void addPost() {
         Post post = new Post("TIL", "roach", "오늘은 스프링을 하고있다.");
         postService.addPost(post);
-        assertThat(postService.getPost(1L).getPostId()).isEqualTo(post.getPostId());
+        assertThat(postService.getPost(1L)).isEqualTo(post);
     }
 
     @Test
@@ -38,7 +37,7 @@ class PostServiceTest {
         Post post1 = new Post("TIL2", "roach", "오늘은 스프링을 하고있다. 123");
         postService.addPost(post);
         postService.addPost(post1);
-        assertThat(postService.getPost(1L).getPostId()).isEqualTo(post.getPostId());
+        assertThat(postService.getPost(1L)).isEqualTo(post);
     }
 
     @Test
