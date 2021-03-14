@@ -6,7 +6,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.servlet.ModelAndView;
 
 @ControllerAdvice
 public class GlobalControllerExceptionHandler {
@@ -18,8 +17,9 @@ public class GlobalControllerExceptionHandler {
 
     @ResponseStatus(HttpStatus.UNAUTHORIZED)
     @ExceptionHandler(LoginFailedException.class)
-    public ModelAndView handleLoginFailed() {
-        return new ModelAndView("users/login", "loginFailed", true);
+    public String handleLoginFailed(Model model) {
+        model.addAttribute("loginFailed", true);
+        return "users/login";
     }
 
     @ResponseStatus(HttpStatus.NOT_FOUND)
@@ -30,15 +30,16 @@ public class GlobalControllerExceptionHandler {
 
     @ResponseStatus(HttpStatus.UNAUTHORIZED)
     @ExceptionHandler(UnauthorizedAccessException.class)
-    public ModelAndView handleUnauthorizedAccess(UnauthorizedAccessException unauthorizedAccessException) {
-        return new ModelAndView("error/401",
-                "errorMessage", unauthorizedAccessException.getMessage());
+    public String handleUnauthorizedAccess(UnauthorizedAccessException unauthorizedAccessException, Model model) {
+        model.addAttribute("errorMessage", unauthorizedAccessException.getMessage());
+        return "error/401";
     }
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(UserExistException.class)
-    public ModelAndView handleUserExist() {
-        return new ModelAndView("users/form", "signUpFailed", true);
+    public String handleUserExist(Model model) {
+        model.addAttribute("signUpFailed", true);
+        return "users/form";
     }
 
     @ResponseStatus(HttpStatus.FORBIDDEN)
