@@ -32,6 +32,8 @@ public class Question {
     public Question(String title, String contents) {
         this.title = title;
         this.contents = contents;
+        this.time = LocalDateTime.now();
+        this.point = 0;
         this.deleted = false;
     }
 
@@ -41,10 +43,6 @@ public class Question {
 
     public void setTime(LocalDateTime time) {
         this.time = time;
-    }
-
-    public void setPoint(int point) {
-        this.point = point;
     }
 
     public Long getId() {

@@ -1,26 +1,24 @@
 package com.codessquad.qna.controller;
 
 import com.codessquad.qna.domain.*;
-import com.codessquad.qna.exception.NotFoundException;
 import com.codessquad.qna.exception.NotLoggedInException;
-import com.codessquad.qna.exception.UnauthorizedAccessException;
+import com.codessquad.qna.service.QuestionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpSession;
-import java.time.LocalDateTime;
 
 @Controller
 @RequestMapping("/questions")
 public class QuestionController {
 
-    private final QuestionRepository questionRepository;
+    private final QuestionService questionService;
 
     @Autowired
-    public QuestionController(QuestionRepository questionRepository) {
-        this.questionRepository = questionRepository;
+    public QuestionController(QuestionService questionService) {
+        this.questionService = questionService;
     }
 
     @GetMapping("/form")
@@ -33,51 +31,35 @@ public class QuestionController {
 
     @PostMapping()
     public String query(Question question, HttpSession session) {
-        User sessionUser = HttpSessionUtils.getUserFromSession(session);
-        question.setWriter(sessionUser);
-        question.setTime(LocalDateTime.now());
-        question.setPoint(0);
-        questionRepository.save(question);
+        questionService.registerQuestion(question, HttpSessionUtils.getUserFromSession(session));
         return "redirect:/";
     }
 
     @GetMapping("/{questionId}")
-    public ModelAndView qnaShow(@PathVariable("questionId") Long id) {
-        Question question = questionRepository.findById(id).orElseThrow(NotFoundException::new);
-        ModelAndView modelAndView = new ModelAndView("qna/show");
-        modelAndView.addObject("question", question);
-        return modelAndView;
+    public String qnaShow(@PathVariable("questionId") Long id, Model model) {
+        model.addAttribute("question", questionService.getQuestionById(id));
+        return "qna/show";
     }
 
     @GetMapping("/{questionId}/form")
-    public ModelAndView updateForm(@PathVariable("questionId") Long id, HttpSession session) {
-        return new ModelAndView("/qna/updateForm",
-                "question", getQuestionWithCheckSession(id, session));
+    public String updateForm(@PathVariable("questionId") Long id, HttpSession session, Model model) {
+        User loginUser = HttpSessionUtils.getUserFromSession(session);
+        model.addAttribute("question", questionService.getQuestionWithAuthentication(id, loginUser));
+        return "/qna/updateForm";
     }
 
     @PutMapping("/{questionId}")
     public String update(@PathVariable("questionId") Long id, Question updatedQuestion, HttpSession session) {
-        Question question = getQuestionWithCheckSession(id, session);
-        question.updateContents(updatedQuestion);
-        questionRepository.save(question);
+        User loginUser = HttpSessionUtils.getUserFromSession(session);
+        questionService.updateQuestion(id, loginUser, updatedQuestion);
         return "redirect:/questions/" + id;
     }
 
     @DeleteMapping("/{id}")
     public String delete(@PathVariable("id") Long id, HttpSession session) {
-        Question question = getQuestionWithCheckSession(id, session);
-        question.delete();
-        questionRepository.save(question);
+        User loginUser = HttpSessionUtils.getUserFromSession(session);
+        questionService.deleteQuestion(id, loginUser);
         return "redirect:/";
-    }
-
-    private Question getQuestionWithCheckSession(Long id, HttpSession session) {
-        User sessionUser = HttpSessionUtils.getUserFromSession(session);
-        Question question = questionRepository.findByIdAndDeleted(id, false).orElseThrow(NotFoundException::new);
-        if (!question.isWriter(sessionUser)) {
-            throw new UnauthorizedAccessException("다른 사람의 질문을 수정하거나 삭제할 수 없습니다.");
-        }
-        return question;
     }
 
 }
