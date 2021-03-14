@@ -22,7 +22,6 @@ public class UserController {
         this.userRepository = userRepository;
     }
 
-
     @PostMapping
     public String create(User user) {
         userRepository.save(user);
