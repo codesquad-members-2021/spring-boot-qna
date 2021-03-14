@@ -56,12 +56,13 @@ public class UserController {
 
     @PutMapping("/{id}/update")
     public String modifyProfile(@PathVariable long id, User updatedUser, String oldPassword) {
-        Optional<User> user = userRepository.findById(id);
-        if (!user.isPresent() || !user.get().verifyPassword(oldPassword)) {
+        User user = userRepository.findById(id).get();
+        if (!user.verifyPassword(oldPassword)) {
+            System.out.println("Password does not match");
             return "redirect:/users";
         }
-        System.out.println("new password" + updatedUser.getPassword());
-        userRepository.save(user.get().updateProfile(updatedUser));
+        System.out.println("new password: " + updatedUser.getPassword());
+        userRepository.save(user.updateProfile(updatedUser));
         return "redirect:/users";
     }
 }
