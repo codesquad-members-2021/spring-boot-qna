@@ -13,9 +13,9 @@ import org.springframework.web.bind.annotation.*;
 @Controller
 public class QuestionController {
 
-    private final QuestionRepository questionRepository;
     private static final Logger logger = LoggerFactory.getLogger(QuestionController.class);
-    
+    private final QuestionRepository questionRepository;
+
     public QuestionController(QuestionRepository questionRepository) {
         this.questionRepository = questionRepository;
     }
