@@ -11,12 +11,10 @@ public class User {
     private Long id;
 
     @Column(nullable = false, length = 32, unique = true)
-    @NotEmpty(message = "Name may not be empty")
     @NotBlank(message = "Name may not be blank")
     private String userId;
 
     @Column(nullable = false, length = 64)
-    @NotEmpty(message = "Password may not be empty")
     @NotBlank(message = "Password may not be blank")
     private String password;
 
