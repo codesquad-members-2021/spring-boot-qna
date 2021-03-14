@@ -28,6 +28,6 @@ public class QuestionService {
 
     public Question findQuestionById(long id) {
         return questionRepository.findById(id)
-                .orElseThrow(NoSuchElementException::new);
+                .orElseThrow(IllegalArgumentException::new);
     }
 }
