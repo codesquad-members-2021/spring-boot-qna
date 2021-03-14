@@ -16,7 +16,7 @@ public class Question {
     private String writer;
     @Column(nullable = false, length = 20)
     private String title;
-    @Column(nullable = false, length = 20)
+    @Column(nullable = false, length = 500)
     private String contents;
     @Column(nullable = false, length = 20)
     // ZonedDateTime 타임존 또는 시차 개념이 필요한 날짜와 시간 정보를 나타낼 때 사용: https://www.daleseo.com/java8-zoned-date-time/
