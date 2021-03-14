@@ -20,7 +20,7 @@ import static com.codessquad.qna.controller.HttpSessionUtils.*;
 @Controller
 public class UserController {
 
-    private final Logger logger = LoggerFactory.getLogger(UserController.class);
+    private static final Logger logger = LoggerFactory.getLogger(UserController.class);
     private final UserService userService;
 
     @Autowired
@@ -31,7 +31,7 @@ public class UserController {
     @PostMapping("/login")
     public String login(String userId, String password, HttpSession session) {
         User user = userService.findByUserId(userId);
-        if (!user.matchPassword(password)) {
+        if (!user.hasMatchingPassword(password)) {
             throw new IllegalUserAccessException("비밀번호가 틀렸습니다.");
         }
         session.setAttribute(USER_SESSION_KEY, user);

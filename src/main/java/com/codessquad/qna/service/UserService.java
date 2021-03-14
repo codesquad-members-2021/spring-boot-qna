@@ -58,7 +58,7 @@ public class UserService {
             throw new IllegalUserAccessException("로그인이 필요합니다.");
         }
         User loginUser = getSessionUser(session);
-        if (!loginUser.matchId(id)) {
+        if (!loginUser.hasMatchingId(id)) {
             throw new IllegalUserAccessException();
         }
     }
