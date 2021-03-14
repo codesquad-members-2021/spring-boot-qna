@@ -11,7 +11,7 @@
     <div class="col-md-6 col-md-offset-3">
         {{#user}}
         <div class="panel panel-default content-main">
-            <form name="question" method="post" action="/users/update">
+            <form name="question" method="post" action="/users/{{id}}">
                 <input type="hidden" name="_method" value="PUT" />
                 <div class="form-group">
                     <input type="hidden" class="form-control" id="id" name="id" value="{{id}}">
@@ -40,7 +40,7 @@
                     <label for="email">이메일</label>
                     <input type="email" class="form-control" id="email" name="email" value="{{email}}">
                 </div>
-                <button type="submit" class="btn btn-success clearfix pull-right">수정</button>
+                <button type="button" class="btn btn-success clearfix pull-right" onclick="validate()">수정</button>
                 <div class="clearfix"/>
             </form>
         </div>
@@ -48,6 +48,7 @@
     {{/user}}
 </div>
 
-{{> fragments/footer}}
+{{> fragments/script}}
+
 </body>
 </html>

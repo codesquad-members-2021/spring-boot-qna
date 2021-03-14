@@ -12,7 +12,7 @@ import java.util.List;
 @Controller
 public class HomeController {
 
-    private QuestionRepository questionRepository;
+    private final QuestionRepository questionRepository;
 
     public HomeController(QuestionRepository questionRepository) {
         this.questionRepository = questionRepository;

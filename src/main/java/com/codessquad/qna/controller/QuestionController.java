@@ -2,27 +2,36 @@ package com.codessquad.qna.controller;
 
 import com.codessquad.qna.domain.Question;
 import com.codessquad.qna.service.QuestionService;
+import com.codessquad.qna.service.UserService;
+import com.codessquad.qna.util.HttpSessionUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
+
+import javax.servlet.http.HttpSession;
 
 
 @Controller
 @RequestMapping("/questions")
 public class QuestionController {
 
-    private QuestionService questionService;
+    private final QuestionService questionService;
+    private final UserService userService;
+    private final Logger logger = LoggerFactory.getLogger(QuestionController.class);
 
-    public QuestionController(QuestionService questionService) {
+    public QuestionController(QuestionService questionService, UserService userService) {
         this.questionService = questionService;
+        this.userService = userService;
     }
 
-    @PostMapping("")
-    public String createQuestion(Question question) {
-        questionService.write(question);
+    @PostMapping
+    public String createQuestion(Question question, HttpSession session) {
+        if (!HttpSessionUtils.isLoginUser(session)) {
+            return "redirect:/users/loginForm";
+        }
+        questionService.write(question, HttpSessionUtils.getUserFromSession(session));
         return "redirect:/";
     }
 
@@ -32,6 +41,41 @@ public class QuestionController {
 
         model.addAttribute("question", findQuestion);
         return "qna/show";
+    }
+
+    @GetMapping("/form")
+    public String renderQuestionForm(HttpSession session) {
+        if (!HttpSessionUtils.isLoginUser(session)) {
+            return "redirect:/users/loginForm";
+        }
+        return "qna/form";
+    }
+
+    @GetMapping("/{id}/form")
+    public String renderUpdateForm(@PathVariable Long id, Model model, HttpSession session) {
+        Question findQuestion = questionService.findById(id);
+        userService.checkSession(session, findQuestion.getWriter().getId());
+        model.addAttribute("question", findQuestion);
+        return "qna/updateForm";
+
+    }
+
+    @PutMapping("/{id}")
+    public String questionUpdate(@PathVariable Long id, Question updateQuestion, HttpSession session) {
+        Question findQuestion = questionService.findById(id);
+        userService.checkSession(session, findQuestion.getWriter().getId());
+        questionService.update(id, updateQuestion);
+        return "redirect:/questions/" + id;
+
+    }
+
+    @DeleteMapping("/{id}")
+    public String questionDelete(@PathVariable Long id, HttpSession session) {
+        Question question = questionService.findById(id);
+        userService.checkSession(session, question.getWriter().getId());
+        questionService.delete(id);
+        return "redirect:/";
+
     }
 
 }

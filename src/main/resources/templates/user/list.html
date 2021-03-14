@@ -24,7 +24,7 @@
                 <tbody>
                 {{#users}}
                 <tr>
-                    <th scope="row">{{@index}}</th>
+                    <th scope="row">{{id}}</th>
                     <td>{{userId}}</td>
                     <td><a href="/users/{{id}}">{{name}}</a></td>
                     <td>{{email}}</td>
@@ -38,6 +38,6 @@
     </div>
 </div>
 
-{{> fragments/footer}}
+{{> fragments/script}}
 </body>
 </html>

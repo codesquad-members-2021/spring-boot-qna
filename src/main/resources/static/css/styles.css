@@ -17,7 +17,9 @@ body {
 }
 .navbar-default {background-color:#f4f4f4;margin-top:50px;border-width:0;z-index:5;}
 .navbar-default .navbar-nav > .active > a,.navbar-default .navbar-nav > li:hover > a {border:0 solid #4285f4;border-bottom-width:2px;font-weight:800;background-color:transparent;}
-.navbar-default .dropdown-menu {background-color:#ffffff;}
+.logout-btn {border:0 solid #ffffff;border-bottom-width:2px;font-weight:800;background-color:transparent;height: 52px; padding-top: 10px;}
+.logout-btn:hover {border:0 solid #4285f4;border-bottom-width:2px;font-weight:0;background-color:transparent;height: 52px; padding-top: 10px;}
+.navbar-default .dropdown-menu {background-color:##e0e0e0;}
 .navbar-default .dropdown-menu li > a {padding-left:30px;}
 
 .header {background-color:#ffffff;border-width:0;}

@@ -1,19 +1,17 @@
 package com.codessquad.qna.domain;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @Entity
 public class User {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false, length = 20)
+    @Column(nullable = false, length = 20, unique = true)
     private String userId;
+
     private String name;
     private String password;
     private String email;
@@ -58,8 +56,8 @@ public class User {
         this.id = id;
     }
 
-    public boolean checkPassword(User user) {
-        return user.getPassword().equals(this.password);
+    public boolean checkPassword(String password) {
+        return this.password.equals(password);
     }
 
     public void updateUserInfo(User user, String newPassword) {
@@ -67,5 +65,9 @@ public class User {
         this.userId = user.getUserId();
         this.email = user.getEmail();
         this.password = newPassword;
+    }
+
+    public boolean checkId(Long newId) {
+        return this.id == newId;
     }
 }

@@ -1,28 +1,45 @@
 package com.codessquad.qna.domain;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import com.codessquad.qna.util.DateTimeUtils;
+
+import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 public class Question {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String writer;
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User writer;
+
+    @OneToMany(mappedBy = "question", cascade = CascadeType.ALL)
+    @OrderBy("id ASC ")
+    private List<Answer> answerList = new ArrayList<>();
+
     private String title;
     private String contents;
-    private LocalDateTime writeTime;
+    private LocalDateTime createDateTime;
 
-    public LocalDateTime getWriteTime() {
-        return writeTime;
+    public void addAnswer(Answer answer) {
+        answerList.add(answer);
     }
 
-    public void setWriteTime(LocalDateTime writeTime) {
-        this.writeTime = writeTime;
+    public List<Answer> getAnswerList() {
+        return answerList;
+    }
+
+    public String getCreateDateTime() {
+        return createDateTime.format(DateTimeUtils.dateTimeFormatter);
+    }
+
+    public void setCreateDateTime(LocalDateTime createDateTime) {
+        this.createDateTime = createDateTime;
     }
 
     public Long getId() {
@@ -33,11 +50,11 @@ public class Question {
         this.id = id;
     }
 
-    public void setWriter(String writer) {
+    public void changeWriter(User writer) {
         this.writer = writer;
     }
 
-    public String getWriter() {
+    public User getWriter() {
         return writer;
     }
 
@@ -57,4 +74,9 @@ public class Question {
         return contents;
     }
 
+
+    public void questionUpdate(Question question) {
+        this.title = question.getTitle();
+        this.contents = question.getContents();
+    }
 }
