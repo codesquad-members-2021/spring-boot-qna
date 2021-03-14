@@ -73,7 +73,7 @@ public class UserController {
 
     private void checkSessionWithId(HttpSession session, Long accessId) {
         User loginUser = HttpSessionUtils.getLoginUser(session);
-        if (!loginUser.isMatchingId(accessId)) {
+        if (!loginUser.matchesId(accessId)) {
             throw new UnauthorizedAccessException("다른 사람의 정보를 수정할 수 없습니다.");
         }
     }

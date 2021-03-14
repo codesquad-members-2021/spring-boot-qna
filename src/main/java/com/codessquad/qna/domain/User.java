@@ -42,11 +42,11 @@ public class User {
         return email;
     }
 
-    public boolean isMatchingPassword(String oldPassword) {
+    public boolean matchesPassword(String oldPassword) {
         return this.password.equals(oldPassword);
     }
 
-    public boolean isMatchingId(Long id) {
+    public boolean matchesId(Long id) {
         return this.id.equals(id);
     }
 

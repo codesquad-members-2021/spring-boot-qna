@@ -41,7 +41,7 @@ public class UserServiceImpl implements UserService{
     @Override
     public void updateUserInfo(Long id, String oldPassword, User newUserInfo) {
         User user = userRepository.findById(id)
-                .filter(u -> u.isMatchingPassword(oldPassword))
+                .filter(u -> u.matchesPassword(oldPassword))
                 .orElseThrow(() -> new UnauthorizedAccessException("권한이 존재하지 않습니다."));
         user.update(newUserInfo);
         userRepository.save(user);
@@ -50,7 +50,7 @@ public class UserServiceImpl implements UserService{
     @Override
     public User authenticate(String userId, String password) {
         return userRepository.findByUserId(userId)
-                .filter(u -> u.isMatchingPassword(password))
+                .filter(u -> u.matchesPassword(password))
                 .orElseThrow(LoginFailedException::new);
     }
 
