@@ -7,10 +7,12 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.Optional;
 
 @Controller
+@RequestMapping("/questions")
 public class QnaController {
     private final QuestionRepository questionRepository;
 
@@ -18,20 +20,20 @@ public class QnaController {
         this.questionRepository = questionRepository;
     }
 
-    @PostMapping("/questions")
+    @PostMapping
     public String createQuestion(String writer, String title, String contents) {
         Question question = new Question(writer, title, contents);
         questionRepository.save(question);
         return "redirect:/";
     }
 
-    @GetMapping("/questions")
+    @GetMapping
     public String getQuestionList(Model model) {
         model.addAttribute("questions", questionRepository.findAll());
         return "index";
     }
 
-    @GetMapping("/questions/{id}")
+    @GetMapping("/{id}")
     public String getDetailedQuestion(@PathVariable long id, Model model) {
         Optional<Question> question = questionRepository.findById(id);
         if (!question.isPresent()) {
