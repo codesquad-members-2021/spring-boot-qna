@@ -11,6 +11,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
+import javax.validation.Valid;
 import java.util.List;
 
 
@@ -73,11 +74,15 @@ public class UserController {
     }
 
     @PutMapping("/{id}")
-    public String update(@PathVariable Long id, User updatedUser, Model model, HttpSession session) {
+    public String update(@PathVariable Long id, @Valid User updatedUser, HttpSession session, @RequestParam String password) {
         User user = userService.findVerifiedUser(id, session);
+        if (!user.hasMatchingPassword(password)) {
+            return "redirect:/users/" + id + "/form";
+        }
         user.update(updatedUser);
         userService.update(user);
         return "redirect:/users";
     }
+
 }
 
