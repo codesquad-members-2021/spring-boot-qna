@@ -96,6 +96,10 @@ public class Question {
         return writer.equals(user);
     }
 
+    public boolean isAnsweredYourself(Answer answer) {
+        return writer == answer.getWriter();
+    }
+
     public void update(Question questionWithUpdatedInfo) {
         this.title = questionWithUpdatedInfo.title;
         this.contents = questionWithUpdatedInfo.contents;
