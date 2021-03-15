@@ -4,6 +4,7 @@ import javax.persistence.*;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Entity
 public class Question {
@@ -25,6 +26,9 @@ public class Question {
     @Column(nullable = false)
     private Date date;
 
+    @Column(nullable = false)
+    private boolean isDelete;
+
     @OneToMany(mappedBy = "question", cascade = CascadeType.REMOVE)
     private List<Answer> answers;
 
@@ -39,15 +43,29 @@ public class Question {
         return this.writer.matchId(writer.getId());
     }
 
+    public boolean matchWriterOfAnswerList() {
+        Long writerId = this.writer.getId();
+        long answerCount = getAnswers().stream()
+                .filter(answer -> !answer.getWriter().matchId(writerId))
+                .count();
+        return answerCount == 0;
+    }
+
     public void save(User writer) {
-        this.date = new Date();
         this.writer = writer;
+        this.date = new Date();
+        this.isDelete = false;
     }
 
     public void update(Question question) {
         this.title = question.getTitle();
         this.contents = question.getContents();
         this.date = new Date();
+    }
+
+    public void delete() {
+        this.isDelete = true;
+        this.answers.forEach(Answer::delete);
     }
 
     public Long getId() {
@@ -91,8 +109,18 @@ public class Question {
         this.date = date;
     }
 
+    public boolean isDelete() {
+        return isDelete;
+    }
+
+    public void setDelete(boolean delete) {
+        isDelete = delete;
+    }
+
     public List<Answer> getAnswers() {
-        return answers;
+        return answers.stream()
+                .filter(answer -> !answer.isDelete())
+                .collect(Collectors.toList());
     }
 
     public void setAnswers(List<Answer> answers) {
