@@ -122,7 +122,7 @@ public class Answer {
                 ", comment='" + comment + '\'' +
                 ", createDateTime=" + createDateTime +
                 ", updateDateTime=" + updateDateTime +
-                ", question=" + question +
+                ", question=" + question.getId() +
                 ", writer=" + writer +
                 '}';
     }
