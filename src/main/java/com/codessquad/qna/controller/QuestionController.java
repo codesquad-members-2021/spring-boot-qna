@@ -2,7 +2,6 @@ package com.codessquad.qna.controller;
 
 import com.codessquad.qna.domain.Question;
 import com.codessquad.qna.domain.QuestionRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -12,8 +11,11 @@ import org.springframework.web.bind.annotation.PostMapping;
 @Controller
 public class QuestionController {
 
-    @Autowired
-    private QuestionRepository questionRepository;
+    private final QuestionRepository questionRepository;
+
+    public QuestionController(QuestionRepository questionRepository){
+        this.questionRepository = questionRepository;
+    }
 
     @PostMapping("/questions")
     public String createQuestion(Question question) {
