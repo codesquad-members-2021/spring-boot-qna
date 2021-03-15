@@ -1,7 +1,7 @@
 package com.codessquad.qna.controller;
 
 import com.codessquad.qna.domain.User;
-import com.codessquad.qna.domain.UserRepository;
+import com.codessquad.qna.service.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,46 +13,45 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/users")
 public class UserController {
     private final Logger logger = LoggerFactory.getLogger(QuestionController.class);
-    private final UserRepository userRepository;
+    private final UserService userService;
 
     @Autowired
-    public UserController(UserRepository userRepository) {
-        this.userRepository = userRepository;
+    public UserController(UserService userService) {
+        this.userService = userService;
     }
 
     @PostMapping
-    public String signUp(User user) {
-        userRepository.save(user);
+    public String signUp(String userId, String password, String name, String email) {
+        User user = new User(userId, password, name, email);
+        userService.create(user);
         logger.info(user.toString());
         return "redirect:/users";
     }
 
     @GetMapping
     public String list(Model model) {
-        model.addAttribute("users", userRepository.findAll());
+        model.addAttribute("users", userService.findUsers());
         return "user/list";
     }
 
     @GetMapping("/{id}")
     public String viewUserProfile(@PathVariable Long id, Model model) {
-        User user = userRepository.findById(id).orElseThrow(IllegalArgumentException::new);
-        model.addAttribute("user", user);
+        model.addAttribute("user", userService.findUserById(id));
         return "user/profile";
     }
 
     @GetMapping("{id}/form")
     public String viewUpdateUserForm(@PathVariable Long id, Model model) {
-        User user = userRepository.findById(id).orElseThrow(IllegalArgumentException::new);
-        model.addAttribute("user", user);
+        model.addAttribute("user", userService.findUserById(id));
         return "user/updateForm";
     }
 
     @PutMapping("{id}/update")
     public String updateUser(@PathVariable Long id, String oldPassword, User updateUser) {
-        User targetUser = userRepository.findById(id).orElseThrow(IllegalArgumentException::new);
+        User targetUser =userService.findUserById(id);
         if (targetUser.isMatchingPassword(oldPassword)) {
             targetUser.update(updateUser);
-            userRepository.save(targetUser);
+            userService.create(targetUser);
             return "redirect:/users";
         }
         return "redirect:/users/{id}/form";
