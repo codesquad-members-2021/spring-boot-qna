@@ -17,7 +17,7 @@ public class CustomHandlebarsHelper {
 
     public Object equals(Object s1, Object s2, Options options) throws IOException {
         Options.Buffer buffer = options.buffer();
-        if (s1 == null || s2 == null || !s1.equals(s2)) {
+        if (s1 == null || !s1.equals(s2)) {
             buffer.append(options.inverse());
         } else {
             buffer.append(options.fn());
