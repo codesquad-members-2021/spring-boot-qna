@@ -34,7 +34,8 @@ public class QuestionController {
 
     @GetMapping("/{id}")
     public String showQuestion(@PathVariable("id") Long id, Model model) {
-        Question question = questionRepository.findById(id).get();
+        Question question = questionRepository.findById(id)
+                .orElseThrow(() -> new NoSuchElementException("해당 id의 질문이 존재하지 않습니다."));
         model.addAttribute("question", question);
         return "qna/show";
     }
