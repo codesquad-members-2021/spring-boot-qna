@@ -44,6 +44,4 @@ public class AnswerController {
         return "redirect:/questions/" + id;
     }
 
-
-
 }

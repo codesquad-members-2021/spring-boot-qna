@@ -61,15 +61,12 @@ public class QuestionService {
     public boolean canDelete(Long id, Question question, User loginUser) {
         int allAnswers = findAnswer(id).size();
         int numCount = 0;
-        for(Answer answer : findAnswer(id)) {
+        for (Answer answer : findAnswer(id)) {
             if (question.getWriter().getId().equals(answer.getWriter().getId())) {
-                numCount+=1;
+                numCount += 1;
             }
         }
-        if ((allAnswers == 0 && question.matchUser(loginUser)) || (allAnswers == numCount && question.matchUser(loginUser))){
-            return true;
-        }
-        return false;
+        return (allAnswers == 0 && question.matchUser(loginUser)) || (allAnswers == numCount && question.matchUser(loginUser));
     }
 
 }
