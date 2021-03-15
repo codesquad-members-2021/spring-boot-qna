@@ -8,5 +8,5 @@ import java.util.List;
 
 public interface QuestionRepository extends CrudRepository<Question, Long> {
     @Query("SELECT question FROM Question question WHERE question.deleted = false")
-    List<Question> findAllActive();
+    List<Question> findActiveQuestion();
 }

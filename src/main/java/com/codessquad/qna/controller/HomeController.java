@@ -17,7 +17,7 @@ public class HomeController {
 
     @GetMapping("/")
     public String home(Model model) {
-        model.addAttribute("questions", questionRepository.findAllActive());
+        model.addAttribute("questions", questionRepository.findActiveQuestion());
         return "index";
     }
 
