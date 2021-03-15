@@ -2,6 +2,7 @@ package com.codessquad.qna.web.controllers;
 
 import com.codessquad.qna.web.domain.User;
 import com.codessquad.qna.web.repository.UserRepository;
+import com.codessquad.qna.web.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -14,9 +15,12 @@ import java.util.NoSuchElementException;
 @Controller
 @RequestMapping("/users")
 public class UserController {
+    
+    private final UserService userService;
 
-    @Autowired
-    private UserRepository userRepository;
+    UserController(UserService userService) {
+        this.userService = userService;
+    }
 
     @GetMapping("/form")
     public String getForm() {
@@ -25,41 +29,35 @@ public class UserController {
 
     @PostMapping("/form")
     public String createUser(User user) {
-        userRepository.save(user);
+        userService.save(user);
         return "redirect:/users";
     }
 
     @GetMapping("")
     public String getUserList(Model model) {
-        model.addAttribute("users", userRepository.findAll());
+        model.addAttribute("users", userService.findAll());
         return "user/list";
     }
 
     @GetMapping("/{id}")
     public String getUserById(@PathVariable Long id, Model model) {
-        User user = findUserById(id);
+        User user = userService.findUserById(id);
         model.addAttribute("user", user);
         return "user/profile";
     }
 
     @GetMapping("/{id}/form")
     public String updateUserForm(@PathVariable Long id, Model model) {
-        User user = findUserById(id);
+        User user = userService.findUserById(id);
         model.addAttribute("user", user);
         return "user/updateForm";
     }
 
-    public User findUserById(Long id) {
-        User user = userRepository.findById(id)
-                .orElseThrow(() -> new NoSuchElementException("해당 id의 사용자가 존재하지 않습니다."));
-        return user;
-    }
-
     @PutMapping("/{id}")
     public String updateUser(@PathVariable Long id, User newInfoUser) {
-        User user = findUserById(id);
+        User user = userService.findUserById(id);
         user.update(newInfoUser);
-        userRepository.save(user);
+        userService.save(user);
         return "redirect:/users";
     }
 }
