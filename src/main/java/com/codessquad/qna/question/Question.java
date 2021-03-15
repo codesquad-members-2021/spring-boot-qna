@@ -28,7 +28,6 @@ public class Question {
     private User writer;
 
     @OneToMany(mappedBy = "question")
-//    @JoinColumn(foreignKey = @ForeignKey(name = "fk_answer_question"), insertable = false, updatable = false)
     private List<Answer> answers;
 
     protected Question() {
