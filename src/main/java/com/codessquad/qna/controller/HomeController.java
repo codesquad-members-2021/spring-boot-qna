@@ -1,6 +1,7 @@
 package com.codessquad.qna.controller;
 
 
+import com.codessquad.qna.domain.DisplayStatus;
 import com.codessquad.qna.domain.Question;
 import com.codessquad.qna.repository.QuestionRepository;
 import org.springframework.stereotype.Controller;
@@ -20,8 +21,8 @@ public class HomeController {
 
     @GetMapping("/")
     public String welcome(Model model) {
-        List<Question> getQuestions = questionRepository.findAll();
-        model.addAttribute("Questions",getQuestions);
+        List<Question> getQuestions = questionRepository.findByStatus(DisplayStatus.OPEN);
+        model.addAttribute("Questions", getQuestions);
         return "index";
     }
 
