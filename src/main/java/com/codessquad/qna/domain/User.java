@@ -46,6 +46,10 @@ public class User {
         return email;
     }
 
+    public boolean isMatchingPassword(String password){
+        return this.password.equals(password);
+    }
+
     public void update(User updateUser) {
         this.password = updateUser.password;
         this.name = updateUser.name;
