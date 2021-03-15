@@ -13,7 +13,9 @@ import org.springframework.web.bind.annotation.PutMapping;
 
 import javax.servlet.http.HttpSession;
 
-import static com.codessquad.qna.controller.HttpSessionUtils.*;
+import static com.codessquad.qna.controller.HttpSessionUtils.USER_SESSION_KEY;
+import static com.codessquad.qna.controller.HttpSessionUtils.getUserFromSession;
+
 
 @Controller
 public class UserController {
@@ -26,30 +28,29 @@ public class UserController {
     }
 
     @GetMapping("/user/form")
-    public String viewSingUp(HttpSession session) {
+    public String viewSingUp() {
         logger.info("회원가입 페이지 요청");
-        return !isLoginUser(session) ? "user/form" : "redirect:/";
+        return "user/form";
     }
 
     @PostMapping("/user/form")
-    public String signUp(User user, HttpSession session) {
-        boolean result = this.userService.save(user);
+    public String signUp(User user) {
+        this.userService.save(user);
         logger.info("회원가입 요청");
-        return (!isLoginUser(session) && result) ? "redirect:/user/list" : "redirect:/user/form";
+        return "redirect:/user/list";
     }
 
     @GetMapping("/user/login")
-    public String viewLogin(HttpSession session) {
+    public String viewLogin() {
         logger.info("로그인 페이지 요청");
-        return !isLoginUser(session) ? "user/login" : "redirect:/";
+        return "user/login";
     }
 
     @PostMapping("/user/login")
     public String login(String userId, String password, HttpSession session) {
-        User loginUser = this.userService.login(userId, password);
-        if (loginUser.nonNull()) session.setAttribute(USER_SESSION_KEY, loginUser);
+        session.setAttribute(USER_SESSION_KEY, this.userService.login(userId, password));
         logger.info("로그인 요청");
-        return loginUser.nonNull() ? "redirect:/" : "redirect:/user/login_failed";
+        return "redirect:/";
     }
 
     @GetMapping("/user/logout")
@@ -68,25 +69,23 @@ public class UserController {
 
     @GetMapping("/user/{userId}/profile")
     public String viewProfile(@PathVariable("userId") String userId, Model model) {
-        User user = this.userService.findByUserId(userId);
-        model.addAttribute("user", user);
+        model.addAttribute("user", this.userService.findByUserId(userId));
         logger.info("유저 프로필 페이지 요청");
-        return user.nonNull() ? "user/profile" : "redirect:/user/list";
+        return "user/profile";
     }
 
     @GetMapping("/user/{id}/form")
     public String viewUpdateProfile(@PathVariable("id") Long id, Model model, HttpSession session) {
-        User user = this.userService.verifyUser(id, getUserFromSession(session));
-        model.addAttribute("user", user);
+        model.addAttribute("user", this.userService.verifyUser(id, getUserFromSession(session)));
         logger.info("유저 정보 수정 페이지 요청");
-        return user.nonNull() ? "user/updateForm" : "redirect:/user/list";
+        return "user/updateForm";
     }
 
     @PutMapping("/user/{id}/form")
     public String updateProfile(@PathVariable("id") Long id, User user, String oldPassword, HttpSession session) {
-        boolean result = this.userService.update(id, user, oldPassword, getUserFromSession(session));
+        this.userService.update(id, user, oldPassword, getUserFromSession(session));
         logger.info("유저 정보 수정 요청");
-        return result ? "redirect:/user/list" : "redirect:/user/" + id + "/form";
+        return "redirect:/user/list";
     }
 
 }
