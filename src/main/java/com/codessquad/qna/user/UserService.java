@@ -30,7 +30,7 @@ public class UserService {
     }
 
     public UserDTO getUserWithVerifyPassword(String userId, String password) {
-        return userRepository.findByUserId(userId)
+        User user = userRepository.findByUserId(userId)
                 .orElseThrow(() -> HttpClientErrorException.create(
                         User.LOGIN_FAIL_MESSAGE,
                         HttpStatus.UNAUTHORIZED,
@@ -38,8 +38,11 @@ public class UserService {
                         null,
                         null,
                         StandardCharsets.UTF_8
-                ))
-                .toDTO();
+                ));
+
+        user.checkPassword(password);
+
+        return user.toDTO();
     }
 
     public void createUser(UserDTO userDTO) {
