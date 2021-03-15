@@ -32,24 +32,12 @@ public class Answer extends AbstractEntity {
         return author;
     }
 
-    public void setAuthor(User author) {
-        this.author = author;
-    }
-
     public Question getQuestion() {
         return question;
     }
 
-    public void setQuestion(Question question) {
-        this.question = question;
-    }
-
     public String getContents() {
         return contents;
-    }
-
-    public void setContents(String contents) {
-        this.contents = contents;
     }
 }
 
