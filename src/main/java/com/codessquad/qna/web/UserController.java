@@ -39,11 +39,11 @@ public class UserController {
 
     @GetMapping("/{id}/form")
     public String update(@PathVariable Long id, Model model, HttpSession session) {
-        User sessionedUser = (User) session.getAttribute(HttpSessionUtils.USER_SESSION_KEY);
-        if (sessionedUser == null) {
+        if (!HttpSessionUtils.isLoginUser(session)) {
             return "redirect:/users/form";
         }
-        // Todo: IllegalStateException이랑 NoUserException 예외처리는 둘중 하나만 하면 될듯
+
+        User sessionedUser = HttpSessionUtils.getUserFromSession(session);
         if (!id.equals(sessionedUser.getId())) {
             throw new IllegalStateException("자신의 정보만 수정할 수 있습니다.");
         }
@@ -53,11 +53,11 @@ public class UserController {
 
     @PutMapping("/{id}")
     public String updateForm(@PathVariable Long id, String inputPassword, User updatedUser, HttpSession session) {
-        User sessionedUser = (User) session.getAttribute(HttpSessionUtils.USER_SESSION_KEY);
-        if (sessionedUser == null) {
+        if (!HttpSessionUtils.isLoginUser(session)) {
             return "redirect:/users/form";
         }
-        // Todo: IllegalStateException이랑 NoUserException 예외처리는 둘중 하나만 하면 될듯
+
+        User sessionedUser = (User) session.getAttribute(HttpSessionUtils.USER_SESSION_KEY);
         if (!id.equals(sessionedUser.getId())) {
             throw new IllegalStateException("자신의 정보만 수정할 수 있습니다.");
         }
@@ -72,8 +72,8 @@ public class UserController {
 
     @PostMapping("/login")
     public String login(String userId, String password, HttpSession session) {
-        User user = userRepository.findByUserId(userId).orElseThrow(NoUserException::new);
-        if (!password.equals(user.getPassword())) {
+        User user = userRepository.findByUserId(userId);
+        if (!user.isPasswordMatching(password)) {
             return "redirect:/users/loginForm";
         }
         session.setAttribute(HttpSessionUtils.USER_SESSION_KEY, user);
