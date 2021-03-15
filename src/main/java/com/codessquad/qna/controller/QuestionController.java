@@ -31,7 +31,8 @@ public class QuestionController {
 
     @GetMapping("/questions/{id}")
     public String viewQuestion(@PathVariable long id, Model model) {
-        model.addAttribute("question", questionRepository.findById(id).get());
+        Question question  = questionRepository.findById(id).orElseThrow(IllegalArgumentException::new);
+        model.addAttribute("question",question);
         return "qna/show";
     }
 }
