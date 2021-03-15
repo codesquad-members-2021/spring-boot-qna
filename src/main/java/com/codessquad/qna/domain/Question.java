@@ -79,4 +79,14 @@ public class Question {
         this.title = question.getTitle();
         this.contents = question.getContents();
     }
+
+    public boolean checkSameUserFromAnswer() {
+        for (Answer answer : answerList) {
+            if (!answer.getWriter().checkId(writer.getId())) {
+                return false;
+            }
+        }
+        return true;
+    }
+
 }

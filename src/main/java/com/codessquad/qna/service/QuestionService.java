@@ -44,7 +44,10 @@ public class QuestionService {
 
     @Transactional
     public void delete(Long id) {
-        questionRepository.deleteById(id);
+        Question question = findById(id);
+        if (question.checkSameUserFromAnswer()) {
+            questionRepository.deleteById(id);
+        }
     }
 
 }
