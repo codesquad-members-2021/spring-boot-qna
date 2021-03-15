@@ -8,17 +8,19 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.text.SimpleDateFormat;
 import java.util.*;
 
 @Controller
+@RequestMapping("/questions")
 public class QuestionController {
 
     @Autowired
     private QuestionRepository questionRepository;
 
-    @PostMapping("/questions")
+    @PostMapping("")
     public String postQuestionForm(Question question) {
         question.setDateTime(presentDateTime());
 
@@ -32,13 +34,13 @@ public class QuestionController {
         return format.format(time.getTime());
     }
 
-    @GetMapping("/questions")
+    @GetMapping("")
     public String getIndex(Model model) {
         model.addAttribute("questions", questionRepository.findAll());
         return "index";
     }
 
-    @GetMapping("/questions/{id}")
+    @GetMapping("/{id}")
     public String getQuestionShow(@PathVariable("id") Long id, Model model) {
         Question question = questionRepository.findById(id).get();
         model.addAttribute("question", question);
