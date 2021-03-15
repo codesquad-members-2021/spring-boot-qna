@@ -1,6 +1,5 @@
 package com.codessquad.qna.web;
 
-import com.codessquad.qna.exception.NoUserException;
 import com.codessquad.qna.domain.User;
 import com.codessquad.qna.repository.UserRepository;
 import org.springframework.stereotype.Controller;
@@ -8,6 +7,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
+import java.util.NoSuchElementException;
 
 @Controller
 @RequestMapping("/users")
@@ -33,7 +33,7 @@ public class UserController {
 
     @GetMapping("/{id}")
     public String show(@PathVariable Long id, Model model) {
-        model.addAttribute("user", userRepository.findById(id).orElseThrow(NoUserException::new));
+        model.addAttribute("user", userRepository.findById(id).orElseThrow(NoSuchElementException::new));
         return "/user/profile";
     }
 
@@ -47,7 +47,7 @@ public class UserController {
         if (!sessionedUser.isIdMatching(id)) {
             throw new IllegalStateException("자신의 정보만 수정할 수 있습니다.");
         }
-        model.addAttribute("user", userRepository.findById(id).orElseThrow(NoUserException::new));
+        model.addAttribute("user", userRepository.findById(id).orElseThrow(NoSuchElementException::new));
         return "/user/updateForm";
     }
 
@@ -62,7 +62,7 @@ public class UserController {
             throw new IllegalStateException("자신의 정보만 수정할 수 있습니다.");
         }
 
-        User user = userRepository.findById(id).orElseThrow(NoUserException::new);
+        User user = userRepository.findById(id).orElseThrow(NoSuchElementException::new);
         if (user.isPasswordMatching(inputPassword)) {
             user.update(updatedUser);
             return "redirect:/users";
@@ -86,7 +86,7 @@ public class UserController {
         return "redirect:/";
     }
 
-    @ExceptionHandler({NoUserException.class, IllegalStateException.class})
+    @ExceptionHandler({NoSuchElementException.class, IllegalStateException.class})
     public String handleException() {
         return "exceptionHandle";
     }
