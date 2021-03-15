@@ -1,9 +1,8 @@
 package com.codessquad.qna.domain;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import com.fasterxml.jackson.annotation.JsonFormat;
+
+import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
@@ -55,12 +54,12 @@ public class Qna {
         return createdDateTime;
     }
 
-    public void setDate(LocalDateTime date) {
-        this.createdDateTime = date;
+    public void setCreatedDateTime(LocalDateTime createdDateTime){
+        this.createdDateTime = createdDateTime;
     }
 
-    public String getFormattedDateTime() {
-        return createdDateTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+    public LocalDateTime getFormattedDateTime() {
+        return LocalDateTime.parse(createdDateTime.format(DateTimeFormatter.ISO_LOCAL_DATE_TIME));
     }
 
     @Override
