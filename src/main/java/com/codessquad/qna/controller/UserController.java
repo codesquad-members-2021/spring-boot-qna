@@ -47,7 +47,7 @@ public class UserController {
 
     @PutMapping("{id}/update")
     public String updateUser(@PathVariable Long id, User updateUser) {
-        User targetUser = userRepository.findById(id).orElseThrow(IllegalArgumentException::new)
+        User targetUser = userRepository.findById(id).orElseThrow(IllegalArgumentException::new);
         targetUser.setUser(updateUser);
         userRepository.save(targetUser);
         return "redirect:/users";
