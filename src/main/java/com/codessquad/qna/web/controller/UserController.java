@@ -1,5 +1,6 @@
 package com.codessquad.qna.web.controller;
 
+import com.codessquad.qna.web.HttpSessionUtils;
 import com.codessquad.qna.web.domain.User;
 import com.codessquad.qna.web.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,13 +33,13 @@ public class UserController {
         } catch (IllegalStateException e){
             return "redirect:/users/loginForm";
         }
-        session.setAttribute("sessionedUser", originUser);
+        session.setAttribute(HttpSessionUtils.USER_SESSION_KEY, originUser);
         return "redirect:/";
     }
 
     @GetMapping("logout")
     public String logout(HttpSession session) {
-        session.removeAttribute("sessionedUser");
+        session.removeAttribute(HttpSessionUtils.USER_SESSION_KEY);
         return "redirect:/";
     }
 
@@ -70,12 +71,11 @@ public class UserController {
 
     @GetMapping("/{id}/form")
     public String getUpdateForm(@PathVariable long id, Model model, HttpSession session) {
-        Object tempUser = session.getAttribute("sessionedUser");
-        if (tempUser == null) {
+        if (!HttpSessionUtils.isLoginUser(session)) {
             return "redirect:/users/loginForm";
         }
 
-        User sessionedUser = (User) tempUser;
+        User sessionedUser = HttpSessionUtils.getSessionedUser(session);
         if(id != sessionedUser.getId()) {
             throw new IllegalStateException("자신의 정보만 수정할 수 있습니다");
         }
@@ -90,12 +90,11 @@ public class UserController {
 
     @PutMapping("/{id}")
     public String updateUser(@PathVariable long id, String testPassword, User user, HttpSession session) {
-        Object tempUser = session.getAttribute("sessionedUser");
-        if (tempUser == null) {
+        if (!HttpSessionUtils.isLoginUser(session)) {
             return "redirect:/users/loginForm";
         }
 
-        User sessionedUser = (User) tempUser;
+        User sessionedUser = HttpSessionUtils.getSessionedUser(session);
         if(id != sessionedUser.getId()) {
             throw new IllegalStateException("자신의 정보만 수정할 수 있습니다");
         }
