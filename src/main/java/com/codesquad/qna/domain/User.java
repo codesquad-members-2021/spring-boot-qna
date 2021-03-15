@@ -1,13 +1,30 @@
-package com.codessquad.qna.domain;
+package com.codesquad.qna.domain;
 
+import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotEmpty;
+
+@Entity
 public class User {
-    private long id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @Column(nullable = false, length = 32, unique = true)
+    @NotBlank(message = "Name may not be blank")
     private String userId;
+
+    @Column(nullable = false, length = 64)
+    @NotBlank(message = "Password may not be blank")
     private String password;
+
+    @Column(length = 32)
     private String name;
+
+    @Column(length = 64)
     private String email;
 
-    public long getId() {
+    public Long getId() {
         return id;
     }
 
@@ -48,12 +65,12 @@ public class User {
     }
 
     public void update(User user) {
-        setUserId(user.userId);
-        setName(user.name);
-        setEmail(user.email);
+        this.userId = user.userId;
+        this.name = user.name;
+        this.email = user.email;
     }
 
-    public boolean matchUserId(String userId) {
-        return this.userId.equals(userId);
+    public boolean matchPassword(User user) {
+        return password.equals(user.password);
     }
 }

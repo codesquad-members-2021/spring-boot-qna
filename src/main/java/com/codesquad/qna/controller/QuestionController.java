@@ -1,20 +1,17 @@
-package com.codessquad.qna.controller;
+package com.codesquad.qna.controller;
 
-import com.codessquad.qna.domain.Question;
-import com.codessquad.qna.service.QuestionService;
+import com.codesquad.qna.domain.Question;
+import com.codesquad.qna.service.QuestionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
-import java.util.List;
-
 @Controller
 @RequestMapping("/questions")
 public class QuestionController {
 
-    private QuestionService questionService;
+    private final QuestionService questionService;
 
     @Autowired
     public QuestionController(QuestionService questionService) {
@@ -23,19 +20,20 @@ public class QuestionController {
 
     @GetMapping()
     public String list(Model model) {
-        model.addAttribute("questions", questionService.getQuestions());
-        return "qna/list";
+        model.addAttribute("questions", questionService.findAll());
+        return "/qna/list";
     }
 
     @PostMapping()
     public String question(Question question) {
-        questionService.addQuestion(question);
+        questionService.save(question);
         return "redirect:/";
     }
 
     @GetMapping("/{id}")
     public String show(@PathVariable("id") long id, Model model) {
-        model.addAttribute("question", questionService.getQuestionById(id));
+        Question question = questionService.findQuestionById(id);
+        model.addAttribute("question", question);
         return "/qna/show";
     }
 }

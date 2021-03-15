@@ -1,4 +1,4 @@
-package com.codessquad.qna;
+package com.codesquad.qna;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

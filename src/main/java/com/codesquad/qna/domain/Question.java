@@ -1,13 +1,25 @@
-package com.codessquad.qna.domain;
+package com.codesquad.qna.domain;
 
-import com.codessquad.qna.util.DateTimeUtils;
+import com.codesquad.qna.util.DateTimeUtils;
 
+import javax.persistence.*;
+import javax.validation.constraints.NotEmpty;
 import java.time.LocalDateTime;
 
+@Entity
 public class Question {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
+
+    @Column(nullable = false, length = 32, unique = true)
     private String writer;
+
+    @Column(nullable = false)
+    @NotEmpty(message = "Title may not be empty")
     private String title;
+
+    @Column(length = 3000)
     private String contents;
     private LocalDateTime createdDateTime;
 
@@ -18,12 +30,15 @@ public class Question {
         this.createdDateTime = LocalDateTime.now();
     }
 
-    public long getId() {
-        return id;
+    protected Question() {
     }
 
     public void setId(long id) {
         this.id = id;
+    }
+
+    public long getId() {
+        return id;
     }
 
     public String getWriter() {
