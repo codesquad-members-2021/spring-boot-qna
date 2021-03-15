@@ -56,7 +56,7 @@ public class UserController {
     @PostMapping("/login")
     public String login(String userId, String password, HttpSession session) {
         try {
-            SessionUtils.setSessionUser(session, userService.getUserWithVerifyPassword(userId, password));
+            SessionUtils.setSessionUser(session, userService.getVerifiedUser(userId, password));
         } catch (IllegalArgumentException e) {
             throw new LoginFailedException(e);
         }

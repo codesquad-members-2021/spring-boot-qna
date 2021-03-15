@@ -26,7 +26,7 @@ public class UserService {
                 .toDTO();
     }
 
-    public UserDTO getUserWithVerifyPassword(String userId, String password) {
+    public UserDTO getVerifiedUser(String userId, String password) {
         User user = userRepository.findByUserId(userId)
                 .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 사용자 입니다. id : " + userId));
 
