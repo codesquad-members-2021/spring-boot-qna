@@ -28,4 +28,8 @@ public class UserService {
     public Iterable<User> findAll() {
         return userRepository.findAll();
     }
+
+    public boolean isCorrectPassword(User user, String inputPassword) {
+        return user.getPassword().equals(inputPassword);
+    }
 }

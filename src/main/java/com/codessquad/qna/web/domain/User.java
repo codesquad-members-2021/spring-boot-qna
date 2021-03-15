@@ -24,6 +24,8 @@ public class User {
     @Column(nullable = false)
     private String email;
 
+    private String newPassword;
+
     protected User() {
     }
 
@@ -53,6 +55,8 @@ public class User {
     public String getEmail() {
         return email;
     }
+
+    public String getNewPassword () {return newPassword;}
 
     @Override
     public String toString() {
