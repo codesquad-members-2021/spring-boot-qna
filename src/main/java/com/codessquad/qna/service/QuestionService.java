@@ -1,5 +1,6 @@
 package com.codessquad.qna.service;
 
+import com.codessquad.qna.domain.DisplayStatus;
 import com.codessquad.qna.domain.Question;
 import com.codessquad.qna.domain.User;
 import com.codessquad.qna.repository.QuestionRepository;
@@ -46,7 +47,7 @@ public class QuestionService {
     public void delete(Long id) {
         Question question = findById(id);
         if (question.checkSameUserFromAnswer()) {
-            questionRepository.deleteById(id);
+            question.changeStatus(DisplayStatus.CLOSE);
         }
     }
 
