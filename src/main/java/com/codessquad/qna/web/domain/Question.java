@@ -26,7 +26,8 @@ public class Question {
     @Column(nullable = false, length = 20)
     private String dateTime;
 
-    protected Question() {}
+    protected Question() {
+    }
 
     public Question(String writer, String title, String contents) {
         this.writer = writer;
