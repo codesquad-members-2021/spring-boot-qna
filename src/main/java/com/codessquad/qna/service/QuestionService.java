@@ -52,7 +52,7 @@ public class QuestionService {
         List<Answer> answers = answerRepository.findAllByQuestionIdAndDeletedIsFalse(id);
 
         boolean isQuestionAnsweredByOnlyItself = answers.stream()
-                .allMatch((question::isAnsweredYourself));
+                .allMatch(question::isAnsweredYourself);
         if (!isQuestionAnsweredByOnlyItself) {
             throw new IllegalArgumentException("다른 사용자의 답변이 있습니다.");
         }
