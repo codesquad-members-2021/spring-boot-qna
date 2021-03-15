@@ -1,5 +1,7 @@
 package com.codessquad.qna.user;
 
+import com.codessquad.qna.exception.InsufficientAuthenticationException;
+
 import javax.persistence.*;
 import java.util.Arrays;
 import java.util.List;
@@ -71,6 +73,8 @@ public class User {
     }
 
     public void update(UserDTO newUser) {
+        verifyWith(newUser.toEntity());
+
         name = newUser.getName();
         password = newUser.hasNewPassword() ? newUser.getNewPassword() : password;
         email = newUser.getEmail();
@@ -85,6 +89,15 @@ public class User {
     public void checkId(Long id) {
         if (this.id.longValue() != id.longValue()) {
             throw new IllegalArgumentException("잘못된 ID입니다. id : " + id);
+        }
+    }
+
+    public void verifyWith(User target) {
+        try {
+            checkId(target.getId());
+            checkPassword(target.getPassword());
+        } catch (IllegalArgumentException e) {
+            throw new InsufficientAuthenticationException("권한이 없는 사용자입니다.", e);
         }
     }
 
