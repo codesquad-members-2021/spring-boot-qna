@@ -2,8 +2,10 @@ package com.codessquad.qna.service;
 
 import com.codessquad.qna.controller.HttpSessionUtils;
 import com.codessquad.qna.controller.QuestionController;
+import com.codessquad.qna.domain.Answer;
 import com.codessquad.qna.domain.Question;
 import com.codessquad.qna.domain.User;
+import com.codessquad.qna.repository.AnswerRepository;
 import com.codessquad.qna.repository.QuestionRepository;
 import com.codessquad.qna.valid.QuestionValidation;
 import org.slf4j.Logger;
@@ -11,13 +13,16 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpSession;
+import java.util.List;
 
 @Service
 public class QuestionService {
     private static final Logger logger = LoggerFactory.getLogger(QuestionController.class);
     private final QuestionRepository questionRepository;
+    private final AnswerRepository answerRepository;
 
-    public QuestionService(QuestionRepository questionRepository) {
+    public QuestionService(AnswerRepository answerRepository, QuestionRepository questionRepository) {
+        this.answerRepository = answerRepository;
         this.questionRepository = questionRepository;
     }
 
@@ -44,6 +49,10 @@ public class QuestionService {
 
     public Question findById(Long id) {
         return questionRepository.findById(id).orElse(null);
+    }
+
+    public List<Answer> findAnswer(Long id) {
+        return answerRepository.findActiveAnswer(id);
     }
 
 }

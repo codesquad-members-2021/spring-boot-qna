@@ -94,10 +94,6 @@ public class Question {
         this.answers = answers;
     }
 
-    public int getAnswerCount() {
-        return answers.size();
-    }
-
     public boolean matchUser(User loginUser) {
         String userId = loginUser.getUserId();
         if (this.writer.getUserId().equals(userId)) {

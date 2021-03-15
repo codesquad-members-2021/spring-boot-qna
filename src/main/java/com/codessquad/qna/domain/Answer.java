@@ -23,6 +23,9 @@ public class Answer {
     @Column(nullable = false, length = 2000)
     private String contents;
 
+    @Column(nullable = false)
+    private boolean deleted = false;
+
     private LocalDateTime currentDateTime;
 
     public Answer() {
@@ -58,6 +61,18 @@ public class Answer {
 
     public void setContents(String contents) {
         this.contents = contents;
+    }
+
+    public void delete() {
+        this.deleted = true;
+    }
+
+    public boolean matchUser(User loginUser) {
+        String userId = loginUser.getUserId();
+        if (this.writer.getUserId().equals(userId)) {
+            return true;
+        }
+        return false;
     }
 
 }

@@ -28,4 +28,13 @@ public class AnswerService {
         answerRepository.save(answer);
     }
 
+    public void delete(Answer answer) {
+        answer.delete();
+        answerRepository.save(answer);
+    }
+
+    public Answer findById(Long id) {
+        return answerRepository.findById(id).orElse(null);
+    }
+
 }

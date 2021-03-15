@@ -75,6 +75,8 @@ public class QuestionController {
     private ModelAndView getQuestionRepository(String viewName, Long id) {
         ModelAndView modelAndView = new ModelAndView(viewName);
         modelAndView.addObject("question", questionService.findById(id));
+        modelAndView.addObject("answersList", questionService.findAnswer(id));
+        modelAndView.addObject("answerCount", questionService.findAnswer(id).size());
         return modelAndView;
     }
 
