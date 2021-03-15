@@ -22,6 +22,16 @@ public class SessionUtils {
         return sessionUser.toDTO();
     }
 
+    public static UserDTO getVerifiedSessionUser(HttpSession session) {
+        User sessionUser = ((User) session.getAttribute(SESSION_USER));
+
+        if (sessionUser == null) {
+            throw new LoginFailedException("로그인이 필요합니다.");
+        }
+
+        return sessionUser.toDTO();
+    }
+
     public static void setSessionUser(HttpSession session, UserDTO user) {
         session.setAttribute(SESSION_USER, user.toEntity());
     }
