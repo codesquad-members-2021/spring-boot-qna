@@ -38,21 +38,23 @@ public class UserController {
 
     @GetMapping("/{id}/form")
     public ModelAndView getUserUpdateForm(@PathVariable Long id, HttpSession session) {
-        SessionUtils.getSessionUser(session).checkId(id);
+        SessionUtils.getSessionUser(session)
+                .toEntity()
+                .checkId(id);
 
         return new ModelAndView("/user/updateForm", "user", userService.getUser(id));
     }
 
     @PutMapping("/{id}")
     public String updateUser(@PathVariable Long id, UserDTO newUser, HttpSession session) {
-        SessionUtils.setSessionUser(session, userService.updateUser(id, newUser).toEntity());
+        SessionUtils.setSessionUser(session, userService.updateUser(id, newUser));
 
         return "redirect:/users";
     }
 
     @PostMapping("/login")
     public String login(String userId, String password, HttpSession session) {
-        SessionUtils.setSessionUser(session, userService.getUserWithVerifyPassword(userId, password).toEntity());
+        SessionUtils.setSessionUser(session, userService.getUserWithVerifyPassword(userId, password));
 
         return "redirect:/";
     }

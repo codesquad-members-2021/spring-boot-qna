@@ -24,7 +24,7 @@ public class QuestionController {
 
     @PostMapping
     public String createQuestions(Question question, HttpSession session) {
-        questionService.createQuestion(question, SessionUtils.getSessionUser(session).toDTO());
+        questionService.createQuestion(question, SessionUtils.getSessionUser(session));
 
         return "redirect:/questions";
     }
@@ -36,21 +36,21 @@ public class QuestionController {
 
     @GetMapping("/{id}/form")
     public ModelAndView getQuestionUpdateForm(@PathVariable Long id, HttpSession session) {
-        UserDTO sessionUser = SessionUtils.getSessionUser(session).toDTO();
+        UserDTO sessionUser = SessionUtils.getSessionUser(session);
 
         return new ModelAndView("/qna/updateForm", "question", questionService.getQuestion(id, sessionUser));
     }
 
     @PutMapping("/{id}")
     public String updateQuestion(@PathVariable Long id, Question newQuestion, HttpSession session) {
-        questionService.updateQuestion(id, newQuestion, SessionUtils.getSessionUser(session).toDTO());
+        questionService.updateQuestion(id, newQuestion, SessionUtils.getSessionUser(session));
 
         return "redirect:/questions";
     }
 
     @DeleteMapping("/{id}")
     public String deleteQuestion(@PathVariable Long id, HttpSession session) {
-        questionService.deleteQuestion(id, SessionUtils.getSessionUser(session).toDTO());
+        questionService.deleteQuestion(id, SessionUtils.getSessionUser(session));
 
         return "redirect:/questions";
     }
@@ -58,7 +58,7 @@ public class QuestionController {
     @PostMapping("/{questionId}/answers")
     public String createAnswer(@PathVariable Long questionId, Answer answer, HttpSession session) {
         answer.setQuestion(questionService.getQuestion(questionId));
-        answer.setWriter(SessionUtils.getSessionUser(session));
+        answer.setWriter(SessionUtils.getSessionUser(session).toEntity());
 
         questionService.createAnswer(answer);
 
@@ -67,7 +67,7 @@ public class QuestionController {
 
     @DeleteMapping("/{questionId}/answers/{id}")
     public String deleteAnswer(@PathVariable Long questionId, @PathVariable Long id, HttpSession session) {
-        questionService.deleteAnswer(id, SessionUtils.getSessionUser(session).toDTO());
+        questionService.deleteAnswer(id, SessionUtils.getSessionUser(session));
 
         return "redirect:/questions/" + questionId;
     }
