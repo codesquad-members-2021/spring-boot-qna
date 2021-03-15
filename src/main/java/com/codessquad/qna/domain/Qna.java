@@ -51,7 +51,7 @@ public class Qna {
         this.contents = contents;
     }
 
-    public LocalDateTime getDate() {
+    public LocalDateTime getCreatedDateTime() {
         return createdDateTime;
     }
 
