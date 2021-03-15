@@ -15,7 +15,7 @@ import java.util.NoSuchElementException;
 @Controller
 @RequestMapping("/users")
 public class UserController {
-    
+
     private final UserService userService;
 
     UserController(UserService userService) {
