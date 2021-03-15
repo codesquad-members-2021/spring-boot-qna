@@ -1,15 +1,16 @@
 package com.codessquad.qna.web.domain;
 
+import com.codessquad.qna.web.utility.QuestionUtility;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.persistence.*;
 import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
 import java.util.Calendar;
 
 @Entity
 public class Question {
-    @Transient
-    public static final String DATE_PATTERN = "yyyy-MM-dd HH:mm";
+
     @Id
     @GeneratedValue
     private Long id;
@@ -24,7 +25,7 @@ public class Question {
     private String contents;
 
     @Column(nullable = false, length = 20)
-    private String dateTime;
+    private LocalDateTime writtenDateTime;
 
     protected Question() {
     }
@@ -33,6 +34,7 @@ public class Question {
         this.writer = writer;
         this.title = title;
         this.contents = contents;
+        this.writtenDateTime = LocalDateTime.now();
     }
 
     public String getWriter() {
@@ -51,11 +53,8 @@ public class Question {
         return id;
     }
 
-    public String getDateTime() {
-        return dateTime;
+    public String getWrittenDateTime() {
+        return writtenDateTime.format(QuestionUtility.DATE_PATTERN);
     }
 
-    public void setDateTime(String dateTime) {
-        this.dateTime = dateTime;
-    }
 }
