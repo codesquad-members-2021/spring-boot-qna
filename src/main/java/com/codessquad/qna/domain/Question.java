@@ -12,8 +12,9 @@ public class Question {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false, length = 20)
-    private String writer;
+    @ManyToOne
+    @JoinColumn(foreignKey = @ForeignKey(name = "fk_question_writer"))
+    private User writer;
     @Column(nullable = false, length = 20)
     private String title;
     @Column(nullable = false, length = 500)
@@ -23,7 +24,7 @@ public class Question {
     // 배포서버가 미국에 있기 때문에 타임존을 사용하였습니다.
     private final ZonedDateTime time = ZonedDateTime.now(ZoneId.of("Asia/Seoul"));
 
-    public String getWriter() {
+    public User getWriter() {
         return writer;
     }
 
@@ -42,7 +43,7 @@ public class Question {
         return time.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
     }
 
-    public void setWriter(String writer) {
+    public void setWriter(User writer) {
         this.writer = writer;
     }
 

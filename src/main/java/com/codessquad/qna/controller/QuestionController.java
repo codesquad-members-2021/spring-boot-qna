@@ -34,12 +34,12 @@ public class QuestionController {
     }
 
     @PostMapping("/questions") // 게시글 작성하고 질문하기 버튼을 누를 경우
-    private String questions(Question question, Model model, HttpSession session) {
+    private String createQuestions(Question question, Model model, HttpSession session) {
         Objects.requireNonNull(question, "Exception: question이 NULL 값입니다.");
         final Object sessionValue = session.getAttribute("sessionedUser");
         if (sessionValue != null) {
             User user = (User) sessionValue;
-            question.setWriter(user.getName());
+            question.setWriter(user);
             questionRepository.save(question);
             return "redirect:/";
         }
