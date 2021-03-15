@@ -7,7 +7,6 @@ import com.codessquad.qna.domain.Question;
 import com.codessquad.qna.domain.User;
 import com.codessquad.qna.repository.AnswerRepository;
 import com.codessquad.qna.repository.QuestionRepository;
-import com.codessquad.qna.valid.QuestionValidation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -29,7 +28,6 @@ public class QuestionService {
     public void create(String title, String contents, HttpSession session) {
         User loginUser = HttpSessionUtils.getSessionUser(session);
         Question question = new Question(loginUser, title, contents);
-        logger.info(QuestionValidation.validQuestion(question));
         logger.info("question {}. ", question);
         questionRepository.save(question);
     }
@@ -37,7 +35,6 @@ public class QuestionService {
     public void update(Long id, String title, String contents) {
         Question question = questionRepository.findById(id).orElse(null);
         question.updateQuestion(title, contents);
-        logger.info(QuestionValidation.validQuestion(question));
         logger.info("question {}. ", question);
         questionRepository.save(question);
     }

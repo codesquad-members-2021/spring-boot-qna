@@ -1,6 +1,8 @@
 package com.codessquad.qna.domain;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotEmpty;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
@@ -18,9 +20,12 @@ public class Question {
     private User writer;
 
     @Column(nullable = false, length = 20)
+    @NotBlank(message = "제목은 필수 입력 값입니다.")
     private String title;
 
     @Column(nullable = false, length = 2000)
+    @NotEmpty
+    @NotBlank(message = "내용은 필수 입력 값입니다.")
     private String contents;
 
     private LocalDateTime currentDateTime;
