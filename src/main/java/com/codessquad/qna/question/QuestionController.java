@@ -23,7 +23,9 @@ public class QuestionController {
 
     @PostMapping
     public String createQuestions(Question question, HttpSession session) {
-        questionService.createQuestion(question, SessionUtils.getSessionUser(session));
+        SessionUtils.getSessionUser(session);
+
+        questionService.createQuestion(question);
 
         return "redirect:/questions";
     }

@@ -36,9 +36,7 @@ public class QuestionService {
         return result;
     }
 
-    public void createQuestion(Question question, UserDTO currentSessionUser) {
-        question.verifyWriter(currentSessionUser.toEntity());
-
+    public void createQuestion(Question question) {
         questionRepository.save(question);
     }
 
