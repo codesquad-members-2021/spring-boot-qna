@@ -59,17 +59,15 @@ public class User {
         this.email = email;
     }
 
-    public boolean checkPassword(String password){
-        return !this.password.equals(password);
+    public boolean checkPassword(String password) {
+        return this.password.equals(password);
     }
 
     public void update(User updateUser, String newPassword) {
-        if(checkPassword(newPassword)){
-            setUserId(updateUser.userId);
-            setEmail(updateUser.email);
-            setName(updateUser.name);
-            setPassword(newPassword);
-        }
+        setUserId(updateUser.userId);
+        setEmail(updateUser.email);
+        setName(updateUser.name);
+        setPassword(newPassword);
     }
 
     @Override
