@@ -29,6 +29,9 @@ public class Question {
     @OrderBy("id ASC")
     private List<Answer> answers;
 
+    @Column(nullable = false)
+    private boolean deleted = false;
+
     public Question() {
         currentDateTime = LocalDateTime.now();
     }
@@ -101,6 +104,10 @@ public class Question {
             return true;
         }
         return false;
+    }
+
+    public void delete() {
+        this.deleted = true;
     }
 
     @Override
