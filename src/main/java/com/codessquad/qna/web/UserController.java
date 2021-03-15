@@ -1,4 +1,4 @@
-package com.codessquad.qna.controller;
+package com.codessquad.qna.web;
 
 import com.codessquad.qna.exception.NoUserException;
 import com.codessquad.qna.domain.User;
@@ -39,10 +39,11 @@ public class UserController {
 
     @GetMapping("/{id}/form")
     public String update(@PathVariable Long id, Model model, HttpSession session) {
-        User sessionedUser = (User) session.getAttribute("sessionedUser");
+        User sessionedUser = (User) session.getAttribute(HttpSessionUtils.USER_SESSION_KEY);
         if (sessionedUser == null) {
             return "redirect:/users/form";
         }
+        // Todo: IllegalStateException이랑 NoUserException 예외처리는 둘중 하나만 하면 될듯
         if (!id.equals(sessionedUser.getId())) {
             throw new IllegalStateException("자신의 정보만 수정할 수 있습니다.");
         }
@@ -51,10 +52,19 @@ public class UserController {
     }
 
     @PutMapping("/{id}")
-    public String updateForm(@PathVariable Long id, String inputPassword, User newUser) {
+    public String updateForm(@PathVariable Long id, String inputPassword, User updatedUser, HttpSession session) {
+        User sessionedUser = (User) session.getAttribute(HttpSessionUtils.USER_SESSION_KEY);
+        if (sessionedUser == null) {
+            return "redirect:/users/form";
+        }
+        // Todo: IllegalStateException이랑 NoUserException 예외처리는 둘중 하나만 하면 될듯
+        if (!id.equals(sessionedUser.getId())) {
+            throw new IllegalStateException("자신의 정보만 수정할 수 있습니다.");
+        }
+
         User user = userRepository.findById(id).orElseThrow(NoUserException::new);
         if (user.isPasswordMatching(inputPassword)) {
-            user.update(newUser);
+            user.update(updatedUser);
             return "redirect:/users";
         }
         return "redirect:/users/{id}/form";
@@ -66,13 +76,13 @@ public class UserController {
         if (!password.equals(user.getPassword())) {
             return "redirect:/users/loginForm";
         }
-        session.setAttribute("sessionedUser", user);
+        session.setAttribute(HttpSessionUtils.USER_SESSION_KEY, user);
         return "redirect:/";
     }
 
     @GetMapping("/logout")
     public String logout(HttpSession session) {
-        session.removeAttribute("sessionedUser");
+        session.removeAttribute(HttpSessionUtils.USER_SESSION_KEY);
         return "redirect:/";
     }
 
