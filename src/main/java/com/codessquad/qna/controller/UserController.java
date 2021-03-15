@@ -48,9 +48,11 @@ public class UserController {
     @PutMapping("{id}/update")
     public String updateUser(@PathVariable Long id, User updateUser) {
         User targetUser = userRepository.findById(id).orElseThrow(IllegalArgumentException::new);
-        if()
-        targetUser.update(updateUser);
-        userRepository.save(targetUser);
-        return "redirect:/users";
+        if (targetUser.isMatchingPassword(updateUser)) {
+            targetUser.update(updateUser);
+            userRepository.save(targetUser);
+            return "redirect:/users";
+        }
+        return "redirect:/users/{id}/form";
     }
 }

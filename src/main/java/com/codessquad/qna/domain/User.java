@@ -46,8 +46,8 @@ public class User {
         return email;
     }
 
-    public boolean isMatchingPassword(String password){
-        return this.password.equals(password);
+    public boolean isMatchingPassword(User user){
+        return this.password.equals(user.password);
     }
 
     public void update(User updateUser) {
