@@ -1,7 +1,6 @@
 package com.codessquad.qna.service;
 
 import com.codessquad.qna.domain.User;
-import com.codessquad.qna.exception.UserExistException;
 import com.codessquad.qna.repository.UserRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -29,9 +28,7 @@ public class UserService {
 
     private void checkRedundancy(User user) {
         userRepository.findByUserId(user.getUserId())
-                .ifPresent(u -> {
-                    throw new UserExistException();
-                });
+                .orElseThrow(IllegalArgumentException::new);
     }
 
     public List<User> getAllUsers() {
