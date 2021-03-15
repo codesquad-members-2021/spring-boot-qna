@@ -1,7 +1,7 @@
 package com.codessquad.qna.controller;
 
 import com.codessquad.qna.domain.Question;
-import com.codessquad.qna.domain.QuestionRepository;
+import com.codessquad.qna.service.QuestionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -12,29 +12,29 @@ import org.springframework.web.bind.annotation.PostMapping;
 @Controller
 public class QuestionController {
 
-    private final QuestionRepository questionRepository;
+    private final QuestionService questionService;
 
     @Autowired
-    public QuestionController(QuestionRepository questionRepository) {
-        this.questionRepository = questionRepository;
+    public QuestionController(QuestionService questionService) {
+        this.questionService = questionService;
     }
 
     @PostMapping("/questions")
-    public String createQuestion(Question question) {
-        questionRepository.save(question);
+    public String createQuestion(String writer, String title, String contents) {
+        Question question = new Question(writer, title, contents);
+        questionService.create(question);
         return "redirect:/";
     }
 
     @GetMapping("/")
     public String list(Model model) {
-        model.addAttribute("questions", questionRepository.findAll());
+        model.addAttribute("questions", questionService.findQuestions());
         return "index";
     }
 
     @GetMapping("/questions/{id}")
     public String viewQuestion(@PathVariable long id, Model model) {
-        Question question  = questionRepository.findById(id).orElseThrow(IllegalArgumentException::new);
-        model.addAttribute("question",question);
+        model.addAttribute("question", questionService.findQuestionById(id));
         return "qna/show";
     }
 }
