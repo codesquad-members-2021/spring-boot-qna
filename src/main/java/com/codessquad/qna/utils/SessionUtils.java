@@ -13,23 +13,17 @@ public class SessionUtils {
     }
 
     public static UserDTO getSessionUser(HttpSession session) {
-        User sessionUser = ((User) session.getAttribute(SESSION_USER));
+        checkSessionUserExists(session);
 
-        if (sessionUser == null) {
-            throw new LoginFailedException("로그인이 필요합니다.");
-        }
-
-        return sessionUser.toDTO();
+        return ((User) session.getAttribute(SESSION_USER)).toDTO();
     }
 
-    public static UserDTO getVerifiedSessionUser(HttpSession session) {
+    public static void checkSessionUserExists(HttpSession session) {
         User sessionUser = ((User) session.getAttribute(SESSION_USER));
 
         if (sessionUser == null) {
             throw new LoginFailedException("로그인이 필요합니다.");
         }
-
-        return sessionUser.toDTO();
     }
 
     public static void setSessionUser(HttpSession session, UserDTO user) {

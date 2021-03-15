@@ -23,7 +23,7 @@ public class QuestionController {
 
     @PostMapping
     public String createQuestions(Question question, HttpSession session) {
-        SessionUtils.getSessionUser(session);
+        SessionUtils.checkSessionUserExists(session);
 
         questionService.createQuestion(question);
 
