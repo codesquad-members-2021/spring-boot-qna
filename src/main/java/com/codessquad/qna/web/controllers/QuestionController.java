@@ -33,7 +33,7 @@ public class QuestionController {
     }
 
     @GetMapping("/{id}")
-    public String getQuestionShow(@PathVariable("id") Long id, Model model) {
+    public String showQuestion(@PathVariable("id") Long id, Model model) {
         Question question = questionRepository.findById(id).get();
         model.addAttribute("question", question);
         return "qna/show";
