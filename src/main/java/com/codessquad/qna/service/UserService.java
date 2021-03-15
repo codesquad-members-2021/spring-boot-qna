@@ -1,7 +1,7 @@
 package com.codessquad.qna.service;
 
 import com.codessquad.qna.domain.User;
-import com.codessquad.qna.repository.UserRepositoryimpl;
+import com.codessquad.qna.repository.UserRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -10,9 +10,9 @@ import java.util.Optional;
 @Service
 public class UserService {
 
-    private UserRepositoryimpl repository;
+    private final UserRepository repository;
 
-    public UserService(UserRepositoryimpl repository) {
+    public UserService(UserRepository repository) {
         this.repository = repository;
     }
 
@@ -22,17 +22,19 @@ public class UserService {
 
     public List<User> findUsers(){
 
-        return repository.findUserList();
+        return (List<User>)repository.findAll();
     }
 
-    public Optional<User> findUser(String userId) {
+    public Optional<User> findUser(Long id) {
 
-        return repository.findById(userId);
+        return repository.findById(id);
     }
 
-    public boolean validationUserInfo(String userIdCheck, String password) {
+    public boolean validationUserInfo(Long id, String password) {
 
-        return Optional.ofNullable(repository.findById(userIdCheck).get().getPassword().equals(password)).isPresent();
+        User user = repository.findById(id).get();
+
+        return user.matchPassword(password);
     }
 
 

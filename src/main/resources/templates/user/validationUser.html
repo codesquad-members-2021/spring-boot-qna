@@ -1,0 +1,31 @@
+{{#partial "content" }}
+
+<div class="container" id="main">
+    <div class="col-md-6 col-md-offset-3">
+        <div class="panel panel-default content-main">
+
+            <form name="question" method="post" action="/validation">
+
+                <label>비밀번호 확인</label>
+
+                {{#id}}
+                <div class="form-group">
+                    <label for="id">{{id}}</label>
+                    <input type="hidden" class="form-control" id="id" name="id" placeholder="UserId" value="{{id}}">
+                </div>
+                {{/id}}
+                <div class="form-group">
+                    <label for="password">비밀번호</label>
+                    <input type="password" class="form-control" id="password" name="password" placeholder="Password">
+                </div>
+
+
+                <button type="submit" class="btn btn-success clearfix pull-right">다음</button>
+
+                <div class="clearfix" />
+            </form>
+        </div>
+    </div>
+</div>
+{{/partial}}
+{{> base}}

@@ -7,17 +7,19 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
+@RequestMapping("/users")
 public class UserController {
 
-    private UserService userService;
+    private final UserService userService;
 
     public UserController(UserService userService) {
         this.userService = userService;
     }
 
-    @PostMapping ("/users/create")
+    @PostMapping ("/create")
     public String create(User user) {
 
         userService.create(user);
@@ -25,7 +27,7 @@ public class UserController {
         return "redirect:/users/list";
     }
 
-    @GetMapping("/users/list")
+    @GetMapping("/list")
     public String list(Model model){
 
         model.addAttribute("users", userService.findUsers());
@@ -33,39 +35,44 @@ public class UserController {
         return "/user/list";
     }
 
-    @GetMapping("/users/{userId}")
-    public String profile(@PathVariable("userId") String userId, Model model) {
+    @GetMapping("/{id}")
+    public String profile(@PathVariable("userId") Long id, Model model) {
 
-        model.addAttribute("user", userService.findUser(userId));
+        model.addAttribute("user", userService.findUser(id));
 
         return "/user/profile";
     }
 
-    @GetMapping("/users/{userId}/validation")
-    public String userValidation(@PathVariable String userId, Model model){
+    @GetMapping("/{id}/validation")
+    public String userValidation(@PathVariable Long id, Model model){
 
-        model.addAttribute("userId", userId);
+        model.addAttribute("id", id);
 
-        return "/user/validation_user";
+        return "/user/validationUser";
     }
 
     @PostMapping("/validation")
     public String validationUser(User user, Model model) {
 
-        if(userService.validationUserInfo(user.getUserId(), user.getPassword())){
+
+        if(userService.validationUserInfo(user.getId(), user.getPassword())){
+
             model.addAttribute("user", user);
+
             return "/user/updateForm";
         }
 
-        return "/user/validation_user";
+        return "/user/validationUser";
     }
 
-    @PostMapping("/users/update")
-    public String userUpdate(User user){
+    @PostMapping("/{id}")
+    public String userUpdate(@PathVariable Long id, User newUser){
 
-        userService.findUser(user.getUserId()).get().setPassword(user.getPassword());
-        userService.findUser(user.getUserId()).get().setEmail(user.getEmail());
-        userService.findUser(user.getUserId()).get().setName(user.getName());
+        User user = userService.findUser(id).get();
+
+        user.update(newUser);
+
+        userService.create(user);
 
         return "redirect:/users/list";
     }
