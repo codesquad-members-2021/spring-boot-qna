@@ -16,15 +16,15 @@ public class QuestionService {
         this.questionRepository = questionRepository;
     }
 
-    public void create(Question question){
+    public void create(Question question) {
         questionRepository.save(question);
     }
 
-    public List<Question> findQuestions(){
+    public List<Question> findQuestions() {
         return questionRepository.findAll();
     }
 
-    public Question findQuestionById(long id){
+    public Question findQuestionById(long id) {
         return questionRepository.findById(id).orElseThrow(IllegalArgumentException::new);
     }
 }

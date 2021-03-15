@@ -17,15 +17,15 @@ public class UserService {
         this.userRepository = userRepository;
     }
 
-    public void create(User user){
+    public void create(User user) {
         userRepository.save(user);
     }
 
-    public List<User> findUsers(){
+    public List<User> findUsers() {
         return userRepository.findAll();
     }
 
-    public User findUserById(long id){
+    public User findUserById(long id) {
         return userRepository.findById(id).orElseThrow(IllegalArgumentException::new);
     }
 }

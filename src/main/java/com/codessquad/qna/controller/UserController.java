@@ -21,8 +21,7 @@ public class UserController {
     }
 
     @PostMapping
-    public String signUp(String userId, String password, String name, String email) {
-        User user = new User(userId, password, name, email);
+    public String signUp(User user) {
         userService.create(user);
         logger.info(user.toString());
         return "redirect:/users";
@@ -48,7 +47,7 @@ public class UserController {
 
     @PutMapping("{id}/update")
     public String updateUser(@PathVariable Long id, String oldPassword, User updateUser) {
-        User targetUser =userService.findUserById(id);
+        User targetUser = userService.findUserById(id);
         if (targetUser.isMatchingPassword(oldPassword)) {
             targetUser.update(updateUser);
             userService.create(targetUser);

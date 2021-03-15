@@ -20,8 +20,7 @@ public class QuestionController {
     }
 
     @PostMapping("/questions")
-    public String createQuestion(String writer, String title, String contents) {
-        Question question = new Question(writer, title, contents);
+    public String createQuestion(Question question) {
         questionService.create(question);
         return "redirect:/";
     }
