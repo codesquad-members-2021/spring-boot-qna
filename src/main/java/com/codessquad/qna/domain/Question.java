@@ -22,6 +22,9 @@ public class Question {
     @OrderBy("id ASC ")
     private List<Answer> answerList = new ArrayList<>();
 
+    @Enumerated(EnumType.STRING)
+    private DisplayStatus status = DisplayStatus.OPEN;
+
     private String title;
     private String contents;
     private LocalDateTime createDateTime;
@@ -74,6 +77,9 @@ public class Question {
         return contents;
     }
 
+    public DisplayStatus getStatus() {
+        return status;
+    }
 
     public void questionUpdate(Question question) {
         this.title = question.getTitle();
@@ -87,6 +93,10 @@ public class Question {
             }
         }
         return true;
+    }
+
+    public void changeStatus(DisplayStatus displayStatus) {
+        this.status = displayStatus;
     }
 
 }
