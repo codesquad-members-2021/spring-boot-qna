@@ -42,7 +42,10 @@ public class QuestionService {
         questionRepository.save(question);
     }
 
-    public void delete(Question question) {
+    public void delete(Question question, Long id) {
+        for (Answer answer : findAnswer(id)) {
+            answer.delete();
+        }
         question.delete();
         questionRepository.save(question);
     }
@@ -53,6 +56,20 @@ public class QuestionService {
 
     public List<Answer> findAnswer(Long id) {
         return answerRepository.findActiveAnswer(id);
+    }
+
+    public boolean canDelete(Long id, Question question, User loginUser) {
+        int allAnswers = findAnswer(id).size();
+        int numCount = 0;
+        for(Answer answer : findAnswer(id)) {
+            if (question.getWriter().getId().equals(answer.getWriter().getId())) {
+                numCount+=1;
+            }
+        }
+        if ((allAnswers == 0 && question.matchUser(loginUser)) || (allAnswers == numCount && question.matchUser(loginUser))){
+            return true;
+        }
+        return false;
     }
 
 }
