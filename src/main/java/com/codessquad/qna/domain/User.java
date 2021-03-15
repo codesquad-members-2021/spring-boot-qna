@@ -9,14 +9,13 @@ import javax.persistence.Id;
 public class User {
     @Id
     @GeneratedValue
-    private long id;
+    private Long id;
 
     @Column(nullable = false, length = 20)
     private String userId;
 
     @Column(nullable = false)
     private String password;
-    private String newPassword;
 
     @Column(nullable = false)
     private String name;
@@ -24,7 +23,7 @@ public class User {
     @Column(nullable = false)
     private String email;
 
-    public long getId() {
+    public Long getId() {
         return id;
     }
 
@@ -60,24 +59,16 @@ public class User {
         this.email = email;
     }
 
-    public String getNewPassword() {
-        return newPassword;
-    }
-
-    public void setNewPassword(String newPassword) {
-        this.newPassword = newPassword;
-    }
-
     public boolean checkPassword(String password){
         return !this.password.equals(password);
     }
 
-    public void update(User updateUser) {
-        if(checkPassword(updateUser.password)){
+    public void update(User updateUser, String newPassword) {
+        if(checkPassword(newPassword)){
             setUserId(updateUser.userId);
             setEmail(updateUser.email);
             setName(updateUser.name);
-            setPassword(updateUser.newPassword);
+            setPassword(newPassword);
         }
     }
 

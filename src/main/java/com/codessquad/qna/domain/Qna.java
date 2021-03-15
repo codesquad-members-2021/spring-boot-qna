@@ -11,7 +11,7 @@ import java.time.format.DateTimeFormatter;
 public class Qna {
     @Id
     @GeneratedValue
-    private long id;
+    private Long id;
 
     @Column(nullable = false)
     private String writer;
@@ -23,7 +23,7 @@ public class Qna {
 
     private LocalDateTime createdDateTime = LocalDateTime.now();
 
-    public long getId() {
+    public Long getId() {
         return id;
     }
 
