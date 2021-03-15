@@ -34,11 +34,11 @@ public class UserService {
                 });
     }
 
-    public List<User> showAll() {
+    public List<User> getAllUsers() {
         return userRepository.findAll();
     }
 
-    public Optional<User> showOneById(Long id) {
+    public Optional<User> getOneById(Long id) {
         return userRepository.findById(id);
     }
 

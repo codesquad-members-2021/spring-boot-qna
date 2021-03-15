@@ -40,21 +40,21 @@ public class UserController {
 
     @GetMapping
     public String showUsers(Model model) {
-        model.addAttribute("users", userService.showAll());
+        model.addAttribute("users", userService.getAllUsers());
 
         return "user/list";
     }
 
     @GetMapping("/{id}")
     public String showUserInDetail(@PathVariable long id, Model model) {
-        model.addAttribute("user", userService.showOneById(id).orElse(null));
+        model.addAttribute("user", userService.getOneById(id).orElse(null));
 
         return "user/profile";
     }
 
     @GetMapping("/{id}/form")
     public String passUserId(@PathVariable long id, Model model) {
-        User user = userService.showOneById(id).orElse(null);
+        User user = userService.getOneById(id).orElse(null);
 
         model.addAttribute("id", user.getId());
         model.addAttribute("userId", user.getUserId());
@@ -64,7 +64,7 @@ public class UserController {
 
     @PutMapping("/{id}")
     public String updateUser(@PathVariable long id, User referenceUser) {
-        User presentUser = userService.showOneById(id).orElse(null);
+        User presentUser = userService.getOneById(id).orElse(null);
 
         if (presentUser == null) {
             logger.info("present empty");
