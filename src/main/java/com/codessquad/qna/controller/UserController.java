@@ -1,5 +1,6 @@
 package com.codessquad.qna.controller;
 
+import com.codessquad.qna.domain.Result;
 import com.codessquad.qna.domain.user.User;
 import com.codessquad.qna.service.UserService;
 import com.codessquad.qna.utils.HttpSessionUtils;
@@ -40,12 +41,10 @@ public class UserController {
 
     @GetMapping("/{id}/form")
     public String getUpdateForm(@PathVariable Long id, Model model, HttpSession session) {
-        if (!HttpSessionUtils.isLoginUser(session)) {
-            return "redirect:/users/login";
-        }
-        User sessionedUser = HttpSessionUtils.getUserFromSession(session);
-        if (!sessionedUser.isYourId(id)) {
-            throw new IllegalStateException("자신의 정보만 수정할 수 있습니다.");
+        Result result = valid(session, id);
+        if (!result.isValid()) {
+            model.addAttribute("errorMessage", result.getErrorMessage());
+            return "/users/login";
         }
         User user = userService.findById(id);
         model.addAttribute("user", user);
@@ -64,10 +63,12 @@ public class UserController {
     }
 
     @PostMapping("/login")
-    public String login(String userId, String password, HttpSession session) {
+    public String login(String userId, String password, Model model, HttpSession session) {
         User user = userService.findByUserId(userId);
-        if (user == null || !user.isCorrectPassword(password)) {
-            return "/users/login_failed";
+        Result result = valid(user, password);
+        if (!result.isValid()) {
+            model.addAttribute("errorMessage", result.getErrorMessage());
+            return "/users/login";
         }
         session.setAttribute(HttpSessionUtils.USER_SESSION_KEY, user);
         return "redirect:/";
@@ -77,5 +78,23 @@ public class UserController {
     public String logout(HttpSession session) {
         session.removeAttribute(HttpSessionUtils.USER_SESSION_KEY);
         return "redirect:/";
+    }
+
+    private Result valid(HttpSession session, Long id) {
+        if (!HttpSessionUtils.isLoginUser(session)) {
+            return Result.fail("로그인이 필요합니다.");
+        }
+        User sessionedUser = HttpSessionUtils.getUserFromSession(session);
+        if (!sessionedUser.isYourId(id)) {
+            return Result.fail("자신의 정보만 수정할 수 있습니다.");
+        }
+        return Result.ok();
+    }
+
+    private Result valid(User user, String password) {
+        if (user == null || !user.isCorrectPassword(password)) {
+            return Result.fail("아이디 또는 비밀번호가 틀립니다. 다시 로그인 해주세요.");
+        }
+        return Result.ok();
     }
 }

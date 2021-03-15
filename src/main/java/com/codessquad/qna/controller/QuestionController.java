@@ -1,5 +1,6 @@
 package com.codessquad.qna.controller;
 
+import com.codessquad.qna.domain.Result;
 import com.codessquad.qna.domain.answer.Answer;
 import com.codessquad.qna.domain.question.Question;
 import com.codessquad.qna.domain.user.User;
@@ -54,13 +55,11 @@ public class QuestionController {
 
     @GetMapping("/{id}/form")
     public String getUpdateForm(@PathVariable Long id, HttpSession session, Model model) {
-        if (!HttpSessionUtils.isLoginUser(session)) {
-            return "redirect:/users/login";
-        }
         Question question = questionService.findById(id);
-        User sessionedUser = HttpSessionUtils.getUserFromSession(session);
-        if (!question.isWrittenBy(sessionedUser)) {
-            throw new IllegalStateException("자신이 작성한 글만 수정할 수 있습니다.");
+        Result result = valid(session, question);
+        if (!result.isValid()) {
+            model.addAttribute("errorMessage", result.getErrorMessage());
+            return "/users/login";
         }
         model.addAttribute("question", question);
         return "/qna/update_form";
@@ -73,16 +72,25 @@ public class QuestionController {
     }
 
     @DeleteMapping("/{id}")
-    public String deleteQuestion(@PathVariable Long id, HttpSession session) {
-        if (!HttpSessionUtils.isLoginUser(session)) {
-            return "redirect:/users/login";
-        }
+    public String deleteQuestion(@PathVariable Long id, Model model, HttpSession session) {
         Question question = questionService.findById(id);
-        User sessionedUser = HttpSessionUtils.getUserFromSession(session);
-        if (!question.isWrittenBy(sessionedUser)) {
-            throw new IllegalStateException("자신이 작성한 글만 삭제할 수 있습니다.");
+        Result result = valid(session, question);
+        if (!result.isValid()) {
+            model.addAttribute("errorMessage", result.getErrorMessage());
+            return "/users/login";
         }
         questionService.deleteById(id);
         return "redirect:/";
+    }
+
+    private Result valid(HttpSession session, Question question) {
+        if (!HttpSessionUtils.isLoginUser(session)) {
+            return Result.fail("로그인이 필요합니다.");
+        }
+        User sessionedUser = HttpSessionUtils.getUserFromSession(session);
+        if (!question.isWrittenBy(sessionedUser)) {
+            return Result.fail("자신이 작성한 글만 수정, 삭제할 수 있습니다.");
+        }
+        return Result.ok();
     }
 }
