@@ -77,7 +77,7 @@ public class QuestionService {
     public void deleteAnswer(Long id, UserDTO currentSessionUser) {
         Answer answer = getAnswer(id);
 
-        answer.getWriter().checkId(currentSessionUser.getId());
+        answer.verifyWriter(currentSessionUser.toEntity());
 
         answerRepository.delete(answer);
     }
