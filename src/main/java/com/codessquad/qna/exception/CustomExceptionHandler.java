@@ -16,6 +16,11 @@ public class CustomExceptionHandler {
         return "/user/login";
     }
 
+    @ExceptionHandler(IllegalUserUpdateException.class)
+    public String userUpdateException(IllegalUserUpdateException e) {
+        return "redirect:/users/" + e.getMessage() + "/form";
+    }
+
     @ExceptionHandler({IllegalUserAccessException.class})
     public String noSameUser() {
         return "redirect:/";
