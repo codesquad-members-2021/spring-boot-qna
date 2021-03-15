@@ -1,57 +1,66 @@
 package com.codessquad.qna.controller;
 
-import com.codessquad.qna.model.User;
+import com.codessquad.qna.domain.User;
+import com.codessquad.qna.repository.UserRepository;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
-import java.util.List;
+import org.slf4j.Logger;
 
 @Controller
+@RequestMapping("/users")
 public class UserController {
-    private List<User> users = new ArrayList<>();
 
-    @PostMapping("/users")
+    private static final Logger logger = LoggerFactory.getLogger(UserController.class);
+    private final UserRepository userRepository;
+
+    public UserController(UserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
+
+    @PostMapping
     public String create(User user) {
-        users.add(user);
+        userRepository.save(user);
+        logger.debug("createUser : {}", user.toString());
         return "redirect:/users";
     }
 
-    @GetMapping("/users")
+    @GetMapping
     public String list(Model model) {
-        model.addAttribute("users", users);
+        model.addAttribute("users", userRepository.findAll());
         return "users/list";
     }
 
-    @GetMapping("/users/{userId}")
-    public String profile(@PathVariable("userId") String userId, Model model) {
-        for (User user : users) {
-            if (user.isUserId(userId))
-                model.addAttribute("user", user);
-        }
+    @GetMapping("/{id}")
+    public String profile(@PathVariable("id") Long id, Model model) {
+        User user = userRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("No such data"));
+        model.addAttribute("user", user);
         return "users/profile";
     }
 
-    @GetMapping("/users/{userId}/form")
-    public String updateForm(@PathVariable("userId") String userId, Model model) {
-        for (User user : users) {
-            if (user.isUserId(userId))
-                model.addAttribute("user", user);
-        }
+
+    @GetMapping("/{id}/form")
+    public String updateForm(@PathVariable("id") Long id, Model model) {
+        User user = userRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("No such data"));
+        model.addAttribute("user", user);
         return "users/updateForm";
     }
 
-    @PostMapping("/users/{userId}/update")
-    public String update(@PathVariable("userId") String userId, User updateUserInfo, Model model) {
-        for (User user : users) {
-            if (user.isUserId(userId)) {
-                user.updateUserInfo(updateUserInfo);
-            }
-            model.addAttribute("user", user);
-        }
+    @PutMapping("/{id}")
+    public String update(@PathVariable("id") Long id, String checkPassword, User updateUserInfo, Model model) {
+        User user = userRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("No such data"));
+        if (!user.isMatchingPassword(checkPassword))
+            return "redirect:/users/{id}/form";
+
+        if (updateUserInfo.getPassword() == "")
+            updateUserInfo.setPassword(user.getPassword());
+
+        user.update(updateUserInfo);
+        userRepository.save(user);
         return "redirect:/users";
+
     }
 }

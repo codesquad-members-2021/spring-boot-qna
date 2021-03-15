@@ -1,42 +1,42 @@
 package com.codessquad.qna.controller;
 
-import com.codessquad.qna.model.Question;
+import com.codessquad.qna.domain.Question;
+import com.codessquad.qna.repository.QuestionRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
 
-import java.util.*;
 
 @Controller
 public class QuestionController {
 
-    private List<Question> questions = new ArrayList<>();
+    private static final Logger logger = LoggerFactory.getLogger(QuestionController.class);
+    private final QuestionRepository questionRepository;
+
+    public QuestionController(QuestionRepository questionRepository) {
+        this.questionRepository = questionRepository;
+    }
 
     @PostMapping("/questions")
     public String create(Question question) {
-        question.setId(questions.size() + 1);
-        questions.add(question);
+        questionRepository.save(question);
         return "redirect:/";
     }
 
     @GetMapping("/")
     public String list(Model model) {
-        model.addAttribute("questions", questions);
+        model.addAttribute("questions", questionRepository.findAll());
         return "index";
     }
 
     @GetMapping("/questions/{id}")
-    public String show(@PathVariable("id") int index, Model model) {
-        Question question;
-        try {
-            question = questions.get(index - 1);
-            model.addAttribute("question", question);
-            return "qna/show";
-        } catch (IndexOutOfBoundsException e) {
-            System.err.println("The index is not vaild.");
-        }
-        return "redirect:/";
+    public String show(@PathVariable("id") Long id, Model model) {
+        Question question = questionRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("No such data"));
+        model.addAttribute("question", question);
+        return "qna/show";
+
     }
 }

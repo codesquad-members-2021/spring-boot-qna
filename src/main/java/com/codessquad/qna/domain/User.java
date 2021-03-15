@@ -1,10 +1,21 @@
-package com.codessquad.qna.model;
+package com.codessquad.qna.domain;
 
+import javax.persistence.*;
+
+@Entity
 public class User {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+    @Column(nullable = false, length = 20)
     private String userId;
     private String password;
     private String name;
     private String email;
+
+    public Long getId() {
+        return id;
+    }
 
     public void setUserId(String userId) {
         this.userId = userId;
@@ -38,13 +49,14 @@ public class User {
         return email;
     }
 
-    public boolean isUserId(String userId) {
-        return userId.equals(this.userId);
+    public boolean isMatchingPassword(String password) {
+        return password.equals(this.password);
     }
 
-    public void updateUserInfo(User user) {
-        this.name = user.getName();
-        this.email = user.getEmail();
+    public void update(User updateUserInfo) {
+        this.password = updateUserInfo.getPassword();
+        this.name = updateUserInfo.getName();
+        this.email = updateUserInfo.getEmail();
     }
 
     @Override
