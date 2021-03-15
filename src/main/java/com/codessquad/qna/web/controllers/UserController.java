@@ -45,8 +45,8 @@ public class UserController {
     @GetMapping("/{id}/form")
     public String updateUserForm(@PathVariable Long id, Model model) {
         User user = findUserById(id);
-        model.addAttribute("user", user );
-        return  "user/updateForm";
+        model.addAttribute("user", user);
+        return "user/updateForm";
     }
 
     public User findUserById(Long id) {
