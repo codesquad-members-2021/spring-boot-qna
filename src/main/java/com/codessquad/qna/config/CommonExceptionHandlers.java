@@ -19,7 +19,7 @@ public class CommonExceptionHandlers {
     @ResponseStatus(HttpStatus.UNAUTHORIZED)
     @ExceptionHandler(LoginFailedException.class)
     public ModelAndView loginFailedExceptionHandler(LoginFailedException e) {
-        return new ModelAndView("/user/login_failed", "errMessage", e.getMessage());
+        return new ModelAndView("/error/401", "errMessage", e.getMessage());
     }
 
     @ResponseStatus(HttpStatus.FORBIDDEN)
