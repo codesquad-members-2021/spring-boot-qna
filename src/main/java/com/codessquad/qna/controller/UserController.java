@@ -33,19 +33,21 @@ public class UserController {
 
     @GetMapping("/{id}")
     public String viewUserProfile(@PathVariable Long id, Model model) {
-        model.addAttribute("user", userRepository.findById(id).get());
+        User user = userRepository.findById(id).orElseThrow(IllegalArgumentException::new);
+        model.addAttribute("user", user);
         return "user/profile";
     }
 
     @GetMapping("{id}/form")
     public String viewUpdateUserForm(@PathVariable Long id, Model model) {
-        model.addAttribute("user", userRepository.findById(id).get());
+        User user = userRepository.findById(id).orElseThrow(IllegalArgumentException::new);
+        model.addAttribute("user",user);
         return "user/updateForm";
     }
 
     @PutMapping("{id}/update")
     public String updateUser(@PathVariable Long id, User updateUser) {
-        User targetUser = userRepository.findById(id).get();
+        User targetUser = userRepository.findById(id).orElseThrow(IllegalArgumentException::new)
         targetUser.setUser(updateUser);
         userRepository.save(targetUser);
         return "redirect:/users";
