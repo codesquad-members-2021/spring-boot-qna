@@ -78,8 +78,8 @@ public class Question {
         return answersCount;
     }
 
-    public void setDeleted(boolean deleted) {
-        this.deleted = deleted;
+    public void delete() {
+        deleted = true;
     }
 
     public void addAnswer(Answer answer) {

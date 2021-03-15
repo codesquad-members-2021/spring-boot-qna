@@ -74,8 +74,8 @@ public class Answer {
         return deleted == true;
     }
 
-    public void setDelete(boolean deleted) {
-        this.deleted = deleted;
+    public void delete() {
+        deleted = true;
     }
 
     public boolean isWrittenBy(User user) {

@@ -56,6 +56,6 @@ public class QuestionService {
         if (!isQuestionAnsweredByOnlyItself) {
             throw new IllegalArgumentException("다른 사용자의 답변이 있습니다.");
         }
-        question.setDeleted(true);
+        question.delete();
     }
 }

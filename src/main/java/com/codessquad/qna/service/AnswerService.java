@@ -58,7 +58,7 @@ public class AnswerService {
         Answer answer = answerRepository.findById(id)
                 .orElseThrow(() -> new IllegalStateException("해당 답변이 없습니다. id = " + id));
 
-        answer.setDelete(true);
+        answer.delete();
 
         return id;
     }
