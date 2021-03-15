@@ -56,6 +56,5 @@ public class ApiAnswerController {
         questionService.update(question);
         return true;
     }
-
 }
 

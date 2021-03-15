@@ -56,3 +56,4 @@ public class AbstractEntity {
         return Objects.hash(id);
     }
 }
+

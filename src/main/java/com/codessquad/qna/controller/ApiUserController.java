@@ -24,3 +24,4 @@ public class ApiUserController {
         return userService.findUser(id);
     }
 }
+
