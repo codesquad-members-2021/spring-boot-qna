@@ -1,13 +1,9 @@
 package com.codessquad.qna.question;
 
-import com.codessquad.qna.user.User;
 import com.codessquad.qna.user.UserDTO;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.client.HttpClientErrorException;
 
-import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
@@ -35,13 +31,13 @@ public class QuestionService {
     public Question getQuestion(Long id, UserDTO currentSessionUser) {
         Question question = getQuestion(id);
 
-        verifyWriter(question, currentSessionUser.toEntity());
+        question.verifyWriter(currentSessionUser.toEntity());
 
         return question;
     }
 
     public void createQuestion(Question question, UserDTO currentSessionUser) {
-        verifyWriter(question, currentSessionUser.toEntity());
+        question.verifyWriter(currentSessionUser.toEntity());
 
         questionRepository.save(question);
     }
@@ -49,7 +45,7 @@ public class QuestionService {
     public void updateQuestion(Long id, Question newQuestion, UserDTO currentSessionUser) {
         Question existedQuestion = getQuestion(id);
 
-        verifyWriter(existedQuestion, currentSessionUser.toEntity());
+        existedQuestion.verifyWriter(currentSessionUser.toEntity());
 
         existedQuestion.update(newQuestion);
         questionRepository.save(existedQuestion);
@@ -59,22 +55,10 @@ public class QuestionService {
     public void deleteQuestion(Long id, UserDTO currentSessionUser) {
         Question question = getQuestion(id);
 
-        verifyWriter(question, currentSessionUser.toEntity());
+        question.verifyWriter(currentSessionUser.toEntity());
 
         deleteAnswers(question.getAnswers());
         questionRepository.delete(question);
-    }
-
-    private void verifyWriter(Question existedQuestion, User target) {
-        if (!existedQuestion.getWriter().isIdSameAs(target.getId())) {
-            throw HttpClientErrorException.create(
-                    HttpStatus.FORBIDDEN,
-                    "",
-                    null,
-                    null,
-                    StandardCharsets.UTF_8
-            );
-        }
     }
 
     private Answer getAnswer(Long id) {
@@ -93,15 +77,7 @@ public class QuestionService {
     public void deleteAnswer(Long id, UserDTO currentSessionUser) {
         Answer answer = getAnswer(id);
 
-        if (!answer.getWriter().isIdSameAs(currentSessionUser.getId())) {
-            throw HttpClientErrorException.create(
-                    HttpStatus.FORBIDDEN,
-                    "",
-                    null,
-                    null,
-                    StandardCharsets.UTF_8
-            );
-        }
+        answer.getWriter().checkId(currentSessionUser.getId());
 
         answerRepository.delete(answer);
     }

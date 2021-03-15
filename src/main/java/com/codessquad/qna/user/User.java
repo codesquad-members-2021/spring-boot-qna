@@ -95,8 +95,16 @@ public class User {
         }
     }
 
-    public boolean isIdSameAs(Long id) {
-        return this.id == id;
+    public void checkId(Long id) {
+        if (this.id.longValue() != id.longValue()) {
+            throw HttpClientErrorException.create(
+                    HttpStatus.FORBIDDEN,
+                    "",
+                    null,
+                    null,
+                    StandardCharsets.UTF_8
+            );
+        }
     }
 
     public UserDTO toDTO() {

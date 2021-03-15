@@ -106,6 +106,10 @@ public class Answer {
         this.writer = writer;
     }
 
+    public void verifyWriter(User target) {
+        writer.checkId(target.getId());
+    }
+
     @Override
     public String toString() {
         return "Answer{" +

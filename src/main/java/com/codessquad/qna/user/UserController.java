@@ -38,7 +38,7 @@ public class UserController {
 
     @GetMapping("/{id}/form")
     public ModelAndView getUserUpdateForm(@PathVariable Long id, HttpSession session) {
-        SessionUtils.verifyWithSessionUserId(session, id);
+        SessionUtils.getSessionUser(session).checkId(id);
 
         return new ModelAndView("/user/updateForm", "user", userService.getUser(id));
     }

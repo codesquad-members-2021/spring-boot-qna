@@ -37,22 +37,4 @@ public class SessionUtils {
     public static void removeSessionUser(HttpSession session) {
         session.removeAttribute(SESSION_USER);
     }
-
-    public static void verifyWithSessionUser(HttpSession session, User user) {
-        verifyWithSessionUserId(session, user.getId());
-    }
-
-    public static void verifyWithSessionUserId(HttpSession session, Long id) {
-        User user = getSessionUser(session);
-
-        if (!user.isIdSameAs(id)) {
-            throw HttpClientErrorException.create(
-                    HttpStatus.FORBIDDEN,
-                    "",
-                    null,
-                    null,
-                    StandardCharsets.UTF_8
-            );
-        }
-    }
 }

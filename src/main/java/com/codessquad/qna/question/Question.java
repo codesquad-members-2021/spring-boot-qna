@@ -133,6 +133,16 @@ public class Question {
         this.answers = answers;
     }
 
+    public void verifyWriter(User target) {
+        writer.checkId(target.getId());
+    }
+
+    public void update(Question newQuestion) {
+        this.title = newQuestion.title;
+        this.contents = newQuestion.contents;
+        this.updateDateTime = LocalDateTime.now();
+    }
+
     @Override
     public String toString() {
         return "Question{" +
@@ -144,11 +154,5 @@ public class Question {
                 ", writer=" + writer +
                 ", answers=" + answers +
                 '}';
-    }
-
-    public void update(Question newQuestion) {
-        this.title = newQuestion.title;
-        this.contents = newQuestion.contents;
-        this.updateDateTime = LocalDateTime.now();
     }
 }
