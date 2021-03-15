@@ -47,6 +47,7 @@ public class UserController {
     @GetMapping("/{id}/form")
     public String renderUpdateForm(@PathVariable Long id, Model model, HttpSession session) {
         User user = HttpSessionUtils.getUserFromSession(session);
+        userService.checkSameUser(user, id);
         model.addAttribute("user", user);
         return "user/userUpdateForm";
     }
