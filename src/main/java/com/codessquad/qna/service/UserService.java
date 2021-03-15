@@ -2,15 +2,14 @@ package com.codessquad.qna.service;
 
 import com.codessquad.qna.domain.User;
 import com.codessquad.qna.exception.IllegalUserAccessException;
+import com.codessquad.qna.exception.IllegalUserUpdateException;
 import com.codessquad.qna.repository.UserRepository;
-import com.codessquad.qna.util.HttpSessionUtils;
 import com.codessquad.qna.valid.UserValidator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.servlet.http.HttpSession;
 import java.util.List;
 
 @Service
@@ -39,14 +38,13 @@ public class UserService {
     }
 
     @Transactional
-    public boolean update(User updatedUser, String newPassword, Long id) {
+    public void update(User updatedUser, String newPassword, Long id) {
         UserValidator.validate(updatedUser);
         User user = findById(id);
-        if (user.checkPassword(updatedUser.getPassword())) {
-            user.updateUserInfo(updatedUser, newPassword);
-            return true;
+        if (!user.checkPassword(updatedUser.getPassword())) {
+            throw new IllegalUserUpdateException(id);
         }
-        return false;
+        user.updateUserInfo(updatedUser, newPassword);
     }
 
     public void checkLoginable(String userId, String password) {

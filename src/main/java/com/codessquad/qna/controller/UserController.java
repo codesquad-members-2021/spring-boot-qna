@@ -56,11 +56,8 @@ public class UserController {
     public String userUpdate(@PathVariable Long id, User updatedUser, String newPassword, Model model, HttpSession session) {
         User user = HttpSessionUtils.getUserFromSession(session);
         userService.checkSameUser(user, id);
-        if (userService.update(updatedUser, newPassword, id)) {
-            return "redirect:/";
-        }
-        model.addAttribute("fail", true);
-        return "user/userUpdateForm";
+        userService.update(updatedUser, newPassword, id);
+        return "redirect:/";
     }
 
 }
