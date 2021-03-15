@@ -1,5 +1,6 @@
 package com.codessquad.qna.web;
 
+import com.codessquad.qna.domain.Qna;
 import com.codessquad.qna.domain.User;
 import com.codessquad.qna.domain.UserRepository;
 import com.codessquad.qna.exception.NoUserException;
@@ -25,11 +26,19 @@ public class UserController {
 
     @PostMapping
     public String create(User user) {
-        if (user == null) {
-            return "redirect:/";
+        if (checkNull(user)) {
+            return "user/form";
+        } else {
+            userRepository.save(user);
+            return "redirect:/users";
         }
-        userRepository.save(user);
-        return "redirect:/users";
+    }
+
+    private boolean checkNull(User user){
+        return user.getUserId().equals("")
+                || user.getPassword().equals("")
+                || user.getEmail().equals("")
+                || user.getName().equals("");
     }
 
     @GetMapping

@@ -21,11 +21,20 @@ public class QuestionController {
 
     @PostMapping
     public String createNewQna(Qna qna) {
-        if (qna == null) {
-            return "redirect:/qna";
+        if(checkNull(qna)){
+            return "qna/form";
         }
-        qnaRepository.save(qna);
-        return "redirect:/qna";
+        else {
+            qna.setCreatedDateTime(qna.getFormattedDateTime());
+            qnaRepository.save(qna);
+            return "redirect:/";
+        }
+    }
+
+    private boolean checkNull(Qna qna){
+        return qna.getWriter().equals("")
+                || qna.getTitle().equals("")
+                || qna.getContents().equals("");
     }
 
     @GetMapping
