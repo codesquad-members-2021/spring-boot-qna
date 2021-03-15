@@ -58,10 +58,4 @@ public class UserService {
         return userRepository.findByUserId(userId).orElseThrow(NullPointerException::new);
     }
 
-    public void checkSameUser(User user, Long id) {
-        if (!user.checkId(id)) {
-            throw new IllegalUserAccessException("자신의 정보만 수정 가능");
-        }
-    }
-
 }

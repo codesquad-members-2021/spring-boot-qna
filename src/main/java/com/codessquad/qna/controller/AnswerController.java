@@ -36,7 +36,7 @@ public class AnswerController {
     public String delete(@PathVariable Long id, HttpSession session) {
         User user = HttpSessionUtils.getUserFromSession(session);
         Answer answer = answerService.findById(id);
-        userService.checkSameUser(user, answer.getWriter().getId());
+        user.checkSameUser(answer.getWriter().getId());
         answerService.delete(id);
 
         return "redirect:/";

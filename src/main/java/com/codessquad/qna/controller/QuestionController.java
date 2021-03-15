@@ -3,7 +3,6 @@ package com.codessquad.qna.controller;
 import com.codessquad.qna.domain.Question;
 import com.codessquad.qna.domain.User;
 import com.codessquad.qna.service.QuestionService;
-import com.codessquad.qna.service.UserService;
 import com.codessquad.qna.util.HttpSessionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,12 +18,10 @@ import javax.servlet.http.HttpSession;
 public class QuestionController {
 
     private final QuestionService questionService;
-    private final UserService userService;
     private final Logger logger = LoggerFactory.getLogger(QuestionController.class);
 
-    public QuestionController(QuestionService questionService, UserService userService) {
+    public QuestionController(QuestionService questionService) {
         this.questionService = questionService;
-        this.userService = userService;
     }
 
     @PostMapping
@@ -52,7 +49,7 @@ public class QuestionController {
     public String renderUpdateForm(@PathVariable Long id, Model model, HttpSession session) {
         Question findQuestion = questionService.findById(id);
         User user = HttpSessionUtils.getUserFromSession(session);
-        userService.checkSameUser(user, findQuestion.getWriter().getId());
+        user.checkSameUser(findQuestion.getWriter().getId());
         model.addAttribute("question", findQuestion);
         return "qna/updateForm";
 
@@ -62,7 +59,7 @@ public class QuestionController {
     public String questionUpdate(@PathVariable Long id, Question updateQuestion, HttpSession session) {
         Question findQuestion = questionService.findById(id);
         User user = HttpSessionUtils.getUserFromSession(session);
-        userService.checkSameUser(user, findQuestion.getWriter().getId());
+        user.checkSameUser(findQuestion.getWriter().getId());
         questionService.update(id, updateQuestion);
         return "redirect:/questions/" + id;
 
@@ -72,7 +69,7 @@ public class QuestionController {
     public String questionDelete(@PathVariable Long id, HttpSession session) {
         Question question = questionService.findById(id);
         User user = HttpSessionUtils.getUserFromSession(session);
-        userService.checkSameUser(user, question.getWriter().getId());
+        user.checkSameUser(question.getWriter().getId());
         questionService.delete(id);
         return "redirect:/";
 
