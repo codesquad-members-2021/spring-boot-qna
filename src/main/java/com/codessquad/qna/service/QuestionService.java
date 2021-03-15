@@ -5,7 +5,6 @@ import com.codessquad.qna.model.User;
 import com.codessquad.qna.repository.QuestionRepository;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -39,8 +38,9 @@ public class QuestionService {
 
     public boolean delete(Long id, User sessionUser) {
         Question targetQuestion = verifyQuestion(id, sessionUser);
-        if (targetQuestion.nonNull()) {
-            this.questionRepository.delete(targetQuestion);
+        if (targetQuestion.nonNull() && targetQuestion.matchWriterOfAnswerList()) {
+            targetQuestion.delete();
+            this.questionRepository.save(targetQuestion);
             return true;
         }
         return false;
@@ -55,9 +55,7 @@ public class QuestionService {
     }
 
     public List<Question> findAll() {
-        List<Question> questionList = new ArrayList<>();
-        this.questionRepository.findAll().forEach(questionList::add);
-        return questionList;
+        return this.questionRepository.findAllByIsDelete(false);
     }
 
     public Question findById(Long id) {

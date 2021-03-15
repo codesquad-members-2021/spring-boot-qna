@@ -40,7 +40,8 @@ public class AnswerService {
     public void delete(Long id, User sessionUser) {
         Answer targetAnswer = verifyAnswer(id, sessionUser);
         if (targetAnswer.nonNull()) {
-            this.answerRepository.delete(targetAnswer);
+            targetAnswer.delete();
+            this.answerRepository.save(targetAnswer);
         }
     }
 
