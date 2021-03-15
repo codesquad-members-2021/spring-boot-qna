@@ -4,6 +4,7 @@ import com.codessquad.qna.domain.User;
 import com.codessquad.qna.domain.UserRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -14,6 +15,7 @@ public class UserController {
     private final Logger logger = LoggerFactory.getLogger(QuestionController.class);
     private final UserRepository userRepository;
 
+    @Autowired
     public UserController(UserRepository userRepository) {
         this.userRepository = userRepository;
     }
