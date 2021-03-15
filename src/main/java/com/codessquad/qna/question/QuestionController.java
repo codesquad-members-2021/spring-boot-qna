@@ -12,11 +12,9 @@ import javax.servlet.http.HttpSession;
 @RequestMapping("/questions")
 public class QuestionController {
     private final QuestionService questionService;
-    private final AnswerService answerService;
 
-    public QuestionController(QuestionService questionService, AnswerService answerService) {
+    public QuestionController(QuestionService questionService) {
         this.questionService = questionService;
-        this.answerService = answerService;
     }
 
     @GetMapping
@@ -62,14 +60,14 @@ public class QuestionController {
         answer.setQuestion(questionService.getQuestion(questionId));
         answer.setWriter(SessionUtils.getSessionUser(session));
 
-        answerService.createAnswer(answer);
+        questionService.createAnswer(answer);
 
         return "redirect:/questions/" + questionId;
     }
 
     @DeleteMapping("/{questionId}/answers/{id}")
     public String deleteAnswer(@PathVariable Long questionId, @PathVariable Long id, HttpSession session) {
-        answerService.deleteAnswer(id, SessionUtils.getSessionUser(session).toDTO());
+        questionService.deleteAnswer(id, SessionUtils.getSessionUser(session).toDTO());
 
         return "redirect:/questions/" + questionId;
     }
