@@ -60,6 +60,8 @@ public class User {
         return this.password.equals(password);
     }
 
+    public boolean isMatchingId(Long id) { return this.id.equals(id);}
+
     public void update(User user){
         this.password = user.password;
         this.name = user.name;

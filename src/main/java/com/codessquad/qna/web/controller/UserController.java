@@ -35,7 +35,7 @@ public class UserController {
     }
 
     @GetMapping("/logout")
-    public String logout(HttpSession session){
+    public String logout(HttpSession session) {
         session.removeAttribute("sessionedUser");
 
         return "redirect:/";
@@ -61,8 +61,17 @@ public class UserController {
     }
 
     @GetMapping("/{id}/form")
-    public String updateForm(@PathVariable long id, Model model) throws NotFoundException {
+    public String updateForm(@PathVariable long id, Model model, HttpSession session) throws NotFoundException {
         User user = userRepository.findById(id).orElseThrow(() -> new NotFoundException("No user with id number " + id));
+        Object value = session.getAttribute("sessionedUser");
+
+        if (value == null) {
+            return "redirect:/users/login-form";
+        }
+        User sessionedUser = (User) value;
+        if (sessionedUser.isMatchingId(id)){
+            throw new IllegalStateException("자신의 정보만 수정할 수 있습니다");
+        }
         model.addAttribute("user", user);
         return "user/updateForm";
     }
@@ -75,6 +84,15 @@ public class UserController {
             userRepository.save(user);
         }
         return "redirect:/users";
+    }
+
+    private boolean identify(Long id, HttpSession session) {
+        Object value = session.getAttribute("sessionedUser");
+        if (value == null) {
+            return false;
+        }
+        User sessionedUser = (User) value;
+        return (sessionedUser.isMatchingId(id));
     }
 
 }
