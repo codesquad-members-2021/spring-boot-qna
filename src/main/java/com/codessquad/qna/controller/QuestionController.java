@@ -31,11 +31,7 @@ public class QuestionController {
 
     @GetMapping("/questions/{id}")
     public String viewQuestion(@PathVariable long id, Model model) {
-        try {
-            model.addAttribute("question", questionRepository.findById(id).get());
-            return "qna/show";
-        } catch (IndexOutOfBoundsException e) {
-            return "redirect:/";
-        }
+        model.addAttribute("question", questionRepository.findById(id).get());
+        return "qna/show";
     }
 }
