@@ -32,20 +32,17 @@ public class QuestionController {
         return format.format(time.getTime());
     }
 
-    @GetMapping("/")
+    @GetMapping("/questions")
     public String getIndex(Model model) {
         model.addAttribute("questions", questionRepository.findAll());
         return "index";
     }
 
-    @GetMapping( "/questions/{id}")
+    @GetMapping("/questions/{id}")
     public String getQuestionShow(@PathVariable("id") Long id, Model model) {
         Question question = questionRepository.findById(id).get();
         model.addAttribute("question", question);
         return "qna/show";
     }
-
-
-
 
 }
