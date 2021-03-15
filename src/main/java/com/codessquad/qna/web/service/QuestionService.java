@@ -5,8 +5,6 @@ import com.codessquad.qna.web.repository.QuestionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-
 @Service
 public class QuestionService {
     private final QuestionRepository questionRepository;
@@ -20,11 +18,13 @@ public class QuestionService {
         questionRepository.save(question);
     }
 
-    public List<Question> findQuestions() {
+    public Iterable<Question> findQuestions() {
         return questionRepository.findAll();
     }
 
-    public Question findQuestion(int index) {
-        return questionRepository.findByIndex(index);
+    public Question findQuestion(long id) {
+        return questionRepository
+                .findById(id)
+                .orElseThrow(()-> new IllegalStateException("찾는 question이 없습니다"));
     }
 }

@@ -1,20 +1,24 @@
 package com.codessquad.qna.web.domain;
 
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
+@Entity
 public class Question {
     private static final DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
 
-    private int index;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
     private String writer;
     private String title;
     private String contents;
     private LocalDateTime createdDateTime = LocalDateTime.now();
-
-    public void setIndex(int index) {
-        this.index = index;
-    }
 
     public void setWriter(String writer) {
         this.writer = writer;
@@ -32,8 +36,8 @@ public class Question {
         this.createdDateTime = LocalDateTime.now();
     }
 
-    public int getIndex() {
-        return index;
+    public Long getId() {
+        return id;
     }
 
     public String getWriter() {

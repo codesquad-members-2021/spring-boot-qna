@@ -6,7 +6,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class UserService {
@@ -33,21 +32,21 @@ public class UserService {
         return userRepository.findAll();
     }
 
-    public User findUser(String userId) {
+    public User findUser(long id) {
         return userRepository
-                .findByUserId(userId)
-                .orElseThrow(()-> new IllegalStateException("찾는 아이디가 없습니다"));
-
+                .findById(id)
+                .orElseThrow(() -> new IllegalStateException("찾는 user가 없습니다"));
     }
 
-    public void updateUser(User user) {
-        User originUser = findUser(user.getUserId());
-        validatePassword(originUser, user);
-        userRepository.update(originUser, user);
+    public void updateUser(long id, String testPassword, User user) {
+        User originUser = findUser(id);
+        validatePassword(originUser, testPassword);
+        originUser.update(user);
+        userRepository.save(originUser);
     }
 
-    private void validatePassword(User originUser, User user) {
-        if (!originUser.getPassword().equals(user.getPassword())) {
+    private void validatePassword(User originUser, String testPassword) {
+        if (!originUser.isMatchingPassword(testPassword)) {
             throw new IllegalStateException("잘못된 비밀번호 입니다");
         }
     }

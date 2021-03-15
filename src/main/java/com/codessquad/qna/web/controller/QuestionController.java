@@ -8,8 +8,10 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
+@RequestMapping("/questions")
 public class QuestionController {
     private final QuestionService questionService;
 
@@ -18,23 +20,23 @@ public class QuestionController {
         this.questionService = questionService;
     }
 
-    @PostMapping("/questions")
+    @PostMapping
     public String createQuestion(Question question) {
         questionService.postQuestion(question);
         return "redirect:/questions";
     }
 
-    @GetMapping("/questions")
+    @GetMapping
     public String getQuestions(Model model) {
         model.addAttribute("questions", questionService.findQuestions());
         return "/index";
     }
 
-    @GetMapping("/questions/{index}")
-    public String getQuestion(@PathVariable int index, Model model) {
+    @GetMapping("/{id}")
+    public String getQuestion(@PathVariable long id, Model model) {
         try {
-            model.addAttribute("question", questionService.findQuestion(index));
-        } catch (IndexOutOfBoundsException e) {
+            model.addAttribute("question", questionService.findQuestion(id));
+        } catch (IllegalStateException e) {
             return "redirect:/";
         }
         return "/qna/show";

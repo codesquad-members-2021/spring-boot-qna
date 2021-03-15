@@ -1,6 +1,14 @@
 package com.codessquad.qna.web.domain;
 
+import javax.persistence.*;
+
+@Entity
 public class User {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @Column(nullable = false, length = 20)
     private String userId;
     private String password;
     private String name;
@@ -22,6 +30,10 @@ public class User {
         this.email = email;
     }
 
+    public Long getId() {
+        return id;
+    }
+
     public String getUserId() {
         return userId;
     }
@@ -36,5 +48,15 @@ public class User {
 
     public String getEmail() {
         return email;
+    }
+
+    public boolean isMatchingPassword(String testPassword) {
+        return password.equals(testPassword);
+    }
+
+    public void update(User user) {
+        this.setPassword(user.getPassword());
+        this.setName(user.getName());
+        this.setEmail(user.getEmail());
     }
 }
