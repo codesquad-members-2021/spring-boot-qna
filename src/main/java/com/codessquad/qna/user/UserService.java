@@ -1,5 +1,6 @@
 package com.codessquad.qna.user;
 
+import com.codessquad.qna.exception.LoginFailedException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -26,25 +27,37 @@ public class UserService {
                 .toDTO();
     }
 
-    public UserDTO getVerifiedUser(String userId, String password) {
-        User user = userRepository.findByUserId(userId)
-                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 사용자 입니다. id : " + userId));
+    public UserDTO getVerifiedUser(Long id, UserDTO verificationTarget) {
+        User result = getUser(id).toEntity();
 
-        user.checkPassword(password);
+        result.verifyWith(verificationTarget.toEntity());
 
-        return user.toDTO();
+        return result.toDTO();
+    }
+
+    public UserDTO getLoginableUser(String userId, String password) {
+        try {
+            User user = userRepository.findByUserId(userId)
+                    .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 사용자 입니다. id : " + userId));
+
+            user.checkPassword(password);
+
+            return user.toDTO();
+
+        } catch (IllegalArgumentException e) {
+            throw new LoginFailedException(e);
+        }
     }
 
     public void createUser(UserDTO userDTO) {
         userRepository.save(userDTO.toEntity());
     }
 
-    public UserDTO updateUser(Long id, UserDTO newUser) {
-        User existedUser = getUser(id).toEntity();
+    public UserDTO updateUser(UserDTO existedUser, UserDTO newUser) {
+        User userToUpdate = existedUser.toEntity();
 
-        existedUser.checkPassword(newUser.getPassword());
-        existedUser.update(newUser);
+        userToUpdate.update(newUser);
 
-        return userRepository.save(existedUser).toDTO();
+        return userRepository.save(userToUpdate).toDTO();
     }
 }

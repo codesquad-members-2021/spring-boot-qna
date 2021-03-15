@@ -1,6 +1,5 @@
 package com.codessquad.qna.question;
 
-import com.codessquad.qna.user.UserDTO;
 import com.codessquad.qna.utils.SessionUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -36,14 +35,16 @@ public class QuestionController {
 
     @GetMapping("/{id}/form")
     public ModelAndView getQuestionUpdateForm(@PathVariable Long id, HttpSession session) {
-        UserDTO sessionUser = SessionUtils.getSessionUser(session);
+        Question result = questionService.getVerifiedQuestion(id, SessionUtils.getSessionUser(session));
 
-        return new ModelAndView("/qna/updateForm", "question", questionService.getQuestion(id, sessionUser));
+        return new ModelAndView("/qna/updateForm", "question", result);
     }
 
     @PutMapping("/{id}")
     public String updateQuestion(@PathVariable Long id, Question newQuestion, HttpSession session) {
-        questionService.updateQuestion(id, newQuestion, SessionUtils.getSessionUser(session));
+        newQuestion.setWriter(SessionUtils.getSessionUser(session).toEntity());
+
+        questionService.updateQuestion(id, newQuestion);
 
         return "redirect:/questions";
     }

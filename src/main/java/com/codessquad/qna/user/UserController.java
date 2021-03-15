@@ -1,6 +1,5 @@
 package com.codessquad.qna.user;
 
-import com.codessquad.qna.exception.LoginFailedException;
 import com.codessquad.qna.utils.SessionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -39,27 +38,23 @@ public class UserController {
 
     @GetMapping("/{id}/form")
     public ModelAndView getUserUpdateForm(@PathVariable Long id, HttpSession session) {
-        SessionUtils.getSessionUser(session)
-                .toEntity()
-                .checkId(id);
+        UserDTO result = userService.getVerifiedUser(id, SessionUtils.getSessionUser(session));
 
-        return new ModelAndView("/user/updateForm", "user", userService.getUser(id));
+        return new ModelAndView("/user/updateForm", "user", result);
     }
 
     @PutMapping("/{id}")
     public String updateUser(@PathVariable Long id, UserDTO newUser, HttpSession session) {
-        SessionUtils.setSessionUser(session, userService.updateUser(id, newUser));
+        UserDTO verifiedUser = userService.getVerifiedUser(id, SessionUtils.getSessionUser(session));
+
+        SessionUtils.setSessionUser(session, userService.updateUser(verifiedUser, newUser));
 
         return "redirect:/users";
     }
 
     @PostMapping("/login")
     public String login(String userId, String password, HttpSession session) {
-        try {
-            SessionUtils.setSessionUser(session, userService.getVerifiedUser(userId, password));
-        } catch (IllegalArgumentException e) {
-            throw new LoginFailedException(e);
-        }
+        SessionUtils.setSessionUser(session, userService.getLoginableUser(userId, password));
 
         return "redirect:/";
     }

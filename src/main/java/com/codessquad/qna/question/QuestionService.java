@@ -28,12 +28,12 @@ public class QuestionService {
                 .orElseThrow(() -> new IllegalArgumentException("질문이 존재하지 않습니다. id : " + id));
     }
 
-    public Question getQuestion(Long id, UserDTO currentSessionUser) {
-        Question question = getQuestion(id);
+    public Question getVerifiedQuestion(Long id, UserDTO user) {
+        Question result = getQuestion(id);
 
-        question.verifyWriter(currentSessionUser.toEntity());
+        result.verifyWriter(user.toEntity());
 
-        return question;
+        return result;
     }
 
     public void createQuestion(Question question, UserDTO currentSessionUser) {
@@ -42,10 +42,8 @@ public class QuestionService {
         questionRepository.save(question);
     }
 
-    public void updateQuestion(Long id, Question newQuestion, UserDTO currentSessionUser) {
+    public void updateQuestion(Long id, Question newQuestion) {
         Question existedQuestion = getQuestion(id);
-
-        existedQuestion.verifyWriter(currentSessionUser.toEntity());
 
         existedQuestion.update(newQuestion);
         questionRepository.save(existedQuestion);
