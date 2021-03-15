@@ -44,7 +44,7 @@ public class UserController {
         }
 
         User sessionedUser = HttpSessionUtils.getUserFromSession(session);
-        if (!id.equals(sessionedUser.getId())) {
+        if (!sessionedUser.isIdMatching(id)) {
             throw new IllegalStateException("자신의 정보만 수정할 수 있습니다.");
         }
         model.addAttribute("user", userRepository.findById(id).orElseThrow(NoUserException::new));
@@ -58,7 +58,7 @@ public class UserController {
         }
 
         User sessionedUser = (User) session.getAttribute(HttpSessionUtils.USER_SESSION_KEY);
-        if (!id.equals(sessionedUser.getId())) {
+        if (!sessionedUser.isIdMatching(id)) {
             throw new IllegalStateException("자신의 정보만 수정할 수 있습니다.");
         }
 

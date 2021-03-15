@@ -57,8 +57,12 @@ public class User {
         this.email = newUser.email;
     }
 
-    public boolean isPasswordMatching(String inputPassword) {
-        return inputPassword.equals(password);
+    public boolean isIdMatching(Long newId) {
+        return newId.equals(id);
+    }
+
+    public boolean isPasswordMatching(String newPassword) {
+        return newPassword.equals(password);
     }
 
     @Override
