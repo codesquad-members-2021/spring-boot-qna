@@ -1,10 +1,11 @@
 package com.codessquad.qna.config;
 
+import com.codessquad.qna.exception.InsufficientAuthenticationException;
+import com.codessquad.qna.exception.LoginFailedException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.servlet.ModelAndView;
 
 @ControllerAdvice
@@ -16,14 +17,14 @@ public class CommonExceptionHandlers {
     }
 
     @ResponseStatus(HttpStatus.UNAUTHORIZED)
-    @ExceptionHandler(HttpClientErrorException.Unauthorized.class)
-    public ModelAndView httpClientUnauthorizedExceptionHandler(HttpClientErrorException.Unauthorized e) {
+    @ExceptionHandler(LoginFailedException.class)
+    public ModelAndView loginFailedExceptionHandler(LoginFailedException e) {
         return new ModelAndView("/user/login_failed", "errMessage", e.getMessage());
     }
 
     @ResponseStatus(HttpStatus.FORBIDDEN)
-    @ExceptionHandler(HttpClientErrorException.Forbidden.class)
-    public String httpClientForbiddenExceptionHandler() {
+    @ExceptionHandler(InsufficientAuthenticationException.class)
+    public String insufficientAuthenticationExceptionHandler() {
         return "/error/403";
     }
 }

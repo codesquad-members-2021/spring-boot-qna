@@ -1,5 +1,6 @@
 package com.codessquad.qna.user;
 
+import com.codessquad.qna.exception.LoginFailedException;
 import com.codessquad.qna.utils.SessionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -54,7 +55,11 @@ public class UserController {
 
     @PostMapping("/login")
     public String login(String userId, String password, HttpSession session) {
-        SessionUtils.setSessionUser(session, userService.getUserWithVerifyPassword(userId, password));
+        try {
+            SessionUtils.setSessionUser(session, userService.getUserWithVerifyPassword(userId, password));
+        } catch (IllegalArgumentException e) {
+            throw new LoginFailedException(e);
+        }
 
         return "redirect:/";
     }

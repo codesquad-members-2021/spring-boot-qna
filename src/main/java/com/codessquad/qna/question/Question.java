@@ -1,5 +1,6 @@
 package com.codessquad.qna.question;
 
+import com.codessquad.qna.exception.InsufficientAuthenticationException;
 import com.codessquad.qna.user.User;
 
 import javax.persistence.*;
@@ -134,7 +135,11 @@ public class Question {
     }
 
     public void verifyWriter(User target) {
-        writer.checkId(target.getId());
+        try {
+            writer.checkId(target.getId());
+        } catch (IllegalArgumentException e) {
+            throw new InsufficientAuthenticationException("권한이 없는 사용자입니다.", e);
+        }
     }
 
     public void update(Question newQuestion) {

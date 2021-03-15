@@ -1,5 +1,6 @@
 package com.codessquad.qna.user;
 
+import com.codessquad.qna.exception.LoginFailedException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.client.HttpClientErrorException;
 
@@ -84,26 +85,13 @@ public class User {
 
     public void checkPassword(String password) {
         if (!this.password.equals(password)) {
-            throw HttpClientErrorException.create(
-                    LOGIN_FAIL_MESSAGE,
-                    HttpStatus.UNAUTHORIZED,
-                    "",
-                    null,
-                    null,
-                    StandardCharsets.UTF_8
-            );
+            throw new IllegalArgumentException("잘못된 비밀번호입니다. password : " + password);
         }
     }
 
     public void checkId(Long id) {
         if (this.id.longValue() != id.longValue()) {
-            throw HttpClientErrorException.create(
-                    HttpStatus.FORBIDDEN,
-                    "",
-                    null,
-                    null,
-                    StandardCharsets.UTF_8
-            );
+            throw new IllegalArgumentException("잘못된 ID입니다. id : " + id);
         }
     }
 
