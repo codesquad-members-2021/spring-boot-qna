@@ -1,6 +1,8 @@
 package com.codessquad.qna.controller;
 
-import com.codessquad.qna.User;
+import com.codessquad.qna.repository.User;
+import com.codessquad.qna.repository.UserRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,6 +17,9 @@ public class UserController {
 
     private List<User> users = new ArrayList<>();
 
+    @Autowired
+    private UserRepository userRepository;
+
     @GetMapping("/user/create")
     public String toCreateUser() {
         return "signup";
@@ -23,6 +28,7 @@ public class UserController {
     @PostMapping("/user/create")
     public String createUser(User user) {
         users.add(user);
+        userRepository.save(user);
         return "redirect:/users";
     }
 
