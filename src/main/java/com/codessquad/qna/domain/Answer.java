@@ -4,7 +4,6 @@ import com.codessquad.qna.util.DateTimeUtils;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 
 @Entity
 public class Answer {
@@ -45,5 +44,9 @@ public class Answer {
 
     public String getContents() {
         return contents;
+    }
+
+    public Long getId() {
+        return id;
     }
 }

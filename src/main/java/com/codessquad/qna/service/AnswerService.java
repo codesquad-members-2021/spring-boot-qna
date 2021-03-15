@@ -24,4 +24,12 @@ public class AnswerService {
         Answer answer = new Answer(writer, question, contents);
         answerRepository.save(answer);
     }
+
+    public Answer findById(Long answerId) {
+        return answerRepository.findById(answerId).orElseThrow(NullPointerException::new);
+    }
+
+    public void delete(Long id) {
+        answerRepository.deleteById(id);
+    }
 }
