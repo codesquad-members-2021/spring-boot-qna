@@ -18,7 +18,7 @@ public class HomeController {
     @GetMapping
     public String showQuestions(Model model) {
 
-        model.addAttribute("questions", questionService.showAll());
+        model.addAttribute("questions", questionService.getAllQuestions());
 
         return "index";
     }

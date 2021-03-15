@@ -25,11 +25,11 @@ public class QuestionService {
         logger.info("after save" + question.toString());
     }
 
-    public List<Question> showAll(){
+    public List<Question> getAllQuestions(){
         return questionRepository.findAll();
     }
 
-    public Optional<Question> showOneById(Long id){
+    public Optional<Question> getOneById(Long id){
         return questionRepository.findById(id);
     }
 }

@@ -54,7 +54,7 @@ public class QuestionController {
 
     @GetMapping("/{id}")
     public String showQuestionInDetail(@PathVariable long id, Model model) {
-        model.addAttribute("question", questionService.showOneById(id).orElse(null));
+        model.addAttribute("question", questionService.getOneById(id).orElse(null));
 
         return "question/show";
     }
