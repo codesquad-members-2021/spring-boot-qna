@@ -2,24 +2,26 @@ package com.codessquad.qna.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+
 import javax.persistence.*;
-import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotBlank;
+
 
 @Entity
 public class User extends AbstractEntity {
     @Column(nullable = false, length = 20, unique = true)
-    @NotEmpty
+    @NotBlank(message = "아이디를 입력해주세요.")
     private String userId;
 
     @JsonIgnore
-    @NotEmpty
+    @NotBlank(message = "비밀번호를 입력해주세요.")
     private String password;
 
-    @NotEmpty
+    @NotBlank(message = "이름을 입력해주세요.")
     private String name;
 
     @Column(nullable = false, unique = true)
-    @NotEmpty
+    @NotBlank(message = "이메일을 입력해주세요.")
     private String email;
 
     protected User() {
