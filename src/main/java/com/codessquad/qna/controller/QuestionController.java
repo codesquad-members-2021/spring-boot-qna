@@ -13,7 +13,7 @@ public class QuestionController {
 
     private final QuestionRepository questionRepository;
 
-    public QuestionController(QuestionRepository questionRepository){
+    public QuestionController(QuestionRepository questionRepository) {
         this.questionRepository = questionRepository;
     }
 
@@ -34,8 +34,7 @@ public class QuestionController {
         try {
             model.addAttribute("question", questionRepository.findById(id).get());
             return "qna/show";
-        }
-        catch (IndexOutOfBoundsException e){
+        } catch (IndexOutOfBoundsException e) {
             return "redirect:/";
         }
     }
