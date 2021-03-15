@@ -38,11 +38,13 @@ public class QuestionService {
 
     @Transactional
     public List<Question> findAll() {
-        return (List<Question>) questionRepository.findAll();
+        return questionRepository.findAllByDeletedIsFalse();
     }
 
     @Transactional
     public void deleteById(Long id) {
-        questionRepository.deleteById(id);
+        Question question = questionRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("해당 질문이 없습니다. id = " + id));
+        question.setDeleted(true);
     }
 }

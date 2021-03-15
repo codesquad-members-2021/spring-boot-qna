@@ -31,6 +31,8 @@ public class Question {
     @OneToMany(mappedBy="question")
     private final List<Answer> answers = new ArrayList<>();
 
+    private boolean deleted;
+
     public Question() {
         this.date = LocalDateTime.now().format(DateFormat.DEFAULT);
     }
@@ -71,8 +73,13 @@ public class Question {
         return date;
     }
 
-    public int getAnswersCount() {
-        return answers.size();
+    public long getNotDeletedAnswersCount() {
+        long answersCount = answers.stream().filter(answer -> !answer.isDeleted()).count();
+        return answersCount;
+    }
+
+    public void setDeleted(boolean deleted) {
+        this.deleted = deleted;
     }
 
     public void addAnswer(Answer answer) {

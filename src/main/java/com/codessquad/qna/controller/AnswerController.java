@@ -70,7 +70,7 @@ public class AnswerController {
         if (!answer.isWrittenBy(sessionedUser)) {
             throw new IllegalStateException("자신이 작성한 답변만 삭제할 수 있습니다.");
         }
-        answerService.deleteById(questionId, id);
+        answerService.deleteById(id);
 
         return "redirect:/questions/" + questionId;
     }

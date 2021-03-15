@@ -24,6 +24,7 @@ public class Answer {
 
     private String contents;
     private String date;
+    private boolean deleted;
 
     public Answer() {
         this.date = LocalDateTime.now().format(DateFormat.DEFAULT);
@@ -67,6 +68,14 @@ public class Answer {
 
     public void setDate(String date) {
         this.date = date;
+    }
+
+    public boolean isDeleted() {
+        return deleted == true;
+    }
+
+    public void setDelete(boolean deleted) {
+        this.deleted = deleted;
     }
 
     public boolean isWrittenBy(User user) {
