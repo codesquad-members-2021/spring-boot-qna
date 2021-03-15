@@ -7,6 +7,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpSession;
+
 @Controller
 @RequestMapping("/users")
 public class UserController {
@@ -15,6 +17,23 @@ public class UserController {
     @Autowired
     public UserController(UserService userService) {
         this.userService = userService;
+    }
+
+    @GetMapping("/loginForm")
+    public String getLoginForm() {
+        return "/user/login";
+    }
+
+    @PostMapping("/login")
+    public String login(User user, HttpSession session) {
+        User originUser;
+        try {
+            originUser = userService.login(user);
+        } catch (IllegalStateException e){
+            return "redirect:/users/loginForm";
+        }
+        session.setAttribute("user", originUser);
+        return "redirect:/";
     }
 
     @PostMapping

@@ -16,6 +16,12 @@ public class UserService {
         this.userRepository = userRepository;
     }
 
+    public User login(User user) {
+        User originUser = findUser(user.getUserId());
+        validatePassword(originUser, user.getPassword());
+        return originUser;
+    }
+
     public void signUp(User user) {
         validateUserID(user);
         userRepository.save(user);
@@ -35,6 +41,12 @@ public class UserService {
     public User findUser(long id) {
         return userRepository
                 .findById(id)
+                .orElseThrow(() -> new IllegalStateException("찾는 user가 없습니다"));
+    }
+
+    private User findUser(String userId) {
+        return userRepository
+                .findByUserId(userId)
                 .orElseThrow(() -> new IllegalStateException("찾는 user가 없습니다"));
     }
 
