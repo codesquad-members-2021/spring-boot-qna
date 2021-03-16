@@ -79,9 +79,9 @@ public class QuestionsController {
     @PutMapping("/{questionId}")
     public String modifyQuestion(@PathVariable("questionId") long questionId,
                                  String newTitle, String newContents, HttpSession session) {
+        User sessionUser = SessionUtil.getLoginUser(session);
         Question currentQuestion = questionRepository.findById(questionId)
                 .orElseThrow(QuestionNotFoundException::new);
-        User sessionUser = SessionUtil.getLoginUser(session);
         validateAuthorizedAccess(currentQuestion, sessionUser);
         currentQuestion.update(newTitle, newContents);
 
@@ -92,9 +92,9 @@ public class QuestionsController {
 
     @DeleteMapping("/{questionId}")
     public String deleteQuestion(@PathVariable("questionId") long questionId, HttpSession session) {
+        User sessionUser = SessionUtil.getLoginUser(session);
         Question currentQuestion = questionRepository.findById(questionId)
                 .orElseThrow(QuestionNotFoundException::new);
-        User sessionUser = SessionUtil.getLoginUser(session);
         validateAuthorizedAccess(currentQuestion, sessionUser);
 
         questionRepository.delete(currentQuestion);
