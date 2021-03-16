@@ -13,6 +13,7 @@
             <table class="table table-hover">
                 <thead>
                 <tr>
+                    <th>번호</th>
                     <th>사용자 아이디</th>
                     <th>이름</th>
                     <th>이메일</th>
@@ -22,6 +23,7 @@
                 <tbody>
                 {{#users}}
                 <tr>
+                    <td>{{id}}</td>
                     <td><a href="/users/{{userId}}">{{userId}}</a></td>
                     <td>{{name}}</td>
                     <td>{{email}}</td>
