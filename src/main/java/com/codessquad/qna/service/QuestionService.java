@@ -1,12 +1,14 @@
 package com.codessquad.qna.service;
 
+import com.codessquad.qna.exception.IllegalUserAccessException;
+import com.codessquad.qna.exception.QuestionNotFoundException;
+import com.codessquad.qna.exception.WriterOfAnswerListNotMatchException;
 import com.codessquad.qna.model.Question;
 import com.codessquad.qna.model.User;
 import com.codessquad.qna.repository.QuestionRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class QuestionService {
@@ -17,41 +19,32 @@ public class QuestionService {
         this.questionRepository = questionRepository;
     }
 
-    public boolean save(Question question, User sessionUser) {
-        if (sessionUser.nonNull()) {
-            question.save(sessionUser);
-            this.questionRepository.save(question);
-            return true;
-        }
-        return false;
+    public void save(Question question, User sessionUser) {
+        question.save(sessionUser);
+        this.questionRepository.save(question);
     }
 
-    public boolean update(Long id, Question question, User sessionUser) {
+    public void update(Long id, Question question, User sessionUser) {
         Question targetQuestion = verifyQuestion(id, sessionUser);
-        if (targetQuestion.nonNull()) {
-            targetQuestion.update(question);
-            this.questionRepository.save(targetQuestion);
-            return true;
-        }
-        return false;
+        targetQuestion.update(question);
+        this.questionRepository.save(targetQuestion);
     }
 
-    public boolean delete(Long id, User sessionUser) {
+    public void delete(Long id, User sessionUser) {
         Question targetQuestion = verifyQuestion(id, sessionUser);
-        if (targetQuestion.nonNull() && targetQuestion.matchWriterOfAnswerList()) {
-            targetQuestion.delete();
-            this.questionRepository.save(targetQuestion);
-            return true;
+        if (!targetQuestion.matchWriterOfAnswerList()) {
+            throw new WriterOfAnswerListNotMatchException(id);
         }
-        return false;
+        targetQuestion.delete();
+        this.questionRepository.save(targetQuestion);
     }
 
     public Question verifyQuestion(Long id, User sessionUser) {
         Question question = findById(id);
-        if (sessionUser.nonNull() && question.nonNull() && question.matchWriter(sessionUser)) {
-            return question;
+        if (!question.matchWriter(sessionUser)) {
+            throw new IllegalUserAccessException();
         }
-        return new Question();
+        return question;
     }
 
     public List<Question> findAll() {
@@ -59,8 +52,7 @@ public class QuestionService {
     }
 
     public Question findById(Long id) {
-        Optional<Question> question = this.questionRepository.findById(id);
-        return question.orElseGet(Question::new);
+        return this.questionRepository.findById(id).orElseThrow(QuestionNotFoundException::new);
     }
 
 }
