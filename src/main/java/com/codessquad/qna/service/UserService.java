@@ -11,7 +11,7 @@ import java.util.List;
 
 @Service
 public class UserService {
-    private static final Logger logger = LoggerFactory.getLogger(UserController.class);
+    private static final Logger logger = LoggerFactory.getLogger(UserService.class);
 
     private final UserRepository userRepository;
 

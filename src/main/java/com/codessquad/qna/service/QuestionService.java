@@ -16,7 +16,7 @@ import java.util.List;
 
 @Service
 public class QuestionService {
-    private static final Logger logger = LoggerFactory.getLogger(QuestionController.class);
+    private static final Logger logger = LoggerFactory.getLogger(QuestionService.class);
     private final QuestionRepository questionRepository;
     private final AnswerRepository answerRepository;
 

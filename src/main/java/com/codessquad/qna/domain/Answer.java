@@ -77,4 +77,16 @@ public class Answer {
         return false;
     }
 
+    @Override
+    public String toString() {
+        return "Answer{" +
+                "id=" + id +
+                ", question=" + question +
+                ", writer=" + writer +
+                ", contents='" + contents + '\'' +
+                ", deleted=" + deleted +
+                ", currentDateTime=" + currentDateTime +
+                '}';
+    }
+
 }
