@@ -73,6 +73,20 @@ public class QuestionController {
         return "redirect:/questions/{id}";
     }
 
+    @DeleteMapping("/questions/{id}/delete")
+    public String delete(@PathVariable Long id, HttpSession session){
+        if (!HttpSessionUtils.isLoginUser(session)) {
+            return "redirect:/users/loginForm";
+        }
+        Question question = questionRepository.findById(id).orElseThrow(NoSuchElementException::new);
+        User sessionedUser = HttpSessionUtils.getUserFromSession(session);
+        if (!question.isQuestionWriter(sessionedUser)) {
+            throw new IllegalStateException("자신의 질문만 수정할 수 있습니다.");
+        }
+        questionRepository.delete(question);
+        return "redirect:/";
+    }
+
     @ExceptionHandler(NoSuchElementException.class)
     public String handleNoSuchElementException() {
         return "noSuchElementExceptionHandle";
