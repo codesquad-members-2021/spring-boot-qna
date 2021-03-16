@@ -1,45 +1,40 @@
 package com.codessquad.qna.users;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
 import java.util.Optional;
 
 @Service
 public class UserService {
-    private final List<User> users = Collections.synchronizedList(new ArrayList<>());
+    private final UserRepository userRepository;
 
-    public List<User> getUsers() {
-        return users;
+    @Autowired
+    public UserService(UserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
+
+    public Iterable<User> getUsers() {
+        return userRepository.findAll();
     }
 
     public void addUser(User newUser) {
-        for (User user : users) {
-            if (user.getUserId().equals(newUser.getUserId())) {
-                return;
-            }
+        Optional<User> existUser = userRepository.findByUserId(newUser.getUserId());
+        if (existUser.isPresent()) {
+            return;
         }
-
-        users.add(newUser);
+        userRepository.save(newUser);
     }
 
-    public void updateUser(User toUpdate) {
-        for (User user : users) {
-            if (user.equals(toUpdate)) {
-                user.update(toUpdate);
-                return;
-            }
+    public void updateUser(User user) {
+        Optional<User> toUpdate = userRepository.findByUserId(user.getUserId());
+        if (toUpdate.isPresent()) {
+            toUpdate.get().update(user);
         }
+        return;
     }
 
     public Optional<User> getUser(String userId) {
-        for (User user : users) {
-            if (user.getUserId().equals(userId)) {
-                return Optional.of(user);
-            }
-        }
-        return Optional.empty();
+        return userRepository.findByUserId(userId);
     }
 }
