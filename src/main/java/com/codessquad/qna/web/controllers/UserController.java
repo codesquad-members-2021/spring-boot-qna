@@ -1,16 +1,10 @@
 package com.codessquad.qna.web.controllers;
 
 import com.codessquad.qna.web.domain.User;
-import com.codessquad.qna.web.repository.UserRepository;
 import com.codessquad.qna.web.service.UserService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.NoSuchElementException;
 
 @Controller
 @RequestMapping("/users")
@@ -18,7 +12,7 @@ public class UserController {
 
     private final UserService userService;
 
-    UserController(UserService userService) {
+    private UserController(UserService userService) {
         this.userService = userService;
     }
 

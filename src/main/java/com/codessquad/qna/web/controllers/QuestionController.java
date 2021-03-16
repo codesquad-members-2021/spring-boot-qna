@@ -18,9 +18,6 @@ import java.util.*;
 @RequestMapping("/questions")
 public class QuestionController {
 
-//    @Autowired
-//    private QuestionRepository questionRepository;
-
     private QuestionService questionService;
 
     private QuestionController(QuestionService questionService) {
