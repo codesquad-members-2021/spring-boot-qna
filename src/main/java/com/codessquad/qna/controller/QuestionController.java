@@ -57,20 +57,16 @@ public class QuestionController {
 
     @PutMapping("/{id}")
     public String questionUpdate(@PathVariable Long id, Question updateQuestion, HttpSession session) {
-        Question findQuestion = questionService.findById(id);
         User user = HttpSessionUtils.getUserFromSession(session);
-        user.checkSameUser(findQuestion.getWriter().getId());
-        questionService.update(id, updateQuestion);
+        questionService.update(id, updateQuestion, user);
         return "redirect:/questions/" + id;
 
     }
 
     @DeleteMapping("/{id}")
     public String questionDelete(@PathVariable Long id, HttpSession session) {
-        Question question = questionService.findById(id);
         User user = HttpSessionUtils.getUserFromSession(session);
-        user.checkSameUser(question.getWriter().getId());
-        questionService.delete(id);
+        questionService.delete(id, user);
         return "redirect:/";
 
     }

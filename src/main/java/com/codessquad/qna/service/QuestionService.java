@@ -37,15 +37,17 @@ public class QuestionService {
     }
 
     @Transactional
-    public void update(Long id, Question question) {
-        Question findQuestion = findById(id);
+    public void update(Long questionId, Question question, User user) {
+        Question findQuestion = findById(questionId);
+        user.checkSameUser(findQuestion.getWriter().getId());
         findQuestion.questionUpdate(question);
         QuestionValidator.validate(findQuestion);
     }
 
     @Transactional
-    public void delete(Long id) {
+    public void delete(Long id, User user) {
         Question question = findById(id);
+        user.checkSameUser(question.getWriter().getId());
         question.checkSameUserFromOpenAnswer();
         question.changeStatus(DisplayStatus.CLOSE);
     }
