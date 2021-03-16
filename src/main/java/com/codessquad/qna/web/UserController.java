@@ -25,7 +25,7 @@ public class UserController {
         return "redirect:/users";
     }
 
-    @GetMapping("")
+    @GetMapping
     public String list(Model model) {
         model.addAttribute("users", userRepository.findAll());
         return "user/list";
@@ -40,13 +40,14 @@ public class UserController {
     @GetMapping("/{id}/form")
     public String update(@PathVariable Long id, Model model, HttpSession session) {
         if (!HttpSessionUtils.isLoginUser(session)) {
-            return "redirect:/users/form";
+            return "redirect:/users/loginForm";
         }
 
-        User sessionedUser = HttpSessionUtils.getUserFromSession(session);
+        User sessionedUser = (User) session.getAttribute(HttpSessionUtils.USER_SESSION_KEY);
         if (!sessionedUser.isIdMatching(id)) {
             throw new IllegalStateException("자신의 정보만 수정할 수 있습니다.");
         }
+
         model.addAttribute("user", userRepository.findById(id).orElseThrow(NoSuchElementException::new));
         return "/user/updateForm";
     }
@@ -54,10 +55,10 @@ public class UserController {
     @PutMapping("/{id}")
     public String updateForm(@PathVariable Long id, String inputPassword, User updatedUser, HttpSession session) {
         if (!HttpSessionUtils.isLoginUser(session)) {
-            return "redirect:/users/form";
+            return "redirect:/users/loginForm";
         }
 
-        User sessionedUser = (User) session.getAttribute(HttpSessionUtils.USER_SESSION_KEY);
+        User sessionedUser = HttpSessionUtils.getUserFromSession(session);
         if (!sessionedUser.isIdMatching(id)) {
             throw new IllegalStateException("자신의 정보만 수정할 수 있습니다.");
         }
