@@ -55,8 +55,18 @@ public class UserController {
     }
 
     @GetMapping("/{id}/form")
-    public String passUserId(@PathVariable long id, Model model) {
+    public String passUserId(@PathVariable long id, Model model, HttpSession session) {
         User user = userService.getOneById(id).orElse(null);
+
+        Object tempUser = session.getAttribute("sessionedUser");
+        if (tempUser == null){
+            return "redirect:/";
+        }
+
+        User sessionedUser = (User) tempUser;
+        if (!sessionedUser.getUserId().equals(user.getUserId())){
+            throw new IllegalStateException("본인의 정보만 수정할 수 있습니다.");
+        }
 
         model.addAttribute("id", user.getId());
         model.addAttribute("userId", user.getUserId());
@@ -65,8 +75,15 @@ public class UserController {
     }
 
     @PutMapping("/{id}")
-    public String updateUser(@PathVariable long id, User referenceUser) {
+    public String updateUser(@PathVariable long id, User referenceUser, HttpSession session) {
         User presentUser = userService.getOneById(id).orElse(null);
+
+        Object tempUser = session.getAttribute("sessionedUser");
+        if (tempUser == null){
+            return "redirect:/";
+        }
+
+        User sessionedUser = (User) tempUser;
 
         if (presentUser == null) {
             logger.info("present empty");
