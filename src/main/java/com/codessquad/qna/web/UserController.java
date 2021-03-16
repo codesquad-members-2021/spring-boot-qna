@@ -32,7 +32,16 @@ public class UserController {
     }
 
     @GetMapping("/{id}")
-    public String show(@PathVariable Long id, Model model) {
+    public String show(@PathVariable Long id, Model model, HttpSession session) {
+        if (!HttpSessionUtils.isLoginUser(session)){
+            return "redirect:/users/loginForm";
+        }
+
+        User sessionedUser = (User) session.getAttribute(HttpSessionUtils.USER_SESSION_KEY);
+        if (!sessionedUser.isIdMatching(id)) {
+            throw new IllegalStateException("자신의 정보만 확인할 수 있습니다.");
+        }
+
         model.addAttribute("user", userRepository.findById(id).orElseThrow(NoSuchElementException::new));
         return "/user/profile";
     }

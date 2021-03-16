@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
+import javax.servlet.http.HttpSession;
 import java.util.NoSuchElementException;
 
 @Controller
@@ -21,7 +22,7 @@ public class QuestionController {
     }
 
     @PostMapping("/questions")
-    public String create(Question question) {
+    public String create(Question question, HttpSession session) {
         question.setPostTime();
         questionRepository.save(question);
         return "redirect:/";
