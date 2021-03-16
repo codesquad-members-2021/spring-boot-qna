@@ -1,5 +1,7 @@
 package com.codessquad.qna.questions;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -14,11 +16,18 @@ import java.util.Optional;
 @Controller
 @RequestMapping("/questions")
 public class QuestionController {
+    private final Logger logger = LoggerFactory.getLogger(this.getClass().getName());
     private final QuestionService questionService;
 
     @Autowired
     public QuestionController(QuestionService questionService) {
         this.questionService = questionService;
+    }
+
+    @GetMapping
+    public String questionList(Model model) {
+        model.addAttribute("questions", questionService.getQuestions());
+        return "index";
     }
 
     @PostMapping
