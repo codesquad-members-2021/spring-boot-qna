@@ -1,5 +1,7 @@
 package com.codessquad.qna.web;
 
+import com.codessquad.qna.domain.answer.Answer;
+import com.codessquad.qna.domain.answer.AnswerRepository;
 import com.codessquad.qna.domain.question.Question;
 import com.codessquad.qna.domain.question.QuestionRepository;
 import com.codessquad.qna.domain.user.User;
@@ -10,25 +12,28 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
+import java.util.List;
 import java.util.Optional;
 
 @Controller
 @RequestMapping("/questions")
 public class QuestionController {
-
     private static Logger logger = LoggerFactory.getLogger(QuestionController.class);
 
     private final QuestionRepository questionRepository;
+    private final AnswerRepository answerRepository;
 
-    public QuestionController(QuestionRepository questionRepository) {
+    public QuestionController(QuestionRepository questionRepository,
+                              AnswerRepository answerRepository) {
         this.questionRepository = questionRepository;
+        this.answerRepository = answerRepository;
     }
 
     @GetMapping("/form")
     public String getQuestionFormPage(HttpSession session) {
         User user = (User) session.getAttribute("sessionedUser");
 
-        if(user == null) {
+        if (user == null) {
             return "redirect:/users/loginForm";
         }
 
@@ -42,7 +47,6 @@ public class QuestionController {
 
         questionRepository.save(question);
         model.addAttribute(question);
-
         logger.debug("question : {} ", question);
 
         return "redirect:/";
@@ -54,12 +58,13 @@ public class QuestionController {
         return "home";
     }
 
-    @GetMapping("/{index}")
-    public String getQuestionDetail(@PathVariable(("index")) long index, Model model, HttpSession session) {
+    @GetMapping("/{questionId}")
+    public String getQuestionDetail(@PathVariable(("questionId")) Long id, Model model, HttpSession session) {
         User loginedUser = (User) session.getAttribute("sessionedUser");
-        Optional<Question> question = questionRepository.findById(index);
+        Optional<Question> question = questionRepository.findById(id);
+        List<Answer> answers = answerRepository.findByQuestion(question.get());
 
-        if(loginedUser == null) {
+        if (loginedUser == null) {
             return "/users/loginForm";
         }
 
@@ -68,22 +73,23 @@ public class QuestionController {
         }
 
         model.addAttribute("question", question.get());
-
-        logger.debug("question : {} ", question);
+        model.addAttribute("answerList", answers);
+        logger.info("question : {} ", question);
+        logger.info("answer : {} ", answers);
 
         return "/qna/show";
     }
 
     @GetMapping("/{id}/form")
     public String getUpdateForm(@PathVariable Long id, Model model, HttpSession session) {
-        User loginedUser = (User)session.getAttribute("sessionedUser");
+        User loginedUser = (User) session.getAttribute("sessionedUser");
         Question question = questionRepository.findById(id).get();
 
-        if(loginedUser == null) {
+        if (loginedUser == null) {
             throw new IllegalStateException("로그인되지 않았습니다.");
         }
 
-        if(!loginedUser.matchUser(question.getWriter())) {
+        if (!loginedUser.matchUser(question.getWriter())) {
             throw new IllegalStateException("른 사람의 글을 수정할 수 없다");
         }
 
@@ -96,11 +102,11 @@ public class QuestionController {
         User loginedUser = (User) session.getAttribute("sessionedUser");
         Question question = questionRepository.findById(id).get();
 
-        if(loginedUser == null) {
+        if (loginedUser == null) {
             throw new IllegalStateException("로그인되지 않았습니다.");
         }
 
-        if(!loginedUser.matchUser(question.getWriter())) {
+        if (!loginedUser.matchUser(question.getWriter())) {
             throw new IllegalStateException("자신의 정보만 수정할 수 있습니다.");
         }
 
@@ -115,7 +121,7 @@ public class QuestionController {
         User loginedUser = (User) session.getAttribute("sessionedUser");
         Optional<Question> question = questionRepository.findById(id);
 
-        if(!question.get().isSameWriter(loginedUser)) {
+        if (!question.get().isSameWriter(loginedUser)) {
             return "redirect:/";
         }
 
