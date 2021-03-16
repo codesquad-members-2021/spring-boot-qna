@@ -1,13 +1,17 @@
 package com.codessquad.qna.service;
 
 import com.codessquad.qna.domain.Answer;
+import com.codessquad.qna.domain.DisplayStatus;
 import com.codessquad.qna.domain.Question;
 import com.codessquad.qna.domain.User;
 import com.codessquad.qna.repository.AnswerRepository;
 import com.codessquad.qna.valid.UserValidator;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 
 @Service
+@Transactional(readOnly = true)
 public class AnswerService {
 
     private final AnswerRepository answerRepository;
@@ -18,6 +22,7 @@ public class AnswerService {
         this.questionService = questionService;
     }
 
+    @Transactional
     public void write(User writer, String contents, Long questionId) {
         UserValidator.validate(writer);
         Question question = questionService.findById(questionId);
@@ -29,7 +34,9 @@ public class AnswerService {
         return answerRepository.findById(answerId).orElseThrow(NullPointerException::new);
     }
 
+    @Transactional
     public void delete(Long id) {
-        answerRepository.deleteById(id);
+        Answer answer = findById(id);
+        answer.changeStatus(DisplayStatus.CLOSE);
     }
 }
