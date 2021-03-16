@@ -33,7 +33,7 @@ public class UserController {
     public String login(String userId, String password, HttpSession session) {
         User user = userService.findUserByUserId(userId);
         if (user.isMatchingPassword(password)) {
-            session.setAttribute("userSession",user);
+            session.setAttribute("userSession", user);
             return "redirect:/";
         }
 
@@ -41,7 +41,7 @@ public class UserController {
     }
 
     @GetMapping("/logout")
-    public String logout(HttpSession session){
+    public String logout(HttpSession session) {
         session.removeAttribute("userSession");
         return "redirect:/";
     }
@@ -59,13 +59,27 @@ public class UserController {
     }
 
     @GetMapping("{id}/form")
-    public String viewUpdateUserForm(@PathVariable Long id, Model model) {
+    public String viewUpdateUserForm(@PathVariable Long id, Model model, HttpSession session) {
+        Object tempUser = session.getAttribute("userSession");
+        if (tempUser == null)
+            return "redirect:/users/loginForm";
+        User sessionUser = (User)tempUser;
+        if(!id.equals(sessionUser.getId())){
+            throw new IllegalStateException("자신의 정보만 수정할 수 있습니다.");
+        }
         model.addAttribute("user", userService.findUserById(id));
         return "user/updateForm";
     }
 
     @PutMapping("{id}/update")
-    public String updateUser(@PathVariable Long id, String oldPassword, User updateUser) {
+    public String updateUser(@PathVariable Long id, String oldPassword, User updateUser, HttpSession session) {
+        Object tempUser = session.getAttribute("userSession");
+        if (tempUser == null)
+            return "redirect:/users/loginForm";
+        User sessionUser = (User)tempUser;
+        if(!id.equals(sessionUser.getId())){
+            throw new IllegalStateException("자신의 정보만 수정할 수 있습니다.");
+        }
         User targetUser = userService.findUserById(id);
         if (targetUser.isMatchingPassword(oldPassword)) {
             targetUser.update(updateUser);
