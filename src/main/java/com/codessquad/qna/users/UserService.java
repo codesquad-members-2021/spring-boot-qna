@@ -30,6 +30,7 @@ public class UserService {
         Optional<User> toUpdate = userRepository.findByUserId(user.getUserId());
         if (toUpdate.isPresent()) {
             toUpdate.get().update(user);
+            userRepository.save(toUpdate.get());
         }
         return;
     }
