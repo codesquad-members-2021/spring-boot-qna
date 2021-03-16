@@ -1,10 +1,13 @@
 package com.codessquad.qna.controller;
 
 import com.codessquad.qna.service.QuestionService;
+import com.codessquad.qna.util.HttpSessionUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+
+import javax.servlet.http.HttpSession;
 
 @Controller
 @RequestMapping("/")
@@ -16,10 +19,10 @@ public class HomeController {
     }
 
     @GetMapping
-    public String showQuestions(Model model) {
+    public String showQuestions(Model model, HttpSession session) {
 
-        model.addAttribute("questions", questionService.showAll());
+        model.addAttribute("questions", questionService.getAllQuestions());
 
-        return "/index";
+        return "index";
     }
 }

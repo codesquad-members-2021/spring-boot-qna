@@ -1,21 +1,19 @@
 package com.codessquad.qna.service;
 
-import com.codessquad.qna.controller.UserController;
 import com.codessquad.qna.domain.User;
-import com.codessquad.qna.exception.UserExistException;
 import com.codessquad.qna.repository.UserRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
 public class UserService {
-
+    private final Logger logger = LoggerFactory.getLogger(UserService.class);
     private final UserRepository userRepository;
-    Logger logger = LoggerFactory.getLogger(UserController.class);
 
     @Autowired
     public UserService(UserRepository userRepository) {
@@ -29,17 +27,17 @@ public class UserService {
     }
 
     private void checkRedundancy(User user) {
-        userRepository.findByUserId(user.getUserId())
-                .ifPresent(u -> {
-                    throw new UserExistException();
-                });
+        User redundantUser = userRepository.findByUserId(user.getUserId()).orElse(null);
+        if (redundantUser != null) {
+            throw new IllegalStateException();
+        }
     }
 
-    public Iterable<User> showAll() {
+    public List<User> getAllUsers() {
         return userRepository.findAll();
     }
 
-    public Optional<User> showOneById(Long id) {
+    public Optional<User> getOneById(Long id) {
         return userRepository.findById(id);
     }
 
@@ -49,6 +47,10 @@ public class UserService {
 
         userRepository.delete(presentUser);
         userRepository.save(referenceUser);
+    }
+
+    public Optional<User> getOneByUserId(String userId) {
+        return userRepository.findByUserId(userId);
     }
 }
 

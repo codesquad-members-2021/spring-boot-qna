@@ -1,4 +1,4 @@
-package com.codessquad.qna;
+package com.codessquad.qna.config;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.Ordered;
@@ -13,6 +13,5 @@ public class MvcConfig implements WebMvcConfigurer {
 
         registry.addViewController("/user/form").setViewName("user/form");
         registry.addViewController("/user/login").setViewName("user/login");
-        registry.addViewController("/question/form").setViewName("question/form");
     }
 }
