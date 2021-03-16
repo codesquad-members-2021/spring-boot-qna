@@ -5,6 +5,10 @@ public class QuestionRequest {
     private String title;
     private String contents;
 
+    protected QuestionRequest() {
+
+    }
+
     public QuestionRequest(String title, String contents) {
         this.title = title;
         this.contents = contents;
