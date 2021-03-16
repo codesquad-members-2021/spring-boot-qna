@@ -4,10 +4,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
-import javax.servlet.http.HttpSession;
-
-import static com.codessquad.qna.controller.HttpSessionUtils.getUserFromSession;
-
 @ControllerAdvice
 public class GlobalExceptionHandler {
 
@@ -24,8 +20,8 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(CurrentPasswordNotMatchException.class)
-    private String handleCurrentPasswordNotMatchException(Model model, CurrentPasswordNotMatchException e, HttpSession session) {
-        model.addAttribute("user", getUserFromSession(session));
+    private String handleCurrentPasswordNotMatchException(Model model, CurrentPasswordNotMatchException e) {
+        model.addAttribute("user", e.getUser());
         model.addAttribute("errorMessage", e.getMessage());
         return "/user/updateForm";
     }
@@ -37,8 +33,19 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(UserNotFoundException.class)
-    private String handleUserNotFoundException() {
-        return "redirect:/user/list";
+    private String handleUserNotFoundException(Model model, UserNotFoundException e) {
+        model.addAttribute("errorMessage", e.getMessage());
+        return "/user/login";
+    }
+
+    @ExceptionHandler(QuestionNotFoundException.class)
+    private String handleQuestionNotFoundException() {
+        return "redirect:/";
+    }
+
+    @ExceptionHandler(WriterOfAnswerListNotMatchException.class)
+    private String handleWriterOfAnswerListNotMatchException(WriterOfAnswerListNotMatchException e) {
+        return "redirect:/question/" + e.getQuestionId();
     }
 
 }
