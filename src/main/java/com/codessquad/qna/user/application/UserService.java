@@ -37,8 +37,7 @@ public class UserService {
     }
 
     public UserResponse getUser(Long id) {
-        User user = userRepository.findById(id)
-                .orElseThrow(() -> new UserNotFoundException("존재하지 않는 유저입니다; id: " + id));
+        User user = getUserFromRepository(id);
         return UserResponse.of(user);
     }
 
@@ -46,23 +45,28 @@ public class UserService {
     public User login(String userId, String password) {
         User user = Optional.ofNullable(userRepository.findByUserId(userId))
                 .orElseThrow(() -> {
-                    String failMessage = "잘못된 userId 로 로그인 했습니다.";
-                    logger.debug("Login Failure; {}", failMessage);
-                    return new LoginFailedException(failMessage);
+                    String exceptionMessage = "잘못된 userId 로 로그인 했습니다.";
+                    logger.debug("Login Failure; {}", exceptionMessage);
+                    return new LoginFailedException(exceptionMessage);
                 });
-        if (!user.isCorrectPassword(password)) {
-            String failMessage = "잘못된 password 로 로그인 했습니다.";
-            logger.debug("Login Failure; {}", failMessage);
-            throw new LoginFailedException(failMessage);
+        if (!user.matchPassword(password)) {
+            String exceptionMessage = "잘못된 password 로 로그인 했습니다.";
+            logger.debug("Login Failure; {}", exceptionMessage);
+            throw new LoginFailedException(exceptionMessage);
         }
         logger.debug("Login Success!");
         return user;
     }
 
     public UserResponse updateUser(Long id, UserRequest userRequest) {
-        User user = userRepository.findById(id)
-                .orElseThrow(() -> new UserNotFoundException("존재하지 않는 유저는 수정이 불가능합니다; id: " + id));
+        User user = getUserFromRepository(id);
         user.update(userRequest.toUser());
+        userRepository.save(user); // HELP: 이유를 모르겠지만 dirty checking 이 동작하지 않는다.
         return UserResponse.of(user);
+    }
+
+    private User getUserFromRepository(Long id) {
+        return userRepository.findById(id)
+                .orElseThrow(() -> new UserNotFoundException("존재하지 않는 유저입니다; id: " + id));
     }
 }

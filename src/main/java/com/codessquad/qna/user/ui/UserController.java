@@ -15,6 +15,9 @@ import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import java.net.URI;
 
+import static com.codessquad.qna.common.HttpSessionUtils.USER_SESSION_KEY;
+import static com.codessquad.qna.common.HttpSessionUtils.checkAuthorization;
+
 @Controller
 @RequestMapping("/users")
 public class UserController {
@@ -42,14 +45,14 @@ public class UserController {
     @PostMapping("login")
     public String login(String userId, String password, HttpSession session) {
         User user = userService.login(userId, password);
-        session.setAttribute("user", user);
+        session.setAttribute(USER_SESSION_KEY, user);
         return "redirect:/";
     }
 
     // FIXME: 로그아웃은 POST 로 구현해야한다.
     @GetMapping("logout")
     public String logout(HttpSession session) {
-        session.removeAttribute("user");
+        session.removeAttribute(USER_SESSION_KEY);
         return "redirect:/";
     }
 
@@ -67,13 +70,15 @@ public class UserController {
     }
 
     @GetMapping("{id}/form")
-    public String getForm(@PathVariable Long id, Model model) {
+    public String getForm(@PathVariable Long id, Model model, HttpSession session) {
+        checkAuthorization(id, session);
         model.addAttribute("user", userService.getUser(id));
         return "user/updateForm";
     }
 
     @PutMapping("{id}")
-    public String updateUser(@PathVariable Long id, User user) {
+    public String updateUser(@PathVariable Long id, User user, HttpSession session) {
+        checkAuthorization(id, session);
         userService.updateUser(id, UserRequest.of(user));
         return "redirect:/users";
     }
