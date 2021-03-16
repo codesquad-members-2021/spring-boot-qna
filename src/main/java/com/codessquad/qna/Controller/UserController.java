@@ -64,10 +64,10 @@ public class UserController {
         return "redirect:/users/list";
     }
 
-    @GetMapping("/{userId}/form")
-    public String updateForm(@PathVariable(name="userId") String userId, Model model) {
+    @GetMapping("/{id}/form")
+    public String getUserupdateForm(@PathVariable Long id , Model model) {
         for(User user : userRepository.findAll() ) {
-            if(user.getUserId().equals(userId)) {
+            if(user.getId() == id) {
                 model.addAttribute("user",user);
                 return "user/updateForm";
             }
