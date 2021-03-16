@@ -42,12 +42,12 @@ public class UsersController {
         return "user/profile";
     }
 
-    @GetMapping("/modify")
+    @GetMapping("/modify-form")
     public String getModifyUserPage() {
         return "user/modify-form";
     }
 
-    @PutMapping("/modify")
+    @PutMapping
     public String modifyUser(String prevPassword, String newPassword,
                              String name, String email, HttpSession session) {
         User sessionUser = SessionUtil.getLoginUser(session);
