@@ -37,7 +37,7 @@ public class UserController {
             return "redirect:/users/loginForm";
         }
 
-        User sessionedUser = (User) session.getAttribute(HttpSessionUtils.USER_SESSION_KEY);
+        User sessionedUser = HttpSessionUtils.getUserFromSession(session);
         if (!sessionedUser.isIdMatching(id)) {
             throw new IllegalStateException("자신의 정보만 확인할 수 있습니다.");
         }
@@ -52,7 +52,7 @@ public class UserController {
             return "redirect:/users/loginForm";
         }
 
-        User sessionedUser = (User) session.getAttribute(HttpSessionUtils.USER_SESSION_KEY);
+        User sessionedUser = HttpSessionUtils.getUserFromSession(session);
         if (!sessionedUser.isIdMatching(id)) {
             throw new IllegalStateException("자신의 정보만 수정할 수 있습니다.");
         }

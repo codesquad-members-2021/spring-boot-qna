@@ -9,16 +9,25 @@ public class Question {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    private String writer;
     private String title;
     private String contents;
     private LocalDate postTime;
+
+    public Long getId() {
+        return id;
+    }
 
     public void setId(Long id) {
         this.id = id;
     }
 
-    public Long getId() {
-        return id;
+    public String getWriter() {
+        return writer;
+    }
+
+    public void setWriter(User user) {
+        this.writer = user.getUserId();
     }
 
     public String getTitle() {
