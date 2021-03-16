@@ -16,12 +16,12 @@ public class AnswerService {
         this.answerRepository = answerRepository;
     }
 
-    public void create(Long questionId, Answer answer, User writer) {
+    public Answer create(Long questionId, Answer answer, User writer) {
         Question question = questionRepository.findById(questionId)
                 .orElseThrow(NotFoundException::new);
         answer.setQuestion(question);
         answer.setWriter(writer);
-        answerRepository.save(answer);
+        return answerRepository.save(answer);
     }
 
     public void delete(Long answerId, Long questionId, User loginUser) {

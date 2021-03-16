@@ -1,6 +1,7 @@
 package com.codessquad.qna.domain;
 
 import com.codessquad.qna.exception.ForbiddenException;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
@@ -26,6 +27,7 @@ public class Question {
 
     @OneToMany(mappedBy = "question")
     @Where(clause = "deleted = false")
+    @JsonIgnore
     private List<Answer> answers;
 
     protected Question() {
