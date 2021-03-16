@@ -1,6 +1,7 @@
 package com.codessquad.qna.controller;
 
 import com.codessquad.qna.domain.Question;
+import com.codessquad.qna.domain.User;
 import com.codessquad.qna.service.QuestionService;
 import com.codessquad.qna.util.HttpSessionUtils;
 import org.slf4j.Logger;
@@ -27,8 +28,9 @@ public class QuestionController {
     }
 
     @PostMapping
-    public String createQuestion(Question newQuestion) {
-
+    public String createQuestion(Question newQuestion, HttpSession session) {
+        User sessionUser = HttpSessionUtils.getUserFromSession(session);
+        newQuestion.setWriter(sessionUser.getName());
         if (!isValidQuestion(newQuestion)) {
             return "question/form";
         }
