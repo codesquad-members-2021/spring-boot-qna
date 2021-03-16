@@ -18,7 +18,8 @@ public class CustomExceptionHandler {
 
     @ExceptionHandler(IllegalUserUpdateException.class)
     public String userUpdateException(IllegalUserUpdateException e) {
-        return "redirect:/users/" + e.getMessage() + "/form";
+        String[] splitMessage = e.getMessage().split(":");
+        return "redirect:/users/" + splitMessage[0] + "/form";
     }
 
     @ExceptionHandler(IllegalUserAccessException.class)
