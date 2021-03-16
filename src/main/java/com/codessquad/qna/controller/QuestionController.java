@@ -2,6 +2,7 @@ package com.codessquad.qna.controller;
 
 import com.codessquad.qna.domain.Question;
 import com.codessquad.qna.domain.User;
+import com.codessquad.qna.repository.AnswerRepository;
 import com.codessquad.qna.repository.QuestionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -16,10 +17,12 @@ import java.util.Optional;
 @Controller
 public class QuestionController {
     private final QuestionRepository questionRepository;
+    private final AnswerRepository answerRepository;
 
     @Autowired
-    public QuestionController(QuestionRepository questionRepository) {
+    public QuestionController(QuestionRepository questionRepository, AnswerRepository answerRepository) {
         this.questionRepository = questionRepository;
+        this.answerRepository = answerRepository;
     }
 
     @GetMapping("/qna/form") // 메인 메뉴에서 질문하기 버튼을 누를 경우
@@ -54,6 +57,8 @@ public class QuestionController {
         Optional<Question> questionOptional = questionRepository.findById(targetId);
         Question questionData = questionOptional.orElseThrow(NoSuchElementException::new);
 
+
+        model.addAttribute("answer", questionData.getAnswers()); // 댓글
         model.addAttribute("question", questionData);
 
         return "qna/show";

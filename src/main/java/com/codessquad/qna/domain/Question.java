@@ -4,6 +4,7 @@ import javax.persistence.*;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 
 @Entity
 public class Question {
@@ -15,13 +16,24 @@ public class Question {
     @ManyToOne
     @JoinColumn(foreignKey = @ForeignKey(name = "fk_question_writer"))
     private User writer;
+
+    @OneToMany(mappedBy = "question", fetch = FetchType.LAZY ) // JPA  fetch: Q-A관계를
+    //@Fetch() // Hibernate
+    private List<Answer> answers;
+
+    public List<Answer> getAnswers() {
+        return answers;
+    }
+
+    public void setAnswers(List<Answer> answers) {
+        this.answers = answers;
+    }
+
     @Column(nullable = false, length = 20)
     private String title;
     @Column(nullable = false, length = 500)
     private String contents;
     @Column(nullable = false, length = 20)
-    // ZonedDateTime 타임존 또는 시차 개념이 필요한 날짜와 시간 정보를 나타낼 때 사용: https://www.daleseo.com/java8-zoned-date-time/
-    // 배포서버가 미국에 있기 때문에 타임존을 사용하였습니다.
     private final ZonedDateTime time = ZonedDateTime.now(ZoneId.of("Asia/Seoul"));
 
     public User getWriter() {
