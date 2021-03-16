@@ -25,8 +25,8 @@ public class Question {
         this.id = id;
     }
 
-    public User getWriter() {
-        return writer;
+    public String getWriter() {
+        return writer.getUserId();
     }
 
     public void setWriter(User user) {
