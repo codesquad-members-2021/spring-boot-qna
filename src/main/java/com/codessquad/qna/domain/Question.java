@@ -3,6 +3,7 @@ package com.codessquad.qna.domain;
 import com.fasterxml.jackson.annotation.*;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -19,7 +20,7 @@ public class Question extends AbstractEntity {
     @OneToMany(mappedBy = "question", cascade = CascadeType.ALL)
     @JsonIgnore
     @OrderBy("id desc")
-    private List<Answer> answers;
+    private final List<Answer> answers = new ArrayList<>();
 
     protected Question() {
     }

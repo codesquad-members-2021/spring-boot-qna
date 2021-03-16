@@ -59,8 +59,7 @@ public class QuestionController {
     @PutMapping("/{id}")
     public String update(@PathVariable Long id, String title, String contents, Model model, HttpSession session) {
         Question question = questionService.findVerifiedQuestion(id, session);
-        question.update(title, contents);
-        questionService.update(question);
+        questionService.update(question, title, contents);
         return "redirect:/questions/" + id;
     }
 
