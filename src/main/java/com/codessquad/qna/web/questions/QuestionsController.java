@@ -61,7 +61,6 @@ public class QuestionsController {
         Question foundQuestion = questionRepository.findById(questionId)
                 .orElseThrow(QuestionNotFoundException::new);
         model.addAttribute("question", foundQuestion);
-        model.addAttribute("numberOfAnswers", foundQuestion.getSizeOfAnswers());
         return "qna/show";
     }
 

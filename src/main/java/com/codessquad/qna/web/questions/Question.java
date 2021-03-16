@@ -49,10 +49,6 @@ public class Question {
         }
     }
 
-    public int getSizeOfAnswers() {
-        return answers.size();
-    }
-
     public Long getId() {
         return id;
     }

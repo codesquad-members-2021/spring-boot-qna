@@ -16,6 +16,9 @@ public class ControllerExceptionHandler {
 
     @ExceptionHandler(UnauthorizedAccessException.class)
     public String handleUnauthorizedAccessException() {
+        /*@TODO
+            예외를 사용하도록 수정하라
+        */
         LOGGER.warn("허가되지 않은 접근이 발견됨!");
         return "redirect:/";
     }
