@@ -42,7 +42,7 @@ public class UserController {
             throw new IllegalStateException("자신의 정보만 확인할 수 있습니다.");
         }
 
-        model.addAttribute("user", userRepository.findById(id).orElseThrow(NoSuchElementException::new));
+        model.addAttribute("user", sessionedUser);
         return "/user/profile";
     }
 
@@ -55,7 +55,7 @@ public class UserController {
         if (!sessionedUser.isIdMatching(id)) {
             throw new IllegalStateException("자신의 정보만 수정할 수 있습니다.");
         }
-        model.addAttribute("user", userRepository.findById(id).orElseThrow(NoSuchElementException::new));
+        model.addAttribute("user", sessionedUser);
         return "/user/updateForm";
     }
 
@@ -90,11 +90,6 @@ public class UserController {
     public String logout(HttpSession session) {
         session.removeAttribute(HttpSessionUtils.USER_SESSION_KEY);
         return "redirect:/";
-    }
-
-    @ExceptionHandler(NoSuchElementException.class)
-    public String handleNoSuchElementException() {
-        return "noSuchElementExceptionHandle";
     }
 
     @ExceptionHandler(IllegalStateException.class)
