@@ -7,4 +7,6 @@ public class QuestionUtility {
     public static final DateTimeFormatter DATE_PATTERN
             = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
 
+    private QuestionUtility() {}
+
 }
