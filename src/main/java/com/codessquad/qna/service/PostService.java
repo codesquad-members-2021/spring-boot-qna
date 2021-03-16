@@ -39,7 +39,7 @@ public class PostService {
     }
 
     public Post getPost(Long id) {
-        return postRepository.findById(id).orElseThrow(() -> {
+        return postRepository.findByPostIdAndDeletedFalse(id).orElseThrow(() -> {
             return new NotFoundException("해당 게시물을 찾을 수 없습니다.");
         });
     }
