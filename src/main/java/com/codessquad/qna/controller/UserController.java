@@ -83,4 +83,16 @@ public class UserController {
         userService.updateInfo(presentUser, referenceUser);
         return "redirect:/users";
     }
+
+    @PostMapping("/login")
+    public String login(User newUser) {
+        // 아이디 존재여부 확인
+
+        // 비밀번호 일치여부 확인
+
+        // 세션 처리
+
+
+        return "redirect:/";
+    }
 }
