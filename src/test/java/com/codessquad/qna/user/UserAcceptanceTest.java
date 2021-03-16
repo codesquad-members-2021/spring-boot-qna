@@ -10,14 +10,11 @@ import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 
-import java.util.HashMap;
-import java.util.Map;
-
+import static com.codessquad.qna.user.UserRequest.USER_PATH;
+import static com.codessquad.qna.user.UserRequest.requestCreateUser;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class UserAcceptanceTest extends AcceptanceTest {
-    private final static String PATH = "/users";
-
     @Test
     @DisplayName("유저를 생성한다.")
     void createUser() {
@@ -95,7 +92,7 @@ public class UserAcceptanceTest extends AcceptanceTest {
         // when
         ExtractableResponse<Response> actualResponse = RestAssured.given().log().all()
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
-                .when().get(PATH)
+                .when().get(USER_PATH)
                 .then().log().all().extract();
 
         // then
@@ -115,7 +112,7 @@ public class UserAcceptanceTest extends AcceptanceTest {
         // when
         ExtractableResponse<Response> actualResponse = RestAssured.given().log().all()
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
-                .when().get(PATH + "/{id}", id)
+                .when().get(USER_PATH + "/{id}", id)
                 .then().log().all().extract();
 
         // then
@@ -129,28 +126,11 @@ public class UserAcceptanceTest extends AcceptanceTest {
         // when
         ExtractableResponse<Response> actualResponse = RestAssured.given().log().all()
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
-                .when().get(PATH + "/{id}", 100)
+                .when().get(USER_PATH + "/{id}", 100)
                 .then().log().all().extract();
 
         // then
         assertThat(actualResponse.statusCode())
                 .isEqualTo(HttpStatus.NOT_FOUND.value());
-    }
-
-    private Map<String, String> createParam(String userId, String password, String name, String email) {
-        Map<String, String> param = new HashMap<>();
-        param.put("userId", userId);
-        param.put("password", password);
-        param.put("name", name);
-        param.put("email", email);
-        return param;
-    }
-
-    private ExtractableResponse<Response> requestCreateUser(String userId, String password, String name, String email) {
-        return RestAssured.given().log().all()
-                .contentType(MediaType.APPLICATION_JSON_VALUE)
-                .body(createParam(userId, password, name, email))
-                .when().post(PATH)
-                .then().log().all().extract();
     }
 }

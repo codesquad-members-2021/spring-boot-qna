@@ -5,6 +5,7 @@ import com.codessquad.qna.question.domain.QuestionRepository;
 import com.codessquad.qna.question.dto.QuestionRequest;
 import com.codessquad.qna.question.dto.QuestionResponse;
 import com.codessquad.qna.question.exception.QuestionNotFoundException;
+import com.codessquad.qna.user.domain.User;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -18,8 +19,8 @@ public class QuestionService {
         this.questionRepository = questionRepository;
     }
 
-    public QuestionResponse saveQuestion(QuestionRequest questionRequest) {
-        Question question = questionRepository.save(questionRequest.toQuestion());
+    public QuestionResponse saveQuestion(QuestionRequest questionRequest, User writer) {
+        Question question = questionRepository.save(questionRequest.toQuestion(writer));
         return QuestionResponse.of(question);
     }
 

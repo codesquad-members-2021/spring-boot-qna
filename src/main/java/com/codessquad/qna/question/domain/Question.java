@@ -1,6 +1,7 @@
 package com.codessquad.qna.question.domain;
 
 import com.codessquad.qna.common.BaseTimeEntity;
+import com.codessquad.qna.user.domain.User;
 
 import javax.persistence.*;
 
@@ -10,8 +11,10 @@ public class Question extends BaseTimeEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false, length = 20)
-    private String writer;
+    @ManyToOne
+    @JoinColumn(foreignKey = @ForeignKey(name = "fk_question_writer"))
+    private User writer;
+
 
     @Column(nullable = false)
     private String title;
@@ -21,7 +24,7 @@ public class Question extends BaseTimeEntity {
 
     protected Question() {}
 
-    public Question(String writer, String title, String contents) {
+    public Question(User writer, String title, String contents) {
         this.writer = writer;
         this.title = title;
         this.contents = contents;
@@ -31,7 +34,7 @@ public class Question extends BaseTimeEntity {
         return id;
     }
 
-    public String getWriter() {
+    public User getWriter() {
         return writer;
     }
 
