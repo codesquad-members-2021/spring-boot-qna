@@ -18,7 +18,7 @@ public class UserController {
 
     private final List<User> userList = new ArrayList<>();
 
-    @GetMapping("users/form.html")
+    @GetMapping("users/form")
     public String signUpForm() {
         logger.info("signUpForm >> users/form.html: in");
         return "users/form";
