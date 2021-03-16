@@ -43,12 +43,16 @@ public class AnswerService {
         return targetAnswer;
     }
 
-    public Long findQuestionId(Long answerId) {
-        return findById(answerId).getQuestionId();
+    public Answer findById(Long id) {
+        Answer answer = this.answerRepository.findById(id).orElseThrow(AnswerNotFoundException::new);
+        if (answer.isDelete()) {
+            throw new AnswerNotFoundException();
+        }
+        return answer;
     }
 
-    public Answer findById(Long id) {
-        return this.answerRepository.findById(id).orElseThrow(AnswerNotFoundException::new);
+    public Long findQuestionId(Long answerId) {
+        return findById(answerId).getQuestionId();
     }
 
 }
