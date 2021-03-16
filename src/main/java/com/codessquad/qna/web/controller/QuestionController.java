@@ -8,10 +8,7 @@ import com.codessquad.qna.web.utils.SessionUtils;
 import javassist.NotFoundException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
 
@@ -46,12 +43,13 @@ public class QuestionController {
 
     @GetMapping("/questions/{id}/form")
     public String updateForm(@PathVariable long id, Model model, HttpSession session) throws NotFoundException {
-        Question question = questionRepository.findById(id).orElseThrow(IllegalArgumentException::new);
-        User writer = question.getWriter();
-
         if (!SessionUtils.isLoginUser(session)) {
             return "/users/login-form";
         }
+
+        Question question = questionRepository.findById(id).orElseThrow(IllegalArgumentException::new);
+        User writer = question.getWriter();
+
 
         User user = SessionUtils.getLoginUser(session).orElseThrow(() -> new NotFoundException("No login user"));
 
@@ -68,6 +66,21 @@ public class QuestionController {
         question.update(post.getTitle(), post.getContents());
         questionRepository.save(question);
         return "redirect:/questions/" + id;
+    }
+
+    @DeleteMapping("/questions/{id}/delete")
+    public String delete(@PathVariable long id, HttpSession session) throws NotFoundException {
+        if (!SessionUtils.isLoginUser(session)) {
+            return "/users/login-form";
+        }
+
+        Question question = questionRepository.findById(id).orElseThrow(IllegalArgumentException::new);
+        User user = SessionUtils.getLoginUser(session).orElseThrow(() -> new NotFoundException("No login user"));
+        if (!question.isMatchingWriter(user)) {
+            throw new IllegalStateException("다른 사용자의 글을 삭제할 수 없습니다.");
+        }
+        questionRepository.delete(question);
+        return "redirect:/";
     }
 
 
