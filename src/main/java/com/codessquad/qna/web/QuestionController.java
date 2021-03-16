@@ -53,11 +53,12 @@ public class QuestionController {
         if (!question.isQuestionWriter(sessionedUser)) {
             throw new IllegalStateException("자신의 질문만 수정할 수 있습니다.");
         }
+        model.addAttribute("question", question);
         return "/qna/updateForm";
     }
 
 //    @PutMapping("/questions/{id}")
-//    public String updateForm() {
+//    public String updateForm(@PathVariable Long id, ) {
 //
 //    }
 
