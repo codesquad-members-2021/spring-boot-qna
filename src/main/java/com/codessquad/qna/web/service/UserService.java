@@ -12,7 +12,7 @@ public class UserService {
 
     private UserRepository userRepository;
 
-    UserService(UserRepository userRepository) {
+    private UserService(UserRepository userRepository) {
         this.userRepository = userRepository;
     }
 
