@@ -37,14 +37,14 @@ public class UserController {
         }
 
         logger.debug("User : {} Login Success!", user);
-        session.setAttribute("user", user);
+        session.setAttribute("sessionUser", user);
 
         return "redirect:/";
     }
 
     @GetMapping("/logout")
     public String logout(HttpSession session) {
-        session.removeAttribute("user");
+        session.removeAttribute("sessionUser");
 
         return "redirect:/";
     }
@@ -71,22 +71,42 @@ public class UserController {
     }
 
     @GetMapping("/{id}/form")
-    public String form(@PathVariable Long id, Model model) {
+    public String form(@PathVariable Long id, Model model, HttpSession session) {
+        Object tempUser = session.getAttribute("sessionUser");
+        if (tempUser == null) {
+            return "redirect:/users/loginForm";
+        }
+
+        User sessionUser = (User)tempUser;
+        if (!id.equals(sessionUser.getId())) {
+            throw new IllegalStateException("Only modify your own info!!");
+        }
+
         User user = userService.findUserById(id);
         model.addAttribute(user);
         return "/user/updateForm";
     }
 
     @PutMapping("/{id}")
-    public String update(@PathVariable Long id, User newUser) {
+    public String update(@PathVariable Long id, User updatedUser, HttpSession session) {
+        Object tempUser = session.getAttribute("sessionUser");
+        if (tempUser == null) {
+            return "redirect:/users/loginForm";
+        }
+
+        User sessionUser = (User)tempUser;
+        if (!id.equals(sessionUser.getId())) {
+            throw new IllegalStateException("You can't modify another user's info!!");
+        }
+
         User user = userService.findUserById(id);
         logger.debug("User : {}", (user));
 
-        if (!user.matchPassword(newUser)) {
-            logger.debug("Password : \"{}\" does not match \"{}\"", newUser.getPassword(), user.getPassword());
+        if (!user.matchPassword(updatedUser)) {
+            logger.debug("Password : \"{}\" does not match \"{}\"", updatedUser.getPassword(), user.getPassword());
             return "redirect:/users";
         }
-        userService.update(user, newUser);
+        userService.update(user, updatedUser);
 
         return "redirect:/users";
     }

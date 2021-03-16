@@ -2,7 +2,6 @@ package com.codesquad.qna.domain;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotEmpty;
 
 @Entity
 public class User {
