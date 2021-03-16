@@ -89,6 +89,7 @@ public class UserController {
     @PostMapping("/login")
     public String login(String userId, String password, HttpSession session) {
         // 아이디 존재여부 확인
+        // TODO: userId에 해당하는 User가 없는 경우, 왜 null 처리가 되지 않나?
         User loginUser = userService.getOneByUserId(userId).orElse(null);
         if (loginUser == null){
             return "redirect:/users/login";
