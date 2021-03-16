@@ -4,6 +4,8 @@ import com.codessquad.qna.web.domain.question.QuestionRepository;
 import com.codessquad.qna.web.domain.question.Question;
 import com.codessquad.qna.web.domain.user.User;
 import com.codessquad.qna.web.dto.question.QuestionRequest;
+import com.codessquad.qna.web.utils.SessionUtils;
+import javassist.NotFoundException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -28,7 +30,7 @@ public class QuestionController {
         }
         User user = SessionUtils.getLoginUser(session)
                 .orElseThrow(() -> new NotFoundException("No login user"));
-        Question question = new Question(user.getName(), request.getTitle(), request.getContents());
+        Question question = new Question(user, request.getTitle(), request.getContents());
         questionRepository.save(question);
         return "redirect:/";
     }
