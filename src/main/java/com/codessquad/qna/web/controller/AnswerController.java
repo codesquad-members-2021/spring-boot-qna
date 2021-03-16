@@ -5,8 +5,8 @@ import com.codessquad.qna.web.domain.answer.AnswerRepository;
 import com.codessquad.qna.web.domain.question.Question;
 import com.codessquad.qna.web.domain.question.QuestionRepository;
 import com.codessquad.qna.web.domain.user.User;
+import com.codessquad.qna.web.exception.QuestionNotFoundException;
 import com.codessquad.qna.web.utils.SessionUtils;
-import javassist.NotFoundException;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -29,18 +29,20 @@ public class AnswerController {
 
     @PostMapping("/")
     public String create(@PathVariable Long questionId, @PathVariable Long id,
-                         String contents, HttpSession session) throws NotFoundException {
-        if (!SessionUtils.isLoginUser(session)) {
-            return "redirect:/users/login-form";
-        }
-        User user = SessionUtils.getLoginUser(session)
-                .orElseThrow(() -> new NotFoundException("No login user"));
+                         String contents, HttpSession session) {
 
-        Question question = questionRepository.findById(questionId).orElseThrow(IllegalArgumentException::new);
+        User user = SessionUtils.getLoginUser(session);
 
+        Question question = getQuestionById(questionId);
         Answer answer = new Answer(user, question, contents);
         answerRepository.save(answer);
         return "redirect:/questions/" + questionId;
     }
+
+    private Question getQuestionById(Long id){
+        return questionRepository.findById(id)
+                .orElseThrow(() -> new QuestionNotFoundException("Cannot found question number "+ id));
+    }
+
 
 }

@@ -4,8 +4,9 @@ import com.codessquad.qna.web.domain.user.User;
 
 import com.codessquad.qna.web.domain.user.UserRepository;
 
+import com.codessquad.qna.web.exception.CRUDAuthenticationException;
+import com.codessquad.qna.web.exception.UserNotFoundException;
 import com.codessquad.qna.web.utils.SessionUtils;
-import javassist.NotFoundException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -23,7 +24,7 @@ public class UserController {
     }
 
     @PostMapping("/login")
-    public String login(String userId, String password, HttpSession session) throws NotFoundException {
+    public String login(String userId, String password, HttpSession session) {
         User user = userRepository.findByUserId(userId);
         if (user == null) {
             return "redirect:/users/login-form";
@@ -55,33 +56,34 @@ public class UserController {
     }
 
     @GetMapping("/{id}")
-    public String show(@PathVariable long id, Model model) throws NotFoundException {
-        User user = userRepository.findById(id).orElseThrow(() -> new NotFoundException("No user with id number " + id));
+    public String show(@PathVariable long id, Model model) {
+        User user = findUserById(id);
         model.addAttribute("user", user);
         return "user/profile";
     }
 
     @GetMapping("/{id}/form")
-    public String updateForm(@PathVariable long id, Model model, HttpSession session) throws NotFoundException {
-        User user = userRepository.findById(id).orElseThrow(() -> new NotFoundException("No user with id number " + id));
-        if (!SessionUtils.isLoginUser(session)) {
-            return "redirect:/users/login-form";
-        }
-        User sessionedUser = SessionUtils.getLoginUser(session).orElseThrow(() -> new NotFoundException("No login user"));
-        if (!sessionedUser.isMatchingId(id)){
-            throw new IllegalStateException("자신의 정보만 수정할 수 있습니다");
+    public String updateForm(@PathVariable long id, Model model, HttpSession session) {
+        User user = findUserById(id);
+        User sessionedUser = SessionUtils.getLoginUser(session);
+        if (!sessionedUser.isMatchingId(id)) {
+            throw new CRUDAuthenticationException("자신의 정보만 수정할 수 있습니다");
         }
         model.addAttribute("user", user);
         return "user/updateForm";
     }
 
     @PutMapping("/{id}/update")
-    public String updateProfile(@PathVariable long id, User updatedUser, String oldPassword) throws NotFoundException {
-        User user = userRepository.findById(id).orElseThrow(() -> new NotFoundException("No user with id number " + id));
+    public String updateProfile(@PathVariable long id, User updatedUser, String oldPassword) {
+        User user = findUserById(id);
         if (user.isMatchingPassword(oldPassword)) {
             user.update(updatedUser);
             userRepository.save(user);
         }
         return "redirect:/users";
+    }
+
+    private User findUserById(Long id){
+        return userRepository.findById(id).orElseThrow(() -> new UserNotFoundException("No user with id number " + id));
     }
 }

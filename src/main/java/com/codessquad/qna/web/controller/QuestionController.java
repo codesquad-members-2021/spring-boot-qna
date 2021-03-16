@@ -4,8 +4,9 @@ import com.codessquad.qna.web.domain.question.QuestionRepository;
 import com.codessquad.qna.web.domain.question.Question;
 import com.codessquad.qna.web.domain.user.User;
 import com.codessquad.qna.web.dto.question.QuestionRequest;
+import com.codessquad.qna.web.exception.CRUDAuthenticationException;
+import com.codessquad.qna.web.exception.QuestionNotFoundException;
 import com.codessquad.qna.web.utils.SessionUtils;
-import javassist.NotFoundException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -22,12 +23,8 @@ public class QuestionController {
     }
 
     @PostMapping("/questions")
-    public String create(QuestionRequest request, HttpSession session) throws NotFoundException {
-        if (!SessionUtils.isLoginUser(session)) {
-            return "redirect:/users/login-form";
-        }
-        User user = SessionUtils.getLoginUser(session)
-                .orElseThrow(() -> new NotFoundException("No login user"));
+    public String create(QuestionRequest request, HttpSession session) {
+        User user = SessionUtils.getLoginUser(session);
         Question question = new Question(user, request.getTitle(), request.getContents());
         questionRepository.save(question);
         return "redirect:/";
@@ -42,19 +39,14 @@ public class QuestionController {
     }
 
     @GetMapping("/questions/{id}/form")
-    public String updateForm(@PathVariable long id, Model model, HttpSession session) throws NotFoundException {
-        if (!SessionUtils.isLoginUser(session)) {
-            return "/users/login-form";
-        }
-
-        Question question = questionRepository.findById(id).orElseThrow(IllegalArgumentException::new);
+    public String updateForm(@PathVariable long id, Model model, HttpSession session) {
+        Question question = getQuestionById(id);
         User writer = question.getWriter();
 
-
-        User user = SessionUtils.getLoginUser(session).orElseThrow(() -> new NotFoundException("No login user"));
+        User user = SessionUtils.getLoginUser(session);
 
         if (!writer.isMatchingId(user.getId())) {
-            throw new IllegalStateException("다른 사용자의 글을 수정할 수 없습니다.");
+            throw new CRUDAuthenticationException("다른 사용자의 글을 수정할 수 없습니다.");
         }
         model.addAttribute("question", question);
         return "qna/updateForm";
@@ -62,31 +54,26 @@ public class QuestionController {
 
     @PutMapping("/questions/{id}/update")
     public String update(@PathVariable long id, QuestionRequest post) {
-        Question question = questionRepository.findById(id).orElseThrow(IllegalArgumentException::new);
+        Question question = getQuestionById(id);
         question.update(post.getTitle(), post.getContents());
         questionRepository.save(question);
         return "redirect:/questions/" + id;
     }
 
     @DeleteMapping("/questions/{id}/delete")
-    public String delete(@PathVariable long id, HttpSession session) throws NotFoundException {
-        if (!SessionUtils.isLoginUser(session)) {
-            return "/users/login-form";
-        }
-
-        Question question = questionRepository.findById(id).orElseThrow(IllegalArgumentException::new);
-        User user = SessionUtils.getLoginUser(session).orElseThrow(() -> new NotFoundException("No login user"));
+    public String delete(@PathVariable long id, HttpSession session) {
+        Question question = getQuestionById(id);
+        User user = SessionUtils.getLoginUser(session);
         if (!question.isMatchingWriter(user)) {
-            throw new IllegalStateException("다른 사용자의 글을 삭제할 수 없습니다.");
+            throw new CRUDAuthenticationException("다른 사용자의 글을 삭제할 수 없습니다.");
         }
         questionRepository.delete(question);
         return "redirect:/";
     }
 
-
     @GetMapping("/questions/{id}")
     public String questionDetail(@PathVariable long id, Model model) {
-        Question question = questionRepository.findById(id).orElseThrow(IllegalArgumentException::new);
+        Question question = getQuestionById(id);
         model.addAttribute("question", question);
         return "/qna/show";
     }
@@ -95,6 +82,11 @@ public class QuestionController {
     public String getHome(Model model) {
         model.addAttribute("questions", questionRepository.findAll());
         return "index";
+    }
+
+    private Question getQuestionById(Long id){
+        return questionRepository.findById(id)
+                .orElseThrow(() -> new QuestionNotFoundException("Cannot found question number "+ id));
     }
 
 }
