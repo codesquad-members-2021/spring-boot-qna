@@ -60,7 +60,7 @@ public class UserController {
 
     @GetMapping("/users/{userId}/form")
     public String updateForm(@PathVariable(name="userId") String userId, Model model) {
-        System.out.println("updateForm@@@");
+        //System.out.println("updateForm@@@");
         User currentUser;
         for(User user : userList) {
             if(user.getUserId().equals(userId)) {
