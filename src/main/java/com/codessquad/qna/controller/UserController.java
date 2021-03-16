@@ -33,7 +33,7 @@ public class UserController {
     public String login(String userId, String password, HttpSession session) {
         User user = userService.findUserByUserId(userId);
         if (user.isMatchingPassword(password)) {
-            session.setAttribute("user",user);
+            session.setAttribute("userSession",user);
             return "redirect:/";
         }
 
@@ -42,7 +42,7 @@ public class UserController {
 
     @GetMapping("/logout")
     public String logout(HttpSession session){
-        session.removeAttribute("user");
+        session.removeAttribute("userSession");
         return "redirect:/";
     }
 
