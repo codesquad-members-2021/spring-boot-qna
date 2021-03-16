@@ -1,6 +1,8 @@
 package com.codessquad.qna.web.controller;
 
+import com.codessquad.qna.web.HttpSessionUtils;
 import com.codessquad.qna.web.domain.Question;
+import com.codessquad.qna.web.domain.User;
 import com.codessquad.qna.web.service.QuestionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -9,6 +11,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+
+import javax.servlet.http.HttpSession;
 
 @Controller
 @RequestMapping("/questions")
@@ -20,9 +24,20 @@ public class QuestionController {
         this.questionService = questionService;
     }
 
+    @GetMapping("/form")
+    public String getQuestionForm(HttpSession session) {
+        if (!HttpSessionUtils.isLoginUser(session)) {
+            return "/users/loginForm";
+        }
+        return "/qna/form";
+    }
+
     @PostMapping
-    public String createQuestion(Question question) {
-        questionService.postQuestion(question);
+    public String createQuestion(Question question, HttpSession session) {
+        if (!HttpSessionUtils.isLoginUser(session)) {
+            return "/users/loginForm";
+        }
+        questionService.postQuestion(question, HttpSessionUtils.getSessionedUser(session));
         return "redirect:/questions";
     }
 
@@ -30,7 +45,7 @@ public class QuestionController {
     public String getQuestions(Model model) {
         model.addAttribute("questions", questionService.findQuestions());
         return "/index";
-    }
+}
 
     @GetMapping("/{id}")
     public String getQuestion(@PathVariable long id, Model model) {
