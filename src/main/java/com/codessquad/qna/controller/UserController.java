@@ -50,6 +50,21 @@ public class UserController {
         return "checkPassword";
     }
 
+    @PostMapping("/users/{userId}/checkPassword")
+    public String passwordRightOrWrong(User user) {
+        String userId = user.getUserId();
+        String inputPw = user.getPassword();
+        System.out.println(userId + "," + inputPw);
+        for (User temp : users) {
+            if (temp.isSameId(userId)) {
+                String pwBefore = temp.getPassword();
+                if (pwBefore.equals(inputPw))
+                    return "updateForm";
+            }
+        }
+        return "redirect:/";
+    }
+
     @GetMapping("/users/{userId}/updateForm")
     public String updateForm(@PathVariable("userId") String userId, Model model) {
         for (User user : users) {
@@ -61,14 +76,17 @@ public class UserController {
         return "updateForm";
     }
 
-    @PostMapping("/user/{user.userId}/update")
-    public String updateUser(@PathVariable("user.userId") String userId, User user) {
+    @PostMapping("/user/{userId}/update")
+    public String updateUser(@PathVariable("userId") String userId, User user) {
+        Long id = 0L;
         for (User temp : users) {
             if (temp.isSameId(userId)) {
+                id = temp.getId();
                 users.remove(temp);
                 break;
             }
         }
+        user.setId(id);
         users.add(user);
         return "redirect:/users";
     }
