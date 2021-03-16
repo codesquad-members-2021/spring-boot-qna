@@ -1,5 +1,7 @@
 package com.codessquad.qna.entity;
 
+import org.hibernate.annotations.Where;
+
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -10,21 +12,21 @@ import java.util.List;
 public class Post {
 
     @Id
-    @Column(name = "POST_ID")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long postId;
 
     private String title;
 
     @ManyToOne
-    @JoinColumn(name = "USER_PK")
+    @JoinColumn(name = "writer_user_id")
     private User author;
 
-    private boolean deleteFlag = false;
+    private boolean deleted = false;
     private String body;
 
 
-    @OneToMany(mappedBy = "post", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "post", cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
+    @Where(clause = "deleted = false")
     private final List<Comment> comments = new ArrayList<>();
 
     private LocalDateTime createDateTime = LocalDateTime.now();
@@ -62,13 +64,30 @@ public class Post {
         return Collections.unmodifiableList(comments);
     }
 
-    public void delete() {
-        deleteFlag = true;
+    public void addComment(Comment comment) {
+        comments.add(comment);
     }
 
-    public boolean isDeleteFlag() {
-        return deleteFlag;
+    public void deleteComment(Comment comment) {
+        if(comments.contains(comment)) {
+            comment.delete();
+        }
     }
+
+    public void deactiveAllComments() {
+        for(Comment comment : comments) {
+            if(comment.isDeleted()) {
+                continue;
+            }
+            comment.delete();
+        }
+    }
+
+    public void delete() {
+        deleted = true;
+    }
+
+
 
     public boolean isMatchedAuthor(User user) {
         return this.author.isMatchedId(user.getId());
