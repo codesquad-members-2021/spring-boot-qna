@@ -14,13 +14,13 @@ public class Question {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private Long id;
 
     @ManyToOne
     @JoinColumn(foreignKey = @ForeignKey(name = "fk_question_writer"))
     private User writer;
 
-    @Column(nullable = false, length = 500)
+    @Column(nullable = false, length=500)
     private String title;
 
     @Column(nullable = false, columnDefinition = "TEXT")
@@ -28,7 +28,8 @@ public class Question {
 
     private String date;
 
-    @OneToMany(mappedBy = "question")
+    @OneToMany(mappedBy="question")
+    @OrderBy("id ASC")
     private final List<Answer> answers = new ArrayList<>();
 
     private boolean deleted;
@@ -37,7 +38,7 @@ public class Question {
         this.date = LocalDateTime.now().format(DateFormat.DEFAULT);
     }
 
-    public long getId() {
+    public Long getId() {
         return id;
     }
 
@@ -74,7 +75,8 @@ public class Question {
     }
 
     public long getNotDeletedAnswersCount() {
-        return answers.stream().filter(answer -> !answer.isDeleted()).count();
+        long answersCount = answers.stream().filter(answer -> !answer.isDeleted()).count();
+        return answersCount;
     }
 
     public void delete() {
@@ -96,7 +98,7 @@ public class Question {
     }
 
     public boolean isAnsweredYourself(Answer answer) {
-        return writer.equals(answer.getWriter());
+        return writer == answer.getWriter();
     }
 
     public void update(Question questionWithUpdatedInfo) {

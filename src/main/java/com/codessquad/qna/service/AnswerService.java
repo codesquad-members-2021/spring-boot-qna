@@ -20,16 +20,12 @@ public class AnswerService {
         this.questionRepository = questionRepository;
     }
 
-    public Long create(Long questionId, Answer answer) {
+    public Answer create(Long questionId, Answer answer) {
         Question question = questionRepository.findById(questionId)
                 .orElseThrow(() -> new IllegalStateException("해당 질문이 없습니다. id = " + questionId));
         answer.setQuestion(question);
-
-        Answer savedAnswer = answerRepository.save(answer);
-
         question.addAnswer(answer);
-
-        return savedAnswer.getId();
+        return answerRepository.save(answer);
     }
 
     @Transactional
