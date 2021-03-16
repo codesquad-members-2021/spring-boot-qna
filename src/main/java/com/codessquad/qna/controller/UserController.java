@@ -44,6 +44,12 @@ public class UserController {
         return "profile";
     }
 
+    @GetMapping("/users/{userId}/checkPassword")
+    public String checkPassword(@PathVariable("userId") String userId, Model model) {
+        model.addAttribute("userId", userId);
+        return "checkPassword";
+    }
+
     @GetMapping("/users/{userId}/updateForm")
     public String updateForm(@PathVariable("userId") String userId, Model model) {
         for (User user : users) {
