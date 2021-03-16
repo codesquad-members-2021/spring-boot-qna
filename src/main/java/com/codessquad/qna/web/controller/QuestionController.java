@@ -43,6 +43,25 @@ public class QuestionController {
         return "qna/form";
     }
 
+    @GetMapping("/questions/{id}/form")
+    public String updateForm(@PathVariable long id, Model model, HttpSession session) throws NotFoundException {
+        Question question = questionRepository.findById(id).orElseThrow(IllegalArgumentException::new);
+        User writer = question.getWriter();
+
+        if (!SessionUtils.isLoginUser(session)) {
+            return "/users/login-form";
+        }
+
+        User user = SessionUtils.getLoginUser(session).orElseThrow(() -> new NotFoundException("No login user"));
+
+        if (!writer.isMatchingId(user.getId())) {
+            throw new IllegalStateException("다른 사용자의 글을 수정할 수 없습니다.");
+        }
+        model.addAttribute("id", id);
+        return "redirect:/qna/updateForm";
+    }
+
+
     @GetMapping("/questions/{id}")
     public String questionDetail(@PathVariable long id, Model model) {
         Question question = questionRepository.findById(id).orElseThrow(IllegalArgumentException::new);
@@ -51,7 +70,7 @@ public class QuestionController {
     }
 
     @GetMapping("/")
-    public String getHome(Model model){
+    public String getHome(Model model) {
         model.addAttribute("questions", questionRepository.findAll());
         return "index";
     }
