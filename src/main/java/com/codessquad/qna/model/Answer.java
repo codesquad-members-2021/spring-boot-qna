@@ -32,22 +32,12 @@ public class Answer {
     @JoinColumn(foreignKey = @ForeignKey(name = "fk_answer_to_question"), nullable = false)
     private Question question;
 
-    public boolean nonNull() {
-        return this.id != null;
-    }
-
     public boolean matchWriter(User loginUser) {
-        if (!this.writer.nonNull()) {
-            return false;
-        }
         return this.writer.matchId(loginUser.getId());
     }
 
     public Long getQuestionId() {
-        if (this.question.nonNull()) {
-            return this.question.getId();
-        }
-        return (long) -1;
+        return this.question.getId();
     }
 
     public void save(User writer, Question question) {

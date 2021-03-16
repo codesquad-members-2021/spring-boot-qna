@@ -32,14 +32,7 @@ public class Question {
     @OneToMany(mappedBy = "question", cascade = CascadeType.REMOVE)
     private List<Answer> answers;
 
-    public boolean nonNull() {
-        return this.id != null;
-    }
-
     public boolean matchWriter(User writer) {
-        if (this.writer == null) {
-            return false;
-        }
         return this.writer.matchId(writer.getId());
     }
 
