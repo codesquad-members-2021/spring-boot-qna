@@ -1,8 +1,8 @@
 package com.codessquad.qna.service;
 
 import com.codessquad.qna.domain.User;
-import com.codessquad.qna.exception.IllegalUserAccessException;
 import com.codessquad.qna.exception.IllegalUserUpdateException;
+import com.codessquad.qna.exception.NoSearchObjectException;
 import com.codessquad.qna.repository.UserRepository;
 import com.codessquad.qna.valid.UserValidator;
 import org.slf4j.Logger;
@@ -30,7 +30,7 @@ public class UserService {
     }
 
     public User findById(Long userId) {
-        return userRepository.findById(userId).orElseThrow(NullPointerException::new);
+        return userRepository.findById(userId).orElseThrow(() -> new NoSearchObjectException("유저"));
     }
 
     public List<User> findAll() {
@@ -55,7 +55,7 @@ public class UserService {
     }
 
     public User findByUserId(String userId) {
-        return userRepository.findByUserId(userId).orElseThrow(NullPointerException::new);
+        return userRepository.findByUserId(userId).orElseThrow(() -> new NoSearchObjectException("유저"));
     }
 
 }

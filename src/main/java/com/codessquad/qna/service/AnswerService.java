@@ -4,6 +4,7 @@ import com.codessquad.qna.domain.Answer;
 import com.codessquad.qna.domain.DisplayStatus;
 import com.codessquad.qna.domain.Question;
 import com.codessquad.qna.domain.User;
+import com.codessquad.qna.exception.NoSearchObjectException;
 import com.codessquad.qna.repository.AnswerRepository;
 import com.codessquad.qna.valid.UserValidator;
 import org.springframework.stereotype.Service;
@@ -31,7 +32,7 @@ public class AnswerService {
     }
 
     public Answer findById(Long answerId) {
-        return answerRepository.findById(answerId).orElseThrow(NullPointerException::new);
+        return answerRepository.findById(answerId).orElseThrow(() -> new NoSearchObjectException("답변"));
     }
 
     @Transactional

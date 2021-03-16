@@ -3,6 +3,7 @@ package com.codessquad.qna.service;
 import com.codessquad.qna.domain.DisplayStatus;
 import com.codessquad.qna.domain.Question;
 import com.codessquad.qna.domain.User;
+import com.codessquad.qna.exception.NoSearchObjectException;
 import com.codessquad.qna.repository.QuestionRepository;
 import com.codessquad.qna.valid.QuestionValidator;
 import org.slf4j.Logger;
@@ -33,7 +34,7 @@ public class QuestionService {
     }
 
     public Question findById(Long questionId) {
-        return questionRepository.findById(questionId).orElseThrow(NullPointerException::new);
+        return questionRepository.findById(questionId).orElseThrow(() -> new NoSearchObjectException("질문"));
     }
 
     @Transactional

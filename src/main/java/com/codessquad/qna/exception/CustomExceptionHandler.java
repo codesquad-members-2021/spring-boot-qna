@@ -11,7 +11,7 @@ public class CustomExceptionHandler {
 
     private final Logger logger = LoggerFactory.getLogger(CustomExceptionHandler.class);
 
-    @ExceptionHandler({NullPointerException.class, IllegalArgumentException.class})
+    @ExceptionHandler({IllegalArgumentException.class})
     public String loginException() {
         return "/user/login";
     }
@@ -21,8 +21,14 @@ public class CustomExceptionHandler {
         return "redirect:/users/" + e.getMessage() + "/form";
     }
 
-    @ExceptionHandler({IllegalUserAccessException.class})
+    @ExceptionHandler(IllegalUserAccessException.class)
     public String noSameUser() {
+        return "redirect:/";
+    }
+
+    @ExceptionHandler(NoSearchObjectException.class)
+    public String noSearchObject(NoSearchObjectException e) {
+        logger.error(e.getMessage());
         return "redirect:/";
     }
 }
