@@ -11,8 +11,6 @@ import java.util.List;
 public class HomeController {
     @GetMapping("/")
     public String goHome(Model model) {
-        List<Question> questions = QuestionController.getQuestions();
-        model.addAttribute("questions", questions);
-        return "index";
+        return "redirect:/questions";
     }
 }

@@ -19,15 +19,22 @@ public class QuestionController {
         return questions;
     }
 
-    @GetMapping("/questions")
-    public String goToCreateQuestion() {
+    @GetMapping("/questions/new")
+    public String newQuestion() {
         return "qnaForm";
     }
 
+    @GetMapping("/questions")
+    public String goToCreateQuestion(Model model) {
+        model.addAttribute("questions", questions);
+        return "index";
+    }
+
     @PostMapping("/questions")
-    public String createQuestion(Question question) {
+    public String createQuestion(Question question, Model model) {
         question.setIndex(questions.size() + 1);
         questions.add(question);
+        model.addAttribute("questions", questions);
         return "redirect:/";
     }
 
