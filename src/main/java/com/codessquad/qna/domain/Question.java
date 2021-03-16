@@ -60,6 +60,12 @@ public class Question {
         return user.isUserIdMatching(writer);
     }
 
+    public void update(Question newQuestion){
+        this.title = newQuestion.title;
+        this.contents = newQuestion.title;
+        setPostTime();
+    }
+
     @Override
     public String toString() {
         return "Question{" +

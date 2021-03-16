@@ -24,6 +24,7 @@ public class QuestionController {
         if (!HttpSessionUtils.isLoginUser(session)) {
             return "redirect:/users/loginForm";
         }
+
         question.setWriter(HttpSessionUtils.getUserFromSession(session));
         question.setPostTime();
         questionRepository.save(question);
@@ -57,10 +58,20 @@ public class QuestionController {
         return "/qna/updateForm";
     }
 
-//    @PutMapping("/questions/{id}")
-//    public String updateForm(@PathVariable Long id, ) {
-//
-//    }
+    @PutMapping("/questions/{id}")
+    public String updateForm(@PathVariable Long id, Question updatedQuestion, HttpSession session) {
+        if (!HttpSessionUtils.isLoginUser(session)) {
+            return "redirect:/users/loginForm";
+        }
+        Question question = questionRepository.findById(id).orElseThrow(NoSuchElementException::new);
+        User sessionedUser = HttpSessionUtils.getUserFromSession(session);
+        if (!question.isQuestionWriter(sessionedUser)) {
+            throw new IllegalStateException("자신의 질문만 수정할 수 있습니다.");
+        }
+        question.update(updatedQuestion);
+        questionRepository.save(updatedQuestion);
+        return "redirect:/questions/{id}";
+    }
 
     @ExceptionHandler(NoSuchElementException.class)
     public String handleNoSuchElementException() {
@@ -68,7 +79,7 @@ public class QuestionController {
     }
 
     @ExceptionHandler(IllegalStateException.class)
-    public String handleIllegalStateException(){
+    public String handleIllegalStateException() {
         return "unableToAccessToOthers";
     }
 }

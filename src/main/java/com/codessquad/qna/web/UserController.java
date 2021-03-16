@@ -51,12 +51,10 @@ public class UserController {
         if (!HttpSessionUtils.isLoginUser(session)) {
             return "redirect:/users/loginForm";
         }
-
         User sessionedUser = HttpSessionUtils.getUserFromSession(session);
         if (!sessionedUser.isIdMatching(id)) {
             throw new IllegalStateException("자신의 정보만 수정할 수 있습니다.");
         }
-
         model.addAttribute("user", userRepository.findById(id).orElseThrow(NoSuchElementException::new));
         return "/user/updateForm";
     }
@@ -66,15 +64,13 @@ public class UserController {
         if (!HttpSessionUtils.isLoginUser(session)) {
             return "redirect:/users/loginForm";
         }
-
         User sessionedUser = HttpSessionUtils.getUserFromSession(session);
         if (!sessionedUser.isIdMatching(id)) {
             throw new IllegalStateException("자신의 정보만 수정할 수 있습니다.");
         }
-
-        User user = userRepository.findById(id).orElseThrow(NoSuchElementException::new);
-        if (user.isPasswordMatching(inputPassword)) {
-            user.update(updatedUser);
+        if (sessionedUser.isPasswordMatching(inputPassword)) {
+            sessionedUser.update(updatedUser);
+            userRepository.save(sessionedUser);
             return "redirect:/users";
         }
         return "redirect:/users/{id}/form";
