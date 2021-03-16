@@ -9,10 +9,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
 
@@ -70,5 +67,24 @@ public class QuestionController {
         model.addAttribute("question", questionService.getOneById(id).orElse(null));
 
         return "question/show";
+    }
+
+    @GetMapping("/{id}/form")
+    public String moveToUpdateForm(@PathVariable long id, Model model, HttpSession session) {
+
+        // TODO: writer의 userId와 sessionedUser의 userId 일치할 경우만 questoin/update로 이동
+        // TODO: writer의 userId를 가져오는 방법?
+
+        return "question/update";
+    }
+
+
+    @PutMapping("/{id}")
+    public String updateQuestion(@PathVariable long id, Question referenceQuestion) {
+        Question presentQuestion = questionService.getOneById(id).orElse(null);
+        referenceQuestion.setWriter(presentQuestion.getWriter());
+        questionService.updateInfo(presentQuestion, referenceQuestion);
+
+        return "redirect:/";
     }
 }

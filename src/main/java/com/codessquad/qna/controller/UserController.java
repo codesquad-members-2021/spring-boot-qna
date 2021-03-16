@@ -58,7 +58,7 @@ public class UserController {
     }
 
     @GetMapping("/{id}/form")
-    public String passUserId(@PathVariable long id, Model model, HttpSession session) {
+    public String moveToUpdateForm(@PathVariable long id, Model model, HttpSession session) {
         User user = userService.getOneById(id).orElse(null);
 
         User sessionedUser = HttpSessionUtils.getUserFromSession(session);
