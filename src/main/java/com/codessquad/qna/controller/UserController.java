@@ -9,6 +9,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpSession;
+
 @Controller
 @RequestMapping("/users")
 public class UserController {
@@ -28,9 +30,10 @@ public class UserController {
     }
 
     @PostMapping("/login")
-    public String login(String userId, String password) {
+    public String login(String userId, String password, HttpSession session) {
         User user = userService.findUserByUserId(userId);
         if (user.isMatchingPassword(password)) {
+            session.setAttribute("user",user);
             return "redirect:/";
         }
 
