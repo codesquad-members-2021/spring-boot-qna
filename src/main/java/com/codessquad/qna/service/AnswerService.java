@@ -3,7 +3,6 @@ package com.codessquad.qna.service;
 import com.codessquad.qna.domain.*;
 import com.codessquad.qna.exception.ForbiddenException;
 import com.codessquad.qna.exception.NotFoundException;
-import com.codessquad.qna.exception.UnauthorizedAccessException;
 import org.springframework.stereotype.Service;
 
 @Service
