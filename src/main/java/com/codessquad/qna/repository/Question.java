@@ -3,6 +3,7 @@ package com.codessquad.qna.repository;
 public class Question {
     private int index;
     private String writer;
+    private String dateTime;
     private String title;
     private String contents;
 
@@ -20,6 +21,14 @@ public class Question {
 
     public void setWriter(String writer) {
         this.writer = writer;
+    }
+
+    public String getDateTime() {
+        return dateTime;
+    }
+
+    public void setDateTime(String dateTime) {
+        this.dateTime = dateTime;
     }
 
     public String getTitle() {
@@ -43,6 +52,7 @@ public class Question {
         return "Question{" +
                 "index=" + index +
                 ", writer='" + writer + '\'' +
+                ", dateTime='" + dateTime + '\'' +
                 ", title='" + title + '\'' +
                 ", contents='" + contents + '\'' +
                 '}';
