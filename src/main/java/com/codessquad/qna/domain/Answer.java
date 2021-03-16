@@ -20,6 +20,9 @@ public class Answer {
     @JoinColumn(name = "question_id")
     private Question question;
 
+    @Enumerated(EnumType.STRING)
+    private DisplayStatus status = DisplayStatus.OPEN;
+
     private String contents;
     private LocalDateTime createDateTime;
 
@@ -48,5 +51,13 @@ public class Answer {
 
     public Long getId() {
         return id;
+    }
+
+    public DisplayStatus getStatus() {
+        return status;
+    }
+
+    public void changeStatus(DisplayStatus displayStatus) {
+        this.status = displayStatus;
     }
 }
