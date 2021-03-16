@@ -35,8 +35,10 @@ public class AnswerService {
     }
 
     @Transactional
-    public void delete(Long id) {
+    public Long delete(Long id, User user) {
         Answer answer = findById(id);
+        user.checkSameUser(answer.getWriter().getId());
         answer.changeStatus(DisplayStatus.CLOSE);
+        return id;
     }
 }

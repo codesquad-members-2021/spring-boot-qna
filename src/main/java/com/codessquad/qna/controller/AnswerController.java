@@ -35,10 +35,7 @@ public class AnswerController {
     @DeleteMapping("/{id}")
     public String delete(@PathVariable Long id, HttpSession session) {
         User user = HttpSessionUtils.getUserFromSession(session);
-        Answer answer = answerService.findById(id);
-        user.checkSameUser(answer.getWriter().getId());
-        answerService.delete(id);
-
+        answerService.delete(id, user);
         return "redirect:/";
     }
 
