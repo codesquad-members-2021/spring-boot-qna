@@ -22,28 +22,27 @@ public class QuestionController {
     }
 
     @PostMapping("/questions")
-    public String create(QuestionRequest request, HttpSession session) {
-        Object value = session.getAttribute("sessionedUser");
-        if (value == null) {
-            return "/users/login-form";
+    public String create(QuestionRequest request, HttpSession session) throws NotFoundException {
+        if (!SessionUtils.isLoginUser(session)) {
+            return "redirect:/users/login-form";
         }
-        User user = (User) value;
+        User user = SessionUtils.getLoginUser(session)
+                .orElseThrow(() -> new NotFoundException("No login user"));
         Question question = new Question(user.getName(), request.getTitle(), request.getContents());
         questionRepository.save(question);
         return "redirect:/";
     }
 
     @GetMapping("/questions/form")
-    public String getForm(HttpSession session) {
-        Object value = session.getAttribute("sessionedUser");
-        if (value == null) {
-            return "redirect:/users/login-form";
+    public String questionForm(HttpSession session) {
+        if (!SessionUtils.isLoginUser(session)) {
+            return "/users/login-form";
         }
         return "qna/form";
     }
 
     @GetMapping("/questions/{id}")
-    public String getQuestionDetail(@PathVariable long id, Model model) {
+    public String questionDetail(@PathVariable long id, Model model) {
         Question question = questionRepository.findById(id).orElseThrow(IllegalArgumentException::new);
         model.addAttribute("question", question);
         return "/qna/show";

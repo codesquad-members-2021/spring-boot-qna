@@ -4,6 +4,7 @@ import com.codessquad.qna.web.domain.user.User;
 
 import com.codessquad.qna.web.domain.user.UserRepository;
 
+import com.codessquad.qna.web.utils.SessionUtils;
 import javassist.NotFoundException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -63,12 +64,10 @@ public class UserController {
     @GetMapping("/{id}/form")
     public String updateForm(@PathVariable long id, Model model, HttpSession session) throws NotFoundException {
         User user = userRepository.findById(id).orElseThrow(() -> new NotFoundException("No user with id number " + id));
-        Object value = session.getAttribute("sessionedUser");
-
-        if (value == null) {
+        if (!SessionUtils.isLoginUser(session)) {
             return "redirect:/users/login-form";
         }
-        User sessionedUser = (User) value;
+        User sessionedUser = SessionUtils.getLoginUser(session).orElseThrow(() -> new NotFoundException("No login user"));
         if (sessionedUser.isMatchingId(id)){
             throw new IllegalStateException("자신의 정보만 수정할 수 있습니다");
         }
@@ -85,14 +84,4 @@ public class UserController {
         }
         return "redirect:/users";
     }
-
-    private boolean identify(Long id, HttpSession session) {
-        Object value = session.getAttribute("sessionedUser");
-        if (value == null) {
-            return false;
-        }
-        User sessionedUser = (User) value;
-        return (sessionedUser.isMatchingId(id));
-    }
-
 }
