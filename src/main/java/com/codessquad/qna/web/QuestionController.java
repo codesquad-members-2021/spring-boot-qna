@@ -1,14 +1,13 @@
 package com.codessquad.qna.web;
 
 import com.codessquad.qna.domain.Question;
+import com.codessquad.qna.domain.User;
 import com.codessquad.qna.repository.QuestionRepository;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
 
+import javax.jws.WebParam;
 import javax.servlet.http.HttpSession;
 import java.util.NoSuchElementException;
 
@@ -23,7 +22,7 @@ public class QuestionController {
 
     @PostMapping("/questions")
     public String create(Question question, HttpSession session) {
-        if(!HttpSessionUtils.isLoginUser(session)){
+        if (!HttpSessionUtils.isLoginUser(session)) {
             return "redirect:/users/loginForm";
         }
         question.setWriter(HttpSessionUtils.getUserFromSession(session));
@@ -43,6 +42,23 @@ public class QuestionController {
         model.addAttribute("question", questionRepository.findById(id).orElseThrow(NoSuchElementException::new));
         return "qna/show";
     }
+
+    @GetMapping("/questions/{id}/form")
+    public String update(@PathVariable Long id, Model model, HttpSession session) {
+        if (!HttpSessionUtils.isLoginUser(session)) {
+            return "redirect:/users/loginForm";
+        }
+
+      User sessionedUser = HttpSessionUtils.getUserFromSession(session);
+      if()
+
+        return "/qna/updateForm";
+    }
+
+//    @PutMapping("/questions/{id}")
+//    public String updateForm() {
+//
+//    }
 
     @ExceptionHandler(NoSuchElementException.class)
     public String handleException() {

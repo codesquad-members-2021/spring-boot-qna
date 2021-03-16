@@ -1,5 +1,7 @@
 package com.codessquad.qna.domain;
 
+import com.codessquad.qna.repository.UserRepository;
+
 import javax.persistence.*;
 import java.time.LocalDate;
 
@@ -52,6 +54,11 @@ public class Question {
 
     public void setPostTime() {
         postTime = LocalDate.now();
+    }
+
+    public boolean isQuestionWriter(User user, UserRepository userRepository){
+        User writeUser = userRepository.findByUserId(writer);
+        return user.equals(writeUser);
     }
 
     @Override
