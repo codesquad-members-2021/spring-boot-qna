@@ -17,9 +17,6 @@ public class UserController {
 
     private List<User> users = new ArrayList<>();
 
-    @Autowired
-    private UserRepository userRepository;
-
     @GetMapping("/user/create")
     public String toCreateUser() {
         return "signup";
@@ -28,7 +25,6 @@ public class UserController {
     @PostMapping("/user/create")
     public String createUser(User user) {
         users.add(user);
-        userRepository.save(user);
         return "redirect:/users";
     }
 
