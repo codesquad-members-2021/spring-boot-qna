@@ -7,17 +7,14 @@ import com.codessquad.qna.web.exceptions.users.NoLoginUserException;
 import com.codessquad.qna.web.exceptions.users.UserNotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.ResponseStatus;
 
 @ControllerAdvice
 public class ControllerExceptionHandler {
     private static final Logger LOGGER = LoggerFactory.getLogger(ControllerExceptionHandler.class);
 
     @ExceptionHandler(UnauthorizedAccessException.class)
-    @ResponseStatus(HttpStatus.UNAUTHORIZED)
     public String handleUnauthorizedAccessException() {
         LOGGER.warn("허가되지 않은 접근이 발견됨!");
         return "redirect:/";
