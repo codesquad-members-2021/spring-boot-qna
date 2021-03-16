@@ -13,14 +13,14 @@ public class UserValidator {
     }
 
     private static void validInfo(String info) {
-        if (info.trim().isEmpty()) {
-            throw new NullPointerException();
+        if (info == null || info.trim().isEmpty()) {
+            throw new IllegalArgumentException();
         }
     }
 
     private static void validId(Long id) {
         if (id == null) {
-            throw new NullPointerException();
+            throw new IllegalArgumentException();
         }
     }
 }

@@ -11,14 +11,14 @@ public class QuestionValidator {
     }
 
     private static void validTitle(String title) {
-        if (title.trim().isEmpty()) {
-            throw new NullPointerException("제목이 비었습니다.");
+        if (title == null || title.trim().isEmpty()) {
+            throw new IllegalArgumentException("제목이 비었습니다.");
         }
     }
 
     private static void validWriter(User writer) {
-        if (writer.getUserId().trim().isEmpty()) {
-            throw new NullPointerException("글쓴이가 비었습니다.");
+        if (writer == null || writer.getUserId().trim().isEmpty()) {
+            throw new IllegalArgumentException("글쓴이가 비었습니다.");
         }
     }
 }
