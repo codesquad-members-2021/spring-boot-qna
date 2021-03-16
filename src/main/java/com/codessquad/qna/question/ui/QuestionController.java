@@ -10,8 +10,11 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import javax.persistence.EntityNotFoundException;
+import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import java.net.URI;
+
+import static com.codessquad.qna.common.HttpSessionUtils.checkLoggedIn;
 
 @Controller
 @RequestMapping("/questions")
@@ -24,6 +27,7 @@ public class QuestionController {
 
     @PostMapping
     public ResponseEntity<QuestionResponse> createQuestion(@RequestBody @Valid QuestionRequest questionRequest) {
+        // TODO: 로그인이 되어 있지 않으면 Exception 을 던져야 한다.
         QuestionResponse questionResponse = questionService.saveQuestion(questionRequest);
         return ResponseEntity.created(
                 URI.create("/questions/" + questionResponse.getId())
@@ -31,9 +35,16 @@ public class QuestionController {
     }
 
     @PostMapping("create")
-    public String createQuestion(Question question) {
+    public String createQuestion(Question question, HttpSession session) {
+        checkLoggedIn(session);
         questionService.saveQuestion(QuestionRequest.of(question));
         return "redirect:/questions";
+    }
+
+    @GetMapping("form")
+    public String getQuestionForm(HttpSession session) {
+        checkLoggedIn(session);
+        return "question/form";
     }
 
     @GetMapping

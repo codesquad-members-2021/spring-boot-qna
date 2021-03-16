@@ -2,10 +2,7 @@
 <div class="col-md-12 col-sm-12 col-lg-10 col-lg-offset-1">
     <div class="panel panel-default content-main">
         <form name="question" method="post" action="/questions/create">
-            <div class="form-group">
-                <label for="writer">글쓴이</label>
-                <input class="form-control" id="writer" name="writer" placeholder="글쓴이"/>
-            </div>
+            <input readonly type="hidden" name="writer" value="{{sessionUser.userId}}"/>
             <div class="form-group">
                 <label for="title">제목</label>
                 <input type="text" class="form-control" id="title" name="title" placeholder="제목"/>
