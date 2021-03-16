@@ -6,7 +6,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.NoSuchElementException;
 
 @Service
 public class UserService {
@@ -33,6 +32,11 @@ public class UserService {
 
     public User findUserById(Long id) {
         return userRepository.findById(id)
+                .orElseThrow(IllegalArgumentException::new);
+    }
+
+    public User findUserById(String userId) {
+        return userRepository.findByUserId(userId)
                 .orElseThrow(IllegalArgumentException::new);
     }
 }

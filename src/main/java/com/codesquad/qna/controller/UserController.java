@@ -9,6 +9,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpSession;
+
 @Controller
 @RequestMapping("/users")
 public class UserController {
@@ -19,6 +21,25 @@ public class UserController {
     @Autowired
     public UserController(UserService userService) {
         this.userService = userService;
+    }
+
+    @GetMapping("/loginForm")
+    public String loginForm() {
+        return "/user/login";
+    }
+
+    @PostMapping("/login")
+    public String login(String userId, String password, HttpSession session) {
+        User user = userService.findUserById(userId);
+        if (user == null) {
+            return "redirect:/users/loginForm";
+        }
+        if (!password.equals(user.getPassword())) {
+            return "redirect:/users/loginForm";
+        }
+        logger.debug("User : {} Login Success!", user);
+        session.setAttribute("user", user);
+        return "redirect:/";
     }
 
     @GetMapping
@@ -54,7 +75,7 @@ public class UserController {
         User user = userService.findUserById(id);
         logger.debug("User : {}", (user));
 
-       if (!user.matchPassword(newUser)) {
+        if (!user.matchPassword(newUser)) {
             logger.debug("Password : \"{}\" does not match \"{}\"", newUser.getPassword(), user.getPassword());
             return "redirect:/users";
         }
