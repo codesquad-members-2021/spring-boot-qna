@@ -1,4 +1,4 @@
-package com.codessquad.qna.users;
+package com.codessquad.qna.entity;
 
 import javax.persistence.*;
 

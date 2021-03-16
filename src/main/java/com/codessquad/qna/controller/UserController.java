@@ -1,5 +1,7 @@
-package com.codessquad.qna.users;
+package com.codessquad.qna.controller;
 
+import com.codessquad.qna.entity.User;
+import com.codessquad.qna.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;

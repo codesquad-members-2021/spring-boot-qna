@@ -1,5 +1,7 @@
-package com.codessquad.qna.questions;
+package com.codessquad.qna.controller;
 
+import com.codessquad.qna.entity.Question;
+import com.codessquad.qna.service.QuestionService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

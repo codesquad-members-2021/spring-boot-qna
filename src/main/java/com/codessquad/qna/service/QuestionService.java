@@ -1,5 +1,7 @@
-package com.codessquad.qna.questions;
+package com.codessquad.qna.service;
 
+import com.codessquad.qna.entity.Question;
+import com.codessquad.qna.repository.QuestionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
