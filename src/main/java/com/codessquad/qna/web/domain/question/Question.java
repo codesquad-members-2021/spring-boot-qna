@@ -62,6 +62,10 @@ public class Question {
         this.contents = contents;
     }
 
+    public boolean isMatchingWriter(User user){
+        return writer.isMatchingId(user.getId());
+    }
+
     @Override
     public String toString() {
         return "Question{" +
