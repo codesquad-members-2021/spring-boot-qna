@@ -1,7 +1,5 @@
 package com.codessquad.qna.domain;
 
-import com.codessquad.qna.repository.UserRepository;
-
 import javax.persistence.*;
 import java.time.LocalDate;
 
@@ -11,7 +9,10 @@ public class Question {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String writer;
+    @ManyToOne
+    @JoinColumn(foreignKey = @ForeignKey(name = "fk_question_writer"))
+    private User writer;
+
     private String title;
     private String contents;
     private LocalDate postTime;
@@ -24,12 +25,12 @@ public class Question {
         this.id = id;
     }
 
-    public String getWriter() {
+    public User getWriter() {
         return writer;
     }
 
     public void setWriter(User user) {
-        this.writer = user.getUserId();
+        this.writer = user;
     }
 
     public String getTitle() {
@@ -57,7 +58,7 @@ public class Question {
     }
 
     public boolean isQuestionWriter(User user){
-        return user.isUserIdMatching(writer);
+        return user.isUserMatching(writer);
     }
 
     public void update(Question newQuestion){
