@@ -53,7 +53,7 @@ public class Question {
         return id;
     }
 
-    public String getWrittenDateTime() {
+    public String getFormattedWrittenDateTime() {
         return writtenDateTime.format(QuestionUtility.DATE_PATTERN);
     }
 

@@ -56,7 +56,9 @@ public class User {
         return email;
     }
 
-    public String getNewPassword () {return newPassword;}
+    public String getNewPassword() {
+        return newPassword;
+    }
 
     @Override
     public String toString() {
