@@ -54,10 +54,9 @@ public class UserController {
     public String passwordRightOrWrong(User user) {
         String userId = user.getUserId();
         String inputPw = user.getPassword();
-        System.out.println(userId + "," + inputPw);
-        for (User temp : users) {
-            if (temp.isSameId(userId)) {
-                String pwBefore = temp.getPassword();
+        for (User aUser : users) {
+            if (aUser.isSameId(userId)) {
+                String pwBefore = aUser.getPassword();
                 if (pwBefore.equals(inputPw))
                     return "updateForm";
             }
@@ -67,9 +66,9 @@ public class UserController {
 
     @GetMapping("/users/{userId}/updateForm")
     public String updateForm(@PathVariable("userId") String userId, Model model) {
-        for (User user : users) {
-            if (user.isSameId(userId)) {
-                model.addAttribute("user", user);
+        for (User aUser : users) {
+            if (aUser.isSameId(userId)) {
+                model.addAttribute("user", aUser);
                 break;
             }
         }
@@ -79,10 +78,10 @@ public class UserController {
     @PostMapping("/user/{userId}/update")
     public String updateUser(@PathVariable("userId") String userId, User user) {
         Long id = 0L;
-        for (User temp : users) {
-            if (temp.isSameId(userId)) {
-                id = temp.getId();
-                users.remove(temp);
+        for (User aUser : users) {
+            if (aUser.isSameId(userId)) {
+                id = aUser.getId();
+                users.remove(aUser);
                 break;
             }
         }
