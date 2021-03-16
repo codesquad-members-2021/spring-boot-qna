@@ -4,6 +4,7 @@ import com.codessquad.qna.web.domain.User;
 import com.codessquad.qna.web.repository.UserRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.NoSuchElementException;
 
 @Service
@@ -25,7 +26,7 @@ public class UserService {
         userRepository.save(user);
     }
 
-    public Iterable<User> findAll() {
+    public List<User> findAll() {
         return userRepository.findAll();
     }
 
