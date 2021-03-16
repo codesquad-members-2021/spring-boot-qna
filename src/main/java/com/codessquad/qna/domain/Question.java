@@ -4,7 +4,6 @@ import javax.persistence.*;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.List;
 
 @Entity
 public class Question {
@@ -17,17 +16,6 @@ public class Question {
     @JoinColumn(foreignKey = @ForeignKey(name = "fk_question_writer"))
     private User writer;
 
-    @OneToMany(mappedBy = "question", fetch = FetchType.LAZY ) // JPA  fetch: Q-A관계를
-    //@Fetch() // Hibernate
-    private List<Answer> answers;
-
-    public List<Answer> getAnswers() {
-        return answers;
-    }
-
-    public void setAnswers(List<Answer> answers) {
-        this.answers = answers;
-    }
 
     @Column(nullable = false, length = 20)
     private String title;

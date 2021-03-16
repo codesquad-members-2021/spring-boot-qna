@@ -57,8 +57,8 @@ public class QuestionController {
         Optional<Question> questionOptional = questionRepository.findById(targetId);
         Question questionData = questionOptional.orElseThrow(NoSuchElementException::new);
 
-
-        model.addAttribute("answer", questionData.getAnswers()); // 댓글
+        //model.addAttribute("answer", answerRepository.findByQuestion(questionData)); // 댓글
+        model.addAttribute("answer", answerRepository.findByQuestionId(questionData.getId())); // 댓글
         model.addAttribute("question", questionData);
 
         return "qna/show";

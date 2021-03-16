@@ -1,0 +1,68 @@
+package com.codessquad.qna.domain;
+
+import javax.persistence.*;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
+
+/**
+ * Created by 68936@naver.com on 2021-03-16 오전 1:30
+ * Blog : https://velog.io/@san
+ * Github : https://github.com/sanhee
+ */
+@Entity
+public class Answer {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @ManyToOne
+    @JoinColumn(foreignKey = @ForeignKey(name = "fk_answer_to_question"))
+    private Question question;
+
+    @Column(nullable = false, length = 20)
+    private String replyId;
+    @Column(nullable = false, length = 20)
+    private String replyAuthor;
+    @Column(nullable = false, length = 500)
+    private String replyContents;
+
+    @Column(nullable = false, length = 20)
+    private final ZonedDateTime replyTime = ZonedDateTime.now(ZoneId.of("Asia/Seoul"));
+
+    public String getTime() {
+        return replyTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+    }
+
+    public Question getQuestion() {
+        return question;
+    }
+
+    public String getReplyId() {
+        return replyId;
+    }
+
+    public String getReplyAuthor() {
+        return replyAuthor;
+    }
+
+    public String getReplyContents() {
+        return replyContents;
+    }
+
+    public void setQuestion(Question question) {
+        this.question = question;
+    }
+
+    public void setReplyId(String replyId) {
+        this.replyId = replyId;
+    }
+
+    public void setReplyAuthor(String replyAuthor) {
+        this.replyAuthor = replyAuthor;
+    }
+
+    public void setReplyContents(String replyContents) {
+        this.replyContents = replyContents;
+    }
+}
