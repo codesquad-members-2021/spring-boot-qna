@@ -35,7 +35,7 @@ public class UserController {
     @GetMapping("/users/{userId}")
     public String showProfile(@PathVariable("userId") String userId, Model model) {
         for (User user : users) {
-            if (user.getUserId().equals(userId)) {
+            if (user.isSameId(userId)) {
                 model.addAttribute("user", user);
                 break;
             }
