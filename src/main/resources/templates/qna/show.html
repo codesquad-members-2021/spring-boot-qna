@@ -19,8 +19,9 @@
 <div class="container" id="main">
     <div class="col-md-12 col-sm-12 col-lg-12">
         <div class="panel panel-default">
+        {{#post}}
           <header class="qna-header">
-              <h2 class="qna-title">{{post.title}}</h2>
+              <h2 class="qna-title">{{title}}</h2>
           </header>
           <div class="content-main">
               <article class="article">
@@ -29,20 +30,20 @@
                           <img src="https://graph.facebook.com/v2.3/100000059371774/picture" class="article-author-thumb" alt="">
                       </div>
                       <div class="article-header-text">
-                          <a href="/users/{{post.author.id}}" class="article-author-name">{{post.author.userId}}</a>
-                          <p>{{formatDateTime post.createDateTime}}</p>
+                          <a href="/users/{{author.id}}" class="article-author-name">{{author.userId}}</a>
+                          <p>{{formatDateTime createDateTime}}</p>
                       </div>
                   </div>
                   <div class="article-doc">
-                      {{post.body}}
+                      {{body}}
                   </div>
                   <div class="article-util">
                       <ul class="article-util-list">
                           <li>
-                              <a class="link-modify-article" href="/posts/{{post.postId}}/form">수정</a>
+                              <a class="link-modify-article" href="/posts/{{postId}}/form">수정</a>
                           </li>
                           <li>
-                              <form class="form-delete" action="/posts/{{post.postId}}" method="POST">
+                              <form class="form-delete" action="/posts/{{postId}}" method="POST">
                                   <input type="hidden" name="_method" value="DELETE">
                                   <button class="link-delete-article" type="submit">삭제</button>
                               </form>
@@ -58,9 +59,8 @@
                   <div class="qna-comment-slipp">
                       <p class="qna-comment-count"><strong>2</strong>개의 의견</p>
                       <div class="qna-comment-slipp-articles">
+                          {{#comments}}
                           <article class="article" id="answer-1405">
-
-                              {{#comments}}
                               <div class="article-header">
                                   <div class="article-header-thumb">
                                       <img src="https://graph.facebook.com/v2.3/1324855987/picture" class="article-author-thumb" alt="">
@@ -78,19 +78,19 @@
                               <div class="article-util">
                                   <ul class="article-util-list">
                                       <li>
-                                          <a class="link-modify-article" href="/posts/{{post.postId}}/comments/{{id}}">수정</a>
+                                          <a class="link-modify-article" href="/posts/{{postId}}/comments/{{id}}">수정</a>
                                       </li>
                                       <li>
-                                          <form class="delete-answer-form" action="/posts/{{post.postId}}/comments/{{id}}" method="POST">
+                                          <form class="delete-answer-form" action="/posts/{{postId}}/comments/{{id}}" method="POST">
                                               <input type="hidden" name="_method" value="DELETE">
                                               <button type="submit" class="delete-answer-button">삭제</button>
                                           </form>
                                       </li>
                                   </ul>
                               </div>
-                              {{/comments}}
                           </article>
-                          <form class="submit-write" action="/posts/{{post.postId}}/comments" method="post">
+                          {{/comments}}
+                          <form class="submit-write" action="/posts/{{postId}}/comments" method="post">
                               <div class="form-group" style="padding:14px;">
                                   <textarea name="body" class="form-control" placeholder="Update your status"></textarea>
                               </div>
@@ -102,8 +102,8 @@
               </div>
           </div>
         </div>
+        {{/post}}
     </div>
-
 </div>
 
 {{> base/reference}}

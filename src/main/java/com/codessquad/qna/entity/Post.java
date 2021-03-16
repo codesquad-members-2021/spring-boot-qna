@@ -58,7 +58,7 @@ public class Post {
         return createDateTime;
     }
 
-    public List<Comment> getComment() {
+    public List<Comment> getComments() {
         return Collections.unmodifiableList(comments);
     }
 

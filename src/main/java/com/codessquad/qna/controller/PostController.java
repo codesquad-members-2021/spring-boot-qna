@@ -68,7 +68,6 @@ public class PostController {
     public String getPost(@PathVariable Long id, Model model) {
         Post post = postService.getPost(id);
         model.addAttribute("post", post);
-        model.addAttribute("comments", post.getComment());
         return "qna/show";
     }
 

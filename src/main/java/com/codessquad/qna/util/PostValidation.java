@@ -19,7 +19,6 @@ public class PostValidation {
         }
     }
 
-
     private static void validateAuthor(User author) {
         if (author == null) {
             throw new IllegalArgumentException("유효하지 않은 유저 입니다.");
