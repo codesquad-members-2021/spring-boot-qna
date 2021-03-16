@@ -64,10 +64,10 @@ public class UserController {
         for(User user : userList) {
             if(user.getUserId().equals(userId)) {
                 model.addAttribute("user",user);
-                break;
+                return "users/updateForm";
             }
         }
-        return "users/updateForm";
+        return "notfound";
     }
 
     @PostMapping("/users/update")
