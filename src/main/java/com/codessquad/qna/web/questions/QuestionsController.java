@@ -71,9 +71,8 @@ public class QuestionsController {
         User sessionUser = SessionUtil.getLoginUser(session);
         Question currentQuestion = questionRepository.findById(questionId)
                 .orElseThrow(QuestionNotFoundException::new);
-        if (!currentQuestion.isMatchingWriter(sessionUser)) {
-            throw new UnauthorizedAccessException();
-        }
+        validateAuthorizedAccess(currentQuestion, sessionUser);
+
         model.addAttribute("currentQuestion", currentQuestion);
         return "qna/modify-form";
     }
@@ -84,10 +83,9 @@ public class QuestionsController {
         Question currentQuestion = questionRepository.findById(questionId)
                 .orElseThrow(QuestionNotFoundException::new);
         User sessionUser = SessionUtil.getLoginUser(session);
-        if (!currentQuestion.isMatchingWriter(sessionUser)) {
-            return "redirect:/";
-        }
+        validateAuthorizedAccess(currentQuestion, sessionUser);
         currentQuestion.update(newTitle, newContents);
+
         questionRepository.save(currentQuestion);
         LOGGER.info("question modified " + currentQuestion);
         return "redirect:/questions/" + currentQuestion.getId();
@@ -98,12 +96,16 @@ public class QuestionsController {
         Question currentQuestion = questionRepository.findById(questionId)
                 .orElseThrow(QuestionNotFoundException::new);
         User sessionUser = SessionUtil.getLoginUser(session);
-        if (!currentQuestion.isMatchingWriter(sessionUser)) {
-            return "redirect:/";
-        }
+        validateAuthorizedAccess(currentQuestion, sessionUser);
+
         questionRepository.delete(currentQuestion);
         LOGGER.info("question deleted " + currentQuestion);
         return "redirect:/";
     }
 
+    private void validateAuthorizedAccess(Question currentQuestion, User loginUser) {
+        if (!currentQuestion.isMatchingWriter(loginUser)) {
+            throw new UnauthorizedAccessException();
+        }
+    }
 }
