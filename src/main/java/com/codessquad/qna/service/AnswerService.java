@@ -1,6 +1,7 @@
 package com.codessquad.qna.service;
 
 import com.codessquad.qna.domain.*;
+import com.codessquad.qna.exception.ForbiddenException;
 import com.codessquad.qna.exception.NotFoundException;
 import com.codessquad.qna.exception.UnauthorizedAccessException;
 import org.springframework.stereotype.Service;
@@ -34,7 +35,7 @@ public class AnswerService {
         Answer answer = answerRepository.findByIdAndQuestionIdAndDeletedFalse(answerId, questionId)
                 .orElseThrow(NotFoundException::new);
         if (!answer.matchesWriter(loginUser)) {
-            throw new UnauthorizedAccessException("다른 사람의 답변을 수정하거나 삭제할 수 없습니다.");
+            throw new ForbiddenException("다른 사람의 답변을 수정하거나 삭제할 수 없습니다.");
         }
         return answer;
     }

@@ -1,4 +1,5 @@
 $('.submit-write button[type=submit]').click(addAnswer);
+$('.delete-answer-form button[type=submit]').click(deleteAnswer);
 
 function addAnswer(e) {
   e.preventDefault();
@@ -9,28 +10,45 @@ function addAnswer(e) {
     url : url,
     data : queryString,
     error : onError,
-    success: addAnswerToBody,
+    success: function (data, status) {
+      let answerTemplate = $('#answerTemplate').html();
+      let template = answerTemplate.format(
+          data.id,
+          data.questionId,
+          data.writer.id,
+          data.comment,
+          data.time,
+          data.writer.name
+      );
+      $('.qna-comment-slipp-articles').append(template);
+      let count = $('.qna-comment-count').children('strong');
+      count.text(Number(count.text()) + 1);
+      $('textarea[name=comment]').val('');
+    },
   });
 }
 
-function onError() {
-  console.log('error');
+function deleteAnswer(e) {
+  e.preventDefault();
+  let deleteBtn = $(this);
+  let url = $(this).parent().attr('action');
+
+  $.ajax({
+    type: 'delete',
+    url: url,
+    error: onError,
+    success: function () {
+      deleteBtn.closest('article').remove();
+      let count = $('.qna-comment-count').children('strong');
+      count.text(Number(count.text()) - 1);
+    },
+  });
 }
 
-function addAnswerToBody(data, status) {
-  let answerTemplate = $('#answerTemplate').html();
-  let template = answerTemplate.format(
-      data.id,
-      data.questionId,
-      data.writer.id,
-      data.comment,
-      data.time,
-      data.writer.name
-  );
-  $('.qna-comment-slipp-articles').append(template);
-  let count = $('.qna-comment-count').children('strong');
-  count.text(Number(count.text()) + 1);
-  $('textarea[name=comment]').val('');
+function onError(xhr, status) {
+  if (xhr.status === 401) {
+    window.location.replace('/users/login');
+  }
 }
 
 String.prototype.format = function() {
