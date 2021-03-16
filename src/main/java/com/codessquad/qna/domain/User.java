@@ -7,6 +7,7 @@ import java.util.Objects;
 @Entity
 public class User {
 
+
     @Id//프라이머리 키
     @GeneratedValue(strategy = GenerationType.IDENTITY)//자동으로 숫자 증가: 오토인크리멘탈
     private Long id;
@@ -24,6 +25,14 @@ public class User {
         this.password = copyUser.password;
         this.name = copyUser.name;
         this.email = copyUser.email;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getUserId() {
