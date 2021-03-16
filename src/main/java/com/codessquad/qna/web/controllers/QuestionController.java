@@ -2,6 +2,7 @@ package com.codessquad.qna.web.controllers;
 
 import com.codessquad.qna.web.domain.Question;
 import com.codessquad.qna.web.repository.QuestionRepository;
+import com.codessquad.qna.web.service.QuestionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -17,24 +18,30 @@ import java.util.*;
 @RequestMapping("/questions")
 public class QuestionController {
 
-    @Autowired
-    private QuestionRepository questionRepository;
+//    @Autowired
+//    private QuestionRepository questionRepository;
+
+    private QuestionService questionService;
+
+    private QuestionController(QuestionService questionService) {
+        this.questionService = questionService;
+    }
 
     @PostMapping
     public String saveQuestionForm(Question question) {
-        questionRepository.save(question);
+        questionService.save(question);
         return "redirect:/";
     }
 
     @GetMapping
     public String viewAllQuestions(Model model) {
-        model.addAttribute("questions", questionRepository.findAll());
+        model.addAttribute("questions", questionService.findAll());
         return "index";
     }
 
     @GetMapping("/{id}")
     public String showQuestion(@PathVariable("id") Long id, Model model) {
-        Question question = questionRepository.findById(id)
+        Question question = questionService.findById(id)
                 .orElseThrow(() -> new NoSuchElementException("해당 id의 질문이 존재하지 않습니다."));
         model.addAttribute("question", question);
         return "qna/show";
