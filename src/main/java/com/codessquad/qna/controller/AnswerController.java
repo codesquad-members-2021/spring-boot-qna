@@ -31,26 +31,23 @@ public class AnswerController {
 
     @GetMapping("/answer/{id}")
     public String viewUpdateAnswer(@PathVariable("id") Long id, Model model, HttpSession session) {
-        Answer answer = this.answerService.verifyAnswer(id, getUserFromSession(session));
-        Long questionId = this.answerService.findQuestionId(id);
-        model.addAttribute("answer", answer);
+        model.addAttribute("answer", this.answerService.verifyAnswer(id, getUserFromSession(session)));
         logger.info("댓글 수정 페이지 요청");
-        return answer.nonNull() ? "qna/updateAnswer" : "redirect:/question/" + questionId;
+        return "qna/updateAnswer";
     }
 
     @PutMapping("/answer/{id}")
     public String updateAnswer(@PathVariable("id") Long id, Answer answer, HttpSession session) {
-        boolean result = this.answerService.update(id, answer, getUserFromSession(session));
-        Long questionId = this.answerService.findQuestionId(id);
+        this.answerService.update(id, answer, getUserFromSession(session));
         logger.info("댓글 수정 요청");
-        return result ? "redirect:/question/" + questionId : "redirect:/answer/" + id;
+        return "redirect:/question/" + this.answerService.findQuestionId(id);
     }
 
     @DeleteMapping("/answer/{id}")
     public String deleteAnswer(@PathVariable("id") Long id, HttpSession session) {
-        Long questionId = this.answerService.findQuestionId(id);
         this.answerService.delete(id, getUserFromSession(session));
-        return (questionId != -1) ? "redirect:/question/" + questionId : "redirect:/";
+        logger.info("질문 삭제 요청");
+        return "redirect:/question/" + this.answerService.findQuestionId(id);
     }
 
 }
