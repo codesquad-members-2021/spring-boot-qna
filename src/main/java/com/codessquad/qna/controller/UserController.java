@@ -72,14 +72,7 @@ public class UserController {
     }
 
     @PutMapping("{id}/update")
-    public String updateUser(@PathVariable Long id, String oldPassword, User updateUser, HttpSession session) {
-        Object tempUser = session.getAttribute("userSession");
-        if (tempUser == null)
-            return "redirect:/users/loginForm";
-        User sessionUser = (User)tempUser;
-        if(!id.equals(sessionUser.getId())){
-            throw new IllegalStateException("자신의 정보만 수정할 수 있습니다.");
-        }
+    public String updateUser(@PathVariable Long id, String oldPassword, User updateUser) {
         User targetUser = userService.findUserById(id);
         if (targetUser.isMatchingPassword(oldPassword)) {
             targetUser.update(updateUser);
