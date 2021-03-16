@@ -74,7 +74,12 @@ public class Post {
         }
     }
 
-    public void deactiveAllComments() {
+    public void delete() {
+        deactiveAllComments();
+        deleted = true;
+    }
+
+    private void deactiveAllComments() {
         for(Comment comment : comments) {
             if(comment.isDeleted()) {
                 continue;
@@ -82,12 +87,6 @@ public class Post {
             comment.delete();
         }
     }
-
-    public void delete() {
-        deleted = true;
-    }
-
-
 
     public boolean isMatchedAuthor(User user) {
         return this.author.isMatchedId(user.getId());
