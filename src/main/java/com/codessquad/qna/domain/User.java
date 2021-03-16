@@ -1,9 +1,17 @@
 package com.codessquad.qna.domain;
 
+import javax.persistence.*;
+//import javax.persistence.GeneratedType;
 import java.util.Objects;
 
+@Entity
 public class User {
 
+    @Id//프라이머리 키
+    @GeneratedValue(strategy = GenerationType.IDENTITY)//자동으로 숫자 증가: 오토인크리멘탈
+    private Long id;
+
+    @Column(nullable = false, length = 20)// 공백을 허용하지 않음, 최대 길이는 20
     private String userId;
     private String password;
     private String name;
