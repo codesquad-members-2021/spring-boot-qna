@@ -2,7 +2,6 @@ package com.codessquad.qna.web.controller;
 
 import com.codessquad.qna.web.HttpSessionUtils;
 import com.codessquad.qna.web.domain.Question;
-import com.codessquad.qna.web.domain.User;
 import com.codessquad.qna.web.service.QuestionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -56,18 +55,11 @@ public class QuestionController {
 
     @GetMapping("/{id}/form")
     public String getUpdateForm(@PathVariable long id, HttpSession session, Model model) {
-        System.out.println("야호");
         if(!HttpSessionUtils.isLoginUser(session)) {
             return "redirect:/users/loginForm";
         }
-
-        Question originQuestion = questionService.findQuestion(id);
-        User sessionedUser = HttpSessionUtils.getSessionedUser(session);
-        if(!originQuestion.getWriter().equals(sessionedUser.getUserId())) {
-            throw new IllegalStateException("자신의 글만 수정할 수 있습니다");
-        }
-
-        model.addAttribute("question", originQuestion);
+        //try-catch 할까 말까
+        model.addAttribute("question", questionService.getOriginQuestion(id, session));
         return "/qna/updateForm";
     }
 
@@ -76,14 +68,7 @@ public class QuestionController {
         if(!HttpSessionUtils.isLoginUser(session)) {
             return "redirect:/users/loginForm";
         }
-
-        Question originQuestion = questionService.findQuestion(id);
-        User sessionedUser = HttpSessionUtils.getSessionedUser(session);
-        if(!originQuestion.getWriter().equals(sessionedUser.getUserId())) {
-            throw new IllegalStateException("자신의 글만 수정할 수 있습니다");
-        }
-
-        questionService.updateQuestion(originQuestion, question);
+        questionService.updateQuestion(questionService.getOriginQuestion(id, session), question);
         return "redirect:/questions/";
     }
 }

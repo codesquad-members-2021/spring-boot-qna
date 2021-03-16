@@ -1,10 +1,13 @@
 package com.codessquad.qna.web.service;
 
+import com.codessquad.qna.web.HttpSessionUtils;
 import com.codessquad.qna.web.domain.Question;
 import com.codessquad.qna.web.domain.User;
 import com.codessquad.qna.web.repository.QuestionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import javax.servlet.http.HttpSession;
 
 @Service
 public class QuestionService {
@@ -33,5 +36,13 @@ public class QuestionService {
     public void updateQuestion(Question originQuestion, Question question) {
         originQuestion.update(question);
         questionRepository.save(originQuestion);
+    }
+
+    public Question getOriginQuestion(long id, HttpSession session) {
+        Question originQuestion = findQuestion(id);
+        if(!originQuestion.isMatchingWriter(HttpSessionUtils.getSessionedUser(session).getUserId())) {
+            throw new IllegalStateException("자신의 글만 수정할 수 있습니다");
+        }
+        return originQuestion;
     }
 }

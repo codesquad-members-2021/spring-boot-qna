@@ -75,14 +75,8 @@ public class UserController {
             return "redirect:/users/loginForm";
         }
 
-        User sessionedUser = HttpSessionUtils.getSessionedUser(session);
-        if(id != sessionedUser.getId()) {
-            throw new IllegalStateException("자신의 정보만 수정할 수 있습니다");
-        }
-
-        //여기 findUser 부분 sessionedUseer로 바꿀 것
         try {
-            model.addAttribute("user", userService.findUser(id));
+            model.addAttribute("user",  userService.getSessionedUser(id, session));
         } catch (IllegalStateException e) {
             return "redirect:/";
         }
@@ -96,16 +90,12 @@ public class UserController {
             return "redirect:/users/loginForm";
         }
 
-        User sessionedUser = HttpSessionUtils.getSessionedUser(session);
-        if(id != sessionedUser.getId()) {
-            throw new IllegalStateException("자신의 정보만 수정할 수 있습니다");
-        }
-        //여기 findUser 부분 sessionedUseer로 바꿀 것
         try {
-            userService.updateUser(id, testPassword, user);
+            userService.updateUser(testPassword, userService.getSessionedUser(id, session), user);
         } catch (IllegalStateException e) {
             return "redirect:/";
         }
+
         return "redirect:/users";
     }
 }

@@ -59,6 +59,10 @@ public class Question {
         return createdDateTime.format(DATE_TIME_FORMATTER);
     }
 
+    public boolean isMatchingWriter(String writer) {
+        return this.writer.equals(writer);
+    }
+
     public void update(Question question) {
         this.title = question.title;
         this.contents = question.contents;

@@ -1,10 +1,12 @@
 package com.codessquad.qna.web.service;
 
+import com.codessquad.qna.web.HttpSessionUtils;
 import com.codessquad.qna.web.domain.User;
 import com.codessquad.qna.web.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.servlet.http.HttpSession;
 import java.util.List;
 
 @Service
@@ -50,8 +52,7 @@ public class UserService {
                 .orElseThrow(() -> new IllegalStateException("찾는 user가 없습니다"));
     }
 
-    public void updateUser(long id, String testPassword, User user) {
-        User originUser = findUser(id);
+    public void updateUser(String testPassword, User originUser, User user) {
         validatePassword(originUser, testPassword);
         originUser.update(user);
         userRepository.save(originUser);
@@ -61,5 +62,14 @@ public class UserService {
         if (!originUser.isMatchingPassword(testPassword)) {
             throw new IllegalStateException("잘못된 비밀번호 입니다");
         }
+    }
+
+    //메소드명 변경 예정
+    public User getSessionedUser(long id, HttpSession session) {
+        User originUser = findUser(id);
+        if(!originUser.isMatchingId(HttpSessionUtils.getSessionedUser(session))) {
+            throw new IllegalStateException("자신의 정보만 수정할 수 있습니다");
+        }
+        return originUser;
     }
 }

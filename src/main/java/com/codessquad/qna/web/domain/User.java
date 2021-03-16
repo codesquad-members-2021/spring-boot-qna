@@ -51,7 +51,11 @@ public class User {
     }
 
     public boolean isMatchingPassword(String testPassword) {
-        return password.equals(testPassword);
+        return this.password.equals(testPassword);
+    }
+
+    public boolean isMatchingId(User user) {
+        return this.id == user.id;
     }
 
     public void update(User user) {

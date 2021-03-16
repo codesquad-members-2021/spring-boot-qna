@@ -16,11 +16,9 @@ public class HttpSessionUtils {
     }
 
     public static User getSessionedUser(HttpSession session) {
-        //여기 optional 활용법 없나
         if (!isLoginUser(session)) {
             return null;
         }
         return (User) session.getAttribute(USER_SESSION_KEY);
-
     }
 }
