@@ -9,20 +9,19 @@ import java.time.LocalDateTime;
 public class Comment {
 
     @Id
-    @Column(name = "COMMENT_ID")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "POST_ID")
+    @JoinColumn(name = "post_id")
     private Post post;
 
     @ManyToOne
-    @JoinColumn(name = "USER_PK")
+    @JoinColumn(name = "writer_user_id")
     private User author;
 
     @ColumnDefault("false")
-    private boolean deleteFlag = false;
+    private boolean deleted = false;
 
     private String body;
     private LocalDateTime createDateTime = LocalDateTime.now();
@@ -58,12 +57,11 @@ public class Comment {
     }
 
     public void delete() {
-        post = null;
-        deleteFlag = true;
+        deleted = true;
     }
 
-    public boolean isDeleteFlag() {
-        return deleteFlag;
+    public boolean isDeleted() {
+        return deleted;
     }
 
     @Override
