@@ -11,7 +11,9 @@ public class Question {
     @GeneratedValue
     private Long id;
 
-    private String userId;
+    @ManyToOne
+    @JoinColumn(foreignKey = @ForeignKey(name = "fk_question_userId"))
+    private User userId;
 
     private String title;
 
@@ -20,7 +22,7 @@ public class Question {
     public Question() {
     }
 
-    public Question(String userId, String title, String contents) {
+    public Question(User userId, String title, String contents) {
         this.userId = userId;
         this.title = title;
         this.contents = contents;
@@ -30,7 +32,7 @@ public class Question {
         return id;
     }
 
-    public String getUserId() {
+    public User getUserId() {
         return userId;
     }
 
