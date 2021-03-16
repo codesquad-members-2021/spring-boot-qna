@@ -9,6 +9,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpSession;
+
 @Controller
 @RequestMapping("/users")
 public class UserController {
@@ -85,13 +87,20 @@ public class UserController {
     }
 
     @PostMapping("/login")
-    public String login(User newUser) {
+    public String login(String userId, String password, HttpSession session) {
         // 아이디 존재여부 확인
+        User loginUser = userService.getOneByUserId(userId).orElse(null);
+        if (loginUser == null){
+            return "redirect:/users/login";
+        }
 
         // 비밀번호 일치여부 확인
+        if(!loginUser.isEqualPassword(password)){
+            return "redirect:/users/login";
+        }
 
         // 세션 처리
-
+        session.setAttribute("sessionedUser", loginUser);
 
         return "redirect:/";
     }

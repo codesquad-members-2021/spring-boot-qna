@@ -48,5 +48,9 @@ public class UserService {
         userRepository.delete(presentUser);
         userRepository.save(referenceUser);
     }
+
+    public Optional<User> getOneByUserId(String userId) {
+        return userRepository.findByUserId(userId);
+    }
 }
 
