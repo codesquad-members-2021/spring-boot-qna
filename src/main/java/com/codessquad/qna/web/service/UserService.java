@@ -65,7 +65,7 @@ public class UserService {
     }
 
     //메소드명 변경 예정
-    public User getSessionedUser(long id, HttpSession session) {
+    public User checkAndGetOriginUser(long id, HttpSession session) {
         User originUser = findUser(id);
         if(!originUser.isMatchingId(HttpSessionUtils.getSessionedUser(session))) {
             throw new IllegalStateException("자신의 정보만 수정할 수 있습니다");

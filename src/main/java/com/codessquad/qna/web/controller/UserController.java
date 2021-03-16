@@ -76,7 +76,7 @@ public class UserController {
         }
 
         try {
-            model.addAttribute("user",  userService.getSessionedUser(id, session));
+            model.addAttribute("user",  userService.checkAndGetOriginUser(id, session));
         } catch (IllegalStateException e) {
             return "redirect:/";
         }
@@ -91,7 +91,7 @@ public class UserController {
         }
 
         try {
-            userService.updateUser(testPassword, userService.getSessionedUser(id, session), user);
+            userService.updateUser(testPassword, userService.checkAndGetOriginUser(id, session), user);
         } catch (IllegalStateException e) {
             return "redirect:/";
         }
