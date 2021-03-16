@@ -31,14 +31,21 @@ public class UserController {
     @PostMapping("/login")
     public String login(String userId, String password, HttpSession session) {
         User user = userService.findUserById(userId);
-        if (user == null) {
-            return "redirect:/users/loginForm";
-        }
+
         if (!password.equals(user.getPassword())) {
             return "redirect:/users/loginForm";
         }
+
         logger.debug("User : {} Login Success!", user);
         session.setAttribute("user", user);
+
+        return "redirect:/";
+    }
+
+    @GetMapping("/logout")
+    public String logout(HttpSession session) {
+        session.removeAttribute("user");
+
         return "redirect:/";
     }
 
