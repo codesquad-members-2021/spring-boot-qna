@@ -70,12 +70,10 @@ public class User {
     }
 
     public boolean matchId(Long id) {
-        if (id == null) return false;
         return this.id.equals(id);
     }
 
     public boolean matchPassword(User user) {
-        if (user.password == null) return false;
         return password.equals(user.password);
     }
 }

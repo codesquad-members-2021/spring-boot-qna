@@ -37,15 +37,15 @@ public class UserController {
             return "redirect:/users/loginForm";
         }
 
-        logger.debug("User : {} Login Success!", user);
-        session.setAttribute("sessionUser", user);
+        logger.debug("User : {} Login Success!", user.getUserId());
+        session.setAttribute("sessionedUser", user);
 
         return "redirect:/";
     }
 
     @GetMapping("/logout")
     public String logout(HttpSession session) {
-        session.removeAttribute("sessionUser");
+        session.removeAttribute("sessionedUser");
 
         return "redirect:/";
     }
@@ -73,28 +73,31 @@ public class UserController {
 
     @GetMapping("/{id}/form")
     public String form(@PathVariable Long id, Model model, HttpSession session) {
-        if (HttpSessionUtils.isLoginUser(session)) {
+        if (!HttpSessionUtils.isLoginUser(session)) {
             return "redirect:/users/loginForm";
         }
 
-        User sessionUser = HttpSessionUtils.getUserFromSession(session);
-        if (sessionUser.matchId(id)) {
+        User sessionedUser = HttpSessionUtils.getUserFromSession(session);
+
+        logger.debug("User : {} found", sessionedUser.getUserId());
+        if (!sessionedUser.matchId(id)) {
             throw new IllegalStateException("You can't modify other user's info!!");
         }
 
         User user = userService.findUserById(id);
+        logger.debug("User : {} found", sessionedUser.getUserId());
         model.addAttribute(user);
         return "/user/updateForm";
     }
 
     @PutMapping("/{id}")
     public String update(@PathVariable Long id, User updatedUser, HttpSession session) {
-        if (HttpSessionUtils.isLoginUser(session)) {
+        if (!HttpSessionUtils.isLoginUser(session)) {
             return "redirect:/users/loginForm";
         }
 
-        User sessionUser = HttpSessionUtils.getUserFromSession(session);
-        if (!sessionUser.matchId(id)) {
+        User sessionedUser = HttpSessionUtils.getUserFromSession(session);
+        if (!sessionedUser.matchId(id)) {
             throw new IllegalStateException("You can't modify other user's info!!");
         }
 
