@@ -32,10 +32,20 @@ public class GlobalExceptionHandler {
         return "/user/login";
     }
 
-    @ExceptionHandler(UserNotFoundException.class)
-    private String handleUserNotFoundException(Model model, UserNotFoundException e) {
+    @ExceptionHandler(UserNotLoginException.class)
+    private String handleUserNotLoginException(Model model, UserNotFoundException e) {
         model.addAttribute("errorMessage", e.getMessage());
         return "/user/login";
+    }
+
+    @ExceptionHandler(UserNotFoundException.class)
+    private String handleUserNotFoundException() {
+        return "redirect:/";
+    }
+
+    @ExceptionHandler(WriterOfAnswerListNotMatchException.class)
+    private String handleWriterOfAnswerListNotMatchException(WriterOfAnswerListNotMatchException e) {
+        return "redirect:/question/" + e.getQuestionId();
     }
 
     @ExceptionHandler(QuestionNotFoundException.class)
@@ -43,9 +53,9 @@ public class GlobalExceptionHandler {
         return "redirect:/";
     }
 
-    @ExceptionHandler(WriterOfAnswerListNotMatchException.class)
-    private String handleWriterOfAnswerListNotMatchException(WriterOfAnswerListNotMatchException e) {
-        return "redirect:/question/" + e.getQuestionId();
+    @ExceptionHandler(AnswerNotFoundException.class)
+    private String handleAnswerNotFoundException() {
+        return "redirect:/";
     }
 
 }
