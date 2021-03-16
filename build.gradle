@@ -1,3 +1,4 @@
+
 plugins {
 	id 'org.springframework.boot' version '2.4.3'
 	id 'io.spring.dependency-management' version '1.0.11.RELEASE'
@@ -17,6 +18,14 @@ dependencies {
 	developmentOnly 'org.springframework.boot:spring-boot-devtools'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	compile 'pl.allegro.tech.boot:handlebars-spring-boot-starter:0.3.2'
+	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+	runtime 'com.h2database:h2'
+	runtimeOnly 'com.h2database:h2'
+	compile('org.springframework.boot:spring-boot-starter-data-jpa')
+	runtime('mysql:mysql-connector-java')
+	testCompile('org.springframework.boot:spring-boot-starter-test')
+
+//디비 접속주소   : 	localhost:8080/h2-console
 }
 
 test {
