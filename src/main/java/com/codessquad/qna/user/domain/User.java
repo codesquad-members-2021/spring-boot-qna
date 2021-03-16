@@ -56,4 +56,8 @@ public class User extends BaseTimeEntity {
         this.name = newUser.name;
         this.email = newUser.email;
     }
+
+    public boolean isCorrectPassword(String password) {
+        return this.password.equals(password);
+    }
 }

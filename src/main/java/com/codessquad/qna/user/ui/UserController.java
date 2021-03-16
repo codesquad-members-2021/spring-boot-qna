@@ -11,6 +11,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import javax.persistence.EntityNotFoundException;
+import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import java.net.URI;
 
@@ -37,6 +38,14 @@ public class UserController {
         userService.saveUser(UserRequest.of(user));
         return "redirect:/users";
     }
+
+    @PostMapping("login")
+    public String login(String userId, String password, HttpSession session) {
+        User user = userService.login(userId, password);
+        session.setAttribute("user", user);
+        return "redirect:/";
+    }
+
 
     @GetMapping
     public String getUsers(Model model) {
