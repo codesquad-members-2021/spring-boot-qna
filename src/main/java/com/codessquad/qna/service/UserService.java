@@ -28,4 +28,8 @@ public class UserService {
     public User findUserById(long id) {
         return userRepository.findById(id).orElseThrow(IllegalArgumentException::new);
     }
+
+    public User findUserByUserId(String userId){
+        return userRepository.findUserByUserId(userId).orElseThrow(IllegalAccessError::new);
+    }
 }

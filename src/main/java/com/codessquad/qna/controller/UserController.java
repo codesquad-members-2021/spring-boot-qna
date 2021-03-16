@@ -27,6 +27,16 @@ public class UserController {
         return "redirect:/users";
     }
 
+    @PostMapping("/login")
+    public String login(String userId, String password) {
+        User user = userService.findUserByUserId(userId);
+        if (user.isMatchingPassword(password)) {
+            return "redirect:/";
+        }
+
+        return "redirect:/users/loginForm";
+    }
+
     @GetMapping
     public String list(Model model) {
         model.addAttribute("users", userService.findUsers());
