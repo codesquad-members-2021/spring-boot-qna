@@ -68,7 +68,7 @@ public class UserController {
             return "redirect:/users/login-form";
         }
         User sessionedUser = SessionUtils.getLoginUser(session).orElseThrow(() -> new NotFoundException("No login user"));
-        if (sessionedUser.isMatchingId(id)){
+        if (!sessionedUser.isMatchingId(id)){
             throw new IllegalStateException("자신의 정보만 수정할 수 있습니다");
         }
         model.addAttribute("user", user);
