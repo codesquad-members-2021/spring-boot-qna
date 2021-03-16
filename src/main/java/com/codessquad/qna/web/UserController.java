@@ -40,14 +40,14 @@ public class UserController {
         }
 
         LOGGER.info("Login Success!");
-        session.setAttribute(HttepSessionUtils.USER_SESSION_KEY, user);
+        session.setAttribute(HttpSessionUtils.USER_SESSION_KEY, user);
 
         return "redirect:/";
     }
 
     @GetMapping("/logout")
     public String logout(HttpSession session) {
-        session.removeAttribute(HttepSessionUtils.USER_SESSION_KEY);
+        session.removeAttribute(HttpSessionUtils.USER_SESSION_KEY);
         return "redirect:/";
     }
 
@@ -82,11 +82,11 @@ public class UserController {
 
     @GetMapping("/{id}/form")
     public String getForm(@PathVariable Long id, Model model, HttpSession session) {
-        if (!HttepSessionUtils.isLoginUser(session)) {
+        if (!HttpSessionUtils.isLoginUser(session)) {
             return "redirect:/users/login";
         }
 
-        User sessionedUser = HttepSessionUtils.getUserFromSession(session);
+        User sessionedUser = HttpSessionUtils.getUserFromSession(session);
         if (!sessionedUser.isRightId(id)) {
             throw new IllegalStateException("자신의 정보만 수정 가능합니다");
         }
@@ -97,11 +97,11 @@ public class UserController {
 
     @PutMapping("/{id}")
     public String updateForm(@PathVariable Long id, User updatedUser, HttpSession session) {
-        if (!HttepSessionUtils.isLoginUser(session)) {
+        if (!HttpSessionUtils.isLoginUser(session)) {
             return "redirect:/users/login";
         }
 
-        User sessionedUser = HttepSessionUtils.getUserFromSession(session);
+        User sessionedUser = HttpSessionUtils.getUserFromSession(session);
         if (!sessionedUser.isRightId(id)) {
             throw new IllegalStateException("자신의 정보만 수정 가능합니다");
         }

@@ -14,11 +14,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.servlet.http.HttpSession;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
 
 @Controller
 @RequestMapping("/questions")
@@ -31,7 +26,7 @@ public class QuestionController {
 
     @GetMapping("/form")
     public String qnaForm(HttpSession session) {
-        if (!HttepSessionUtils.isLoginUser(session)) {
+        if (!HttpSessionUtils.isLoginUser(session)) {
             return "/users/login";
         }
         return "/qna/form";
@@ -39,11 +34,11 @@ public class QuestionController {
 
     @PostMapping("")
     public String createQuestion(String title, String contents, HttpSession session) {
-        if (!HttepSessionUtils.isLoginUser(session)) {
+        if (!HttpSessionUtils.isLoginUser(session)) {
             return "/users/login";
         }
 
-        User sessionedUser = HttepSessionUtils.getUserFromSession(session);
+        User sessionedUser = HttpSessionUtils.getUserFromSession(session);
         Question newQuestion = new Question(sessionedUser.getUserId(), title, contents);
         questionRepository.save(newQuestion);
 

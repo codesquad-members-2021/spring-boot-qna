@@ -4,7 +4,7 @@ import com.codessquad.qna.domain.User;
 
 import javax.servlet.http.HttpSession;
 
-public class HttepSessionUtils {
+public class HttpSessionUtils {
     public static final String USER_SESSION_KEY = "sessionedUser";
 
     public static boolean isLoginUser(HttpSession session) {
