@@ -2,6 +2,7 @@ package com.codessquad.qna.controller;
 
 import com.codessquad.qna.domain.User;
 import com.codessquad.qna.service.UserService;
+import com.codessquad.qna.util.HttpSessionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +11,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
+
+import static com.codessquad.qna.util.HttpSessionUtils.USER_SESSION_KEY;
 
 @Controller
 @RequestMapping("/users")
@@ -58,13 +61,9 @@ public class UserController {
     public String passUserId(@PathVariable long id, Model model, HttpSession session) {
         User user = userService.getOneById(id).orElse(null);
 
-        Object tempUser = session.getAttribute("sessionedUser");
-        if (tempUser == null){
-            return "redirect:/";
-        }
+        User sessionedUser = HttpSessionUtils.getUserFromSession(session);
 
-        User sessionedUser = (User) tempUser;
-        if (!sessionedUser.getUserId().equals(user.getUserId())){
+        if (!sessionedUser.isEqualUserId(user.getUserId())){
             throw new IllegalStateException("본인의 정보만 수정할 수 있습니다.");
         }
 
@@ -78,12 +77,7 @@ public class UserController {
     public String updateUser(@PathVariable long id, User referenceUser, HttpSession session) {
         User presentUser = userService.getOneById(id).orElse(null);
 
-        Object tempUser = session.getAttribute("sessionedUser");
-        if (tempUser == null){
-            return "redirect:/";
-        }
-
-        User sessionedUser = (User) tempUser;
+        User sessionedUser = HttpSessionUtils.getUserFromSession(session);
 
         if (presentUser == null) {
             logger.info("present empty");
@@ -118,14 +112,14 @@ public class UserController {
         }
 
         // 세션 처리
-        session.setAttribute("sessionedUser", loginUser);
+        session.setAttribute(USER_SESSION_KEY, loginUser);
 
         return "redirect:/";
     }
 
     @GetMapping("/logout")
     public String logout(HttpSession session){
-        session.removeAttribute("sessionedUser");
+        session.removeAttribute(USER_SESSION_KEY);
 
         return "redirect:/";
     }
