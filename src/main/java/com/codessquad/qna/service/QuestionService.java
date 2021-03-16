@@ -32,4 +32,12 @@ public class QuestionService {
     public Optional<Question> getOneById(Long id){
         return questionRepository.findById(id);
     }
+
+    public void updateInfo(Question presentQuestion, Question referenceQuestion) {
+        // TODO: setter 안쓰고 id 바꾸는 방법?
+        referenceQuestion.setId(presentQuestion.getId());
+
+        questionRepository.delete(presentQuestion);
+        questionRepository.save(referenceQuestion);
+    }
 }
