@@ -35,7 +35,7 @@ public class UserService {
     public void update(Long id, User user, String oldPassword, User sessionUser) {
         User loginUser = verifyUser(id, sessionUser);
         if (!loginUser.matchPassword(oldPassword)) {
-            throw new CurrentPasswordNotMatchException();
+            throw new CurrentPasswordNotMatchException(user);
         }
         loginUser.update(user);
         this.userRepository.save(loginUser);
