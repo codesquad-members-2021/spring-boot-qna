@@ -1,11 +1,21 @@
 package com.codessquad.qna.users;
 
-import java.util.Objects;
+import javax.persistence.*;
 
+@Entity
+@Table(name = "USER")
 public class User {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @Column(nullable = false, length = 20)
     private String userId;
+    @Column(nullable = false, length = 20)
     private String password;
+    @Column(nullable = false, length = 20)
     private String name;
+    @Column(nullable = false, length = 50)
     private String email;
 
     public String getUserId() {
@@ -45,29 +55,5 @@ public class User {
         this.password = user.password;
         this.name = user.name;
         this.email = user.email;
-    }
-
-    @Override
-    public String toString() {
-        return "User{" +
-                "userId='" + userId + '\'' +
-                ", password='" + password + '\'' +
-                ", name='" + name + '\'' +
-                ", email='" + email + '\'' +
-                '}';
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof User)) return false;
-        User user = (User) o;
-        return Objects.equals(getUserId(), user.getUserId())
-                && Objects.equals(getPassword(), user.getPassword());
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(getUserId(), getPassword());
     }
 }
