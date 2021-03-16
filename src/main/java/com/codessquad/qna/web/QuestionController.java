@@ -7,6 +7,7 @@ import com.codessquad.qna.domain.question.QuestionRepository;
 import com.codessquad.qna.domain.user.User;
 import com.codessquad.qna.exception.IllegalUserAccessException;
 import com.codessquad.qna.exception.QuestionNotFoundException;
+import com.codessquad.qna.exception.UserNotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
@@ -60,7 +61,7 @@ public class QuestionController {
     @GetMapping("/{questionId}")
     public String getQuestionDetail(@PathVariable(("questionId")) Long id, Model model, HttpSession session) {
         if (!isLoginUser(session)) {
-            return "/users/loginForm";
+            throw new UserNotFoundException();
         }
 
         Question question = questionRepository.findById(id)

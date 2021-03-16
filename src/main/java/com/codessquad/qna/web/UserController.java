@@ -48,8 +48,7 @@ public class UserController {
         User user = getUserFromSession(session);
 
         if (!user.matchId(id)) {
-            logger.error("user : 다른 사용자의 정보를 열람할 수 없습니다.");
-            return "redirect:/";
+            throw new IllegalUserAccessException();
         }
 
         logger.debug("user : {}", user);
