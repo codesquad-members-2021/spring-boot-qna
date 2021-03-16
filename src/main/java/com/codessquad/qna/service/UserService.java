@@ -27,8 +27,10 @@ public class UserService {
     }
 
     private void checkRedundancy(User user) {
-        userRepository.findByUserId(user.getUserId())
-                .orElseThrow(IllegalArgumentException::new);
+        User redundantUser = userRepository.findByUserId(user.getUserId()).orElse(null);
+        if (redundantUser != null) {
+            throw new IllegalStateException();
+        }
     }
 
     public List<User> getAllUsers() {
