@@ -45,4 +45,9 @@ public class Question extends BaseTimeEntity {
     public String getContents() {
         return contents;
     }
+
+    public void update(Question question) {
+        this.title = question.title;
+        this.contents = question.contents;
+    }
 }

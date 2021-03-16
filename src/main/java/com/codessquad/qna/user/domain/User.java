@@ -51,10 +51,10 @@ public class User extends BaseTimeEntity {
         return email;
     }
 
-    public void update(User newUser) {
-        this.password = newUser.password;
-        this.name = newUser.name;
-        this.email = newUser.email;
+    public void update(User user) {
+        this.password = user.password;
+        this.name = user.name;
+        this.email = user.email;
     }
 
     public boolean matchId(Long id) {

@@ -16,6 +16,7 @@ public class HttpSessionUtils {
         getUserAttribute(session);
     }
 
+    // FIXME: 권한 인증과 관련된 부분은 AOP 로 분리해야한다.
     public static void checkAuthorization(Long id, HttpSession session) {
         boolean authorized = getUserAttribute(session)
                 .matchId(id);
