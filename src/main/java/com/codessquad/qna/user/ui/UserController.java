@@ -46,6 +46,13 @@ public class UserController {
         return "redirect:/";
     }
 
+    // FIXME: 로그아웃은 POST 로 구현해야한다.
+    @GetMapping("logout")
+    public String logout(HttpSession session) {
+        session.removeAttribute("user");
+        return "redirect:/";
+    }
+
 
     @GetMapping
     public String getUsers(Model model) {
@@ -54,13 +61,13 @@ public class UserController {
     }
 
     @GetMapping("{id}")
-    public String user_profile(@PathVariable Long id, Model model) {
+    public String getProfile(@PathVariable Long id, Model model) {
         model.addAttribute("user", userService.getUser(id));
         return "user/profile";
     }
 
     @GetMapping("{id}/form")
-    public String user_form(@PathVariable Long id, Model model) {
+    public String getForm(@PathVariable Long id, Model model) {
         model.addAttribute("user", userService.getUser(id));
         return "user/updateForm";
     }
