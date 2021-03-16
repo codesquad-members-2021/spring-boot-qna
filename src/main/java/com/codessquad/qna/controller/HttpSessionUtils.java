@@ -1,6 +1,6 @@
 package com.codessquad.qna.controller;
 
-import com.codessquad.qna.exception.UserNotFoundException;
+import com.codessquad.qna.exception.UserNotLoginException;
 import com.codessquad.qna.model.User;
 
 import javax.servlet.http.HttpSession;
@@ -15,7 +15,7 @@ public class HttpSessionUtils {
 
     public static User getUserFromSession(HttpSession session) {
         if (!isLoginUser(session)) {
-            throw new UserNotFoundException();
+            throw new UserNotLoginException();
         }
         return (User) session.getAttribute(USER_SESSION_KEY);
     }
