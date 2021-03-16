@@ -15,6 +15,7 @@ import java.util.List;
 public class UserController {
 
     private Logger logger = LoggerFactory.getLogger(UserController.class);
+
     final private List<User> userList = new ArrayList<>();
 
     @GetMapping("users/form.html")
