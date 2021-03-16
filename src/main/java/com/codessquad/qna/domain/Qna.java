@@ -58,8 +58,8 @@ public class Qna {
         this.createdDateTime = createdDateTime;
     }
 
-    public LocalDateTime getFormattedDateTime() {
-        return LocalDateTime.parse(createdDateTime.format(DateTimeFormatter.ISO_LOCAL_DATE_TIME));
+    public String getFormattedDateTime() {
+        return createdDateTime.format(DateTimeFormatter.ISO_LOCAL_DATE_TIME);
     }
 
     @Override
