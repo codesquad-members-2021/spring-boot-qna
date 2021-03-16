@@ -1,6 +1,5 @@
 package com.codessquad.qna.web;
 
-import com.codessquad.qna.domain.Qna;
 import com.codessquad.qna.domain.User;
 import com.codessquad.qna.domain.UserRepository;
 import com.codessquad.qna.exception.NoUserException;
@@ -16,25 +15,24 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @Controller
 @RequestMapping("/users")
 public class UserController {
+    private final Logger logger = LoggerFactory.getLogger(QuestionController.class);
     private final UserRepository userRepository;
 
     public UserController(UserRepository userRepository) {
         this.userRepository = userRepository;
     }
 
-    private final Logger logger = LoggerFactory.getLogger(QuestionController.class);
-
     @PostMapping
     public String create(User user) {
-        if (checkNull(user)) {
+        if (checkEmpty(user)) {
             return "user/form";
-        } else {
-            userRepository.save(user);
-            return "redirect:/users";
         }
+        userRepository.save(user);
+        return "redirect:/users";
+
     }
 
-    private boolean checkNull(User user){
+    private boolean checkEmpty(User user) {
         return user.getUserId().equals("")
                 || user.getPassword().equals("")
                 || user.getEmail().equals("")
@@ -65,7 +63,8 @@ public class UserController {
         if (user.checkPassword(updateUser.getPassword())) {
             user.update(updateUser, newPassword);
             userRepository.save(user);
-        } else {
+        }
+        if (!user.checkPassword(updateUser.getPassword())) {
             logger.info("Error: 올바르지 않은 패스워드입니다.정보가 유지됩니다.");
         }
         return "redirect:/users";
