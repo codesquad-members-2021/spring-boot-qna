@@ -40,6 +40,12 @@ public class UserController {
         return "redirect:/users/loginForm";
     }
 
+    @GetMapping("/logout")
+    public String logout(HttpSession session){
+        session.removeAttribute("user");
+        return "redirect:/";
+    }
+
     @GetMapping
     public String list(Model model) {
         model.addAttribute("users", userService.findUsers());
