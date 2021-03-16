@@ -15,7 +15,7 @@ import javax.servlet.http.HttpSession;
 public class UsersController {
     private final UserRepository userRepository;
 
-    private final Logger logger = LoggerFactory.getLogger(UsersController.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(UsersController.class);
 
     public UsersController(UserRepository userRepository) {
         this.userRepository = userRepository;
@@ -24,7 +24,7 @@ public class UsersController {
     @PostMapping
     public String createUser(User createdUser) {
         userRepository.save(createdUser);
-        logger.info("user created : " + createdUser.getUserId());
+        LOGGER.info("user created : " + createdUser.getUserId());
         return "redirect:/users";
     }
 
@@ -68,14 +68,14 @@ public class UsersController {
             return "redirect:/users/login-form";
         }
         SessionUtil.setLoginUser(session, foundUser);
-        logger.info("user login : " + foundUser.getUserId());
+        LOGGER.info("user login : " + foundUser.getUserId());
         return "redirect:/";
     }
 
     @PostMapping("/logout")
     public String processLogout(HttpSession session) {
         User sessionUser = SessionUtil.getLoginUser(session);
-        logger.info("user logout : " + sessionUser.getUserId());
+        LOGGER.info("user logout : " + sessionUser.getUserId());
         SessionUtil.removeLoginUser(session);
         return "redirect:/";
     }

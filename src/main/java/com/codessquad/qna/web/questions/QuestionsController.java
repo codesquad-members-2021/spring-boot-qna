@@ -17,7 +17,7 @@ import javax.servlet.http.HttpSession;
 @Controller
 @RequestMapping("/questions")
 public class QuestionsController {
-    private final Logger logger = LoggerFactory.getLogger(QuestionsController.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(QuestionsController.class);
 
     private final QuestionRepository questionRepository;
     private final AnswersRepository answersRepository;
@@ -33,7 +33,7 @@ public class QuestionsController {
         User sessionUser = SessionUtil.getLoginUser(session);
         newQuestion.setWriter(sessionUser);
         questionRepository.save(newQuestion);
-        logger.info("question created " + newQuestion);
+        LOGGER.info("question created " + newQuestion);
         return "redirect:/";
     }
 
@@ -89,7 +89,7 @@ public class QuestionsController {
         }
         currentQuestion.update(newTitle, newContents);
         questionRepository.save(currentQuestion);
-        logger.info("question modified " + currentQuestion);
+        LOGGER.info("question modified " + currentQuestion);
         return "redirect:/questions/" + currentQuestion.getId();
     }
 
@@ -102,7 +102,7 @@ public class QuestionsController {
             return "redirect:/";
         }
         questionRepository.delete(currentQuestion);
-        logger.info("question deleted " + currentQuestion);
+        LOGGER.info("question deleted " + currentQuestion);
         return "redirect:/";
     }
 
