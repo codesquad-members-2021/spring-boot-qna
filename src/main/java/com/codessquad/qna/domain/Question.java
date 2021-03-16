@@ -86,9 +86,11 @@ public class Question {
         this.contents = question.getContents();
     }
 
-    public void checkSameUserFromAnswer() {
+    public void checkSameUserFromOpenAnswer() {
         for (Answer answer : answerList) {
-            answer.getWriter().checkSameUser(writer.getId());
+            if (answer.getStatus() == DisplayStatus.OPEN) {
+                answer.getWriter().checkSameUser(writer.getId());
+            }
         }
     }
 

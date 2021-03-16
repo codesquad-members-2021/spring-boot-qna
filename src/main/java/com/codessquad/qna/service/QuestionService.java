@@ -46,7 +46,7 @@ public class QuestionService {
     @Transactional
     public void delete(Long id) {
         Question question = findById(id);
-        question.checkSameUserFromAnswer();
+        question.checkSameUserFromOpenAnswer();
         question.changeStatus(DisplayStatus.CLOSE);
     }
 
