@@ -13,11 +13,7 @@ import java.util.List;
 @Controller
 public class QuestionController {
 
-    private static List<Question> questions = new ArrayList<>();
-
-    public static List<Question> getQuestions() {
-        return questions;
-    }
+    private List<Question> questions = new ArrayList<>();
 
     @GetMapping("/questions/new")
     public String newQuestion() {
