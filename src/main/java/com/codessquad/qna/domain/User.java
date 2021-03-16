@@ -62,6 +62,9 @@ public class User {
     public boolean isEqualPassword(String expected) {
         return this.password.equals(expected);
     }
+    public boolean isEqualUserId(String expected) {
+        return this.userId.equals(expected);
+    }
 
     public boolean isEmpty() {
         if ("".equals(this.userId) || this.userId == null) {
