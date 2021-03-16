@@ -2,6 +2,8 @@ package com.codessquad.qna.web;
 
 import com.codessquad.qna.domain.user.User;
 import com.codessquad.qna.domain.user.UserRepository;
+import com.codessquad.qna.exception.IllegalUserAccessException;
+import com.codessquad.qna.exception.UserNotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
@@ -11,13 +13,12 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpSession;
 import java.util.Optional;
 
+import static com.codessquad.qna.domain.user.HttpSessionUtils.getUserFromSession;
 
 @Controller
 @RequestMapping("/users")
 public class UserController {
-
     private static Logger logger = LoggerFactory.getLogger(UserController.class);
-
     private final UserRepository userRepository;
 
     public UserController(UserRepository userRepository) {
@@ -44,14 +45,7 @@ public class UserController {
 
     @GetMapping("/{id}")
     public String getUserProfile(@PathVariable Long id, HttpSession session) {
-        Object userAsObject = session.getAttribute("sessionedUser");
-
-        if (userAsObject == null) {
-            logger.error("user : 해당 회원이 존재하지 않습니다.");
-            return "redirect:/users/form";
-        }
-
-        User user = (User) userAsObject;
+        User user = getUserFromSession(session);
 
         if (!user.matchId(id)) {
             logger.error("user : 다른 사용자의 정보를 열람할 수 없습니다.");
@@ -65,17 +59,14 @@ public class UserController {
 
     @GetMapping("/{id}/form")
     public String getUpdateForm(@PathVariable Long id, Model model, HttpSession session) {
-        User loginedUser = (User) session.getAttribute("sessionedUser");
-
-        if(loginedUser == null) {
-            throw new IllegalStateException("로그인되지 않았습니다.");
-        }
+        User loginedUser = getUserFromSession(session);
 
         if (!loginedUser.matchId(id)) {
-            throw new IllegalStateException("자신의 정보만 수정할 수 있습니다.");
+            throw new IllegalUserAccessException();
         }
 
-        Optional<User> user = userRepository.findById(id);
+        Optional<User> user = Optional.ofNullable(userRepository.findById(id))
+                .orElseThrow(UserNotFoundException::new);
         model.addAttribute("user", user.get());
         logger.debug("user : {}", user.get());
 
@@ -85,25 +76,20 @@ public class UserController {
     @PutMapping("/{id}")
     public String update(@PathVariable Long id, String prevPassword,
                          User updateUser, HttpSession session) {
-        User loginedUser = (User) session.getAttribute("sessionedUser");
+        User loginedUser = getUserFromSession(session);
 
-        if(loginedUser == null) {
-            throw new IllegalStateException("로그인되지 않았습니다.");
+        if (!loginedUser.matchId(id)) {
+            throw new IllegalUserAccessException();
         }
 
-        if(!loginedUser.matchId(id)) {
-            throw new IllegalStateException("자신의 정보만 수정할 수 있습니다.");
-        }
-
-        User user = userRepository.findById(id).get();
+        User user = userRepository.findById(id)
+                .orElseThrow(UserNotFoundException::new);
 
         if (!user.matchPassword(prevPassword)) {
             return "redirect:/users/";
         }
 
-        user.update(updateUser);
-        userRepository.save(user);
-
+        userRepository.save(user.update(updateUser));
         logger.debug("user : {}", updateUser);
 
         return "redirect:/users/";
@@ -116,12 +102,8 @@ public class UserController {
 
     @PostMapping("/login")
     public String login(String userId, String password, HttpSession session) {
-        User user = userRepository.findByUserId(userId);
-
-        if (user == null) {
-            logger.error("등록된 회원이 존재하지 않습니다.");
-            return "user/login_failed";
-        }
+        User user = userRepository.findByUserId(userId)
+                .orElseThrow(UserNotFoundException::new);
 
         if (!user.matchPassword(password)) {
             logger.error("로그인에 실패하셨습니다.");

@@ -59,10 +59,12 @@ public class User {
         return this.password.equals(password);
     }
 
-    public void update(User updateUser) {
+    public User update(User updateUser) {
         this.password = updateUser.password;
         this.name = updateUser.name;
         this.email = updateUser.email;
+
+        return this;
     }
 
     @Override
