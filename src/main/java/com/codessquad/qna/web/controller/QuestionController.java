@@ -2,6 +2,8 @@ package com.codessquad.qna.web.controller;
 
 import com.codessquad.qna.web.domain.question.QuestionRepository;
 import com.codessquad.qna.web.domain.question.Question;
+import com.codessquad.qna.web.domain.user.User;
+import com.codessquad.qna.web.dto.question.QuestionRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -19,9 +21,14 @@ public class QuestionController {
         this.questionRepository = questionRepository;
     }
 
-    // TODO : 현재 로그인한 유저의 name이 question의 writer 값으로
     @PostMapping("/questions")
-    public String create(Question question) {
+    public String create(QuestionRequest request, HttpSession session) {
+        Object value = session.getAttribute("sessionedUser");
+        if (value == null) {
+            return "/users/login-form";
+        }
+        User user = (User) value;
+        Question question = new Question(user.getName(), request.getTitle(), request.getContents());
         questionRepository.save(question);
         return "redirect:/";
     }
