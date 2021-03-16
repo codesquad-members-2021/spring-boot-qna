@@ -23,7 +23,7 @@ public class UserController {
     }
 
     @GetMapping("/form")
-    public String getForm() {
+    public String viewLoginForm() {
         return "user/form";
     }
 
@@ -33,14 +33,14 @@ public class UserController {
         return "redirect:/users";
     }
 
-    @GetMapping("")
-    public String getUserList(Model model) {
+    @GetMapping
+    public String viewUserList(Model model) {
         model.addAttribute("users", userService.findAll());
         return "user/list";
     }
 
     @GetMapping("/{id}")
-    public String getUserById(@PathVariable Long id, Model model) {
+    public String viewUserProfileById(@PathVariable Long id, Model model) {
         User user = userService.findUserById(id);
         model.addAttribute("user", user);
         return "user/profile";
@@ -56,7 +56,7 @@ public class UserController {
     @PutMapping("/{id}")
     public String updateUser(@PathVariable Long id, User newInfoUser) {
         User user = userService.findUserById(id);
-        if(userService.isCorrectPassword(user, newInfoUser.getPassword())) {
+        if (userService.isCorrectPassword(user, newInfoUser.getPassword())) {
             user.update(newInfoUser);
             userService.save(user);
             return "redirect:/users";

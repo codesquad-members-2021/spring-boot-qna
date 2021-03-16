@@ -20,14 +20,14 @@ public class QuestionController {
     @Autowired
     private QuestionRepository questionRepository;
 
-    @PostMapping("")
-    public String postQuestionForm(Question question) {
+    @PostMapping
+    public String saveQuestionForm(Question question) {
         questionRepository.save(question);
         return "redirect:/";
     }
 
-    @GetMapping("")
-    public String getIndex(Model model) {
+    @GetMapping
+    public String viewAllQuestions(Model model) {
         model.addAttribute("questions", questionRepository.findAll());
         return "index";
     }
