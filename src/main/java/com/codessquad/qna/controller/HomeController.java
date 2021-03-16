@@ -21,10 +21,6 @@ public class HomeController {
     @GetMapping
     public String showQuestions(Model model, HttpSession session) {
 
-        if(!HttpSessionUtils.isLoginUser(session)){
-            return "user/login";
-        }
-
         model.addAttribute("questions", questionService.getAllQuestions());
 
         return "index";
