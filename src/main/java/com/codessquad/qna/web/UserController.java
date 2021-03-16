@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import javax.servlet.http.HttpSession;
+
 @Controller
 @RequestMapping("/users")
 public class UserController {
@@ -60,14 +62,33 @@ public class UserController {
     @PostMapping("/{id}/form")
     public String update(@PathVariable long id, User updateUser, String newPassword) {
         User user = userRepository.findById(id).orElseThrow(NoUserException::new);
-        if (user.checkPassword(updateUser.getPassword())) {
-            user.update(updateUser, newPassword);
-            userRepository.save(user);
-        }
         if (!user.checkPassword(updateUser.getPassword())) {
             logger.info("Error: 올바르지 않은 패스워드입니다.정보가 유지됩니다.");
         }
+        if (user.checkPassword(updateUser.getPassword())) {
+            user.update(updateUser, newPassword);
+
+        }
+        userRepository.save(user);
         return "redirect:/users";
+    }
+
+    @GetMapping("/login")
+    public String loginForm() {
+        return "user/login";
+    }
+
+    @PostMapping("/login")
+    public String login(String userId, String password, HttpSession session) {
+        User user = userRepository.findByUserId(userId);
+        if (user == null) {
+            return "redirect:/users/login";
+        }
+        if (!user.checkPassword(password)) {
+            return "redirect:/users/login";
+        }
+        session.setAttribute("user", user);
+        return "redirect:/";
     }
 
 }
