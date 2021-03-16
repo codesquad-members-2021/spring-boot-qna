@@ -61,7 +61,6 @@ public class UserController {
 
     @GetMapping("/users/{userId}/form")
     public String updateForm(@PathVariable(name="userId") String userId, Model model) {
-        User currentUser;
         for(User user : userList) {
             if(user.getUserId().equals(userId)) {
                 model.addAttribute("user",user);
