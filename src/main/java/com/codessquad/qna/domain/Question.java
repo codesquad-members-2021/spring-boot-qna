@@ -4,6 +4,7 @@ import javax.persistence.*;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 
 @Entity
 public class Question {
@@ -16,6 +17,8 @@ public class Question {
     @JoinColumn(foreignKey = @ForeignKey(name = "fk_question_writer"))
     private User writer;
 
+    @OneToMany(mappedBy = "question", fetch = FetchType.LAZY ) // JPA 에노테이션: Q-A관계 맵핑, question은 Answer 클래스가 ManyToOne으로 맺은 칼럼의 이름
+    private List<Answer> answers;
 
     @Column(nullable = false, length = 20)
     private String title;
@@ -43,6 +46,10 @@ public class Question {
         return time.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
     }
 
+    public List<Answer> getAnswers() {
+        return answers;
+    }
+
     public void setWriter(User writer) {
         this.writer = writer;
     }
@@ -56,5 +63,9 @@ public class Question {
     }
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public void setAnswers(List<Answer> answers) {
+        this.answers = answers;
     }
 }
