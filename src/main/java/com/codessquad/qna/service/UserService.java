@@ -1,9 +1,6 @@
 package com.codessquad.qna.service;
 
-import com.codessquad.qna.exception.DuplicateUserIdFoundException;
-import com.codessquad.qna.exception.IdOrPasswordNotMatchException;
-import com.codessquad.qna.exception.IllegalUserAccessException;
-import com.codessquad.qna.exception.UserNotFoundException;
+import com.codessquad.qna.exception.*;
 import com.codessquad.qna.model.User;
 import com.codessquad.qna.repository.UserRepository;
 import org.springframework.stereotype.Service;
@@ -38,7 +35,7 @@ public class UserService {
     public void update(Long id, User user, String oldPassword, User sessionUser) {
         User loginUser = verifyUser(id, sessionUser);
         if (!loginUser.matchPassword(oldPassword)) {
-            throw new IdOrPasswordNotMatchException();
+            throw new CurrentPasswordNotMatchException();
         }
         loginUser.update(user);
         this.userRepository.save(loginUser);
