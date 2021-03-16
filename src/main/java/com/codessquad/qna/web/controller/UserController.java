@@ -80,6 +80,7 @@ public class UserController {
             throw new IllegalStateException("자신의 정보만 수정할 수 있습니다");
         }
 
+        //여기 findUser 부분 sessionedUseer로 바꿀 것
         try {
             model.addAttribute("user", userService.findUser(id));
         } catch (IllegalStateException e) {
@@ -88,6 +89,7 @@ public class UserController {
         return "/user/updateForm";
     }
 
+    //testassword 자체를 넘겨줄 수도 있고, 이 위에서 먼저 확인한다음에 updateUser 할 수도 있겠다 == questionController
     @PutMapping("/{id}")
     public String updateUser(@PathVariable long id, String testPassword, User user, HttpSession session) {
         if (!HttpSessionUtils.isLoginUser(session)) {
@@ -98,7 +100,7 @@ public class UserController {
         if(id != sessionedUser.getId()) {
             throw new IllegalStateException("자신의 정보만 수정할 수 있습니다");
         }
-
+        //여기 findUser 부분 sessionedUseer로 바꿀 것
         try {
             userService.updateUser(id, testPassword, user);
         } catch (IllegalStateException e) {

@@ -58,4 +58,9 @@ public class Question {
         }
         return createdDateTime.format(DATE_TIME_FORMATTER);
     }
+
+    public void update(Question question) {
+        this.title = question.title;
+        this.contents = question.contents;
+    }
 }

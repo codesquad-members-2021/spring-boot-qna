@@ -29,4 +29,9 @@ public class QuestionService {
                 .findById(id)
                 .orElseThrow(()-> new IllegalStateException("찾는 question이 없습니다"));
     }
+
+    public void updateQuestion(Question originQuestion, Question question) {
+        originQuestion.update(question);
+        questionRepository.save(originQuestion);
+    }
 }
