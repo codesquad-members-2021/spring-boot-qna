@@ -52,8 +52,6 @@ public class ApiAnswerController {
             return false;
         }
         answerService.delete(id);
-        Question question = questionService.findQuestion(questionId);
-        questionService.update(question);
         return true;
     }
 }
