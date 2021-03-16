@@ -1,6 +1,7 @@
 package com.codessquad.qna.service;
 
 import com.codessquad.qna.dto.PostDto;
+import com.codessquad.qna.entity.Comment;
 import com.codessquad.qna.entity.Post;
 import com.codessquad.qna.entity.User;
 import com.codessquad.qna.exception.NotFoundException;
@@ -32,6 +33,11 @@ public class PostService {
         postRepository.save(Mapper.mapToPost(postDto));
     }
 
+    public void addComment(Post post, Comment comment) {
+       post.addComment(comment);
+       postRepository.save(post);
+    }
+
     public Post getPost(Long id) {
         return postRepository.findById(id).orElseThrow(() -> {
             return new NotFoundException("해당 게시물을 찾을 수 없습니다.");
@@ -39,7 +45,7 @@ public class PostService {
     }
 
     public List<Post> getPosts() {
-        return postRepository.findAll();
+        return postRepository.findByDeletedFalse();
     }
 
     @Transactional
@@ -54,8 +60,8 @@ public class PostService {
         if (!post.isMatchedAuthor(sessionUser)) {
             throw new IllegalAccessException("다른 사람의 글을 삭제할 수 없습니다");
         }
+        post.deactiveAllComments();
         post.delete();
-        commentRepository.deactiveCommentsByPostId(post.getPostId());
         postRepository.save(post);
     }
 
