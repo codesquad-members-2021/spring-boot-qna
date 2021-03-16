@@ -2,6 +2,7 @@ package com.codesquad.qna.controller;
 
 import com.codesquad.qna.domain.User;
 import com.codesquad.qna.service.UserService;
+import com.codesquad.qna.util.HttpSessionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -72,14 +73,13 @@ public class UserController {
 
     @GetMapping("/{id}/form")
     public String form(@PathVariable Long id, Model model, HttpSession session) {
-        Object tempUser = session.getAttribute("sessionUser");
-        if (tempUser == null) {
+        if (HttpSessionUtils.isLoginUser(session)) {
             return "redirect:/users/loginForm";
         }
 
-        User sessionUser = (User)tempUser;
-        if (!id.equals(sessionUser.getId())) {
-            throw new IllegalStateException("Only modify your own info!!");
+        User sessionUser = HttpSessionUtils.getUserFromSession(session);
+        if (sessionUser.matchId(id)) {
+            throw new IllegalStateException("You can't modify other user's info!!");
         }
 
         User user = userService.findUserById(id);
@@ -89,14 +89,13 @@ public class UserController {
 
     @PutMapping("/{id}")
     public String update(@PathVariable Long id, User updatedUser, HttpSession session) {
-        Object tempUser = session.getAttribute("sessionUser");
-        if (tempUser == null) {
+        if (HttpSessionUtils.isLoginUser(session)) {
             return "redirect:/users/loginForm";
         }
 
-        User sessionUser = (User)tempUser;
-        if (!id.equals(sessionUser.getId())) {
-            throw new IllegalStateException("You can't modify another user's info!!");
+        User sessionUser = HttpSessionUtils.getUserFromSession(session);
+        if (!sessionUser.matchId(id)) {
+            throw new IllegalStateException("You can't modify other user's info!!");
         }
 
         User user = userService.findUserById(id);
