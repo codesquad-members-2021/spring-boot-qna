@@ -13,7 +13,6 @@ import javax.servlet.http.HttpSession;
 @Controller
 @RequestMapping("/users")
 public class UsersController {
-
     private final UserRepository userRepository;
 
     private final Logger logger = LoggerFactory.getLogger(UsersController.class);
