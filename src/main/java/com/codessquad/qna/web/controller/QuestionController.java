@@ -11,6 +11,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 
 import javax.servlet.http.HttpSession;
 
@@ -57,8 +58,16 @@ public class QuestionController {
         if (!writer.isMatchingId(user.getId())) {
             throw new IllegalStateException("다른 사용자의 글을 수정할 수 없습니다.");
         }
-        model.addAttribute("id", id);
-        return "redirect:/qna/updateForm";
+        model.addAttribute("question", question);
+        return "qna/updateForm";
+    }
+
+    @PutMapping("/questions/{id}/update")
+    public String update(@PathVariable long id, QuestionRequest post) {
+        Question question = questionRepository.findById(id).orElseThrow(IllegalArgumentException::new);
+        question.update(post.getTitle(), post.getContents());
+        questionRepository.save(question);
+        return "redirect:/questions/" + id;
     }
 
 
