@@ -1,21 +1,30 @@
 package com.codessquad.qna.questions;
 
+import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
+@Entity
+@Table(name = "QUESTION")
 public class Question {
-    private int index;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private long id;
+    @Column(nullable = false, length = 20)
     private String writer;
+    @Column(nullable = false, length = 100)
     private String title;
+    @Column(nullable = false, length = 3000)
     private String contents;
+    @Column(nullable = false)
     private LocalDateTime writeDateTime;
 
-    public int getIndex() {
-        return index;
+    public long getId() {
+        return id;
     }
 
-    public void setIndex(int index) {
-        this.index = index;
+    public void setId(long index) {
+        this.id = index;
     }
 
     public String getWriter() {
@@ -52,16 +61,5 @@ public class Question {
 
     public void setWriteDateTime(LocalDateTime writeDateTime) {
         this.writeDateTime = writeDateTime;
-    }
-
-    @Override
-    public String toString() {
-        return "Question{" +
-                "index=" + index +
-                ", writer='" + writer + '\'' +
-                ", title='" + title + '\'' +
-                ", contents='" + contents + '\'' +
-                ", dateTime='" + writeDateTime + '\'' +
-                '}';
     }
 }
