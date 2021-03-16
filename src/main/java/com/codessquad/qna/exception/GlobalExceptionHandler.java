@@ -33,7 +33,7 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(UserNotLoginException.class)
-    private String handleUserNotLoginException(Model model, UserNotFoundException e) {
+    private String handleUserNotLoginException(Model model, UserNotLoginException e) {
         model.addAttribute("errorMessage", e.getMessage());
         return "/user/login";
     }
