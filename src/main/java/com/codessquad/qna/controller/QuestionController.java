@@ -12,7 +12,6 @@ import javax.servlet.http.HttpSession;
 
 
 import static com.codessquad.qna.controller.HttpSessionUtils.getUserFromSession;
-import static com.codessquad.qna.controller.HttpSessionUtils.isLoginUser;
 
 @Controller
 public class QuestionController {
@@ -33,8 +32,9 @@ public class QuestionController {
 
     @GetMapping("/question/form")
     public String viewCreateQuestion(HttpSession session) {
+        getUserFromSession(session);
         logger.info("질문 작성 페이지 요청");
-        return isLoginUser(session) ? "qna/form" : "redirect:/user/login";
+        return "qna/form";
     }
 
     @PostMapping("/question/form")
