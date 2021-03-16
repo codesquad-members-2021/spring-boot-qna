@@ -14,7 +14,7 @@ import java.util.List;
 @Controller
 public class UserController {
 
-    private Logger logger = LoggerFactory.getLogger(UserController.class);
+    private final Logger logger = LoggerFactory.getLogger(UserController.class);
 
     private final List<User> userList = new ArrayList<>();
 
