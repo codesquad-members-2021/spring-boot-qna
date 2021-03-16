@@ -7,7 +7,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import javax.jws.WebParam;
 import javax.servlet.http.HttpSession;
 import java.util.NoSuchElementException;
 
@@ -49,9 +48,11 @@ public class QuestionController {
             return "redirect:/users/loginForm";
         }
 
-      User sessionedUser = HttpSessionUtils.getUserFromSession(session);
-      if()
-
+        Question question = questionRepository.findById(id).orElseThrow(NoSuchElementException::new);
+        User sessionedUser = HttpSessionUtils.getUserFromSession(session);
+        if (!question.isQuestionWriter(sessionedUser)) {
+            throw new IllegalStateException("자신의 질문만 수정할 수 있습니다.");
+        }
         return "/qna/updateForm";
     }
 
@@ -61,7 +62,12 @@ public class QuestionController {
 //    }
 
     @ExceptionHandler(NoSuchElementException.class)
-    public String handleException() {
-        return "exceptionHandle";
+    public String handleNoSuchElementException() {
+        return "noSuchElementExceptionHandle";
+    }
+
+    @ExceptionHandler(IllegalStateException.class)
+    public String handleIllegalStateException(){
+        return "unableToAccessToOthers";
     }
 }

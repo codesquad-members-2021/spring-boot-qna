@@ -66,6 +66,10 @@ public class User {
         return newPassword.equals(password);
     }
 
+    public boolean isUserIdMatching(String newUserId){
+        return newUserId.equals(userId);
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

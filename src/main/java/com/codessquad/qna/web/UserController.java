@@ -33,7 +33,7 @@ public class UserController {
 
     @GetMapping("/{id}")
     public String show(@PathVariable Long id, Model model, HttpSession session) {
-        if (!HttpSessionUtils.isLoginUser(session)){
+        if (!HttpSessionUtils.isLoginUser(session)) {
             return "redirect:/users/loginForm";
         }
 
@@ -96,8 +96,13 @@ public class UserController {
         return "redirect:/";
     }
 
-    @ExceptionHandler({NoSuchElementException.class, IllegalStateException.class})
-    public String handleException() {
-        return "exceptionHandle";
+    @ExceptionHandler(NoSuchElementException.class)
+    public String handleNoSuchElementException() {
+        return "noSuchElementExceptionHandle";
+    }
+
+    @ExceptionHandler(IllegalStateException.class)
+    public String handleIllegalStateException() {
+        return "unableToAccessToOthers";
     }
 }

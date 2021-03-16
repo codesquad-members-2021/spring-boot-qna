@@ -56,9 +56,8 @@ public class Question {
         postTime = LocalDate.now();
     }
 
-    public boolean isQuestionWriter(User user, UserRepository userRepository){
-        User writeUser = userRepository.findByUserId(writer);
-        return user.equals(writeUser);
+    public boolean isQuestionWriter(User user){
+        return user.isUserIdMatching(writer);
     }
 
     @Override
