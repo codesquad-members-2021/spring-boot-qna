@@ -22,17 +22,7 @@ public class Answer {
 
     @Column(nullable = false, length = 400)
     private String contents;
-
     private LocalDateTime reportingDateTime;
-
-    public boolean isMatchingWriter(User anotherWriter) {
-        return writer.isMatchingId(anotherWriter);
-    }
-
-    public Answer(String contents) {
-        this.contents = contents;
-        reportingDateTime = LocalDateTime.now();
-    }
 
     public Answer(String contents, Question question, User writer) {
         this.contents = contents;
@@ -40,6 +30,10 @@ public class Answer {
         this.writer = writer;
         reportingDateTime = LocalDateTime.now();
     }
+    public boolean isMatchingWriter(User anotherWriter) {
+        return writer.isMatchingId(anotherWriter);
+    }
+
 
     public Answer() {
         reportingDateTime = LocalDateTime.now();

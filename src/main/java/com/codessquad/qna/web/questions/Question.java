@@ -21,9 +21,7 @@ public class Question {
     private List<Answer> answers;
 
     private String title;
-
     private String contents;
-
     private LocalDateTime reportingDateTime;
 
     public Question(String title, String contents) {
