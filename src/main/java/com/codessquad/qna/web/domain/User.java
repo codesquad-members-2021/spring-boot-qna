@@ -24,8 +24,6 @@ public class User {
     @Column(nullable = false)
     private String email;
 
-    private String newPassword;
-
     protected User() {
     }
 
@@ -56,10 +54,6 @@ public class User {
         return email;
     }
 
-    public String getNewPassword() {
-        return newPassword;
-    }
-
     @Override
     public String toString() {
         return "User{" +
@@ -74,5 +68,9 @@ public class User {
         this.userId = newInfoUser.userId;
         this.name = newInfoUser.name;
         this.email = newInfoUser.email;
+    }
+
+    public boolean matchesPassword(String inputPassword) {
+        return password.equals(inputPassword);
     }
 }

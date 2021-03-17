@@ -71,7 +71,7 @@ public class UserController {
         if(user == null) {
             return "redirect:/users/login";
         }
-        if(!password.equals(user.getPassword())) {
+        if(!user.matchesPassword(password)) {
             return "redirect:/users/login";
         }
         session.setAttribute("sessionedUser", user);
