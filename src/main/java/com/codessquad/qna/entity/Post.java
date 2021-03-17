@@ -23,8 +23,8 @@ public class Post {
     private User author;
 
     private boolean deleted = false;
-    private String body;
 
+    private String body;
 
     @OneToMany(mappedBy = "post", cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
     @Where(clause = "deleted = false")
