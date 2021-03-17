@@ -4,19 +4,14 @@ import com.codessquad.qna.repository.QuestionRepository;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
 public class HomeController {
-    private final QuestionRepository questionRepository;
-
-    public HomeController(QuestionRepository questionRepository) {
-        this.questionRepository = questionRepository;
-    }
 
     @GetMapping("/")
-    public String home(Model model) {
-        model.addAttribute("questions", questionRepository.findActiveQuestion());
-        return "index";
+    public String home() {
+        return "redirect:/questions";
     }
 
 }

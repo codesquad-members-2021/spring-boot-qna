@@ -19,6 +19,12 @@ public class QuestionController {
         this.questionService = questionService;
     }
 
+    @GetMapping
+    public String show(Model model) {
+        model.addAttribute("questions", questionService.findAllQuestion());
+        return "index";
+    }
+
     @GetMapping("/form")
     public String createQuestion(HttpSession session) {
         if (!HttpSessionUtils.isLoginUser(session)) {

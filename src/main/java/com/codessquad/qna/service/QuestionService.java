@@ -51,6 +51,8 @@ public class QuestionService {
         return questionRepository.findById(id).orElse(null);
     }
 
+    public List<Question> findAllQuestion() {return questionRepository.findActiveQuestion();}
+
     public List<Answer> findAnswer(Long id) {
         return answerRepository.findActiveAnswer(id);
     }
