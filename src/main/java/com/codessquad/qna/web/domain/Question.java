@@ -13,7 +13,7 @@ public class Question {
     private Long id;
 
     @ManyToOne
-    @Column(nullable = false, length = 20)
+    @JoinColumn(nullable=false)
     private User writer;
 
     @Column(nullable = false, length = 20)
