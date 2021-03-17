@@ -87,13 +87,13 @@ public class UserController {
         if (!user.checkPassword(password)) {
             return "redirect:/users/login";
         }
-        session.setAttribute("user", user);
+        session.setAttribute("sessionUser", user);
         return "redirect:/";
     }
 
     @GetMapping("/logout")
     public String logout(HttpSession session) {
-        session.removeAttribute("user");
+        session.removeAttribute("sessionUser");
         return "redirect:/";
     }
 
