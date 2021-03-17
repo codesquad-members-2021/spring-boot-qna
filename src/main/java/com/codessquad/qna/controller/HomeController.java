@@ -14,7 +14,7 @@ public class HomeController {
         this.questionService = questionService;
     }
 
-    @GetMapping("/")
+    @GetMapping
     public String index(Model model) {
         model.addAttribute("questions", questionService.getQuestionList());
         return "index";

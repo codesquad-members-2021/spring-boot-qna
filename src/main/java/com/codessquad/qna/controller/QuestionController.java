@@ -28,7 +28,7 @@ public class QuestionController {
         return "qna/form";
     }
 
-    @PostMapping()
+    @PostMapping
     public String query(Question question, HttpSession session) {
         questionService.registerQuestion(question, HttpSessionUtils.getLoginUser(session));
         return "redirect:/";

@@ -19,13 +19,13 @@ public class UserController {
         this.userService = userService;
     }
 
-    @GetMapping()
+    @GetMapping
     public String userList(Model model) {
         model.addAttribute("users", userService.getUserList());
         return "users/list";
     }
 
-    @PostMapping()
+    @PostMapping
     public String registerUser(User user) {
         userService.register(user);
         return "redirect:/users";
