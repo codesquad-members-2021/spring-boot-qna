@@ -51,28 +51,23 @@ public class UserController {
     }
 
     @PostMapping("/user/{userId}/password-check")
-    public String passwordRightOrWrong(User user) {
+    public String passwordRightOrWrong(User user, Model model) {
         String userId = user.getUserId();
         String inputPw = user.getPassword();
         for (User aUser : users) {
             if (aUser.isSameId(userId)) {
                 String pwBefore = aUser.getPassword();
-                if (pwBefore.equals(inputPw))
+                if (pwBefore.equals(inputPw)) {
+                    System.out.println("비밀번호 일치");
+                    System.out.println("기존 비밀번호 " + pwBefore);
+                    System.out.println("입력 비밀번호 " + inputPw);
+                    model.addAttribute("user", aUser);
                     return "updateForm";
+                }
             }
         }
+        System.out.println("비밀번호 불일치");
         return "redirect:/";
-    }
-
-    @GetMapping("/users/{userId}/updateForm")
-    public String updateForm(@PathVariable("userId") String userId, Model model) {
-        for (User aUser : users) {
-            if (aUser.isSameId(userId)) {
-                model.addAttribute("user", aUser);
-                break;
-            }
-        }
-        return "updateForm";
     }
 
     @PostMapping("/user/{userId}/update")
