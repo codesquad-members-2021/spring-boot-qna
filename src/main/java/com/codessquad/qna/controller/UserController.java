@@ -15,6 +15,7 @@ import javax.validation.Valid;
 import java.util.List;
 
 import static com.codessquad.qna.controller.HttpSessionUtils.*;
+import static com.codessquad.qna.domain.User.isValidPassword;
 
 @RequestMapping("/users")
 @Controller
@@ -29,7 +30,7 @@ public class UserController {
     @PostMapping("/login")
     public String login(String userId, String password, HttpSession session) {
         User user = userService.findByUserId(userId);
-        if (!user.hasMatchingPassword(password)) {
+        if (!isValidPassword(user, password)) {
             throw new IllegalUserAccessException("비밀번호가 틀렸습니다.");
         }
         session.setAttribute(USER_SESSION_KEY, user);
@@ -75,14 +76,7 @@ public class UserController {
     @PutMapping("/{id}")
     public String update(@PathVariable Long id, @Valid User updatedUser, @RequestParam String password, Model model, HttpSession session, Errors errors) {
         User user = userService.findVerifiedUser(id, session);
-        if (errors.hasErrors()) {
-            model.addAttribute("user", user);
-            model.addAttribute("errorMessage", "비어있는 필드가 있습니다.");
-            return "/user/updateForm";
-        }
-        if (!user.hasMatchingPassword(password)) {
-            model.addAttribute("user", user);
-            model.addAttribute("errorMessage", "비밀번호가 일치하지 않습니다.");
+        if (!userService.isValidInput(user, password, errors, model)) {
             return "/user/updateForm";
         }
         userService.update(user, updatedUser);

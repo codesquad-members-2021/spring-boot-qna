@@ -5,12 +5,15 @@ import com.codessquad.qna.exception.*;
 import com.codessquad.qna.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.ui.Model;
+import org.springframework.validation.Errors;
 
 import javax.servlet.http.HttpSession;
 import java.util.List;
 
 import static com.codessquad.qna.controller.HttpSessionUtils.getSessionUser;
 import static com.codessquad.qna.controller.HttpSessionUtils.isLoginUser;
+import static com.codessquad.qna.domain.User.isValidPassword;
 
 
 @Service
@@ -63,9 +66,24 @@ public class UserService {
             throw new IllegalUserAccessException("로그인이 필요합니다.");
         }
         User loginUser = getSessionUser(session);
-        if (!loginUser.hasMatchingId(id)) {
+        if (!loginUser.equals(getSessionUser(session))) {
             throw new IllegalUserAccessException();
         }
+    }
+
+    public boolean isValidInput(User user, String password, Errors errors, Model model) {
+        if (errors.hasErrors()) {
+            model.addAttribute("user", user);
+            model.addAttribute("errorMessage", "비어있는 필드가 있습니다.");
+            return false;
+
+        }
+        if (!isValidPassword(user, password)) {
+            model.addAttribute("user", user);
+            model.addAttribute("errorMessage", "비밀번호가 일치하지 않습니다.");
+            return false;
+        }
+        return true;
     }
 }
 
