@@ -2,7 +2,9 @@ package com.codessquad.qna.controller;
 
 import com.codessquad.qna.entity.User;
 import com.codessquad.qna.exception.UserIdNotFoundException;
+import com.codessquad.qna.exception.UserNotFoundInSessionException;
 import com.codessquad.qna.service.UserService;
+import com.codessquad.qna.util.HttpSessionUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,10 +45,13 @@ public class UserController {
     }
 
     @GetMapping("/{userId}/form")
-    public String updateForm(@PathVariable String userId, Model model) {
-        User user = userService.getUser(userId);
-        model.addAttribute("user", user);
-        return "user/updateForm";
+    public String updateForm(@PathVariable String userId, Model model, HttpSession session) {
+        User user = HttpSessionUtil.getUser(session).orElseThrow(UserNotFoundInSessionException::new);
+        if (user.getUserId().equals(userId)) {
+            model.addAttribute("user", user);
+            return "user/updateForm";
+        }
+        throw new IllegalStateException("자신의 정보만 수정할 수 있습니다.");
     }
 
     @PutMapping("/{userId}/update")
