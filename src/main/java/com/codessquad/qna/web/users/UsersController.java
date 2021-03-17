@@ -24,7 +24,7 @@ public class UsersController {
     @PostMapping
     public String createUser(User createdUser) {
         userRepository.save(createdUser);
-        LOGGER.info("user created : " + createdUser.getUserId());
+        LOGGER.info("user created : {}", createdUser.getUserId());
         return "redirect:/users";
     }
 
@@ -68,14 +68,14 @@ public class UsersController {
             return "redirect:/users/login-form";
         }
         SessionUtil.setLoginUser(session, foundUser);
-        LOGGER.info("user login : " + foundUser.getUserId());
+        LOGGER.info("user login : {}", foundUser.getUserId());
         return "redirect:/";
     }
 
     @PostMapping("/logout")
     public String processLogout(HttpSession session) {
         User sessionUser = SessionUtil.getLoginUser(session);
-        LOGGER.info("user logout : " + sessionUser.getUserId());
+        LOGGER.info("user logout : {}", sessionUser.getUserId());
         SessionUtil.removeLoginUser(session);
         return "redirect:/";
     }

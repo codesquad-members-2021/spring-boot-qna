@@ -28,7 +28,7 @@ public class QuestionsController {
         User sessionUser = SessionUtil.getLoginUser(session);
         newQuestion.setWriter(sessionUser);
         questionRepository.save(newQuestion);
-        LOGGER.info("question created " + newQuestion);
+        LOGGER.info("question created {}", newQuestion);
         return "redirect:/";
     }
 
@@ -60,7 +60,7 @@ public class QuestionsController {
         Question currentQuestion = verifyQuestionAndGet(session, questionId);
         currentQuestion.update(newTitle, newContents);
         questionRepository.save(currentQuestion);
-        LOGGER.info("question modified " + currentQuestion);
+        LOGGER.info("question modified {}", currentQuestion);
         return "redirect:/questions/" + currentQuestion.getId();
     }
 
@@ -68,7 +68,7 @@ public class QuestionsController {
     public String deleteQuestion(@PathVariable("questionId") long questionId, HttpSession session) {
         Question currentQuestion = verifyQuestionAndGet(session, questionId);
         questionRepository.delete(currentQuestion);
-        LOGGER.info("question deleted " + currentQuestion);
+        LOGGER.info("question deleted {}", currentQuestion);
         return "redirect:/";
     }
 
