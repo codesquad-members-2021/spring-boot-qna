@@ -1,68 +1,69 @@
 package com.codessquad.qna.controller;
 
 import com.codessquad.qna.domain.User;
-import com.codessquad.qna.domain.UserRepository;
+import com.codessquad.qna.service.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Optional;
+import java.util.NoSuchElementException;
 
 @Controller
 @RequestMapping("/users")
 public class UserController {
     private static final Logger logger = LoggerFactory.getLogger(UserController.class);
 
-    private final UserRepository userRepository;
+    private final UserService userService;
 
-    public UserController(UserRepository userRepository) {
-        this.userRepository = userRepository;
-    }
+    @Autowired
+    public UserController(UserService userService) { this.userService = userService; }
 
     @PostMapping
     public String create(User user) {
-        userRepository.save(user);
+        userService.save(user);
         logger.info("New User Created: {}", user);
         return "redirect:/users";
     }
 
     @GetMapping
     public String list(Model model) {
-        model.addAttribute("users", userRepository.findAll());
+        model.addAttribute("users", userService.findAll());
         return "user/list";
     }
 
     @GetMapping("/{id}")
     public String profile(@PathVariable long id, Model model) {
-        Optional<User> user = userRepository.findById(id);
-        if (!user.isPresent()) {
-            return "user/list";
-        }
-        model.addAttribute("user", user.get());
+        User user = userService.findById(id);
+        model.addAttribute("user", user);
         return "user/profile";
     }
 
     @GetMapping("/{id}/form")
     public String showModifyProfile(@PathVariable long id, Model model) {
-        Optional<User> user = userRepository.findById(id);
-        if (!user.isPresent()) {
-            return "redirect:/users";
-        }
-        model.addAttribute("user", user.get());
+        User user = userService.findById(id);
+        model.addAttribute("user", user);
         return "user/updateForm";
     }
 
     @PutMapping("/{id}/update")
     public String modifyProfile(@PathVariable long id, User updatedUser, String oldPassword) {
-        User user = userRepository.findById(id).get();
+        User user = userService.findById(id);
+
         if (!user.verifyPassword(oldPassword)) {
             logger.debug("Old Password Does Not Match");
             return "redirect:/users";
         }
+
         logger.info("Updated info: {}", updatedUser);
-        userRepository.save(user.updateProfile(updatedUser));
+        userService.update(user, updatedUser);
         return "redirect:/users";
+    }
+
+    @ExceptionHandler(NoSuchElementException.class)
+    public String handleException() {
+        return "error";
     }
 }

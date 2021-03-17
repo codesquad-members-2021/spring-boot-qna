@@ -1,45 +1,41 @@
 package com.codessquad.qna.controller;
 
 import com.codessquad.qna.domain.Question;
-import com.codessquad.qna.domain.QuestionRepository;
+import com.codessquad.qna.service.QuestionService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-
-import java.util.Optional;
+import org.springframework.web.bind.annotation.*;
 
 @Controller
 @RequestMapping("/questions")
 public class QnaController {
-    private final QuestionRepository questionRepository;
+    private final QuestionService questionService;
 
-    public QnaController(QuestionRepository questionRepository) {
-        this.questionRepository = questionRepository;
+    public QnaController(QuestionService questionService) {
+        this.questionService = questionService;
     }
 
     @PostMapping
-    public String createQuestion(String writer, String title, String contents) {
-        Question question = new Question(writer, title, contents);
-        questionRepository.save(question);
+    public String createQuestion(Question question) {
+        questionService.save(question);
         return "redirect:/";
     }
 
     @GetMapping
     public String getQuestionList(Model model) {
-        model.addAttribute("questions", questionRepository.findAll());
+        model.addAttribute("questions", questionService.listAllQuestions());
         return "index";
     }
 
     @GetMapping("/{id}")
     public String getDetailedQuestion(@PathVariable long id, Model model) {
-        Optional<Question> question = questionRepository.findById(id);
-        if (!question.isPresent()) {
-            return "redirect:/";
-        }
-        model.addAttribute("question", question.get());
+        Question question = questionService.findById(id);
+        model.addAttribute("question", question);
         return "qna/show";
+    }
+
+    @ExceptionHandler(IllegalArgumentException.class)
+    public String handleException() {
+        return "error";
     }
 }

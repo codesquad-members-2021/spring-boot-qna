@@ -6,6 +6,8 @@ import java.time.format.DateTimeFormatter;
 
 @Entity
 public class Question {
+    private static final DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd kk:mm");
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
@@ -18,10 +20,6 @@ public class Question {
     private String contents;
     private LocalDateTime timeCreated;
 
-    private static final DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd kk:mm");
-
-    public Question() {}
-
     public Question(String writer, String title, String contents) {
         this.writer = writer;
         this.title = title;
@@ -29,8 +27,14 @@ public class Question {
         this.timeCreated = LocalDateTime.now();
     }
 
+    public Question() {}
+
     public void setWriter(String writer) {
         this.writer = writer;
+    }
+
+    public void setTimeCreated() {
+        this.timeCreated = LocalDateTime.now();
     }
 
     public void setTitle(String title) {

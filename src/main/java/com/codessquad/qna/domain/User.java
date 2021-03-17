@@ -52,7 +52,9 @@ public class User {
     }
 
     public User updateProfile(User updatedUser) {
-        this.password = updatedUser.password;
+        if (updatedUser.password.isEmpty()) {
+            this.password = updatedUser.password;
+        }
         this.name = updatedUser.name;
         this.email = updatedUser.email;
         return this;
