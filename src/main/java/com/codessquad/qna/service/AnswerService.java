@@ -31,7 +31,7 @@ public class AnswerService {
     }
 
     public Answer getWithAuthentication(Long questionId, Long answerId, User loginUser) {
-        Answer answer = answerRepository.findByIdAndQuestionIdAndDeleted(answerId, questionId, false)
+        Answer answer = answerRepository.findByIdAndQuestionIdAndDeletedFalse(answerId, questionId)
                 .orElseThrow(NotFoundException::new);
         if (!answer.matchesWriter(loginUser)) {
             throw new UnauthorizedAccessException("다른 사람의 답변을 수정하거나 삭제할 수 없습니다.");

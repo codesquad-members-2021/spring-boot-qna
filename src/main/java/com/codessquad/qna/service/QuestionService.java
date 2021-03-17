@@ -22,7 +22,7 @@ public class QuestionService {
     }
 
     public List<Question> getList() {
-        return questionRepository.findAllByDeleted(false);
+        return questionRepository.findAllByDeletedFalse();
     }
 
     public void register(Question question, User loginUser) {
@@ -31,7 +31,7 @@ public class QuestionService {
     }
 
     public Question getById(Long id) {
-        return questionRepository.findByIdAndDeleted(id, false).orElseThrow(NotFoundException::new);
+        return questionRepository.findByIdAndDeletedFalse(id).orElseThrow(NotFoundException::new);
     }
 
     public Question getWithAuthentication(Long id, User loginUser) {
