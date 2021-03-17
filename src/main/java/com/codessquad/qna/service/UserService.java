@@ -1,22 +1,58 @@
 package com.codessquad.qna.service;
 
 import com.codessquad.qna.domain.User;
+import com.codessquad.qna.domain.UserRepository;
+import com.codessquad.qna.exception.LoginFailedException;
 import com.codessquad.qna.exception.NotFoundException;
 import com.codessquad.qna.exception.UnauthorizedAccessException;
+import com.codessquad.qna.exception.UserExistException;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-public interface UserService {
+@Service
+public class UserService {
 
-    List<User> getUserList();
+    private final UserRepository userRepository;
 
-    void register(User user);
+    public UserService(UserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
 
-    User getUserById(Long id) throws NotFoundException;
+    public List<User> getUserList() {
+        return userRepository.findAll();
+    }
 
-    void updateUserInfo(Long id, String oldPassword, User newUserInfo) throws UnauthorizedAccessException;
+    public void register(User user) {
+        userRepository.findByUserId(user.getUserId())
+                .ifPresent(u -> {
+                    throw new UserExistException();
+                });
+        userRepository.save(user);
+    }
 
-    User authenticate(String userId, String password) throws UnauthorizedAccessException;
+    public User getUserById(Long id) {
+        return userRepository.findById(id).orElseThrow(NotFoundException::new);
+    }
 
-    void checkAccessId(User loginUser, Long accessId);
+    public void updateUserInfo(Long id, String oldPassword, User newUserInfo) {
+        User user = userRepository.findById(id)
+                .filter(u -> u.matchesPassword(oldPassword))
+                .orElseThrow(() -> new UnauthorizedAccessException("권한이 존재하지 않습니다."));
+        user.update(newUserInfo);
+        userRepository.save(user);
+    }
+
+    public User authenticate(String userId, String password) {
+        return userRepository.findByUserId(userId)
+                .filter(u -> u.matchesPassword(password))
+                .orElseThrow(LoginFailedException::new);
+    }
+
+    public void checkAccessId(User loginUser, Long accessId) {
+        if (!loginUser.matchesId(accessId)) {
+            throw new UnauthorizedAccessException("다른 사람의 정보를 수정할 수 없습니다.");
+        }
+    }
+
 }
