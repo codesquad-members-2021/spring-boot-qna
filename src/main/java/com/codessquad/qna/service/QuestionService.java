@@ -40,9 +40,9 @@ public class QuestionService {
                 .orElseThrow(() -> new UnauthorizedAccessException("다른 사람의 질문을 수정하거나 삭제할 수 없습니다."));
     }
 
-    public void update(Long id, User loginUser, Question updatedQuestion) {
+    public void update(Long id, User loginUser, Question updatingQuestion) {
         Question question = getWithAuthentication(id, loginUser);
-        question.updateContents(updatedQuestion);
+        question.updateContents(updatingQuestion);
         questionRepository.save(question);
     }
 

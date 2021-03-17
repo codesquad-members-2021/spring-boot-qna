@@ -71,8 +71,8 @@ public class Answer {
         this.time = time;
     }
 
-    public void updateAnswer(Answer updatedAnswer) {
-        this.comment = updatedAnswer.comment;
+    public void updateAnswer(Answer updatingAnswer) {
+        this.comment = updatingAnswer.comment;
         this.time = LocalDateTime.now();
     }
 

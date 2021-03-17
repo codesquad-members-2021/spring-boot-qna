@@ -53,8 +53,8 @@ public class QuestionController {
     }
 
     @PutMapping("/{questionId}")
-    public String update(@PathVariable("questionId") Long id, Question updatedQuestion, HttpSession session) {
-        questionService.update(id, HttpSessionUtils.getLoginUser(session), updatedQuestion);
+    public String update(@PathVariable("questionId") Long id, Question updatingQuestion, HttpSession session) {
+        questionService.update(id, HttpSessionUtils.getLoginUser(session), updatingQuestion);
         return "redirect:/questions/" + id;
     }
 

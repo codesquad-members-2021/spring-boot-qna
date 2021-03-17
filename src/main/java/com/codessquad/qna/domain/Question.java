@@ -82,9 +82,9 @@ public class Question {
         return writer.equals(user);
     }
 
-    public void updateContents(Question updatedQuestion) {
-        this.title = updatedQuestion.title;
-        this.contents = updatedQuestion.contents;
+    public void updateContents(Question updatingQuestion) {
+        this.title = updatingQuestion.title;
+        this.contents = updatingQuestion.contents;
         this.time = LocalDateTime.now();
     }
 

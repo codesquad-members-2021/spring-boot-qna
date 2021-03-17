@@ -39,9 +39,9 @@ public class AnswerService {
         return answer;
     }
 
-    public void update(Long questionId, Long answerId, User loginUser, Answer updatedAnswer) {
+    public void update(Long questionId, Long answerId, User loginUser, Answer updatingAnswer) {
         Answer answer = getWithAuthentication(questionId, answerId, loginUser);
-        answer.updateAnswer(updatedAnswer);
+        answer.updateAnswer(updatingAnswer);
         answerRepository.save(answer);
     }
 }

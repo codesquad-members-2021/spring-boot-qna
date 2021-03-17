@@ -45,9 +45,9 @@ public class AnswerController {
     @PutMapping("/{answerId}")
     public String update(@PathVariable("questionId") Long questionId,
                          @PathVariable("answerId") Long answerId,
-                         Answer updatedAnswer,
+                         Answer updatingAnswer,
                          HttpSession session) {
-        answerService.update(questionId, answerId, HttpSessionUtils.getLoginUser(session), updatedAnswer);
+        answerService.update(questionId, answerId, HttpSessionUtils.getLoginUser(session), updatingAnswer);
         return "redirect:/questions/" + questionId;
     }
 
