@@ -20,7 +20,12 @@ public class QuestionService {
         this.questionRepository = questionRepository;
     }
 
-    public void create(Question question) {
+    public void update(Question question) {
+        questionRepository.save(question);
+    }
+
+    public void update(Question question, String title, String contents) {
+        question.update(title, contents);
         questionRepository.save(question);
     }
 

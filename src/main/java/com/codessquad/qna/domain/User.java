@@ -1,50 +1,29 @@
 package com.codessquad.qna.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
-import java.util.Objects;
+import javax.validation.constraints.NotBlank;
+import java.io.Serializable;
 
 @Entity
-public class User {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
+public class User extends AbstractEntity implements Serializable {
+    @NotBlank(message = "아이디를 입력해주세요.")
     @Column(nullable = false, length = 20, unique = true)
     private String userId;
 
+    @NotBlank(message = "비밀번호를 입력해주세요.")
+    @JsonIgnore
     private String password;
 
+    @NotBlank(message = "이름을 입력해주세요.")
     private String name;
 
+    @NotBlank(message = "이메일을 입력해주세요.")
     @Column(nullable = false, unique = true)
     private String email;
 
     protected User() {
-    }
-
-    public boolean matchPassword(String password) {
-        if (password == null) {
-            return false;
-        }
-        return password.equals(this.password);
-    }
-
-    public boolean matchId(Long id) {
-        if (id == null) {
-            return false;
-        }
-        return id.equals(this.id);
-    }
-
-    public void update(User newUser) {
-        userId = newUser.userId;
-        password = newUser.password;
-        name = newUser.name;
-        email = newUser.email;
-    }
-
-    public Long getId() {
-        return id;
     }
 
     public String getUserId() {
@@ -79,17 +58,15 @@ public class User {
         this.email = email;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        User user = (User) o;
-        return Objects.equals(id, user.id);
+    public void update(User newUser) {
+        userId = newUser.userId;
+        password = newUser.password;
+        name = newUser.name;
+        email = newUser.email;
     }
 
-    @Override
-    public int hashCode() {
-        return Objects.hash(id);
+    public boolean isValidPassword(String password) {
+        return this.password.equals(password);
     }
 }
 

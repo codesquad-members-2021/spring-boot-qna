@@ -12,7 +12,6 @@ import java.util.List;
 import static com.codessquad.qna.controller.HttpSessionUtils.getSessionUser;
 import static com.codessquad.qna.controller.HttpSessionUtils.isLoginUser;
 
-
 @Service
 public class UserService {
 
@@ -32,6 +31,11 @@ public class UserService {
     }
 
     public void update(User user) {
+        userRepository.save(user);
+    }
+
+    public void update(User user, User updatedUser) {
+        user.update(updatedUser);
         userRepository.save(user);
     }
 
@@ -57,8 +61,7 @@ public class UserService {
         if (!isLoginUser(session)) {
             throw new IllegalUserAccessException("로그인이 필요합니다.");
         }
-        User loginUser = getSessionUser(session);
-        if (!loginUser.matchId(id)) {
+        if (!findUser(id).equals(getSessionUser(session))) {
             throw new IllegalUserAccessException();
         }
     }

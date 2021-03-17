@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 public class HomeController {
     private final QuestionRepository questionRepository;
 
-    @Autowired
     public HomeController(QuestionRepository questionRepository) {
         this.questionRepository = questionRepository;
     }

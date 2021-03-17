@@ -16,10 +16,8 @@ import static com.codessquad.qna.controller.HttpSessionUtils.*;
 @Controller
 @RequestMapping("/questions")
 public class QuestionController {
-
     private final QuestionService questionService;
 
-    @Autowired
     public QuestionController(QuestionService questionService) {
         this.questionService = questionService;
     }
@@ -39,7 +37,7 @@ public class QuestionController {
         }
         User sessionUser = getSessionUser(session);
         Question question = new Question(sessionUser, title, contents);
-        questionService.create(question);
+        questionService.update(question);
         return "redirect:/";
     }
 
@@ -59,8 +57,7 @@ public class QuestionController {
     @PutMapping("/{id}")
     public String update(@PathVariable Long id, String title, String contents, Model model, HttpSession session) {
         Question question = questionService.findVerifiedQuestion(id, session);
-        question.update(title, contents);
-        questionService.create(question);
+        questionService.update(question, title, contents);
         return "redirect:/questions/" + id;
     }
 

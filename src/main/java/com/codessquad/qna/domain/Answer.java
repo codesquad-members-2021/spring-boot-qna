@@ -1,17 +1,9 @@
 package com.codessquad.qna.domain;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 
 @Entity
-public class Answer {
-    public static final String ANSWER_DATETIME_FORMAT = "yyyy.MM.dd HH:mm";
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
+public class Answer extends AbstractEntity {
     @ManyToOne
     @JoinColumn(foreignKey = @ForeignKey(name = "fk_answer_author"))
     private User author;
@@ -20,10 +12,8 @@ public class Answer {
     @JoinColumn(foreignKey = @ForeignKey(name = "fk_answer"))
     private Question question;
 
-    @Lob
+    @Column(length = 2000)
     private String contents;
-
-    private LocalDateTime date;
 
     protected Answer() {
     }
@@ -32,18 +22,10 @@ public class Answer {
         this.author = author;
         this.question = question;
         this.contents = contents;
-        this.date = LocalDateTime.now();
     }
 
-    public String getDate() {
-        if (date == null) {
-            return "";
-        }
-        return date.format(DateTimeFormatter.ofPattern(ANSWER_DATETIME_FORMAT));
-    }
-
-    public Long getId() {
-        return id;
+    public boolean isSameAuthor(User loginUser) {
+        return this.author.equals(loginUser);
     }
 
     public User getAuthor() {
