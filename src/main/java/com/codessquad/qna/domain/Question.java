@@ -6,7 +6,8 @@ public class Question {
     private int questionId;
     private String writer;
     private String title;
-    private String content;
+    private String contents;
+    private String writeTime;
 
     public int getQuestionId() {
         return questionId;
@@ -32,12 +33,20 @@ public class Question {
         this.title = title;
     }
 
-    public String getContent() {
-        return content;
+    public String getContents() {
+        return contents;
     }
 
-    public void setContent(String content) {
-        this.content = content;
+    public void setContents(String contents) {
+        this.contents = contents;
+    }
+
+    public String getWriteTime() {
+        return writeTime;
+    }
+
+    public void setWriteTime(String writeTime) {
+        this.writeTime = writeTime;
     }
 
     @Override
@@ -46,7 +55,7 @@ public class Question {
                 "questionId=" + questionId +
                 ", writer='" + writer + '\'' +
                 ", subject='" + title + '\'' +
-                ", content='" + content + '\'' +
+                ", content='" + contents + '\'' +
                 '}';
     }
 }
