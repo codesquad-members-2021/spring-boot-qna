@@ -56,9 +56,9 @@ public class Question {
         return user.isUserMatching(writer);
     }
 
-    public void update(Question newQuestion) {
-        this.title = newQuestion.title;
-        this.contents = newQuestion.title;
+    public void update(String newTitle, String newContents) {
+        this.title = newTitle;
+        this.contents = newContents;
         setPostTime();
     }
 
