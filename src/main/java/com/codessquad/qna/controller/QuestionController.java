@@ -1,7 +1,6 @@
 package com.codessquad.qna.controller;
 
 import com.codessquad.qna.domain.Question;
-import com.codessquad.qna.domain.User;
 import com.codessquad.qna.exception.NotLoggedInException;
 import com.codessquad.qna.service.QuestionService;
 import org.springframework.stereotype.Controller;
@@ -42,22 +41,20 @@ public class QuestionController {
 
     @GetMapping("/{questionId}/form")
     public String updateForm(@PathVariable("questionId") Long id, HttpSession session, Model model) {
-        User loginUser = HttpSessionUtils.getLoginUser(session);
-        model.addAttribute("question", questionService.getQuestionWithAuthentication(id, loginUser));
+        model.addAttribute("question",
+                questionService.getQuestionWithAuthentication(id, HttpSessionUtils.getLoginUser(session)));
         return "/qna/updateForm";
     }
 
     @PutMapping("/{questionId}")
     public String update(@PathVariable("questionId") Long id, Question updatedQuestion, HttpSession session) {
-        User loginUser = HttpSessionUtils.getLoginUser(session);
-        questionService.updateQuestion(id, loginUser, updatedQuestion);
+        questionService.updateQuestion(id, HttpSessionUtils.getLoginUser(session), updatedQuestion);
         return "redirect:/questions/" + id;
     }
 
     @DeleteMapping("/{id}")
     public String delete(@PathVariable("id") Long id, HttpSession session) {
-        User loginUser = HttpSessionUtils.getLoginUser(session);
-        questionService.deleteQuestion(id, loginUser);
+        questionService.deleteQuestion(id, HttpSessionUtils.getLoginUser(session));
         return "redirect:/";
     }
 
