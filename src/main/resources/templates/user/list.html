@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html lang="kr">
 <head>
-    {{> include/header}}
+{{> include/header}}
 </head>
 <body>
-    {{> include/navigation}}
+{{> include/navigation}}
 <div class="container" id="main">
    <div class="col-md-10 col-md-offset-1">
       <div class="panel panel-default">
@@ -17,11 +17,11 @@
               <tbody>
                 {{#userlist}}
                 <tr>
-                    <th scope="row"> </th>
+                    <th scope="row"> {{id}} </th>
                     <td><a href="/user/{{userId}}" />{{userId}}</td>
                     <td>{{name}}</td>
                     <td>{{email}}</td>
-                    <td><a href="/user/{{userId}}/form" class="btn btn-success" role="button">수정</a></td>
+                    <td><a href="/user/{{id}}/form" class="btn btn-success" role="button">수정</a></td>
 
                 </tr>
                 {{/userlist}}
