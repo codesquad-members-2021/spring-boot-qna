@@ -72,7 +72,7 @@ public class UserController {
     }
 
     @GetMapping("/{id}/form")
-    public String form(@PathVariable Long id, Model model, HttpSession session) {
+    public String updateForm(@PathVariable Long id, Model model, HttpSession session) {
         if (!HttpSessionUtils.isLoginUser(session)) {
             return "redirect:/users/loginForm";
         }
@@ -80,7 +80,7 @@ public class UserController {
         User sessionedUser = HttpSessionUtils.getUserFromSession(session);
 
         logger.debug("User : {} found", sessionedUser.getUserId());
-        if (!sessionedUser.matchId(id)) {
+        if (!sessionedUser.isMatchedId(id)) {
             throw new IllegalStateException("You can't modify other user's info!!");
         }
 
@@ -97,14 +97,14 @@ public class UserController {
         }
 
         User sessionedUser = HttpSessionUtils.getUserFromSession(session);
-        if (!sessionedUser.matchId(id)) {
+        if (!sessionedUser.isMatchedId(id)) {
             throw new IllegalStateException("You can't modify other user's info!!");
         }
 
         User user = userService.findUserById(id);
         logger.debug("User : {}", (user));
 
-        if (!user.matchPassword(updatedUser)) {
+        if (!user.isMatchedPassword(updatedUser)) {
             logger.debug("Password : \"{}\" does not match \"{}\"", updatedUser.getPassword(), user.getPassword());
             return "redirect:/users";
         }

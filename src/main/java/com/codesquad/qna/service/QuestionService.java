@@ -4,15 +4,17 @@ import com.codesquad.qna.domain.Question;
 import com.codesquad.qna.domain.User;
 import com.codesquad.qna.repository.QuestionRepository;
 import com.codesquad.qna.util.HttpSessionUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpSession;
 import java.util.List;
-import java.util.NoSuchElementException;
 
 @Service
 public class QuestionService {
+    private static final Logger logger = LoggerFactory.getLogger(QuestionService.class);
 
     private final QuestionRepository questionRepository;
 
@@ -28,11 +30,19 @@ public class QuestionService {
     public void save(Question question, HttpSession session) {
         User sessionedUser = HttpSessionUtils.getUserFromSession(session);
         Question newQuestion = new Question(sessionedUser.getUserId(), question.getTitle(), question.getContents());
+
+        logger.error("Question : {}", question);
+
         questionRepository.save(newQuestion);
     }
 
     public Question findQuestionById(long id) {
         return questionRepository.findById(id)
                 .orElseThrow(IllegalArgumentException::new);
+    }
+
+    public void update(Question question, Question updatedQuestion) {
+        question.update(updatedQuestion);
+        questionRepository.save(question);
     }
 }

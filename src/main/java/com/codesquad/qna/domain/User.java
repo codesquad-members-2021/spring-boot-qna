@@ -69,11 +69,15 @@ public class User {
         this.email = user.email;
     }
 
-    public boolean matchId(Long id) {
+    public boolean isMatchedId(Long id) {
         return this.id.equals(id);
     }
 
-    public boolean matchPassword(User user) {
+    public boolean isMatchedUserId(String userId) {
+        return this.userId.equals(userId);
+    }
+
+    public boolean isMatchedPassword(User user) {
         return password.equals(user.password);
     }
 }
