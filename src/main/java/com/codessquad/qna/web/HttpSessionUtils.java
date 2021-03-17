@@ -1,9 +1,7 @@
 package com.codessquad.qna.web;
 
 import com.codessquad.qna.domain.User;
-import com.codessquad.qna.exception.NoQuestionException;
 import com.codessquad.qna.exception.NoUserException;
-import javassist.NotFoundException;
 
 import javax.servlet.http.HttpSession;
 

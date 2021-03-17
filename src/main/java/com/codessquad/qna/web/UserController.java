@@ -92,14 +92,4 @@ public class UserController {
         session.removeAttribute(HttpSessionUtils.USER_SESSION_KEY);
         return "redirect:/";
     }
-
-    @ExceptionHandler(NotFoundException.class)
-    public String handleNotFountException() {
-        return "notExistHandle";
-    }
-
-    @ExceptionHandler(IllegalStateException.class)
-    public String handleIllegalStateException() {
-        return "unableToAccessToOthers";
-    }
 }

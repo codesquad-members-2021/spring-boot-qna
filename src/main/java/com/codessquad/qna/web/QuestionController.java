@@ -90,14 +90,4 @@ public class QuestionController {
         questionRepository.delete(question);
         return "redirect:/";
     }
-
-    @ExceptionHandler(NotFoundException.class)
-    public String handleNotFountException() {
-        return "notExistHandle";
-    }
-
-    @ExceptionHandler(IllegalStateException.class)
-    public String handleIllegalStateException() {
-        return "unableToAccessToOthers";
-    }
 }
