@@ -54,12 +54,10 @@ public class UserController {
 
     @PostMapping("/{userId}/password-check")
     public String checkPassword(User user, Model model) {
-        String userId = user.getUserId();
-        String inputPassword = user.getPassword();
         for (User aUser : users) {
-            if (aUser.isSameId(userId)) {
+            if (aUser.isSameId(user.getUserId())) {
                 String pwBefore = aUser.getPassword();
-                if (pwBefore.equals(inputPassword)) {
+                if (pwBefore.equals(user.getPassword())) {
                     model.addAttribute("user", aUser);
                     return "userUpdateForm";
                 }
