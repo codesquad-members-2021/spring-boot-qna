@@ -54,4 +54,11 @@ public class UserServiceImpl implements UserService {
                 .orElseThrow(LoginFailedException::new);
     }
 
+    @Override
+    public void checkAccessId(User loginUser, Long accessId) {
+        if (!loginUser.matchesId(accessId)) {
+            throw new UnauthorizedAccessException("다른 사람의 정보를 수정할 수 없습니다.");
+        }
+    }
+
 }

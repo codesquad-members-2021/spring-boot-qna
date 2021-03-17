@@ -17,4 +17,6 @@ public interface UserService {
     void updateUserInfo(Long id, String oldPassword, User newUserInfo) throws UnauthorizedAccessException;
 
     User authenticate(String userId, String password) throws UnauthorizedAccessException;
+
+    void checkAccessId(User loginUser, Long accessId);
 }

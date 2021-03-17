@@ -1,7 +1,6 @@
 package com.codessquad.qna.controller;
 
 import com.codessquad.qna.domain.User;
-import com.codessquad.qna.exception.UnauthorizedAccessException;
 import com.codessquad.qna.service.UserService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -39,14 +38,14 @@ public class UserController {
 
     @GetMapping("/{id}/form")
     public String updateForm(@PathVariable("id") Long id, HttpSession session, Model model) {
-        checkSessionWithId(session, id);
+        userService.checkAccessId(HttpSessionUtils.getLoginUser(session), id);
         model.addAttribute(userService.getUserById(id));
         return "users/updateForm";
     }
 
     @PutMapping("/{id}")
     public String update(@PathVariable("id") Long id, String oldPassword, User newUserInfo, HttpSession session) {
-        checkSessionWithId(session, id);
+        userService.checkAccessId(HttpSessionUtils.getLoginUser(session), id);
         userService.updateUserInfo(id, oldPassword, newUserInfo);
         return "redirect:/users";
     }
@@ -68,10 +67,4 @@ public class UserController {
         return "redirect:/";
     }
 
-    private void checkSessionWithId(HttpSession session, Long accessId) {
-        User loginUser = HttpSessionUtils.getLoginUser(session);
-        if (!loginUser.matchesId(accessId)) {
-            throw new UnauthorizedAccessException("다른 사람의 정보를 수정할 수 없습니다.");
-        }
-    }
 }
