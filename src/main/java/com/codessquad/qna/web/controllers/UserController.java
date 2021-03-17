@@ -6,6 +6,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpSession;
+
 @Controller
 @RequestMapping("/users")
 public class UserController {
@@ -56,5 +58,23 @@ public class UserController {
             return "redirect:/users";
         }
         return "user/wrongPassword";
+    }
+
+    @GetMapping("/login")   
+    public String loginForm() {
+        return "user/login";
+    }
+
+    @PostMapping("/login")
+    public String loginUser(String userId, String password, HttpSession session) {
+        User user = userService.findByUserId(userId);
+        if(user == null) {
+            return "redirect:/users/login";
+        }
+        if(!password.equals(user.getPassword())) {
+            return "redirect:/users/login";
+        }
+        session.setAttribute("user", user);
+        return "redirect:/";
     }
 }
