@@ -34,7 +34,7 @@ public class QnaController {
     }
 
     @GetMapping
-    public String loadHome(Model model) {
+    public String readQuestions(Model model) {
         model.addAttribute("questions", questions);
         logger.info("questions = " + questions);
         return "index";
