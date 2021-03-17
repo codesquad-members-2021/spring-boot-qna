@@ -25,10 +25,7 @@ public class UserController {
 
     @PostMapping("/login")
     public String login(String userId, String password, HttpSession session) {
-        User user = userRepository.findByUserId(userId);
-        if (user == null) {
-            return "redirect:/users/login-form";
-        }
+        User user = userRepository.findByUserId(userId).orElseThrow(() -> new UserNotFoundException("No user with userId " + userId));
         if (!user.isMatchingPassword(password)) {
             return "redirect:/users/login-form";
         }
