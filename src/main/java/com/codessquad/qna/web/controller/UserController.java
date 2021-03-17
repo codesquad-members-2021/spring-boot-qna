@@ -26,17 +26,19 @@ public class UserController {
     @PostMapping("/login")
     public String login(String userId, String password, HttpSession session) {
         User user = userRepository.findByUserId(userId).orElseThrow(() -> new UserNotFoundException("No user with userId " + userId));
+
         if (!user.isMatchingPassword(password)) {
             return "redirect:/users/login-form";
         }
+
         session.setAttribute("sessionedUser", user);
+
         return "redirect:/";
     }
 
     @GetMapping("/logout")
     public String logout(HttpSession session) {
         session.removeAttribute("sessionedUser");
-
         return "redirect:/";
     }
 
@@ -62,21 +64,26 @@ public class UserController {
     @GetMapping("/{id}/form")
     public String updateForm(@PathVariable long id, Model model, HttpSession session) {
         User user = findUserById(id);
-        User sessionedUser = SessionUtils.getLoginUser(session);
-        if (!sessionedUser.isMatchingId(id)) {
+        User loginUser = SessionUtils.getLoginUser(session);
+
+        if (!loginUser.isMatchingWriter(user)) {
             throw new CRUDAuthenticationException("Users can only edit their own profile information");
         }
+
         model.addAttribute("user", user);
+
         return "user/updateForm";
     }
 
     @PutMapping("/{id}/update")
     public String updateProfile(@PathVariable long id, User updatedUser, String oldPassword) {
         User user = findUserById(id);
+
         if (user.isMatchingPassword(oldPassword)) {
             user.update(updatedUser);
             userRepository.save(user);
         }
+
         return "redirect:/users";
     }
 

@@ -33,7 +33,17 @@ public class QuestionController {
         User loginUser = SessionUtils.getLoginUser(session);
         Question question = Question.toEntity(loginUser, request);
         questionRepository.save(question);
+
         return "redirect:/";
+    }
+
+    @PutMapping("/{id}/update")
+    public String update(@PathVariable long id, QuestionRequest post) {
+        Question question = getQuestionById(id);
+        question.update(post.getTitle(), post.getContents());
+        questionRepository.save(question);
+
+        return "redirect:/questions/" + id;
     }
 
     @GetMapping("/form")
@@ -48,40 +58,40 @@ public class QuestionController {
     public String updateForm(@PathVariable long id, Model model, HttpSession session) {
         Question question = getQuestionById(id);
         User writer = question.getWriter();
-        User user = SessionUtils.getLoginUser(session);
+        User loginUser = SessionUtils.getLoginUser(session);
 
-        if (!writer.isMatchingId(user.getId())) {
+        if (!loginUser.isMatchingWriter(writer)) {
             throw new CRUDAuthenticationException("Cannot edit other user's posts");
         }
+
         model.addAttribute("question", question);
+
         return "qna/updateForm";
     }
 
-    @PutMapping("/{id}/update")
-    public String update(@PathVariable long id, QuestionRequest post) {
-        Question question = getQuestionById(id);
-        question.update(post.getTitle(), post.getContents());
-        questionRepository.save(question);
-        return "redirect:/questions/" + id;
-    }
 
     @DeleteMapping("/{id}/delete")
     public String delete(@PathVariable long id, HttpSession session) {
         Question question = getQuestionById(id);
-        User user = SessionUtils.getLoginUser(session);
-        if (!question.isMatchingWriter(user)) {
+        User loginUser = SessionUtils.getLoginUser(session);
+
+        if (!question.isMatchingWriter(loginUser)) {
             throw new CRUDAuthenticationException("Cannot edit other user's posts");
         }
+
         questionRepository.delete(question);
+
         return "redirect:/";
     }
 
     @GetMapping("/{id}")
     public String show(@PathVariable long id, Model model) {
         Question question = getQuestionById(id);
-        List<Answer> answers = answerRepository.findByQuestionId(id);
         model.addAttribute("question", question);
+
+        List<Answer> answers = answerRepository.findByQuestionId(id);
         model.addAttribute("answers", answers);
+
         return "/qna/show";
     }
 

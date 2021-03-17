@@ -36,6 +36,7 @@ public class AnswerController {
         Question question = getQuestionById(questionId);
         Answer answer = Answer.toEntity(loginUser, question, contents);
         answerRepository.save(answer);
+
         return "redirect:/questions/" + questionId;
     }
 
@@ -48,7 +49,9 @@ public class AnswerController {
         if (!answer.isMatchingWriter(loginUser)) {
             throw new CRUDAuthenticationException("Only writer can delete this answer post!");
         }
+
         answerRepository.delete(answer);
+
         return "redirect:/questions/" + questionId;
     }
 

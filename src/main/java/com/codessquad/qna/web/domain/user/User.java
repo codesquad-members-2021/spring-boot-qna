@@ -5,6 +5,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
+import java.util.Objects;
 
 @Entity
 public class User {
@@ -32,7 +33,7 @@ public class User {
         this.email = email;
     }
 
-    protected User(){
+    protected User() {
 
     }
 
@@ -56,16 +57,31 @@ public class User {
         return email;
     }
 
-    public boolean isMatchingPassword(String password){
+    public boolean isMatchingPassword(String password) {
         return this.password.equals(password);
     }
 
-    public boolean isMatchingId(Long id) { return this.id.equals(id);}
+    public boolean isMatchingWriter(User user) {
+        return this.equals(user);
+    }
 
-    public void update(User user){
+    public void update(User user) {
         this.password = user.password;
         this.name = user.name;
         this.email = user.email;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        User user = (User) o;
+        return Objects.equals(id, user.id) && Objects.equals(userId, user.userId);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, userId);
     }
 
     @Override

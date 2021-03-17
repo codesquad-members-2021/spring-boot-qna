@@ -41,7 +41,7 @@ public class Answer {
         this.createdAt = LocalDateTime.now();
     }
 
-    public static Answer toEntity(User writer, Question question, String contents){
+    public static Answer toEntity(User writer, Question question, String contents) {
         return new Answer(writer, question, contents);
     }
 
@@ -65,8 +65,8 @@ public class Answer {
         return createdAt.format(DATE_TIME_FORMATTER);
     }
 
-    public boolean isMatchingWriter(User user){
-        return writer.isMatchingId(user.getId());
+    public boolean isMatchingWriter(User user) {
+        return writer.isMatchingWriter(user);
     }
 
 }

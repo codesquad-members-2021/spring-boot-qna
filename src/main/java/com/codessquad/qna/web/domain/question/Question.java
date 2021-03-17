@@ -68,7 +68,7 @@ public class Question {
     }
 
     public boolean isMatchingWriter(User user){
-        return writer.isMatchingId(user.getId());
+        return writer.isMatchingWriter(user);
     }
 
     @Override
