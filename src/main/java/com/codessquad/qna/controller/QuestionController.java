@@ -80,11 +80,10 @@ public class QuestionController {
     }
 
     @PutMapping("/{id}")
-    public String updateQuestion(@PathVariable long id, Question referenceQuestion) {
-        Question presentQuestion = questionService.getOneById(id).orElse(null);
-        referenceQuestion.setWriter(presentQuestion.getWriter());
-        questionService.updateInfo(presentQuestion, referenceQuestion);
-
+    public String updateQuestion(@PathVariable long id, String title, String contents) {
+        Question question = questionService.getOneById(id).orElse(null);
+        question.updateInfo(title, contents);
+        questionService.add(question);
         return "redirect:/";
     }
 }
