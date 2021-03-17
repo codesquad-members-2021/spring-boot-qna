@@ -121,8 +121,8 @@ public class QuestionController {
         return "redirect:/";
     }
 
-    @ExceptionHandler(IllegalUserAccessException.class)
-    public String handleIllegalUserAccessException(@PathVariable Long questionId) {
-        return "redirect:/" + questionId;
+    @ExceptionHandler(QuestionNotFoundException.class)
+    public String handleQuestionNotFoundException() {
+        return "redirect:/";
     }
 }

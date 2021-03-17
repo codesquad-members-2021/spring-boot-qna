@@ -9,17 +9,12 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 @ControllerAdvice
 public class CommonExceptionHandler {
     @ExceptionHandler(UserNotFoundException.class)
-    public String HandleUserNotFoundException() {
+    public String handleUserNotFoundException() {
         return "redirect:/users/loginForm";
     }
 
     @ExceptionHandler(IllegalUserAccessException.class)
     public String handleIllegalUserAccessException() {
-        return "redirect:/";
-    }
-
-    @ExceptionHandler(QuestionNotFoundException.class)
-    public String handleQuestionNotFoundException() {
         return "redirect:/";
     }
 }
