@@ -22,17 +22,20 @@
 
 회원 프로필 조회
 
-- GET `/user/{user-id}`
+- GET `/user/{userId}`
     - profile
 
 비밀번호 확인
 
-- GET `/user/{user-id}/password-check`
+- GET `/user/{userId}/password-check`
     - checkPassword
+- POST `/user/{userId}/password-check`
+    - if 비밀번호 일치) updateForm
+    - if 비밀번호 불일치) redirect:/
 
 회원정보 수정
 
-- POST `/user/{user-id}/edit`
+- POST `/user/{userId}/edit`
     - redirect:/
 
 질문하기

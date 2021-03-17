@@ -27,13 +27,13 @@ public class UserController {
         return "redirect:/user";
     }
 
-    @GetMapping("/users")
+    @GetMapping("/user")
     public String showUser(Model model) {
         model.addAttribute("users", users);
         return "list";
     }
 
-    @GetMapping("/users/{userId}")
+    @GetMapping("/user/{userId}")
     public String showProfile(@PathVariable("userId") String userId, Model model) {
         for (User user : users) {
             if (user.isSameId(userId)) {
@@ -44,13 +44,13 @@ public class UserController {
         return "profile";
     }
 
-    @GetMapping("/users/{userId}/checkPassword")
+    @GetMapping("/user/{userId}/password-check")
     public String checkPassword(@PathVariable("userId") String userId, Model model) {
         model.addAttribute("userId", userId);
         return "checkPassword";
     }
 
-    @PostMapping("/users/{userId}/checkPassword")
+    @PostMapping("/user/{userId}/password-check")
     public String passwordRightOrWrong(User user) {
         String userId = user.getUserId();
         String inputPw = user.getPassword();
