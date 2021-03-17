@@ -24,6 +24,11 @@ public class UserController {
     @Autowired
     private UserRepository userRepository;
 
+    @GetMapping("")
+    public String userListShow() {
+        return "redirect:/user/list";
+    }
+
     @GetMapping("/form")
     public String signUpForm() {
         logger.info("signUpForm >> users/form.html: in");
@@ -42,14 +47,15 @@ public class UserController {
         return "user/list";
     }
 
-    @GetMapping("/{userId}")
-    public String showProfile(@PathVariable String userId, Model model) {
-        User currentUser = getUserByUserId(userId);
-        model.addAttribute("user",currentUser);
+    @PostMapping("/{id}")
+    public String updateUser(@PathVariable Long id,User newUser) {
+        User currentUser = userRepository.findById(id).get();
+        currentUser.update(newUser);
+        userRepository.save(currentUser);
         logger.info("update User : " + currentUser.toString());
-        return "/user/profile";
+        return "redirect:/user";
     }
-
+/*
     public User getUserByUserId(String userId) {
         for(User user: userRepository.findAll() ) {
             if(user.getUserId().equals(userId)) {
@@ -57,27 +63,19 @@ public class UserController {
             }
         }
         return null;
-    }
+    }*/
 
-    @GetMapping("")
-    public String userListShow() {
-        return "redirect:/users/list";
-    }
 
     @GetMapping("/{id}/form")
     public String getUserupdateForm(@PathVariable Long id , Model model) {
-        for(User user : userRepository.findAll() ) {
-            if(user.getId() == id) {
-                model.addAttribute("user",user);
-                return "user/updateForm";
-            }
-        }
-        return "index";
+        User user = userRepository.findById(id).get();
+        model.addAttribute("user",user);
+        return "user/updateForm";
     }
-
+/*
     @PostMapping("/update")
     public String updateConfirm(User newUser) {
         return "redirect:/user";
     }
-
+*/
 }
