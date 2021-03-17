@@ -51,7 +51,7 @@ public class QuestionController {
         User user = SessionUtils.getLoginUser(session);
 
         if (!writer.isMatchingId(user.getId())) {
-            throw new CRUDAuthenticationException("다른 사용자의 글을 수정할 수 없습니다.");
+            throw new CRUDAuthenticationException("Cannot edit other user's posts");
         }
         model.addAttribute("question", question);
         return "qna/updateForm";
@@ -70,7 +70,7 @@ public class QuestionController {
         Question question = getQuestionById(id);
         User user = SessionUtils.getLoginUser(session);
         if (!question.isMatchingWriter(user)) {
-            throw new CRUDAuthenticationException("다른 사용자의 글을 삭제할 수 없습니다.");
+            throw new CRUDAuthenticationException("Cannot edit other user's posts");
         }
         questionRepository.delete(question);
         return "redirect:/";

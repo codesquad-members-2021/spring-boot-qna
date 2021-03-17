@@ -64,7 +64,7 @@ public class UserController {
         User user = findUserById(id);
         User sessionedUser = SessionUtils.getLoginUser(session);
         if (!sessionedUser.isMatchingId(id)) {
-            throw new CRUDAuthenticationException("자신의 정보만 수정할 수 있습니다");
+            throw new CRUDAuthenticationException("Users can only edit their own profile information");
         }
         model.addAttribute("user", user);
         return "user/updateForm";
