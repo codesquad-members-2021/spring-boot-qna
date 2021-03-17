@@ -30,8 +30,8 @@ public class UserService {
         return userRepository.findAll();
     }
 
-    public boolean isCorrectPassword(User user, String inputPassword) {
-        return user.getPassword().equals(inputPassword);
+    public boolean isCorrectPassword(User user, User newInfoUser) {
+        return user.getPassword().equals(newInfoUser.getPassword());
     }
 
     public User findByUserId(String userId) {

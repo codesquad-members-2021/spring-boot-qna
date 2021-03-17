@@ -1,7 +1,9 @@
 package com.codessquad.qna.web.controllers;
 
 import com.codessquad.qna.web.domain.Question;
+import com.codessquad.qna.web.domain.User;
 import com.codessquad.qna.web.service.QuestionService;
+import com.codessquad.qna.web.utility.SessionUtility;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -9,6 +11,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import javax.servlet.http.HttpSession;
 import java.util.*;
 
 @Controller
@@ -21,8 +24,16 @@ public class QuestionController {
         this.questionService = questionService;
     }
 
+    @GetMapping("/form")
+    public String askQuestion(HttpSession session) {
+        User writer = SessionUtility.findSessionedUser(session);
+        return "qna/form";
+    }
+
     @PostMapping
-    public String saveQuestionForm(Question question) {
+    public String saveQuestionForm(String title, String contents, HttpSession session) {
+        User writer = SessionUtility.findSessionedUser(session);
+        Question question = new Question(writer, title, contents);
         questionService.save(question);
         return "redirect:/";
     }
