@@ -13,7 +13,7 @@ public class Question {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(nullable=false)
+    @JoinColumn(foreignKey = @ForeignKey(name = "fk_question_writer"), nullable=false)
     private User writer;
 
     @Column(nullable = false, length = 20)
