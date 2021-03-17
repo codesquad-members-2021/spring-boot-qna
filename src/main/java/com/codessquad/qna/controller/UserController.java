@@ -5,26 +5,23 @@ import com.codessquad.qna.exception.IllegalUserAccessException;
 import com.codessquad.qna.service.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import java.util.List;
 
-
 import static com.codessquad.qna.controller.HttpSessionUtils.*;
 
 @RequestMapping("/users")
 @Controller
 public class UserController {
-
     private static final Logger logger = LoggerFactory.getLogger(UserController.class);
     private final UserService userService;
 
-    @Autowired
     public UserController(UserService userService) {
         this.userService = userService;
     }
@@ -36,19 +33,21 @@ public class UserController {
             throw new IllegalUserAccessException("비밀번호가 틀렸습니다.");
         }
         session.setAttribute(USER_SESSION_KEY, user);
-        logger.info("user : {}님이 로그인하셨습니다.", user.getUserId());
+        logger.debug("user : {}님이 로그인하셨습니다.", user.getUserId());
         return "redirect:/";
     }
 
     @GetMapping("/logout")
     public String logout(HttpSession session) {
         session.removeAttribute(USER_SESSION_KEY);
+        logger.debug("user : {}님이 로그아웃하셨습니다.", getSessionUser(session).getUserId());
         return "redirect:/";
     }
 
     @PostMapping
     public String create(User user) {
         userService.join(user);
+        logger.debug("user : {}님이 가입하셨습니다.", user.getUserId());
         return "redirect:/users";
     }
 
@@ -70,19 +69,26 @@ public class UserController {
     public String updateForm(@PathVariable Long id, Model model, HttpSession session) {
         User user = userService.findVerifiedUser(id, session);
         model.addAttribute("user", user);
-        return "user/updateForm";
+        return "/user/updateForm";
     }
 
     @PutMapping("/{id}")
-    public String update(@PathVariable Long id, @Valid User updatedUser, HttpSession session, @RequestParam String password) {
+    public String update(@PathVariable Long id, @Valid User updatedUser, @RequestParam String password, Model model, HttpSession session, Errors errors) {
         User user = userService.findVerifiedUser(id, session);
-        if (!user.hasMatchingPassword(password)) {
-            return "redirect:/users/" + id + "/form";
+        if (errors.hasErrors()) {
+            model.addAttribute("user", user);
+            model.addAttribute("errorMessage", "비어있는 필드가 있습니다.");
+            return "/user/updateForm";
         }
-        user.update(updatedUser);
-        userService.update(user);
+        if (!user.hasMatchingPassword(password)) {
+            model.addAttribute("user", user);
+            model.addAttribute("errorMessage", "비밀번호가 일치하지 않습니다.");
+            return "/user/updateForm";
+        }
+        userService.update(user, updatedUser);
+        session.setAttribute(USER_SESSION_KEY, user);
         return "redirect:/users";
     }
-
 }
+
 
