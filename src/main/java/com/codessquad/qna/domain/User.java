@@ -1,7 +1,6 @@
 package com.codessquad.qna.domain;
 
 import javax.persistence.*;
-import java.util.Objects;
 
 @Entity //m 데이타베이스의 테이블과 일대일로 매칭되는 객체 단위
 public class User {
@@ -68,21 +67,4 @@ public class User {
         this.newPassword = newPassword;
     }
 
-    public boolean eqaulId(String inputUserId) {
-        return Objects.equals(inputUserId, this.getUserId());
-    }
-
-    public boolean equalPassword(String inputPassword) {
-        return Objects.equals(inputPassword, this.getPassword());
-    }
-
-    public User update(User updateUserData) {
-        if (!this.eqaulId(updateUserData.getUserId()) || !this.equalPassword(updateUserData.getPassword())) {
-            return this;
-        }
-        this.setName(updateUserData.getName());
-        this.setPassword(updateUserData.getNewPassword());
-        this.setEmail(updateUserData.getEmail());
-        return this;
-    }
 }
