@@ -16,19 +16,31 @@ public class AnswerService {
         this.answerRepository = answerRepository;
     }
 
+    /**
+     * 답변 생성
+     */
     public void createAnswer(Answer answer) {
         answerRepository.save(answer);
     }
 
+    /**
+     * 답변 조회
+     */
     public Answer findBy(Long id) {
         return answerRepository.findById(id)
                 .orElseThrow(AnswerNotFoundException::new);
     }
 
+    /**
+     * 답변 리스트 조회
+     */
     public List<Answer> findAnswerListBy(Question question) {
         return answerRepository.findByQuestion(question);
     }
 
+    /**
+     * 답변 삭제
+     */
     public void delete(Answer answer) {
         answerRepository.delete(answer);
     }

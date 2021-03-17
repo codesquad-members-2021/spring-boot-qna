@@ -16,24 +16,39 @@ public class QuestionService {
         this.questionRepository = questionRepository;
     }
 
+    /**
+     * 질문 생성
+     */
     public Question createQuestion(Question question) {
         return questionRepository.save(question);
     }
 
-    public List<Question> findAll() {
-        return questionRepository.findAll();
-    }
-
+    /**
+     * 질문 조회
+     */
     public Question findBy(Long id) {
         return questionRepository.findById(id)
                 .orElseThrow(QuestionNotFoundException::new);
     }
 
+    /**
+     * 질문 리스트 조회
+     */
+    public List<Question> findAll() {
+        return questionRepository.findAll();
+    }
+
+    /**
+     * 질문 수정
+     */
     @Transactional
     public void update(Question question, Question updateQuestion) {
         question.update(updateQuestion);
     }
 
+    /**
+     * 질문 제거
+     */
     public void deleteBy(Long id) {
         questionRepository.deleteById(id);
     }
