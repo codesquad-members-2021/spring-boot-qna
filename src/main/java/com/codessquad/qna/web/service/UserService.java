@@ -25,15 +25,7 @@ public class UserService {
     }
 
     public void signUp(User user) {
-        validateUserID(user);
-        userRepository.save(user);
-    }
-
-    private void validateUserID(User user) {
-        userRepository.findByUserId(user.getUserId())
-                .ifPresent(x -> {
-                    throw new IllegalStateException("이미 존재하는 아이디입니다");
-                });
+          userRepository.save(user);
     }
 
     public List<User> findUsers() {

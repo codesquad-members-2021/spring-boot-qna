@@ -45,11 +45,7 @@ public class UserController {
 
     @PostMapping
     public String createUser(User user) {
-        try {
-            userService.signUp(user);
-        } catch (IllegalStateException e) {
-            return "redirect:/";
-        }
+        userService.signUp(user);
         return "redirect:/users";
     }
 
