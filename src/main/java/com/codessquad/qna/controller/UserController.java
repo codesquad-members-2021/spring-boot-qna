@@ -43,8 +43,8 @@ public class UserController {
     @GetMapping("users/{primaryKey}/form") //m 개인정보 수정
     private String changeMemberInfo(@PathVariable("primaryKey") Long targetKey, Model model, HttpSession session) {
 
-        if (userService.matchingId(userService.getById(targetKey), HttpSessionUtil.getLoginUser(session))) {
-            model.addAttribute("users", HttpSessionUtil.getLoginUser(session));
+        if (userService.equalsId(userService.getById(targetKey), HttpSessionUtil.getLoginUserOf(session))) {
+            model.addAttribute("users", HttpSessionUtil.getLoginUserOf(session));
             return "user/updateForm";
         }
 
@@ -70,7 +70,7 @@ public class UserController {
         HttpSessionUtil.setAttribute(session, userService.getById(userId));
         return "redirect:/";
     }
-    
+
     @GetMapping("/logout")
     private String logout(HttpSession session){
         HttpSessionUtil.removeAttribute(session);

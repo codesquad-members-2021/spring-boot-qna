@@ -13,13 +13,13 @@ public class HttpSessionUtil {
 
     private static final String SESSION_KEY = "sessionedUser";
 
-    public static User getLoginUser(HttpSession session){
-        if(!checkValidOfSession(session)){
+    public static User getLoginUserOf(HttpSession session){
+        if(!checkValidOf(session)){
             throw new RuntimeException("나중에 예외처리");
         }
         return (User)session.getAttribute(SESSION_KEY);
     }
-    public static boolean checkValidOfSession(HttpSession session){
+    public static boolean checkValidOf(HttpSession session){
         return session.getAttribute(SESSION_KEY) != null;
     }
 

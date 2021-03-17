@@ -43,11 +43,11 @@ public class UserService {
         return userRepository.findByUserId(userId).orElseThrow(NoSuchElementException::new);
     }
 
-    public boolean matchingId(User selectedUser, User loginUser) { // 네이밍 고민
+    public boolean equalsId(User selectedUser, User loginUser) { // 네이밍 고민
         return Objects.equals(selectedUser.getUserId(), loginUser.getUserId());
     }
 
-    public boolean matchingPw(User selectedUser, User loginUser) {
+    public boolean equalsPw(User selectedUser, User loginUser) {
         return Objects.equals(selectedUser.getPassword(), loginUser.getPassword());
     }
 
@@ -57,10 +57,10 @@ public class UserService {
     }
 
     public User update(User originUserData, User updateUserData) {
-        if (!matchingId(originUserData,updateUserData) || !matchingPw(originUserData,updateUserData)){
+        if (!equalsId(originUserData,updateUserData) || !equalsPw(originUserData,updateUserData)){
             return originUserData;
         }
-        originUserData.setName(updateUserData.getName());
+        originUserData.setName(updateUserData.getName()); // 이 역할을 User 클래스가 해야할지.. 고민
         originUserData.setPassword(updateUserData.getNewPassword());
         originUserData.setEmail(updateUserData.getEmail());
         return originUserData;
