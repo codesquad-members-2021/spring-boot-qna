@@ -1,9 +1,8 @@
 package com.codessquad.qna.controller;
 
 import com.codessquad.qna.domain.User;
-import com.codessquad.qna.exception.*;
+import com.codessquad.qna.exception.UnauthorizedAccessException;
 import com.codessquad.qna.service.UserService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -16,7 +15,6 @@ public class UserController {
 
     private final UserService userService;
 
-    @Autowired
     public UserController(UserService userService) {
         this.userService = userService;
     }

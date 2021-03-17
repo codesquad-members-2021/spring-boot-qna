@@ -7,18 +7,16 @@ import com.codessquad.qna.domain.User;
 import com.codessquad.qna.exception.ForbiddenException;
 import com.codessquad.qna.exception.NotFoundException;
 import com.codessquad.qna.exception.UnauthorizedAccessException;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
 @Service
-public class QuestionServiceImpl implements QuestionService{
+public class QuestionServiceImpl implements QuestionService {
 
     private final QuestionRepository questionRepository;
 
-    @Autowired
     public QuestionServiceImpl(QuestionRepository questionRepository) {
         this.questionRepository = questionRepository;
     }

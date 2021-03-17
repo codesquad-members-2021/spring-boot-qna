@@ -3,16 +3,14 @@ package com.codessquad.qna.service;
 import com.codessquad.qna.domain.*;
 import com.codessquad.qna.exception.NotFoundException;
 import com.codessquad.qna.exception.UnauthorizedAccessException;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-public class AnswerServiceImpl implements AnswerService{
+public class AnswerServiceImpl implements AnswerService {
 
     private final QuestionRepository questionRepository;
     private final AnswerRepository answerRepository;
 
-    @Autowired
     public AnswerServiceImpl(QuestionRepository questionRepository, AnswerRepository answerRepository) {
         this.questionRepository = questionRepository;
         this.answerRepository = answerRepository;

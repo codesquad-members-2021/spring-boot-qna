@@ -1,9 +1,9 @@
 package com.codessquad.qna.controller;
 
-import com.codessquad.qna.domain.*;
+import com.codessquad.qna.domain.Question;
+import com.codessquad.qna.domain.User;
 import com.codessquad.qna.exception.NotLoggedInException;
 import com.codessquad.qna.service.QuestionService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -16,7 +16,6 @@ public class QuestionController {
 
     private final QuestionService questionService;
 
-    @Autowired
     public QuestionController(QuestionService questionService) {
         this.questionService = questionService;
     }

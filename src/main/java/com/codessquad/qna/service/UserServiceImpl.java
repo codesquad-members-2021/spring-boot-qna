@@ -6,17 +6,15 @@ import com.codessquad.qna.exception.LoginFailedException;
 import com.codessquad.qna.exception.NotFoundException;
 import com.codessquad.qna.exception.UnauthorizedAccessException;
 import com.codessquad.qna.exception.UserExistException;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
-public class UserServiceImpl implements UserService{
+public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
 
-    @Autowired
     public UserServiceImpl(UserRepository userRepository) {
         this.userRepository = userRepository;
     }
@@ -29,7 +27,9 @@ public class UserServiceImpl implements UserService{
     @Override
     public void register(User user) {
         userRepository.findByUserId(user.getUserId())
-                .ifPresent(u -> {throw new UserExistException();});
+                .ifPresent(u -> {
+                    throw new UserExistException();
+                });
         userRepository.save(user);
     }
 
