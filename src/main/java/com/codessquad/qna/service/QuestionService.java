@@ -40,4 +40,8 @@ public class QuestionService {
         questionRepository.delete(presentQuestion);
         questionRepository.save(referenceQuestion);
     }
+
+    public void remove(long id) {
+        questionRepository.deleteById(id);
+    }
 }

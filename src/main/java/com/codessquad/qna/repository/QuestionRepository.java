@@ -8,4 +8,7 @@ import java.util.List;
 public interface QuestionRepository extends CrudRepository<Question, Long> {
     @Override
     List<Question> findAll();
+
+    @Override
+    void deleteById(Long id);
 }
