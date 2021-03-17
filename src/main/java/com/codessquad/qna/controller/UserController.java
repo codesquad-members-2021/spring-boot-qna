@@ -58,19 +58,15 @@ public class UserController {
             if (aUser.isSameId(userId)) {
                 String pwBefore = aUser.getPassword();
                 if (pwBefore.equals(inputPw)) {
-                    System.out.println("비밀번호 일치");
-                    System.out.println("기존 비밀번호 " + pwBefore);
-                    System.out.println("입력 비밀번호 " + inputPw);
                     model.addAttribute("user", aUser);
                     return "updateForm";
                 }
             }
         }
-        System.out.println("비밀번호 불일치");
         return "redirect:/";
     }
 
-    @PostMapping("/user/{userId}/update")
+    @PostMapping("/user/{userId}/edit")
     public String updateUser(@PathVariable("userId") String userId, User user) {
         Long id = 0L;
         for (User aUser : users) {
@@ -82,7 +78,7 @@ public class UserController {
         }
         user.setId(id);
         users.add(user);
-        return "redirect:/users";
+        return "redirect:/user";
     }
 }
 

@@ -36,7 +36,7 @@
 회원정보 수정
 
 - POST `/user/{userId}/edit`
-    - redirect:/
+    - redirect:/user
 
 질문하기
 
