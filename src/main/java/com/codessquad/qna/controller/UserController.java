@@ -22,7 +22,7 @@ public class UserController {
 
     private List<User> users = new ArrayList<>();
 
-    @PostMapping("")
+    @PostMapping
     public String createUserAccount(User user) {
         if (user == null) {
             return "redirect:/user/form";
@@ -32,7 +32,7 @@ public class UserController {
         return "redirect:/users";
     }
 
-    @GetMapping("")
+    @GetMapping
     public String showUserList(Model model) {
         model.addAttribute("users", users);
         return "/user/list";
@@ -53,11 +53,12 @@ public class UserController {
 
     @PostMapping("/{userId}/update")
     public String updateUserInfo(@PathVariable String userId, User updateUser) {
+        //for
         for (User user : users) {
             if(user.getUserId().equals(userId)) {
                 int index = users.indexOf(user);
                 users.set(index, updateUser);
-                System.out.println("updateUser = " + updateUser);
+                logger.info("updateUser = " + updateUser);
             }
         }
         return "redirect:/users";
