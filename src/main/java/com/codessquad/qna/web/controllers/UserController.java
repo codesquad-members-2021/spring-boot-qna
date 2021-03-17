@@ -21,7 +21,7 @@ public class UserController {
         return "user/form";
     }
 
-    @PostMapping("/form")
+    @PostMapping
     public String createUser(User user) {
         userService.save(user);
         return "redirect:/users";
