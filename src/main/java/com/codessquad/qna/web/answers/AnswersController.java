@@ -45,7 +45,7 @@ public class AnswersController {
 
         Question targetQuestion = targetAnswer.getQuestion();
         if (!targetAnswer.isMatchingWriter(sessionUser)) {
-            throw new UnauthorizedAccessException();
+            throw new UnauthorizedAccessException("자신의 답변만 삭제할 수 있습니다");
         }
 
         this.answersRepository.delete(targetAnswer);

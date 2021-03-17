@@ -78,7 +78,7 @@ public class UsersController {
 
     private void verifyAuthorizedAccess(User user, String password) {
         if (!user.isMatchingPassword(password)) {
-            throw new UnauthorizedAccessException();
+            throw new UnauthorizedAccessException("패스워드가 일치하지 않습니다");
         }
     }
 }

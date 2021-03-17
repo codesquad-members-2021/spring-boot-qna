@@ -18,7 +18,7 @@ public class SessionUtil {
     public static User getLoginUser(HttpSession session) {
         User loginUser = (User) session.getAttribute(SESSION_KEY_LOGIN_USER);
         if (loginUser == null) {
-            throw new NoLoginUserException();
+            throw new NoLoginUserException("로그인된 사용자만 이용할 수 있는 기능입니다");
         }
         return loginUser;
     }
