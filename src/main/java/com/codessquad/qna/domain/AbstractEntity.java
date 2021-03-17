@@ -42,7 +42,7 @@ public class AbstractEntity {
         }
         return date.format(DateTimeFormatter.ofPattern(DATETIME_FORMAT));
     }
-
+    
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
