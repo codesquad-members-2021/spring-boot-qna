@@ -1,53 +1,60 @@
 package com.codessquad.qna.web.controllers;
 
-import com.codessquad.qna.User;
+import com.codessquad.qna.web.domain.User;
+import com.codessquad.qna.web.service.UserService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import org.springframework.web.bind.annotation.*;
 
 @Controller
+@RequestMapping("/users")
 public class UserController {
-    private List<User> users = new ArrayList<>();
 
-    @GetMapping("/user/login")
-    public String getLogin() {
-        return "user/login";
+    private final UserService userService;
+
+    private UserController(UserService userService) {
+        this.userService = userService;
     }
 
-    @GetMapping("/user/form")
-    public String getForm() {
+    @GetMapping("/form")
+    public String viewLoginForm() {
         return "user/form";
     }
 
-    @PostMapping("/user/form")
+    @PostMapping
     public String createUser(User user) {
-        users.add(user);
+        userService.save(user);
         return "redirect:/users";
     }
 
-    @GetMapping("/users")
-    public String getUserList(Model model) {
-        model.addAttribute("users", users);
+    @GetMapping
+    public String viewUserList(Model model) {
+        model.addAttribute("users", userService.findAll());
         return "user/list";
     }
 
-    @GetMapping("/users/{userId}")
-    public String getSpecificUser(@PathVariable("userId") String userId, Model model) {
-        User foundUser = findUserById(userId);
-        model.addAttribute("user", foundUser);
+    @GetMapping("/{id}")
+    public String viewUserProfileById(@PathVariable Long id, Model model) {
+        User user = userService.findUserById(id);
+        model.addAttribute("user", user);
         return "user/profile";
     }
 
-    private User findUserById(String userId) {
-        return users.stream()
-                .filter(user -> user.getUserId().equals(userId))
-                .findAny().orElse(null);
+    @GetMapping("/{id}/form")
+    public String updateUserForm(@PathVariable Long id, Model model) {
+        User user = userService.findUserById(id);
+        model.addAttribute("user", user);
+        return "user/updateForm";
     }
 
+    @PutMapping("/{id}")
+    public String updateUser(@PathVariable Long id, User newInfoUser) {
+        User user = userService.findUserById(id);
+        if (userService.isCorrectPassword(user, newInfoUser.getPassword())) {
+            user.update(newInfoUser);
+            userService.save(user);
+            return "redirect:/users";
+        }
+        return "user/wrongPassword";
+    }
 }
