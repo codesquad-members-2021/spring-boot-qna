@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpSession;
 
 @Controller
+@RequestMapping("/questions")
 public class QuestionController {
 
     private final QuestionRepository questionRepository;
@@ -22,7 +23,7 @@ public class QuestionController {
         this.questionRepository = questionRepository;
     }
 
-    @PostMapping("/questions")
+    @PostMapping()
     public String create(QuestionRequest request, HttpSession session) {
         User user = SessionUtils.getLoginUser(session);
         Question question = new Question(user, request.getTitle(), request.getContents());
@@ -30,7 +31,7 @@ public class QuestionController {
         return "redirect:/";
     }
 
-    @GetMapping("/questions/form")
+    @GetMapping("/form")
     public String questionForm(HttpSession session) {
         if (!SessionUtils.isLoginUser(session)) {
             return "/users/login-form";
@@ -38,7 +39,7 @@ public class QuestionController {
         return "qna/form";
     }
 
-    @GetMapping("/questions/{id}/form")
+    @GetMapping("/{id}/form")
     public String updateForm(@PathVariable long id, Model model, HttpSession session) {
         Question question = getQuestionById(id);
         User writer = question.getWriter();
@@ -52,7 +53,7 @@ public class QuestionController {
         return "qna/updateForm";
     }
 
-    @PutMapping("/questions/{id}/update")
+    @PutMapping("/{id}/update")
     public String update(@PathVariable long id, QuestionRequest post) {
         Question question = getQuestionById(id);
         question.update(post.getTitle(), post.getContents());
@@ -60,7 +61,7 @@ public class QuestionController {
         return "redirect:/questions/" + id;
     }
 
-    @DeleteMapping("/questions/{id}/delete")
+    @DeleteMapping("/{id}/delete")
     public String delete(@PathVariable long id, HttpSession session) {
         Question question = getQuestionById(id);
         User user = SessionUtils.getLoginUser(session);
@@ -71,17 +72,11 @@ public class QuestionController {
         return "redirect:/";
     }
 
-    @GetMapping("/questions/{id}")
+    @GetMapping("/{id}")
     public String questionDetail(@PathVariable long id, Model model) {
         Question question = getQuestionById(id);
         model.addAttribute("question", question);
         return "/qna/show";
-    }
-
-    @GetMapping("/")
-    public String getHome(Model model) {
-        model.addAttribute("questions", questionRepository.findAll());
-        return "index";
     }
 
     private Question getQuestionById(Long id){
