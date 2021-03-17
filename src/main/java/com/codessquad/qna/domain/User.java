@@ -73,10 +73,7 @@ public class User extends AbstractEntity implements Serializable {
     }
 
     public boolean hasMatchingPassword(String password) {
-        if (password == null) {
-            return false;
-        }
-        return password.equals(this.password);
+        return !this.password.equals(password);
     }
 }
 
