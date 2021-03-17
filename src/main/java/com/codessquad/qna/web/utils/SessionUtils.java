@@ -10,7 +10,7 @@ public class SessionUtils {
 
     public static User getLoginUser(HttpSession session) {
         return userFromSession(session)
-                .orElseThrow(() -> new UserNotFoundException("No login user"));
+                .orElseThrow(() -> new UserNotFoundException("You are a guest user, please sign in first"));
     }
 
     public static boolean isLoginUser(HttpSession session) {
