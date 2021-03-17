@@ -1,14 +1,15 @@
 package com.codessquad.qna.web.controllers;
 
 import com.codessquad.qna.web.domain.User;
+import com.codessquad.qna.web.exception.LoginException;
 import com.codessquad.qna.web.exception.UserException;
 import com.codessquad.qna.web.service.UserService;
+import com.codessquad.qna.web.utility.SessionUtility;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
-import java.util.NoSuchElementException;
 
 @Controller
 @RequestMapping("/users")
@@ -47,16 +48,9 @@ public class UserController {
     @GetMapping("/{id}/form")
     public String updateUserForm(@PathVariable Long id, Model model, HttpSession session) {
         User user = userService.findUserById(id);
+        User sessionedUser = SessionUtility.findSessionedUser(session);
 
-        Object value = session.getAttribute("sessionedUser");
-        if(value == null) {
-            return "redirect:/users/login";
-        }
-        User sessionedUser = (User)value;
-
-        if(sessionedUser.getId() != user.getId()) {
-            throw new UserException("본인의 회원정보만 수정할 수 있습니다.");
-        }
+        SessionUtility.verifySessionUser(sessionedUser, user);
         model.addAttribute("user", user);
         return "user/updateForm";
     }
@@ -64,12 +58,12 @@ public class UserController {
     @PutMapping("/{id}")
     public String updateUser(@PathVariable Long id, User newInfoUser) {
         User user = userService.findUserById(id);
-        if (userService.isCorrectPassword(user, newInfoUser.getPassword())) {
-            user.update(newInfoUser);
-            userService.save(user);
-            return "redirect:/users";
+        if (!userService.isCorrectPassword(user, newInfoUser)) {
+            throw new UserException("비밀번호가 틀렸습니다.");
         }
-        return "user/error";
+        user.update(newInfoUser);
+        userService.save(user);
+        return "redirect:/users";
     }
 
     @GetMapping("/login")
@@ -81,10 +75,10 @@ public class UserController {
     public String loginUser(String userId, String password, HttpSession session) {
         User user = userService.findByUserId(userId);
         if(user == null) {
-            return "redirect:/users/login_failed";
+            throw new LoginException("해당 userId의 사용자가 존재하지 않습니다.");
         }
         if(!user.matchesPassword(password)) {
-            return "redirect:/users/login_failed";
+            throw new LoginException("비밀번호가 틀렸습니다.");
         }
         session.setAttribute("sessionedUser", user);
         return "redirect:/";
