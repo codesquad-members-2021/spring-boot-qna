@@ -26,7 +26,7 @@ public class QuestionController {
 
     @GetMapping("/new")
     public String toQnaForm() {
-        return "qnaForm";
+        return "questionInputForm";
     }
 
     @PostMapping("/new")
@@ -45,6 +45,6 @@ public class QuestionController {
     public String showQuestion(@PathVariable("index") int index, Model model) {
         Question question = questions.get(index - 1);
         model.addAttribute("question", question);
-        return "show";
+        return "questionDetail";
     }
 }

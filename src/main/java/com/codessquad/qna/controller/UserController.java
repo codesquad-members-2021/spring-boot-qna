@@ -18,14 +18,14 @@ public class UserController {
     private List<User> users = new ArrayList<>();
 
     @GetMapping
-    public String showUsers(Model model) {
+    public String showUserList(Model model) {
         model.addAttribute("users", users);
-        return "list";
+        return "userList";
     }
 
     @GetMapping("/new")
     public String toSignupPage() {
-        return "signup";
+        return "userSignup";
     }
 
     @PostMapping("/new")
@@ -43,13 +43,13 @@ public class UserController {
                 break;
             }
         }
-        return "profile";
+        return "userProfile";
     }
 
     @GetMapping("/{userId}/password-check")
     public String toCheckPasswordPage(@PathVariable("userId") String userId, Model model) {
         model.addAttribute("userId", userId);
-        return "checkPassword";
+        return "passwordCheck";
     }
 
     @PostMapping("/{userId}/password-check")
@@ -61,7 +61,7 @@ public class UserController {
                 String pwBefore = aUser.getPassword();
                 if (pwBefore.equals(inputPw)) {
                     model.addAttribute("user", aUser);
-                    return "updateForm";
+                    return "userUpdateForm";
                 }
             }
         }
