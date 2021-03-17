@@ -21,13 +21,7 @@ public class QuestionController {
         return "qnaForm";
     }
 
-    @GetMapping("/questions")
-    public String goToCreateQuestion(Model model) {
-        model.addAttribute("questions", questions);
-        return "index";
-    }
-
-    @PostMapping("/questions")
+    @PostMapping("/questions/new")
     public String createQuestion(Question question) {
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm");
         String formatTime = format.format(System.currentTimeMillis());
@@ -35,6 +29,12 @@ public class QuestionController {
         question.setIndex(questions.size() + 1);
         questions.add(question);
         return "redirect:/";
+    }
+
+    @GetMapping("/questions")
+    public String goToCreateQuestion(Model model) {
+        model.addAttribute("questions", questions);
+        return "index";
     }
 
     @GetMapping("/questions/{index}")
