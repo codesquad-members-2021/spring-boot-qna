@@ -13,7 +13,8 @@
                                  class="article-author-thumb" alt="">
                         </div>
                         <div class="article-header-text">
-                            <a href="/users/{{question.writer.id}}" class="article-author-name">{{question.writer.name}}</a>
+                            <a href="/users/{{question.writer.id}}"
+                               class="article-author-name">{{question.writer.name}}</a>
                             <a href="#" class="article-header-time" title="퍼머링크">
                                 {{question.date}}
                                 <i class="icon-link"></i>
@@ -51,7 +52,8 @@
                             <article class="article" id="answer-1405">
                                 <div class="article-header">
                                     <div class="article-header-thumb">
-                                        <img src="https://graph.facebook.com/v2.3/1324855987/picture" class="article-author-thumb" alt="">
+                                        <img src="https://graph.facebook.com/v2.3/1324855987/picture"
+                                             class="article-author-thumb" alt="">
                                     </div>
                                     <div class="article-header-text">
                                         <a href="/users/{{writer.id}}" class="article-author-name">{{writer.name}}</a>
@@ -66,13 +68,11 @@
                                 <div class="article-util">
                                     <ul class="article-util-list">
                                         <li>
-                                            <a class="link-modify-article" href="/questions/{{question.id}}/answers/{{id}}/form">수정</a>
+                                            <a class="link-modify-article"
+                                               href="/questions/{{question.id}}/answers/{{id}}/form">수정</a>
                                         </li>
                                         <li>
-                                            <form class="delete-answer-form" action="/questions/{{question.id}}/answers/{{id}}" method="POST">
-                                                <input type="hidden" name="_method" value="DELETE">
-                                                <button type="submit" class="delete-answer-button">삭제</button>
-                                            </form>
+                                            <a class="link-delete-article" href="/api/questions/{{question.id}}/answers/{{id}}">삭제</a>
                                         </li>
                                     </ul>
                                 </div>
@@ -80,7 +80,8 @@
                             {{/answers}}
                             <form class="answer-write" action="/api/questions/{{question.id}}/answers/" method="POST">
                                 <div class="form-group" style="padding:14px;">
-                                    <textarea class="form-control" name="contents" id="contents" placeholder="Update your status"></textarea>
+                                    <textarea class="form-control" name="contents" id="contents"
+                                              placeholder="Update your status"></textarea>
                                 </div>
                                 <input type="submit" class="btn btn-success pull-right pull-right" value="답변하기"/>
                                 <div class="clearfix"/>
@@ -114,10 +115,7 @@
                     <a class="link-modify-article" href="/api/qna/updateAnswer/{3}">수정</a>
                 </li>
                 <li>
-                    <form class="delete-answer-form" action="/api/questions/{3}/answers/{4}" method="POST">
-                        <input type="hidden" name="_method" value="DELETE">
-                        <button type="submit" class="delete-answer-button">삭제</button>
-                    </form>
+                    <a class="link-delete-article" href="/api/questions/{3}/answers/{4}">삭제</a>
                 </li>
             </ul>
         </div>
