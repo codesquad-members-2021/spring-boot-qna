@@ -65,6 +65,21 @@ public class Answer {
         return createdAt.format(DATE_TIME_FORMATTER);
     }
 
+    public void setQuestion(Question question) {
+        this.question = question;
+        if (!question.getAnswers().contains(this)) {
+            question.getAnswers().add(this);
+        }
+    }
+
+    public void setWriter(User writer) {
+        this.writer = writer;
+        if (!writer.getAnswers().contains(this)) {
+            writer.getAnswers().add(this);
+        }
+    }
+
+
     public boolean isMatchingWriter(User user) {
         return writer.isMatchingWriter(user);
     }
