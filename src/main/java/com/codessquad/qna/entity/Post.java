@@ -1,7 +1,10 @@
 package com.codessquad.qna.entity;
 
+import org.hibernate.annotations.Where;
+
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -9,22 +12,29 @@ import java.util.List;
 public class Post {
 
     @Id
-    @Column(name = "POST_ID")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long postId;
 
     private String title;
-    private String author;
-    private String body;
-    private LocalDateTime createDateTime = LocalDateTime.now();
 
-    @OneToMany(mappedBy = "post")
-    private List<Comment> comments;
+    @ManyToOne
+    @JoinColumn(name = "writer_user_id")
+    private User author;
+
+    private boolean deleted = false;
+    private String body;
+
+
+    @OneToMany(mappedBy = "post", cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
+    @Where(clause = "deleted = false")
+    private final List<Comment> comments = new ArrayList<>();
+
+    private LocalDateTime createDateTime = LocalDateTime.now();
 
     protected Post() {
     }
 
-    public Post(String title, String author, String body) {
+    public Post(String title, User author, String body) {
         this.title = title;
         this.author = author;
         this.body = body;
@@ -38,7 +48,7 @@ public class Post {
         return title;
     }
 
-    public String getAuthor() {
+    public User getAuthor() {
         return author;
     }
 
@@ -50,12 +60,36 @@ public class Post {
         return createDateTime;
     }
 
-    public List<Comment> getComment() {
+    public List<Comment> getComments() {
         return Collections.unmodifiableList(comments);
     }
 
+    public void addComment(Comment comment) {
+        comments.add(comment);
+    }
+
+    public void deleteComment(Comment comment) {
+        if(comments.contains(comment)) {
+            comment.delete();
+        }
+    }
+
+    public void delete() {
+        deactiveAllComments();
+        deleted = true;
+    }
+
+    private void deactiveAllComments() {
+        for(Comment comment : comments) {
+            if(comment.isDeleted()) {
+                continue;
+            }
+            comment.delete();
+        }
+    }
+
     public boolean isMatchedAuthor(User user) {
-        return this.author.equals(user.getUserId());
+        return this.author.isMatchedId(user.getId());
     }
 
     public void change(Post post) {
@@ -69,7 +103,7 @@ public class Post {
         return "Post{" +
                 "postId=" + postId +
                 ", title='" + title + '\'' +
-                ", author='" + author + '\'' +
+                ", author='" + author.toString() + '\'' +
                 ", body='" + body + '\'' +
                 ", createDateTime='" + createDateTime + '\'' +
                 '}';

@@ -1,15 +1,18 @@
 package com.codessquad.qna.dto;
 
+import com.codessquad.qna.entity.User;
+
 import java.time.LocalDateTime;
 
 public class PostDto {
 
+    private final LocalDateTime updateDateTime = LocalDateTime.now();
     private String title;
-    private String author;
+    private User author;
     private String body;
-    private final LocalDateTime date = LocalDateTime.now();;
 
-    public PostDto() { }
+    public PostDto() {
+    }
 
     public String getTitle() {
         return title;
@@ -19,11 +22,11 @@ public class PostDto {
         this.title = title;
     }
 
-    public String getAuthor() {
+    public User getAuthor() {
         return author;
     }
 
-    public void setAuthor(String author) {
+    public void setAuthor(User author) {
         this.author = author;
     }
 
@@ -35,8 +38,8 @@ public class PostDto {
         this.body = body;
     }
 
-    public LocalDateTime getDate() {
-        return date;
+    public LocalDateTime getUpdateDateTime() {
+        return updateDateTime;
     }
 
 }

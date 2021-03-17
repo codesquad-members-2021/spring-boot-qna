@@ -1,7 +1,6 @@
 package com.codessquad.qna.entity;
 
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
+import org.hibernate.annotations.ColumnDefault;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -10,33 +9,38 @@ import java.time.LocalDateTime;
 public class Comment {
 
     @Id
-    @Column(name = "COMMENT_ID")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @ManyToOne
-    @OnDelete(action = OnDeleteAction.CASCADE)
-    @JoinColumn(name = "POST_ID")
+    @JoinColumn(name = "post_id")
     private Post post;
 
-    private String author;
+    @ManyToOne
+    @JoinColumn(name = "writer_user_id")
+    private User author;
+
+    @ColumnDefault("false")
+    private boolean deleted = false;
+
     private String body;
-    private LocalDateTime date = LocalDateTime.now();
+    private LocalDateTime createDateTime = LocalDateTime.now();
 
-    protected Comment() { }
+    protected Comment() {
+    }
 
-    public Comment(Post post, String author, String body) {
+    public Comment(Post post, User author, String body) {
         this.post = post;
         this.author = author;
         this.body = body;
-        this.date = LocalDateTime.now();
+        this.createDateTime = LocalDateTime.now();
     }
 
     public Long getId() {
         return id;
     }
 
-    public String getAuthor() {
+    public User getAuthor() {
         return author;
     }
 
@@ -44,12 +48,20 @@ public class Comment {
         return body;
     }
 
-    public LocalDateTime getDate() {
-        return date;
+    public LocalDateTime getCreateDateTime() {
+        return createDateTime;
     }
 
     public Post getPost() {
         return post;
+    }
+
+    public void delete() {
+        deleted = true;
+    }
+
+    public boolean isDeleted() {
+        return deleted;
     }
 
     @Override
@@ -59,8 +71,17 @@ public class Comment {
                 ", post=" + post +
                 ", author='" + author + '\'' +
                 ", body='" + body + '\'' +
-                ", date='" + date + '\'' +
+                ", createDateTime='" + createDateTime + '\'' +
                 '}';
+    }
+
+    public boolean isMatchedUser(User user) {
+        return author.isMatchedId(user.getId());
+    }
+
+    public void update(String body, LocalDateTime updateDateTime) {
+        this.body = body;
+        this.createDateTime = updateDateTime;
     }
 
 }

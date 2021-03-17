@@ -1,0 +1,12 @@
+<html>
+    <body>
+    <form class="submit-write" action="/posts/{{postId}}/comments/{{comment.id}}" method="post">
+        <input type="hidden" name="_method" value="PUT" />
+        <div class="form-group" style="padding:14px;">
+            <textarea name="body" class="form-control" placeholder="{{comment.body}}"></textarea>
+        </div>
+        <button class="btn btn-success pull-right" type="submit">수정하기</button>
+        <div class="clearfix"></div>
+    </form>
+    </body>
+</html>

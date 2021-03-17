@@ -1,9 +1,11 @@
 package com.codessquad.qna.service;
 
 import com.codessquad.qna.dto.PostDto;
+import com.codessquad.qna.entity.Comment;
 import com.codessquad.qna.entity.Post;
 import com.codessquad.qna.entity.User;
-import com.codessquad.qna.exception.CanNotFindPostException;
+import com.codessquad.qna.exception.NotFoundException;
+import com.codessquad.qna.repository.CommentRepository;
 import com.codessquad.qna.repository.PostRepository;
 import com.codessquad.qna.util.Mapper;
 import org.springframework.stereotype.Service;
@@ -16,26 +18,34 @@ import java.util.List;
 public class PostService {
 
     private final PostRepository postRepository;
+    private final CommentRepository commentRepository;
 
-    public PostService(PostRepository postRepository) {
+    public PostService(PostRepository postRepository, CommentRepository commentRepository) {
         this.postRepository = postRepository;
+        this.commentRepository = commentRepository;
     }
 
     public void addPost(Post post) {
         postRepository.save(post);
     }
 
-    //Overload addPost
     public void addPost(PostDto postDto) {
         postRepository.save(Mapper.mapToPost(postDto));
     }
 
+    public void addComment(Post post, Comment comment) {
+       post.addComment(comment);
+       postRepository.save(post);
+    }
+
     public Post getPost(Long id) {
-        return postRepository.findById(id).orElseThrow(CanNotFindPostException::new);
+        return postRepository.findByPostIdAndDeletedFalse(id).orElseThrow(() -> {
+            return new NotFoundException("해당 게시물을 찾을 수 없습니다.");
+        });
     }
 
     public List<Post> getPosts() {
-        return postRepository.findAll();
+        return postRepository.findByDeletedFalse();
     }
 
     @Transactional
@@ -47,10 +57,11 @@ public class PostService {
 
     @Transactional
     public void deletePost(Post post, User sessionUser) throws IllegalAccessException {
-        if(!post.isMatchedAuthor(sessionUser)){
+        if (!post.isMatchedAuthor(sessionUser)) {
             throw new IllegalAccessException("다른 사람의 글을 삭제할 수 없습니다");
         }
-        postRepository.delete(post);
+        post.delete();
+        postRepository.save(post);
     }
 
 }
