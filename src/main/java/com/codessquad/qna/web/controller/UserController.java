@@ -30,7 +30,7 @@ public class UserController {
         User originUser;
         try {
             originUser = userService.login(user);
-        } catch (IllegalStateException e){
+        } catch (IllegalStateException e) {
             return "redirect:/users/loginForm";
         }
         session.setAttribute(HttpSessionUtils.USER_SESSION_KEY, originUser);
@@ -76,7 +76,7 @@ public class UserController {
         }
 
         try {
-            model.addAttribute("user",  userService.checkAndGetOriginUser(id, session));
+            model.addAttribute("user", userService.checkAndGetOriginUser(id, session));
         } catch (IllegalStateException e) {
             return "redirect:/";
         }
@@ -90,12 +90,15 @@ public class UserController {
             return "redirect:/users/loginForm";
         }
 
-        try {
             userService.updateUser(testPassword, userService.checkAndGetOriginUser(id, session), user);
-        } catch (IllegalStateException e) {
-            return "redirect:/";
-        }
-
         return "redirect:/users";
     }
+
+    @ExceptionHandler(IllegalStateException.class)
+    public String hello() {
+        return  "redirect:/users/loginForm";
+    }
+
+    /// 세션 private /// SESSION........
+
 }

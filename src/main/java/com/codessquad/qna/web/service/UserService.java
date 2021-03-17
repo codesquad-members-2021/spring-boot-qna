@@ -4,6 +4,7 @@ import com.codessquad.qna.web.HttpSessionUtils;
 import com.codessquad.qna.web.domain.User;
 import com.codessquad.qna.web.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpSession;
@@ -64,8 +65,9 @@ public class UserService {
         }
     }
 
-    //메소드명 변경 예정
+    //id랑 session id랑 비교해도 되는디.. Userservice라서
     public User checkAndGetOriginUser(long id, HttpSession session) {
+        //컨트롤러에서 할 때 //
         User originUser = findUser(id);
         if(!originUser.isMatchingId(HttpSessionUtils.getSessionedUser(session))) {
             throw new IllegalStateException("자신의 정보만 수정할 수 있습니다");

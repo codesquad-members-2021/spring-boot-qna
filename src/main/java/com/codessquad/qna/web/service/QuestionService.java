@@ -45,4 +45,8 @@ public class QuestionService {
         }
         return originQuestion;
     }
+
+    public void deleteQuestion(long id) {
+        questionRepository.deleteById(id);
+    }
 }

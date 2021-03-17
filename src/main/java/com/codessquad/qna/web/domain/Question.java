@@ -16,7 +16,9 @@ public class Question {
     private Long id;
 
     private String writer;
+    //length 지정
     private String title;
+    // length 지정 안해주면 기본값 255 // 4000... 2000.. 지정 필요
     private String contents;
     private LocalDateTime createdDateTime = LocalDateTime.now();
 

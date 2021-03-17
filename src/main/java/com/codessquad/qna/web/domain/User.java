@@ -58,8 +58,10 @@ public class User {
         return this.id == user.id;
     }
 
+
+    //수정필요
     public void update(User user) {
-        this.setPassword(user.getPassword());
+//        this.password(user.getPassword());
         this.setName(user.getName());
         this.setEmail(user.getEmail());
     }

@@ -58,7 +58,7 @@ public class QuestionController {
         if(!HttpSessionUtils.isLoginUser(session)) {
             return "redirect:/users/loginForm";
         }
-        //try-catch 할까 말까
+        //try-catch 할까 말까  //여기 세션 들어가는 곳 원래 자바지기 때로 controller로 빼야 한다.
         model.addAttribute("question", questionService.getOriginQuestion(id, session));
         return "/qna/updateForm";
     }
@@ -68,7 +68,21 @@ public class QuestionController {
         if(!HttpSessionUtils.isLoginUser(session)) {
             return "redirect:/users/loginForm";
         }
+        //여기 세션 들어가는 곳 원래 자바지기 때로 controller로 빼야 한다.
         questionService.updateQuestion(questionService.getOriginQuestion(id, session), question);
         return "redirect:/questions/";
+    }
+
+    @DeleteMapping("/{id}")
+    public String deleteQuestion(@PathVariable long id, HttpSession session) {
+        if (!HttpSessionUtils.isLoginUser(session)) {
+            return "redirect:/users/loginForm";
+        }
+        //seession에 저장되어 있는 id랑 / id인자로 받은 글쓴이랑 같은 확인
+        if(!questionService.findQuestion(id).getWriter().equals(HttpSessionUtils.getSessionedUser(session).getUserId())){
+            throw new IllegalStateException("자신이 올린 질문만 삭제할 수 있습니다");
+        }
+       questionService.deleteQuestion(id);
+        return "redirect:/questions";
     }
 }
