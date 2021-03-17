@@ -30,7 +30,6 @@ public class QuestionController {
 
     @PostMapping("/create")
     public String create(Question question, HttpSession session) {
-        isLoginUser(session);
         question.setWriter(getUserFromSession(session));
         question.setPostTime();
         questionRepository.save(question);
@@ -45,9 +44,8 @@ public class QuestionController {
 
     @GetMapping("/{id}/form")
     public String update(@PathVariable Long id, Model model, HttpSession session) {
-        isLoginUser(session);
-        Question question = getQuestionById(id);
         User sessionedUser = getUserFromSession(session);
+        Question question = getQuestionById(id);
         if (!question.isPostWriter(sessionedUser)) {
             throw new IllegalStateException("자신의 질문만 수정할 수 있습니다.");
         }
@@ -57,9 +55,8 @@ public class QuestionController {
 
     @PutMapping("/{id}")
     public String updateForm(@PathVariable Long id, Question updatedQuestion, HttpSession session) {
-        isLoginUser(session);
-        Question question = getQuestionById(id);
         User sessionedUser = getUserFromSession(session);
+        Question question = getQuestionById(id);
         if (!question.isPostWriter(sessionedUser)) {
             throw new IllegalStateException("자신의 질문만 수정할 수 있습니다.");
         }
@@ -70,9 +67,8 @@ public class QuestionController {
 
     @DeleteMapping("/{id}/delete")
     public String delete(@PathVariable Long id, HttpSession session) {
-        isLoginUser(session);
-        Question question = getQuestionById(id);
         User sessionedUser = getUserFromSession(session);
+        Question question = getQuestionById(id);
         if (!question.isPostWriter(sessionedUser)) {
             throw new IllegalStateException("자신의 질문만 수정할 수 있습니다.");
         }
