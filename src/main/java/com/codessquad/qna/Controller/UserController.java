@@ -9,9 +9,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
-import java.util.List;
-
 @Controller
 @RequestMapping("/user")
 public class UserController {
@@ -44,7 +41,6 @@ public class UserController {
         return "user/list";
     }
 
-    //@PostMapping("/{id}")
     @PutMapping("/{id}")
     public String updateUser(@PathVariable Long id,User newUser) {
         User currentUser = userRepository.findById(id).get();
@@ -53,16 +49,6 @@ public class UserController {
         logger.info("update User : " + currentUser.toString());
         return "redirect:/user";
     }
-/*
-    public User getUserByUserId(String userId) {
-        for(User user: userRepository.findAll() ) {
-            if(user.getUserId().equals(userId)) {
-                return user;
-            }
-        }
-        return null;
-    }*/
-
 
     @GetMapping("/{id}/form")
     public String getUserupdateForm(@PathVariable Long id , Model model) {
@@ -70,10 +56,5 @@ public class UserController {
         model.addAttribute("user",user);
         return "user/updateForm";
     }
-/*
-    @PostMapping("/update")
-    public String updateConfirm(User newUser) {
-        return "redirect:/user";
-    }
-*/
+
 }

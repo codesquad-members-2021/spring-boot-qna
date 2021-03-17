@@ -11,9 +11,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
-import java.util.ArrayList;
-import java.util.List;
-
 @Controller
 public class QuestionController {
 
@@ -21,8 +18,6 @@ public class QuestionController {
     private QuestionRepostory questionRepostory;
 
     private Logger logger = LoggerFactory.getLogger(UserController.class);
-
-    //final private List<Question> questionList = new ArrayList<>();
 
     @GetMapping("/qna/form")
     public String questionList() {
@@ -49,6 +44,5 @@ public class QuestionController {
         logger.info("update Question : " + currentQuestion.toString());
         return "/qna/show";
     }
-
 
 }
