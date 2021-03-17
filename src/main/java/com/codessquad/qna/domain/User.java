@@ -66,8 +66,8 @@ public class User {
         return newPassword.equals(password);
     }
 
-    public boolean isUserMatching(User newUser){
-        return newUser.equals(this);
+    public boolean isUserMatching(User newUser) {
+        return newUser.getId().equals(id);
     }
 
     @Override
@@ -79,18 +79,5 @@ public class User {
                 ", name='" + name + '\'' +
                 ", email='" + email + '\'' +
                 '}';
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        User user = (User) o;
-        return id.equals(user.id) && userId.equals(user.userId);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id, userId);
     }
 }
