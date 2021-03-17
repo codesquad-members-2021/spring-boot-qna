@@ -20,19 +20,19 @@ public class UserController {
     }
 
     @GetMapping
-    public String userList(Model model) {
+    public String list(Model model) {
         model.addAttribute("users", userService.getUsers());
         return "user/list";
     }
 
     @PostMapping
-    public String createUser(User user) {
+    public String create(User user) {
         userService.addUser(user);
         return "redirect:/users";
     }
 
     @GetMapping("/{userId}/profile")
-    public String userProfile(@PathVariable String userId, Model model) {
+    public String profile(@PathVariable String userId, Model model) {
         Optional<User> user = userService.getUser(userId);
         if (user.isPresent()) {
             model.addAttribute("user", user.get());
@@ -52,7 +52,7 @@ public class UserController {
     }
 
     @PutMapping("/{userId}/update")
-    public String updateUser(User user) {
+    public String update(User user) {
         userService.updateUser(user);
         return "redirect:/users";
     }
