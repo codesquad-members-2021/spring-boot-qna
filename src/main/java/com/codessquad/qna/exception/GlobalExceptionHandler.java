@@ -1,13 +1,12 @@
 package com.codessquad.qna.exception;
 
+import com.codessquad.qna.domain.User;
 import org.springframework.ui.Model;
-
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
 @ControllerAdvice
 public class GlobalExceptionHandler {
-
     @ExceptionHandler(UserNotFoundException.class)
     private String handleUserNotFoundException(Model model, UserNotFoundException e) {
         model.addAttribute("errorMessage", e.getMessage());
@@ -28,8 +27,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(DuplicateUserIdFoundException.class)
     private String handleDuplicateUserIdFoundException(Model model, DuplicateUserIdFoundException e) {
         model.addAttribute("errorMessage", e.getMessage());
-        return "/user/login";
+        return "/user/form";
     }
-
 }
 
