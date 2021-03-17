@@ -1,6 +1,7 @@
 package com.codessquad.qna.controller;
 
 import com.codessquad.qna.entity.User;
+import com.codessquad.qna.exception.UserIdNotFoundException;
 import com.codessquad.qna.service.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -8,6 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+
+import javax.servlet.http.HttpSession;
 
 @Controller
 @RequestMapping("/users")
@@ -58,8 +61,23 @@ public class UserController {
         return "user/login";
     }
 
-    @GetMapping("/loginFail")
+    @GetMapping("/login/failed")
     public String loginFailForm() {
         return "user/login_failed";
+    }
+
+    @PostMapping("/login")
+    public String login(User user, HttpSession session) {
+        logger.debug("login 요청: id={}, password={}", user.getUserId(), user.getPassword());
+        try {
+            User toLogin = userService.getUser(user.getUserId());
+            if (toLogin.verify(user)) {
+                session.setAttribute("user", toLogin);
+                return "redirect:/";
+            }
+            return "redirect:/users/login/failed";
+        } catch (UserIdNotFoundException ex) {
+            return "redirect:/users/login/failed";
+        }
     }
 }
