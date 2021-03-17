@@ -18,18 +18,18 @@ public class UserController {
     private List<User> users = new ArrayList<>();
 
     @GetMapping
-    public String showUser(Model model) {
+    public String showUsers(Model model) {
         model.addAttribute("users", users);
         return "list";
     }
 
     @GetMapping("/new")
-    public String toCreateUser() {
+    public String toSignupPage() {
         return "signup";
     }
 
     @PostMapping("/new")
-    public String createUser(User user) {
+    public String makeNewUser(User user) {
         user.setId((long) (users.size() + 1));
         users.add(user);
         return "redirect:/user";
@@ -47,13 +47,13 @@ public class UserController {
     }
 
     @GetMapping("/{userId}/password-check")
-    public String checkPassword(@PathVariable("userId") String userId, Model model) {
+    public String toCheckPasswordPage(@PathVariable("userId") String userId, Model model) {
         model.addAttribute("userId", userId);
         return "checkPassword";
     }
 
     @PostMapping("/{userId}/password-check")
-    public String passwordRightOrWrong(User user, Model model) {
+    public String checkPassword(User user, Model model) {
         String userId = user.getUserId();
         String inputPw = user.getPassword();
         for (User aUser : users) {

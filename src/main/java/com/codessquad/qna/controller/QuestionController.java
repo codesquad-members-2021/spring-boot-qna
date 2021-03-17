@@ -19,18 +19,18 @@ public class QuestionController {
     private List<Question> questions = new ArrayList<>();
 
     @GetMapping
-    public String goToCreateQuestion(Model model) {
+    public String showQuestions(Model model) {
         model.addAttribute("questions", questions);
         return "index";
     }
 
     @GetMapping("/new")
-    public String newQuestion() {
+    public String toQnaForm() {
         return "qnaForm";
     }
 
     @PostMapping("/new")
-    public String createQuestion(Question question) {
+    public String makeNewQuestion(Question question) {
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm");
         String formatTime = format.format(System.currentTimeMillis());
         question.setDateTime(formatTime);

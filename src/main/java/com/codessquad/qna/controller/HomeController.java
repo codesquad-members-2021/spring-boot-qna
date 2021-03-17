@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 @Controller
 public class HomeController {
     @GetMapping("/")
-    public String showQuestions() {
+    public String redirectQuestions() {
         return "redirect:/questions";
     }
 }
