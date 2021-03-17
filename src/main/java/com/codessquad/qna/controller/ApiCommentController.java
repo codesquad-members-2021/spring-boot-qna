@@ -86,10 +86,10 @@ public class ApiCommentController {
      * @throws IllegalAccessException
      */
     @DeleteMapping("/{id}")
-    public String deleteComment(@PathVariable Long postId, @PathVariable Long id, HttpSession httpSession) throws IllegalAccessException {
+    public boolean deleteComment(@PathVariable Long postId, @PathVariable Long id, HttpSession httpSession) throws IllegalAccessException {
         User sessionUser = HttpSessionUtils.getUserFromSession(httpSession);
         commentService.deleteComment(id, sessionUser);
-        return "redirect:/posts/" + postId;
+        return true;
     }
 
 }
