@@ -1,12 +1,14 @@
 package com.codessquad.qna.web.controllers;
 
 import com.codessquad.qna.web.domain.User;
+import com.codessquad.qna.web.exception.UserException;
 import com.codessquad.qna.web.service.UserService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
+import java.util.NoSuchElementException;
 
 @Controller
 @RequestMapping("/users")
@@ -43,8 +45,18 @@ public class UserController {
     }
 
     @GetMapping("/{id}/form")
-    public String updateUserForm(@PathVariable Long id, Model model) {
+    public String updateUserForm(@PathVariable Long id, Model model, HttpSession session) {
         User user = userService.findUserById(id);
+
+        Object value = session.getAttribute("sessionedUser");
+        if(value == null) {
+            return "redirect:/users/login";
+        }
+        User sessionedUser = (User)value;
+
+        if(sessionedUser.getId() != user.getId()) {
+            throw new UserException("본인의 회원정보만 수정할 수 있습니다.");
+        }
         model.addAttribute("user", user);
         return "user/updateForm";
     }
@@ -57,7 +69,7 @@ public class UserController {
             userService.save(user);
             return "redirect:/users";
         }
-        return "user/wrongPassword";
+        return "user/error";
     }
 
     @GetMapping("/login")
