@@ -1,25 +1,33 @@
 package com.codessquad.qna.domain;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 
 @Entity
 public class Question {
 
     @Id
-    private int index;
+    @GeneratedValue
+    private Long id;
+
+    @Column(nullable = false, length = 20)
     private String writer;
+
+    @Column(nullable = false, length = 100)
     private String title;
+
+    @Column(nullable = false, length = 5000)
     private String contents;
 
 
-
-    public int getIndex() {
-        return index;
+    public Long getId() {
+        return id;
     }
 
-    public void setIndex(int index) {
-        this.index = index;
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getWriter() {
@@ -50,11 +58,10 @@ public class Question {
     @Override
     public String toString() {
         return "Question{" +
-                "index=" + index +
+                "id=" + id +
                 ", writer='" + writer + '\'' +
                 ", title='" + title + '\'' +
                 ", contents='" + contents + '\'' +
                 '}';
     }
-
 }
