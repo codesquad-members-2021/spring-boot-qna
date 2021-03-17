@@ -20,8 +20,6 @@ public class Question extends BaseTimeEntity {
     private String title;
     private String contents;
 
-    private Integer countOfAnswer = 0;
-
     @OneToMany(mappedBy = "question")
     @OrderBy("id DESC")
     private List<Answer> answers;
@@ -59,14 +57,6 @@ public class Question extends BaseTimeEntity {
     public void update(Question updateQuestion) {
         this.title = updateQuestion.title;
         this.contents = updateQuestion.contents;
-    }
-
-    public void addAnswer() {
-        this.countOfAnswer += 1;
-    }
-
-    public void deleteAnswer() {
-        this.countOfAnswer -= 1;
     }
 
     @Override

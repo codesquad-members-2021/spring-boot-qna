@@ -1,16 +1,15 @@
 package com.codessquad.qna.web;
 
 import com.codessquad.qna.domain.answer.Answer;
-import com.codessquad.qna.domain.answer.AnswerRepository;
 import com.codessquad.qna.domain.question.Question;
-import com.codessquad.qna.domain.question.QuestionRepository;
 import com.codessquad.qna.domain.user.User;
 import com.codessquad.qna.exception.AnswerNotFoundException;
 import com.codessquad.qna.exception.IllegalUserAccessException;
 import com.codessquad.qna.exception.QuestionNotFoundException;
+import com.codessquad.qna.service.AnswerService;
+import com.codessquad.qna.service.QuestionService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
@@ -23,26 +22,23 @@ import static com.codessquad.qna.domain.user.HttpSessionUtils.getUserFromSession
 public class AnswerController {
     private static Logger logger = LoggerFactory.getLogger(AnswerController.class);
 
-    private QuestionRepository questionRepository;
-    private AnswerRepository answerRepository;
+    private QuestionService questionService;
+    private AnswerService answerService;
 
-    @Autowired
-    public AnswerController(QuestionRepository questionRepository,
-                            AnswerRepository answerRepository) {
-        this.questionRepository = questionRepository;
-        this.answerRepository = answerRepository;
+    public AnswerController(QuestionService questionService,
+                            AnswerService answerService) {
+        this.questionService = questionService;
+        this.answerService = answerService;
     }
 
     @PostMapping("/")
     public String createAnswer(@PathVariable Long questionId, String comments,
                                HttpSession session) {
         User writer = getUserFromSession(session);
-        Question question = questionRepository.findById(questionId)
-                .orElseThrow(QuestionNotFoundException::new);
+        Question question = questionService.findBy(questionId);
         Answer answer = new Answer(writer, question, comments);
-        question.addAnswer();
 
-        answerRepository.save(answer);
+        answerService.createAnswer(answer);
         logger.debug("answer : {}", answer);
 
         return String.format("redirect:/questions/%d", questionId);
@@ -53,20 +49,13 @@ public class AnswerController {
                          @PathVariable Long id,
                          HttpSession session) {
         User loginedUser = getUserFromSession(session);
-        Answer answer = answerRepository.findById(id)
-                .orElseThrow(AnswerNotFoundException::new);
+        Answer answer = answerService.findBy(id);
 
         if(!answer.matchWriter(loginedUser)) {
             throw new IllegalUserAccessException();
         }
 
-        answerRepository.delete(answer);
-
-        Question question = questionRepository.findById(questionId)
-                .orElseThrow(QuestionNotFoundException::new);
-        question.deleteAnswer();
-
-        questionRepository.save(question);
+        answerService.delete(answer);
 
         return String.format("redirect:/questions/%d", questionId);
     }
