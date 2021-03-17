@@ -50,15 +50,23 @@ public class QuestionService {
     public void delete(Long id, User loginUser) {
         Question question = getWithAuthentication(id, loginUser);
         List<Answer> answers = question.getAnswers();
+
+        checkAnswersWriter(answers, loginUser);
+        deleteAnswers(answers);
+        question.delete();
+    }
+
+    private void checkAnswersWriter(List<Answer> answers, User loginUser) {
         for (Answer answer : answers) {
             if (!answer.matchesWriter(loginUser)) {
                 throw new ForbiddenException("다른 사람의 답변이 존재하여 질문을 삭제할 수 없습니다.");
             }
         }
+    }
+
+    private void deleteAnswers(List<Answer> answers) {
         for (Answer answer : answers) {
             answer.delete();
         }
-        question.delete();
-        questionRepository.save(question);
     }
 }
