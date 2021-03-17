@@ -1,5 +1,5 @@
-$('.submit-write button[type=submit]').click(addAnswer);
-$('.delete-answer-form button[type=submit]').click(deleteAnswer);
+$('.submit-write button[type=submit]').on('click', addAnswer);
+$('.qna-comment-slipp-articles').on('click', '.delete-answer-form button[type=submit]', deleteAnswer);
 
 function addAnswer(e) {
   e.preventDefault();
