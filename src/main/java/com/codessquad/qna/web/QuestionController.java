@@ -42,7 +42,6 @@ public class QuestionController {
 
     @GetMapping("/questions/{id}")
     public String show(@PathVariable Long id, Model model) {
-        // Todo: 왜안돼
         Question question = questionRepository.findById(id).orElseThrow(NoQuestionException::new);
         model.addAttribute("question", question);
         return "qna/show";
@@ -50,9 +49,7 @@ public class QuestionController {
 
     @GetMapping("/questions/{id}/form")
     public String update(@PathVariable Long id, Model model, HttpSession session) {
-        if (!isLoginUser(session)) {
-            return "redirect:/users/loginForm";
-        }
+        isLoginUser(session);
         Question question = questionRepository.findById(id).orElseThrow(NoQuestionException::new);
         User sessionedUser = getUserFromSession(session);
         if (!question.isQuestionWriter(sessionedUser)) {
@@ -64,9 +61,7 @@ public class QuestionController {
 
     @PutMapping("/questions/{id}")
     public String updateForm(@PathVariable Long id, Question updatedQuestion, HttpSession session) {
-        if (!isLoginUser(session)) {
-            return "redirect:/users/loginForm";
-        }
+        isLoginUser(session);
         Question question = questionRepository.findById(id).orElseThrow(NoQuestionException::new);
         User sessionedUser = getUserFromSession(session);
         if (!question.isQuestionWriter(sessionedUser)) {
@@ -79,9 +74,7 @@ public class QuestionController {
 
     @DeleteMapping("/questions/{id}/delete")
     public String delete(@PathVariable Long id, HttpSession session) {
-        if (!isLoginUser(session)) {
-            return "redirect:/users/loginForm";
-        }
+        isLoginUser(session);
         Question question = questionRepository.findById(id).orElseThrow(NoQuestionException::new);
         User sessionedUser = getUserFromSession(session);
         if (!question.isQuestionWriter(sessionedUser)) {
