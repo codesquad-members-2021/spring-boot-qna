@@ -3,6 +3,7 @@ package com.codessquad.qna.domain.question;
 import com.codessquad.qna.domain.answer.Answer;
 import com.codessquad.qna.domain.user.User;
 import com.codessquad.qna.utils.DateFormat;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -31,6 +32,9 @@ public class Question {
     @OneToMany(mappedBy="question")
     @OrderBy("id ASC")
     private final List<Answer> answers = new ArrayList<>();
+
+    @JsonProperty
+    private Integer countOfAnswer = 0;
 
     private boolean deleted;
 
@@ -74,6 +78,10 @@ public class Question {
         return date;
     }
 
+    public Integer getCountOfAnswer() {
+        return countOfAnswer;
+    }
+
     public long getNotDeletedAnswersCount() {
         long answersCount = answers.stream().filter(answer -> !answer.isDeleted()).count();
         return answersCount;
@@ -86,11 +94,15 @@ public class Question {
     public void addAnswer(Answer answer) {
         answers.add(answer);
         answer.setQuestion(this);
+        upCountOfAnswer();
     }
 
-    public void removeAnswer(Answer answer) {
-        answers.remove(answer);
-        answer.setQuestion(null);
+    private void upCountOfAnswer() {
+        countOfAnswer++;
+    }
+
+    public void downCountOfAnswer() {
+        countOfAnswer--;
     }
 
     public boolean isWrittenBy(User user) {

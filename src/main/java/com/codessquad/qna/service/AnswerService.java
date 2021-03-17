@@ -52,8 +52,11 @@ public class AnswerService {
     public Long deleteById(Long id) {
         Answer answer = answerRepository.findById(id)
                 .orElseThrow(() -> new IllegalStateException("해당 답변이 없습니다. id = " + id));
-
+        Long questionId = answer.getQuestion().getId();
+        Question question = questionRepository.findById(questionId)
+                .orElseThrow(() -> new IllegalStateException("해당 질문이 없습니다. id = " + questionId));
         answer.delete();
+        question.downCountOfAnswer();
 
         return id;
     }
