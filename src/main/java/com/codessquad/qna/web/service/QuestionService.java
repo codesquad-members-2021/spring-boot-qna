@@ -2,6 +2,7 @@ package com.codessquad.qna.web.service;
 
 import com.codessquad.qna.web.domain.Question;
 import com.codessquad.qna.web.domain.repository.QuestionRepository;
+import com.codessquad.qna.web.exception.QuestionNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -20,11 +21,15 @@ public class QuestionService {
         questionRepository.save(question);
     }
 
+    public void delete(Question question) { questionRepository.delete(question); }
+
     public List<Question> findAll() {
         return questionRepository.findAll();
     }
 
-    public Optional<Question> findById(Long id) {
-        return questionRepository.findById(id);
+    public Question findById(Long id) {
+        Question question = questionRepository.findById(id)
+                .orElseThrow(() -> new QuestionNotFoundException("찾으시는 질문이 존재하지 않습니다."));
+        return question;
     }
 }

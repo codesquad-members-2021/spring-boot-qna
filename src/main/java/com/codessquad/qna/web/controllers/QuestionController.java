@@ -18,11 +18,9 @@ import java.util.*;
 public class QuestionController {
 
     private QuestionService questionService;
-    //private UserService userService;
 
     private QuestionController(QuestionService questionService) {
         this.questionService = questionService;
-        //this.userService = userService;
     }
 
     @GetMapping("/form")
@@ -69,6 +67,18 @@ public class QuestionController {
         Question question = questionService.findById(id);
         question.updateQuestion(title, contents);
         questionService.save(question);
+        return "redirect:/";
+    }
+
+    @DeleteMapping("{id}")
+    public String deleteQuestion(@PathVariable Long id, HttpSession session) {
+        Question question = questionService.findById(id);
+        User writer = question.getWriter();
+
+        User sessionedUser = SessionUtility.findSessionedUser(session);
+        SessionUtility.verifySessionUser(sessionedUser, writer, "본인이 작성한 글만 삭제할 수 있습니다.");
+
+        questionService.delete(question);
         return "redirect:/";
     }
 
