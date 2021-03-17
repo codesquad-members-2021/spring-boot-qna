@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import java.util.List;
+import java.util.Objects;
 
 import static com.codessquad.qna.controller.HttpSessionUtils.*;
 
@@ -77,7 +78,7 @@ public class UserController {
         User user = userService.findVerifiedUser(id, session);
         if (errors.hasErrors()) {
             model.addAttribute("user", user);
-            model.addAttribute("errorMessage", "비어있는 필드가 있습니다.");
+            model.addAttribute("errorMessage", Objects.requireNonNull(errors.getFieldError()).getDefaultMessage());
             return "/user/updateForm";
         }
         if (!user.isValidPassword(password)) {
