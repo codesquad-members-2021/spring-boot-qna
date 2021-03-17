@@ -40,24 +40,24 @@ public class UserController {
 
     @GetMapping("/{id}")
     public String viewUserProfileById(@PathVariable Long id, Model model) {
-        User user = userService.findUserById(id);
+        User user = userService.findById(id);
         model.addAttribute("user", user);
         return "user/profile";
     }
 
     @GetMapping("/{id}/form")
     public String updateUserForm(@PathVariable Long id, Model model, HttpSession session) {
-        User user = userService.findUserById(id);
+        User user = userService.findById(id);
         User sessionedUser = SessionUtility.findSessionedUser(session);
 
-        SessionUtility.verifySessionUser(sessionedUser, user);
+        SessionUtility.verifySessionUser(sessionedUser, user, "본인의 회원정보만 수정할수있습니다.");
         model.addAttribute("user", user);
         return "user/updateForm";
     }
 
     @PutMapping("/{id}")
     public String updateUser(@PathVariable Long id, User newInfoUser) {
-        User user = userService.findUserById(id);
+        User user = userService.findById(id);
         if (!userService.isCorrectPassword(user, newInfoUser)) {
             throw new UserException("비밀번호가 틀렸습니다.");
         }
@@ -81,6 +81,12 @@ public class UserController {
             throw new LoginException("비밀번호가 틀렸습니다.");
         }
         session.setAttribute("sessionedUser", user);
+        return "redirect:/";
+    }
+
+    @GetMapping("/logout")
+    public String logoutUser(HttpSession session) {
+        session.removeAttribute("sessionedUser");
         return "redirect:/";
     }
 }
