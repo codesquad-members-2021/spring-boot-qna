@@ -69,10 +69,10 @@ public class UserController {
     public String loginUser(String userId, String password, HttpSession session) {
         User user = userService.findByUserId(userId);
         if(user == null) {
-            return "redirect:/users/login";
+            return "redirect:/users/login_failed";
         }
         if(!user.matchesPassword(password)) {
-            return "redirect:/users/login";
+            return "redirect:/users/login_failed";
         }
         session.setAttribute("sessionedUser", user);
         return "redirect:/";
