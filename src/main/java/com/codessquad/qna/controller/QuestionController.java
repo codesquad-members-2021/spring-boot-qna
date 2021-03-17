@@ -71,8 +71,9 @@ public class QuestionController {
 
     @GetMapping("/{id}/form")
     public String moveToUpdateForm(@PathVariable long id, Model model, HttpSession session) {
-
+        model.addAttribute("question", questionService.getOneById(id).orElse(null));
         // TODO: writer의 userId와 sessionedUser의 userId 일치할 경우만 questoin/update로 이동
+
         // TODO: writer의 userId를 가져오는 방법?
 
         return "question/update";
