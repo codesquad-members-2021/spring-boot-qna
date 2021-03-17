@@ -20,7 +20,7 @@ public class Question {
     @JoinColumn(foreignKey = @ForeignKey(name = "fk_question_writer"))
     private User writer;
 
-    @Column(nullable = false, length=500)
+    @Column(nullable = false, length = 500)
     private String title;
 
     @Column(nullable = false, columnDefinition = "TEXT")
@@ -28,7 +28,7 @@ public class Question {
 
     private String date;
 
-    @OneToMany(mappedBy="question")
+    @OneToMany(mappedBy = "question")
     private final List<Answer> answers = new ArrayList<>();
 
     private boolean deleted;
@@ -74,8 +74,7 @@ public class Question {
     }
 
     public long getNotDeletedAnswersCount() {
-        long answersCount = answers.stream().filter(answer -> !answer.isDeleted()).count();
-        return answersCount;
+        return answers.stream().filter(answer -> !answer.isDeleted()).count();
     }
 
     public void delete() {
@@ -97,7 +96,7 @@ public class Question {
     }
 
     public boolean isAnsweredYourself(Answer answer) {
-        return writer == answer.getWriter();
+        return writer.equals(answer.getWriter());
     }
 
     public void update(Question questionWithUpdatedInfo) {

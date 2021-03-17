@@ -20,7 +20,6 @@ public class AnswerService {
         this.questionRepository = questionRepository;
     }
 
-
     public Long create(Long questionId, Answer answer) {
         Question question = questionRepository.findById(questionId)
                 .orElseThrow(() -> new IllegalStateException("해당 질문이 없습니다. id = " + questionId));

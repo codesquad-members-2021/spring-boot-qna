@@ -71,7 +71,7 @@ public class Answer {
     }
 
     public boolean isDeleted() {
-        return deleted == true;
+        return deleted;
     }
 
     public void delete() {
