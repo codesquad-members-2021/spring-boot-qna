@@ -11,12 +11,12 @@ public class MyAdvice {
 
     @ExceptionHandler({NoUserException.class, NoQuestionException.class})
     public String handleNotExistException() {
-        return "notExistHandle";
+        return "/exception/notExistHandle";
     }
 
     @ExceptionHandler(IllegalStateException.class)
     public String handleIllegalStateException() {
-        return "unableToAccessToOthers";
+        return "/exception/unableToAccessToOthers";
     }
 
     @ExceptionHandler(NoSessionedUserException.class)

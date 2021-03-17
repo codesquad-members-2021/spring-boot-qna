@@ -58,7 +58,7 @@ public class Question {
         postTime = LocalDateTime.now();
     }
 
-    public boolean isQuestionWriter(User user){
+    public boolean isPostWriter(User user){
         return user.isUserMatching(writer);
     }
 

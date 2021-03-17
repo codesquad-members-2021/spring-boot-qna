@@ -33,6 +33,22 @@ public class UserController {
         return "user/list";
     }
 
+    @PostMapping("/login")
+    public String login(String userId, String password, HttpSession session) {
+        User user = userRepository.findByUserId(userId).orElseThrow(NoUserException::new);
+        if (!user.isPasswordMatching(password)) {
+            return "redirect:/users/loginForm";
+        }
+        session.setAttribute(USER_SESSION_KEY, user);
+        return "redirect:/";
+    }
+
+    @GetMapping("/logout")
+    public String logout(HttpSession session) {
+        session.removeAttribute(HttpSessionUtils.USER_SESSION_KEY);
+        return "redirect:/";
+    }
+
     @GetMapping("/{id}")
     public String show(@PathVariable Long id, Model model, HttpSession session) {
         isLoginUser(session);
@@ -62,27 +78,12 @@ public class UserController {
         if (!sessionedUser.isIdMatching(id)) {
             throw new IllegalStateException("자신의 정보만 수정할 수 있습니다.");
         }
-        if (sessionedUser.isPasswordMatching(inputPassword)) {
-            sessionedUser.update(updatedUser);
-            userRepository.save(sessionedUser);
-            return "redirect:/users";
+        User user = sessionedUser;
+        if (!user.isPasswordMatching(inputPassword)) {
+            return "redirect:/users/{id}/form";
         }
-        return "redirect:/users/{id}/form";
-    }
-
-    @PostMapping("/login")
-    public String login(String userId, String password, HttpSession session) {
-        User user = userRepository.findByUserId(userId).orElseThrow(NoUserException::new);
-        if (!user.isPasswordMatching(password)) {
-            return "redirect:/users/loginForm";
-        }
-        session.setAttribute(USER_SESSION_KEY, user);
-        return "redirect:/";
-    }
-
-    @GetMapping("/logout")
-    public String logout(HttpSession session) {
-        session.removeAttribute(HttpSessionUtils.USER_SESSION_KEY);
-        return "redirect:/";
+        user.update(updatedUser);
+        userRepository.save(user);
+        return "redirect:/users";
     }
 }
