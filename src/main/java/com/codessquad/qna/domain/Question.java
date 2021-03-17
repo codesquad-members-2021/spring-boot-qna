@@ -70,4 +70,9 @@ public class Question {
                 ", contents='" + contents + '\'' +
                 '}';
     }
+
+    public void updateInfo(String title, String contents) {
+        this.title = title;
+        this.contents = contents;
+    }
 }
