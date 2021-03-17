@@ -72,7 +72,7 @@ public class UserController {
         try {
             User toLogin = userService.getUser(user.getUserId());
             if (toLogin.verify(user)) {
-                session.setAttribute("user", toLogin);
+                session.setAttribute("sessionedUser", toLogin);
                 return "redirect:/";
             }
             return "redirect:/users/login/failed";
