@@ -1,7 +1,7 @@
 package com.codessquad.qna.web.service;
 
 import com.codessquad.qna.web.domain.Question;
-import com.codessquad.qna.web.repository.QuestionRepository;
+import com.codessquad.qna.web.domain.repository.QuestionRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
