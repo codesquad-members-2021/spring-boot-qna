@@ -21,11 +21,7 @@ public class Question {
     public Long getId() {
         return id;
     }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
+    
     public String getWriter() {
         return writer.getUserId();
     }
