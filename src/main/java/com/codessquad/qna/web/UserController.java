@@ -48,14 +48,31 @@ public class UserController {
     }
 
     @GetMapping("/{id}")
-    public String getOneUserProfile(@PathVariable long id, Model model) {
-        model.addAttribute("user", userRepository.findById(id).orElseThrow(NoUserException::new));
+    public String getOneUserProfile(@PathVariable long id, Model model, HttpSession session) {
+        Object tempUser = session.getAttribute("sessionUser");
+        if (tempUser == null) {
+            return "redirect:/users/login";
+        }
+
+        User sessionUser = (User) tempUser;
+        User user = userRepository.findById(sessionUser.getId()).orElseThrow(NoUserException::new);
+
+        model.addAttribute("user", user);
         return "user/profile";
     }
 
     @GetMapping("/{id}/form")
-    public String editUserInfo(@PathVariable long id, Model model) {
-        model.addAttribute("user", userRepository.findById(id).orElseThrow(NoUserException::new));
+    public String editUserInfo(@PathVariable long id, Model model, HttpSession session) {
+        Object tempUser = session.getAttribute("sessionUser");
+        if (tempUser == null) {
+            return "redirect:/users/login";
+        }
+
+        User sessionUser = (User) tempUser;
+        User user = userRepository.findById(sessionUser.getId()).orElseThrow(NoUserException::new);
+
+        model.addAttribute("user", user);
+
         return "user/updateForm";
     }
 
