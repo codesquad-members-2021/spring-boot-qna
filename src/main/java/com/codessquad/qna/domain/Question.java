@@ -75,4 +75,8 @@ public class Question {
         this.title = title;
         this.contents = contents;
     }
+
+    public boolean isEqualWriter(User sessionUser) {
+        return writer.isEqualUserId(sessionUser.getUserId());
+    }
 }

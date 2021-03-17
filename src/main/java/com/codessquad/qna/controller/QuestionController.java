@@ -71,19 +71,52 @@ public class QuestionController {
 
     @GetMapping("/{id}/form")
     public String moveToUpdateForm(@PathVariable long id, Model model, HttpSession session) {
-        model.addAttribute("question", questionService.getOneById(id).orElse(null));
-        // TODO: writer의 userId와 sessionedUser의 userId 일치할 경우만 questoin/update로 이동
+        if(!HttpSessionUtils.isLoginUser(session)){
+            return "/user/login";
+        }
 
-        // TODO: writer의 userId를 가져오는 방법?
+        User sessionUser = HttpSessionUtils.getUserFromSession(session);
+        Question question = questionService.getOneById(id).orElse(null);
+        if(!question.isEqualWriter(sessionUser)){
+            return "/user/login";
+        }
 
+        model.addAttribute("question", question);
         return "question/update";
     }
 
     @PutMapping("/{id}")
-    public String updateQuestion(@PathVariable long id, String title, String contents) {
+    public String updateQuestion(@PathVariable long id, String title, String contents, HttpSession session) {
+        if(!HttpSessionUtils.isLoginUser(session)){
+            return "/user/login";
+        }
+
+        User sessionUser = HttpSessionUtils.getUserFromSession(session);
         Question question = questionService.getOneById(id).orElse(null);
+
+        if(!question.isEqualWriter(sessionUser)){
+            return "/user/login";
+        }
+
         question.updateInfo(title, contents);
         questionService.add(question);
+        return "redirect:/";
+    }
+
+    @DeleteMapping("/{id}")
+    public String deleteQuestion(@PathVariable long id, HttpSession session) {
+        if(!HttpSessionUtils.isLoginUser(session)){
+            return "/user/login";
+        }
+
+        User sessionUser = HttpSessionUtils.getUserFromSession(session);
+        Question question = questionService.getOneById(id).orElse(null);
+
+        if(!question.isEqualWriter(sessionUser)){
+            return "/user/login";
+        }
+
+        questionService.remove(id);
         return "redirect:/";
     }
 }
