@@ -68,7 +68,7 @@ public class UserController {
 
     @PostMapping("/login")
     public String login(User user, HttpSession session) {
-        logger.debug("login 요청: id={}, password={}", user.getUserId(), user.getPassword());
+        logger.debug("login 요청: id={}", user.getUserId());
         try {
             User toLogin = userService.getUser(user.getUserId());
             if (toLogin.verify(user)) {
@@ -79,5 +79,12 @@ public class UserController {
         } catch (UserIdNotFoundException ex) {
             return "redirect:/users/login/failed";
         }
+    }
+
+    @GetMapping("/logout")
+    public String logout(HttpSession session) {
+        logger.debug("logout 요청");
+        session.removeAttribute("sessionedUser");
+        return "redirect:/";
     }
 }
