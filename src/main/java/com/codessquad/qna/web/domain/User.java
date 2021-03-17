@@ -1,6 +1,7 @@
 package com.codessquad.qna.web.domain;
 
 import javax.persistence.*;
+import java.util.Objects;
 
 @Entity
 public class User {
@@ -64,5 +65,18 @@ public class User {
 //        this.password(user.getPassword());
         this.setName(user.getName());
         this.setEmail(user.getEmail());
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof User)) return false;
+        User user = (User) o;
+        return Objects.equals(getId(), user.getId());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getId());
     }
 }

@@ -1,9 +1,6 @@
 package com.codessquad.qna.web.domain;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
@@ -15,14 +12,18 @@ public class Question {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String writer;
+
+//    @JoinColumn(foreignKey = @ForeignKey(name = "fk_questions_writer"))
+    @ManyToOne
+    @JoinColumn(foreignKey = @ForeignKey(name = "fk_questions_writer"))
+    private User writer;
     //length 지정
     private String title;
     // length 지정 안해주면 기본값 255 // 4000... 2000.. 지정 필요
     private String contents;
     private LocalDateTime createdDateTime = LocalDateTime.now();
 
-    public void setWriter(String writer) {
+    public void setWriter(User writer) {
         this.writer = writer;
     }
 
@@ -42,7 +43,7 @@ public class Question {
         return id;
     }
 
-    public String getWriter() {
+    public User getWriter() {
         return writer;
     }
 
@@ -61,7 +62,7 @@ public class Question {
         return createdDateTime.format(DATE_TIME_FORMATTER);
     }
 
-    public boolean isMatchingWriter(String writer) {
+    public boolean isMatchingWriter(User writer) {
         return this.writer.equals(writer);
     }
 
