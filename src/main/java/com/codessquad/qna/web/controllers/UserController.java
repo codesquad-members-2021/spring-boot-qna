@@ -60,7 +60,7 @@ public class UserController {
         return "user/wrongPassword";
     }
 
-    @GetMapping("/login")   
+    @GetMapping("/login")
     public String loginForm() {
         return "user/login";
     }
@@ -74,7 +74,7 @@ public class UserController {
         if(!password.equals(user.getPassword())) {
             return "redirect:/users/login";
         }
-        session.setAttribute("user", user);
+        session.setAttribute("sessionedUser", user);
         return "redirect:/";
     }
 }
