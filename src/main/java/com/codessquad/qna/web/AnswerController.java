@@ -34,19 +34,18 @@ public class AnswerController {
     }
 
     @PostMapping("/")
-    public String createAnswer(@PathVariable Long questionId, Answer answer,
+    public String createAnswer(@PathVariable Long questionId, String comments,
                                HttpSession session) {
         User writer = getUserFromSession(session);
         Question question = questionRepository.findById(questionId)
                 .orElseThrow(QuestionNotFoundException::new);
+        Answer answer = new Answer(writer, question, comments);
+        question.addAnswer();
 
-        answer.setQuestion(question);
-        answer.setWriter(writer);
         answerRepository.save(answer);
-
         logger.debug("answer : {}", answer);
 
-        return "redirect:/questions/" + questionId;
+        return String.format("redirect:/questions/%d", questionId);
     }
 
     @DeleteMapping("/{id}")
@@ -62,9 +61,14 @@ public class AnswerController {
         }
 
         answerRepository.delete(answer);
-        questionRepository.findById(questionId);
 
-        return "redirect:/questions/" + questionId;
+        Question question = questionRepository.findById(questionId)
+                .orElseThrow(QuestionNotFoundException::new);
+        question.deleteAnswer();
+
+        questionRepository.save(question);
+
+        return String.format("redirect:/questions/%d", questionId);
     }
 
     @ExceptionHandler(AnswerNotFoundException.class)

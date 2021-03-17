@@ -41,13 +41,11 @@ public class QuestionController {
     }
 
     @PostMapping("/")
-    public String submitQuestion(Question question, Model model, HttpSession session) {
+    public String submitQuestion(String title, String contents,
+                                 HttpSession session) {
         User loginedUser = getUserFromSession(session);
-
-        question.setWriter(loginedUser);
+        Question question = new Question(loginedUser, title, contents);
         questionRepository.save(question);
-        model.addAttribute(question);
-        logger.debug("question : {} ", question);
 
         return "redirect:/";
     }

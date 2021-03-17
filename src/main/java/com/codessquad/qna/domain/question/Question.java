@@ -1,9 +1,11 @@
 package com.codessquad.qna.domain.question;
 
 import com.codessquad.qna.domain.BaseTimeEntity;
+import com.codessquad.qna.domain.answer.Answer;
 import com.codessquad.qna.domain.user.User;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 public class Question extends BaseTimeEntity {
@@ -18,10 +20,18 @@ public class Question extends BaseTimeEntity {
     private String title;
     private String contents;
 
-    protected Question() {
+    private Integer countOfAnswer = 0;
+
+    @OneToMany(mappedBy = "question")
+    @OrderBy("id DESC")
+    private List<Answer> answers;
+
+    public Question() {
     }
 
-    public Question(String title, String contents) {
+    public Question(User writer, String title, String contents) {
+        super();
+        this.writer = writer;
         this.title = title;
         this.contents = contents;
     }
@@ -42,12 +52,21 @@ public class Question extends BaseTimeEntity {
         return contents;
     }
 
-    public void setWriter(User writer) {
-        this.writer = writer;
-    }
-
     public boolean isSameWriter(User user) {
         return writer.equals(user);
+    }
+
+    public void update(Question updateQuestion) {
+        this.title = updateQuestion.title;
+        this.contents = updateQuestion.contents;
+    }
+
+    public void addAnswer() {
+        this.countOfAnswer += 1;
+    }
+
+    public void deleteAnswer() {
+        this.countOfAnswer -= 1;
     }
 
     @Override
@@ -58,10 +77,5 @@ public class Question extends BaseTimeEntity {
                 ", title='" + title + '\'' +
                 ", contents='" + contents + '\'' +
                 '}';
-    }
-
-    public void update(Question updateQuestion) {
-        this.title = updateQuestion.title;
-        this.contents = updateQuestion.contents;
     }
 }
