@@ -1,6 +1,8 @@
 package com.codessquad.qna.controller;
 
 import com.codessquad.qna.domain.User;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -16,18 +18,18 @@ import java.util.List;
 @RequestMapping("/users")
 public class UserController {
 
+    Logger logger = LoggerFactory.getLogger(UserController.class);
+
     private List<User> users = new ArrayList<>();
 
     @PostMapping("")
     public String createUserAccount(User user) {
-        System.out.println("user = " + user);
-        users.add(user);
         if (user == null) {
             return "redirect:/user/form";
-
-        }else {
-            return "redirect:/users";
         }
+        users.add(user);
+        user.setId(users.size());
+        return "redirect:/users";
     }
 
     @GetMapping("")
@@ -38,19 +40,18 @@ public class UserController {
 
     @GetMapping("/{userId}")
     public String showProfile(@PathVariable String userId, Model model) {
-        User tempUser = null;
+        int index = 0;
         for (User user : users) {
             if(user.getUserId().equals(userId)) {
-                int index = users.indexOf(user);
-               tempUser = users.get(index);
-                System.out.println("tempUser = " + tempUser);
+                index = users.indexOf(user);
+                logger.info("tempUser = " + users.get(index));
             }
         }
-        model.addAttribute("user", tempUser);
+        model.addAttribute("user", users.get(index));
         return "/user/profile";
     }
 
-    @PostMapping("/update/{userId}")
+    @PostMapping("/{userId}/update")
     public String updateUserInfo(@PathVariable String userId, User updateUser) {
         for (User user : users) {
             if(user.getUserId().equals(userId)) {

@@ -3,18 +3,18 @@ package com.codessquad.qna.domain;
 
 public class Question {
 
-    private int questionId;
+    private int id;
     private String writer;
     private String title;
     private String contents;
     private String writeTime;
 
-    public int getQuestionId() {
-        return questionId;
+    public int getId() {
+        return id;
     }
 
-    public void setQuestionId(int questionId) {
-        this.questionId = questionId;
+    public void setId(int id) {
+        this.id = id;
     }
 
     public String getWriter() {
@@ -52,7 +52,7 @@ public class Question {
     @Override
     public String toString() {
         return "Question{" +
-                "questionId=" + questionId +
+                "questionId=" + id +
                 ", writer='" + writer + '\'' +
                 ", subject='" + title + '\'' +
                 ", content='" + contents + '\'' +
