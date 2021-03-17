@@ -1,5 +1,7 @@
 package com.codessquad.qna.web.controller;
 
+import com.codessquad.qna.web.domain.answer.Answer;
+import com.codessquad.qna.web.domain.answer.AnswerRepository;
 import com.codessquad.qna.web.domain.question.QuestionRepository;
 import com.codessquad.qna.web.domain.question.Question;
 import com.codessquad.qna.web.domain.user.User;
@@ -12,15 +14,18 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
+import java.util.List;
 
 @Controller
 @RequestMapping("/questions")
 public class QuestionController {
 
     private final QuestionRepository questionRepository;
+    private final AnswerRepository answerRepository;
 
-    public QuestionController(QuestionRepository questionRepository) {
+    public QuestionController(QuestionRepository questionRepository, AnswerRepository answerRepository) {
         this.questionRepository = questionRepository;
+        this.answerRepository = answerRepository;
     }
 
     @PostMapping()
@@ -73,9 +78,11 @@ public class QuestionController {
     }
 
     @GetMapping("/{id}")
-    public String questionDetail(@PathVariable long id, Model model) {
+    public String show(@PathVariable long id, Model model) {
         Question question = getQuestionById(id);
         model.addAttribute("question", question);
+        List<Answer> answers = answerRepository.findByQuestionId(id);
+        model.addAttribute("answers", answers);
         return "/qna/show";
     }
 
