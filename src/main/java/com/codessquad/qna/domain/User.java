@@ -65,8 +65,8 @@ public class User extends AbstractEntity implements Serializable {
         email = newUser.email;
     }
 
-    public static boolean isValidPassword(User user, String password) {
-        return user.password.equals(password);
+    public boolean isValidPassword(String password) {
+        return this.password.equals(password);
     }
 }
 

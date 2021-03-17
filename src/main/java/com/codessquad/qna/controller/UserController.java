@@ -15,7 +15,6 @@ import javax.validation.Valid;
 import java.util.List;
 
 import static com.codessquad.qna.controller.HttpSessionUtils.*;
-import static com.codessquad.qna.domain.User.isValidPassword;
 
 @RequestMapping("/users")
 @Controller
@@ -30,7 +29,7 @@ public class UserController {
     @PostMapping("/login")
     public String login(String userId, String password, HttpSession session) {
         User user = userService.findByUserId(userId);
-        if (!isValidPassword(user, password)) {
+        if (!user.isValidPassword(password)) {
             throw new IllegalUserAccessException("비밀번호가 틀렸습니다.");
         }
         session.setAttribute(USER_SESSION_KEY, user);
@@ -40,8 +39,8 @@ public class UserController {
 
     @GetMapping("/logout")
     public String logout(HttpSession session) {
-        session.removeAttribute(USER_SESSION_KEY);
         logger.debug("user : {}님이 로그아웃하셨습니다.", getSessionUser(session).getUserId());
+        session.removeAttribute(USER_SESSION_KEY);
         return "redirect:/";
     }
 
@@ -74,9 +73,16 @@ public class UserController {
     }
 
     @PutMapping("/{id}")
-    public String update(@PathVariable Long id, @Valid User updatedUser, @RequestParam String password, Model model, HttpSession session, Errors errors) {
+    public String update(@PathVariable Long id, @Valid User updatedUser, Errors errors, @RequestParam String password, Model model, HttpSession session) {
         User user = userService.findVerifiedUser(id, session);
-        if (!userService.isValidInput(user, password, errors, model)) {
+        if (errors.hasErrors()) {
+            model.addAttribute("user", user);
+            model.addAttribute("errorMessage", "비어있는 필드가 있습니다.");
+            return "/user/updateForm";
+        }
+        if (!user.isValidPassword(password)) {
+            model.addAttribute("user", user);
+            model.addAttribute("errorMessage", "비밀번호가 일치하지 않습니다.");
             return "/user/updateForm";
         }
         userService.update(user, updatedUser);
@@ -84,5 +90,6 @@ public class UserController {
         return "redirect:/users";
     }
 }
+
 
 
