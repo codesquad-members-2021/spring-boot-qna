@@ -41,12 +41,8 @@ public class Question {
     }
 
     public void update(String newTitle, String newContents) {
-        if (!title.equals(newTitle)) {
-            title = newTitle;
-        }
-        if (!contents.equals(newContents)) {
-            contents = newContents;
-        }
+        title = newTitle;
+        contents = newContents;
     }
 
     public Long getId() {
