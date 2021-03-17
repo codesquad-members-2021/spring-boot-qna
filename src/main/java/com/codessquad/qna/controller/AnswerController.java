@@ -20,7 +20,7 @@ public class AnswerController {
     }
 
     @PostMapping
-    public String createAnswer(@PathVariable("questionId") Long questionId, Answer answer, HttpSession session) {
+    public String create(@PathVariable("questionId") Long questionId, Answer answer, HttpSession session) {
         answerService.createAnswer(questionId, answer, HttpSessionUtils.getLoginUser(session));
         return "redirect:/questions/" + questionId;
     }

@@ -21,7 +21,7 @@ public class QuestionController {
     }
 
     @GetMapping("/form")
-    public String questionForm(HttpSession session) {
+    public String form(HttpSession session) {
         if (!HttpSessionUtils.isLoggedIn(session)) {
             throw new NotLoggedInException();
         }
@@ -29,13 +29,13 @@ public class QuestionController {
     }
 
     @PostMapping
-    public String query(Question question, HttpSession session) {
+    public String create(Question question, HttpSession session) {
         questionService.registerQuestion(question, HttpSessionUtils.getLoginUser(session));
         return "redirect:/";
     }
 
     @GetMapping("/{questionId}")
-    public String qnaShow(@PathVariable("questionId") Long id, Model model) {
+    public String show(@PathVariable("questionId") Long id, Model model) {
         model.addAttribute("question", questionService.getQuestionById(id));
         return "qna/show";
     }

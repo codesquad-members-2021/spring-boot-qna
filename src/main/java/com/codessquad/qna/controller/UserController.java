@@ -20,32 +20,32 @@ public class UserController {
     }
 
     @GetMapping
-    public String userList(Model model) {
+    public String list(Model model) {
         model.addAttribute("users", userService.getUserList());
         return "users/list";
     }
 
     @PostMapping
-    public String registerUser(User user) {
+    public String register(User user) {
         userService.register(user);
         return "redirect:/users";
     }
 
     @GetMapping("/{id}")
-    public String userProfile(@PathVariable("id") Long id, Model model) {
+    public String profile(@PathVariable("id") Long id, Model model) {
         model.addAttribute("user", userService.getUserById(id));
         return "users/profile";
     }
 
     @GetMapping("/{id}/form")
-    public String updateUserForm(@PathVariable("id") Long id, HttpSession session, Model model) {
+    public String updateForm(@PathVariable("id") Long id, HttpSession session, Model model) {
         checkSessionWithId(session, id);
         model.addAttribute(userService.getUserById(id));
         return "users/updateForm";
     }
 
     @PutMapping("/{id}")
-    public String updateUser(@PathVariable("id") Long id, String oldPassword, User newUserInfo, HttpSession session) {
+    public String update(@PathVariable("id") Long id, String oldPassword, User newUserInfo, HttpSession session) {
         checkSessionWithId(session, id);
         userService.updateUserInfo(id, oldPassword, newUserInfo);
         return "redirect:/users";
