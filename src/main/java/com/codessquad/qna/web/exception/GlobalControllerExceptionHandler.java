@@ -8,12 +8,12 @@ import org.springframework.web.servlet.ModelAndView;
 public class GlobalControllerExceptionHandler {
 
     @ExceptionHandler(NotLoginException.class)
-    public String handleNotLoginException(){
+    public String handleNotLoginException() {
         return "redirect:/users/login-form";
     }
 
     @ExceptionHandler({UserNotFoundException.class, QuestionNotFoundException.class, AnswerNotFoundException.class})
-    public ModelAndView handleNotFoundException(Exception e){
+    public ModelAndView handleNotFoundException(Exception e) {
         ModelAndView mav = new ModelAndView("error/notFoundError");
         mav.addObject("errorMessage", e.getMessage());
         return mav;

@@ -87,7 +87,7 @@ public class UserController {
         return "redirect:/users";
     }
 
-    private User findUserById(Long id){
+    private User findUserById(Long id) {
         return userRepository.findById(id).orElseThrow(() -> new UserNotFoundException("No user with id number " + id));
     }
 }

@@ -8,16 +8,16 @@ import java.util.Optional;
 
 public class SessionUtils {
 
-    public static User getLoginUser(HttpSession session){
+    public static User getLoginUser(HttpSession session) {
         return userFromSession(session)
                 .orElseThrow(() -> new UserNotFoundException("No login user"));
     }
 
-    public static boolean isLoginUser(HttpSession session){
+    public static boolean isLoginUser(HttpSession session) {
         return userFromSession(session).isPresent();
     }
 
-    private static Optional<User> userFromSession(HttpSession session){
+    private static Optional<User> userFromSession(HttpSession session) {
         User user = (User) session.getAttribute("sessionedUser");
         return Optional.ofNullable(user);
     }

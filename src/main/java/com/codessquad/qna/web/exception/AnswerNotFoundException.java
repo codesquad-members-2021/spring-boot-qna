@@ -1,6 +1,6 @@
 package com.codessquad.qna.web.exception;
 
-public class AnswerNotFoundException extends RuntimeException{
+public class AnswerNotFoundException extends RuntimeException {
 
     public AnswerNotFoundException(String msg) {
         super(msg);
