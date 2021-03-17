@@ -16,7 +16,7 @@ public class AnswerService {
         this.answerRepository = answerRepository;
     }
 
-    public void createAnswer(Long questionId, Answer answer, User writer) {
+    public void create(Long questionId, Answer answer, User writer) {
         Question question = questionRepository.findById(questionId)
                 .orElseThrow(NotFoundException::new);
         answer.setQuestion(question);
@@ -24,13 +24,13 @@ public class AnswerService {
         answerRepository.save(answer);
     }
 
-    public void deleteAnswer(Long answerId, Long questionId, User loginUser) {
-        Answer answer = getAnswerWithAuthentication(answerId, questionId, loginUser);
+    public void delete(Long answerId, Long questionId, User loginUser) {
+        Answer answer = getWithAuthentication(answerId, questionId, loginUser);
         answer.delete();
         answerRepository.save(answer);
     }
 
-    public Answer getAnswerWithAuthentication(Long questionId, Long answerId, User loginUser) {
+    public Answer getWithAuthentication(Long questionId, Long answerId, User loginUser) {
         Answer answer = answerRepository.findByIdAndQuestionIdAndDeleted(answerId, questionId, false)
                 .orElseThrow(NotFoundException::new);
         if (!answer.matchesWriter(loginUser)) {
@@ -39,8 +39,8 @@ public class AnswerService {
         return answer;
     }
 
-    public void updateAnswer(Long questionId, Long answerId, User loginUser, Answer updatedAnswer) {
-        Answer answer = getAnswerWithAuthentication(questionId, answerId, loginUser);
+    public void update(Long questionId, Long answerId, User loginUser, Answer updatedAnswer) {
+        Answer answer = getWithAuthentication(questionId, answerId, loginUser);
         answer.updateAnswer(updatedAnswer);
         answerRepository.save(answer);
     }

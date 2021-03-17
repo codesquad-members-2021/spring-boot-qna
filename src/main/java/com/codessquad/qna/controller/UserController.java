@@ -20,7 +20,7 @@ public class UserController {
 
     @GetMapping
     public String list(Model model) {
-        model.addAttribute("users", userService.getUserList());
+        model.addAttribute("users", userService.getList());
         return "users/list";
     }
 
@@ -32,21 +32,21 @@ public class UserController {
 
     @GetMapping("/{id}")
     public String profile(@PathVariable("id") Long id, Model model) {
-        model.addAttribute("user", userService.getUserById(id));
+        model.addAttribute("user", userService.getById(id));
         return "users/profile";
     }
 
     @GetMapping("/{id}/form")
     public String updateForm(@PathVariable("id") Long id, HttpSession session, Model model) {
         userService.checkAccessId(HttpSessionUtils.getLoginUser(session), id);
-        model.addAttribute(userService.getUserById(id));
+        model.addAttribute(userService.getById(id));
         return "users/updateForm";
     }
 
     @PutMapping("/{id}")
     public String update(@PathVariable("id") Long id, String oldPassword, User newUserInfo, HttpSession session) {
         userService.checkAccessId(HttpSessionUtils.getLoginUser(session), id);
-        userService.updateUserInfo(id, oldPassword, newUserInfo);
+        userService.update(id, oldPassword, newUserInfo);
         return "redirect:/users";
     }
 

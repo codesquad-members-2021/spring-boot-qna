@@ -21,34 +21,34 @@ public class QuestionService {
         this.questionRepository = questionRepository;
     }
 
-    public List<Question> getQuestionList() {
+    public List<Question> getList() {
         return questionRepository.findAllByDeleted(false);
     }
 
-    public void registerQuestion(Question question, User loginUser) {
+    public void register(Question question, User loginUser) {
         question.setWriter(loginUser);
         questionRepository.save(question);
     }
 
-    public Question getQuestionById(Long id) {
+    public Question getById(Long id) {
         return questionRepository.findByIdAndDeleted(id, false).orElseThrow(NotFoundException::new);
     }
 
-    public Question getQuestionWithAuthentication(Long id, User loginUser) {
+    public Question getWithAuthentication(Long id, User loginUser) {
         return questionRepository.findById(id)
                 .filter(q -> q.isWriter(loginUser))
                 .orElseThrow(() -> new UnauthorizedAccessException("다른 사람의 질문을 수정하거나 삭제할 수 없습니다."));
     }
 
-    public void updateQuestion(Long id, User loginUser, Question updatedQuestion) {
-        Question question = getQuestionWithAuthentication(id, loginUser);
+    public void update(Long id, User loginUser, Question updatedQuestion) {
+        Question question = getWithAuthentication(id, loginUser);
         question.updateContents(updatedQuestion);
         questionRepository.save(question);
     }
 
     @Transactional
-    public void deleteQuestion(Long id, User loginUser) {
-        Question question = getQuestionWithAuthentication(id, loginUser);
+    public void delete(Long id, User loginUser) {
+        Question question = getWithAuthentication(id, loginUser);
         List<Answer> answers = question.getAnswers();
         for (Answer answer : answers) {
             if (!answer.matchesWriter(loginUser)) {

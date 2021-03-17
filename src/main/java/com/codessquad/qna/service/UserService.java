@@ -19,7 +19,7 @@ public class UserService {
         this.userRepository = userRepository;
     }
 
-    public List<User> getUserList() {
+    public List<User> getList() {
         return userRepository.findAll();
     }
 
@@ -31,11 +31,11 @@ public class UserService {
         userRepository.save(user);
     }
 
-    public User getUserById(Long id) {
+    public User getById(Long id) {
         return userRepository.findById(id).orElseThrow(NotFoundException::new);
     }
 
-    public void updateUserInfo(Long id, String oldPassword, User newUserInfo) {
+    public void update(Long id, String oldPassword, User newUserInfo) {
         User user = userRepository.findById(id)
                 .filter(u -> u.matchesPassword(oldPassword))
                 .orElseThrow(() -> new UnauthorizedAccessException("권한이 존재하지 않습니다."));
