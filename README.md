@@ -52,7 +52,7 @@
 
 - GET `/questions/new`
     - questionInputForm
-- POST `/questions/new`
+- POST `/questions`
     - redirect:/
 
 질문 조회 (상세보기)
