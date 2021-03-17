@@ -2,7 +2,6 @@ package com.codessquad.qna.domain;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotEmpty;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
@@ -27,7 +26,7 @@ public class Question {
     @NotBlank(message = "내용은 필수 입력 값입니다.")
     private String contents;
 
-    private LocalDateTime currentDateTime;
+    private LocalDateTime createdDateTime;
 
     @OneToMany(mappedBy = "question")
     @OrderBy("id ASC")
@@ -37,7 +36,7 @@ public class Question {
     private boolean deleted = false;
 
     public Question() {
-        currentDateTime = LocalDateTime.now();
+        createdDateTime = LocalDateTime.now();
     }
 
     public Question(User writer, String title, String contents) {
@@ -45,13 +44,13 @@ public class Question {
         this.writer = writer;
         this.title = title;
         this.contents = contents;
-        this.currentDateTime = LocalDateTime.now();
+        this.createdDateTime = LocalDateTime.now();
     }
 
     public void updateQuestion(String title, String contents) {
         this.title = title;
         this.contents = contents;
-        this.currentDateTime = LocalDateTime.now();
+        this.createdDateTime = LocalDateTime.now();
     }
 
     public void setWriter(User writer) {
@@ -66,8 +65,8 @@ public class Question {
         this.contents = contents;
     }
 
-    public void setCurrentDateTime(LocalDateTime currentDateTime) {
-        this.currentDateTime = currentDateTime;
+    public void setCreatedDateTime(LocalDateTime createdDateTime) {
+        this.createdDateTime = createdDateTime;
     }
 
     public Long getId() {
@@ -86,8 +85,8 @@ public class Question {
         return contents;
     }
 
-    public String getCurrentDateTime() {
-        return currentDateTime.format(FORMATTER_PATTERN);
+    public String getCreatedDateTime() {
+        return createdDateTime.format(FORMATTER_PATTERN);
     }
 
     public List<Answer> getAnswers() {
@@ -114,7 +113,7 @@ public class Question {
                 ", writer=" + writer +
                 ", title='" + title + '\'' +
                 ", contents='" + contents + '\'' +
-                ", currentDateTime=" + currentDateTime +
+                ", createdDateTime=" + createdDateTime +
                 '}';
     }
 

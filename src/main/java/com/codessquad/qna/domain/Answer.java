@@ -28,17 +28,17 @@ public class Answer {
     @Column(nullable = false)
     private boolean deleted = false;
 
-    private LocalDateTime currentDateTime;
+    private LocalDateTime createdDateTime;
 
     public Answer() {
-        currentDateTime = LocalDateTime.now();
+        createdDateTime = LocalDateTime.now();
     }
 
     public Answer(Question question, User writer, String contents) {
         this.question = question;
         this.writer = writer;
         this.contents = contents;
-        this.currentDateTime = LocalDateTime.now();
+        this.createdDateTime = LocalDateTime.now();
     }
 
     public Long getId() {
@@ -53,8 +53,8 @@ public class Answer {
         return writer;
     }
 
-    public String getCurrentDateTime() {
-        return currentDateTime.format(pattern);
+    public String getCreatedDateTime() {
+        return createdDateTime.format(pattern);
     }
 
     public String getContents() {
@@ -71,21 +71,16 @@ public class Answer {
 
     public boolean matchUser(User loginUser) {
         String userId = loginUser.getUserId();
-        if (this.writer.getUserId().equals(userId)) {
-            return true;
-        }
-        return false;
+        return this.writer.getUserId().equals(userId);
     }
 
     @Override
     public String toString() {
         return "Answer{" +
                 "id=" + id +
-                ", question=" + question +
-                ", writer=" + writer +
                 ", contents='" + contents + '\'' +
                 ", deleted=" + deleted +
-                ", currentDateTime=" + currentDateTime +
+                ", createdDateTime=" + createdDateTime +
                 '}';
     }
 
