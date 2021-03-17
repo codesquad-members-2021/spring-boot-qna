@@ -1,6 +1,8 @@
 package com.codessquad.qna.web.config;
 
+import com.codessquad.qna.web.domain.Question;
 import com.codessquad.qna.web.exception.LoginException;
+import com.codessquad.qna.web.exception.QuestionNotFoundException;
 import com.codessquad.qna.web.exception.UserException;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -19,5 +21,11 @@ public class ExceptionHandlers {
     public String handleLoginFailure(LoginException e, Model model) {
         model.addAttribute("exceptionMessage", e.getMessage());
         return "user/login_failed";
+    }
+
+    @ExceptionHandler(QuestionNotFoundException.class)
+    public String handleQuestionSearchFailure(QuestionNotFoundException e, Model model) {
+        model.addAttribute("exceptionMessage", e.getMessage());
+        return "user/error";
     }
 }
