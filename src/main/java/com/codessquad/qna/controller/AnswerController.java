@@ -1,9 +1,7 @@
 package com.codessquad.qna.controller;
 
-import com.codessquad.qna.domain.Answer;
 import com.codessquad.qna.domain.User;
 import com.codessquad.qna.service.AnswerService;
-import com.codessquad.qna.service.UserService;
 import com.codessquad.qna.util.HttpSessionUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -18,11 +16,9 @@ import javax.servlet.http.HttpSession;
 public class AnswerController {
 
     private final AnswerService answerService;
-    private final UserService userService;
 
-    public AnswerController(AnswerService answerService, UserService userService) {
+    public AnswerController(AnswerService answerService) {
         this.answerService = answerService;
-        this.userService = userService;
     }
 
     @PostMapping
