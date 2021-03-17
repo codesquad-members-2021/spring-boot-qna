@@ -37,7 +37,7 @@ public class Question {
     }
 
     public boolean isMatchingWriter(User anotherWriter) {
-        return writer.getId() == anotherWriter.getId();
+        return writer.isMatchingId(anotherWriter);
     }
 
     public void update(String newTitle, String newContents) {

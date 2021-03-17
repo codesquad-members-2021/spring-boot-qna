@@ -79,7 +79,7 @@ public class User {
     }
 
     public boolean isMatchingId(User anotherUser) {
-        return id == anotherUser.getId();
+        return id.equals(anotherUser.getId());
     }
 
     @Override
