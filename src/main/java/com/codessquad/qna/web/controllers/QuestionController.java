@@ -8,10 +8,7 @@ import com.codessquad.qna.web.utility.SessionUtility;
 import org.graalvm.compiler.lir.LIRInstruction;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
 import java.util.*;
@@ -56,15 +53,23 @@ public class QuestionController {
     }
 
     @GetMapping("{id}/update")
-    public String updateQuestion(@PathVariable Long id, Model model, HttpSession session) {
+    public String clickUpdateQuestion(@PathVariable Long id, Model model, HttpSession session) {
         Question question = questionService.findById(id);
         User writer = question.getWriter();
-        
+
         User sessionedUser = SessionUtility.findSessionedUser(session);
         SessionUtility.verifySessionUser(sessionedUser, writer, "본인이 작성한 글만 수정할 수 있습니다.");
 
         model.addAttribute("question", question);
         return "qna/updateForm";
+    }
+
+    @PutMapping("{id}")
+    public String updateQuestion(@PathVariable Long id, String title, String contents) {
+        Question question = questionService.findById(id);
+        question.updateQuestion(title, contents);
+        questionService.save(question);
+        return "redirect:/";
     }
 
 }

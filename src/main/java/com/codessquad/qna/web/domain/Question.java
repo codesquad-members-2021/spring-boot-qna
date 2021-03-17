@@ -55,4 +55,9 @@ public class Question {
         return writtenDateTime.format(QuestionUtility.DATE_PATTERN);
     }
 
+    public void updateQuestion(String title, String contents) {
+        this.title = title;
+        this.contents = contents;
+    }
+
 }
