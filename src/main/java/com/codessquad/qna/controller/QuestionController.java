@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import java.time.LocalDateTime;
 import java.util.Optional;
 
 @Controller
@@ -34,7 +33,6 @@ public class QuestionController {
 
     @PostMapping
     public String create(Question question) {
-        question.setWriteDateTime(LocalDateTime.now());
         questionService.addQuestion(question);
 
         return "redirect:/";

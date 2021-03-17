@@ -19,20 +19,22 @@ public class Question {
     @Column(nullable = false)
     private LocalDateTime writeDateTime;
 
+    protected Question() {
+    }
+    
+    public Question(String writer, String title, String contents) {
+        this.writer = writer;
+        this.title = title;
+        this.contents = contents;
+        this.writeDateTime = LocalDateTime.now();
+    }
+
     public long getId() {
         return id;
     }
 
-    public void setId(long index) {
-        this.id = index;
-    }
-
     public String getWriter() {
         return writer;
-    }
-
-    public void setWriter(String writer) {
-        this.writer = writer;
     }
 
     public String getTitle() {
@@ -57,9 +59,5 @@ public class Question {
 
     public String getFormattedWriteDateTime() {
         return writeDateTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"));
-    }
-
-    public void setWriteDateTime(LocalDateTime writeDateTime) {
-        this.writeDateTime = writeDateTime;
     }
 }
