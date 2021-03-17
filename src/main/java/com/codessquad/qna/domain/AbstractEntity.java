@@ -28,6 +28,10 @@ public class AbstractEntity {
         return id;
     }
 
+    public void setId(Long id) {
+        this.id = id;
+    }
+
     public String getFormattedCreatedDate() {
         return getFormattedDate(createdDate);
     }
@@ -42,7 +46,7 @@ public class AbstractEntity {
         }
         return date.format(DateTimeFormatter.ofPattern(DATETIME_FORMAT));
     }
-    
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

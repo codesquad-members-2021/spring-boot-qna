@@ -76,13 +76,14 @@ public class UserController {
     @PutMapping("/{id}")
     public String update(@PathVariable Long id, @Valid User updatedUser, Errors errors, @RequestParam String password, Model model, HttpSession session) {
         User user = userService.findVerifiedUser(id, session);
+        updatedUser.setId(id);
         if (errors.hasErrors()) {
-            model.addAttribute("user", user);
+            model.addAttribute("user", updatedUser);
             model.addAttribute("errorMessage", Objects.requireNonNull(errors.getFieldError()).getDefaultMessage());
             return "/user/updateForm";
         }
         if (!user.isValidPassword(password)) {
-            model.addAttribute("user", user);
+            model.addAttribute("user", updatedUser);
             model.addAttribute("errorMessage", "비밀번호가 일치하지 않습니다.");
             return "/user/updateForm";
         }
