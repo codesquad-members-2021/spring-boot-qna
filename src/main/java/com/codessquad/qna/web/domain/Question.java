@@ -1,12 +1,9 @@
 package com.codessquad.qna.web.domain;
 
 import com.codessquad.qna.web.utility.QuestionUtility;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.persistence.*;
-import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
-import java.util.Calendar;
 
 @Entity
 public class Question {
@@ -15,8 +12,9 @@ public class Question {
     @GeneratedValue
     private Long id;
 
+    @ManyToOne
     @Column(nullable = false, length = 20)
-    private String writer;
+    private User writer;
 
     @Column(nullable = false, length = 20)
     private String title;
@@ -30,14 +28,14 @@ public class Question {
     protected Question() {
     }
 
-    public Question(String writer, String title, String contents) {
+    public Question(User writer, String title, String contents) {
         this.writer = writer;
         this.title = title;
         this.contents = contents;
         this.writtenDateTime = LocalDateTime.now();
     }
 
-    public String getWriter() {
+    public User getWriter() {
         return writer;
     }
 
