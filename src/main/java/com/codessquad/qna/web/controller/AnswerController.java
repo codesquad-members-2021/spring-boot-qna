@@ -21,15 +21,13 @@ public class AnswerController {
     private final AnswerRepository answerRepository;
     private final QuestionRepository questionRepository;
 
-
     public AnswerController(AnswerRepository answerRepository, QuestionRepository questionRepository) {
         this.answerRepository = answerRepository;
         this.questionRepository = questionRepository;
     }
 
-    @PostMapping("/")
-    public String create(@PathVariable Long questionId, @PathVariable Long id,
-                         String contents, HttpSession session) {
+    @PostMapping()
+    public String create(@PathVariable Long questionId, String contents, HttpSession session) {
 
         User user = SessionUtils.getLoginUser(session);
 
@@ -39,9 +37,9 @@ public class AnswerController {
         return "redirect:/questions/" + questionId;
     }
 
-    private Question getQuestionById(Long id){
+    private Question getQuestionById(Long id) {
         return questionRepository.findById(id)
-                .orElseThrow(() -> new QuestionNotFoundException("Cannot found question number "+ id));
+                .orElseThrow(() -> new QuestionNotFoundException("Cannot found question number " + id));
     }
 
 
