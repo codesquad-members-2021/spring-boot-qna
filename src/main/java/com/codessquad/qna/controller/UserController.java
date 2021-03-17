@@ -53,7 +53,6 @@ public class UserController {
 
     @PostMapping("/{userId}/update")
     public String updateUserInfo(@PathVariable String userId, User updateUser) {
-        //for
         for (User user : users) {
             if(user.getUserId().equals(userId)) {
                 int index = users.indexOf(user);
