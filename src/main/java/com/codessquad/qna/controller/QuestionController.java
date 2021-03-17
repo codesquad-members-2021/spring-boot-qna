@@ -19,6 +19,12 @@ public class QuestionController {
         this.questionService = questionService;
     }
 
+    @GetMapping
+    public String list(Model model) {
+        model.addAttribute("questions", questionService.getQuestionList());
+        return "qna/list";
+    }
+
     @GetMapping("/form")
     public String form(HttpSession session) {
         if (!HttpSessionUtils.isLoggedIn(session)) {
@@ -30,7 +36,7 @@ public class QuestionController {
     @PostMapping
     public String create(Question question, HttpSession session) {
         questionService.registerQuestion(question, HttpSessionUtils.getLoginUser(session));
-        return "redirect:/";
+        return "redirect:/questions";
     }
 
     @GetMapping("/{questionId}")
@@ -55,7 +61,7 @@ public class QuestionController {
     @DeleteMapping("/{id}")
     public String delete(@PathVariable("id") Long id, HttpSession session) {
         questionService.deleteQuestion(id, HttpSessionUtils.getLoginUser(session));
-        return "redirect:/";
+        return "redirect:/questions";
     }
 
 }
