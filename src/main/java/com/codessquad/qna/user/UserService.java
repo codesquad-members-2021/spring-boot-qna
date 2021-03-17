@@ -50,6 +50,11 @@ public class UserService {
     }
 
     public void createUser(UserDTO userDTO) {
+        userRepository.findByUserId(userDTO.getUserId())
+                .ifPresent(user -> {
+                    throw new LoginFailedException("이미 존재하는 ID 입니다.");
+                });
+
         userRepository.save(userDTO.toEntity());
     }
 
