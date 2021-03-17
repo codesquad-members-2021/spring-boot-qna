@@ -19,7 +19,6 @@ public class QuestionController {
 
     private final QuestionService questionService;
 
-    @Autowired
     public QuestionController(QuestionService questionService) {
         this.questionService = questionService;
     }

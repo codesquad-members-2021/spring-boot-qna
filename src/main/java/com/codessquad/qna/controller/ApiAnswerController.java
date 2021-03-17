@@ -23,7 +23,6 @@ public class ApiAnswerController {
     private final QuestionService questionService;
     private final AnswerService answerService;
 
-    @Autowired
     public ApiAnswerController(QuestionService questionService, AnswerService answerService) {
         this.questionService = questionService;
         this.answerService = answerService;
