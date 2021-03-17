@@ -15,16 +15,16 @@ public class UserController {
 
     private List<User> users = new ArrayList<>();
 
-    @GetMapping("/user/create")
+    @GetMapping("/user/new")
     public String toCreateUser() {
         return "signup";
     }
 
-    @PostMapping("/user/create")
+    @PostMapping("/user/new")
     public String createUser(User user) {
         user.setId((long) (users.size() + 1));
         users.add(user);
-        return "redirect:/users";
+        return "redirect:/user";
     }
 
     @GetMapping("/users")

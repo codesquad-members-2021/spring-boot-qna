@@ -13,7 +13,7 @@
 - GET `/user/new`
     - signup
 - POST `/user/new`
-    - redirect:/users
+    - redirect:/user
 
 회원 목록 조회
 
