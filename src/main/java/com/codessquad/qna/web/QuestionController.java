@@ -43,7 +43,7 @@ public class QuestionController {
     }
 
     @GetMapping("{id}")
-    public String getQuestion(@PathVariable Long id , Model model) {
+    public String getQuestion(@PathVariable Long id, Model model) {
         Question selectedQuestion = questionRepository.findById(id).get();
         if (selectedQuestion.isRightId(id)) {
             model.addAttribute("question", selectedQuestion);
@@ -53,17 +53,35 @@ public class QuestionController {
     }
 
     @GetMapping("/{id}/form")
-    public String updateForm(@PathVariable Long id, Model model) {
-        Question selectedQuestion = questionRepository.findById(id).get();
-        if (selectedQuestion.isRightId(id)) {
-            model.addAttribute("question", selectedQuestion);
+    public String updateForm(@PathVariable Long id, Model model, HttpSession session) {
+        if (!HttpSessionUtils.isLoginUser(session)) {
+            return "/users/login";
         }
+
+        User sessionedUser = HttpSessionUtils.getUserFromSession(session);
+        Question selectedQuestion = questionRepository.findById(id).get();
+
+        if (!selectedQuestion.hasSameUserAs(sessionedUser)) {
+            return "redirect:/";
+        }
+
+        model.addAttribute("question", selectedQuestion);
         return "/qna/updateForm";
     }
 
     @PutMapping("/{id}")
-    public String update(@PathVariable Long id, String title, String contents) {
+    public String update(@PathVariable Long id, String title, String contents, HttpSession session) {
+        if (!HttpSessionUtils.isLoginUser(session)) {
+            return "/users/login";
+        }
+
+        User sessionedUser = HttpSessionUtils.getUserFromSession(session);
         Question selectedQuestion = questionRepository.findById(id).get();
+
+        if (!selectedQuestion.hasSameUserAs(sessionedUser)) {
+            return "redirect:/";
+        }
+
         selectedQuestion.update(title, contents);
         questionRepository.save(selectedQuestion);
         return String.format("redirect:/questions/%d", id);
