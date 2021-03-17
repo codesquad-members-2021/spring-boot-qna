@@ -12,8 +12,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import java.util.Optional;
-
 @Controller
 @RequestMapping("/questions")
 public class QuestionController {
@@ -34,18 +32,13 @@ public class QuestionController {
     @PostMapping
     public String create(Question question) {
         questionService.addQuestion(question);
-
         return "redirect:/";
     }
 
     @GetMapping("/{index}")
     public String detail(@PathVariable int index, Model model) {
-        Optional<Question> question = questionService.getQuestion(index);
-        if (question.isPresent()) {
-            model.addAttribute("question", question.get());
-            return "qna/show";
-        }
-
-        return "redirect:/";
+        Question question = questionService.getQuestion(index);
+        model.addAttribute("question", question);
+        return "qna/show";
     }
 }

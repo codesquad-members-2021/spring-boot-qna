@@ -1,12 +1,12 @@
 package com.codessquad.qna.service;
 
 import com.codessquad.qna.entity.Question;
+import com.codessquad.qna.exception.QuestionNotFoundException;
 import com.codessquad.qna.repository.QuestionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class QuestionService {
@@ -25,7 +25,7 @@ public class QuestionService {
         return questionRepository.findAll();
     }
 
-    public Optional<Question> getQuestion(long index) {
-        return questionRepository.findById(index);
+    public Question getQuestion(long index) {
+        return questionRepository.findById(index).orElseThrow(QuestionNotFoundException::new);
     }
 }

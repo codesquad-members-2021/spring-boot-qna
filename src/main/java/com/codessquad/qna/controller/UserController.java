@@ -7,8 +7,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Optional;
-
 @Controller
 @RequestMapping("/users")
 public class UserController {
@@ -33,22 +31,16 @@ public class UserController {
 
     @GetMapping("/{userId}/profile")
     public String profile(@PathVariable String userId, Model model) {
-        Optional<User> user = userService.getUser(userId);
-        if (user.isPresent()) {
-            model.addAttribute("user", user.get());
-            return "user/profile";
-        }
-        return "redirect:/users";
+        User user = userService.getUser(userId);
+        model.addAttribute("user", user);
+        return "user/profile";
     }
 
     @GetMapping("/{userId}/form")
     public String updateForm(@PathVariable String userId, Model model) {
-        Optional<User> user = userService.getUser(userId);
-        if (user.isPresent()) {
-            model.addAttribute("user", user.get());
-            return "user/updateForm";
-        }
-        return "redirect:/users";
+        User user = userService.getUser(userId);
+        model.addAttribute("user", user);
+        return "user/updateForm";
     }
 
     @PutMapping("/{userId}/update")
