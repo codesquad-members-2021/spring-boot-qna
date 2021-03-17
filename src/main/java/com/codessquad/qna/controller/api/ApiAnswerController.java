@@ -3,7 +3,6 @@ package com.codessquad.qna.controller.api;
 import com.codessquad.qna.domain.Answer;
 import com.codessquad.qna.domain.User;
 import com.codessquad.qna.service.AnswerService;
-import com.codessquad.qna.service.UserService;
 import com.codessquad.qna.util.HttpSessionUtils;
 import org.springframework.web.bind.annotation.*;
 
@@ -14,11 +13,9 @@ import javax.servlet.http.HttpSession;
 public class ApiAnswerController {
 
     private final AnswerService answerService;
-    private final UserService userService;
 
-    public ApiAnswerController(AnswerService answerService, UserService userService) {
+    public ApiAnswerController(AnswerService answerService) {
         this.answerService = answerService;
-        this.userService = userService;
     }
 
     @PostMapping
