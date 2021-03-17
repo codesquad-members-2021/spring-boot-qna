@@ -43,13 +43,14 @@ public class UserController {
     }
 
     @GetMapping("/{id}")
-    public String getUserProfile(@PathVariable Long id, HttpSession session) {
+    public String getUserProfile(@PathVariable Long id, Model model, HttpSession session) {
         User user = getUserFromSession(session);
 
         if (!user.matchId(id)) {
             throw new IllegalUserAccessException();
         }
 
+        model.addAttribute("user", user);
         logger.debug("user : {}", user);
 
         return "user/profile";
