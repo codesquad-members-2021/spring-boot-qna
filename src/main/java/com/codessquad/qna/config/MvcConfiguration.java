@@ -10,12 +10,6 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 public class MvcConfiguration implements WebMvcConfigurer {
 
     @Override
-    public void addResourceHandlers(ResourceHandlerRegistry registry) {
-        registry.addResourceHandler("/**")
-                .addResourceLocations("classpath:/templates/", "classpath:/static/");
-    }
-
-    @Override
     public void addViewControllers(ViewControllerRegistry registry) {
         registry.setOrder(Ordered.HIGHEST_PRECEDENCE);
 
@@ -23,5 +17,4 @@ public class MvcConfiguration implements WebMvcConfigurer {
         registry.addViewController("/user/login").setViewName("user/login");
         registry.addViewController("/questions/form").setViewName("qna/form");
     }
-
 }

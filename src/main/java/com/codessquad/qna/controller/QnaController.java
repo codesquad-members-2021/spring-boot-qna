@@ -23,18 +23,13 @@ public class QnaController {
 
     private List<Question> questions = new ArrayList<>();
 
-    @GetMapping("/form")
-    public String showQuestionForm() {
-        return "/qna/form";
-    }
-
     @PostMapping
     public String createQuestion(Question question) {
         questions.add(question);
-        question.setQuestionId(questions.size());
+        question.setId(questions.size());
         question.setWriteTime(new SimpleDateFormat(("yyyy-MM-dd HH:mm")).format(new Date()));
         logger.info(question.getWriteTime());
-        logger.info("question.getQuestionId() = " + question.getQuestionId());
+        logger.info("question.getQuestionId() = " + question.getId());
         return "redirect:/questions";
     }
 
