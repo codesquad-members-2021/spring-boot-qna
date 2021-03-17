@@ -75,10 +75,7 @@ public class User {
     }
 
     public boolean matchId(Long newId) {
-        if (newId == null) {
-            return false;
-        }
-        return newId.equals(id);
+        return this.id.equals(newId);
     }
 
     @Override

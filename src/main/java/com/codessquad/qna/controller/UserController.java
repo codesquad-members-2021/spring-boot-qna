@@ -103,7 +103,7 @@ public class UserController {
     private ModelAndView getUserRepository(String viewName, Long id) {
         ModelAndView modelAndView = new ModelAndView(viewName);
         User user = userService.findById(id);
-        modelAndView.addObject("userId", user.getUserId());
+        modelAndView.addObject("user", user);
         return modelAndView;
     }
 
