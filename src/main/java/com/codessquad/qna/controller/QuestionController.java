@@ -16,6 +16,8 @@ import java.util.List;
 @RequestMapping("/questions")
 public class QuestionController {
 
+    private static String dateTime = "yyyy-MM-dd HH:mm";
+
     private List<Question> questions = new ArrayList<>();
 
     @GetMapping
@@ -26,7 +28,7 @@ public class QuestionController {
 
     @PostMapping
     public String makeNewQuestion(Question question) {
-        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+        SimpleDateFormat format = new SimpleDateFormat(dateTime);
         String formatTime = format.format(System.currentTimeMillis());
         question.setDateTime(formatTime);
         question.setIndex(questions.size() + 1);
