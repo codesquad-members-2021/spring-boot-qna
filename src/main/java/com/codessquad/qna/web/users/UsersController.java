@@ -1,5 +1,6 @@
 package com.codessquad.qna.web.users;
 
+import com.codessquad.qna.web.exceptions.auth.UnauthorizedAccessException;
 import com.codessquad.qna.web.exceptions.users.UserNotFoundException;
 import com.codessquad.qna.web.utils.SessionUtil;
 import org.slf4j.Logger;
@@ -50,23 +51,18 @@ public class UsersController {
     @PutMapping
     public String modifyUser(String prevPassword, String newPassword,
                              String name, String email, HttpSession session) {
-        User sessionUser = SessionUtil.getLoginUser(session);
-        if (sessionUser.isMatchingPassword(prevPassword)) {
-            sessionUser.update(newPassword, name, email);
-            userRepository.save(sessionUser);
-            return "redirect:/users/" + sessionUser.getId();
-        }
-        return "redirect:/users";
+        User loginUser = SessionUtil.getLoginUser(session);
+        verifyAuthorizedAccess(loginUser, prevPassword);
+        loginUser.update(newPassword, name, email);
+        userRepository.save(loginUser);
+        return "redirect:/users/" + loginUser.getId();
     }
 
     @PostMapping("/login")
     public String processLogin(String userId, String password, HttpSession session) {
         User foundUser = userRepository.findByUserId(userId)
                 .orElseThrow(UserNotFoundException::new);
-
-        if (!foundUser.isMatchingPassword(password)) {
-            return "redirect:/users/login-form";
-        }
+        verifyAuthorizedAccess(foundUser, password);
         SessionUtil.setLoginUser(session, foundUser);
         LOGGER.info("user login : {}", foundUser.getUserId());
         return "redirect:/";
@@ -78,5 +74,11 @@ public class UsersController {
         LOGGER.info("user logout : {}", sessionUser.getUserId());
         SessionUtil.removeLoginUser(session);
         return "redirect:/";
+    }
+
+    private void verifyAuthorizedAccess(User user, String password) {
+        if (!user.isMatchingPassword(password)) {
+            throw new UnauthorizedAccessException();
+        }
     }
 }
