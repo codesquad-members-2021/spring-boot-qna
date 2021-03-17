@@ -39,8 +39,6 @@ public class QuestionController {
         return "redirect:/";
     }
 
-
-
     @GetMapping("/{index}")
     public String showQuestion(@PathVariable("index") int index, Model model) {
         Question question = questions.get(index - 1);
