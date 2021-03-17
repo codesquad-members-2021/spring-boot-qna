@@ -49,4 +49,8 @@ public class User {
         this.name = user.name;
         this.email = user.email;
     }
+
+    public boolean verify(User toVerify) {
+        return this.userId.equals(toVerify.userId) && this.password.equals(toVerify.password);
+    }
 }

@@ -31,8 +31,11 @@ public class UserService {
     public void updateUser(User user) {
         Optional<User> toUpdate = userRepository.findByUserId(user.getUserId());
         if (toUpdate.isPresent()) {
-            toUpdate.get().update(user);
-            userRepository.save(toUpdate.get());
+            User existUser = toUpdate.get();
+            if (existUser.verify(user)) {
+                toUpdate.get().update(user);
+                userRepository.save(toUpdate.get());
+            }
         }
         return;
     }
