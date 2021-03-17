@@ -1,9 +1,8 @@
 package com.codessquad.qna.web;
 
 import com.codessquad.qna.domain.user.User;
-import com.codessquad.qna.domain.user.UserRepository;
 import com.codessquad.qna.exception.IllegalUserAccessException;
-import com.codessquad.qna.exception.UserNotFoundException;
+import com.codessquad.qna.service.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
@@ -12,16 +11,17 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
 
-import static com.codessquad.qna.domain.user.HttpSessionUtils.*;
+import static com.codessquad.qna.domain.user.HttpSessionUtils.USER_SESSION_KEY;
+import static com.codessquad.qna.domain.user.HttpSessionUtils.getUserFromSession;
 
 @Controller
 @RequestMapping("/users")
 public class UserController {
     private static Logger logger = LoggerFactory.getLogger(UserController.class);
-    private final UserRepository userRepository;
+    private final UserService userService;
 
-    public UserController(UserRepository userRepository) {
-        this.userRepository = userRepository;
+    public UserController(UserService userService) {
+        this.userService = userService;
     }
 
     @GetMapping("/form")
@@ -31,14 +31,14 @@ public class UserController {
 
     @PostMapping("/")
     public String createUser(User user) {
-        userRepository.save(user);
+        userService.signUp(user);
         logger.debug("user : {}", user);
         return "redirect:/users/";
     }
 
     @GetMapping("/")
     public String getUserList(Model model) {
-        model.addAttribute("userList", userRepository.findAll());
+        model.addAttribute("userList", userService.findUsers());
         return "user/list";
     }
 
@@ -64,8 +64,7 @@ public class UserController {
             throw new IllegalUserAccessException();
         }
 
-        User user = userRepository.findById(id)
-                .orElseThrow(UserNotFoundException::new);
+        User user = userService.findUser(id);
         model.addAttribute("user", user);
         logger.debug("user : {}", user);
 
@@ -81,14 +80,13 @@ public class UserController {
             throw new IllegalUserAccessException();
         }
 
-        User user = userRepository.findById(id)
-                .orElseThrow(UserNotFoundException::new);
+        User user = userService.findUser(id);
 
         if (!user.matchPassword(prevPassword)) {
             return "redirect:/users/";
         }
 
-        userRepository.save(user.update(updateUser));
+        userService.update(updateUser);
         session.setAttribute(USER_SESSION_KEY, user);
         logger.debug("user : {}", user);
 
@@ -102,8 +100,7 @@ public class UserController {
 
     @PostMapping("/login")
     public String login(String userId, String password, HttpSession session) {
-        User user = userRepository.findByUserId(userId)
-                .orElseThrow(UserNotFoundException::new);
+        User user = userService.findUser(userId);
 
         if (!user.matchPassword(password)) {
             logger.error("로그인에 실패하셨습니다.");
