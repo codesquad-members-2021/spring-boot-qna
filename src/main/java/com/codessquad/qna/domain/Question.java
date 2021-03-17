@@ -1,6 +1,8 @@
 package com.codessquad.qna.domain;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 @Entity
 public class Question {
@@ -14,8 +16,10 @@ public class Question {
     private User writer;
     private String title;
     private String contents;
+    private LocalDateTime createdDate;
 
     public Question() {
+        this.createdDate = LocalDateTime.now();
     }
 
     public Long getId() {
@@ -48,6 +52,13 @@ public class Question {
 
     public void setContents(String contents) {
         this.contents = contents;
+    }
+
+    public String getFormattedCreatedDate(){
+        if (createdDate == null){
+            return "";
+        }
+        return createdDate.format(DateTimeFormatter.ofPattern("yyyy.MM.dd HH:mm"));
     }
 
     @Override
