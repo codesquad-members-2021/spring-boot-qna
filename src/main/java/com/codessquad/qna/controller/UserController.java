@@ -1,5 +1,6 @@
 package com.codessquad.qna.controller;
 
+import com.codessquad.qna.HttpSessionUtil;
 import com.codessquad.qna.domain.User;
 import com.codessquad.qna.service.UserService;
 import org.springframework.stereotype.Controller;
@@ -41,14 +42,12 @@ public class UserController {
 
     @GetMapping("users/{primaryKey}/form") //m 개인정보 수정
     private String changeMemberInfo(@PathVariable("primaryKey") Long targetKey, Model model, HttpSession session) {
-        final Object sessionValue = session.getAttribute("sessionedUser");
-        if(sessionValue != null){
-            User sessionUser = (User)sessionValue;
-            if (userService.matchingId(userService.getById(targetKey),sessionUser)) {
-                model.addAttribute("users", sessionUser);
-                return "user/updateForm";
-            }
+
+        if (userService.matchingId(userService.getById(targetKey), HttpSessionUtil.getLoginUser(session))) {
+            model.addAttribute("users", HttpSessionUtil.getLoginUser(session));
+            return "user/updateForm";
         }
+
         model.addAttribute("errorMessage","타인의 정보는 열람할 수 없습니다!");
         return "error/404"; //m 세션아이디와 다를 경우 이동
     }
@@ -68,12 +67,13 @@ public class UserController {
         if(!userService.checkValidOfLogin(userId,password)){
             return "user/login_failed";
         }
-        session.setAttribute("sessionedUser",userService.getById(userId));
+        HttpSessionUtil.setAttribute(session, userService.getById(userId));
         return "redirect:/";
     }
+    
     @GetMapping("/logout")
     private String logout(HttpSession session){
-        session.removeAttribute("sessionedUser");
+        HttpSessionUtil.removeAttribute(session);
         return "redirect:/";
     }
 
