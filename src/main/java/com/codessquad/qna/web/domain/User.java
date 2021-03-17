@@ -7,7 +7,7 @@ import java.util.Objects;
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private long id;
 
     @Column(nullable = false, length = 20)
     private String userId;
@@ -59,12 +59,14 @@ public class User {
         return this.id == user.id;
     }
 
+    public boolean isSameId(long id) {
+        return this.id == id;
+    }
 
-    //수정필요
     public void update(User user) {
-//        this.password(user.getPassword());
-        this.setName(user.getName());
-        this.setEmail(user.getEmail());
+        this.password = user.password;
+        this.name = user.name;
+        this.email = user.email;
     }
 
     @Override

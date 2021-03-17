@@ -75,8 +75,13 @@ public class UserController {
             return "redirect:/users/loginForm";
         }
 
+        User loginUser = HttpSessionUtils.getSessionedUser(session);
+        if (loginUser.isSameId(id)){
+            throw new IllegalStateException("자신의 정보만 수정할 수 있습니다");
+        }
+
         try {
-            model.addAttribute("user", userService.checkAndGetOriginUser(id, session));
+            model.addAttribute("user", loginUser);
         } catch (IllegalStateException e) {
             return "redirect:/";
         }
@@ -90,15 +95,20 @@ public class UserController {
             return "redirect:/users/loginForm";
         }
 
-            userService.updateUser(testPassword, userService.checkAndGetOriginUser(id, session), user);
+        User loginUser = HttpSessionUtils.getSessionedUser(session);
+        if (loginUser.isSameId(id)){
+            throw new IllegalStateException("자신의 정보만 수정할 수 있습니다");
+        }
+
+        userService.updateUser(testPassword, loginUser, user);
         return "redirect:/users";
     }
 
-    @ExceptionHandler(IllegalStateException.class)
-    public String hello() {
-        return  "redirect:/users/loginForm";
-    }
-
-    /// 세션 private /// SESSION........
+//    @ExceptionHandler(IllegalStateException.class)
+//    public String hello() {
+//        return  "redirect:/users/loginForm";
+//    }
+//
+//    /// 세션 private /// SESSION........
 
 }

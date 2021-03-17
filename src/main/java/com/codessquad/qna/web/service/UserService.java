@@ -4,7 +4,6 @@ import com.codessquad.qna.web.HttpSessionUtils;
 import com.codessquad.qna.web.domain.User;
 import com.codessquad.qna.web.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpSession;

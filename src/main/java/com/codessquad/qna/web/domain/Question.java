@@ -10,7 +10,7 @@ public class Question {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private long id;
 
     @ManyToOne
     @JoinColumn(foreignKey = @ForeignKey(name = "fk_questions_writer"))
@@ -36,7 +36,7 @@ public class Question {
         this.createdDateTime = LocalDateTime.now();
     }
 
-    public Long getId() {
+    public long getId() {
         return id;
     }
 
