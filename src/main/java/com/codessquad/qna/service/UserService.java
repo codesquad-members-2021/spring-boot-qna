@@ -24,10 +24,9 @@ public class UserService {
     }
 
     public void register(User user) {
-        userRepository.findByUserId(user.getUserId())
-                .ifPresent(u -> {
-                    throw new UserExistException();
-                });
+        if (userRepository.findByUserId(user.getUserId()).isPresent()) {
+            throw new UserExistException();
+        }
         userRepository.save(user);
     }
 
