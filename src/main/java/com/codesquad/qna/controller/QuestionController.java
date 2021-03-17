@@ -92,4 +92,22 @@ public class QuestionController {
         model.addAttribute("question", question);
         return "/qna/show";
     }
+
+    @DeleteMapping("/{id}")
+    public String delete(@PathVariable Long id, HttpSession session) {
+        if (!HttpSessionUtils.isLoginUser(session)) {
+            return "redirect:/users/loginForm";
+        }
+
+        User sessionedUser = HttpSessionUtils.getUserFromSession(session);
+        Question question = questionService.findQuestionById(id);
+
+        if (!sessionedUser.isMatchedUserId(question.getWriter())) {
+            throw new IllegalStateException("You can't modify other user's question!!");
+        }
+
+        questionService.delete(question);
+
+        return "redirect:/questions";
+    }
 }
