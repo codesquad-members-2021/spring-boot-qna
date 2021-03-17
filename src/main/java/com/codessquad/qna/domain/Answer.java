@@ -70,8 +70,9 @@ public class Answer {
     }
 
     public boolean matchUser(User loginUser) {
-        String userId = loginUser.getUserId();
-        return this.writer.getUserId().equals(userId);
+        String loginUserId = loginUser.getUserId();
+        String writerId = this.writer.getUserId();
+        return writerId.equals(loginUserId);
     }
 
     @Override
