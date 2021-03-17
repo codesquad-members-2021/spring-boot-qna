@@ -8,7 +8,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 @Configuration
 public class MyConfig implements WebMvcConfigurer {
 
-    public void addViewControllers(ViewControllerRegistry registry){
+    public void addViewControllers(ViewControllerRegistry registry) {
         registry.setOrder(Ordered.HIGHEST_PRECEDENCE);
 
         registry.addViewController("/users/signUp").setViewName("user/form");

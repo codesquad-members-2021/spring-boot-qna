@@ -17,7 +17,7 @@ public class HttpSessionUtils {
 
     public static User getUserFromSession(HttpSession session) {
         if (!isLoginUser(session)) {
-            return null;
+            return null;    // 예외발생
         }
         return (User) session.getAttribute(USER_SESSION_KEY);
     }
