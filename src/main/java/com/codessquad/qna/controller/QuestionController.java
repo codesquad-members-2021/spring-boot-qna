@@ -71,18 +71,15 @@ public class QuestionController {
     public String deleteQuestion(@PathVariable Long id, HttpSession session) {
         Question question = questionService.findById(id);
         User loginUser = HttpSessionUtils.getSessionUser(session);
-        if (questionService.canDelete(id, question, loginUser)) {
-            questionService.delete(question, id);
-            return "redirect:/";
-        }
+        questionService.delete(question, id, loginUser);
         return "redirect:/";
     }
 
     private ModelAndView getQuestionRepository(String viewName, Long id) {
         ModelAndView modelAndView = new ModelAndView(viewName);
         modelAndView.addObject("question", questionService.findById(id));
-        modelAndView.addObject("answersList", questionService.findAnswer(id));
-        modelAndView.addObject("answerCount", questionService.findAnswer(id).size());
+        modelAndView.addObject("answersList", questionService.findAnswers(id));
+        modelAndView.addObject("answerCount", questionService.findAnswers(id).size());
         return modelAndView;
     }
 

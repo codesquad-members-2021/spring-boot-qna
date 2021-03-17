@@ -1,7 +1,6 @@
 package com.codessquad.qna.service;
 
 import com.codessquad.qna.controller.HttpSessionUtils;
-import com.codessquad.qna.controller.QuestionController;
 import com.codessquad.qna.domain.Answer;
 import com.codessquad.qna.domain.Question;
 import com.codessquad.qna.domain.User;
@@ -39,33 +38,41 @@ public class QuestionService {
         questionRepository.save(question);
     }
 
-    public void delete(Question question, Long id) {
-        for (Answer answer : findAnswer(id)) {
-            answer.delete();
+    public void delete(Question question, Long questionId, User loginUser) {
+        if (canDelete(questionId, question, loginUser)) {
+            for (Answer answer : findAnswers(questionId)) {
+                answer.delete();
+            }
+            question.delete();
+            questionRepository.save(question);
         }
-        question.delete();
-        questionRepository.save(question);
     }
 
     public Question findById(Long id) {
         return questionRepository.findById(id).orElse(null);
     }
 
-    public List<Question> findAllQuestion() {return questionRepository.findActiveQuestion();}
-
-    public List<Answer> findAnswer(Long id) {
-        return answerRepository.findActiveAnswer(id);
+    public List<Question> findAllQuestion() {
+        return questionRepository.findActiveQuestion();
     }
 
-    public boolean canDelete(Long id, Question question, User loginUser) {
-        int allAnswers = findAnswer(id).size();
+    public List<Answer> findAnswers(Long questionId) {
+        return answerRepository.findActiveAnswer(questionId);
+    }
+
+    public boolean canDelete(Long questionId, Question question, User loginUser) {
+        int allAnswers = findAnswers(questionId).size();
         int numCount = 0;
-        for (Answer answer : findAnswer(id)) {
-            if (question.getWriter().getId().equals(answer.getWriter().getId())) {
+        Long questionWriterId = question.getWriter().getId();
+        for (Answer answer : findAnswers(questionId)) {
+            Long answerWriterId = answer.getWriter().getId();
+            if (questionWriterId.equals(answerWriterId)) {
                 numCount += 1;
             }
         }
-        return (allAnswers == 0 && question.matchUser(loginUser)) || (allAnswers == numCount && question.matchUser(loginUser));
+        boolean flag1 = allAnswers == 0 && question.matchUser(loginUser);
+        boolean flag2 = allAnswers == numCount && question.matchUser(loginUser);
+        return (flag1 || flag2);
     }
 
 }

@@ -24,7 +24,6 @@ public class Question {
     private String title;
 
     @Column(nullable = false, length = 2000)
-    @NotEmpty
     @NotBlank(message = "내용은 필수 입력 값입니다.")
     private String contents;
 
@@ -101,10 +100,7 @@ public class Question {
 
     public boolean matchUser(User loginUser) {
         String userId = loginUser.getUserId();
-        if (this.writer.getUserId().equals(userId)) {
-            return true;
-        }
-        return false;
+        return this.writer.getUserId().equals(userId);
     }
 
     public void delete() {
