@@ -27,7 +27,7 @@ public class QuestionController {
     @PostMapping
     public String createQuestion(Question newQuestion, HttpSession session) {
         User sessionUser = HttpSessionUtils.getUserFromSession(session);
-        newQuestion.setWriter(sessionUser.getName());
+        newQuestion.setWriter(sessionUser);
         if (!isValidQuestion(newQuestion)) {
             return "question/form";
         }
@@ -49,7 +49,7 @@ public class QuestionController {
         if (question == null) {
             return false;
         }
-        if ("".equals(question.getWriter()) || question.getWriter() == null) {
+        if (question.getWriter() == null) {
             return false;
         }
         if ("".equals(question.getTitle()) || question.getTitle() == null) {
@@ -77,7 +77,6 @@ public class QuestionController {
 
         return "question/update";
     }
-
 
     @PutMapping("/{id}")
     public String updateQuestion(@PathVariable long id, Question referenceQuestion) {
