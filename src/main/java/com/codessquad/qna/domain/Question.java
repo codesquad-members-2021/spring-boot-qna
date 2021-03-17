@@ -18,36 +18,30 @@ public class Question {
     private String contents;
     private LocalDateTime postTime;
 
-    public Long getId() {
-        return id;
+    public Question() {
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public Question(User writer, String title, String contents) {
+        this.writer = writer;
+        this.title = title;
+        this.contents = contents;
+        setPostTime();
+    }
+
+    public Long getId() {
+        return id;
     }
 
     public String getWriter() {
         return writer.getUserId();
     }
 
-    public void setWriter(User user) {
-        this.writer = user;
-    }
-
     public String getTitle() {
         return title;
     }
 
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
     public String getContents() {
         return contents;
-    }
-
-    public void setContents(String contents) {
-        this.contents = contents;
     }
 
     public String getPostTime() {
@@ -58,11 +52,11 @@ public class Question {
         postTime = LocalDateTime.now();
     }
 
-    public boolean isPostWriter(User user){
+    public boolean isPostWriter(User user) {
         return user.isUserMatching(writer);
     }
 
-    public void update(Question newQuestion){
+    public void update(Question newQuestion) {
         this.title = newQuestion.title;
         this.contents = newQuestion.title;
         setPostTime();

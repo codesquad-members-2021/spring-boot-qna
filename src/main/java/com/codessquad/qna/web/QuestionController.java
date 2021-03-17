@@ -29,9 +29,9 @@ public class QuestionController {
     }
 
     @PostMapping("/create")
-    public String create(Question question, HttpSession session) {
-        question.setWriter(getUserFromSession(session));
-        question.setPostTime();
+    public String create(String title, String contents, HttpSession session) {
+        User user = getUserFromSession(session);
+        Question question = new Question(user, title, contents);
         questionRepository.save(question);
         return "redirect:/questions";
     }
