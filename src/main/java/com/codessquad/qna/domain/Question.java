@@ -1,8 +1,8 @@
 package com.codessquad.qna.domain;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 @Entity
 public class Question {
@@ -19,6 +19,8 @@ public class Question {
 
     private String contents;
 
+    private LocalDateTime createDate;
+
     public Question() {
     }
 
@@ -26,6 +28,14 @@ public class Question {
         this.userId = userId;
         this.title = title;
         this.contents = contents;
+        this.createDate = LocalDateTime.now();
+    }
+
+    public String getFormattedCreateDate() {
+        if (createDate == null) {
+            return "";
+        }
+        return createDate.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"));
     }
 
     public Long getId() {
