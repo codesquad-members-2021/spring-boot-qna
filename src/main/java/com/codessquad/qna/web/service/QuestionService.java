@@ -38,15 +38,6 @@ public class QuestionService {
         questionRepository.save(originQuestion);
     }
 
-    public Question getOriginQuestion(long id, HttpSession session) {
-        Question originQuestion = findQuestion(id);
-        //ISmATCHING을 uSER에서 시키는 것이 낫겠어.
-        if(!originQuestion.isMatchingWriter(HttpSessionUtils.getSessionedUser(session))) {
-            throw new IllegalStateException("자신의 글만 수정할 수 있습니다");
-        }
-        return originQuestion;
-    }
-
     public void deleteQuestion(long id) {
         questionRepository.deleteById(id);
     }
