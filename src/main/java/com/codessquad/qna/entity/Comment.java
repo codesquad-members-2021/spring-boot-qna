@@ -1,5 +1,6 @@
 package com.codessquad.qna.entity;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import org.hibernate.annotations.ColumnDefault;
 
 import javax.persistence.*;
@@ -14,6 +15,7 @@ public class Comment {
 
     @ManyToOne
     @JoinColumn(name = "post_id")
+    @JsonManagedReference
     private Post post;
 
     @ManyToOne

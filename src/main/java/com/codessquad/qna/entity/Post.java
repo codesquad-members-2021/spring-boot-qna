@@ -1,5 +1,6 @@
 package com.codessquad.qna.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
@@ -27,6 +28,8 @@ public class Post {
 
     @OneToMany(mappedBy = "post", cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
     @Where(clause = "deleted = false")
+    @OrderBy("id DESC")
+    @JsonBackReference
     private final List<Comment> comments = new ArrayList<>();
 
     private LocalDateTime createDateTime = LocalDateTime.now();
