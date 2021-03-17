@@ -6,21 +6,20 @@ import com.codessquad.qna.service.CommentService;
 import com.codessquad.qna.util.HttpSessionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
 
-@Controller
-@RequestMapping("/posts/{postId}/comments")
-public class CommentController {
+@RestController
+@RequestMapping("/api/posts/{postId}/comments")
+public class ApiCommentController {
 
-    private static final Logger logger = LoggerFactory.getLogger(CommentController.class);
+    private static final Logger logger = LoggerFactory.getLogger(ApiCommentController.class);
 
     private final CommentService commentService;
 
-    public CommentController(CommentService commentService) {
+    public ApiCommentController(CommentService commentService) {
         this.commentService = commentService;
     }
 
@@ -34,9 +33,8 @@ public class CommentController {
      * @return redirect:/questions/%d
      */
     @PostMapping("")
-    public String addComment(@PathVariable Long postId, String body, HttpSession httpSession) {
-        commentService.addComment(postId, HttpSessionUtils.getUserFromSession(httpSession), body);
-        return "redirect:/posts/" + postId;
+    public Comment addComment(@PathVariable Long postId, String body, HttpSession httpSession) {
+        return commentService.addComment(postId, HttpSessionUtils.getUserFromSession(httpSession), body);
     }
 
     /**
