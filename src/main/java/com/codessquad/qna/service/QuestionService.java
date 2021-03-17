@@ -8,6 +8,8 @@ import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpSession;
 
+import java.util.List;
+
 import static com.codessquad.qna.controller.HttpSessionUtils.*;
 
 @Service
@@ -24,8 +26,8 @@ public class QuestionService {
         questionRepository.save(question);
     }
 
-    public void update(Question question, String title, String contents) {
-        question.update(title, contents);
+    public void update(Question question, Question updatedQuestion) {
+        question.update(updatedQuestion);
         questionRepository.save(question);
     }
 

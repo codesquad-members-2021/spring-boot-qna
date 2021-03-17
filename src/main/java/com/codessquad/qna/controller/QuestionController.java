@@ -3,12 +3,15 @@ package com.codessquad.qna.controller;
 import com.codessquad.qna.domain.*;
 import com.codessquad.qna.exception.*;
 import com.codessquad.qna.service.QuestionService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
+import javax.validation.Valid;
+
+import java.util.Objects;
 
 import static com.codessquad.qna.controller.HttpSessionUtils.*;
 
@@ -55,9 +58,15 @@ public class QuestionController {
     }
 
     @PutMapping("/{id}")
-    public String update(@PathVariable Long id, String title, String contents, Model model, HttpSession session) {
+    public String update(@PathVariable Long id, @Valid Question updatedQuestion, Errors errors, Model model, HttpSession session) {
         Question question = questionService.findVerifiedQuestion(id, session);
-        questionService.update(question, title, contents);
+        updatedQuestion.setId(id);
+        if (errors.hasErrors()) {
+            model.addAttribute("question", updatedQuestion);
+            model.addAttribute("errorMessage", Objects.requireNonNull(errors.getFieldError()).getDefaultMessage());
+            return "/qna/updateForm";
+        }
+        questionService.update(question, updatedQuestion);
         return "redirect:/questions/" + id;
     }
 
