@@ -1,35 +1,27 @@
 package com.codessquad.qna.domain.question;
 
+import com.codessquad.qna.domain.AbstractEntity;
 import com.codessquad.qna.domain.answer.Answer;
 import com.codessquad.qna.domain.user.User;
-import com.codessquad.qna.utils.DateFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-public class Question {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
+public class Question extends AbstractEntity {
     @ManyToOne
     @JoinColumn(foreignKey = @ForeignKey(name = "fk_question_writer"))
     private User writer;
 
-    @Column(nullable = false, length=500)
+    @Column(nullable = false, length = 500)
     private String title;
 
     @Column(nullable = false, columnDefinition = "TEXT")
     private String contents;
 
-    private String date;
-
-    @OneToMany(mappedBy="question")
+    @OneToMany(mappedBy = "question")
     @OrderBy("id ASC")
     private final List<Answer> answers = new ArrayList<>();
 
@@ -37,18 +29,6 @@ public class Question {
     private Integer countOfAnswer = 0;
 
     private boolean deleted;
-
-    public Question() {
-        this.date = LocalDateTime.now().format(DateFormat.DEFAULT);
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(long id) {
-        this.id = id;
-    }
 
     public User getWriter() {
         return writer;
@@ -74,17 +54,8 @@ public class Question {
         this.contents = contents;
     }
 
-    public String getDate() {
-        return date;
-    }
-
     public Integer getCountOfAnswer() {
         return countOfAnswer;
-    }
-
-    public long getNotDeletedAnswersCount() {
-        long answersCount = answers.stream().filter(answer -> !answer.isDeleted()).count();
-        return answersCount;
     }
 
     public void delete() {
@@ -121,11 +92,11 @@ public class Question {
     @Override
     public String toString() {
         return "Question{" +
-                "id=" + id +
+                "id=" + getId() +
                 ", writer='" + writer + '\'' +
                 ", title='" + title + '\'' +
                 ", contents='" + contents + '\'' +
-                ", date='" + date + '\'' +
+                ", date='" + getCreateDate() + '\'' +
                 '}';
     }
 }
