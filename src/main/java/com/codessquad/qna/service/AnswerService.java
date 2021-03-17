@@ -1,6 +1,8 @@
 package com.codessquad.qna.service;
 
 import com.codessquad.qna.domain.Answer;
+import com.codessquad.qna.domain.Question;
+import com.codessquad.qna.domain.User;
 import com.codessquad.qna.exception.AnswerNotFoundException;
 import com.codessquad.qna.repository.AnswerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,7 +17,8 @@ public class AnswerService {
         this.answerRepository = answerRepository;
     }
 
-    public Answer create(Answer answer) {
+    public Answer create(User user, Question question, String contents) {
+        Answer answer = new Answer(user, question, contents);
         return answerRepository.save(answer);
     }
 

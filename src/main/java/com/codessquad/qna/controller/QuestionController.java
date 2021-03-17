@@ -16,7 +16,6 @@ import static com.codessquad.qna.controller.HttpSessionUtils.*;
 @Controller
 @RequestMapping("/questions")
 public class QuestionController {
-
     private final QuestionService questionService;
 
     public QuestionController(QuestionService questionService) {

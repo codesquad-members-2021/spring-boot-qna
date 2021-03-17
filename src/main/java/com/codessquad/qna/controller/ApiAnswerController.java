@@ -35,9 +35,8 @@ public class ApiAnswerController {
         }
         User user = getSessionUser(session);
         Question question = questionService.findQuestion(questionId);
-        Answer answer = new Answer(user, question, contents);
         logger.debug("{}님께서 답변 작성에 성공하셨습니다.", user.getUserId());
-        return answerService.create(answer);
+        return answerService.create(user, question, contents);
     }
 
     @DeleteMapping("/{id}")
