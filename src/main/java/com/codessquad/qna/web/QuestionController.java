@@ -1,39 +1,48 @@
 package com.codessquad.qna.web;
 
+import com.codessquad.qna.domain.Qna;
+import com.codessquad.qna.domain.QnaRepository;
+import com.codessquad.qna.exception.NoQuestionException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-
-import java.util.ArrayList;
-import java.util.List;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
+@RequestMapping("/qna")
 public class QuestionController {
+    private final QnaRepository qnaRepository;
 
-    List<Qna> qnaList = new ArrayList<>();
+    public QuestionController(QnaRepository qnaRepository) {
+        this.qnaRepository = qnaRepository;
+    }
 
-    @PostMapping("/qna")
-    public String qnaMain(String writer, String title, String contents) {
-        Qna newQna = new Qna(qnaList.size() + 1, writer, title, contents);
-        System.out.println("QnA: " + writer);
-        qnaList.add(newQna);
+    @PostMapping
+    public String createNewQna(Qna qna) {
+        if (checkEmpty(qna)) {
+            return "qna/form";
+        }
+        qnaRepository.save(qna);
         return "redirect:/";
     }
 
-    @GetMapping("/")
-    public String getQnaList(Model model) {
-        model.addAttribute("qnaList", qnaList);
+    private boolean checkEmpty(Qna qna) {
+        return qna.getWriter().equals("")
+                || qna.getTitle().equals("")
+                || qna.getContents().equals("");
+    }
+
+    @GetMapping
+    public String qnaList(Model model) {
+        model.addAttribute("qnaList", qnaRepository.findAll());
         return "index";
     }
 
-    @GetMapping("qna/show/{qnaId}")
-    public String getOneQuestion(@PathVariable("qnaId") int qnaId, Model model) {
-        Qna foundQuestion = qnaList.stream()
-                .filter((qua -> qua.getId() == qnaId))
-                .findFirst().orElse(null);
-        model.addAttribute("Qna", foundQuestion);
+    @GetMapping("/{qnaId}")
+    public String showOneQuestion(@PathVariable long qnaId, Model model) {
+        model.addAttribute("Qna", qnaRepository.findById(qnaId).orElseThrow(NoQuestionException::new));
         return "qna/show";
     }
 }

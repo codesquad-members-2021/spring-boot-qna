@@ -17,11 +17,11 @@
                     <div class="wrap">
                         <div class="main">
                             <strong class="subject">
-                                <a href="qna/show/{{id}}">{{title}}</a>
+                                <a href="qna/{{id}}">{{title}}</a>
                             </strong>
                             <div class="auth-info">
                                 <i class="icon-add-comment"></i>
-                                <span class="time">{{date}}</span>
+                                <span class="time">{{createdDateTime}}</span>
                                 <a href="user/profile" class="author">{{writer}}</a>
                             </div>
                             <div class="reply" title="댓글">
@@ -132,8 +132,6 @@
 -->
 
 <!-- script references -->
-<script src="../static/js/jquery-2.2.0.min.js"></script>
-<script src="../static/js/bootstrap.min.js"></script>
-<script src="../static/js/scripts.js"></script>
+{{> base/script}}
 </body>
 </html>

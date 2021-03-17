@@ -1,29 +1,29 @@
-package com.codessquad.qna.web;
+package com.codessquad.qna.domain;
 
-import java.util.Date;
+import com.fasterxml.jackson.annotation.JsonFormat;
 
+import javax.persistence.*;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+
+@Entity
 public class Qna {
+    @Id
+    @GeneratedValue
+    private Long id;
 
-    private int id;
+    @Column(nullable = false)
     private String writer;
+
     private String title;
+
+    @Column(nullable = false)
     private String contents;
-    private Date date;
 
-    public Qna(int id, String writer, String title, String contents) {
-        this.id = id;
-        this.writer = writer;
-        this.title = title;
-        this.contents = contents;
-        this.date = new Date();
-    }
+    private LocalDateTime createdDateTime = LocalDateTime.now();
 
-    public int getId() {
+    public Long getId() {
         return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
     }
 
     public String getWriter() {
@@ -50,12 +50,16 @@ public class Qna {
         this.contents = contents;
     }
 
-    public Date getDate() {
-        return date;
+    public LocalDateTime getCreatedDateTime() {
+        return createdDateTime;
     }
 
-    public void setDate(Date date) {
-        this.date = date;
+    public void setCreatedDateTime(LocalDateTime createdDateTime){
+        this.createdDateTime = createdDateTime;
+    }
+
+    public String getFormattedDateTime() {
+        return createdDateTime.format(DateTimeFormatter.ISO_LOCAL_DATE_TIME);
     }
 
     @Override
