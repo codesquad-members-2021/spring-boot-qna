@@ -21,9 +21,10 @@ public class CommentService {
         this.postService = postService;
     }
 
-    public void addComment(Long postId, User user, String body) {
+    public Comment addComment(Long postId, User user, String body) {
         Comment comment = new Comment(postService.getPost(postId), user, body);
         commentRepository.save(comment);
+        return comment;
     }
 
     public Comment findComment(Long commentId) {
