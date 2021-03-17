@@ -48,7 +48,7 @@ public class QuestionController {
     @GetMapping("{id}")
     public String getQuestion(@PathVariable Long id , Model model) {
         Question selectedQuestion = questionRepository.findById(id).get();
-        if (id == selectedQuestion.getId()) {
+        if (selectedQuestion.isRightId(id)) {
             model.addAttribute("question", selectedQuestion);
         }
 

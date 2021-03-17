@@ -42,6 +42,10 @@ public class Question {
         return id;
     }
 
+    public boolean isRightId(Long selectedId) {
+        return this.id == selectedId;
+    }
+
     public User getUserId() {
         return userId;
     }
