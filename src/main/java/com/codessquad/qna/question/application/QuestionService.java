@@ -4,8 +4,8 @@ import com.codessquad.qna.question.domain.Question;
 import com.codessquad.qna.question.domain.QuestionRepository;
 import com.codessquad.qna.question.dto.QuestionRequest;
 import com.codessquad.qna.question.dto.QuestionResponse;
+import com.codessquad.qna.question.exception.QuestionNotFoundException;
 import com.codessquad.qna.user.domain.User;
-import com.codessquad.qna.user.exception.UserNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -13,7 +13,7 @@ import java.util.List;
 
 @Service
 public class QuestionService {
-    private QuestionRepository questionRepository;
+    private final QuestionRepository questionRepository;
 
     public QuestionService(QuestionRepository questionRepository) {
         this.questionRepository = questionRepository;
@@ -54,8 +54,8 @@ public class QuestionService {
                 .getId();
     }
 
-    private Question getQuestionFromRepository(Long id) {
+    public Question getQuestionFromRepository(Long id) {
         return questionRepository.findById(id)
-                .orElseThrow(() -> new UserNotFoundException(String.format("존재하지 않는 질문입니다. id: %d", id)));
+                .orElseThrow(() -> new QuestionNotFoundException(String.format("존재하지 않는 질문입니다. id: %d", id)));
     }
 }

@@ -1,37 +1,44 @@
 package com.codessquad.qna.question.dto;
 
+import com.codessquad.qna.answer.domain.Answer;
+import com.codessquad.qna.answer.dto.AnswerResponse;
 import com.codessquad.qna.question.domain.Question;
+import com.codessquad.qna.user.domain.User;
 
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
+import java.util.List;
+import java.util.stream.Collectors;
+
+import static com.codessquad.qna.common.DateUtils.format;
 
 public class QuestionResponse {
     private Long id;
-    private String writer;
+    private User writer;
     private String title;
     private String contents;
-    private String createdDate;
-    private String modifiedDate;
+    private List<Answer> answers;
+    private LocalDateTime createdDate;
+    private LocalDateTime modifiedDate;
 
     protected QuestionResponse() {}
 
-    public QuestionResponse(Long id, String writer, String title, String contents, LocalDateTime createdDate, LocalDateTime modifiedDate) {
+    public QuestionResponse(Long id, User writer, String title, String contents, List<Answer> answers, LocalDateTime createdDate, LocalDateTime modifiedDate) {
         this.id = id;
         this.writer = writer;
         this.title = title;
         this.contents = contents;
-
-        // FIXME: dto 에서의 로직을 삭제해야한다; 프론트에서 자바스크립트로 format 할수 있도록 한다.
-        this.createdDate = format(createdDate);
-        this.modifiedDate = format(modifiedDate);
+        this.answers = answers;
+        this.createdDate = createdDate;
+        this.modifiedDate = modifiedDate;
     }
 
     public static QuestionResponse of(Question question) {
         return new QuestionResponse(
                 question.getId(),
-                question.getWriter().getUserId(),
+                question.getWriter(),
                 question.getTitle(),
                 question.getContents(),
+                question.getAnswers(),
                 question.getCreatedDate(),
                 question.getModifiedDate());
     }
@@ -40,7 +47,7 @@ public class QuestionResponse {
         return id;
     }
 
-    public String getWriter() {
+    public User getWriter() {
         return writer;
     }
 
@@ -52,15 +59,17 @@ public class QuestionResponse {
         return contents;
     }
 
+    public List<AnswerResponse> getAnswers() {
+        return answers.stream()
+                .map(AnswerResponse::of)
+                .collect(Collectors.toList());
+    }
+
     public String getCreatedDate() {
-        return createdDate;
+        return format(createdDate);
     }
 
     public String getModifiedDate() {
-        return modifiedDate;
-    }
-
-    private String format(LocalDateTime localDateTime) {
-        return localDateTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd hh:mm"));
+        return format(modifiedDate);
     }
 }

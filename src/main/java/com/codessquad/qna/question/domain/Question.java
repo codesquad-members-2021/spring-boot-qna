@@ -1,9 +1,11 @@
 package com.codessquad.qna.question.domain;
 
+import com.codessquad.qna.answer.domain.Answer;
 import com.codessquad.qna.common.BaseTimeEntity;
 import com.codessquad.qna.user.domain.User;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 public class Question extends BaseTimeEntity {
@@ -15,12 +17,15 @@ public class Question extends BaseTimeEntity {
     @JoinColumn(foreignKey = @ForeignKey(name = "fk_question_writer"))
     private User writer;
 
-
     @Column(nullable = false)
     private String title;
 
-    @Column(nullable = false)
+    @Lob
     private String contents;
+
+    @OneToMany(mappedBy = "question")
+    @OrderBy("id ASC")
+    private List<Answer> answers;
 
     protected Question() {}
 
@@ -44,6 +49,10 @@ public class Question extends BaseTimeEntity {
 
     public String getContents() {
         return contents;
+    }
+
+    public List<Answer> getAnswers() {
+        return answers;
     }
 
     public void update(Question question) {
