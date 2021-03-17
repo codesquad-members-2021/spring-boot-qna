@@ -67,3 +67,16 @@ String.prototype.format = function () {
             ;
     });
 };
+
+function checkEmptyFields() {
+    let data = document.question.getElementsByTagName("input");
+
+    for (let i = 0; i < data.length; i++) {
+        if (data[i].value.trim() === "") {
+            let name = data[i].getAttribute("name");
+            alert(name + " 필드가 비어있습니다.")
+            return;
+        }
+    }
+    document.question.submit();
+}
