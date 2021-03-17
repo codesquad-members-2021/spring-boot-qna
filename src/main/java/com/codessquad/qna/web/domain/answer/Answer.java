@@ -60,4 +60,9 @@ public class Answer {
     public String getCreatedAt() {
         return createdAt.format(DATE_TIME_FORMATTER);
     }
+
+    public boolean isMatchingWriter(User user){
+        return writer.isMatchingId(user.getId());
+    }
+
 }

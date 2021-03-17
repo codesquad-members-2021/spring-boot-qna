@@ -5,9 +5,12 @@ import com.codessquad.qna.web.domain.answer.AnswerRepository;
 import com.codessquad.qna.web.domain.question.Question;
 import com.codessquad.qna.web.domain.question.QuestionRepository;
 import com.codessquad.qna.web.domain.user.User;
+import com.codessquad.qna.web.exception.AnswerNotFoundException;
+import com.codessquad.qna.web.exception.CRUDAuthenticationException;
 import com.codessquad.qna.web.exception.QuestionNotFoundException;
 import com.codessquad.qna.web.utils.SessionUtils;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -28,12 +31,24 @@ public class AnswerController {
 
     @PostMapping()
     public String create(@PathVariable Long questionId, String contents, HttpSession session) {
-
-        User user = SessionUtils.getLoginUser(session);
+        User loginUser = SessionUtils.getLoginUser(session);
 
         Question question = getQuestionById(questionId);
-        Answer answer = new Answer(user, question, contents);
+        Answer answer = new Answer(loginUser, question, contents);
         answerRepository.save(answer);
+        return "redirect:/questions/" + questionId;
+    }
+
+    @DeleteMapping("/{id}")
+    public String delete(@PathVariable Long questionId, @PathVariable Long id, HttpSession session) {
+        User loginUser = SessionUtils.getLoginUser(session);
+        Answer answer = answerRepository.findById(id)
+                .orElseThrow(() -> new AnswerNotFoundException("Cannot found answer number " + id));
+
+        if (!answer.isMatchingWriter(loginUser)) {
+            throw new CRUDAuthenticationException("Only writer can delete this answer post!");
+        }
+        answerRepository.delete(answer);
         return "redirect:/questions/" + questionId;
     }
 
