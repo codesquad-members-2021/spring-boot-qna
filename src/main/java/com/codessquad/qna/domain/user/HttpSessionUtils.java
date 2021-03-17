@@ -5,7 +5,7 @@ import com.codessquad.qna.exception.UserNotFoundException;
 import javax.servlet.http.HttpSession;
 
 public class HttpSessionUtils {
-    private static String USER_SESSION_KEY = "sessionedUser";
+    public static String USER_SESSION_KEY = "sessionedUser";
 
     public static boolean isLoginUser(HttpSession session) {
         return session.getAttribute(USER_SESSION_KEY) == null ?

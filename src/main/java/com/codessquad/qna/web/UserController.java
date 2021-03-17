@@ -11,9 +11,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
-import java.util.Optional;
 
-import static com.codessquad.qna.domain.user.HttpSessionUtils.getUserFromSession;
+import static com.codessquad.qna.domain.user.HttpSessionUtils.*;
 
 @Controller
 @RequestMapping("/users")
@@ -64,10 +63,10 @@ public class UserController {
             throw new IllegalUserAccessException();
         }
 
-        Optional<User> user = Optional.ofNullable(userRepository.findById(id))
+        User user = userRepository.findById(id)
                 .orElseThrow(UserNotFoundException::new);
-        model.addAttribute("user", user.get());
-        logger.debug("user : {}", user.get());
+        model.addAttribute("user", user);
+        logger.debug("user : {}", user);
 
         return "user/updateForm";
     }
@@ -89,7 +88,8 @@ public class UserController {
         }
 
         userRepository.save(user.update(updateUser));
-        logger.debug("user : {}", updateUser);
+        session.setAttribute(USER_SESSION_KEY, user);
+        logger.debug("user : {}", user);
 
         return "redirect:/users/";
     }
@@ -110,14 +110,14 @@ public class UserController {
         }
 
         logger.debug("login : {}", user);
-        session.setAttribute("sessionedUser", user);
+        session.setAttribute(USER_SESSION_KEY, user);
 
         return "redirect:/";
     }
 
     @GetMapping("/logout")
     public String logOut(HttpSession session) {
-        session.removeAttribute("sessionedUser");
+        session.removeAttribute(USER_SESSION_KEY);
         return "redirect:/";
     }
 }
