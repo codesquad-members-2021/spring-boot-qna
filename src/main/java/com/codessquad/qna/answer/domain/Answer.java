@@ -23,6 +23,9 @@ public class Answer extends BaseTimeEntity {
     @Lob
     private String contents;
 
+    @Column
+    private boolean deleted = false;
+
     protected Answer() {}
 
     public Answer(Question question, User writer, String contents) {
@@ -45,5 +48,13 @@ public class Answer extends BaseTimeEntity {
 
     public String getContents() {
         return contents;
+    }
+
+    public void delete() {
+        this.deleted = true;
+    }
+
+    public boolean isDeleted() {
+        return deleted;
     }
 }
