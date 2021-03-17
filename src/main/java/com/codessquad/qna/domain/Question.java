@@ -57,4 +57,9 @@ public class Question {
     public String getContents() {
         return contents;
     }
+
+    public void update(String title, String contents) {
+        this.title = title;
+        this.contents = contents;
+    }
 }
