@@ -1,27 +1,47 @@
-$(".submit-write input[type = submit]").click(addAnswer);
+$(".submit-write input[type = submit]").on("click", addAnswer);
+$(document).on("click", ".link-delete-article", deleteAnswer);
 
 function addAnswer(event) {
     event.preventDefault();
-    console.log("click ?");
 
     const queryString = $(".submit-write").serialize();
-    console.log("query :" + queryString);
 
     const url = $(".submit-write").attr("action");
-    console.log("url : " + url)
 
     $.ajax({
         type : 'post',
         url : url,
         data : queryString,
         dataType : 'json',
-        error : onError,
+        error : function () {
+            alert("댓글 추가 중 오류발생. 다시 시도해 주십시오.")
+        },
         success : onSuccess
     });
 }
 
-function onError() {
+function deleteAnswer(event) {
 
+    event.preventDefault();
+
+    const deleteAnchor = $(this);
+    const url = deleteAnchor.attr("href");
+
+    $.ajax({
+        type : 'delete',
+        url : url,
+        dataType: 'json',
+        error : function () {
+            alert("댓글 삭제중 오류 발생")
+        },
+        success : function (data, status) {
+            if(data) {
+                deleteAnchor.closest("article").remove();
+            } else {
+                alert("댓글 삭제에 실패하셨습니다.");
+            }
+        }
+    });
 }
 
 function onSuccess(data, status) {
@@ -42,3 +62,4 @@ String.prototype.format = function() {
             ;
     });
 };
+
