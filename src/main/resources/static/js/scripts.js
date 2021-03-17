@@ -32,7 +32,7 @@ function addAnswer(e) {
     }
 }
 
-$("a.link-delete-article").click(deleteAnswer);
+$(".qna-comment-slipp-articles").on("click", "a.link-delete-article", deleteAnswer);
 
 function deleteAnswer(e) {
     e.preventDefault();
