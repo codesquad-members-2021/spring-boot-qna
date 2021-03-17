@@ -24,11 +24,11 @@ public class AnswerService {
     }
 
     @Transactional
-    public void write(User writer, String contents, Long questionId) {
+    public Answer write(User writer, String contents, Long questionId) {
         UserValidator.validate(writer);
         Question question = questionService.findById(questionId);
         Answer answer = new Answer(writer, question, contents);
-        answerRepository.save(answer);
+        return answerRepository.save(answer);
     }
 
     public Answer findById(Long answerId) {
