@@ -55,10 +55,6 @@ public class User {
         return this.password.equals(testPassword);
     }
 
-    public boolean isMatchingId(User user) {
-        return this.id == user.id;
-    }
-
     public boolean isSameId(long id) {
         return this.id == id;
     }

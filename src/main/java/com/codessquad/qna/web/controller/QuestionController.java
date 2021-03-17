@@ -61,7 +61,7 @@ public class QuestionController {
         }
 
         Question originQuestion = questionService.findQuestion(id);
-        if (!originQuestion.isMatchingWriter(HttpSessionUtils.getSessionedUser(session))) {
+        if (!originQuestion.isSameWriter(HttpSessionUtils.getSessionedUser(session))) {
             throw new IllegalStateException("자신의 질문만 수정할 수 있습니다");
         }
 
@@ -77,7 +77,7 @@ public class QuestionController {
         }
 
         Question originQuestion = questionService.findQuestion(id);
-        if (!originQuestion.isMatchingWriter(HttpSessionUtils.getSessionedUser(session))) {
+        if (!originQuestion.isSameWriter(HttpSessionUtils.getSessionedUser(session))) {
             throw new IllegalStateException("자신의 질문만 수정할 수 있습니다");
         }
 
@@ -92,7 +92,7 @@ public class QuestionController {
         }
 
         Question originQuestion = questionService.findQuestion(id);
-        if (!originQuestion.isMatchingWriter(HttpSessionUtils.getSessionedUser(session))) {
+        if (!originQuestion.isSameWriter(HttpSessionUtils.getSessionedUser(session))) {
             throw new IllegalStateException("자신의 질문만 삭제할 수 있습니다");
         }
 

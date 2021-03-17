@@ -43,13 +43,13 @@ public class UserService {
     public User findUser(long id) {
         return userRepository
                 .findById(id)
-                .orElseThrow(() -> new IllegalStateException("찾는 user가 없습니다"));
+                .orElseThrow(() -> new IllegalStateException("찾는 회원이 없습니다"));
     }
 
     private User findUser(String userId) {
         return userRepository
                 .findByUserId(userId)
-                .orElseThrow(() -> new IllegalStateException("찾는 user가 없습니다"));
+                .orElseThrow(() -> new IllegalStateException("찾는 회원이 없습니다"));
     }
 
     public void updateUser(String testPassword, User originUser, User user) {
@@ -62,15 +62,5 @@ public class UserService {
         if (!originUser.isMatchingPassword(testPassword)) {
             throw new IllegalStateException("잘못된 비밀번호 입니다");
         }
-    }
-
-    //id랑 session id랑 비교해도 되는디.. Userservice라서
-    public User checkAndGetOriginUser(long id, HttpSession session) {
-        //컨트롤러에서 할 때 //
-        User originUser = findUser(id);
-        if(!originUser.isMatchingId(HttpSessionUtils.getSessionedUser(session))) {
-            throw new IllegalStateException("자신의 정보만 수정할 수 있습니다");
-        }
-        return originUser;
     }
 }

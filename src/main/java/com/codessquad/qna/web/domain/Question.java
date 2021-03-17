@@ -59,7 +59,7 @@ public class Question {
         return createdDateTime.format(DATE_TIME_FORMATTER);
     }
 
-    public boolean isMatchingWriter(User writer) {
+    public boolean isSameWriter(User writer) {
         return this.writer.equals(writer);
     }
 
