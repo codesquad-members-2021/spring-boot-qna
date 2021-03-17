@@ -38,7 +38,7 @@ public class UserService {
     public void update(Long id, String oldPassword, User newUserInfo) {
         User user = userRepository.findById(id)
                 .filter(u -> u.matchesPassword(oldPassword))
-                .orElseThrow(() -> new UnauthorizedAccessException("권한이 존재하지 않습니다."));
+                .orElseThrow(() -> new UnauthorizedAccessException("비밀번호가 틀렸습니다."));
         user.update(newUserInfo);
         userRepository.save(user);
     }
