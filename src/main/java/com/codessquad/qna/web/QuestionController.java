@@ -2,6 +2,7 @@ package com.codessquad.qna.web;
 
 import com.codessquad.qna.domain.Question;
 import com.codessquad.qna.domain.User;
+import com.codessquad.qna.exception.NoQuestionException;
 import com.codessquad.qna.repository.QuestionRepository;
 import javassist.NotFoundException;
 import org.springframework.stereotype.Controller;
@@ -40,19 +41,19 @@ public class QuestionController {
     }
 
     @GetMapping("/questions/{id}")
-    public String show(@PathVariable Long id, Model model) throws NotFoundException {
+    public String show(@PathVariable Long id, Model model) {
         // Todo: 왜안돼
-        Question question = questionRepository.findById(id).orElseThrow(() -> new NotFoundException("게시물이 존재하지 않습니다."));
+        Question question = questionRepository.findById(id).orElseThrow(NoQuestionException::new);
         model.addAttribute("question", question);
         return "qna/show";
     }
 
     @GetMapping("/questions/{id}/form")
-    public String update(@PathVariable Long id, Model model, HttpSession session) throws NotFoundException {
+    public String update(@PathVariable Long id, Model model, HttpSession session) {
         if (!isLoginUser(session)) {
             return "redirect:/users/loginForm";
         }
-        Question question = questionRepository.findById(id).orElseThrow(() -> new NotFoundException("게시물이 존재하지 않습니다."));
+        Question question = questionRepository.findById(id).orElseThrow(NoQuestionException::new);
         User sessionedUser = getUserFromSession(session);
         if (!question.isQuestionWriter(sessionedUser)) {
             throw new IllegalStateException("자신의 질문만 수정할 수 있습니다.");
@@ -62,11 +63,11 @@ public class QuestionController {
     }
 
     @PutMapping("/questions/{id}")
-    public String updateForm(@PathVariable Long id, Question updatedQuestion, HttpSession session) throws NotFoundException {
+    public String updateForm(@PathVariable Long id, Question updatedQuestion, HttpSession session) {
         if (!isLoginUser(session)) {
             return "redirect:/users/loginForm";
         }
-        Question question = questionRepository.findById(id).orElseThrow(() -> new NotFoundException("게시물이 존재하지 않습니다."));
+        Question question = questionRepository.findById(id).orElseThrow(NoQuestionException::new);
         User sessionedUser = getUserFromSession(session);
         if (!question.isQuestionWriter(sessionedUser)) {
             throw new IllegalStateException("자신의 질문만 수정할 수 있습니다.");
@@ -77,11 +78,11 @@ public class QuestionController {
     }
 
     @DeleteMapping("/questions/{id}/delete")
-    public String delete(@PathVariable Long id, HttpSession session) throws NotFoundException {
+    public String delete(@PathVariable Long id, HttpSession session) {
         if (!isLoginUser(session)) {
             return "redirect:/users/loginForm";
         }
-        Question question = questionRepository.findById(id).orElseThrow(() -> new NotFoundException("게시물이 존재하지 않습니다."));
+        Question question = questionRepository.findById(id).orElseThrow(NoQuestionException::new);
         User sessionedUser = getUserFromSession(session);
         if (!question.isQuestionWriter(sessionedUser)) {
             throw new IllegalStateException("자신의 질문만 수정할 수 있습니다.");
@@ -92,7 +93,7 @@ public class QuestionController {
 
     @ExceptionHandler(NotFoundException.class)
     public String handleNotFountException() {
-        return "notFoundExceptionHandle";
+        return "notExistHandle";
     }
 
     @ExceptionHandler(IllegalStateException.class)

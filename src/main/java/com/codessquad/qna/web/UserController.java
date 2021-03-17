@@ -1,7 +1,9 @@
 package com.codessquad.qna.web;
 
 import com.codessquad.qna.domain.User;
+import com.codessquad.qna.exception.NoUserException;
 import com.codessquad.qna.repository.UserRepository;
+import javassist.NotFoundException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -77,7 +79,7 @@ public class UserController {
 
     @PostMapping("/login")
     public String login(String userId, String password, HttpSession session) {
-        User user = userRepository.findByUserId(userId);
+        User user = userRepository.findByUserId(userId).orElseThrow(NoUserException::new);
         if (!user.isPasswordMatching(password)) {
             return "redirect:/users/loginForm";
         }
@@ -89,6 +91,11 @@ public class UserController {
     public String logout(HttpSession session) {
         session.removeAttribute(HttpSessionUtils.USER_SESSION_KEY);
         return "redirect:/";
+    }
+
+    @ExceptionHandler(NotFoundException.class)
+    public String handleNotFountException() {
+        return "notExistHandle";
     }
 
     @ExceptionHandler(IllegalStateException.class)
