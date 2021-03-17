@@ -8,5 +8,6 @@ import java.util.Optional;
 public interface QuestionRepository extends CrudRepository<Question, Long> {
 
     Optional<Question> findByIdAndDeleted(Long id, boolean deleted);
+
     List<Question> findAllByDeleted(boolean deleted);
 }

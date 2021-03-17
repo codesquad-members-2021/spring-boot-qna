@@ -27,7 +27,8 @@ public class Question {
     @Where(clause = "deleted = false")
     private List<Answer> answers;
 
-    protected Question() {}
+    protected Question() {
+    }
 
     public Question(String title, String contents) {
         this.title = title;
@@ -37,20 +38,16 @@ public class Question {
         this.deleted = false;
     }
 
-    public void setWriter(User writer) {
-        this.writer = writer;
-    }
-
-    public void setTime(LocalDateTime time) {
-        this.time = time;
-    }
-
     public Long getId() {
         return id;
     }
 
     public User getWriter() {
         return writer;
+    }
+
+    public void setWriter(User writer) {
+        this.writer = writer;
     }
 
     public String getTitle() {
@@ -63,6 +60,10 @@ public class Question {
 
     public LocalDateTime getTime() {
         return time;
+    }
+
+    public void setTime(LocalDateTime time) {
+        this.time = time;
     }
 
     public int getPoint() {
@@ -87,7 +88,7 @@ public class Question {
         this.time = LocalDateTime.now();
     }
 
-    public void delete(){
+    public void delete() {
         this.deleted = true;
     }
 }

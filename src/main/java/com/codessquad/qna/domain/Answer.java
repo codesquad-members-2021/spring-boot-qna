@@ -24,10 +24,10 @@ public class Answer {
 
     private String comment;
     private LocalDateTime time;
-
     private boolean deleted;
 
-    protected Answer() {}
+    protected Answer() {
+    }
 
     public Answer(String comment) {
         this.comment = comment;
@@ -43,8 +43,16 @@ public class Answer {
         return question;
     }
 
+    public void setQuestion(Question question) {
+        this.question = question;
+    }
+
     public User getWriter() {
         return writer;
+    }
+
+    public void setWriter(User writer) {
+        this.writer = writer;
     }
 
     public String getComment() {
@@ -59,19 +67,11 @@ public class Answer {
         return time;
     }
 
-    public void setQuestion(Question question) {
-        this.question = question;
-    }
-
-    public void setWriter(User writer) {
-        this.writer = writer;
-    }
-
     public void setTime(LocalDateTime time) {
         this.time = time;
     }
 
-    public void updateAnswer (Answer updatedAnswer) {
+    public void updateAnswer(Answer updatedAnswer) {
         this.comment = updatedAnswer.comment;
         this.time = LocalDateTime.now();
     }
