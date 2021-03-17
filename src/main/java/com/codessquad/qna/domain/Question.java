@@ -1,7 +1,8 @@
 package com.codessquad.qna.domain;
 
 import javax.persistence.*;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 @Entity
 public class Question {
@@ -15,7 +16,7 @@ public class Question {
 
     private String title;
     private String contents;
-    private LocalDate postTime;
+    private LocalDateTime postTime;
 
     public Long getId() {
         return id;
@@ -49,12 +50,12 @@ public class Question {
         this.contents = contents;
     }
 
-    public LocalDate getPostTime() {
-        return postTime;
+    public String getPostTime() {
+        return postTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"));
     }
 
     public void setPostTime() {
-        postTime = LocalDate.now();
+        postTime = LocalDateTime.now();
     }
 
     public boolean isQuestionWriter(User user){

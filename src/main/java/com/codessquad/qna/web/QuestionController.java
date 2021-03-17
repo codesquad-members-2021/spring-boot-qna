@@ -24,10 +24,7 @@ public class QuestionController {
 
     @PostMapping("/questions")
     public String create(Question question, HttpSession session) {
-        if (!isLoginUser(session)) {
-            return "redirect:/users/loginForm";
-        }
-
+        isLoginUser(session);
         question.setWriter(getUserFromSession(session));
         question.setPostTime();
         questionRepository.save(question);
