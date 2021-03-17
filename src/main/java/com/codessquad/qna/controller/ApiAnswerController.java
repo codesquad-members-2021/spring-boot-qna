@@ -45,12 +45,7 @@ public class ApiAnswerController {
             return false;
         }
         Answer answer = answerService.findAnswer(id);
-        User loginUser = getSessionUser(session);
-        if (!answer.isSameAuthor(loginUser)) {
-            return false;
-        }
-        answerService.delete(id);
-        return true;
+        return answerService.delete(answer, session, id);
     }
 }
 

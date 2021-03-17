@@ -8,6 +8,10 @@ import com.codessquad.qna.repository.AnswerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.servlet.http.HttpSession;
+
+import static com.codessquad.qna.controller.HttpSessionUtils.getSessionUser;
+
 @Service
 public class AnswerService {
     private final AnswerRepository answerRepository;
@@ -22,8 +26,13 @@ public class AnswerService {
         return answerRepository.save(answer);
     }
 
-    public void delete(Long id) {
+    public boolean delete(Answer answer, HttpSession session, Long id) {
+        User loginUser = getSessionUser(session);
+        if (!answer.isSameAuthor(loginUser)) {
+            return false;
+        }
         answerRepository.deleteById(id);
+        return true;
     }
 
     public Answer findAnswer(Long id) {
