@@ -30,8 +30,8 @@ public class QuestionController {
 
     @PostMapping()
     public String create(QuestionRequest request, HttpSession session) {
-        User user = SessionUtils.getLoginUser(session);
-        Question question = new Question(user, request.getTitle(), request.getContents());
+        User loginUser = SessionUtils.getLoginUser(session);
+        Question question = Question.toEntity(loginUser, request);
         questionRepository.save(question);
         return "redirect:/";
     }
@@ -48,7 +48,6 @@ public class QuestionController {
     public String updateForm(@PathVariable long id, Model model, HttpSession session) {
         Question question = getQuestionById(id);
         User writer = question.getWriter();
-
         User user = SessionUtils.getLoginUser(session);
 
         if (!writer.isMatchingId(user.getId())) {
@@ -80,15 +79,15 @@ public class QuestionController {
     @GetMapping("/{id}")
     public String show(@PathVariable long id, Model model) {
         Question question = getQuestionById(id);
-        model.addAttribute("question", question);
         List<Answer> answers = answerRepository.findByQuestionId(id);
+        model.addAttribute("question", question);
         model.addAttribute("answers", answers);
         return "/qna/show";
     }
 
-    private Question getQuestionById(Long id){
+    private Question getQuestionById(Long id) {
         return questionRepository.findById(id)
-                .orElseThrow(() -> new QuestionNotFoundException("Cannot found question number "+ id));
+                .orElseThrow(() -> new QuestionNotFoundException("Cannot found question number " + id));
     }
 
 }

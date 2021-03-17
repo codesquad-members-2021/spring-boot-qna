@@ -41,6 +41,10 @@ public class Answer {
         this.createdAt = LocalDateTime.now();
     }
 
+    public static Answer toEntity(User writer, Question question, String contents){
+        return new Answer(writer, question, contents);
+    }
+
     public Long getId() {
         return id;
     }

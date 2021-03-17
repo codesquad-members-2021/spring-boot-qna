@@ -34,7 +34,7 @@ public class AnswerController {
         User loginUser = SessionUtils.getLoginUser(session);
 
         Question question = getQuestionById(questionId);
-        Answer answer = new Answer(loginUser, question, contents);
+        Answer answer = Answer.toEntity(loginUser, question, contents);
         answerRepository.save(answer);
         return "redirect:/questions/" + questionId;
     }

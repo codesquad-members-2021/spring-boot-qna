@@ -1,6 +1,7 @@
 package com.codessquad.qna.web.domain.question;
 
 import com.codessquad.qna.web.domain.user.User;
+import com.codessquad.qna.web.dto.question.QuestionRequest;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -35,6 +36,10 @@ public class Question {
 
     protected Question() {
 
+    }
+
+    public static Question toEntity(User writer, QuestionRequest request){
+        return new Question(writer, request.getTitle(), request.getContents());
     }
 
     public Long getId() {
