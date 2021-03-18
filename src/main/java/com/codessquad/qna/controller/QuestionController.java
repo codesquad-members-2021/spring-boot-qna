@@ -39,11 +39,11 @@ public class QuestionController {
         return "redirect:/";
     }
 
-    @PutMapping
-    public String update(long questionId, String contents, String title, HttpSession session) {
+    @PutMapping("/{id}")
+    public String update(@PathVariable long id, String contents, String title, HttpSession session) {
         User user = HttpSessionUtil.getUser(session);
-        questionService.updateQuestion(questionId, title, contents, user);
-        return "redirect:/questions/" + questionId;
+        questionService.updateQuestion(id, title, contents, user);
+        return "redirect:/questions/" + id;
     }
 
     @DeleteMapping("/{id}")
