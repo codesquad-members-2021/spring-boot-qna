@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
 @ControllerAdvice
-public class MyAdvice {
+public class GlobalExceptionHandler {
 
     @ExceptionHandler({NoUserException.class, NoQuestionException.class})
     public String handleNotExistException() {
