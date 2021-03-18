@@ -1,7 +1,7 @@
 package com.codessquad.qna.controller.api;
 
-import com.codessquad.qna.domain.Answer;
 import com.codessquad.qna.domain.User;
+import com.codessquad.qna.domain.dto.AnswerDto;
 import com.codessquad.qna.service.AnswerService;
 import com.codessquad.qna.util.HttpSessionUtils;
 import org.springframework.web.bind.annotation.*;
@@ -19,10 +19,9 @@ public class ApiAnswerController {
     }
 
     @PostMapping
-    public Answer create(@PathVariable Long questionId, String contents, HttpSession session) {
+    public AnswerDto create(@PathVariable Long questionId, String contents, HttpSession session) {
         User user = HttpSessionUtils.getUserFromSession(session);
-        //todo : DTO로 변환
-        return answerService.write(user, contents, questionId);
+        return answerService.write(user, contents, questionId).returnDto();
     }
 
     @DeleteMapping("/{id}")

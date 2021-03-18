@@ -1,6 +1,8 @@
 package com.codessquad.qna.domain;
 
+import com.codessquad.qna.domain.dto.AnswerDto;
 import com.codessquad.qna.util.DateTimeUtils;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -17,6 +19,7 @@ public class Answer {
     private User writer;
 
     @ManyToOne
+    @JsonIgnore
     @JoinColumn(name = "question_id")
     private Question question;
 
@@ -61,7 +64,15 @@ public class Answer {
         return status;
     }
 
+    public Question getQuestion() {
+        return question;
+    }
+
     public void changeStatus(DisplayStatus displayStatus) {
         this.status = displayStatus;
+    }
+
+    public AnswerDto returnDto() {
+        return new AnswerDto(this);
     }
 }
