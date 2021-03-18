@@ -1,4 +1,5 @@
 $(".answer-write button[type=submit]" ).click(addAnswer);
+$('a.link-delete-ATag-article').click(deleteAnswer);
 
 function addAnswer(e){
     e.preventDefault();
@@ -15,18 +16,43 @@ function addAnswer(e){
     });
 }
 
-function onError(){
+function deleteAnswer(e){
+    e.preventDefault();
+
+    var deleteBtn = $(this);
+    var url = deleteBtn.attr("href");
+    console.log("url"+url);
+
+    $.ajax({
+        type : "delete",
+        url : url,
+        dataType : "text",
+        error: onError,
+        success : function(data, status){
+            if(data == "true"){
+                console.log("success");
+                deleteBtn.closest("article").remove();
+            }
+        }
+    });
+}
+
+function onError(request, error){
+    alert("fail");
+    alert("code:"+request.status+"\n"+"message: 실패요"+"\n"+"error:"+error);
+
 }
 
 function onSuccess(data, status){
     console.log(data);
     var answerTemplate = $("#answerTemplate").html();
-    var template = answerTemplate.format(data.writer.userId, data.formatCreateDateTime, data.contents, data.id, data.id);
+    var template = answerTemplate.format(data.writerUserId, data.formatCreateDateTime, data.contents, data.questionId, data.id);
      $(".qna-comment-slipp-articles").prepend(template);
 
      $(".answer-write textarea").val("");
 
 }
+
 
 String.prototype.format = function() {
   var args = arguments;
