@@ -18,18 +18,18 @@ public class QuestionService {
         this.answerRepository = answerRepository;
     }
 
-    public List<Question> getQuestions() {
+    public List<Question> readQuestions() {
         return StreamSupport.stream(questionRepository.findAll().spliterator(), true)
                 .collect(Collectors.toList());
     }
 
-    public Question getQuestion(Long id) {
+    public Question readQuestion(Long id) {
         return questionRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("질문이 존재하지 않습니다. id : " + id));
     }
 
-    public Question getVerifiedQuestion(Long id, UserDTO user) {
-        Question result = getQuestion(id);
+    public Question readVerifiedQuestion(Long id, UserDTO user) {
+        Question result = readQuestion(id);
 
         result.verifyWriter(user.toEntity());
 
@@ -41,7 +41,7 @@ public class QuestionService {
     }
 
     public void updateQuestion(Long id, Question newQuestion) {
-        Question existedQuestion = getQuestion(id);
+        Question existedQuestion = readQuestion(id);
 
         existedQuestion.update(newQuestion);
         questionRepository.save(existedQuestion);
@@ -49,7 +49,7 @@ public class QuestionService {
 
     @Transactional
     public void deleteQuestion(Long id, UserDTO currentSessionUser) {
-        Question question = getQuestion(id);
+        Question question = readQuestion(id);
 
         question.verifyWriter(currentSessionUser.toEntity());
 
@@ -57,7 +57,7 @@ public class QuestionService {
         questionRepository.delete(question);
     }
 
-    private Answer getAnswer(Long id) {
+    private Answer readAnswer(Long id) {
         return answerRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 답변입니다."));
     }
@@ -71,7 +71,7 @@ public class QuestionService {
     }
 
     public void deleteAnswer(Long id, UserDTO currentSessionUser) {
-        Answer answer = getAnswer(id);
+        Answer answer = readAnswer(id);
 
         answer.verifyWriter(currentSessionUser.toEntity());
 

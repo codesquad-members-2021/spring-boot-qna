@@ -21,13 +21,13 @@ public class UserController {
     }
 
     @GetMapping
-    public ModelAndView getUsers() {
-        return new ModelAndView("/user/list", "users", userService.getUsers());
+    public ModelAndView readUsers() {
+        return new ModelAndView("/user/list", "users", userService.readUsers());
     }
 
     @GetMapping("/{id}")
-    public ModelAndView getUser(@PathVariable Long id) {
-        return new ModelAndView("/user/profile", "user", userService.getUser(id));
+    public ModelAndView readUser(@PathVariable Long id) {
+        return new ModelAndView("/user/profile", "user", userService.readUser(id));
     }
 
     @PostMapping
@@ -37,15 +37,15 @@ public class UserController {
     }
 
     @GetMapping("/{id}/form")
-    public ModelAndView getUserUpdateForm(@PathVariable Long id, HttpSession session) {
-        UserDTO result = userService.getVerifiedUser(id, SessionUtils.getSessionUser(session));
+    public ModelAndView viewUserUpdateForm(@PathVariable Long id, HttpSession session) {
+        UserDTO result = userService.readVerifiedUser(id, SessionUtils.getSessionUser(session));
 
         return new ModelAndView("/user/updateForm", "user", result);
     }
 
     @PutMapping("/{id}")
     public String updateUser(@PathVariable Long id, UserDTO newUser, HttpSession session) {
-        UserDTO verifiedUser = userService.getVerifiedUser(id, SessionUtils.getSessionUser(session));
+        UserDTO verifiedUser = userService.readVerifiedUser(id, SessionUtils.getSessionUser(session));
 
         SessionUtils.setSessionUser(session, userService.updateUser(verifiedUser, newUser));
 
@@ -54,7 +54,7 @@ public class UserController {
 
     @PostMapping("/login")
     public String login(String userId, String password, HttpSession session) {
-        SessionUtils.setSessionUser(session, userService.getLoginableUser(userId, password));
+        SessionUtils.setSessionUser(session, userService.readLoginableUser(userId, password));
 
         return "redirect:/";
     }

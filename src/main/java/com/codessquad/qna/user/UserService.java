@@ -15,27 +15,27 @@ public class UserService {
         this.userRepository = userRepository;
     }
 
-    public List<UserDTO> getUsers() {
+    public List<UserDTO> readUsers() {
         return StreamSupport.stream(userRepository.findAll().spliterator(), true)
                 .map(User::toDTO)
                 .collect(Collectors.toList());
     }
 
-    public UserDTO getUser(Long id) {
+    public UserDTO readUser(Long id) {
         return userRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 사용자 입니다. id : " + id))
                 .toDTO();
     }
 
-    public UserDTO getVerifiedUser(Long id, UserDTO verificationTarget) {
-        User result = getUser(id).toEntity();
+    public UserDTO readVerifiedUser(Long id, UserDTO verificationTarget) {
+        User result = readUser(id).toEntity();
 
         result.verifyWith(verificationTarget.toEntity());
 
         return result.toDTO();
     }
 
-    public UserDTO getLoginableUser(String userId, String password) {
+    public UserDTO readLoginableUser(String userId, String password) {
         try {
             User user = userRepository.findByUserId(userId)
                     .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 사용자 입니다. id : " + userId));

@@ -17,12 +17,12 @@ public class QuestionController {
     }
 
     @GetMapping
-    public ModelAndView getQuestions() {
-        return new ModelAndView("/qna/list", "questions", questionService.getQuestions());
+    public ModelAndView readQuestions() {
+        return new ModelAndView("/qna/list", "questions", questionService.readQuestions());
     }
 
     @PostMapping
-    public String createQuestions(Question question, HttpSession session) {
+    public String createQuestion(Question question, HttpSession session) {
         question.setWriter(SessionUtils.getSessionUser(session).toEntity());
 
         questionService.createQuestion(question);
@@ -31,13 +31,13 @@ public class QuestionController {
     }
 
     @GetMapping("/{id}")
-    public ModelAndView getQuestion(@PathVariable Long id) {
-        return new ModelAndView("/qna/show", "question", questionService.getQuestion(id));
+    public ModelAndView readQuestion(@PathVariable Long id) {
+        return new ModelAndView("/qna/show", "question", questionService.readQuestion(id));
     }
 
     @GetMapping("/{id}/form")
-    public ModelAndView getQuestionUpdateForm(@PathVariable Long id, HttpSession session) {
-        Question result = questionService.getVerifiedQuestion(id, SessionUtils.getSessionUser(session));
+    public ModelAndView readQuestionUpdateForm(@PathVariable Long id, HttpSession session) {
+        Question result = questionService.readVerifiedQuestion(id, SessionUtils.getSessionUser(session));
 
         return new ModelAndView("/qna/updateForm", "question", result);
     }
@@ -60,7 +60,7 @@ public class QuestionController {
 
     @PostMapping("/{questionId}/answers")
     public String createAnswer(@PathVariable Long questionId, Answer answer, HttpSession session) {
-        answer.setQuestion(questionService.getQuestion(questionId));
+        answer.setQuestion(questionService.readQuestion(questionId));
         answer.setWriter(SessionUtils.getSessionUser(session).toEntity());
 
         questionService.createAnswer(answer);
