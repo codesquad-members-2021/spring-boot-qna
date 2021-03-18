@@ -61,11 +61,10 @@ public class UserController {
 
     @GetMapping("{id}/form")
     public String viewUpdateUserForm(@PathVariable Long id, Model model, HttpSession session) {
-        Object tempUser = session.getAttribute(HttpSessionUtils.USER_SESSION_KEY);
-        if (tempUser == null)
+        if (!HttpSessionUtils.isLoginUser(session))
             return "redirect:/users/loginForm";
-        User sessionUser = (User)tempUser;
-        if(!id.equals(sessionUser.getId())){
+        User sessionedUser = HttpSessionUtils.getUserFromSession(session);
+        if(!id.equals(sessionedUser.getId())){
             throw new IllegalStateException("자신의 정보만 수정할 수 있습니다.");
         }
         model.addAttribute("user", userService.findUserById(id));
