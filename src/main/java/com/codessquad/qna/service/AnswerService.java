@@ -20,7 +20,6 @@ public class AnswerService {
         this.questionRepository = questionRepository;
     }
 
-
     public Long create(Long questionId, Answer answer) {
         Question question = questionRepository.findById(questionId)
                 .orElseThrow(() -> new IllegalStateException("해당 질문이 없습니다. id = " + questionId));
@@ -28,8 +27,7 @@ public class AnswerService {
 
         Answer savedAnswer = answerRepository.save(answer);
 
-        int answerCount = answerRepository.countAnswersByQuestionId(questionId);
-        question.setAnswerCount(answerCount);
+        question.addAnswer(answer);
 
         return savedAnswer.getId();
     }
@@ -42,7 +40,7 @@ public class AnswerService {
 
     @Transactional
     public List<Answer> findAllByQuestionId(Long questionId) {
-        return answerRepository.findAllByQuestionId(questionId);
+        return answerRepository.findAllByQuestionIdAndDeletedIsFalse(questionId);
     }
 
     @Transactional
@@ -55,13 +53,11 @@ public class AnswerService {
     }
 
     @Transactional
-    public Long deleteById(Long questionId, Long id) {
-        answerRepository.deleteById(id);
+    public Long deleteById(Long id) {
+        Answer answer = answerRepository.findById(id)
+                .orElseThrow(() -> new IllegalStateException("해당 답변이 없습니다. id = " + id));
 
-        Question question = questionRepository.findById(questionId)
-                .orElseThrow(() -> new IllegalStateException("해당 질문이 없습니다. id = " + id));
-        int answerCount = answerRepository.countAnswersByQuestionId(questionId);
-        question.setAnswerCount(answerCount);
+        answer.delete();
 
         return id;
     }

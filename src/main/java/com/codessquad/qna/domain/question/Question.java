@@ -1,10 +1,13 @@
 package com.codessquad.qna.domain.question;
 
+import com.codessquad.qna.domain.answer.Answer;
 import com.codessquad.qna.domain.user.User;
+import com.codessquad.qna.utils.DateFormat;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 public class Question {
@@ -17,7 +20,7 @@ public class Question {
     @JoinColumn(foreignKey = @ForeignKey(name = "fk_question_writer"))
     private User writer;
 
-    @Column(nullable = false, length=500)
+    @Column(nullable = false, length = 500)
     private String title;
 
     @Column(nullable = false, columnDefinition = "TEXT")
@@ -25,10 +28,13 @@ public class Question {
 
     private String date;
 
-    private int answerCount;
+    @OneToMany(mappedBy = "question")
+    private final List<Answer> answers = new ArrayList<>();
+
+    private boolean deleted;
 
     public Question() {
-        this.date = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"));
+        this.date = LocalDateTime.now().format(DateFormat.DEFAULT);
     }
 
     public long getId() {
@@ -67,16 +73,30 @@ public class Question {
         return date;
     }
 
-    public int getAnswerCount() {
-        return answerCount;
+    public long getNotDeletedAnswersCount() {
+        return answers.stream().filter(answer -> !answer.isDeleted()).count();
     }
 
-    public void setAnswerCount(int answerCount) {
-        this.answerCount = answerCount;
+    public void delete() {
+        deleted = true;
+    }
+
+    public void addAnswer(Answer answer) {
+        answers.add(answer);
+        answer.setQuestion(this);
+    }
+
+    public void removeAnswer(Answer answer) {
+        answers.remove(answer);
+        answer.setQuestion(null);
     }
 
     public boolean isWrittenBy(User user) {
         return writer.equals(user);
+    }
+
+    public boolean isAnsweredYourself(Answer answer) {
+        return writer.equals(answer.getWriter());
     }
 
     public void update(Question questionWithUpdatedInfo) {
