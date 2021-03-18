@@ -1,36 +1,41 @@
 package com.codessquad.qna.controller;
 
 import com.codessquad.qna.domain.Question;
+import com.codessquad.qna.service.QuestionService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-
-import java.util.ArrayList;
-import java.util.List;
+import org.springframework.web.bind.annotation.*;
 
 @Controller
+@RequestMapping("/questions")
 public class QnaController {
-    private List<Question> questions = new ArrayList<>();
+    private final QuestionService questionService;
 
-    @PostMapping("/questions")
-    public String createQuestion(String writer, String title, String contents) {
-        Question question = new Question(writer, title, contents, questions.size() + 1);
-        System.out.println(question);
-        questions.add(question);
+    public QnaController(QuestionService questionService) {
+        this.questionService = questionService;
+    }
+
+    @PostMapping
+    public String createQuestion(Question question) {
+        questionService.save(question);
         return "redirect:/";
     }
 
-    @GetMapping("/")
+    @GetMapping
     public String getQuestionList(Model model) {
-        model.addAttribute("questions", questions);
+        model.addAttribute("questions", questionService.listAllQuestions());
         return "index";
     }
 
-    @GetMapping("/questions/{id}")
+    @GetMapping("/{id}")
     public String getDetailedQuestion(@PathVariable long id, Model model) {
-        model.addAttribute("question", questions.get((int) (id - 1)));
+        Question question = questionService.findById(id);
+        model.addAttribute("question", question);
         return "qna/show";
+    }
+
+    @ExceptionHandler(IllegalArgumentException.class)
+    public String handleException() {
+        return "error";
     }
 }

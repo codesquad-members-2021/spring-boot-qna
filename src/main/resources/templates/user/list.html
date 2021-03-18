@@ -11,13 +11,13 @@
                 <tbody>
                 {{#users}}
                 <tr>
-                    <th scope="row">{{incremented @index}}</th>
-                    <form method="get" action="/users/{userId}">
-                    <td><a href="/user/{{userId}}" />{{userId}}</td>
+                    <th scope="row">{{id}}</th>
+                    <form method="get" action="/users/{id}">
+                    <td><a href="/users/{{id}}" />{{userId}}</td>
                     </form>
                     <td>{{name}}</td>
                     <td>{{email}}</td>
-                    <td><a href="/user/{{userId}}/form" class="btn btn-success" role="button">수정</a></td>
+                    <td><a href="/users/{{id}}/form" class="btn btn-success" role="button">수정</a></td>
                 </tr>
                 {{/users}}
                 </tbody>

@@ -1,25 +1,40 @@
 package com.codessquad.qna.domain;
 
+import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
+@Entity
 public class Question {
+    private static final DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd kk:mm");
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
+
+    @Column(nullable = false)
     private String writer;
     private String title;
-    private String contents;
-    private String timeCreated;
 
-    public Question(String writer, String title, String contents, int id) {
+    @Column(nullable = false, length = 2000)
+    private String contents;
+    private LocalDateTime timeCreated;
+
+    public Question(String writer, String title, String contents) {
         this.writer = writer;
         this.title = title;
         this.contents = contents;
-        this.id = id;
-        this.timeCreated = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd kk:mm"));
+        this.timeCreated = LocalDateTime.now();
     }
+
+    public Question() {}
 
     public void setWriter(String writer) {
         this.writer = writer;
+    }
+
+    public void setTimeCreated() {
+        this.timeCreated = LocalDateTime.now();
     }
 
     public void setTitle(String title) {
@@ -46,8 +61,12 @@ public class Question {
         return id;
     }
 
-    public String getTimeCreated() {
+    public LocalDateTime getTimeCreated() {
         return timeCreated;
+    }
+
+    public String getFormattedTimeCreated() {
+        return timeCreated.format(DATE_TIME_FORMATTER);
     }
 
     @Override

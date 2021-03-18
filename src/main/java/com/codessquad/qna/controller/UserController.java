@@ -1,63 +1,69 @@
 package com.codessquad.qna.controller;
 
 import com.codessquad.qna.domain.User;
+import com.codessquad.qna.service.UserService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.NoSuchElementException;
 
 @Controller
-@RequestMapping("/user")
+@RequestMapping("/users")
 public class UserController {
-    private List<User> users = new ArrayList<>();
+    private static final Logger logger = LoggerFactory.getLogger(UserController.class);
 
-    @PostMapping("/")
+    private final UserService userService;
+
+    @Autowired
+    public UserController(UserService userService) { this.userService = userService; }
+
+    @PostMapping
     public String create(User user) {
-        users.add(user);
-        System.out.println(user);
-        return "redirect:/user/";
+        userService.save(user);
+        logger.info("New User Created: {}", user);
+        return "redirect:/users";
     }
 
-    @GetMapping("/")
+    @GetMapping
     public String list(Model model) {
-        model.addAttribute("users", users);
+        model.addAttribute("users", userService.findAll());
         return "user/list";
     }
 
-    @GetMapping("/{userId}")
-    public String profile(@PathVariable String userId, Model model) {
-        for (User user : users) {
-            if (user.getUserId().equals(userId)) {
-                model.addAttribute("user", user);
-            }
-        }
+    @GetMapping("/{id}")
+    public String profile(@PathVariable long id, Model model) {
+        User user = userService.findById(id);
+        model.addAttribute("user", user);
         return "user/profile";
     }
 
-    @GetMapping("/{userId}/form")
-    public String showModifyProfile(@PathVariable String userId, Model model) {
-        for (User user : users) {
-            if (user.getUserId().equals(userId)) {
-                model.addAttribute(user);
-            }
-        }
+    @GetMapping("/{id}/form")
+    public String showModifyProfile(@PathVariable long id, Model model) {
+        User user = userService.findById(id);
+        model.addAttribute("user", user);
         return "user/updateForm";
     }
 
-    @PostMapping("/{userId}/update")
-    public String modifyProfile(User updatedUser, Model model) {
-        for (User user : users) {
-            if (user.getUserId().equals(updatedUser.getUserId())) {
-                user.setName(updatedUser.getName());
-                user.setEmail(updatedUser.getEmail());
-            }
+    @PutMapping("/{id}/update")
+    public String modifyProfile(@PathVariable long id, User updatedUser, String oldPassword) {
+        User user = userService.findById(id);
+
+        if (!user.verifyPassword(oldPassword)) {
+            logger.debug("Old Password Does Not Match");
+            return "redirect:/users";
         }
-        model.addAttribute("users", users);
-        return "redirect:/user/";
+
+        logger.info("Updated info: {}", updatedUser);
+        userService.update(user, updatedUser);
+        return "redirect:/users";
+    }
+
+    @ExceptionHandler(NoSuchElementException.class)
+    public String handleException() {
+        return "error";
     }
 }
