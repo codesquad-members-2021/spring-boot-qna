@@ -3,7 +3,8 @@ package com.codessquad.qna.domain;
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.Objects;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 public class Question {
@@ -13,8 +14,8 @@ public class Question {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(foreignKey = @ForeignKey(name = "fk_question_userId"))
-    private User userId;
+    @JoinColumn(foreignKey = @ForeignKey(name = "fk_question_writer"))
+    private User writer;
 
     private String title;
 
@@ -22,11 +23,15 @@ public class Question {
 
     private LocalDateTime createDate;
 
+    @OneToMany(mappedBy = "question")
+    @OrderBy("id ASC")
+    private List<Answer> answers = new ArrayList<>();
+
     public Question() {
     }
 
-    public Question(User userId, String title, String contents) {
-        this.userId = userId;
+    public Question(User writer, String title, String contents) {
+        this.writer = writer;
         this.title = title;
         this.contents = contents;
         this.createDate = LocalDateTime.now();
@@ -47,8 +52,8 @@ public class Question {
         return this.id == selectedId;
     }
 
-    public User getUserId() {
-        return userId;
+    public User getWriter() {
+        return writer;
     }
 
     public String getTitle() {
@@ -59,12 +64,16 @@ public class Question {
         return contents;
     }
 
+    public List<Answer> getAnswers() {
+        return answers;
+    }
+
     public void update(String title, String contents) {
         this.title = title;
         this.contents = contents;
     }
 
     public boolean hasSameUserAs(User sessionedUser) {
-        return this.userId.equals(sessionedUser);
+        return this.writer.equals(sessionedUser);
     }
 }

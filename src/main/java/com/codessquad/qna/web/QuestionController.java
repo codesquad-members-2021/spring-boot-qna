@@ -42,9 +42,10 @@ public class QuestionController {
         return "redirect:/";
     }
 
-    @GetMapping("{id}")
+    @GetMapping("/{id}")
     public String getQuestion(@PathVariable Long id, Model model) {
         Question selectedQuestion = questionRepository.findById(id).get();
+
         if (selectedQuestion.isRightId(id)) {
             model.addAttribute("question", selectedQuestion);
         }
