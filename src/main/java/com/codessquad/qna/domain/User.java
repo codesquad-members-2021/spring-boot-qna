@@ -1,17 +1,14 @@
 package com.codessquad.qna.domain;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @Entity
 public class User {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable=false, length=20)
+    @Column(nullable = false, length = 20, unique = true)
     private String userId;
     private String password;
     private String name;
@@ -41,6 +38,10 @@ public class User {
         return password;
     }
 
+    public boolean isRightPassword(String inputPassword) {
+        return inputPassword.equals(password);
+    }
+
     public String getName() {
         return name;
     }
@@ -51,6 +52,10 @@ public class User {
 
     public Long getId() {
         return id;
+    }
+
+    public boolean isRightId(Long inputId) {
+        return inputId.equals(id);
     }
 
     public void setId(Long id) {
