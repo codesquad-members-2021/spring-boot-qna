@@ -20,7 +20,7 @@ public class Question {
     @JoinColumn(foreignKey = @ForeignKey(name = "fk_question_writer"))
     private User writer;
 
-    @OneToMany(mappedBy = "question", fetch = FetchType.LAZY ) // JPA 에노테이션: Q-A관계 맵핑, question은 Answer 클래스가 ManyToOne으로 맺은 칼럼의 이름
+    @OneToMany(mappedBy = "question", cascade = CascadeType.ALL) // JPA 에노테이션: Q-A관계 맵핑, question은 Answer 클래스가 ManyToOne으로 맺은 칼럼의 이름
     private List<Answer> answers;
 
     @Column(nullable = false, length = 20)
