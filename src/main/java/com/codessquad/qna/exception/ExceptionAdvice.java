@@ -27,9 +27,8 @@ public class ExceptionAdvice {
     public String handleConstraintViolationException(ConstraintViolationException e, Model model) {
         String message = e.getMessage();
         String[] error = message.split("\'");
-
-        model.addAttribute("errorMessage",error[1]);
-        return "error/402";
+        model.addAttribute("errorMessage", error[1]);
+        return "error/400";
     }
 
 }
