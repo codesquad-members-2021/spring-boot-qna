@@ -16,7 +16,7 @@ public class Question extends AbstractEntity {
     @NotBlank(message = "제목을 입력해주세요.")
     private String title;
 
-    @Column(length = 2000)
+    @Lob
     @NotBlank(message = "본문을 입력해주세요.")
     private String contents;
 

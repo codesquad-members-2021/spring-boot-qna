@@ -46,9 +46,13 @@ public class QuestionService {
         return questionRepository.findAll();
     }
 
-    public Page<Question> findPage(int pageNumber) {
-        int pageSize = 15;
-        Pageable pageable = PageRequest.of(pageNumber - 1, pageSize);
+//    public Page<Question> findPage(int pageNumber) {
+//        int pageSize = 15;
+//        Pageable pageable = PageRequest.of(pageNumber - 1, pageSize);
+//        return questionRepository.findAll(pageable);
+//    }
+
+    public Page<Question> findPage(Pageable pageable) {
         return questionRepository.findAll(pageable);
     }
 
