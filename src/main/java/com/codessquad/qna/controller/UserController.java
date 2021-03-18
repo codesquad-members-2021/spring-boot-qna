@@ -64,7 +64,7 @@ public class UserController {
         if (!HttpSessionUtils.isLoginUser(session))
             return "redirect:/users/loginForm";
         User sessionedUser = HttpSessionUtils.getUserFromSession(session);
-        if(!id.equals(sessionedUser.getId())){
+        if(!id.equals(){
             throw new IllegalStateException("자신의 정보만 수정할 수 있습니다.");
         }
         model.addAttribute("user", userService.findUserById(id));

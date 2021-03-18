@@ -46,8 +46,12 @@ public class User {
         return email;
     }
 
-    public boolean isMatchingPassword(String password){
+    public boolean isMatchingPassword(String password) {
         return this.password.equals(password);
+    }
+
+    public boolean isMatchingId(Long id) {
+        return this.id.equals(id);
     }
 
     public void update(User updateUser) {
