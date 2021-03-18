@@ -20,7 +20,7 @@ public class QuestionController {
     }
 
     @GetMapping
-    public String show(Model model) {
+    public String showList(Model model) {
         model.addAttribute("questions", questionService.findAllQuestion());
         return "index";
     }
@@ -43,8 +43,12 @@ public class QuestionController {
     }
 
     @GetMapping("/{id}")
-    public ModelAndView viewQuestion(@PathVariable Long id) {
-        return getQuestionRepository("/qna/show", id);
+    public ModelAndView showQuestion(@PathVariable Long id) {
+        ModelAndView modelAndView = new ModelAndView("/qna/show");
+        modelAndView.addObject("question", questionService.findById(id));
+        modelAndView.addObject("answersList", questionService.findAnswers(id));
+        modelAndView.addObject("answerCount", questionService.findAnswers(id).size());
+        return modelAndView;
     }
 
     @GetMapping("/{id}/confirm")
@@ -73,14 +77,6 @@ public class QuestionController {
         User loginUser = HttpSessionUtils.getSessionUser(session);
         questionService.delete(question, id, loginUser);
         return "redirect:/";
-    }
-
-    private ModelAndView getQuestionRepository(String viewName, Long id) {
-        ModelAndView modelAndView = new ModelAndView(viewName);
-        modelAndView.addObject("question", questionService.findById(id));
-        modelAndView.addObject("answersList", questionService.findAnswers(id));
-        modelAndView.addObject("answerCount", questionService.findAnswers(id).size());
-        return modelAndView;
     }
 
 }
