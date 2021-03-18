@@ -111,10 +111,6 @@ public class Question {
         return isDelete;
     }
 
-    public void setDelete(boolean delete) {
-        isDelete = delete;
-    }
-
     @Override
     public String toString() {
         return "Question{" +

@@ -61,7 +61,7 @@ public class QuestionController {
         return "redirect:/";
     }
 
-    @PutMapping("/{id}/update")
+    @PutMapping("/{id}/put")
     public String updateQuestion(@PathVariable Long id, String title, String contents) {
         questionService.update(id, title, contents);
         return "redirect:/questions/" + id;

@@ -80,7 +80,6 @@ public class Answer {
         return isDelete;
     }
 
-
     @Override
     public String toString() {
         return "Answer{" +
