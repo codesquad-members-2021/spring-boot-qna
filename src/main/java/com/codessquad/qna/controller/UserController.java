@@ -76,7 +76,7 @@ public class UserController {
         try {
             User toLogin = userService.getUser(user.getUserId());
             if (toLogin.verify(user)) {
-                session.setAttribute("sessionedUser", toLogin);
+                session.setAttribute(HttpSessionUtil.USER_KEY, toLogin);
                 return "redirect:/";
             }
             return "redirect:/users/login/failed";
@@ -88,7 +88,7 @@ public class UserController {
     @GetMapping("/logout")
     public String logout(HttpSession session) {
         logger.debug("logout 요청");
-        session.removeAttribute("sessionedUser");
+        session.removeAttribute(HttpSessionUtil.USER_KEY);
         return "redirect:/";
     }
 }
