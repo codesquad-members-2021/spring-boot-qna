@@ -1,6 +1,6 @@
 package com.codessquad.qna.controller;
 
-import com.codessquad.qna.HttpSessionUtil;
+import com.codessquad.qna.utils.HttpSessionUtils;
 import com.codessquad.qna.domain.Answer;
 import com.codessquad.qna.domain.User;
 import com.codessquad.qna.repository.AnswerRepository;
@@ -29,9 +29,9 @@ public class AnswerController {
     //@PathVariable("question.id") Long questionId, @PathVariable("id") Long id, Model model
     @PostMapping("/questions/{question.id}/answers")
     public String createAnswer(Answer answer, HttpSession session, Model model) {
-        HttpSessionUtil.checkValidOf(session);
+        HttpSessionUtils.checkValidOf(session);
 
-        User findUser = HttpSessionUtil.getLoginUserOf(session);
+        User findUser = HttpSessionUtils.getLoginUserOf(session);
         answer.setReplyId(findUser.getUserId());
         answer.setReplyAuthor(findUser.getName());
         answerRepository.save(answer);

@@ -1,6 +1,6 @@
 package com.codessquad.qna.controller;
 
-import com.codessquad.qna.HttpSessionUtil;
+import com.codessquad.qna.utils.HttpSessionUtils;
 import com.codessquad.qna.domain.User;
 import com.codessquad.qna.service.UserService;
 import org.springframework.stereotype.Controller;
@@ -43,8 +43,8 @@ public class UserController {
 
     @GetMapping("users/{primaryKey}/form") //m 개인정보 수정
     private String changeMemberInfo(@PathVariable("primaryKey") Long targetKey, Model model, HttpSession session) {
-        userService.authenticateOfId(userService.getById(targetKey), HttpSessionUtil.getLoginUserOf(session));
-        model.addAttribute("users", HttpSessionUtil.getLoginUserOf(session));
+        userService.authenticateOfId(userService.getById(targetKey), HttpSessionUtils.getLoginUserOf(session));
+        model.addAttribute("users", HttpSessionUtils.getLoginUserOf(session));
         return "user/updateForm";
     }
 
@@ -61,13 +61,13 @@ public class UserController {
     @PostMapping("/user/login")
     public String login(String userId, String password, HttpSession session) {
         userService.checkValidOfLogin(userId, password); //m null 일 경우 내부에서 예외처리됨.
-        HttpSessionUtil.setAttribute(session, userService.getById(userId));
+        HttpSessionUtils.setAttribute(session, userService.getById(userId));
         return "redirect:/";
     }
 
     @GetMapping("/logout") // 로그아웃은 주로 포스트맵핑을 사용한다고 하는데, 아직 잘 모르겠어서 변경하지 않음.
     private String logout(HttpSession session) {
-        HttpSessionUtil.removeAttribute(session);
+        HttpSessionUtils.removeAttribute(session);
         return "redirect:/";
     }
 

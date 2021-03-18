@@ -1,6 +1,6 @@
 package com.codessquad.qna.domain;
 
-import com.codessquad.qna.ValidUtils;
+import com.codessquad.qna.utils.ValidUtils;
 
 import javax.persistence.*;
 import java.time.ZoneId;

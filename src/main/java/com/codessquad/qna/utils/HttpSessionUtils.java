@@ -1,4 +1,4 @@
-package com.codessquad.qna;
+package com.codessquad.qna.utils;
 
 import com.codessquad.qna.domain.User;
 import com.codessquad.qna.exception.type.UnauthorizedException;
@@ -10,7 +10,7 @@ import javax.servlet.http.HttpSession;
  * Blog : https://velog.io/@san
  * Github : https://github.com/sanhee
  */
-public class HttpSessionUtil {
+public class HttpSessionUtils {
 
     private static final String SESSION_KEY = "sessionedUser";
 

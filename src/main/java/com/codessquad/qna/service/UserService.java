@@ -1,6 +1,6 @@
 package com.codessquad.qna.service;
 
-import com.codessquad.qna.ValidUtils;
+import com.codessquad.qna.utils.ValidUtils;
 import com.codessquad.qna.domain.User;
 import com.codessquad.qna.exception.type.DuplicateIdFoundException;
 import com.codessquad.qna.exception.type.IncorrectAccountException;

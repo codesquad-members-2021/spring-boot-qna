@@ -1,4 +1,4 @@
-package com.codessquad.qna;
+package com.codessquad.qna.utils;
 
 /**
  * Created by 68936@naver.com on 2021-03-19 오전 12:21
