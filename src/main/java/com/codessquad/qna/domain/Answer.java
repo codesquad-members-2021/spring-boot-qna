@@ -68,7 +68,8 @@ public class Answer {
         return question;
     }
 
-    public void changeStatus(DisplayStatus displayStatus) {
+    public void deleteAnswer(DisplayStatus displayStatus) {
+        this.question.deleteAnswer(this);
         this.status = displayStatus;
     }
 
