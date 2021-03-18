@@ -63,18 +63,18 @@ public class QuestionService {
     }
 
     public boolean canDelete(Long questionId, Question question, User loginUser) {
-        int allAnswers = findAnswers(questionId).size();
-        int numCount = 0;
+        int activeAnswerCount = findAnswers(questionId).size();
+        int count = 0;
         Long questionWriterId = question.getWriter().getId();
         for (Answer answer : findAnswers(questionId)) {
             Long answerWriterId = answer.getWriter().getId();
             if (questionWriterId.equals(answerWriterId)) {
-                numCount += 1;
+                count += 1;
             }
         }
-        boolean flag1 = allAnswers == 0 && question.matchUser(loginUser);
-        boolean flag2 = allAnswers == numCount && question.matchUser(loginUser);
-        return (flag1 || flag2);
+        boolean nonAnswer = activeAnswerCount == 0 && question.matchUser(loginUser);
+        boolean answersWriterSameQuestionWriter = activeAnswerCount == count && question.matchUser(loginUser);
+        return (nonAnswer || answersWriterSameQuestionWriter);
     }
 
 }
