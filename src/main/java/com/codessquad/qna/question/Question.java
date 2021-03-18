@@ -116,7 +116,7 @@ public class Question {
     }
 
     public void update(Question newQuestion) {
-        writer.verifyWith(newQuestion.getWriter());
+        verifyWriter(newQuestion.getWriter());
 
         this.title = newQuestion.title;
         this.contents = newQuestion.contents;

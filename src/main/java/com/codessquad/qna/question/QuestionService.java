@@ -50,17 +50,19 @@ public class QuestionService {
 
     @Transactional
     public void deleteQuestion(Long id, UserDTO currentSessionUser) {
-        Question question = readQuestion(id);
-
-        question.verifyWriter(currentSessionUser.toEntity());
+        Question question = readVerifiedQuestion(id, currentSessionUser);
 
         deleteAnswers(question.getAnswers());
         questionRepository.delete(question);
     }
 
-    private Answer readAnswer(Long id) {
-        return answerRepository.findById(id)
+    private Answer readVerifiedAnswer(Long id, UserDTO user) {
+        Answer answer = answerRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("존재하지 않는 답변입니다. id : " + id));
+
+        answer.verifyWriter(user.toEntity());
+
+        return answer;
     }
 
     public void createAnswer(Answer answer) {
@@ -72,9 +74,7 @@ public class QuestionService {
     }
 
     public void deleteAnswer(Long id, UserDTO currentSessionUser) {
-        Answer answer = readAnswer(id);
-
-        answer.verifyWriter(currentSessionUser.toEntity());
+        Answer answer = readVerifiedAnswer(id, currentSessionUser);
 
         answerRepository.delete(answer);
     }
