@@ -4,11 +4,11 @@ import com.codessquad.qna.controller.HttpSessionUtils;
 import com.codessquad.qna.domain.Answer;
 import com.codessquad.qna.domain.Question;
 import com.codessquad.qna.domain.User;
+import com.codessquad.qna.exception.NotFoundException;
 import com.codessquad.qna.repository.AnswerRepository;
 import com.codessquad.qna.repository.QuestionRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpSession;
@@ -32,8 +32,9 @@ public class QuestionService {
         questionRepository.save(question);
     }
 
-    public void update(Long id, String title, String contents) throws Exception {
-        Question question = questionRepository.findById(id).orElseThrow(() -> new Exception("null 값입니다."));;
+    public void update(Long id, String title, String contents) {
+        Question question = questionRepository.findById(id).orElseThrow(NotFoundException::new);
+        ;
         question.updateQuestion(title, contents);
         logger.info("question {}. ", question);
         questionRepository.save(question);
@@ -49,8 +50,8 @@ public class QuestionService {
         }
     }
 
-    public Question findById(Long id) throws Exception {
-        return questionRepository.findById(id).orElseThrow(() -> new Exception("null 값입니다."));
+    public Question findById(Long id) {
+        return questionRepository.findById(id).orElseThrow(NotFoundException::new);
     }
 
     public List<Question> findAllQuestion() {

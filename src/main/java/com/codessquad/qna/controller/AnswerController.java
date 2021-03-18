@@ -22,7 +22,7 @@ public class AnswerController {
     }
 
     @PostMapping
-    public String createAnswer(@PathVariable Long id, String contents, HttpSession session) throws Exception {
+    public String createAnswer(@PathVariable Long id, String contents, HttpSession session) {
         if (!HttpSessionUtils.isLoginUser(session)) {
             return "/user/login";
         }

@@ -1,7 +1,7 @@
 package com.codessquad.qna.service;
 
-import com.codessquad.qna.controller.UserController;
 import com.codessquad.qna.domain.User;
+import com.codessquad.qna.exception.NotFoundException;
 import com.codessquad.qna.repository.UserRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -24,8 +24,8 @@ public class UserService {
         userRepository.save(user);
     }
 
-    public void update(Long id, String password, String name, String email) throws Exception {
-        User user = userRepository.findById(id).orElseThrow(() -> new Exception("null 값입니다."));
+    public void update(Long id, String password, String name, String email) {
+        User user = userRepository.findById(id).orElseThrow(NotFoundException::new);
         user.updateUserInfo(password, name, email);
         logger.info("users {}.", user);
         userRepository.save(user);
@@ -35,8 +35,8 @@ public class UserService {
         return (List<User>) userRepository.findAll();
     }
 
-    public User findById(Long id) throws Exception {
-        return userRepository.findById(id).orElseThrow(() -> new Exception("null 값입니다."));
+    public User findById(Long id) {
+        return userRepository.findById(id).orElseThrow(NotFoundException::new);
     }
 
     public User findByUserId(String userId) {

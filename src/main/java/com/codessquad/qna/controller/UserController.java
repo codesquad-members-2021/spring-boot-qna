@@ -2,7 +2,7 @@ package com.codessquad.qna.controller;
 
 import com.codessquad.qna.domain.User;
 import com.codessquad.qna.service.UserService;
-import com.codessquad.qna.exception.IllegalStateException;
+import com.codessquad.qna.exception.UnauthorizedAccessException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -58,7 +58,7 @@ public class UserController {
     }
 
     @GetMapping("/{id}")
-    public String profile(@PathVariable Long id, Model model) throws Exception {
+    public String profile(@PathVariable Long id, Model model) {
         User user = userService.findById(id);
         model.addAttribute("user", user);
         return "user/profile";
@@ -71,18 +71,18 @@ public class UserController {
         }
         User tempUser = HttpSessionUtils.getSessionUser(httpSession);
         if (!tempUser.matchId(id)) {
-            throw new IllegalStateException("자신의 정보만 수정 가능합니다.");
+            throw new UnauthorizedAccessException("자신의 정보만 수정 가능합니다.");
         }
         return "redirect:/users/confirm/{id}";
     }
 
     @GetMapping(CONFIRM_INFO)
-    public ModelAndView confirmUserInfo(@PathVariable Long id) throws Exception {
+    public ModelAndView confirmUserInfo(@PathVariable Long id) {
         return getUserRepository("/user/confirmUserInfo", id);
     }
 
     @PostMapping(CONFIRM_INFO)
-    public String confirmUserInfo(@PathVariable Long id, String password) throws Exception {
+    public String confirmUserInfo(@PathVariable Long id, String password) {
         User user = userService.findById(id);
         if (user.matchPassword(password)) {
             return "redirect:/users/update/{id}";
@@ -91,17 +91,17 @@ public class UserController {
     }
 
     @GetMapping(UPDATE_INFO)
-    public ModelAndView updateUserInfo(@PathVariable Long id) throws Exception {
+    public ModelAndView updateUserInfo(@PathVariable Long id) {
         return getUserRepository("user/updateForm", id);
     }
 
     @PutMapping(UPDATE_INFO)
-    public String updateUserInfo(@PathVariable Long id, String password, String name, String email) throws Exception {
+    public String updateUserInfo(@PathVariable Long id, String password, String name, String email) {
         userService.update(id, password, name, email);
         return "redirect:/users";
     }
 
-    private ModelAndView getUserRepository(String viewName, Long id) throws Exception {
+    private ModelAndView getUserRepository(String viewName, Long id) {
         ModelAndView modelAndView = new ModelAndView(viewName);
         User user = userService.findById(id);
         modelAndView.addObject("user", user);

@@ -6,6 +6,7 @@ import com.codessquad.qna.controller.QuestionController;
 import com.codessquad.qna.domain.Answer;
 import com.codessquad.qna.domain.Question;
 import com.codessquad.qna.domain.User;
+import com.codessquad.qna.exception.NotFoundException;
 import com.codessquad.qna.repository.AnswerRepository;
 import com.codessquad.qna.repository.QuestionRepository;
 import org.slf4j.Logger;
@@ -25,8 +26,8 @@ public class AnswerService {
         this.questionRepository = questionRepository;
     }
 
-    public void create(Long id, String contents, HttpSession session) throws Exception {
-        Question question = questionRepository.findById(id).orElseThrow(() -> new Exception("null 값입니다."));
+    public void create(Long id, String contents, HttpSession session) {
+        Question question = questionRepository.findById(id).orElseThrow(NotFoundException::new);
         User loginUser = HttpSessionUtils.getSessionUser(session);
         Answer answer = new Answer(question, loginUser, contents);
         logger.info("answer : {}. ", answer);
@@ -39,7 +40,7 @@ public class AnswerService {
     }
 
     public Answer findById(Long id) {
-        return answerRepository.findById(id).orElse(null);
+        return answerRepository.findById(id).orElseThrow(NotFoundException::new);
     }
 
 }
