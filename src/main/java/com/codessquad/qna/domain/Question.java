@@ -6,6 +6,7 @@ import java.time.format.DateTimeFormatter;
 
 @Entity
 public class Question {
+    private static final DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -17,6 +18,7 @@ public class Question {
     private String title;
     private String contents;
     private LocalDateTime postTime;
+    private LocalDateTime updatedPostTime;
 
     public Question() {
     }
@@ -25,14 +27,14 @@ public class Question {
         this.writer = writer;
         this.title = title;
         this.contents = contents;
-        setPostTime();
+        this.postTime = LocalDateTime.now();
     }
 
     public Long getId() {
         return id;
     }
 
-    public String getWriter() {
+    public String getWriterUserId() {
         return writer.getUserId();
     }
 
@@ -44,22 +46,21 @@ public class Question {
         return contents;
     }
 
-    public String getPostTime() {
-        return postTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"));
-    }
-
-    public void setPostTime() {
-        postTime = LocalDateTime.now();
+    public String getFormattedPostTime() {
+        if (updatedPostTime == null) {
+            return postTime.format(DATE_TIME_FORMATTER);
+        }
+        return updatedPostTime.format(DATE_TIME_FORMATTER);
     }
 
     public boolean isPostWriter(User user) {
         return user.isUserMatching(writer);
     }
 
-    public void update(String newTitle, String newContents) {
-        this.title = newTitle;
-        this.contents = newContents;
-        setPostTime();
+    public void update(String updatedTitle, String updatedContents) {
+        this.title = updatedTitle;
+        this.contents = updatedContents;
+        this.updatedPostTime = LocalDateTime.now();
     }
 
     @Override
