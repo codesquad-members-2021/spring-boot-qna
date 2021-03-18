@@ -4,20 +4,25 @@ import com.codessquad.qna.domain.Answer;
 import com.codessquad.qna.domain.DisplayStatus;
 
 public class AnswerDto {
-    private final Long writerId;
+    private final Long id;
+    private final String writerUserId;
     private final DisplayStatus status;
     private Long questionId;
     private final String contents;
     private final String createDateTime;
 
     public AnswerDto(Answer answer) {
-        this.writerId = answer.getWriter().getId();
+        this.id = answer.getId();
+        this.writerUserId = answer.getWriter().getUserId();
         this.status = answer.getStatus();
         this.contents = answer.getContents();
         this.createDateTime = answer.getFormatCreateDateTime();
         this.questionId = answer.getQuestion().getId();
     }
 
+    public Long getId() {
+        return id;
+    }
 
     public DisplayStatus getStatus() {
         return status;
@@ -31,8 +36,8 @@ public class AnswerDto {
         return createDateTime;
     }
 
-    public Long getWriterId() {
-        return writerId;
+    public String getWriterUserId() {
+        return writerUserId;
     }
 
     public Long getQuestionId() {
