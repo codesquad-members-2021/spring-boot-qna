@@ -26,7 +26,10 @@ public class UserService {
         userRepository.save(user);
     }
 
-    public void update(User user, User updatedUser) {
+    public void update(User user, User updatedUser, String newPassword) {
+        if (newPassword.length() > 0) {
+            updatedUser.setPassword(newPassword);
+        }
         user.update(updatedUser);
         save(user);
     }

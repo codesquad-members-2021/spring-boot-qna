@@ -82,7 +82,7 @@ public class UserController {
     }
 
     @PutMapping("/{id}")
-    public String update(@PathVariable Long id, User updatedUser, HttpSession session) {
+    public String update(@PathVariable Long id, User updatedUser, String newPassword, HttpSession session) {
         if (!HttpSessionUtils.isLoginUser(session)) {
             return "redirect:/users/loginForm";
         }
@@ -93,7 +93,7 @@ public class UserController {
             logger.debug("Password : \"{}\" does not match \"{}\"", updatedUser.getPassword(), user.getPassword());
             throw new IllegalStateException("Password does not match!");
         }
-        userService.update(user, updatedUser);
+        userService.update(user, updatedUser, newPassword);
 
         return "redirect:/users";
     }
