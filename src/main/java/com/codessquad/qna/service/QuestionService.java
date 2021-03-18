@@ -53,7 +53,7 @@ public class QuestionService {
     }
 
     public List<Question> findAllQuestion() {
-        return questionRepository.findActiveQuestion();
+        return this.questionRepository.findAllByIsDeleteFalse();
     }
 
     public List<Answer> findAnswers(Long questionId) {

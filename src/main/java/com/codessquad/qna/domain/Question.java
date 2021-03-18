@@ -33,7 +33,7 @@ public class Question {
     private List<Answer> answers;
 
     @Column(nullable = false)
-    private boolean deleted = false;
+    private boolean isDelete;
 
     public Question() {
         createdDateTime = LocalDateTime.now();
@@ -45,6 +45,7 @@ public class Question {
         this.title = title;
         this.contents = contents;
         this.createdDateTime = LocalDateTime.now();
+        this.isDelete = false;
     }
 
     public void updateQuestion(String title, String contents) {
@@ -103,7 +104,15 @@ public class Question {
     }
 
     public void delete() {
-        this.deleted = true;
+        this.isDelete = true;
+    }
+
+    public boolean isDelete() {
+        return isDelete;
+    }
+
+    public void setDelete(boolean delete) {
+        isDelete = delete;
     }
 
     @Override
