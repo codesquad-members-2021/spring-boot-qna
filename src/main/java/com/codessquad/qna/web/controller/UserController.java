@@ -31,8 +31,9 @@ public class UserController {
         try {
             originUser = userService.login(user);
         } catch (IllegalStateException e) {
-            return "redirect:/users/loginForm";
+            return "user/loginFailed";
         }
+
         session.setAttribute(HttpSessionUtils.USER_SESSION_KEY, originUser);
         return "redirect:/";
     }
@@ -106,5 +107,4 @@ public class UserController {
 //    }
 //
 //    /// 세션 private /// SESSION........
-
 }
