@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Controller
@@ -29,7 +30,8 @@ public class QuestionController {
     @PostMapping
     public String makeNewQuestion(Question question) {
         SimpleDateFormat format = new SimpleDateFormat(dateTime);
-        String formatTime = format.format(System.currentTimeMillis());
+        Date date = new Date();
+        String formatTime = format.format(date);
         question.setDateTime(formatTime);
         question.setIndex(questions.size() + 1);
         questions.add(question);
