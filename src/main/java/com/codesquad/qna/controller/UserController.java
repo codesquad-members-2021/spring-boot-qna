@@ -31,7 +31,7 @@ public class UserController {
 
     @PostMapping("/login")
     public String login(String userId, String password, HttpSession session) {
-        User user = userService.findUserById(userId);
+        User user = userService.findUserByUserId(userId);
 
         if (!password.equals(user.getPassword())) {
             return "redirect:/users/loginForm";
@@ -66,7 +66,7 @@ public class UserController {
 
     @GetMapping("/{id}")
     public String profile(@PathVariable Long id, Model model) {
-        User user = userService.findUserById(id);
+        User user = userService.findUserByUserId(id);
         model.addAttribute(user);
         return "/user/profile";
     }
@@ -76,16 +76,7 @@ public class UserController {
         if (!HttpSessionUtils.isLoginUser(session)) {
             return "redirect:/users/loginForm";
         }
-
-        User sessionedUser = HttpSessionUtils.getUserFromSession(session);
-
-        logger.debug("User : {} found", sessionedUser.getUserId());
-        if (!sessionedUser.isMatchedId(id)) {
-            throw new IllegalStateException("You can't modify other user's info!!");
-        }
-
-        User user = userService.findUserById(id);
-        logger.debug("User : {} found", sessionedUser.getUserId());
+        User user = userService.findUserBySession(id, session);
         model.addAttribute(user);
         return "/user/updateForm";
     }
@@ -96,13 +87,7 @@ public class UserController {
             return "redirect:/users/loginForm";
         }
 
-        User sessionedUser = HttpSessionUtils.getUserFromSession(session);
-        if (!sessionedUser.isMatchedId(id)) {
-            throw new IllegalStateException("You can't modify other user's info!!");
-        }
-
-        User user = userService.findUserById(id);
-        logger.debug("User : {}", (user));
+        User user = userService.findUserBySession(id, session);
 
         if (!user.isMatchedPassword(updatedUser)) {
             logger.debug("Password : \"{}\" does not match \"{}\"", updatedUser.getPassword(), user.getPassword());
