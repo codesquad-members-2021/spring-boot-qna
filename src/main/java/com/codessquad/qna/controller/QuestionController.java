@@ -3,6 +3,9 @@ package com.codessquad.qna.controller;
 import com.codessquad.qna.domain.*;
 import com.codessquad.qna.exception.*;
 import com.codessquad.qna.service.QuestionService;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
@@ -10,7 +13,6 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
-
 import java.util.List;
 import java.util.Objects;
 
@@ -82,6 +84,17 @@ public class QuestionController {
         Question question = questionService.findVerifiedQuestion(id, session);
         questionService.delete(question);
         return "redirect:/";
+    }
+
+    @GetMapping("/{pageNumber}")
+    public String page(@PathVariable int pageNumber, Model model) {
+        Page<Question> page = questionService.findPage(pageNumber);
+        List<Question> questions = page.getContent();
+        model.addAttribute("currentPage", pageNumber);
+        model.addAttribute("totalPages", page.getTotalPages());
+        model.addAttribute("totalQuestions", page.getTotalElements());
+        model.addAttribute("questions", questions);
+        return "index";
     }
 }
 
