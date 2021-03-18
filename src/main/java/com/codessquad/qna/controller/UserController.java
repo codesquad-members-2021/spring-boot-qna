@@ -56,8 +56,8 @@ public class UserController {
     public String checkPassword(User targetUser, Model model) {
         for (User user : users) {
             if (user.isSameId(targetUser.getUserId())) {
-                String pwBefore = user.getPassword();
-                if (pwBefore.equals(targetUser.getPassword())) {
+                String passwordBefore = user.getPassword();
+                if (passwordBefore.equals(targetUser.getPassword())) {
                     model.addAttribute("user", user);
                     return "userUpdateForm";
                 }
