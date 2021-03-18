@@ -20,7 +20,7 @@ public class HttpSessionUtil {
     }
     public static void checkValidOf(HttpSession session){
         if(session.getAttribute(SESSION_KEY) == null){
-            throw new UnauthorizedException();
+            throw new UnauthorizedException(); // 로그인정보가 유효하지 않을 때
         }
     }
 

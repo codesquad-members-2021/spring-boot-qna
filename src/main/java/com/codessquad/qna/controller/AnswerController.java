@@ -1,5 +1,6 @@
 package com.codessquad.qna.controller;
 
+import com.codessquad.qna.HttpSessionUtil;
 import com.codessquad.qna.domain.Answer;
 import com.codessquad.qna.domain.User;
 import com.codessquad.qna.repository.AnswerRepository;
@@ -24,19 +25,17 @@ public class AnswerController {
     public AnswerController(AnswerRepository answerRepository) {
         this.answerRepository = answerRepository;
     }
+
     //@PathVariable("question.id") Long questionId, @PathVariable("id") Long id, Model model
     @PostMapping("/questions/{question.id}/answers")
     public String createAnswer(Answer answer, HttpSession session, Model model) {
-        final Object sessionValue = session.getAttribute("sessionedUser");
-        if (sessionValue != null) {
-            User findUser = (User)sessionValue;
-            answer.setReplyId(findUser.getUserId());
-            answer.setReplyAuthor(findUser.getName());
-            answerRepository.save(answer);
-            return "redirect:/questions/{question.id}";
-        }
-        model.addAttribute("errorMessage", "로그인 정보가 유효하지 않습니다.");
-        return "error/404"; //m 세션아이디와 다를 경우 이동
+        HttpSessionUtil.checkValidOf(session);
+
+        User findUser = HttpSessionUtil.getLoginUserOf(session);
+        answer.setReplyId(findUser.getUserId());
+        answer.setReplyAuthor(findUser.getName());
+        answerRepository.save(answer);
+        return "redirect:/questions/{question.id}";
     }
 
 }
