@@ -42,6 +42,14 @@ public class QuestionController {
         return "redirect:/";
     }
 
+    @GetMapping("/form")
+    public String form(HttpSession session) {
+        if (!HttpSessionUtil.hasUser(session)) {
+            throw new UserNotFoundInSessionException();
+        }
+        return "qna/form";
+    }
+
     @GetMapping("/{index}")
     public String detail(@PathVariable int index, Model model) {
         Question question = questionService.getQuestion(index);
