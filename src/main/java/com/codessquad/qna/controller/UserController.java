@@ -49,7 +49,7 @@ public class UserController {
     @GetMapping("/{userId}/password-check")
     public String toCheckPasswordPage(@PathVariable("userId") String userId, Model model) {
         model.addAttribute("userId", userId);
-        return "passwordCheck";
+        return "passwordCheckForm";
     }
 
     @PostMapping("/{userId}/password-check")

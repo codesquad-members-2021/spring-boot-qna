@@ -31,7 +31,7 @@
 비밀번호 확인
 
 - GET `/user/{userId}/password-check`
-    - passwordCheck
+    - passwordCheckForm
 - POST `/user/{userId}/password-check`
     - if 비밀번호 일치) userUpdateForm
     - if 비밀번호 불일치) redirect:/
