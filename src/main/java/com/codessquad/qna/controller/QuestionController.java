@@ -33,7 +33,7 @@ public class QuestionController {
         Date date = new Date();
         String formatTime = format.format(date);
         question.setDateTime(formatTime);
-        question.setIndex(questions.size() + 1);
+        question.setId((long) (questions.size() + 1));
         questions.add(question);
         return "redirect:/";
     }

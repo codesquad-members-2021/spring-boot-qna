@@ -1,18 +1,18 @@
 package com.codessquad.qna.repository;
 
 public class Question {
-    private int index;
+    private Long id;
     private String writer;
     private String dateTime;
     private String title;
     private String contents;
 
-    public int getIndex() {
-        return index;
+    public Long getId() {
+        return id;
     }
 
-    public void setIndex(int index) {
-        this.index = index;
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getWriter() {
@@ -50,7 +50,7 @@ public class Question {
     @Override
     public String toString() {
         return "Question{" +
-                "index=" + index +
+                "index=" + id +
                 ", writer='" + writer + '\'' +
                 ", dateTime='" + dateTime + '\'' +
                 ", title='" + title + '\'' +
