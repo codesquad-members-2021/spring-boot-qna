@@ -16,10 +16,7 @@ public class Qna {
     private String writer;
 
     private String title;
-
-    @Column(nullable = false)
     private String contents;
-
     private LocalDateTime createdDateTime = LocalDateTime.now();
 
     public Long getId() {

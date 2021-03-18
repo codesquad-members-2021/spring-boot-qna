@@ -49,7 +49,7 @@ public class UserController {
 
     @GetMapping("/{id}")
     public String getOneUserProfile(@PathVariable long id, Model model, HttpSession session) {
-        if (HttpSessionUtils.isLoginUser(session)) {
+        if (!HttpSessionUtils.isLoginUser(session)) {
             return "redirect:/users/login";
         }
 
@@ -62,7 +62,7 @@ public class UserController {
 
     @GetMapping("/{id}/form")
     public String editUserInfo(@PathVariable long id, Model model, HttpSession session) {
-        if (HttpSessionUtils.isLoginUser(session)) {
+        if (!HttpSessionUtils.isLoginUser(session)) {
             return "redirect:/users/login";
         }
 
@@ -96,7 +96,7 @@ public class UserController {
     @PostMapping("/login")
     public String login(String userId, String password, HttpSession session) {
         User user = userRepository.findByUserId(userId);
-        if (user == null) {
+        if (HttpSessionUtils.isLoginUser(session)) {
             return "redirect:/users/login";
         }
         if (!user.checkPassword(password)) {
