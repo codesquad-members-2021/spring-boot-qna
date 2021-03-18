@@ -19,7 +19,7 @@ public class UserService {
         this.userRepository = userRepository;
     }
 
-    public List<User> getList() {
+    public List<User> users() {
         return userRepository.findAll();
     }
 
@@ -30,7 +30,7 @@ public class UserService {
         userRepository.save(user);
     }
 
-    public User getById(Long id) {
+    public User user(Long id) {
         return userRepository.findById(id).orElseThrow(NotFoundException::new);
     }
 

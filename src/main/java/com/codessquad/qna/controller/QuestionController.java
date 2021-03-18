@@ -21,7 +21,7 @@ public class QuestionController {
 
     @GetMapping
     public String list(Model model) {
-        model.addAttribute("questions", questionService.getList());
+        model.addAttribute("questions", questionService.questions());
         return "qna/list";
     }
 
@@ -35,32 +35,32 @@ public class QuestionController {
 
     @PostMapping
     public String create(Question question, HttpSession session) {
-        questionService.register(question, HttpSessionUtils.getLoginUser(session));
+        questionService.register(question, HttpSessionUtils.loginUser(session));
         return "redirect:/questions";
     }
 
     @GetMapping("/{questionId}")
     public String show(@PathVariable("questionId") Long id, Model model) {
-        model.addAttribute("question", questionService.getById(id));
+        model.addAttribute("question", questionService.question(id));
         return "qna/show";
     }
 
     @GetMapping("/{questionId}/form")
     public String updateForm(@PathVariable("questionId") Long id, HttpSession session, Model model) {
         model.addAttribute("question",
-                questionService.getWithAuthentication(id, HttpSessionUtils.getLoginUser(session)));
+                questionService.questionWithAuthentication(id, HttpSessionUtils.loginUser(session)));
         return "/qna/updateForm";
     }
 
     @PutMapping("/{questionId}")
     public String update(@PathVariable("questionId") Long id, Question updatingQuestion, HttpSession session) {
-        questionService.update(id, HttpSessionUtils.getLoginUser(session), updatingQuestion);
+        questionService.update(id, HttpSessionUtils.loginUser(session), updatingQuestion);
         return "redirect:/questions/" + id;
     }
 
     @DeleteMapping("/{id}")
     public String delete(@PathVariable("id") Long id, HttpSession session) {
-        questionService.delete(id, HttpSessionUtils.getLoginUser(session));
+        questionService.delete(id, HttpSessionUtils.loginUser(session));
         return "redirect:/questions";
     }
 

@@ -19,7 +19,7 @@ public class QuestionService {
         this.questionRepository = questionRepository;
     }
 
-    public List<Question> getList() {
+    public List<Question> questions() {
         return questionRepository.findAllByDeletedFalse();
     }
 
@@ -28,25 +28,27 @@ public class QuestionService {
         questionRepository.save(question);
     }
 
-    public Question getById(Long id) {
+    public Question question(Long id) {
         return questionRepository.findByIdAndDeletedFalse(id).orElseThrow(NotFoundException::new);
     }
 
-    public Question getWithAuthentication(Long id, User loginUser) {
-        return questionRepository.findById(id)
-                .filter(q -> q.isWriter(loginUser))
-                .orElseThrow(() -> new UnauthorizedAccessException("다른 사람의 질문을 수정하거나 삭제할 수 없습니다."));
+    public Question questionWithAuthentication(Long id, User loginUser) {
+        Question question = this.question(id);
+        if (!question.isWriter(loginUser)) {
+            throw new UnauthorizedAccessException("다른 사람의 질문을 수정하거나 삭제할 수 없습니다.");
+        }
+        return question;
     }
 
     public void update(Long id, User loginUser, Question updatingQuestion) {
-        Question question = getWithAuthentication(id, loginUser);
+        Question question = questionWithAuthentication(id, loginUser);
         question.updateContents(updatingQuestion);
         questionRepository.save(question);
     }
 
     @Transactional
     public void delete(Long id, User loginUser) {
-        Question question = getWithAuthentication(id, loginUser);
+        Question question = questionWithAuthentication(id, loginUser);
         question.delete(loginUser);
     }
 

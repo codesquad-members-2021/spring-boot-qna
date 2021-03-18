@@ -20,7 +20,7 @@ public class AnswerController {
 
     @PostMapping
     public String create(@PathVariable("questionId") Long questionId, Answer answer, HttpSession session) {
-        answerService.create(questionId, answer, HttpSessionUtils.getLoginUser(session));
+        answerService.create(questionId, answer, HttpSessionUtils.loginUser(session));
         return "redirect:/questions/" + questionId;
     }
 
@@ -28,7 +28,7 @@ public class AnswerController {
     public String delete(@PathVariable("questionId") Long questionId,
                          @PathVariable("answerId") Long answerId,
                          HttpSession session) {
-        answerService.delete(questionId, answerId, HttpSessionUtils.getLoginUser(session));
+        answerService.delete(questionId, answerId, HttpSessionUtils.loginUser(session));
         return "redirect:/questions/" + questionId;
     }
 
@@ -36,8 +36,8 @@ public class AnswerController {
     public String updateForm(@PathVariable("questionId") Long questionId,
                              @PathVariable("answerId") Long answerId,
                              HttpSession session, Model model) {
-        Answer answer = answerService.getWithAuthentication(questionId, answerId,
-                HttpSessionUtils.getLoginUser(session));
+        Answer answer = answerService.answerWithAuthentication(questionId, answerId,
+                HttpSessionUtils.loginUser(session));
         model.addAttribute("answer", answer);
         return "qna/updateAnswerForm";
     }
@@ -47,7 +47,7 @@ public class AnswerController {
                          @PathVariable("answerId") Long answerId,
                          Answer updatingAnswer,
                          HttpSession session) {
-        answerService.update(questionId, answerId, HttpSessionUtils.getLoginUser(session), updatingAnswer);
+        answerService.update(questionId, answerId, HttpSessionUtils.loginUser(session), updatingAnswer);
         return "redirect:/questions/" + questionId;
     }
 

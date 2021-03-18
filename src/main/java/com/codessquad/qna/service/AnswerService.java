@@ -25,12 +25,12 @@ public class AnswerService {
     }
 
     public void delete(Long answerId, Long questionId, User loginUser) {
-        Answer answer = getWithAuthentication(answerId, questionId, loginUser);
+        Answer answer = answerWithAuthentication(answerId, questionId, loginUser);
         answer.delete();
         answerRepository.save(answer);
     }
 
-    public Answer getWithAuthentication(Long questionId, Long answerId, User loginUser) {
+    public Answer answerWithAuthentication(Long questionId, Long answerId, User loginUser) {
         Answer answer = answerRepository.findByIdAndQuestionIdAndDeletedFalse(answerId, questionId)
                 .orElseThrow(NotFoundException::new);
         if (!answer.matchesWriter(loginUser)) {
@@ -40,7 +40,7 @@ public class AnswerService {
     }
 
     public void update(Long questionId, Long answerId, User loginUser, Answer updatingAnswer) {
-        Answer answer = getWithAuthentication(questionId, answerId, loginUser);
+        Answer answer = answerWithAuthentication(questionId, answerId, loginUser);
         answer.updateAnswer(updatingAnswer);
         answerRepository.save(answer);
     }

@@ -16,7 +16,7 @@ public class HttpSessionUtils {
         return session.getAttribute(USER_SESSION_KEY) != null;
     }
 
-    public static User getLoginUser(HttpSession session) throws NotLoggedInException {
+    public static User loginUser(HttpSession session) throws NotLoggedInException {
         User user = (User) session.getAttribute(USER_SESSION_KEY);
         if (user == null) {
             throw new NotLoggedInException();
