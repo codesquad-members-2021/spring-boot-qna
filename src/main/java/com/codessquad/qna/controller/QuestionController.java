@@ -37,7 +37,7 @@ public class QuestionController {
     @PostMapping
     public String create(String title, String contents, HttpSession session) {
         User user = HttpSessionUtil.getUser(session).orElseThrow(UserNotFoundInSessionException::new);
-        Question toCreate = new Question(user.getName(), title, contents);
+        Question toCreate = new Question(user, title, contents);
         questionService.addQuestion(toCreate);
         return "redirect:/";
     }
@@ -50,9 +50,9 @@ public class QuestionController {
         return "qna/form";
     }
 
-    @GetMapping("/{index}")
-    public String detail(@PathVariable int index, Model model) {
-        Question question = questionService.getQuestion(index);
+    @GetMapping("/{id}")
+    public String detail(@PathVariable int id, Model model) {
+        Question question = questionService.getQuestion(id);
         model.addAttribute("question", question);
         return "qna/show";
     }
