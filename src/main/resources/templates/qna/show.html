@@ -27,10 +27,7 @@
                     <div class="article-util">
                         <ul class="article-util-list">
                             <li>
-                                <form class="form-modify" action="/questions/{{question.id}}" method="POST">
-                                    <input type="hidden" name="_method" value="PUT">
-                                    <button class="link-delete-article" type="submit">수정</button>
-                                </form>
+                                <a class="link-modify-article" href="/questions/{{question.id}}/form">수정</a>
                             </li>
                             <li>
                                 <form class="form-delete" action="/questions/423" method="POST">

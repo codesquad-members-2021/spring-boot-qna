@@ -56,4 +56,16 @@ public class QuestionController {
         model.addAttribute("question", question);
         return "qna/show";
     }
+
+    @GetMapping("/{id}/form")
+    public String updateForm(@PathVariable int id, Model model, HttpSession session) {
+        User user = HttpSessionUtil.getUser(session).orElseThrow(UserNotFoundInSessionException::new);
+        Question question = questionService.getQuestion(id);
+        User writer = question.getWriter();
+        if (writer.verify(user)) {
+            model.addAttribute("question", question);
+            return "/qna/updateForm";
+        }
+        throw new IllegalStateException("자신의 글만 수정할 수 있습니다.");
+    }
 }
