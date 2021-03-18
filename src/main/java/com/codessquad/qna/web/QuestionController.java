@@ -7,10 +7,7 @@ import com.codessquad.qna.exception.NoQuestionException;
 import com.codessquad.qna.exception.NoUserException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
 
@@ -84,6 +81,23 @@ public class QuestionController {
         Qna qna = qnaRepository.findById(id).orElseThrow(NoUserException::new);
         qna.update(updateQna);
         qnaRepository.save(qna);
+        return "redirect:/";
+    }
+
+    @DeleteMapping("{id}/delete")
+    public String delete(@PathVariable long id, HttpSession session) {
+        Qna qna = qnaRepository.findById(id).orElseThrow(NoUserException::new);
+        User sessionUser = HttpSessionUtils.getUserFromSession(session);
+
+        if (!HttpSessionUtils.isLoginUser(session)) {
+            return "redirect:/users/login";
+        }
+        assert sessionUser != null;
+        if (!qna.checkWriter(sessionUser.getUserId())) {
+            throw new IllegalStateException("자신의 질문만 삭제할 수 있습니다.");
+        }
+
+        qnaRepository.delete(qna);
         return "redirect:/";
     }
 
