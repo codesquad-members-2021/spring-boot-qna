@@ -28,7 +28,7 @@ public class ApiAnswerController {
     public String delete(@PathVariable Long id, HttpSession session) {
         User user = HttpSessionUtils.getUserFromSession(session);
         answerService.delete(id, user);
-        return "redirect:/";
+        return "true";
     }
 
 }
