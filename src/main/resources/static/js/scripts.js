@@ -21,7 +21,7 @@ function deleteAnswer(e){
 
     var deleteBtn = $(this);
     var url = deleteBtn.attr("href");
-    console.log("url"+url);
+    console.log("url" + url);
 
     $.ajax({
         type : "delete",

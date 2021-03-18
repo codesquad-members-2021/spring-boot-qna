@@ -57,8 +57,8 @@
                     <div class="qna-comment-slipp">
                         <p class="qna-comment-count"><strong>{{countOfAnswer}}</strong>개의 의견</p>
                         <div class="qna-comment-slipp-articles">
+                            {{#answerList}}
                             <article class="article" id="answer-1405">
-                                {{#answerList}}
                                 {{#if (checkStatus status)}}
                                 <div class="article-header">
                                     <div class="article-header-thumb">
@@ -88,9 +88,8 @@
                                     </ul>
                                 </div>
                                 {{/if}}
-                                {{/answerList}}
                             </article>
-
+                            {{/answerList}}
 
                             <form class="answer-write" method="post" action="/api/questions/{{id}}/answers">
                                 <div class="form-group" style="padding:14px;">
