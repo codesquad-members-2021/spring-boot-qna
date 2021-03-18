@@ -29,7 +29,14 @@ public class QuestionService {
         }
         question.update(title, contents);
         questionRepository.save(question);
-        return;
+    }
+
+    public void deleteQuestion(long questionId, User tryUser) {
+        Question question = getQuestion(questionId);
+        if (!question.getWriter().verify(tryUser)) {
+            throw new IllegalStateException("자신의 글만 삭제할 수 있습니다.");
+        }
+        questionRepository.delete(question);
     }
 
     public List<Question> getQuestions() {

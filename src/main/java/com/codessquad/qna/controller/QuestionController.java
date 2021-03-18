@@ -46,6 +46,13 @@ public class QuestionController {
         return "redirect:/questions/" + questionId;
     }
 
+    @DeleteMapping("/{id}")
+    public String delete(@PathVariable long id, HttpSession session) {
+        User user = HttpSessionUtil.getUser(session);
+        questionService.deleteQuestion(id, user);
+        return "redirect:/";
+    }
+
     @GetMapping("/form")
     public String form(HttpSession session) {
         if (!HttpSessionUtil.hasUser(session)) {
