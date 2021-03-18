@@ -77,7 +77,7 @@ public class UserController {
     }
 
     @GetMapping(CONFIRM_INFO)
-    public ModelAndView confirmUserInfo(@PathVariable Long id) {
+    public ModelAndView confirmForm(@PathVariable Long id) {
         return getUserRepository("/user/confirmUserInfo", id);
     }
 
@@ -91,7 +91,7 @@ public class UserController {
     }
 
     @GetMapping(UPDATE_INFO)
-    public ModelAndView updateUserInfo(@PathVariable Long id) {
+    public ModelAndView updateForm(@PathVariable Long id) {
         return getUserRepository("user/updateForm", id);
     }
 
