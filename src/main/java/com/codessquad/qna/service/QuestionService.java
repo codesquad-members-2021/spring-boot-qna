@@ -39,6 +39,10 @@ public class QuestionService {
         return questionRepository.findById(id).orElseThrow(QuestionNotFoundException::new);
     }
 
+    public List<Question> findQuestions() {
+        return questionRepository.findAll();
+    }
+
     public Question findVerifiedQuestion(Long id, HttpSession session) {
         Question question = questionRepository.findById(id).orElseThrow(QuestionNotFoundException::new);
         checkPermission(session, question);

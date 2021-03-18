@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
+import java.util.List;
 import java.util.Objects;
 
 import static com.codessquad.qna.controller.HttpSessionUtils.*;
@@ -23,6 +24,12 @@ public class QuestionController {
 
     public QuestionController(QuestionService questionService) {
         this.questionService = questionService;
+    }
+
+    @GetMapping
+    public String list(Model model) {
+        model.addAttribute("questions", questionService.findQuestions());
+        return "index";
     }
 
     @GetMapping("/form")
