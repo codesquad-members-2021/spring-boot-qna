@@ -58,7 +58,7 @@ public class QuestionService {
     }
 
     public List<Answer> findAnswers(Long questionId) {
-        return answerRepository.findAllByQuestionIdAndIsDelete(questionId, false);
+        return answerRepository.findAllByQuestionIdAndIsDeleteFalse(questionId);
     }
 
     public boolean canDelete(Long questionId, Question question, User loginUser) {
