@@ -2,6 +2,7 @@ package com.codessquad.qna.service;
 
 import com.codessquad.qna.domain.Question;
 import com.codessquad.qna.domain.QuestionRepository;
+import com.codessquad.qna.dto.QuestionDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -16,7 +17,8 @@ public class QuestionService {
         this.questionRepository = questionRepository;
     }
 
-    public void create(Question question) {
+    public void create(QuestionDto questionDto) {
+        Question question = new Question(questionDto.getWriter(), questionDto.getContents(), questionDto.getTitle());
         questionRepository.save(question);
     }
 

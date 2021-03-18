@@ -1,7 +1,7 @@
 package com.codessquad.qna.controller;
 
 import com.codessquad.qna.HttpSessionUtils;
-import com.codessquad.qna.domain.Question;
+import com.codessquad.qna.dto.QuestionDto;
 import com.codessquad.qna.service.QuestionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -29,8 +29,8 @@ public class QuestionController {
     }
 
     @PostMapping("/questions")
-    public String createQuestion(Question question) {
-        questionService.create(question);
+    public String createQuestion(QuestionDto questionDto, HttpSession session) {
+        questionService.create(questionDto);
         return "redirect:/";
     }
 
