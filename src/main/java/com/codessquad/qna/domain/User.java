@@ -1,5 +1,6 @@
 package com.codessquad.qna.domain;
 
+import com.codessquad.qna.domain.dto.UserDto;
 import com.codessquad.qna.exception.IllegalUserAccessException;
 
 import javax.persistence.*;
@@ -73,5 +74,9 @@ public class User {
         if (this.id != newId) {
             throw new IllegalUserAccessException("자신의 정보만 수정 가능");
         }
+    }
+
+    public UserDto returnDto() {
+        return new UserDto(this);
     }
 }

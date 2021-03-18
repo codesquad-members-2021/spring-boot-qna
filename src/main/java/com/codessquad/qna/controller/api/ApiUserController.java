@@ -1,6 +1,6 @@
 package com.codessquad.qna.controller.api;
 
-import com.codessquad.qna.domain.User;
+import com.codessquad.qna.domain.dto.UserDto;
 import com.codessquad.qna.service.UserService;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -18,8 +18,7 @@ public class ApiUserController {
     }
 
     @GetMapping("/{id}")
-    public User show(@PathVariable Long id){
-        //todo : DTO로 변환
-        return userService.findById(id);
+    public UserDto show(@PathVariable Long id) {
+        return userService.findById(id).returnDto();
     }
 }
