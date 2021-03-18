@@ -9,7 +9,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.NoSuchElementException;
+import javax.servlet.http.HttpSession;
 
 @Controller
 @RequestMapping("/users")
@@ -20,6 +20,23 @@ public class UserController {
 
     @Autowired
     public UserController(UserService userService) { this.userService = userService; }
+
+    @GetMapping("/login")
+    public String loginForm() { return "/user/login"; }
+
+    @PostMapping("/login")
+    public String login(String userId, String password, HttpSession session) {
+        User user = userService.findByUserId(userId);
+
+        if (!password.equals(user.getPassword())) {
+            return "redirect:/users/login";
+        }
+
+        logger.info("User Logged In: {}", user);
+        session.setAttribute("user", user);
+
+        return "redirect:/";
+    }
 
     @PostMapping
     public String create(User user) {
@@ -62,8 +79,8 @@ public class UserController {
         return "redirect:/users";
     }
 
-    @ExceptionHandler(IllegalArgumentException.class)
-    public String handleException() {
-        return "error";
-    }
+//    @ExceptionHandler(IllegalArgumentException.class)
+//    public String handleException() {
+//        return "error";
+//    }
 }

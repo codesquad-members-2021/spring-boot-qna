@@ -32,4 +32,8 @@ public class UserService {
         return userRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("User Not Found"));
     }
 
+    public User findByUserId(String userId){
+        return userRepository.findByUserId(userId).orElseThrow(() -> new IllegalArgumentException("User Not Found"));
+    }
+
 }
