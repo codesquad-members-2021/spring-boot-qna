@@ -8,16 +8,16 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 @Controller
 @RequestMapping("/questions")
 public class QuestionController {
 
-    private static String dateTime = "yyyy-MM-dd HH:mm";
+    private static String dateTimeFormat = "yyyy-MM-dd HH:mm";
 
     private List<Question> questions = new ArrayList<>();
 
@@ -29,10 +29,10 @@ public class QuestionController {
 
     @PostMapping
     public String makeNewQuestion(Question question) {
-        SimpleDateFormat format = new SimpleDateFormat(dateTime);
-        Date date = new Date();
-        String formatTime = format.format(date);
-        question.setDateTime(formatTime);
+        LocalDateTime dateTime = LocalDateTime.now();
+        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern(dateTimeFormat);
+        String dateTimeString = dateTime.format(dateTimeFormatter);
+        question.setDateTime(dateTimeString);
         question.setId((long) (questions.size() + 1));
         questions.add(question);
         return "redirect:/";
