@@ -28,9 +28,16 @@ public class Question {
     private String title;
     private String contents;
     private LocalDateTime createDateTime;
+    private int countOfAnswer = 0;
 
     public void addAnswer(Answer answer) {
         answerList.add(answer);
+        countOfAnswer++;
+    }
+
+    public void deleteAnswer(Answer answer) {
+        answerList.remove(answer);
+        countOfAnswer--;
     }
 
     public List<Answer> getAnswerList() {
