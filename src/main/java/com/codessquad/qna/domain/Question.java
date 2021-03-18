@@ -84,10 +84,8 @@ public class Question {
         return contents;
     }
 
-    public int getOpenAnswerCount() {
-        return (int) answerList.stream()
-                .filter(answer -> answer.getStatus() == DisplayStatus.OPEN)
-                .count();
+    public int getCountOfAnswer() {
+        return countOfAnswer;
     }
 
     public DisplayStatus getStatus() {
