@@ -1,5 +1,6 @@
 package com.codessquad.qna.domain;
 
+import com.codessquad.qna.exception.ForbiddenException;
 import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
@@ -87,7 +88,26 @@ public class Question {
         this.contents = updatingQuestion.contents;
     }
 
-    public void delete() {
+    public void delete(User writer) {
+        if (!this.writer.equals(writer)) {
+            throw new ForbiddenException("다른 사람의 질문을 삭제할 수 없습니다.");
+        }
+        checkAnswersWriter(writer);
+        deleteAnswers();
         this.deleted = true;
+    }
+
+    private void checkAnswersWriter(User writer) {
+        for (Answer answer : answers) {
+            if (!answer.matchesWriter(writer)) {
+                throw new ForbiddenException("다른 사람의 답변이 존재하여 질문을 삭제할 수 없습니다.");
+            }
+        }
+    }
+
+    private void deleteAnswers() {
+        for (Answer answer : answers) {
+            answer.delete();
+        }
     }
 }
