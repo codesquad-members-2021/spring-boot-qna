@@ -1,7 +1,9 @@
 package com.codessquad.qna.service;
 
+import com.codessquad.qna.domain.DisplayStatus;
 import com.codessquad.qna.domain.Question;
 import com.codessquad.qna.domain.User;
+import com.codessquad.qna.exception.NoSearchObjectException;
 import com.codessquad.qna.repository.QuestionRepository;
 import com.codessquad.qna.valid.QuestionValidator;
 import org.slf4j.Logger;
@@ -32,19 +34,23 @@ public class QuestionService {
     }
 
     public Question findById(Long questionId) {
-        return questionRepository.findById(questionId).orElseThrow(NullPointerException::new);
+        return questionRepository.findById(questionId).orElseThrow(() -> new NoSearchObjectException("질문"));
     }
 
     @Transactional
-    public void update(Long id, Question question) {
-        Question findQuestion = findById(id);
+    public void update(Long questionId, Question question, User user) {
+        Question findQuestion = findById(questionId);
+        user.checkSameUser(findQuestion.getWriter().getId());
         findQuestion.questionUpdate(question);
         QuestionValidator.validate(findQuestion);
     }
 
     @Transactional
-    public void delete(Long id) {
-        questionRepository.deleteById(id);
+    public void delete(Long id, User user) {
+        Question question = findById(id);
+        user.checkSameUser(question.getWriter().getId());
+        question.checkSameUserFromOpenAnswer();
+        question.changeStatus(DisplayStatus.CLOSE);
     }
 
 }

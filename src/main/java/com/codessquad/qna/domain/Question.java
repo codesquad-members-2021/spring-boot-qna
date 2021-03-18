@@ -22,6 +22,9 @@ public class Question {
     @OrderBy("id ASC ")
     private List<Answer> answerList = new ArrayList<>();
 
+    @Enumerated(EnumType.STRING)
+    private DisplayStatus status = DisplayStatus.OPEN;
+
     private String title;
     private String contents;
     private LocalDateTime createDateTime;
@@ -34,7 +37,7 @@ public class Question {
         return answerList;
     }
 
-    public String getCreateDateTime() {
+    public String getFormatCreateDateTime() {
         return createDateTime.format(DateTimeUtils.dateTimeFormatter);
     }
 
@@ -74,9 +77,31 @@ public class Question {
         return contents;
     }
 
+    public int getOpenAnswerCount() {
+        return (int) answerList.stream()
+                .filter(answer -> answer.getStatus() == DisplayStatus.OPEN)
+                .count();
+    }
+
+    public DisplayStatus getStatus() {
+        return status;
+    }
 
     public void questionUpdate(Question question) {
         this.title = question.getTitle();
         this.contents = question.getContents();
     }
+
+    public void checkSameUserFromOpenAnswer() {
+        for (Answer answer : answerList) {
+            if (answer.getStatus() == DisplayStatus.OPEN) {
+                answer.getWriter().checkSameUser(writer.getId());
+            }
+        }
+    }
+
+    public void changeStatus(DisplayStatus displayStatus) {
+        this.status = displayStatus;
+    }
+
 }

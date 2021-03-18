@@ -13,26 +13,28 @@
         <div class="panel panel-default qna-list">
             <ul class="list">
                 {{#Questions}}
-                <li>
-                    <div class="wrap">
-                        <div class="main">
-                            <strong class="subject">
-                                <a href="/questions/{{id}}">{{title}}</a>
-                            </strong>
-                            <div class="auth-info">
-                                <i class="icon-add-comment"></i>
-                                <span class="time">{{createDateTime}}</span>
-                                {{#writer}}
-                                <a href="/users/profile" class="author">{{userId}}</a>
-                                {{/writer}}
-                            </div>
-                            <div class="reply" title="댓글">
-                                <i class="icon-reply"></i>
-                                <span class="point">{{answerList.length}}</span>
+                {{#if (checkStatus status)}}
+                    <li>
+                        <div class="wrap">
+                            <div class="main">
+                                <strong class="subject">
+                                    <a href="/questions/{{id}}">{{title}}</a>
+                                </strong>
+                                <div class="auth-info">
+                                    <i class="icon-add-comment"></i>
+                                    <span class="time">{{formatCreateDateTime}}</span>
+                                    {{#writer}}
+                                    <a href="/users/profile" class="author">{{userId}}</a>
+                                    {{/writer}}
+                                </div>
+                                <div class="reply" title="댓글">
+                                    <i class="icon-reply"></i>
+                                    <span class="point">{{openAnswerCount}}</span>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                </li>
+                    </li>
+                {{/if}}
                 {{/Questions}}
             </ul>
             <div class="row">
@@ -84,7 +86,7 @@
       <div class="modal-footer">
           <div class="col-md-12">
           <button class="btn" data-dismiss="modal" aria-hidden="true">Cancel</button>
-      </div>  
+      </div>
       </div>
   </div>
   </div>
@@ -126,7 +128,7 @@
       <div class="modal-footer">
           <div class="col-md-12">
           <button class="btn" data-dismiss="modal" aria-hidden="true">Cancel</button>
-      </div>  
+      </div>
       </div>
   </div>
   </div>

@@ -1,15 +1,15 @@
 package com.codessquad.qna.service;
 
 import com.codessquad.qna.domain.User;
+import com.codessquad.qna.exception.IllegalUserUpdateException;
+import com.codessquad.qna.exception.NoSearchObjectException;
 import com.codessquad.qna.repository.UserRepository;
-import com.codessquad.qna.util.HttpSessionUtils;
 import com.codessquad.qna.valid.UserValidator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.servlet.http.HttpSession;
 import java.util.List;
 
 @Service
@@ -30,7 +30,7 @@ public class UserService {
     }
 
     public User findById(Long userId) {
-        return userRepository.findById(userId).orElseThrow(NullPointerException::new);
+        return userRepository.findById(userId).orElseThrow(() -> new NoSearchObjectException("유저"));
     }
 
     public List<User> findAll() {
@@ -38,38 +38,24 @@ public class UserService {
     }
 
     @Transactional
-    public boolean update(User user, String newPassword) {
-        UserValidator.validate(user);
-        User getUser = findById(user.getId());
-        if (getUser.checkPassword(user.getPassword())) {
-            getUser.updateUserInfo(user, newPassword);
-            return true;
+    public void update(User updatedUser, String newPassword, Long id) {
+        UserValidator.validate(updatedUser);
+        User user = findById(id);
+        if (!user.checkPassword(updatedUser.getPassword())) {
+            throw new IllegalUserUpdateException(id);
         }
-        return false;
+        user.updateUserInfo(updatedUser, newPassword);
     }
 
-    public boolean checkLoginable(String userId, String password) {
+    public void checkLoginable(String userId, String password) {
         User findUser = findByUserId(userId);
-        return findUser != null && findUser.checkPassword(password);
+        if (!findUser.checkPassword(password)) {
+            throw new IllegalArgumentException("비밀번호가 다름");
+        }
     }
 
     public User findByUserId(String userId) {
-        return userRepository.findByUserId(userId).orElseThrow(NullPointerException::new);
-    }
-
-    public boolean checkSession(HttpSession session, Long id) {
-        if (!HttpSessionUtils.isLoginUser(session)) {
-            throw new IllegalStateException("자신의 정보만 수정 가능");
-        }
-        checkSameUser(session, id);
-        return true;
-    }
-
-    private void checkSameUser(HttpSession session, Long id) {
-        User sessionedUser = HttpSessionUtils.getUserFromSession(session);
-        if (!sessionedUser.checkId(id)) {
-            throw new IllegalStateException("자신의 정보만 수정 가능");
-        }
+        return userRepository.findByUserId(userId).orElseThrow(() -> new NoSearchObjectException("유저"));
     }
 
 }

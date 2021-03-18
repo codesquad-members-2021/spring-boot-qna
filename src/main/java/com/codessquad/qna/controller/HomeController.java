@@ -21,7 +21,7 @@ public class HomeController {
     @GetMapping("/")
     public String welcome(Model model) {
         List<Question> getQuestions = questionRepository.findAll();
-        model.addAttribute("Questions",getQuestions);
+        model.addAttribute("Questions", getQuestions);
         return "index";
     }
 

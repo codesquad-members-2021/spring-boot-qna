@@ -4,7 +4,6 @@ import com.codessquad.qna.util.DateTimeUtils;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 
 @Entity
 public class Answer {
@@ -20,6 +19,9 @@ public class Answer {
     @ManyToOne
     @JoinColumn(name = "question_id")
     private Question question;
+
+    @Enumerated(EnumType.STRING)
+    private DisplayStatus status = DisplayStatus.OPEN;
 
     private String contents;
     private LocalDateTime createDateTime;
@@ -45,5 +47,17 @@ public class Answer {
 
     public String getContents() {
         return contents;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public DisplayStatus getStatus() {
+        return status;
+    }
+
+    public void changeStatus(DisplayStatus displayStatus) {
+        this.status = displayStatus;
     }
 }

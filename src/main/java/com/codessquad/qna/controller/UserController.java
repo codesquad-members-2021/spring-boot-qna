@@ -46,19 +46,18 @@ public class UserController {
 
     @GetMapping("/{id}/form")
     public String renderUpdateForm(@PathVariable Long id, Model model, HttpSession session) {
-        userService.checkSession(session, id);
-        model.addAttribute("user", HttpSessionUtils.getUserFromSession(session));
+        User user = HttpSessionUtils.getUserFromSession(session);
+        user.checkSameUser(id);
+        model.addAttribute("user", user);
         return "user/userUpdateForm";
     }
 
     @PutMapping("/{id}")
-    public String userUpdate(User user, String newPassword, Model model, HttpSession session) {
-        userService.checkSession(session, user.getId());
-        if (userService.update(user, newPassword)) {
-            return "redirect:/";
-        }
-        model.addAttribute("fail", true);
-        return "user/userUpdateForm";
+    public String userUpdate(@PathVariable Long id, User updatedUser, String newPassword, Model model, HttpSession session) {
+        User user = HttpSessionUtils.getUserFromSession(session);
+        user.checkSameUser(id);
+        userService.update(updatedUser, newPassword, id);
+        return "redirect:/";
     }
 
 }

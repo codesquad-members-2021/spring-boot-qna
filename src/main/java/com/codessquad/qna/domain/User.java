@@ -1,5 +1,7 @@
 package com.codessquad.qna.domain;
 
+import com.codessquad.qna.exception.IllegalUserAccessException;
+
 import javax.persistence.*;
 
 @Entity
@@ -67,7 +69,9 @@ public class User {
         this.password = newPassword;
     }
 
-    public boolean checkId(Long newId) {
-        return this.id == newId;
+    public void checkSameUser(Long newId) {
+        if (this.id != newId) {
+            throw new IllegalUserAccessException("자신의 정보만 수정 가능");
+        }
     }
 }

@@ -56,39 +56,41 @@
                 <div class="qna-comment">
                     <div class="qna-comment-slipp">
                         <div class="qna-comment-slipp-articles">
-                            <p class="qna-comment-count"><strong>{{answerList.length}}</strong>개의 의견</p>
+                            <p class="qna-comment-count"><strong>{{openAnswerCount}}</strong>개의 의견</p>
                             <article class="article" id="answer-1405">
                                 {{#answerList}}
-                                <div class="article-header">
-                                    <div class="article-header-thumb">
-                                        <img src="https://graph.facebook.com/v2.3/1324855987/picture"
-                                             class="article-author-thumb" alt="">
+                                {{#if (checkStatus status)}}
+                                    <div class="article-header">
+                                        <div class="article-header-thumb">
+                                            <img src="https://graph.facebook.com/v2.3/1324855987/picture"
+                                                 class="article-author-thumb" alt="">
+                                        </div>
+                                        <div class="article-header-text">
+                                            <a href="/users/1/자바지기" class="article-author-name">{{writer.userId}}</a>
+                                            <a href="#answer-1434" class="article-header-time" title="퍼머링크">
+                                                {{formatCreateDateTime}}
+                                            </a>
+                                        </div>
                                     </div>
-                                    <div class="article-header-text">
-                                        <a href="/users/1/자바지기" class="article-author-name">{{writer.userId}}</a>
-                                        <a href="#answer-1434" class="article-header-time" title="퍼머링크">
-                                            {{createDate}}
-                                        </a>
+                                    <div class="article-doc comment-doc">
+                                        <p>{{contents}}</p>
                                     </div>
-                                </div>
-                                <div class="article-doc comment-doc">
-                                    <p>{{contents}}</p>
-                                </div>
-                                <div class="article-util">
-                                    <ul class="article-util-list">
-                                        <li>
-                                            <a class="link-modify-article"
-                                               href="/questions/413/answers/1405/form">수정</a>
-                                        </li>
-                                        <li>
-                                            <form class="delete-answer-form" action="/questions/413/answers/1405"
-                                                  method="POST">
-                                                <input type="hidden" name="_method" value="DELETE">
-                                                <button type="submit" class="delete-answer-button">삭제</button>
-                                            </form>
-                                        </li>
-                                    </ul>
-                                </div>
+                                    <div class="article-util">
+                                        <ul class="article-util-list">
+                                            <li>
+                                                <a class="link-modify-article"
+                                                   href="/questions/413/answers/1405/form">수정</a>
+                                            </li>
+                                            <li>
+                                                <form class="delete-answer-form" action="/questions/{{question.id}}/answers/{{id}}"
+                                                      method="POST">
+                                                    <input type="hidden" name="_method" value="DELETE">
+                                                    <button type="submit" class="delete-answer-button">삭제</button>
+                                                </form>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                {{/if}}
                                 {{/answerList}}
                             </article>
 
