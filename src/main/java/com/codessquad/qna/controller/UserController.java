@@ -62,7 +62,7 @@ public class UserController {
         return "redirect:/users";
     }
 
-    @ExceptionHandler(NoSuchElementException.class)
+    @ExceptionHandler(IllegalArgumentException.class)
     public String handleException() {
         return "error";
     }

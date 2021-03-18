@@ -27,7 +27,7 @@ public class Question {
         this.timeCreated = LocalDateTime.now();
     }
 
-    public Question() {}
+    protected Question() {}
 
     public void setWriter(String writer) {
         this.writer = writer;
