@@ -35,15 +35,6 @@ public class User {
         this.email = email;
     }
 
-    public static List<User> getDummyData() {
-        return Arrays.asList(
-                new User(null, "javajigi", "1234", "자바지기", "javajigi@sample.net"),
-                new User(null, "slipp", "1234", "슬립", "slipp@sample.net"),
-                new User(null, "mskim", "1234", "김문수", "mskim@sample.net"),
-                new User(null, "test", "test", "test", "test@test.net")
-        );
-    }
-
     public Long getId() {
         return id;
     }

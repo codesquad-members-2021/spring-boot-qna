@@ -37,27 +37,6 @@ public class Answer {
         this.writer = writer;
     }
 
-    public static List<Answer> getDummyData() {
-        return Arrays.asList(
-                new Answer("국내에서 Ruby on Rails와 Play가 활성화되기 힘든 이유는 뭘까",
-                        LocalDateTime.of(2016, 01, 15, 18, 47),
-                        new Question(1L),
-                        new User(1L, "", "", "", "")),
-                new Answer("국내에서 Ruby on Rails와 Play가 활성화되기 힘든 이유는 뭘까",
-                        LocalDateTime.of(2016, 01, 15, 18, 47),
-                        new Question(2L),
-                        new User(2L, "", "", "", "")),
-                new Answer("국내에서 Ruby on Rails와 Play가 활성화되기 힘든 이유는 뭘까",
-                        LocalDateTime.of(2016, 01, 15, 18, 47),
-                        new Question(3L),
-                        new User(4L, "", "", "", "")),
-                new Answer("국내에서 Ruby on Rails와 Play가 활성화되기 힘든 이유는 뭘까",
-                        LocalDateTime.of(2016, 01, 15, 18, 47),
-                        new Question(1L),
-                        new User(1L, "", "", "", ""))
-        );
-    }
-
     public Long getId() {
         return id;
     }
