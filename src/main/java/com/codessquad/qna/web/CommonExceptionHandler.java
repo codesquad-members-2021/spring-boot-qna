@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 
 @ControllerAdvice
 public class CommonExceptionHandler {
+
     @ExceptionHandler(UserNotFoundException.class)
     public String handleUserNotFoundException() {
         return "redirect:/users/loginForm";

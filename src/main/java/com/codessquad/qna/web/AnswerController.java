@@ -5,7 +5,6 @@ import com.codessquad.qna.domain.question.Question;
 import com.codessquad.qna.domain.user.User;
 import com.codessquad.qna.exception.AnswerNotFoundException;
 import com.codessquad.qna.exception.IllegalUserAccessException;
-import com.codessquad.qna.exception.QuestionNotFoundException;
 import com.codessquad.qna.service.AnswerService;
 import com.codessquad.qna.service.QuestionService;
 import org.slf4j.Logger;
@@ -35,21 +34,21 @@ public class AnswerController {
     public String createAnswer(@PathVariable Long questionId, String comments,
                                HttpSession session) {
         User writer = getUserFromSession(session);
-        Question question = questionService.findBy(questionId);
+        Question question = questionService.findById(questionId);
         Answer answer = new Answer(writer, question, comments);
 
         answerService.createAnswer(answer);
         logger.debug("answer : {}", answer);
 
-        return String.format("redirect:/questions/%d", questionId);
+        return "redirect:/questions/" + questionId;
     }
 
     @DeleteMapping("/{id}")
     public String delete(@PathVariable Long questionId,
-                         @PathVariable Long id,
+                        @PathVariable Long id,
                          HttpSession session) {
         User loginedUser = getUserFromSession(session);
-        Answer answer = answerService.findBy(id);
+        Answer answer = answerService.findById(id);
 
         if(!answer.matchWriter(loginedUser)) {
             throw new IllegalUserAccessException();

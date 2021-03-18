@@ -19,14 +19,14 @@ public class AnswerService {
     /**
      * 답변 생성
      */
-    public void createAnswer(Answer answer) {
-        answerRepository.save(answer);
+    public Answer createAnswer(Answer answer) {
+        return answerRepository.save(answer);
     }
 
     /**
      * 답변 조회
      */
-    public Answer findBy(Long id) {
+    public Answer findById(Long id) {
         return answerRepository.findById(id)
                 .orElseThrow(AnswerNotFoundException::new);
     }
@@ -34,7 +34,7 @@ public class AnswerService {
     /**
      * 답변 리스트 조회
      */
-    public List<Answer> findAnswerListBy(Question question) {
+    public List<Answer> findAnswerListByQuestion(Question question) {
         return answerRepository.findByQuestion(question);
     }
 

@@ -62,8 +62,8 @@ public class QuestionController {
             throw new UserNotFoundException();
         }
 
-        Question question = questionService.findBy(id);
-        List<Answer> answers = answerService.findAnswerListBy(question);
+        Question question = questionService.findById(id);
+        List<Answer> answers = answerService.findAnswerListByQuestion(question);
 
         model.addAttribute("question", question);
         model.addAttribute("answerList", answers);
@@ -77,7 +77,7 @@ public class QuestionController {
     @GetMapping("/{id}/form")
     public String getUpdateForm(@PathVariable Long id, Model model, HttpSession session) {
         User loginedUser = getUserFromSession(session);
-        Question question = questionService.findBy(id);
+        Question question = questionService.findById(id);
 
         if (!loginedUser.matchUser(question.getWriter())) {
             throw new IllegalUserAccessException();
@@ -90,7 +90,7 @@ public class QuestionController {
     @PutMapping("/{id}")
     public String updateQuestion(@PathVariable Long id, Question updateQuestion, HttpSession session) {
         User loginedUser = getUserFromSession(session);
-        Question question = questionService.findBy(id);
+        Question question = questionService.findById(id);
 
         if (!loginedUser.matchUser(question.getWriter())) {
             throw new IllegalStateException("자신의 정보만 수정할 수 있습니다.");
@@ -104,7 +104,7 @@ public class QuestionController {
     @DeleteMapping("{id}")
     public String delete(@PathVariable Long id, HttpSession session) {
         User loginedUser = getUserFromSession(session);
-        Question question = questionService.findBy(id);
+        Question question = questionService.findById(id);
 
         if (!question.isSameWriter(loginedUser)) {
             throw new IllegalUserAccessException();

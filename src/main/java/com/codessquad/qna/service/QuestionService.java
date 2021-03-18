@@ -26,7 +26,7 @@ public class QuestionService {
     /**
      * 질문 조회
      */
-    public Question findBy(Long id) {
+    public Question findById(Long id) {
         return questionRepository.findById(id)
                 .orElseThrow(QuestionNotFoundException::new);
     }
