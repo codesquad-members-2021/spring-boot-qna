@@ -8,7 +8,7 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false, length = 20)
+    @Column(nullable = false, length = 20, unique = true)
     private String userId;
 
     private String password;
@@ -57,8 +57,16 @@ public class User {
         this.email = newUser.email;
     }
 
-    public boolean isPasswordMatching(String inputPassword){
-        return inputPassword.equals(password);
+    public boolean isIdMatching(Long newId) {
+        return newId.equals(id);
+    }
+
+    public boolean isPasswordMatching(String newPassword) {
+        return newPassword.equals(password);
+    }
+
+    public boolean isUserMatching(User newUser) {
+        return newUser.getId().equals(id);
     }
 
     @Override

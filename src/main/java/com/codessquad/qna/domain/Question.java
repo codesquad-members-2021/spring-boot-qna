@@ -1,35 +1,35 @@
 package com.codessquad.qna.domain;
 
 import javax.persistence.*;
-import java.text.SimpleDateFormat;
-import java.time.LocalDate;
-import java.util.Date;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 @Entity
 public class Question {
+    private static final DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String writer;
+    @ManyToOne
+    @JoinColumn(foreignKey = @ForeignKey(name = "fk_question_writer"))
+    private User writer;
+
     private String title;
     private String contents;
-    private LocalDate postTime;
-
-    public void setId(Long id) {
-        this.id = id;
-    }
+    private LocalDateTime postTime = LocalDateTime.now();
+    private LocalDateTime updatedPostTime;
 
     public Long getId() {
         return id;
     }
 
     public String getWriter() {
-        return writer;
+        return writer.getUserId();
     }
 
-    public void setWriter(String writer) {
-        this.writer = writer;
+    public void setWriter(User user) {
+        this.writer = user;
     }
 
     public String getTitle() {
@@ -48,19 +48,27 @@ public class Question {
         this.contents = contents;
     }
 
-    public LocalDate getPostTime() {
-        return postTime;
+    public String getFormattedPostTime() {
+        if (updatedPostTime == null) {
+            return postTime.format(DATE_TIME_FORMATTER);
+        }
+        return updatedPostTime.format(DATE_TIME_FORMATTER);
     }
 
-    public void setPostTime() {
-        postTime = LocalDate.now();
+    public boolean isPostWriter(User user) {
+        return user.isUserMatching(writer);
+    }
+
+    public void update(Question newQuestion) {
+        this.title = newQuestion.title;
+        this.contents = newQuestion.title;
+        this.updatedPostTime = LocalDateTime.now();
     }
 
     @Override
     public String toString() {
         return "Question{" +
                 "id=" + id +
-                ", writer='" + writer + '\'' +
                 ", title='" + title + '\'' +
                 ", contents='" + contents + '\'' +
                 ", postTime=" + postTime +
