@@ -26,11 +26,11 @@ public class CustomExceptionHandler {
     }
     @ExceptionHandler(IllegalArgumentException.class)
     public String IllegalArgumentException(){
-        return "error/404";
+        return "error/500";
     }
     @ExceptionHandler(UnauthorizedException.class)
     public String UnauthorizedException(Model model){
-        model.addAttribute("errorMessage","타인의 정보는 열람할 수 없습니다!");
+        model.addAttribute("errorMessage","권한이 없습니다.");
         return "error/404";
     }
 }

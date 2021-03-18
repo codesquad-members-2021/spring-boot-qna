@@ -1,6 +1,7 @@
 package com.codessquad.qna;
 
 import com.codessquad.qna.domain.User;
+import com.codessquad.qna.exception.type.UnauthorizedException;
 
 import javax.servlet.http.HttpSession;
 
@@ -14,13 +15,13 @@ public class HttpSessionUtil {
     private static final String SESSION_KEY = "sessionedUser";
 
     public static User getLoginUserOf(HttpSession session){
-        if(checkValidOf(session)){
-            throw new IllegalArgumentException();
-        }
+        checkValidOf(session);
         return (User)session.getAttribute(SESSION_KEY);
     }
-    public static boolean checkValidOf(HttpSession session){
-        return session.getAttribute(SESSION_KEY) == null;
+    public static void checkValidOf(HttpSession session){
+        if(session.getAttribute(SESSION_KEY) == null){
+            throw new UnauthorizedException();
+        }
     }
 
     public static void setAttribute(HttpSession session, User loginUser){

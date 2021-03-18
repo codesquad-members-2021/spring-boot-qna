@@ -1,5 +1,7 @@
 package com.codessquad.qna.domain;
 
+import com.codessquad.qna.ValidUtils;
+
 import javax.persistence.*;
 
 @Entity //m 데이타베이스의 테이블과 일대일로 매칭되는 객체 단위
@@ -44,10 +46,12 @@ public class User {
     }
 
     public void setPrimaryKey(Long primaryKey) {
+        ValidUtils.checkIllegalArgumentOf(primaryKey);
         this.primaryKey = primaryKey;
     }
 
     public void setUserId(String userId) {
+        ValidUtils.checkIllegalArgumentOf(userId);
         this.userId = userId;
     }
 

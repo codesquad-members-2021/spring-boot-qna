@@ -1,10 +1,13 @@
 package com.codessquad.qna.domain;
 
+import com.codessquad.qna.ValidUtils;
+
 import javax.persistence.*;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.Optional;
 
 @Entity
 public class Question {
@@ -51,21 +54,26 @@ public class Question {
     }
 
     public void setWriter(User writer) {
+        writer = Optional.ofNullable(writer).orElseThrow(IllegalArgumentException::new);
         this.writer = writer;
     }
 
     public void setTitle(String title) {
+        ValidUtils.checkIllegalArgumentOf(title);
         this.title = title;
     }
 
     public void setContents(String contents) {
+        ValidUtils.checkIllegalArgumentOf(contents);
         this.contents = contents;
     }
     public void setId(Long id) {
+        ValidUtils.checkIllegalArgumentOf(id);
         this.id = id;
     }
 
     public void setAnswers(List<Answer> answers) { // 순환참조 문제점?? 우디 PR 내용중에 있었는데 나중에 확인.
+        answers = Optional.ofNullable(answers).orElseThrow(IllegalArgumentException::new);
         this.answers = answers;
     }
 }
