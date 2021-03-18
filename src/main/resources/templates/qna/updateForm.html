@@ -4,6 +4,7 @@
         <div class="panel panel-default content-main">
             <form name="question" method="post" action="/questions">
                 <input type="hidden" name="_method" value="PUT">
+                <input type="hidden" name="questionId" value="{{question.id}}">
                 <div class="form-group">
                     <label for="title">글쓴이</label>
                     <input type="text" class="form-control" id="writer" name="writer" placeholder="글쓴이"

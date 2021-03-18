@@ -10,10 +10,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
 
@@ -42,6 +39,13 @@ public class QuestionController {
         return "redirect:/";
     }
 
+    @PutMapping
+    public String update(long questionId, String contents, String title, HttpSession session) {
+        User user = HttpSessionUtil.getUser(session).orElseThrow(UserNotFoundInSessionException::new);
+        questionService.updateQuestion(questionId, title, contents, user);
+        return "redirect:/questions/" + questionId;
+    }
+
     @GetMapping("/form")
     public String form(HttpSession session) {
         if (!HttpSessionUtil.hasUser(session)) {
@@ -61,11 +65,10 @@ public class QuestionController {
     public String updateForm(@PathVariable int id, Model model, HttpSession session) {
         User user = HttpSessionUtil.getUser(session).orElseThrow(UserNotFoundInSessionException::new);
         Question question = questionService.getQuestion(id);
-        User writer = question.getWriter();
-        if (writer.verify(user)) {
-            model.addAttribute("question", question);
-            return "/qna/updateForm";
+        if (!question.getWriter().verify(user)) {
+            throw new IllegalStateException("자신의 글만 수정할 수 있습니다.");
         }
-        throw new IllegalStateException("자신의 글만 수정할 수 있습니다.");
+        model.addAttribute("question", question);
+        return "/qna/updateForm";
     }
 }

@@ -1,6 +1,7 @@
 package com.codessquad.qna.service;
 
 import com.codessquad.qna.entity.Question;
+import com.codessquad.qna.entity.User;
 import com.codessquad.qna.exception.QuestionNotFoundException;
 import com.codessquad.qna.repository.QuestionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,11 +22,21 @@ public class QuestionService {
         questionRepository.save(question);
     }
 
+    public void updateQuestion(long questionId, String title, String contents, User tryUser) {
+        Question question = getQuestion(questionId);
+        if (!question.getWriter().verify(tryUser)) {
+            throw new IllegalStateException("자신의 글만 수정할 수 있습니다.");
+        }
+        question.update(title, contents);
+        questionRepository.save(question);
+        return;
+    }
+
     public List<Question> getQuestions() {
         return questionRepository.findAll();
     }
 
-    public Question getQuestion(long index) {
-        return questionRepository.findById(index).orElseThrow(QuestionNotFoundException::new);
+    public Question getQuestion(long id) {
+        return questionRepository.findById(id).orElseThrow(QuestionNotFoundException::new);
     }
 }

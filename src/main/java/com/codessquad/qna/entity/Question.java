@@ -42,16 +42,8 @@ public class Question {
         return title;
     }
 
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
     public String getContents() {
         return contents;
-    }
-
-    public void setContents(String contents) {
-        this.contents = contents;
     }
 
     public LocalDateTime getWriteDateTime() {
@@ -60,5 +52,10 @@ public class Question {
 
     public String getFormattedWriteDateTime() {
         return writeDateTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"));
+    }
+
+    public void update(String title, String contents) {
+        this.title = title;
+        this.contents = contents;
     }
 }
