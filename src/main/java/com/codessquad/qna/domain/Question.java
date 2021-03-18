@@ -65,7 +65,7 @@ public class Question {
         this.id = id;
     }
 
-    public void setAnswers(List<Answer> answers) {
+    public void setAnswers(List<Answer> answers) { // 순환참조 문제점?? 우디 PR 내용중에 있었는데 나중에 확인.
         this.answers = answers;
     }
 }

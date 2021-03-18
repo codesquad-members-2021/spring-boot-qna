@@ -16,6 +16,8 @@ import javax.servlet.http.HttpSession;
 public class UserController {
 
     private final UserService userService;
+    public final static boolean UPDATE_FALSE = false;
+    public final static boolean UPDATE_TRUE = true;
 
     public UserController(UserService userService) {
         this.userService = userService;
@@ -23,7 +25,7 @@ public class UserController {
 
     @PostMapping("/user/create")
     private String register(User user) {
-        userService.register(user);
+        userService.save(user, UPDATE_FALSE);
         return "redirect:/users";
     }
 
@@ -36,43 +38,35 @@ public class UserController {
     @GetMapping("/users/{primaryKey}")
     private String displayProfile(@PathVariable("primaryKey") Long targetKey, Model model) {
         model.addAttribute("users", userService.getById(targetKey));
-
         return "user/profile";
     }
 
     @GetMapping("users/{primaryKey}/form") //m 개인정보 수정
     private String changeMemberInfo(@PathVariable("primaryKey") Long targetKey, Model model, HttpSession session) {
-
-        if (userService.equalsId(userService.getById(targetKey), HttpSessionUtil.getLoginUserOf(session))) {
-            model.addAttribute("users", HttpSessionUtil.getLoginUserOf(session));
-            return "user/updateForm";
-        }
-
-        model.addAttribute("errorMessage","타인의 정보는 열람할 수 없습니다!");
-        return "error/404"; //m 세션아이디와 다를 경우 이동
+        userService.authenticateOfId(userService.getById(targetKey), HttpSessionUtil.getLoginUserOf(session));
+        model.addAttribute("users", HttpSessionUtil.getLoginUserOf(session));
+        return "user/updateForm";
     }
 
     @PutMapping("/users/{primaryKey}/update")
     private String updateMemberList(@PathVariable Long primaryKey, User updateUserData, Model model) {
-
         updateUserData.setPrimaryKey(primaryKey); //m 테이블이 생성될 때, PK가 생기므로. 임의 지정
-        userService.register(userService.update(userService.getById(primaryKey),updateUserData));
-        model.addAttribute("users", userService.getList());
+        User originUserData = userService.getById(primaryKey);
 
+        userService.save(userService.update(originUserData, updateUserData), UPDATE_TRUE);
+        model.addAttribute("users", userService.getList());
         return "redirect:/users";
     }
 
     @PostMapping("/user/login")
-    public String login(String userId, String password, HttpSession session){
-        if(!userService.checkValidOfLogin(userId,password)){
-            return "user/login_failed";
-        }
+    public String login(String userId, String password, HttpSession session) {
+        userService.checkValidOfLogin(userId, password); //m null 일 경우 내부에서 예외처리됨.
         HttpSessionUtil.setAttribute(session, userService.getById(userId));
         return "redirect:/";
     }
 
-    @GetMapping("/logout")
-    private String logout(HttpSession session){
+    @GetMapping("/logout") // 로그아웃은 주로 포스트맵핑을 사용한다고 하는데, 아직 잘 모르겠어서 변경하지 않음.
+    private String logout(HttpSession session) {
         HttpSessionUtil.removeAttribute(session);
         return "redirect:/";
     }
