@@ -30,8 +30,8 @@ public class QuestionController {
 
     @PostMapping("/create")
     public String create(String title, String contents, HttpSession session) {
-        User user = getUserFromSession(session);
-        Question question = new Question(user, title, contents);
+        User loggedinUser = getUserFromSession(session);
+        Question question = new Question(loggedinUser, title, contents);
         questionRepository.save(question);
         return "redirect:/questions";
     }
@@ -44,9 +44,9 @@ public class QuestionController {
 
     @GetMapping("/{id}/form")
     public String update(@PathVariable Long id, Model model, HttpSession session) {
-        User sessionedUser = getUserFromSession(session);
+        User loggedinUser = getUserFromSession(session);
         Question question = getQuestionById(id);
-        if (!question.isPostWriter(sessionedUser)) {
+        if (!question.isPostWriter(loggedinUser)) {
             throw new IllegalStateException("자신의 질문만 수정할 수 있습니다.");
         }
         model.addAttribute("question", question);
@@ -55,9 +55,9 @@ public class QuestionController {
 
     @PutMapping("/{id}")
     public String updateForm(@PathVariable Long id, String title, String contents, HttpSession session) {
-        User sessionedUser = getUserFromSession(session);
+        User loggedinUser = getUserFromSession(session);
         Question question = getQuestionById(id);
-        if (!question.isPostWriter(sessionedUser)) {
+        if (!question.isPostWriter(loggedinUser)) {
             throw new IllegalStateException("자신의 질문만 수정할 수 있습니다.");
         }
         question.update(title, contents);
@@ -67,9 +67,9 @@ public class QuestionController {
 
     @DeleteMapping("/{id}/delete")
     public String delete(@PathVariable Long id, HttpSession session) {
-        User sessionedUser = getUserFromSession(session);
+        User loggedinUser = getUserFromSession(session);
         Question question = getQuestionById(id);
-        if (!question.isPostWriter(sessionedUser)) {
+        if (!question.isPostWriter(loggedinUser)) {
             throw new IllegalStateException("자신의 질문만 수정할 수 있습니다.");
         }
         questionRepository.delete(question);

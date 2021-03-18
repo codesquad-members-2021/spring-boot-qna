@@ -51,31 +51,31 @@ public class UserController {
 
     @GetMapping("/{id}")
     public String show(@PathVariable Long id, Model model, HttpSession session) {
-        User sessionedUser = getUserFromSession(session);
-        if (!sessionedUser.isIdMatching(id)) {
+        User loggedinUser = getUserFromSession(session);
+        if (!loggedinUser.isIdMatching(id)) {
             throw new IllegalStateException("자신의 정보만 확인할 수 있습니다.");
         }
-        model.addAttribute("user", sessionedUser);
+        model.addAttribute("user", loggedinUser);
         return "/user/profile";
     }
 
     @GetMapping("/{id}/form")
     public String update(@PathVariable Long id, Model model, HttpSession session) {
-        User sessionedUser = getUserFromSession(session);
-        if (!sessionedUser.isIdMatching(id)) {
+        User loggedinUser = getUserFromSession(session);
+        if (!loggedinUser.isIdMatching(id)) {
             throw new IllegalStateException("자신의 정보만 수정할 수 있습니다.");
         }
-        model.addAttribute("user", sessionedUser);
+        model.addAttribute("user", loggedinUser);
         return "/user/updateForm";
     }
 
     @PutMapping("/{id}")
     public String updateForm(@PathVariable Long id, String inputPassword, User updatedUser, HttpSession session) {
-        User sessionedUser = getUserFromSession(session);
-        if (!sessionedUser.isIdMatching(id)) {
+        User loggedinUser = getUserFromSession(session);
+        if (!loggedinUser.isIdMatching(id)) {
             throw new IllegalStateException("자신의 정보만 수정할 수 있습니다.");
         }
-        User user = sessionedUser;
+        User user = loggedinUser;
         if (!user.isPasswordMatching(inputPassword)) {
             return "redirect:/users/{id}/form";
         }
