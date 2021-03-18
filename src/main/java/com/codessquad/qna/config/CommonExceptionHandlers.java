@@ -2,6 +2,7 @@ package com.codessquad.qna.config;
 
 import com.codessquad.qna.exception.InsufficientAuthenticationException;
 import com.codessquad.qna.exception.LoginFailedException;
+import com.codessquad.qna.exception.ResourceNotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -15,9 +16,9 @@ public class CommonExceptionHandlers {
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     @ResponseStatus(HttpStatus.NOT_FOUND)
-    @ExceptionHandler(IllegalArgumentException.class)
-    public String illegalArgumentExceptionHandler(IllegalArgumentException e) {
-        logger.error("IllegalArgumentException", e);
+    @ExceptionHandler(ResourceNotFoundException.class)
+    public String resourceNotFoundExceptionHandler(ResourceNotFoundException e) {
+        logger.error("ResourceNotFoundException", e);
 
         return "/error/404";
     }

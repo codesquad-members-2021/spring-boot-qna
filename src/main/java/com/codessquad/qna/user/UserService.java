@@ -1,6 +1,7 @@
 package com.codessquad.qna.user;
 
 import com.codessquad.qna.exception.LoginFailedException;
+import com.codessquad.qna.exception.ResourceNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -23,7 +24,7 @@ public class UserService {
 
     public UserDTO readUser(Long id) {
         return userRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 사용자 입니다. id : " + id))
+                .orElseThrow(() -> new ResourceNotFoundException("존재하지 않는 사용자 입니다. id : " + id))
                 .toDTO();
     }
 

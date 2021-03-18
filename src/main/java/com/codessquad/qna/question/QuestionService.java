@@ -1,5 +1,6 @@
 package com.codessquad.qna.question;
 
+import com.codessquad.qna.exception.ResourceNotFoundException;
 import com.codessquad.qna.user.UserDTO;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -59,7 +60,7 @@ public class QuestionService {
 
     private Answer readAnswer(Long id) {
         return answerRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 답변입니다."));
+                .orElseThrow(() -> new ResourceNotFoundException("존재하지 않는 답변입니다. id : " + id));
     }
 
     public void createAnswer(Answer answer) {
