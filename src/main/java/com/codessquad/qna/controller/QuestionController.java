@@ -43,9 +43,9 @@ public class QuestionController {
         return "questionInputForm";
     }
 
-    @GetMapping("/{index}")
-    public String showQuestion(@PathVariable("index") int index, Model model) {
-        Question question = questions.get(index - 1);
+    @GetMapping("/{id}")
+    public String showQuestion(@PathVariable("id") int id, Model model) {
+        Question question = questions.get(id - 1);
         model.addAttribute("question", question);
         return "questionDetail";
     }
