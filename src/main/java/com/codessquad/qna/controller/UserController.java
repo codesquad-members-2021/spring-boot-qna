@@ -1,5 +1,6 @@
 package com.codessquad.qna.controller;
 
+import com.codessquad.qna.HttpSessionUtils;
 import com.codessquad.qna.domain.User;
 import com.codessquad.qna.service.UserService;
 import org.slf4j.Logger;
@@ -42,7 +43,7 @@ public class UserController {
 
     @GetMapping("/logout")
     public String logout(HttpSession session) {
-        session.removeAttribute("userSession");
+        session.removeAttribute(HttpSessionUtils.USER_SESSION_KEY);
         return "redirect:/";
     }
 
@@ -60,7 +61,7 @@ public class UserController {
 
     @GetMapping("{id}/form")
     public String viewUpdateUserForm(@PathVariable Long id, Model model, HttpSession session) {
-        Object tempUser = session.getAttribute("userSession");
+        Object tempUser = session.getAttribute(HttpSessionUtils.USER_SESSION_KEY);
         if (tempUser == null)
             return "redirect:/users/loginForm";
         User sessionUser = (User)tempUser;
