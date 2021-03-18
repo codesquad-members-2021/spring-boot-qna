@@ -16,7 +16,10 @@ public class Question {
     private User writer;
 
     private String title;
+
+    @Lob
     private String contents;
+
     private LocalDateTime postTime;
     private LocalDateTime updatedPostTime;
 
