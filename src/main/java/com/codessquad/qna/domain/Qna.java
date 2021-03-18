@@ -51,12 +51,21 @@ public class Qna {
         return createdDateTime;
     }
 
-    public void setCreatedDateTime(LocalDateTime createdDateTime){
+    public void setCreatedDateTime(LocalDateTime createdDateTime) {
         this.createdDateTime = createdDateTime;
     }
 
     public String getFormattedDateTime() {
         return createdDateTime.format(DateTimeFormatter.ISO_LOCAL_DATE_TIME);
+    }
+
+    public boolean checkWriter(String userId) {
+        return this.writer.equals(userId);
+    }
+
+    public void update(Qna updateQna) {
+        this.title = updateQna.title;
+        this.contents = updateQna.contents;
     }
 
     @Override

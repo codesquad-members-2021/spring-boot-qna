@@ -67,9 +67,13 @@ public class UserController {
         }
 
         User sessionUser = HttpSessionUtils.getUserFromSession(session);
-        User user = userRepository.findById(sessionUser.getId()).orElseThrow(NoUserException::new);
 
-        model.addAttribute("user", user);
+
+        if (sessionUser.checkId(id)) {
+            throw new IllegalStateException("자신의 정보만 수정할 수 있습니다.");
+        }
+
+        model.addAttribute("user", sessionUser);
 
         return "user/updateForm";
     }
@@ -80,10 +84,8 @@ public class UserController {
         if (!user.checkPassword(updateUser.getPassword())) {
             logger.info("Error: 올바르지 않은 패스워드입니다.정보가 유지됩니다.");
         }
-        if (user.checkPassword(updateUser.getPassword())) {
-            user.update(updateUser, newPassword);
+        user.update(updateUser, newPassword);
 
-        }
         userRepository.save(user);
         return "redirect:/users";
     }

@@ -61,6 +61,10 @@ public class User {
         return this.password.equals(password);
     }
 
+    public boolean checkId(long id) {
+        return this.id == id;
+    }
+
     public void update(User updateUser, String newPassword) {
         setUserId(updateUser.userId);
         setEmail(updateUser.email);
