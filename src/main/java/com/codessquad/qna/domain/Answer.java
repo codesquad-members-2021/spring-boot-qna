@@ -23,12 +23,16 @@ public class Answer {
     private User writer;
 
     private String comment;
-    private LocalDateTime time;
+    private LocalDateTime createdDateTime;
+    private boolean deleted;
 
-    protected Answer() {}
+    protected Answer() {
+    }
 
     public Answer(String comment) {
         this.comment = comment;
+        this.createdDateTime = LocalDateTime.now();
+        this.deleted = false;
     }
 
     public Long getId() {
@@ -39,36 +43,43 @@ public class Answer {
         return question;
     }
 
-    public User getWriter() {
-        return writer;
-    }
-
-    public String getComment() {
-        return comment;
-    }
-
-    public LocalDateTime getTime() {
-        return time;
-    }
-
     public void setQuestion(Question question) {
         this.question = question;
+    }
+
+    public User getWriter() {
+        return writer;
     }
 
     public void setWriter(User writer) {
         this.writer = writer;
     }
 
-    public void setTime(LocalDateTime time) {
-        this.time = time;
+    public String getComment() {
+        return comment;
     }
 
-    public void updateAnswer (Answer updatedAnswer) {
-        this.comment = updatedAnswer.comment;
-        this.time = LocalDateTime.now();
+    public boolean isDeleted() {
+        return deleted;
+    }
+
+    public LocalDateTime getCreatedDateTime() {
+        return createdDateTime;
+    }
+
+    public void setCreatedDateTime(LocalDateTime createdDateTime) {
+        this.createdDateTime = createdDateTime;
+    }
+
+    public void updateAnswer(Answer updatingAnswer) {
+        this.comment = updatingAnswer.comment;
     }
 
     public boolean matchesWriter(User user) {
         return writer.equals(user);
+    }
+
+    public void delete() {
+        deleted = true;
     }
 }

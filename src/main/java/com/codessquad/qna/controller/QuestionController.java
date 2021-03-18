@@ -1,93 +1,67 @@
 package com.codessquad.qna.controller;
 
-import com.codessquad.qna.domain.*;
-import com.codessquad.qna.exception.NotFoundException;
+import com.codessquad.qna.domain.Question;
 import com.codessquad.qna.exception.NotLoggedInException;
-import com.codessquad.qna.exception.UnauthorizedAccessException;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.codessquad.qna.service.QuestionService;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpSession;
-import java.time.LocalDateTime;
 
 @Controller
 @RequestMapping("/questions")
 public class QuestionController {
 
-    private final QuestionRepository questionRepository;
-    private final AnswerRepository answerRepository;
+    private final QuestionService questionService;
 
-    @Autowired
-    public QuestionController(QuestionRepository questionRepository, AnswerRepository answerRepository) {
-        this.questionRepository = questionRepository;
-        this.answerRepository = answerRepository;
+    public QuestionController(QuestionService questionService) {
+        this.questionService = questionService;
+    }
+
+    @GetMapping
+    public String list(Model model) {
+        model.addAttribute("questions", questionService.questions());
+        return "qna/list";
     }
 
     @GetMapping("/form")
-    public String questionForm(HttpSession session) {
+    public String form(HttpSession session) {
         if (!HttpSessionUtils.isLoggedIn(session)) {
             throw new NotLoggedInException();
         }
         return "qna/form";
     }
 
-    @PostMapping()
-    public String query(Question question, HttpSession session) {
-        User sessionUser = HttpSessionUtils.getUserFromSession(session);
-        question.setWriter(sessionUser);
-        question.setTime(LocalDateTime.now());
-        question.setPoint(0);
-        questionRepository.save(question);
-        return "redirect:/";
+    @PostMapping
+    public String create(Question question, HttpSession session) {
+        questionService.register(question, HttpSessionUtils.loginUser(session));
+        return "redirect:/questions";
     }
 
     @GetMapping("/{questionId}")
-    public ModelAndView qnaShow(@PathVariable("questionId") Long id) {
-        Question question = questionRepository.findById(id).orElseThrow(NotFoundException::new);
-        ModelAndView modelAndView = new ModelAndView("qna/show");
-        modelAndView.addObject("question", question);
-        modelAndView.addObject("comments", answerRepository.findAllByQuestion(question));
-        return modelAndView;
+    public String show(@PathVariable("questionId") Long id, Model model) {
+        model.addAttribute("question", questionService.question(id));
+        return "qna/show";
     }
 
     @GetMapping("/{questionId}/form")
-    public ModelAndView updateForm(@PathVariable("questionId") Long id, HttpSession session) {
-        return new ModelAndView("/qna/update_form",
-                "question", getQuestionWithCheckSession(id, session));
+    public String updateForm(@PathVariable("questionId") Long id, HttpSession session, Model model) {
+        model.addAttribute("question",
+                questionService.questionWithAuthentication(id, HttpSessionUtils.loginUser(session)));
+        return "/qna/updateForm";
     }
 
     @PutMapping("/{questionId}")
-    public String update(@PathVariable("questionId") Long id, Question updatedQuestion, HttpSession session) {
-        Question question = getQuestionWithCheckSession(id, session);
-        question.updateContents(updatedQuestion);
-        questionRepository.save(question);
+    public String update(@PathVariable("questionId") Long id, Question updatingQuestion, HttpSession session) {
+        questionService.update(id, HttpSessionUtils.loginUser(session), updatingQuestion);
         return "redirect:/questions/" + id;
     }
 
     @DeleteMapping("/{id}")
     public String delete(@PathVariable("id") Long id, HttpSession session) {
-        User sessionUser = HttpSessionUtils.getUserFromSession(session);
-        questionRepository.findById(id)
-                .ifPresent(question -> {
-                    matchesQuestionWriterWithUser(question, sessionUser);
-                    questionRepository.deleteById(id);
-                });
-        return "redirect:/";
-    }
-
-    private Question getQuestionWithCheckSession(Long id, HttpSession session) {
-        User sessionUser = HttpSessionUtils.getUserFromSession(session);
-        Question question = questionRepository.findById(id).orElseThrow(NotFoundException::new);
-        matchesQuestionWriterWithUser(question, sessionUser);
-        return question;
-    }
-
-    private void matchesQuestionWriterWithUser(Question question, User sessionUser) {
-        if (!question.isWriter(sessionUser)) {
-            throw new UnauthorizedAccessException("다른 사람의 질문을 수정하거나 삭제할 수 없습니다.");
-        }
+        questionService.delete(id, HttpSessionUtils.loginUser(session));
+        return "redirect:/questions";
     }
 
 }

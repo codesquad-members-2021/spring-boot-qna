@@ -1,12 +1,10 @@
 package com.codessquad.qna.controller;
 
 import com.codessquad.qna.domain.User;
-import com.codessquad.qna.domain.UserRepository;
-import com.codessquad.qna.exception.*;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.codessquad.qna.service.UserService;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpSession;
 
@@ -14,51 +12,41 @@ import javax.servlet.http.HttpSession;
 @RequestMapping("/users")
 public class UserController {
 
-    private final UserRepository userRepository;
+    private final UserService userService;
 
-    @Autowired
-    public UserController(UserRepository userRepository) {
-        this.userRepository = userRepository;
+    public UserController(UserService userService) {
+        this.userService = userService;
     }
 
-    @GetMapping()
-    public ModelAndView userList() {
-        ModelAndView modelAndView = new ModelAndView("users/list");
-        modelAndView.addObject("users", userRepository.findAll());
-        return modelAndView;
+    @GetMapping
+    public String list(Model model) {
+        model.addAttribute("users", userService.users());
+        return "users/list";
     }
 
-    @PostMapping()
-    public String registerUser(User user) {
-        userRepository.findByUserId(user.getUserId())
-                .ifPresent(u -> {
-                    throw new UserExistException();
-                });
-        userRepository.save(user);
+    @PostMapping
+    public String register(User user) {
+        userService.register(user);
         return "redirect:/users";
     }
 
     @GetMapping("/{id}")
-    public ModelAndView userProfile(@PathVariable("id") Long id) {
-        return new ModelAndView("users/profile",
-                "user", userRepository.findById(id).orElseThrow(NotFoundException::new));
+    public String profile(@PathVariable("id") Long id, Model model) {
+        model.addAttribute("user", userService.user(id));
+        return "users/profile";
     }
 
     @GetMapping("/{id}/form")
-    public ModelAndView updateUserForm(@PathVariable("id") Long id, HttpSession session) {
-        checkSessionWithId(session, id);
-        return new ModelAndView("users/update_form",
-                "user", userRepository.findById(id).orElseThrow(NotFoundException::new));
+    public String updateForm(@PathVariable("id") Long id, HttpSession session, Model model) {
+        userService.checkAccessId(HttpSessionUtils.loginUser(session), id);
+        model.addAttribute(userService.user(id));
+        return "users/updateForm";
     }
 
     @PutMapping("/{id}")
-    public String updateUser(@PathVariable("id") Long id, String oldPassword, User newUserInfo, HttpSession session) {
-        checkSessionWithId(session, id);
-        User user = userRepository.findById(id)
-                .filter(u -> u.isMatchingPassword(oldPassword))
-                .orElseThrow(() -> new UnauthorizedAccessException("권한이 존재하지 않습니다."));
-        user.update(newUserInfo);
-        userRepository.save(user);
+    public String update(@PathVariable("id") Long id, String oldPassword, User newUserInfo, HttpSession session) {
+        userService.checkAccessId(HttpSessionUtils.loginUser(session), id);
+        userService.update(id, oldPassword, newUserInfo);
         return "redirect:/users";
     }
 
@@ -69,10 +57,7 @@ public class UserController {
 
     @PostMapping("/login")
     public String login(String userId, String password, HttpSession session) {
-        User user = userRepository.findByUserId(userId)
-                .filter(u -> u.isMatchingPassword(password))
-                .orElseThrow(LoginFailedException::new);
-        HttpSessionUtils.setUserSession(session, user);
+        HttpSessionUtils.setUserSession(session, userService.authenticate(userId, password));
         return "redirect:/";
     }
 
@@ -82,10 +67,4 @@ public class UserController {
         return "redirect:/";
     }
 
-    private void checkSessionWithId(HttpSession session, Long accessId) {
-        User sessionUser = HttpSessionUtils.getUserFromSession(session);
-        if (!sessionUser.isMatchingId(accessId)) {
-            throw new UnauthorizedAccessException("다른 사람의 정보를 수정할 수 없습니다.");
-        }
-    }
 }

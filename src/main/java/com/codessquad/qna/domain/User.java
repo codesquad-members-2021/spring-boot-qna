@@ -17,7 +17,8 @@ public class User {
     private String name;
     private String email;
 
-    protected User() {}
+    protected User() {
+    }
 
     public User(String userId, String password, String name, String email) {
         this.userId = userId;
@@ -42,11 +43,11 @@ public class User {
         return email;
     }
 
-    public boolean isMatchingPassword(String oldPassword) {
+    public boolean matchesPassword(String oldPassword) {
         return this.password.equals(oldPassword);
     }
 
-    public boolean isMatchingId(Long id) {
+    public boolean matchesId(Long id) {
         return this.id.equals(id);
     }
 

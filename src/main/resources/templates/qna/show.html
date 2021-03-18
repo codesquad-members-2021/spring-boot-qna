@@ -1,9 +1,10 @@
 {{#partial "content"}}
 <div class="container" id="main">
     <div class="col-md-12 col-sm-12 col-lg-12">
+        {{#question}}
         <div class="panel panel-default">
           <header class="qna-header">
-              <h2 class="qna-title">{{question.title}}</h2>
+              <h2 class="qna-title">{{title}}</h2>
           </header>
           <div class="content-main">
               <article class="article">
@@ -12,15 +13,15 @@
                           <img src="https://graph.facebook.com/v2.3/100000059371774/picture" class="article-author-thumb" alt="">
                       </div>
                       <div class="article-header-text">
-                          <a href="/users/{{question.writer.id}}" class="article-author-name">{{question.writer.name}}</a>
+                          <a href="/users/{{question.writer.id}}" class="article-author-name">{{writer.name}}</a>
                           <a href="/questions/{{question.id}}" class="article-header-time" title="퍼머링크">
-                              {{formatDateTime question.time}}
+                              {{formatDateTime createdDateTime}}
                               <i class="icon-link"></i>
                           </a>
                       </div>
                   </div>
                   <div class="article-doc">
-                      <p>{{question.contents}}</p>
+                      <p>{{contents}}</p>
                   </div>
                   <div class="article-util">
                       <ul class="article-util-list">
@@ -42,10 +43,9 @@
 
               <div class="qna-comment">
                   <div class="qna-comment-slipp">
-                      <p class="qna-comment-count"><strong>{{comments.length}}</strong>개의 의견</p>
+                      <p class="qna-comment-count"><strong>{{answers.length}}</strong>개의 의견</p>
                       <div class="qna-comment-slipp-articles">
-
-                          {{#comments}}
+                          {{#answers}}
                           <article class="article" id="answer-{{id}}">
                               <div class="article-header">
                                   <div class="article-header-thumb">
@@ -54,7 +54,7 @@
                                   <div class="article-header-text">
                                       <a href="/users/{{writer.id}}" class="article-author-name">{{writer.name}}</a>
                                       <a href="#answer-{{id}}" class="article-header-time" title="퍼머링크">
-                                          {{formatDateTime time}}
+                                          {{formatDateTime createdDateTime}}
                                       </a>
                                   </div>
                               </div>
@@ -75,7 +75,7 @@
                                   </ul>
                               </div>
                           </article>
-                          {{/comments}}
+                          {{/answers}}
                           <form class="submit-write" action="/questions/{{question.id}}/answers" method="POST">
                               <div class="form-group" style="padding:14px;">
                                   <textarea class="form-control" name="comment" placeholder="Update your status"></textarea>
@@ -88,6 +88,7 @@
               </div>
           </div>
         </div>
+        {{/question}}
     </div>
 </div>
 

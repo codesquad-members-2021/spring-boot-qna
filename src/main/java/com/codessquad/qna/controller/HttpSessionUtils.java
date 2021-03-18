@@ -6,13 +6,17 @@ import com.codessquad.qna.exception.NotLoggedInException;
 import javax.servlet.http.HttpSession;
 
 public class HttpSessionUtils {
-    private static final String USER_SESSION_KEY="sessionUser";
+
+    private static final String USER_SESSION_KEY = "sessionUser";
+
+    private HttpSessionUtils() {
+    }
 
     public static boolean isLoggedIn(HttpSession session) {
         return session.getAttribute(USER_SESSION_KEY) != null;
     }
 
-    public static User getUserFromSession(HttpSession session) throws NotLoggedInException{
+    public static User loginUser(HttpSession session) throws NotLoggedInException {
         User user = (User) session.getAttribute(USER_SESSION_KEY);
         if (user == null) {
             throw new NotLoggedInException();
