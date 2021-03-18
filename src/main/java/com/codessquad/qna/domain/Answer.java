@@ -23,7 +23,7 @@ public class Answer {
     private User writer;
 
     private String comment;
-    private LocalDateTime time;
+    private LocalDateTime createdDateTime;
     private boolean deleted;
 
     protected Answer() {
@@ -31,7 +31,7 @@ public class Answer {
 
     public Answer(String comment) {
         this.comment = comment;
-        this.time = LocalDateTime.now();
+        this.createdDateTime = LocalDateTime.now();
         this.deleted = false;
     }
 
@@ -63,17 +63,16 @@ public class Answer {
         return deleted;
     }
 
-    public LocalDateTime getTime() {
-        return time;
+    public LocalDateTime getCreatedDateTime() {
+        return createdDateTime;
     }
 
-    public void setTime(LocalDateTime time) {
-        this.time = time;
+    public void setCreatedDateTime(LocalDateTime createdDateTime) {
+        this.createdDateTime = createdDateTime;
     }
 
     public void updateAnswer(Answer updatingAnswer) {
         this.comment = updatingAnswer.comment;
-        this.time = LocalDateTime.now();
     }
 
     public boolean matchesWriter(User user) {

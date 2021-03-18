@@ -19,7 +19,7 @@ public class Question {
 
     private String title;
     private String contents;
-    private LocalDateTime time;
+    private LocalDateTime createdDateTime;
     private int point;
     private boolean deleted;
 
@@ -33,7 +33,7 @@ public class Question {
     public Question(String title, String contents) {
         this.title = title;
         this.contents = contents;
-        this.time = LocalDateTime.now();
+        this.createdDateTime = LocalDateTime.now();
         this.point = 0;
         this.deleted = false;
     }
@@ -58,12 +58,12 @@ public class Question {
         return contents;
     }
 
-    public LocalDateTime getTime() {
-        return time;
+    public LocalDateTime getCreatedDateTime() {
+        return createdDateTime;
     }
 
-    public void setTime(LocalDateTime time) {
-        this.time = time;
+    public void setCreatedDateTime(LocalDateTime createdDateTime) {
+        this.createdDateTime = createdDateTime;
     }
 
     public int getPoint() {
@@ -85,7 +85,6 @@ public class Question {
     public void updateContents(Question updatingQuestion) {
         this.title = updatingQuestion.title;
         this.contents = updatingQuestion.contents;
-        this.time = LocalDateTime.now();
     }
 
     public void delete() {
