@@ -1,6 +1,5 @@
 package com.codessquad.qna.controller;
 
-import com.codessquad.qna.domain.Result;
 import com.codessquad.qna.domain.answer.Answer;
 import com.codessquad.qna.domain.user.User;
 import com.codessquad.qna.service.AnswerService;
@@ -15,7 +14,7 @@ public class ApiAnswerController {
 
     private final AnswerService answerService;
 
-    ApiAnswerController(AnswerService answerService) {
+    public ApiAnswerController(AnswerService answerService) {
         this.answerService = answerService;
     }
 
@@ -31,18 +30,17 @@ public class ApiAnswerController {
     }
 
     @DeleteMapping("/{id}")
-    public Result delete(@PathVariable Long questionId, @PathVariable Long id, HttpSession session) {
+    public void delete(@PathVariable Long questionId, @PathVariable Long id, HttpSession session) {
         if (!HttpSessionUtils.isLoginUser(session)) {
-            return Result.fail("로그인해야 합니다.");
+            throw new IllegalStateException("로그인이 필요합니다.");
         }
 
         Answer answer = answerService.findById(id);
         User loginUser = HttpSessionUtils.getUserFromSession(session);
         if (!answer.isWrittenBy(loginUser)) {
-            return Result.fail("자신의 글만 삭제할 수 있습니다.");
+            throw new IllegalStateException("자신이 작성한 답변만 삭제할 수 있습니다.");
         }
 
         answerService.deleteById(id);
-        return Result.ok();
     }
 }

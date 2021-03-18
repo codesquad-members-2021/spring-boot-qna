@@ -44,17 +44,13 @@ function deleteAnswer(e) {
     $.ajax({
         type: 'delete',
         url: url,
-        dataType: 'json',
+        dataType: 'text',
         error: function (xhr, status) {
             console.log("error");
         },
         success: function (data, status) {
-            console.log(data);
-            if (data.valid) {
-                deleteBtn.closest("article").remove();
-            } else {
-                alert(data.errorMessage);
-            }
+            console.log("success");
+            deleteBtn.closest("article").remove();
         }
     });
 }

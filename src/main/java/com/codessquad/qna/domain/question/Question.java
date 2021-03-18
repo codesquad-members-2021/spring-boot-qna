@@ -11,6 +11,7 @@ import java.util.List;
 
 @Entity
 public class Question extends AbstractEntity {
+
     @ManyToOne
     @JoinColumn(foreignKey = @ForeignKey(name = "fk_question_writer"))
     private User writer;
@@ -81,7 +82,7 @@ public class Question extends AbstractEntity {
     }
 
     public boolean isAnsweredYourself(Answer answer) {
-        return writer == answer.getWriter();
+        return writer.equals(answer.getWriter());
     }
 
     public void update(Question questionWithUpdatedInfo) {
