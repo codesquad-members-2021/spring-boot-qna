@@ -19,7 +19,7 @@ public class Question {
     private User writer;
 
     @OneToMany(mappedBy = "question", cascade = CascadeType.ALL)
-    @OrderBy("id ASC ")
+    @OrderBy("id DESC ")
     private List<Answer> answerList = new ArrayList<>();
 
     @Enumerated(EnumType.STRING)
