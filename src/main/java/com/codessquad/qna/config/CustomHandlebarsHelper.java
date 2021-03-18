@@ -1,18 +1,17 @@
 package com.codessquad.qna.config;
 
+import com.codessquad.qna.common.Const;
 import com.github.jknack.handlebars.Options;
 import pl.allegro.tech.boot.autoconfigure.handlebars.HandlebarsHelper;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 
 @HandlebarsHelper
 public class CustomHandlebarsHelper {
-    public String formatDate(LocalDateTime date, String pattern) {
-        DateTimeFormatter dateTimeFormat = DateTimeFormatter.ofPattern(pattern);
 
-        return date.format(dateTimeFormat);
+    public String formatDateTime(LocalDateTime date) {
+        return date.format(Const.DEFAULT_DATE_TIME_FORMATTER);
     }
 
     public Object equals(Object s1, Object s2, Options options) throws IOException {
