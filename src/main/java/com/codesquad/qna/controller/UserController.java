@@ -106,7 +106,7 @@ public class UserController {
 
         if (!user.isMatchedPassword(updatedUser)) {
             logger.debug("Password : \"{}\" does not match \"{}\"", updatedUser.getPassword(), user.getPassword());
-            return "redirect:/users";
+            throw new IllegalStateException("Password does not match!");
         }
         userService.update(user, updatedUser);
 
