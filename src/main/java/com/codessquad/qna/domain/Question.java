@@ -18,7 +18,7 @@ public class Question {
     private String title;
     private String contents;
     private LocalDateTime postTime = LocalDateTime.now();
-    private LocalDateTime updatedTime;
+    private LocalDateTime updatedPostTime;
 
     public Long getId() {
         return id;
@@ -49,10 +49,10 @@ public class Question {
     }
 
     public String getFormattedPostTime() {
-        if (updatedTime == null) {
+        if (updatedPostTime == null) {
             return postTime.format(DATE_TIME_FORMATTER);
         }
-        return updatedTime.format(DATE_TIME_FORMATTER);
+        return updatedPostTime.format(DATE_TIME_FORMATTER);
     }
 
     public boolean isPostWriter(User user) {
@@ -62,7 +62,7 @@ public class Question {
     public void update(Question newQuestion) {
         this.title = newQuestion.title;
         this.contents = newQuestion.title;
-        this.updatedTime = LocalDateTime.now();
+        this.updatedPostTime = LocalDateTime.now();
     }
 
     @Override
