@@ -42,7 +42,7 @@ public class UserService {
     }
 
     // FIXME: 나중에 LoginRequest 와 LoginResponse dto 를 사용해서 테스트 가능하게 리팩토링해야한다.
-    public User login(String userId, String password) {
+    public UserResponse login(String userId, String password) {
         User user = Optional.ofNullable(userRepository.findByUserId(userId))
                 .orElseThrow(() -> {
                     String exceptionMessage = "잘못된 userId 로 로그인 했습니다.";
@@ -55,7 +55,7 @@ public class UserService {
             throw new LoginFailedException(exceptionMessage);
         }
         logger.debug("Login Success!");
-        return user;
+        return UserResponse.of(user);
     }
 
     public UserResponse updateUser(Long id, UserRequest userRequest) {
