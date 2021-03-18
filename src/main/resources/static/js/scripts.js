@@ -1,5 +1,5 @@
 $(".answer-write button[type=submit]" ).click(addAnswer);
-$('a.link-delete-ATag-article').click(deleteAnswer);
+$(document).on('click', '.link-delete-ATag-article', deleteAnswer);
 
 function addAnswer(e){
     e.preventDefault();
