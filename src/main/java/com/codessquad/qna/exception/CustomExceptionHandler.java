@@ -2,6 +2,7 @@ package com.codessquad.qna.exception;
 
 import com.codessquad.qna.exception.type.DuplicateIdFoundException;
 import com.codessquad.qna.exception.type.IncorrectAccountException;
+import com.codessquad.qna.exception.type.NotFoundException;
 import com.codessquad.qna.exception.type.UnauthorizedException;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -31,6 +32,10 @@ public class CustomExceptionHandler {
     @ExceptionHandler(UnauthorizedException.class)
     public String UnauthorizedException(Model model){
         model.addAttribute("errorMessage","권한이 없습니다.");
+        return "error/404";
+    }
+    @ExceptionHandler(NotFoundException.class)
+    public String NotFoundException(){
         return "error/404";
     }
 }

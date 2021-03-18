@@ -12,7 +12,7 @@ import javax.servlet.http.HttpSession;
 @Controller
 public class QuestionController {
 
-    private QuestionService questionService;
+    private final QuestionService questionService;
 
     public QuestionController(QuestionService questionService) {
         this.questionService = questionService;
@@ -25,7 +25,7 @@ public class QuestionController {
     }
 
     @PostMapping("/questions") // 게시글 작성하고 질문하기 버튼을 누를 경우
-    private String createQuestions(Question question, Model model, HttpSession session) {
+    private String createQuestions(Question question, HttpSession session) {
         HttpSessionUtils.checkValidOf(session);
         question.setWriter(HttpSessionUtils.getLoginUserOf(session)); // 이부분은 나중에 없앨 수 있을 거 같다.
         questionService.save(question);

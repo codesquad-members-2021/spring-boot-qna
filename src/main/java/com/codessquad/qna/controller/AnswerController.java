@@ -1,12 +1,11 @@
 package com.codessquad.qna.controller;
 
-import com.codessquad.qna.utils.HttpSessionUtils;
 import com.codessquad.qna.domain.Answer;
 import com.codessquad.qna.domain.User;
 import com.codessquad.qna.repository.AnswerRepository;
+import com.codessquad.qna.utils.HttpSessionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import javax.servlet.http.HttpSession;
@@ -28,7 +27,7 @@ public class AnswerController {
 
     //@PathVariable("question.id") Long questionId, @PathVariable("id") Long id, Model model
     @PostMapping("/questions/{question.id}/answers")
-    public String createAnswer(Answer answer, HttpSession session, Model model) {
+    public String createAnswer(Answer answer, HttpSession session) {
         HttpSessionUtils.checkValidOf(session);
 
         User findUser = HttpSessionUtils.getLoginUserOf(session);

@@ -1,14 +1,14 @@
 package com.codessquad.qna.service;
 
-import com.codessquad.qna.utils.ValidUtils;
 import com.codessquad.qna.domain.Question;
 import com.codessquad.qna.domain.User;
+import com.codessquad.qna.exception.type.NotFoundException;
 import com.codessquad.qna.exception.type.UnauthorizedException;
 import com.codessquad.qna.repository.QuestionRepository;
+import com.codessquad.qna.utils.ValidUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.NoSuchElementException;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -34,7 +34,7 @@ public class QuestionService {
 
     public Question findById(Long id){
         ValidUtils.checkIllegalArgumentOf(id);
-        return questionRepository.findById(id).orElseThrow(NoSuchElementException::new);
+        return questionRepository.findById(id).orElseThrow(NotFoundException::new);
     }
 
     public void confirmWriter(User loginUser, Question questionData){
