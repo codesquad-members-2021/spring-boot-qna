@@ -3,7 +3,6 @@ package com.codessquad.qna.web.controller;
 import com.codessquad.qna.web.HttpSessionUtils;
 import com.codessquad.qna.web.domain.User;
 import com.codessquad.qna.web.service.UserService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -25,15 +24,15 @@ public class UserController {
     }
 
     @PostMapping("/login")
-    public String login(User user, HttpSession session) {
-        User originUser;
+    public String login(String userId, String password, HttpSession session) {
+        User user;
         try {
-            originUser = userService.login(user);
+            user = userService.login(userId, password);
         } catch (IllegalStateException e) {
             return "user/loginFailed";
         }
 
-        session.setAttribute(HttpSessionUtils.USER_SESSION_KEY, originUser);
+        session.setAttribute(HttpSessionUtils.USER_SESSION_KEY, user);
         return "redirect:/";
     }
 
@@ -72,7 +71,7 @@ public class UserController {
         }
 
         User loginUser = HttpSessionUtils.getSessionedUser(session);
-        if (loginUser.isSameId(id)){
+        if (!loginUser.isSameId(id)){
             throw new IllegalStateException("자신의 정보만 수정할 수 있습니다");
         }
 
@@ -84,7 +83,6 @@ public class UserController {
         return "/user/updateForm";
     }
 
-    //testassword 자체를 넘겨줄 수도 있고, 이 위에서 먼저 확인한다음에 updateUser 할 수도 있겠다 == questionController
     @PutMapping("/{id}")
     public String updateUser(@PathVariable long id, String testPassword, User user, HttpSession session) {
         if (!HttpSessionUtils.isLoginUser(session)) {
@@ -92,7 +90,7 @@ public class UserController {
         }
 
         User loginUser = HttpSessionUtils.getSessionedUser(session);
-        if (loginUser.isSameId(id)){
+        if (!loginUser.isSameId(id)){
             throw new IllegalStateException("자신의 정보만 수정할 수 있습니다");
         }
 

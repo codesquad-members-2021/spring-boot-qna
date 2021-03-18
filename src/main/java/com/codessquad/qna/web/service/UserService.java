@@ -1,12 +1,9 @@
 package com.codessquad.qna.web.service;
 
-import com.codessquad.qna.web.HttpSessionUtils;
 import com.codessquad.qna.web.domain.User;
 import com.codessquad.qna.web.repository.UserRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javax.servlet.http.HttpSession;
 import java.util.List;
 
 @Service
@@ -17,10 +14,10 @@ public class UserService {
         this.userRepository = userRepository;
     }
 
-    public User login(User user) {
-        User originUser = findUser(user.getUserId());
-        validatePassword(originUser, user.getPassword());
-        return originUser;
+    public User login(String userId, String password) {
+        User user = findUser(userId);
+        validatePassword(user, password);
+        return user;
     }
 
     public void signUp(User user) {
@@ -43,14 +40,14 @@ public class UserService {
                 .orElseThrow(() -> new IllegalStateException("찾는 회원이 없습니다"));
     }
 
-    public void updateUser(String testPassword, User originUser, User user) {
-        validatePassword(originUser, testPassword);
-        originUser.update(user);
-        userRepository.save(originUser);
+    public void updateUser(String testPassword, User loginUser, User user) {
+        validatePassword(loginUser, testPassword);
+        loginUser.update(user);
+        userRepository.save(loginUser);
     }
 
-    private void validatePassword(User originUser, String testPassword) {
-        if (!originUser.isMatchingPassword(testPassword)) {
+    private void validatePassword(User user, String testPassword) {
+        if (!user.isMatchingPassword(testPassword)) {
             throw new IllegalStateException("잘못된 비밀번호 입니다");
         }
     }
