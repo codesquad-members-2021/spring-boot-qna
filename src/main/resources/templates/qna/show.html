@@ -15,38 +15,39 @@
             </header>
             <div class="content-main">
                 <article class="article">
-                    <div class="article-header">
-                        <div class="article-header-thumb">
-                            <img src="https://graph.facebook.com/v2.3/100000059371774/picture"
-                                 class="article-author-thumb" alt="">
+                    <div class="article-header-util-container">
+                        <div class="article-header">
+                            <div class="article-header-name">
+                                <a href="/users/92/kimmunsu" class="article-author-name">{{author.name}}</a>
+                            </div>
+                            <div class="article-header-datetime">
+                                <a href="/questions/413" class="article-header-time" title="퍼머링크">
+                                    {{formattedCreatedDate}}
+                                    <i class="icon-link"></i>
+                                </a>
+                            </div>
                         </div>
-                        <div class="article-header-text">
-                            <a href="/users/92/kimmunsu" class="article-author-name">{{author.name}}</a>
-                            <a href="/questions/413" class="article-header-time" title="퍼머링크">
-                                {{formattedCreatedDate}}
-                                <i class="icon-link"></i>
-                            </a>
+                        <div class="article-util">
+                            <ul class="article-util-list">
+                                <li>
+                                    <a class="link-modify-article" href="/questions/{{id}}/form">수정</a>
+                                </li>
+                                <li>
+                                    <form class="form-delete" action="/questions/{{id}}" method="POST">
+                                        <input type="hidden" name="_method" value="delete">
+                                        <button class="link-delete-article" type="submit">삭제</button>
+                                    </form>
+                                </li>
+                                <li>
+                                    <a class="link-modify-article" href="/">목록</a>
+                                </li>
+                            </ul>
                         </div>
                     </div>
                     <div class="article-doc">
                         {{contents}}
                     </div>
-                    <div class="article-util">
-                        <ul class="article-util-list">
-                            <li>
-                                <a class="link-modify-article" href="/questions/{{id}}/form">수정</a>
-                            </li>
-                            <li>
-                                <form class="form-delete" action="/questions/{{id}}" method="POST">
-                                    <input type="hidden" name="_method" value="delete">
-                                    <button class="link-delete-article" type="submit">삭제</button>
-                                </form>
-                            </li>
-                            <li>
-                                <a class="link-modify-article" href="/">목록</a>
-                            </li>
-                        </ul>
-                    </div>
+
                 </article>
 
                 <div class="qna-comment">
@@ -77,7 +78,8 @@
                                                href="/questions/413/answers/1405/form">수정</a>
                                         </li>
                                         <li>
-                                            <a class="link-delete-answer" href="/api/questions/{{question.id}}/answers/{{id}}">삭제</a>
+                                            <a class="link-delete-answer"
+                                               href="/api/questions/{{question.id}}/answers/{{id}}">삭제</a>
                                         </li>
                                     </ul>
                                 </div>

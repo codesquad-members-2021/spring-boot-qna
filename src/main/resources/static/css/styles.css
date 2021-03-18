@@ -12,7 +12,7 @@ author: bootply.com
 @import url('https://fonts.googleapis.com/css2?family=Catamaran:wght@900&family=Open+Sans:wght@800&display=swap');
 @import url(http://fonts.googleapis.com/css?family=Roboto:400);
 @import url('https://fonts.googleapis.com/css2?family=Catamaran:wght@900&family=Open+Sans:wght@800&display=swap');
-
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@700&display=swap');
 
 body {
     background-color: #e0e0e0;
@@ -204,19 +204,23 @@ h3, h4, h5 {
 
 .qna-header {
     position: relative;
-    padding: 1em
+    padding: 1em;
+    font-family: 'Noto Sans KR', sans-serif;
 }
 
 .article {
     position: relative;
-    padding: .6em 0 .8em
+    padding: .6em 2em .8em
+}
+
+.article-header-util-container {
+    display: flex;
 }
 
 .article-header {
-    display: table;
-    width: 100%;
+    display: flex;
+    width: 80%;
     padding-bottom: .6em;
-    border-bottom: 1px dashed #dadada
 }
 
 .article-header-text, .article-header-thumb {
@@ -237,7 +241,8 @@ h3, h4, h5 {
 
 .article-author-name {
     font-weight: bold;
-    font-size: 1.1em
+    font-size: 1.5em;
+    color: black;
 }
 
 .article-author-fbgroup {
@@ -264,10 +269,15 @@ h3, h4, h5 {
     }
 }
 
+.article-header-datetime{
+    display: flex;
+    align-items: center;
+}
+
 .article-header-time {
-    display: block;
-    font-size: .8em;
+    font-size: .9em;
     color: #666;
+    padding-left: .5em;
 }
 
 .article-header-time:hover {
@@ -278,8 +288,15 @@ h3, h4, h5 {
     color: #3aa
 }
 
-.article-doc, .article-util {
-    padding-left: 48px;
+.article-doc {
+    padding-top: 48px;
+    line-height: 1.6em;
+}
+
+.article-util {
+    text-align: right;
+    padding-right: 0px;
+    width: 20%;
 }
 
 @media (max-width: 480px) {
@@ -475,6 +492,7 @@ h3, h4, h5 {
 }
 
 .qna-title {
+    margin-left: .5em;
     margin-bottom: 0
 }
 
