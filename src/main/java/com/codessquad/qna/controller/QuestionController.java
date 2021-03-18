@@ -43,12 +43,12 @@ public class QuestionController {
     }
 
     @GetMapping("/{id}")
-    public ModelAndView viewQuestion(@PathVariable Long id) {
+    public ModelAndView viewQuestion(@PathVariable Long id) throws Exception {
         return getQuestionRepository("/qna/show", id);
     }
 
     @GetMapping("/{id}/confirm")
-    public String confirmQuestion(@PathVariable Long id, HttpSession session, Model model) {
+    public String confirmQuestion(@PathVariable Long id, HttpSession session, Model model) throws Exception {
         if (!HttpSessionUtils.isLoginUser(session)) {
             return "/user/login";
         }
@@ -62,20 +62,20 @@ public class QuestionController {
     }
 
     @PutMapping("/{id}/update")
-    public String updateQuestion(@PathVariable Long id, String title, String contents) {
+    public String updateQuestion(@PathVariable Long id, String title, String contents) throws Exception {
         questionService.update(id, title, contents);
         return "redirect:/questions/" + id;
     }
 
     @DeleteMapping("/{id}/delete")
-    public String deleteQuestion(@PathVariable Long id, HttpSession session) {
+    public String deleteQuestion(@PathVariable Long id, HttpSession session) throws Exception {
         Question question = questionService.findById(id);
         User loginUser = HttpSessionUtils.getSessionUser(session);
         questionService.delete(question, id, loginUser);
         return "redirect:/";
     }
 
-    private ModelAndView getQuestionRepository(String viewName, Long id) {
+    private ModelAndView getQuestionRepository(String viewName, Long id) throws Exception {
         ModelAndView modelAndView = new ModelAndView(viewName);
         modelAndView.addObject("question", questionService.findById(id));
         modelAndView.addObject("answersList", questionService.findAnswers(id));

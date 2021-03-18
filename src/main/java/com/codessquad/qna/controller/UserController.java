@@ -57,7 +57,7 @@ public class UserController {
     }
 
     @GetMapping("/{id}")
-    public String profile(@PathVariable Long id, Model model) {
+    public String profile(@PathVariable Long id, Model model) throws Exception {
         User user = userService.findById(id);
         model.addAttribute("user", user);
         return "user/profile";
@@ -76,12 +76,12 @@ public class UserController {
     }
 
     @GetMapping(CONFIRM_INFO)
-    public ModelAndView confirmUserInfo(@PathVariable Long id) {
+    public ModelAndView confirmUserInfo(@PathVariable Long id) throws Exception {
         return getUserRepository("/user/confirmUserInfo", id);
     }
 
     @PostMapping(CONFIRM_INFO)
-    public String confirmUserInfo(@PathVariable Long id, String password) {
+    public String confirmUserInfo(@PathVariable Long id, String password) throws Exception {
         User user = userService.findById(id);
         if (user.matchPassword(password)) {
             return "redirect:/users/update/{id}";
@@ -90,17 +90,17 @@ public class UserController {
     }
 
     @GetMapping(UPDATE_INFO)
-    public ModelAndView updateUserInfo(@PathVariable Long id) {
+    public ModelAndView updateUserInfo(@PathVariable Long id) throws Exception {
         return getUserRepository("user/updateForm", id);
     }
 
     @PutMapping(UPDATE_INFO)
-    public String updateUserInfo(@PathVariable Long id, String password, String name, String email) {
+    public String updateUserInfo(@PathVariable Long id, String password, String name, String email) throws Exception {
         userService.update(id, password, name, email);
         return "redirect:/users";
     }
 
-    private ModelAndView getUserRepository(String viewName, Long id) {
+    private ModelAndView getUserRepository(String viewName, Long id) throws Exception {
         ModelAndView modelAndView = new ModelAndView(viewName);
         User user = userService.findById(id);
         modelAndView.addObject("user", user);
