@@ -26,7 +26,7 @@ public class Answer {
     private String contents;
 
     @Column(nullable = false)
-    private boolean deleted = false;
+    private boolean isDelete;
 
     private LocalDateTime createdDateTime;
 
@@ -38,6 +38,7 @@ public class Answer {
         this.question = question;
         this.writer = writer;
         this.contents = contents;
+        this.isDelete = false;
         this.createdDateTime = LocalDateTime.now();
     }
 
@@ -66,7 +67,7 @@ public class Answer {
     }
 
     public void delete() {
-        this.deleted = true;
+        this.isDelete = true;
     }
 
     public boolean matchUser(User loginUser) {
@@ -75,12 +76,17 @@ public class Answer {
         return writerId.equals(loginUserId);
     }
 
+    public boolean isDeleted() {
+        return isDelete;
+    }
+
+
     @Override
     public String toString() {
         return "Answer{" +
                 "id=" + id +
                 ", contents='" + contents + '\'' +
-                ", deleted=" + deleted +
+                ", deleted=" + isDelete +
                 ", createdDateTime=" + createdDateTime +
                 '}';
     }
