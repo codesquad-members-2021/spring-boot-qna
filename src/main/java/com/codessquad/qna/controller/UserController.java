@@ -68,16 +68,14 @@ public class UserController {
 
     @PostMapping("/{userId}/edit")
     public String updateUser(@PathVariable("userId") String userId, User targetUser) {
-        Long id = 0L;
         for (User user : users) {
             if (user.isSameId(userId)) {
-                id = user.getId();
-                users.remove(user);
+                user.setPassword(targetUser.getPassword());
+                user.setName(targetUser.getName());
+                user.setEmail(targetUser.getEmail());
                 break;
             }
         }
-        targetUser.setId(id);
-        users.add(targetUser);
         return "redirect:/user";
     }
 }
