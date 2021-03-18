@@ -28,8 +28,8 @@ public class UserController {
         return "userSignup";
     }
 
-    @PostMapping("/new")
-    public String makeNewUser(User user) {
+    @PostMapping
+    public String signup(User user) {
         user.setId((long) (users.size() + 1));
         users.add(user);
         return "redirect:/user";
