@@ -3,6 +3,7 @@ package com.codessquad.qna.domain;
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 
 @Entity
 public class Question {
@@ -22,6 +23,10 @@ public class Question {
 
     private LocalDateTime postTime;
     private LocalDateTime updatedPostTime;
+
+    @OneToMany(mappedBy = "question")
+    @OrderBy("id asc")
+    private List<Answer> answers;
 
     public Question() {
     }
@@ -54,6 +59,10 @@ public class Question {
             return postTime.format(DATE_TIME_FORMATTER);
         }
         return updatedPostTime.format(DATE_TIME_FORMATTER);
+    }
+
+    public List<Answer> getAnswers() {
+        return answers;
     }
 
     public boolean isPostWriter(User user) {

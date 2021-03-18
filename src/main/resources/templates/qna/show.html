@@ -77,11 +77,11 @@
                                 </div>
                             </article>
                             {{/answers}}
-                            <form class="submit-write" method="post" action="/questions/{{id}}/answers">
+                            <form name="answer" method="POST" action="/questions/{{id}}/answers">
                                 <div class="form-group" style="padding:14px;">
                                     <textarea class="form-control" placeholder="Update your status" name="contents"></textarea>
                                 </div>
-                                <input type="submit" class="btn btn-success pull-right" value="답변하기">
+                                <button type="submit" class="btn btn-success pull-right">답변하기</button>
                                 <div class="clearfix" />
                             </form>
                         </div>

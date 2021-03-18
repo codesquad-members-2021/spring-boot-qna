@@ -7,7 +7,6 @@ import com.codessquad.qna.exception.NoQuestionException;
 import com.codessquad.qna.repository.AnswerRepository;
 import com.codessquad.qna.repository.QuestionRepository;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -35,6 +34,6 @@ public class AnswerController {
         Question question = questionRepository.findById(questionId).orElseThrow(NoQuestionException::new);
         Answer answer = new Answer(loggedinUser, question, contents);
         answerRepository.save(answer);
-        return "redicert:/questions/{questionId}";
+        return "redirect:/questions/{questionId}";
     }
 }
