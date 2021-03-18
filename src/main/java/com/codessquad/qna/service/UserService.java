@@ -24,8 +24,8 @@ public class UserService {
         userRepository.save(user);
     }
 
-    public void update(Long id, String password, String name, String email) {
-        User user = userRepository.findById(id).orElse(null);
+    public void update(Long id, String password, String name, String email) throws Exception {
+        User user = userRepository.findById(id).orElseThrow(() -> new Exception("null 값입니다."));
         user.updateUserInfo(password, name, email);
         logger.info("users {}.", user);
         userRepository.save(user);
@@ -35,8 +35,8 @@ public class UserService {
         return (List<User>) userRepository.findAll();
     }
 
-    public User findById(Long id) {
-        return userRepository.findById(id).orElse(null);
+    public User findById(Long id) throws Exception {
+        return userRepository.findById(id).orElseThrow(() -> new Exception("null 값입니다."));
     }
 
     public User findByUserId(String userId) {
