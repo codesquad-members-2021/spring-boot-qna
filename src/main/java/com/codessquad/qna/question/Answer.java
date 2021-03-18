@@ -14,9 +14,7 @@ public class Answer {
     private Long id;
 
     private String comment;
-
     private LocalDateTime createDateTime = LocalDateTime.now();
-
     private LocalDateTime updateDateTime;
 
     @ManyToOne
