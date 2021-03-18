@@ -111,6 +111,21 @@ public class Question {
         return isDelete;
     }
 
+    public boolean canDelete(Question question, User loginUser, List<Answer> activeAnswers) {
+        if (!question.matchUser(loginUser)) {
+            return false;
+        }
+        if (activeAnswers.size() == 0) {
+            return true;
+        }
+        for (Answer answer : activeAnswers) {
+            if (!answer.matchUser(loginUser)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
     @Override
     public String toString() {
         return "Question{" +

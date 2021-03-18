@@ -34,15 +34,15 @@ public class QuestionService {
 
     public void update(Long id, String title, String contents) {
         Question question = questionRepository.findById(id).orElseThrow(NotFoundException::new);
-        ;
         question.updateQuestion(title, contents);
         logger.info("question {}. ", question);
         questionRepository.save(question);
     }
 
     public void delete(Question question, Long questionId, User loginUser) {
-        if (canDelete(questionId, question, loginUser)) {
-            for (Answer answer : findAnswers(questionId)) {
+        List<Answer> activeAnswers = findAnswers(questionId);
+        if (question.canDelete(question, loginUser, activeAnswers)) {
+            for (Answer answer : activeAnswers) {
                 answer.delete();
             }
             question.delete();
@@ -62,19 +62,5 @@ public class QuestionService {
         return answerRepository.findAllByQuestionIdAndIsDeleteFalse(questionId);
     }
 
-    public boolean canDelete(Long questionId, Question question, User loginUser) {
-        int activeAnswerCount = findAnswers(questionId).size();
-        int count = 0;
-        Long questionWriterId = question.getWriter().getId();
-        for (Answer answer : findAnswers(questionId)) {
-            Long answerWriterId = answer.getWriter().getId();
-            if (questionWriterId.equals(answerWriterId)) {
-                count += 1;
-            }
-        }
-        boolean nonAnswer = activeAnswerCount == 0 && question.matchUser(loginUser);
-        boolean answersWriterSameQuestionWriter = activeAnswerCount == count && question.matchUser(loginUser);
-        return (nonAnswer || answersWriterSameQuestionWriter);
-    }
 
 }
