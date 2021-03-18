@@ -49,12 +49,11 @@ public class UserController {
 
     @GetMapping("/{id}")
     public String getOneUserProfile(@PathVariable long id, Model model, HttpSession session) {
-        Object tempUser = session.getAttribute("sessionUser");
-        if (tempUser == null) {
+        if (HttpSessionUtils.isLoginUser(session)) {
             return "redirect:/users/login";
         }
 
-        User sessionUser = (User) tempUser;
+        User sessionUser = HttpSessionUtils.getUserFromSession(session);
         User user = userRepository.findById(sessionUser.getId()).orElseThrow(NoUserException::new);
 
         model.addAttribute("user", user);
@@ -63,12 +62,11 @@ public class UserController {
 
     @GetMapping("/{id}/form")
     public String editUserInfo(@PathVariable long id, Model model, HttpSession session) {
-        Object tempUser = session.getAttribute("sessionUser");
-        if (tempUser == null) {
+        if (HttpSessionUtils.isLoginUser(session)) {
             return "redirect:/users/login";
         }
 
-        User sessionUser = (User) tempUser;
+        User sessionUser = HttpSessionUtils.getUserFromSession(session);
         User user = userRepository.findById(sessionUser.getId()).orElseThrow(NoUserException::new);
 
         model.addAttribute("user", user);
@@ -104,13 +102,13 @@ public class UserController {
         if (!user.checkPassword(password)) {
             return "redirect:/users/login";
         }
-        session.setAttribute("sessionUser", user);
+        session.setAttribute(HttpSessionUtils.USER_SESSION_KEY, user);
         return "redirect:/";
     }
 
     @GetMapping("/logout")
     public String logout(HttpSession session) {
-        session.removeAttribute("sessionUser");
+        session.removeAttribute(HttpSessionUtils.USER_SESSION_KEY);
         return "redirect:/";
     }
 
