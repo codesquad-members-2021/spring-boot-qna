@@ -1,9 +1,12 @@
 package com.codessquad.qna.domain;
 
+import com.codessquad.qna.ValidUtils;
+
 import javax.persistence.*;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Optional;
 
 /**
  * Created by 68936@naver.com on 2021-03-16 오전 1:30
@@ -51,18 +54,22 @@ public class Answer {
     }
 
     public void setQuestion(Question question) {
+        question = Optional.ofNullable(question).orElseThrow(IllegalArgumentException::new);
         this.question = question;
     }
 
     public void setReplyId(String replyId) {
+        ValidUtils.checkIllegalArgumentOf(replyId);
         this.replyId = replyId;
     }
 
     public void setReplyAuthor(String replyAuthor) {
+        ValidUtils.checkIllegalArgumentOf(replyAuthor);
         this.replyAuthor = replyAuthor;
     }
 
     public void setReplyContents(String replyContents) {
+        ValidUtils.checkIllegalArgumentOf(replyContents);
         this.replyContents = replyContents;
     }
 }
