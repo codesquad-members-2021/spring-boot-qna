@@ -2,7 +2,6 @@ package com.codessquad.qna.controller;
 
 import com.codessquad.qna.entity.User;
 import com.codessquad.qna.exception.UserIdNotFoundException;
-import com.codessquad.qna.exception.UserNotFoundInSessionException;
 import com.codessquad.qna.service.UserService;
 import com.codessquad.qna.util.HttpSessionUtil;
 import org.slf4j.Logger;
@@ -46,7 +45,7 @@ public class UserController {
 
     @GetMapping("/{userId}/form")
     public String updateForm(@PathVariable String userId, Model model, HttpSession session) {
-        User user = HttpSessionUtil.getUser(session).orElseThrow(UserNotFoundInSessionException::new);
+        User user = HttpSessionUtil.getUser(session);
         if (user.getUserId().equals(userId)) {
             model.addAttribute("user", user);
             return "user/updateForm";

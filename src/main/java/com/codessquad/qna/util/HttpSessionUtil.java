@@ -1,9 +1,9 @@
 package com.codessquad.qna.util;
 
 import com.codessquad.qna.entity.User;
+import com.codessquad.qna.exception.UserNotFoundInSessionException;
 
 import javax.servlet.http.HttpSession;
-import java.util.Optional;
 
 public class HttpSessionUtil {
     public static final String USER_KEY = "sessionedUser";
@@ -13,11 +13,11 @@ public class HttpSessionUtil {
         return userObject != null && userObject instanceof User;
     }
 
-    public static Optional<User> getUser(HttpSession session) {
+    public static User getUser(HttpSession session) {
         Object userObject = session.getAttribute(USER_KEY);
         if (hasUser(session)) {
-            return Optional.of((User) userObject);
+            return (User) userObject;
         }
-        return Optional.empty();
+        throw new UserNotFoundInSessionException();
     }
 }

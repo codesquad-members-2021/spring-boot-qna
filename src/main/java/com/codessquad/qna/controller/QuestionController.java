@@ -33,7 +33,7 @@ public class QuestionController {
 
     @PostMapping
     public String create(String title, String contents, HttpSession session) {
-        User user = HttpSessionUtil.getUser(session).orElseThrow(UserNotFoundInSessionException::new);
+        User user = HttpSessionUtil.getUser(session);
         Question toCreate = new Question(user, title, contents);
         questionService.addQuestion(toCreate);
         return "redirect:/";
@@ -41,7 +41,7 @@ public class QuestionController {
 
     @PutMapping
     public String update(long questionId, String contents, String title, HttpSession session) {
-        User user = HttpSessionUtil.getUser(session).orElseThrow(UserNotFoundInSessionException::new);
+        User user = HttpSessionUtil.getUser(session);
         questionService.updateQuestion(questionId, title, contents, user);
         return "redirect:/questions/" + questionId;
     }
@@ -63,7 +63,7 @@ public class QuestionController {
 
     @GetMapping("/{id}/form")
     public String updateForm(@PathVariable int id, Model model, HttpSession session) {
-        User user = HttpSessionUtil.getUser(session).orElseThrow(UserNotFoundInSessionException::new);
+        User user = HttpSessionUtil.getUser(session);
         Question question = questionService.getQuestion(id);
         if (!question.getWriter().verify(user)) {
             throw new IllegalStateException("자신의 글만 수정할 수 있습니다.");
