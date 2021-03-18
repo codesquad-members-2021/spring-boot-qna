@@ -38,14 +38,14 @@ public class UserController {
         }
 
         logger.debug("User : {} Login Success!", user.getUserId());
-        session.setAttribute("sessionedUser", user);
+        session.setAttribute(HttpSessionUtils.USER_SESSION_KEY, user);
 
         return "redirect:/";
     }
 
     @GetMapping("/logout")
     public String logout(HttpSession session) {
-        session.removeAttribute("sessionedUser");
+        session.removeAttribute(HttpSessionUtils.USER_SESSION_KEY);
 
         return "redirect:/";
     }
