@@ -37,8 +37,12 @@ public class Answer {
         question.addAnswer(this);
     }
 
-    public String getCreateDateTime() {
+    public String getFormatCreateDateTime() {
         return createDateTime.format(DateTimeUtils.dateTimeFormatter);
+    }
+
+    public LocalDateTime getCreateDateTime() {
+        return createDateTime;
     }
 
     public User getWriter() {

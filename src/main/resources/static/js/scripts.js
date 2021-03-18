@@ -21,7 +21,7 @@ function onError(){
 function onSuccess(data, status){
     console.log(data);
     var answerTemplate = $("#answerTemplate").html();
-    var template = answerTemplate.format(data.writer.userId, data.createDateTime, data.contents, data.id, data.id);
+    var template = answerTemplate.format(data.writer.userId, data.formatCreateDateTime, data.contents, data.id, data.id);
      $(".qna-comment-slipp-articles").prepend(template);
 
      $(".answer-write textarea").val("");
