@@ -1,6 +1,7 @@
 package com.codessquad.qna.service;
 
 import com.codessquad.qna.domain.Question;
+import com.codessquad.qna.repository.AnswerRepository;
 import com.codessquad.qna.repository.QuestionRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -14,10 +15,12 @@ import java.util.Optional;
 public class QuestionService {
     private final Logger logger = LoggerFactory.getLogger(QuestionService.class);
     private final QuestionRepository questionRepository;
+    private final AnswerRepository answerRepository;
 
     @Autowired
-    public QuestionService(QuestionRepository questionRepository) {
+    public QuestionService(QuestionRepository questionRepository, AnswerRepository answerRepository) {
         this.questionRepository = questionRepository;
+        this.answerRepository = answerRepository;
     }
 
     public void add(Question newQuestion){

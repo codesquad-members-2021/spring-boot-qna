@@ -2,6 +2,7 @@ package com.codessquad.qna.controller;
 
 import com.codessquad.qna.domain.Question;
 import com.codessquad.qna.domain.User;
+import com.codessquad.qna.service.AnswerService;
 import com.codessquad.qna.service.QuestionService;
 import com.codessquad.qna.util.HttpSessionUtils;
 import org.slf4j.Logger;
@@ -18,10 +19,12 @@ import javax.servlet.http.HttpSession;
 public class QuestionController {
     private final Logger logger = LoggerFactory.getLogger(QuestionController.class);
     private final QuestionService questionService;
+    private final AnswerService answerService;
 
     @Autowired
-    public QuestionController(QuestionService questionService) {
+    public QuestionController(QuestionService questionService, AnswerService answerService){
         this.questionService = questionService;
+        this.answerService = answerService;
     }
 
     @PostMapping
@@ -64,8 +67,9 @@ public class QuestionController {
 
     @GetMapping("/{id}")
     public String showQuestionInDetail(@PathVariable long id, Model model) {
+        model.addAttribute("answers", answerService.findAll());
         model.addAttribute("question", questionService.getOneById(id).orElse(null));
-
+        logger.info(" answerRepository.findAll() Test: " + answerService.findAll().toString());
         return "question/show";
     }
 
