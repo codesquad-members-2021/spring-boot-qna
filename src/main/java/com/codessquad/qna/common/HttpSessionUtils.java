@@ -8,9 +8,9 @@ import javax.servlet.http.HttpSession;
 import java.util.Optional;
 
 public class HttpSessionUtils {
-    private HttpSessionUtils() {}
-
     public static final String USER_SESSION_KEY = "sessionUser";
+
+    private HttpSessionUtils() {}
 
     public static void checkLoggedIn(HttpSession session) {
         getUserAttribute(session);
@@ -18,8 +18,7 @@ public class HttpSessionUtils {
 
     // FIXME: 권한 인증과 관련된 부분은 AOP 로 분리해야한다.
     public static void checkAuthorization(Long id, HttpSession session) {
-        boolean authorized = getUserAttribute(session)
-                .matchId(id);
+        boolean authorized = getUserAttribute(session).matchId(id);
         if (!authorized) {
             throw new UnauthorizedException("허가받지 않은 사용자입니다.");
         }

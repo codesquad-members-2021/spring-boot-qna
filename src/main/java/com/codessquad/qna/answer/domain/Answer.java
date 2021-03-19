@@ -22,8 +22,7 @@ public class Answer extends BaseTimeEntity {
 
     @Lob
     private String contents;
-
-    @Column
+    
     private boolean deleted = false;
 
     protected Answer() {}

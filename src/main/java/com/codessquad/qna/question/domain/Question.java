@@ -28,8 +28,7 @@ public class Question extends BaseTimeEntity {
     @OrderBy("id ASC")
     @Where(clause = "deleted = false")
     private List<Answer> answers;
-
-    @Column
+    
     private boolean deleted = false;
 
     protected Question() {}
