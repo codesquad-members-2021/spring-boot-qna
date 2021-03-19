@@ -52,6 +52,7 @@ function deleteAnswer(e) {
         dataType: 'json',
         error: function (xhr, status) {
             console.log("error");
+            alert("로그인이 필요합니다.");
         },
         success: function (data, status) {
             console.log("success");

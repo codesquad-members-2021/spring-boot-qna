@@ -32,7 +32,7 @@ public class ApiAnswerController {
     @DeleteMapping("/{id}")
     public Answer delete(@PathVariable Long id, HttpSession session) {
         if (!HttpSessionUtils.isLoginUser(session)) {
-            throw new IllegalStateException("로그인이 필요합니다.");
+            return null;
         }
 
         Answer answer = answerService.findById(id);
