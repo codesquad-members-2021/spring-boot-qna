@@ -4,8 +4,6 @@ import com.codessquad.qna.user.User;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
-import java.util.Arrays;
-import java.util.List;
 
 @Entity
 public class Answer {
@@ -14,7 +12,7 @@ public class Answer {
     private Long id;
 
     private String comment;
-    private LocalDateTime createDateTime = LocalDateTime.now();
+    private LocalDateTime createDateTime;
     private LocalDateTime updateDateTime;
 
     @ManyToOne
@@ -25,12 +23,12 @@ public class Answer {
     @JoinColumn(foreignKey = @ForeignKey(name = "fk_answer_writer"))
     private User writer;
 
-    public Answer() {
+    protected Answer() {
     }
 
     public Answer(String comment, LocalDateTime createDateTime, Question question, User writer) {
         this.comment = comment;
-        this.createDateTime = createDateTime;
+        this.createDateTime = createDateTime == null ? LocalDateTime.now() : createDateTime;
         this.question = question;
         this.writer = writer;
     }
@@ -39,32 +37,16 @@ public class Answer {
         return id;
     }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
-
     public String getComment() {
         return comment;
-    }
-
-    public void setComment(String comment) {
-        this.comment = comment;
     }
 
     public LocalDateTime getCreateDateTime() {
         return createDateTime;
     }
 
-    public void setCreateDateTime(LocalDateTime createDateTime) {
-        this.createDateTime = createDateTime;
-    }
-
     public LocalDateTime getUpdateDateTime() {
         return updateDateTime;
-    }
-
-    public void setUpdateDateTime(LocalDateTime updateDateTime) {
-        this.updateDateTime = updateDateTime;
     }
 
     public Question getQuestion() {
