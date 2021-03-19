@@ -3,6 +3,7 @@ package com.codessquad.qna;
 import com.codessquad.qna.exception.NoQuestionException;
 import com.codessquad.qna.exception.NoSessionedUserException;
 import com.codessquad.qna.exception.NoUserException;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
@@ -20,7 +21,8 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(NoSessionedUserException.class)
-    public String handleNoSessionedUserException() {
-        return "redirect:/users/loginForm";
+    public String handleNoSessionedUserException(Model model) {
+        model.addAttribute("errorMessage", "로그인이 필요합니다.");
+        return "/user/login";
     }
 }
