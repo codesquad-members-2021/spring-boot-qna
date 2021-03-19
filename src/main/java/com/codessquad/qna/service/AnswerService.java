@@ -1,7 +1,7 @@
 package com.codessquad.qna.service;
 
-import com.codessquad.qna.exception.AnswerNotFoundException;
 import com.codessquad.qna.exception.IllegalUserAccessException;
+import com.codessquad.qna.exception.NotFoundException;
 import com.codessquad.qna.model.Answer;
 import com.codessquad.qna.model.User;
 import com.codessquad.qna.repository.AnswerRepository;
@@ -44,11 +44,7 @@ public class AnswerService {
     }
 
     public Answer findById(Long id) {
-        Answer answer = this.answerRepository.findById(id).orElseThrow(AnswerNotFoundException::new);
-        if (answer.isDeleted()) {
-            throw new AnswerNotFoundException();
-        }
-        return answer;
+        return this.answerRepository.findByIdAndDeletedFalse(id).orElseThrow(NotFoundException::new);
     }
 
     public Long findQuestionId(Long answerId) {

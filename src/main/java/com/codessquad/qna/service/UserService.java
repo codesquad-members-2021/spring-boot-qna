@@ -55,7 +55,7 @@ public class UserService {
     }
 
     public User findByUserId(String userId) {
-        return this.userRepository.findByUserId(userId).orElseThrow(UserNotFoundException::new);
+        return this.userRepository.findByUserId(userId).orElseThrow(NotFoundException::new);
     }
 
 }

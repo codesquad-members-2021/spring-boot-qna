@@ -7,6 +7,11 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 @ControllerAdvice
 public class GlobalExceptionHandler {
 
+    @ExceptionHandler(NotFoundException.class)
+    private String handleNotFoundException() {
+        return "redirect:/";
+    }
+
     @ExceptionHandler(DuplicateUserIdFoundException.class)
     private  String handleDuplicateUserIdFoundException(Model model, DuplicateUserIdFoundException e) {
         model.addAttribute("errorMessage", e.getMessage());
@@ -38,24 +43,9 @@ public class GlobalExceptionHandler {
         return "/user/login";
     }
 
-    @ExceptionHandler(UserNotFoundException.class)
-    private String handleUserNotFoundException() {
-        return "redirect:/";
-    }
-
     @ExceptionHandler(WriterOfAnswerListNotMatchException.class)
     private String handleWriterOfAnswerListNotMatchException(WriterOfAnswerListNotMatchException e) {
         return "redirect:/question/" + e.getQuestionId();
-    }
-
-    @ExceptionHandler(QuestionNotFoundException.class)
-    private String handleQuestionNotFoundException() {
-        return "redirect:/";
-    }
-
-    @ExceptionHandler(AnswerNotFoundException.class)
-    private String handleAnswerNotFoundException() {
-        return "redirect:/";
     }
 
 }
