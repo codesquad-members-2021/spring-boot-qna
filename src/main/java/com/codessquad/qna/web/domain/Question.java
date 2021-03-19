@@ -5,7 +5,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
-public class Question {
+public class Question extends BaseTimeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -19,16 +19,13 @@ public class Question {
 
     private String title;
     private String contents;
-    private LocalDateTime reportingDateTime;
 
     public Question(String title, String contents) {
         this.title = title;
         this.contents = contents;
-        this.reportingDateTime = LocalDateTime.now();
     }
 
     public Question() {
-        this.reportingDateTime = LocalDateTime.now();
     }
 
     public boolean isMatchingWriter(User anotherWriter) {
@@ -72,14 +69,6 @@ public class Question {
         this.contents = contents;
     }
 
-    public LocalDateTime getReportingDateTime() {
-        return reportingDateTime;
-    }
-
-    public void setReportingDateTime(LocalDateTime reportingDateTime) {
-        this.reportingDateTime = reportingDateTime;
-    }
-
     public List<Answer> getAnswers() {
         return answers;
     }
@@ -95,7 +84,6 @@ public class Question {
                 ", writer=" + writer.getId() +
                 ", title='" + title + '\'' +
                 ", contents='" + contents + '\'' +
-                ", reportingDateTime=" + reportingDateTime +
                 '}';
     }
 }

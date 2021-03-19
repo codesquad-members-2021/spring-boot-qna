@@ -9,7 +9,10 @@ import java.time.format.DateTimeFormatter;
 public class HandlebarDateHelper {
     private static final DateTimeFormatter MY_DATE_FORMATTER = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
 
-    public CharSequence date(LocalDateTime localDateTime) {
-        return localDateTime.format(MY_DATE_FORMATTER);
+    public String date(LocalDateTime date) {
+        if (date == null) {
+            return "";
+        }
+        return date.format(MY_DATE_FORMATTER);
     }
 }

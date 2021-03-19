@@ -4,7 +4,7 @@ import javax.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
-public class Answer {
+public class Answer extends BaseTimeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -19,21 +19,18 @@ public class Answer {
 
     @Column(nullable = false, length = 400)
     private String contents;
-    private LocalDateTime reportingDateTime;
 
     public Answer(String contents, Question question, User writer) {
         this.contents = contents;
         this.question = question;
         this.writer = writer;
-        reportingDateTime = LocalDateTime.now();
     }
-    public boolean isMatchingWriter(User anotherWriter) {
-        return writer.isMatchingId(anotherWriter);
-    }
-
 
     public Answer() {
-        reportingDateTime = LocalDateTime.now();
+    }
+
+    public boolean isMatchingWriter(User anotherWriter) {
+        return writer.isMatchingId(anotherWriter);
     }
 
     public Long getId() {
@@ -68,14 +65,6 @@ public class Answer {
         this.question = question;
     }
 
-    public LocalDateTime getReportingDateTime() {
-        return reportingDateTime;
-    }
-
-    public void setReportingDateTime(LocalDateTime reportingDateTime) {
-        this.reportingDateTime = reportingDateTime;
-    }
-
     @Override
     public String toString() {
         return "Answer{" +
@@ -83,7 +72,6 @@ public class Answer {
                 ", writerId=" + writer.getId() +
                 ", questionId=" + question.getId() +
                 ", contents='" + contents + '\'' +
-                ", reportingDateTime=" + reportingDateTime +
                 '}';
     }
 }
