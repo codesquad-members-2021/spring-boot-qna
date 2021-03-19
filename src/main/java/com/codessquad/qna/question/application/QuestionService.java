@@ -27,7 +27,7 @@ public class QuestionService {
 
     public List<QuestionResponse> getQuestions() {
         List<QuestionResponse> questionResponses = new ArrayList<>();
-        for (Question question : questionRepository.findAllByDeleted(false)) {
+        for (Question question : questionRepository.findAllByDeletedIsFalse()) {
             questionResponses.add(QuestionResponse.from(question));
         }
         return questionResponses;
