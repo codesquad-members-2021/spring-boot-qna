@@ -6,8 +6,6 @@ import com.codessquad.qna.user.dto.UserRequest;
 import com.codessquad.qna.user.dto.UserResponse;
 import com.codessquad.qna.user.exception.LoginFailedException;
 import com.codessquad.qna.user.exception.UserNotFoundException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -17,7 +15,6 @@ import java.util.Optional;
 @Service
 public class UserService {
     private final UserRepository userRepository;
-    private final Logger logger = LoggerFactory.getLogger(UserService.class);
 
     public UserService(UserRepository userRepository) {
         this.userRepository = userRepository;
@@ -44,17 +41,10 @@ public class UserService {
     // FIXME: 나중에 LoginRequest 와 LoginResponse dto 를 사용해서 테스트 가능하게 리팩토링해야한다.
     public User login(String userId, String password) {
         User user = Optional.ofNullable(userRepository.findByUserId(userId))
-                .orElseThrow(() -> {
-                    String exceptionMessage = "잘못된 userId 로 로그인 했습니다.";
-                    logger.debug("Login Failure; {}", exceptionMessage);
-                    return new LoginFailedException(exceptionMessage);
-                });
+                .orElseThrow(() -> new LoginFailedException("잘못된 userId 로 로그인 했습니다."));
         if (!user.matchPassword(password)) {
-            String exceptionMessage = "잘못된 password 로 로그인 했습니다.";
-            logger.debug("Login Failure; {}", exceptionMessage);
-            throw new LoginFailedException(exceptionMessage);
+            throw new LoginFailedException("잘못된 password 로 로그인 했습니다.");
         }
-        logger.debug("Login Success!");
         return user;
     }
 

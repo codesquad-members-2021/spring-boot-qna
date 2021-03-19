@@ -34,8 +34,7 @@ public class UserController {
         setUserAttribute(user, session);
         return "redirect:/";
     }
-
-    // FIXME: 로그아웃은 POST 로 구현해야한다.
+    
     @GetMapping("logout")
     public String logout(HttpSession session) {
         clearSession(session);

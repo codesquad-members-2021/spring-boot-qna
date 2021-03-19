@@ -55,7 +55,7 @@ public class QuestionService {
     public void deleteQuestion(Long id) {
         Question question = getQuestionFromRepository(id);
         if (!question.isDeletable()) {
-            throw new QuestionNotDeletableException("삭제할 수 없는 질문입니다.");
+            throw new QuestionNotDeletableException();
         }
         question.delete();
         questionRepository.save(question);

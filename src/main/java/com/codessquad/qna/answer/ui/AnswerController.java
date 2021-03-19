@@ -40,10 +40,9 @@ public class AnswerController {
         answerService.deleteAnswer(id);
         return "redirect:/questions/" + questionId;
     }
-
-    // FIXME: 권한 인증과 관련된 부분은 AOP 로 분리해야한다.
+    
     private void checkAnswerAuthorization(Long id, HttpSession session) {
-        Long writerId = answerService.getWriterId(id);
-        checkAuthorization(writerId, session);
+        User writer = answerService.getWriter(id);
+        checkAuthorization(writer, session);
     }
 }

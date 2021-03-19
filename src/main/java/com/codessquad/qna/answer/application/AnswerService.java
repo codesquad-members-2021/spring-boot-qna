@@ -4,6 +4,7 @@ import com.codessquad.qna.answer.domain.Answer;
 import com.codessquad.qna.answer.domain.AnswerRepository;
 import com.codessquad.qna.answer.exception.AnswerDeletedException;
 import com.codessquad.qna.answer.exception.AnswerNotFoundException;
+import com.codessquad.qna.user.domain.User;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -20,10 +21,8 @@ public class AnswerService {
         answerRepository.save(answer);
     }
 
-    public Long getWriterId(Long id) {
-        return getAnswerFromRepository(id)
-                .getWriter()
-                .getId();
+    public User getWriter(Long id) {
+        return getAnswerFromRepository(id).getWriter();
     }
 
     public Answer getAnswerFromRepository(Long id) {
