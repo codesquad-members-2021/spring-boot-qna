@@ -3,7 +3,6 @@ package com.codessquad.qna.user.ui;
 import com.codessquad.qna.user.application.UserService;
 import com.codessquad.qna.user.domain.User;
 import com.codessquad.qna.user.dto.UserRequest;
-import com.codessquad.qna.user.dto.UserResponse;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -12,8 +11,6 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.persistence.EntityNotFoundException;
 import javax.servlet.http.HttpSession;
-import javax.validation.Valid;
-import java.net.URI;
 
 import static com.codessquad.qna.common.HttpSessionUtils.USER_SESSION_KEY;
 import static com.codessquad.qna.common.HttpSessionUtils.checkAuthorization;
@@ -29,14 +26,6 @@ public class UserController {
     }
 
     @PostMapping
-    public ResponseEntity<UserResponse> createUser(@RequestBody @Valid UserRequest userRequest) {
-        UserResponse userResponse = userService.save(userRequest);
-        return ResponseEntity
-                .created(URI.create("/users/" + userResponse.getId()))
-                .body(userResponse);
-    }
-
-    @PostMapping("create")
     public String createUser(User user) {
         userService.save(UserRequest.from(user));
         return "redirect:/users";

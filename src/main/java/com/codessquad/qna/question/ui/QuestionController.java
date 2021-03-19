@@ -20,7 +20,7 @@ public class QuestionController {
         this.questionService = questionService;
     }
 
-    @PostMapping("create")
+    @PostMapping
     public String createQuestion(QuestionRequest questionRequest, HttpSession session) {
         User writer = getUserAttribute(session);
         questionService.save(questionRequest, writer);

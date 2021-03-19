@@ -1,7 +1,6 @@
 package com.codessquad.qna.user;
 
 import com.codessquad.qna.AcceptanceTest;
-import com.codessquad.qna.user.dto.UserResponse;
 import io.restassured.RestAssured;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
@@ -15,23 +14,6 @@ import static com.codessquad.qna.user.UserRequest.requestCreateUser;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class UserAcceptanceTest extends AcceptanceTest {
-    @Test
-    @DisplayName("유저를 생성한다.")
-    void createUser() {
-        // given
-        String userId = "pyro";
-        String password = "P@ssw0rd";
-        String name = "고정완";
-        String email = "pyro@gmail.com";
-
-        // when
-        ExtractableResponse<Response> response = requestCreateUser(userId, password, name, email);
-
-        // then
-        assertThat(response.statusCode())
-                .isEqualTo(HttpStatus.CREATED.value());
-    }
-
     @Test
     @DisplayName("비어있는 값으로 유저를 생성하면 실패한다.")
     void createUserWithBlank() {
@@ -93,26 +75,6 @@ public class UserAcceptanceTest extends AcceptanceTest {
         ExtractableResponse<Response> actualResponse = RestAssured.given().log().all()
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .when().get(USER_PATH)
-                .then().log().all().extract();
-
-        // then
-        assertThat(actualResponse.statusCode())
-                .isEqualTo(HttpStatus.OK.value());
-    }
-
-    @DisplayName("유저를 조회한다.")
-    @Test
-    void getUser() {
-        // given
-        requestCreateUser("userId1", "password1", "name1", "email1@a.com");
-        Long id = requestCreateUser("userId2", "password2", "name2", "email2@a.com")
-                .as(UserResponse.class)
-                .getId();
-
-        // when
-        ExtractableResponse<Response> actualResponse = RestAssured.given().log().all()
-                .contentType(MediaType.APPLICATION_JSON_VALUE)
-                .when().get(USER_PATH + "/{id}", id)
                 .then().log().all().extract();
 
         // then
