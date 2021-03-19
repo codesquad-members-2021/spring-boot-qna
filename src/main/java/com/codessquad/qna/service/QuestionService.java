@@ -1,13 +1,11 @@
 package com.codessquad.qna.service;
 
-import com.codessquad.qna.HttpSessionUtils;
 import com.codessquad.qna.domain.Question;
 import com.codessquad.qna.domain.QuestionRepository;
 import com.codessquad.qna.dto.QuestionDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javax.servlet.http.HttpSession;
 import java.util.List;
 
 @Service
@@ -19,8 +17,7 @@ public class QuestionService {
         this.questionRepository = questionRepository;
     }
 
-    public void create(QuestionDto questionDto, HttpSession session) {
-        questionDto.setWriter(HttpSessionUtils.getUserFromSession(session).getUserId());
+    public void create(QuestionDto questionDto) {
         Question question = new Question(questionDto);
         questionRepository.save(question);
     }

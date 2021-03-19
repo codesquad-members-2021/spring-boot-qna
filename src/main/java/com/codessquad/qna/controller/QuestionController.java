@@ -30,8 +30,8 @@ public class QuestionController {
     }
 
     @PostMapping("/questions")
-    public String createQuestion(QuestionDto questionDto, HttpSession session) {
-        questionService.create(questionDto,session);
+    public String createQuestion(QuestionDto questionDto) {
+        questionService.create(questionDto);
         return "redirect:/";
     }
 

@@ -35,6 +35,7 @@ public class Question {
     }
 
     public Question(QuestionDto questionDto){
+        this.writer = questionDto.getWriter();
         this.title = questionDto.getTitle();
         this.contents = questionDto.getContents();
         this.time = questionDto.getTime();
