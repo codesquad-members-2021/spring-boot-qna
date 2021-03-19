@@ -26,7 +26,7 @@ public class Question {
     @NotBlank(message = "내용은 필수 입력 값입니다.")
     private String contents;
 
-    private LocalDateTime createdDateTime;
+    private LocalDateTime createdDateTime = LocalDateTime.now();
 
     @OneToMany(mappedBy = "question")
     @OrderBy("id ASC")
@@ -36,7 +36,6 @@ public class Question {
     private boolean isDelete;
 
     public Question() {
-        createdDateTime = LocalDateTime.now();
     }
 
     public Question(User writer, String title, String contents) {
@@ -44,7 +43,6 @@ public class Question {
         this.writer = writer;
         this.title = title;
         this.contents = contents;
-        this.createdDateTime = LocalDateTime.now();
         this.isDelete = false;
     }
 
@@ -119,7 +117,7 @@ public class Question {
             return true;
         }
         for (Answer answer : activeAnswers) {
-            if (!answer.matchUser(loginUser)) {
+            if (!answer.isMatch(loginUser)) {
                 return false;
             }
         }

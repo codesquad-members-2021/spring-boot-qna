@@ -38,7 +38,6 @@ public class Answer {
         this.question = question;
         this.writer = writer;
         this.contents = contents;
-        this.isDelete = false;
         this.createdDateTime = LocalDateTime.now();
     }
 
@@ -70,10 +69,8 @@ public class Answer {
         this.isDelete = true;
     }
 
-    public boolean matchUser(User loginUser) {
-        String loginUserId = loginUser.getUserId();
-        String writerId = this.writer.getUserId();
-        return writerId.equals(loginUserId);
+    public boolean isMatch(User loginUser) {
+        return this.writer.getUserId().equals(loginUser.getUserId());
     }
 
     public boolean isDeleted() {

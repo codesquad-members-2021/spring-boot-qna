@@ -17,10 +17,10 @@ import java.util.List;
 public class QuestionService {
     private static final Logger logger = LoggerFactory.getLogger(QuestionService.class);
     private final QuestionRepository questionRepository;
-    private final AnswerRepository answerRepository;
+    private final AnswerService answerService;
 
-    public QuestionService(AnswerRepository answerRepository, QuestionRepository questionRepository) {
-        this.answerRepository = answerRepository;
+    public QuestionService(AnswerService answerService, QuestionRepository questionRepository) {
+        this.answerService = answerService;
         this.questionRepository = questionRepository;
     }
 
@@ -39,7 +39,7 @@ public class QuestionService {
     }
 
     public void delete(Long questionId, User loginUser) {
-        List<Answer> activeAnswers = findAnswers(questionId);
+        List<Answer> activeAnswers = answerService.findAnswers(questionId);
         Question question = findById(questionId);
         if (question.canDelete(question, loginUser, activeAnswers)) {
             for (Answer answer : activeAnswers) {
@@ -56,10 +56,6 @@ public class QuestionService {
 
     public List<Question> findAllQuestion() {
         return this.questionRepository.findAllByIsDeleteFalse();
-    }
-
-    public List<Answer> findAnswers(Long questionId) {
-        return answerRepository.findAllByQuestionIdAndIsDeleteFalse(questionId);
     }
 
 }

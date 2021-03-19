@@ -37,9 +37,8 @@ public class AnswerController {
         }
         Answer answer = answerService.findById(answerId);
         User loginUser = HttpSessionUtils.getSessionUser(session);
-        if (answer.matchUser(loginUser)) {
+        if (answer.isMatch(loginUser)) {
             answerService.delete(answer);
-            return "redirect:/questions/" + id;
         }
         return "redirect:/questions/" + id;
     }

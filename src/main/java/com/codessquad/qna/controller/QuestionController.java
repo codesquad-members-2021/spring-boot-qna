@@ -2,6 +2,7 @@ package com.codessquad.qna.controller;
 
 import com.codessquad.qna.domain.User;
 import com.codessquad.qna.domain.Question;
+import com.codessquad.qna.service.AnswerService;
 import com.codessquad.qna.service.QuestionService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -14,9 +15,11 @@ import javax.servlet.http.HttpSession;
 @RequestMapping("/questions")
 public class QuestionController {
     private final QuestionService questionService;
+    private final AnswerService answerService;
 
-    public QuestionController(QuestionService questionService) {
+    public QuestionController(QuestionService questionService, AnswerService answerService) {
         this.questionService = questionService;
+        this.answerService = answerService;
     }
 
     @GetMapping
@@ -46,8 +49,8 @@ public class QuestionController {
     public ModelAndView showQuestion(@PathVariable Long id) {
         ModelAndView modelAndView = new ModelAndView("/qna/show");
         modelAndView.addObject("question", questionService.findById(id));
-        modelAndView.addObject("answersList", questionService.findAnswers(id));
-        modelAndView.addObject("answerCount", questionService.findAnswers(id).size());
+        modelAndView.addObject("answersList", answerService.findAnswers(id));
+        modelAndView.addObject("answerCount", answerService.findAnswers(id).size());
         return modelAndView;
     }
 
@@ -65,13 +68,13 @@ public class QuestionController {
         return "redirect:/";
     }
 
-    @PutMapping("/{id}/put")
+    @PutMapping("/{id}")
     public String updateQuestion(@PathVariable Long id, String title, String contents) {
         questionService.update(id, title, contents);
         return "redirect:/questions/" + id;
     }
 
-    @DeleteMapping("/{id}/delete")
+    @DeleteMapping("/{id}")
     public String deleteQuestion(@PathVariable Long id, HttpSession session) {
         User loginUser = HttpSessionUtils.getSessionUser(session);
         questionService.delete(id, loginUser);
