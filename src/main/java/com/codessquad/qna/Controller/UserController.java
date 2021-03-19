@@ -18,7 +18,7 @@ public class UserController {
     @Autowired
     private UserRepository userRepository;
 
-    @GetMapping("")
+    @GetMapping
     public String userListShow() {
         return "redirect:/user/list";
     }
