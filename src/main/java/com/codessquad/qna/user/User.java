@@ -5,6 +5,7 @@ import com.codessquad.qna.exception.InsufficientAuthenticationException;
 import javax.persistence.*;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 
 @Entity
 public class User {
@@ -123,6 +124,19 @@ public class User {
         } catch (IllegalArgumentException e) {
             throw new InsufficientAuthenticationException("권한이 없는 사용자입니다.", e);
         }
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        User user = (User) o;
+        return Objects.equals(id, user.id) && Objects.equals(userId, user.userId);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, userId);
     }
 
     @Override

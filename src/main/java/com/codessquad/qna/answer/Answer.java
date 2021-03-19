@@ -75,6 +75,10 @@ public class Answer {
         writer.verifyWith(target);
     }
 
+    public boolean isWriterSameAs(User target) {
+        return writer.equals(target);
+    }
+
     public void update(Answer newAnswer) {
         verifyWriter(newAnswer.getWriter());
 

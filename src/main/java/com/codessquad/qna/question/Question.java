@@ -140,6 +140,10 @@ public class Question {
         writer.verifyWith(target);
     }
 
+    public boolean isWriterDifferentFrom(Answer answer) {
+        return !answer.isWriterSameAs(writer);
+    }
+
     public void update(Question newQuestion) {
         verifyWriter(newQuestion.getWriter());
 

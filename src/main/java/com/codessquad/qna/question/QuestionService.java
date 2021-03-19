@@ -1,6 +1,8 @@
 package com.codessquad.qna.question;
 
+import com.codessquad.qna.answer.Answer;
 import com.codessquad.qna.answer.AnswerService;
+import com.codessquad.qna.exception.InsufficientAuthenticationException;
 import com.codessquad.qna.user.UserDTO;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -58,6 +60,14 @@ public class QuestionService {
     @Transactional
     public void delete(Long id, UserDTO currentSessionUser) {
         Question question = readVerifiedQuestion(id, currentSessionUser);
+        List<Answer> answer = question.getAnswers();
+
+        boolean differentWriterExists = answer.stream()
+                .anyMatch(question::isWriterDifferentFrom);
+
+        if (differentWriterExists) {
+            throw new InsufficientAuthenticationException("다른 작성자가 작성한 답변이 있으면 삭제할 수 없습니다.");
+        }
 
         answerService.deleteAll(question.getAnswers());
         question.delete();

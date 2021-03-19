@@ -59,6 +59,10 @@ public class DummyDataFactory {
                 new Answer("국내에서 Ruby on Rails와 Play가 활성화되기 힘든 이유는 뭘까",
                         LocalDateTime.of(2016, 1, 15, 18, 47),
                         Question.builder().setId(1L).build(),
+                        User.builder().setId(1L).build()),
+                new Answer("국내에서 Ruby on Rails와 Play가 활성화되기 힘든 이유는 뭘까",
+                        LocalDateTime.of(2016, 1, 15, 18, 47),
+                        Question.builder().setId(5L).build(),
                         User.builder().setId(1L).build())
         );
     }
