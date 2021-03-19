@@ -36,25 +36,25 @@ public class UserController {
         return "redirect:/users";
     }
 
-    @GetMapping("/{userId}/profile")
-    public String profile(@PathVariable String userId, Model model) {
-        User user = userService.getUser(userId);
+    @GetMapping("/{id}/profile")
+    public String profile(@PathVariable long id, Model model) {
+        User user = userService.getUser(id);
         model.addAttribute("user", user);
         return "user/profile";
     }
 
-    @GetMapping("/{userId}/form")
-    public String updateForm(@PathVariable String userId, Model model, HttpSession session) {
+    @GetMapping("/{id}/form")
+    public String updateForm(@PathVariable long id, Model model, HttpSession session) {
         User user = HttpSessionUtil.getUser(session);
-        if (user.getUserId().equals(userId)) {
+        if (user.getId() == id) {
             model.addAttribute("user", user);
             return "user/updateForm";
         }
         throw new IllegalStateException("자신의 정보만 수정할 수 있습니다.");
     }
 
-    @PutMapping("/{userId}/update")
-    public String update(User user) {
+    @PutMapping("/{id}/update")
+    public String update(@PathVariable long id, User user) {
         userService.updateUser(user);
         return "redirect:/users";
     }
