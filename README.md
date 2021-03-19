@@ -20,12 +20,12 @@
 
 - GET `/user/new`
     - userSignup
-- POST `/user/new`
+- POST `/user`
     - redirect:/user
   
 회원 프로필 조회
 
-- GET `/user/{userId}`
+- GET `/user/{id}`
     - userProfile
 
 비밀번호 확인

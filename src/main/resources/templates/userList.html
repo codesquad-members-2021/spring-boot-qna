@@ -24,7 +24,7 @@
                 {{#users}}
                 <tr>
                     <td>{{id}}</td>
-                    <td><a href="/user/{{userId}}">{{userId}}</a></td>
+                    <td><a href="/user/{{id}}">{{userId}}</a></td>
                     <td>{{name}}</td>
                     <td>{{email}}</td>
                     <td><a href="/user/{{userId}}/password-check" class="btn btn-success" role="button">수정</a></td>
@@ -35,7 +35,6 @@
         </div>
     </div>
 </div>
-
 {{> footer}}
 </body>
 </html>

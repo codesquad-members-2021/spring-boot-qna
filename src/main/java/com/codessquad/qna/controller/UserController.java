@@ -1,24 +1,26 @@
 package com.codessquad.qna.controller;
 
 import com.codessquad.qna.repository.User;
+import com.codessquad.qna.repository.UserRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-
-import java.util.ArrayList;
-import java.util.List;
+import org.springframework.web.servlet.ModelAndView;
 
 @Controller
 @RequestMapping("/user")
 public class UserController {
 
-    private List<User> users = new ArrayList<>();
+    @Autowired
+    private UserRepository userRepository;
 
     @GetMapping
     public String showUserList(Model model) {
+        Iterable<User> users = userRepository.findAll();
         model.addAttribute("users", users);
         return "userList";
     }
@@ -30,20 +32,15 @@ public class UserController {
 
     @PostMapping
     public String signup(User user) {
-        user.setId((long) (users.size() + 1));
-        users.add(user);
+        userRepository.save(user);
         return "redirect:/user";
     }
 
-    @GetMapping("/{userId}")
-    public String showProfile(@PathVariable("userId") String userId, Model model) {
-        for (User user : users) {
-            if (user.isSameId(userId)) {
-                model.addAttribute("user", user);
-                break;
-            }
-        }
-        return "userProfile";
+    @GetMapping("/{id}")
+    public ModelAndView showProfile(@PathVariable Long id) {
+        ModelAndView modelAndView = new ModelAndView("userProfile");
+        modelAndView.addObject("user", userRepository.findById(id).get());
+        return modelAndView;
     }
 
     @GetMapping("/{userId}/password-check")
@@ -52,31 +49,31 @@ public class UserController {
         return "passwordCheckForm";
     }
 
-    @PostMapping("/{userId}/password-check")
-    public String checkPassword(User targetUser, Model model) {
-        for (User user : users) {
-            if (user.isSameId(targetUser.getUserId())) {
-                String passwordBefore = user.getPassword();
-                if (passwordBefore.equals(targetUser.getPassword())) {
-                    model.addAttribute("user", user);
-                    return "userUpdateForm";
-                }
-            }
-        }
-        return "redirect:/";
-    }
-
-    @PostMapping("/{userId}/edit")
-    public String updateUser(@PathVariable("userId") String userId, User targetUser) {
-        for (User user : users) {
-            if (user.isSameId(userId)) {
-                user.setPassword(targetUser.getPassword());
-                user.setName(targetUser.getName());
-                user.setEmail(targetUser.getEmail());
-                break;
-            }
-        }
-        return "redirect:/user";
-    }
+//    @PostMapping("/{userId}/password-check")
+//    public String checkPassword(User targetUser, Model model) {
+//        for (User user : users) {
+//            if (user.isSameId(targetUser.getUserId())) {
+//                String passwordBefore = user.getPassword();
+//                if (passwordBefore.equals(targetUser.getPassword())) {
+//                    model.addAttribute("user", user);
+//                    return "userUpdateForm";
+//                }
+//            }
+//        }
+//        return "redirect:/";
+//    }
+//
+//    @PostMapping("/{userId}/edit")
+//    public String updateUser(@PathVariable("userId") String userId, User targetUser) {
+//        for (User user : users) {
+//            if (user.isSameId(userId)) {
+//                user.setPassword(targetUser.getPassword());
+//                user.setName(targetUser.getName());
+//                user.setEmail(targetUser.getEmail());
+//                break;
+//            }
+//        }
+//        return "redirect:/user";
+//    }
 }
 
