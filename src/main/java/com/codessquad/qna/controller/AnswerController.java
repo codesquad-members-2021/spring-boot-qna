@@ -56,7 +56,12 @@ public class AnswerController {
         if (!Objects.equals(loginUser.getUserId(), selectedAnswer.getReplyId())) {
             throw new UnauthorizedException();
         }
-        answerRepository.delete(selectedAnswer);
+
+        if(!selectedAnswer.isAnswerDeleted()){   // soft delete
+            selectedAnswer.setAnswerDeleted(true);
+        }
+        answerRepository.save(selectedAnswer); // soft delete
+
         return "redirect:/questions/{question.id}";
     }
 

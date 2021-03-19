@@ -6,6 +6,7 @@ import javax.persistence.*;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -52,7 +53,15 @@ public class Question {
     }
 
     public List<Answer> getAnswers() {
-        return answers;
+        List<Answer> enableAnswers = new ArrayList<>();
+
+        for(Answer answer : answers){
+            if(!answer.isAnswerDeleted()){
+                enableAnswers.add(answer);
+            }
+        }
+
+        return enableAnswers;
     }
 
     public boolean isDeleted() {
