@@ -34,7 +34,7 @@ public class UserController {
     public String login(String userId, String password, HttpSession session) {
         User user = userService.findUserByUserId(userId);
 
-        if (!password.equals(user.getPassword())) {
+        if (!user.isMatchedPassword(password)) {
             return "redirect:/users/loginForm";
         }
 
