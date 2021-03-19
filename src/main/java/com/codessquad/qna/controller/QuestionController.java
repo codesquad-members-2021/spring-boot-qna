@@ -1,6 +1,7 @@
 package com.codessquad.qna.controller;
 
 import com.codessquad.qna.HttpSessionUtils;
+import com.codessquad.qna.domain.User;
 import com.codessquad.qna.dto.QuestionDto;
 import com.codessquad.qna.service.QuestionService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,6 +10,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 
 import javax.servlet.http.HttpSession;
 
@@ -45,5 +47,17 @@ public class QuestionController {
     public String viewQuestion(@PathVariable long id, Model model) {
         model.addAttribute("question", questionService.findQuestionById(id));
         return "qna/show";
+    }
+
+    @PutMapping("/questions/{id}/form")
+    public String viewUpdateQuestionForm(@PathVariable long id, Model model, HttpSession session){
+        if (!HttpSessionUtils.isLoginUser(session))
+            return "redirect:/users/loginForm";
+        User sessionedUser = HttpSessionUtils.getUserFromSession(session);
+        if(!sessionedUser.isMatchingId(id)){
+            throw new IllegalStateException("자신의 질문만 수정할 수 있습니다.");
+        }
+        model.addAttribute("question",questionService.findQuestionById(id));
+        return "questions/";
     }
 }
