@@ -25,11 +25,7 @@ public class UserService {
     }
 
     public User login(String userId, String password) {
-        User targetUser = this.userRepository.findByUserId(userId).orElseThrow(IdOrPasswordNotMatchException::new);
-        if (!targetUser.matchPassword(password)) {
-            throw new IdOrPasswordNotMatchException();
-        }
-        return targetUser;
+        return this.userRepository.findByUserIdAndPassword(userId, password).orElseThrow(IdOrPasswordNotMatchException::new);
     }
 
     public void update(Long id, User user, String oldPassword, User sessionUser) {
@@ -43,7 +39,7 @@ public class UserService {
 
     public User verifyUser(Long id, User sessionUser) {
         if (!sessionUser.matchId(id)) {
-            throw new IllegalUserAccessException();
+            throw new UserSessionException("접근권한이 없는 유저입니다.");
         }
         return sessionUser;
     }

@@ -1,7 +1,7 @@
 package com.codessquad.qna.service;
 
-import com.codessquad.qna.exception.IllegalUserAccessException;
 import com.codessquad.qna.exception.NotFoundException;
+import com.codessquad.qna.exception.UserSessionException;
 import com.codessquad.qna.exception.WriterOfAnswerListNotMatchException;
 import com.codessquad.qna.model.Question;
 import com.codessquad.qna.model.User;
@@ -42,7 +42,7 @@ public class QuestionService {
     public Question verifyQuestion(Long id, User sessionUser) {
         Question question = findById(id);
         if (!question.matchWriter(sessionUser)) {
-            throw new IllegalUserAccessException();
+            throw new UserSessionException("접근권한이 없는 유저입니다.");
         }
         return question;
     }

@@ -12,6 +12,12 @@ public class GlobalExceptionHandler {
         return "redirect:/";
     }
 
+    @ExceptionHandler(UserSessionException.class)
+    private String handleUserSessionException(Model model, UserSessionException e) {
+        model.addAttribute("errorMessage", e.getMessage());
+        return "/user/login";
+    }
+
     @ExceptionHandler(DuplicateUserIdFoundException.class)
     private  String handleDuplicateUserIdFoundException(Model model, DuplicateUserIdFoundException e) {
         model.addAttribute("errorMessage", e.getMessage());
@@ -29,18 +35,6 @@ public class GlobalExceptionHandler {
         model.addAttribute("user", e.getUser());
         model.addAttribute("errorMessage", e.getMessage());
         return "/user/updateForm";
-    }
-
-    @ExceptionHandler(IllegalUserAccessException.class)
-    private String handleIllegalUserAccessException(Model model, IllegalUserAccessException e) {
-        model.addAttribute("errorMessage", e.getMessage());
-        return "/user/login";
-    }
-
-    @ExceptionHandler(UserNotLoginException.class)
-    private String handleUserNotLoginException(Model model, UserNotLoginException e) {
-        model.addAttribute("errorMessage", e.getMessage());
-        return "/user/login";
     }
 
     @ExceptionHandler(WriterOfAnswerListNotMatchException.class)
