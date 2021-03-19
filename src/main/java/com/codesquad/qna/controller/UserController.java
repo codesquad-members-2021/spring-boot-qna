@@ -8,6 +8,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
@@ -82,12 +83,17 @@ public class UserController {
     }
 
     @PutMapping("/{id}")
-    public String update(@PathVariable Long id, User updatedUser, String newPassword, HttpSession session) {
+    public String update(@PathVariable Long id, User updatedUser, String newPassword, Errors errors,Model model, HttpSession session) {
         if (!HttpSessionUtils.isLoginUser(session)) {
             return "redirect:/users/loginForm";
         }
 
         User user = userService.findUserBySession(id, session);
+
+        if (errors.hasErrors()) {
+            model.addAttribute("user", user);
+            return "/user/updateForm";
+        }
 
         if (!user.isMatchedPassword(updatedUser)) {
             logger.debug("Password : \"{}\" does not match \"{}\"", updatedUser.getPassword(), user.getPassword());
