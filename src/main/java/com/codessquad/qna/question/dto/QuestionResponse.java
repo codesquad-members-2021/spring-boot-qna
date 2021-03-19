@@ -64,11 +64,11 @@ public class QuestionResponse {
         return answers;
     }
 
-    public String getCreatedDate() {
+    public String getFormattedCreatedDate() {
         return format(createdDate);
     }
 
-    public String getModifiedDate() {
+    public String getFormattedModifiedDate() {
         return format(modifiedDate);
     }
 }

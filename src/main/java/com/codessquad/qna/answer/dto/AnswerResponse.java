@@ -52,11 +52,11 @@ public class AnswerResponse {
         return contents;
     }
 
-    public String getCreatedDate() {
+    public String getFormattedCreatedDate() {
         return format(createdDate);
     }
 
-    public String getModifiedDate() {
+    public String getFormattedModifiedDate() {
         return format(modifiedDate);
     }
 }
