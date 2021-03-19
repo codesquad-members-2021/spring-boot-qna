@@ -1,7 +1,7 @@
 package com.codessquad.qna.web;
 
 import com.codessquad.qna.domain.Question;
-import com.codessquad.qna.domain.QuestionRepository;
+import com.codessquad.qna.repository.QuestionRepository;
 import com.codessquad.qna.domain.User;
 import com.codessquad.qna.exception.NoQuestionException;
 import com.codessquad.qna.exception.NoUserException;

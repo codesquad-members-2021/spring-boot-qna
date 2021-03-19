@@ -1,7 +1,7 @@
 package com.codessquad.qna.web;
 
 import com.codessquad.qna.domain.User;
-import com.codessquad.qna.domain.UserRepository;
+import com.codessquad.qna.repository.UserRepository;
 import com.codessquad.qna.exception.NoUserException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
