@@ -29,6 +29,8 @@ public class Question {
     private String contents;
     @Column(nullable = false, length = 20)
     private final ZonedDateTime time = ZonedDateTime.now(ZoneId.of("Asia/Seoul"));
+    @Column(nullable = false)
+    private boolean questionDeleted = false;
 
     public User getWriter() {
         return writer;
@@ -53,6 +55,10 @@ public class Question {
         return answers;
     }
 
+    public boolean isDeleted() {
+        return questionDeleted;
+    }
+
     public void setWriter(User writer) {
         writer = Optional.ofNullable(writer).orElseThrow(IllegalArgumentException::new);
         this.writer = writer;
@@ -70,6 +76,10 @@ public class Question {
     public void setId(Long id) {
         ValidUtils.checkIllegalArgumentOf(id);
         this.id = id;
+    }
+
+    public void setDeleted(boolean deleted) {
+        this.questionDeleted = deleted;
     }
 
     public void setAnswers(List<Answer> answers) { // 순환참조 문제점?? 우디 PR 내용중에 있었는데 나중에 확인.

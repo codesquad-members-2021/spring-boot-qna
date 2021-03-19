@@ -46,8 +46,12 @@ public class QuestionService {
         }
     }
 
-    public void deleteById(Long id){
-        questionRepository.deleteById(id);
+    public void deleteById(Long targetId){
+        Question targetQuestion = findById(targetId);
+        if(!targetQuestion.isDeleted()) {
+            targetQuestion.setDeleted(true);
+        }
+        save(targetQuestion); // soft delete
     }
 
 }
