@@ -1,6 +1,6 @@
 package com.codessquad.qna.common;
 
-import com.codessquad.qna.question.Answer;
+import com.codessquad.qna.answer.Answer;
 import com.codessquad.qna.question.Question;
 import com.codessquad.qna.user.User;
 

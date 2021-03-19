@@ -1,5 +1,6 @@
-package com.codessquad.qna.question;
+package com.codessquad.qna.answer;
 
+import com.codessquad.qna.question.Question;
 import com.codessquad.qna.user.User;
 
 import javax.persistence.*;

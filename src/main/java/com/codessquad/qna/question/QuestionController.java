@@ -57,37 +57,4 @@ public class QuestionController {
 
         return "redirect:/questions";
     }
-
-    @PostMapping("/{questionId}/answers")
-    public String createAnswer(@PathVariable Long questionId, Answer answer, HttpSession session) {
-        answer.setQuestion(questionService.read(questionId));
-        answer.setWriter(SessionUtils.getSessionUser(session).toEntity());
-
-        questionService.createAnswer(answer);
-
-        return "redirect:/questions/" + questionId;
-    }
-
-    @GetMapping("/{questionId}/answers/{id}/form")
-    public ModelAndView viewAnswerUpdateForm(@PathVariable Long questionId, @PathVariable Long id, HttpSession session) {
-        Answer result = questionService.readVerifiedAnswer(id, SessionUtils.getSessionUser(session));
-
-        return new ModelAndView("/qna/answerUpdateForm", "answer", result);
-    }
-
-    @PutMapping("/{questionId}/answers/{id}")
-    public String updateAnswer(@PathVariable Long questionId, @PathVariable Long id, Answer newAnswer, HttpSession session) {
-        newAnswer.setWriter(SessionUtils.getSessionUser(session).toEntity());
-
-        questionService.updateAnswer(id, newAnswer);
-
-        return "redirect:/questions/" + questionId;
-    }
-
-    @DeleteMapping("/{questionId}/answers/{id}")
-    public String deleteAnswer(@PathVariable Long questionId, @PathVariable Long id, HttpSession session) {
-        questionService.deleteAnswer(id, SessionUtils.getSessionUser(session));
-
-        return "redirect:/questions/" + questionId;
-    }
 }

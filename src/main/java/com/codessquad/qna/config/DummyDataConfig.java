@@ -1,7 +1,7 @@
 package com.codessquad.qna.config;
 
 import com.codessquad.qna.common.DummyDataFactory;
-import com.codessquad.qna.question.AnswerRepository;
+import com.codessquad.qna.answer.AnswerRepository;
 import com.codessquad.qna.question.QuestionRepository;
 import com.codessquad.qna.user.UserRepository;
 import org.springframework.boot.ApplicationRunner;
