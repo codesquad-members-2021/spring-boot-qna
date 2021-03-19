@@ -47,7 +47,7 @@
 
                 <div class="qna-comment">
                     <div class="qna-comment-slipp">
-                        <p class="qna-comment-count"><strong>{{answerCount}}</strong>개의 의견</p>
+                        <p class="qna-comment-count"><strong>👼 바른말 고운말</strong></p>
                         <div class="qna-comment-slipp-articles">
                             {{#answer}}
                             <article class="article" id="answer-1406">
@@ -63,37 +63,24 @@
                                         </a>
                                     </div>
                                 </div>
-                                <div class="article-doc comment-doc">
-                                    <p>{{replyContents}}</p>
-                                </div>
                                 <div class="article-util">
                                     <ul class="article-util-list">
                                         <li>
-                                            <a class="link-modify-article" href="/questions/{{question.id}}/answers/{{answerId}}/update">수정</a>
-                                        </li>
-                                        <li>
-                                            <form class="form-delete" action="/questions/{{question.id}}/answers/{{answerId}}"
+                                            <form class="form-update" action="/questions/{{question.id}}/answers/{{answerId}}"
                                                   method="POST">
-                                                <input type="hidden" name="_method" value="DELETE">
-                                                <button type="submit" class="delete-answer-button">삭제</button>
+                                                <input type="hidden" name="_method" value="PUT">
+                                                <div class="form-group" style="padding:14px;">
+                                                    <label>
+                                                        <textarea class="form-control mb-3" cols="500" rows="3" name = "replyContents">{{replyContents}}</textarea>
+                                                    </label>
+                                                </div>
+                                                <button type="submit" class="update-answer-button">수정완료</button>
                                             </form>
                                         </li>
                                     </ul>
                                 </div>
                             </article>
                             {{/answer}}
-                                <form class="submit-write" method="post" action="/questions/{{question.id}}/answers">
-                                <div class="form-group" style="padding:14px;">
-                                    <textarea class="form-control" name = "replyContents" placeholder="답글을 작성해주세요."></textarea>
-                                </div>
-                                {{^sessionedUser}}
-                                <button class="btn btn-success pull-right" type="button" disabled>🚫 로그인후 작성가능합니다.</button>
-                                {{/sessionedUser}}
-                                {{#sessionedUser}}
-                                <button type = "submit" class="btn btn-success pull-right" >답변하기</button>
-                                {{/sessionedUser}}
-                                <div class="clearfix"/>
-                            </form>
                         </div>
                     </div>
                 </div>
