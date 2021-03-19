@@ -14,10 +14,12 @@ public class Question {
 
     @Column(nullable = false)
     private String writer;
+
     private String title;
 
     @Column(nullable = false, length = 2000)
     private String contents;
+
     private LocalDateTime timeCreated;
 
     public Question(String writer, String title, String contents) {

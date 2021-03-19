@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
 
+import java.util.Optional;
+
 import static com.codessquad.qna.HttpSessionUtils.*;
 
 @Controller
@@ -28,10 +30,15 @@ public class UserController {
 
     @PostMapping("/login")
     public String login(String userId, String password, HttpSession session) {
-        User user = userService.findByUserId(userId);
+        Optional<User> tempUser = userService.findByUserId(userId);
 
+        if (!tempUser.isPresent()) {
+            return "user/login_failed";
+        }
+
+        User user = tempUser.get();
         if (!user.matchPassword(password)) {
-            return "redirect:/users/login";
+            return "user/login_failed";
         }
 
         logger.info("User Logged In: {}", user);

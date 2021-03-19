@@ -6,6 +6,11 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpSession;
+
+import static com.codessquad.qna.HttpSessionUtils.getUserFromSession;
+import static com.codessquad.qna.HttpSessionUtils.isLoginUser;
+
 @Controller
 @RequestMapping("/questions")
 public class QnaController {
@@ -15,9 +20,20 @@ public class QnaController {
         this.questionService = questionService;
     }
 
+    @GetMapping("/form")
+    public String form(HttpSession session) {
+        if (!isLoginUser(session)) {
+            return "redirect:/users/login";
+        }
+        return "qna/form";
+    }
+
     @PostMapping
-    public String createQuestion(Question question) {
-        questionService.save(question);
+    public String createQuestion(Question question, HttpSession session) {
+        if (!isLoginUser(session)) {
+            return "redirect:/users/login";
+        }
+        questionService.save(question, getUserFromSession(session));
         return "redirect:/";
     }
 
