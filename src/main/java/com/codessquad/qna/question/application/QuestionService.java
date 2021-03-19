@@ -59,9 +59,9 @@ public class QuestionService {
 
     public Question getQuestionFromRepository(Long id) {
         Question question = questionRepository.findById(id)
-                .orElseThrow(() -> new QuestionNotFoundException(String.format("존재하지 않는 질문입니다. id: %d", id)));
+                .orElseThrow(() -> new QuestionNotFoundException(id));
         if (question.isDeleted()) {
-            throw new QuestionDeletedException(String.format("이미 삭제된 질문입니다. id: %d", id));
+            throw new QuestionDeletedException(id);
         }
         return question;
     }

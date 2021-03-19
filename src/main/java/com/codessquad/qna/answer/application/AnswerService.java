@@ -37,9 +37,9 @@ public class AnswerService {
 
     public Answer getAnswerFromRepository(Long id) {
         Answer answer = answerRepository.findById(id)
-                .orElseThrow(() -> new AnswerNotFoundException(String.format("존재하지 않는 답변입니다. id: %d", id)));
+                .orElseThrow(() -> new AnswerNotFoundException(id));
         if (answer.isDeleted()) {
-            throw new AnswerDeletedException(String.format("이미 삭제된 답변입니다. id: %d", id));
+            throw new AnswerDeletedException(id);
         }
         return answer;
     }

@@ -67,6 +67,6 @@ public class UserService {
 
     private User getUserFromRepository(Long id) {
         return userRepository.findById(id)
-                .orElseThrow(() -> new UserNotFoundException("존재하지 않는 유저입니다; id: " + id));
+                .orElseThrow(() -> new UserNotFoundException(id));
     }
 }
