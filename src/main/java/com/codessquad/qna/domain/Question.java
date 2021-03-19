@@ -14,6 +14,8 @@ public class Question {
     @JoinColumn(foreignKey = @ForeignKey(name = "fk_question_writer"))
     private User writer;
     private String title;
+
+    @Lob
     private String contents;
     private LocalDateTime createdDateTime = LocalDateTime.now();
 
