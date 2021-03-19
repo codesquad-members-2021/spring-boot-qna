@@ -18,12 +18,22 @@ public class QuestionService {
     }
 
     public List<Question> readAll() {
-        return questionRepository.findAll();
+        List<Question> result = questionRepository.findAll();
+
+        for (Question question : result) {
+            question.setAnswers(answerService.readAll(question.getId()));
+        }
+
+        return result;
     }
 
     public Question read(Long id) {
-        return questionRepository.findById(id)
+        Question result = questionRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("질문이 존재하지 않습니다. id : " + id));
+
+        result.setAnswers(answerService.readAll(id));
+
+        return result;
     }
 
     public Question readVerifiedQuestion(Long id, UserDTO user) {
@@ -49,7 +59,7 @@ public class QuestionService {
     public void delete(Long id, UserDTO currentSessionUser) {
         Question question = readVerifiedQuestion(id, currentSessionUser);
 
-        answerService.delete(question.getAnswers());
+        answerService.deleteAll(question.getAnswers());
         questionRepository.delete(question);
     }
 }

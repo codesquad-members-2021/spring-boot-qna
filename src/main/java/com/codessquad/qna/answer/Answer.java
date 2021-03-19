@@ -13,6 +13,7 @@ public class Answer {
     private Long id;
 
     private String comment;
+    private boolean deleted;
     private LocalDateTime createDateTime;
     private LocalDateTime updateDateTime;
 
@@ -40,6 +41,10 @@ public class Answer {
 
     public String getComment() {
         return comment;
+    }
+
+    public void delete() {
+        deleted = true;
     }
 
     public LocalDateTime getCreateDateTime() {

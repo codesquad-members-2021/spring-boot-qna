@@ -14,6 +14,10 @@ public class AnswerService {
         this.answerRepository = answerRepository;
     }
 
+    public List<Answer> readAll(Long questionId) {
+        return answerRepository.findAllByQuestionIdAndDeletedFalse(questionId);
+    }
+
     private Answer read(Long id) {
         return answerRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("존재하지 않는 답변입니다. id : " + id));
@@ -38,13 +42,18 @@ public class AnswerService {
         answerRepository.save(existedAnswer);
     }
 
-    public void delete(List<Answer> answers) {
-        answerRepository.deleteAll(answers);
+    public void deleteAll(List<Answer> answers) {
+        for (Answer answer : answers) {
+            answer.delete();
+        }
+
+        answerRepository.saveAll(answers);
     }
 
     public void delete(Long id, UserDTO currentSessionUser) {
         Answer answer = readVerifiedAnswer(id, currentSessionUser);
+        answer.delete();
 
-        answerRepository.delete(answer);
+        answerRepository.save(answer);
     }
 }
