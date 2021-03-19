@@ -22,8 +22,8 @@ public class Answer extends BaseTimeEntity {
     @Column(nullable = false, length = 400)
     private String contents;
 
-    @Column(columnDefinition = "BOOLEAN DEFAULT TRUE")
-    private Boolean deleted;
+    @Column(columnDefinition = "BOOLEAN DEFAULT FALSE")
+    private Boolean deleted = false;
 
     public Answer(String contents, Question question, User writer) {
         this.contents = contents;

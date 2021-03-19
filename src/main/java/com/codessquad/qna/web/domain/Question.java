@@ -1,9 +1,9 @@
 package com.codessquad.qna.web.domain;
 
 import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
@@ -18,6 +18,7 @@ public class Question extends BaseTimeEntity {
     private User writer;
 
     @OneToMany(mappedBy = "question", cascade = CascadeType.REMOVE)
+    @Where(clause = "deleted=false")
     private List<Answer> answers;
 
     @Column(nullable = false)
@@ -26,8 +27,8 @@ public class Question extends BaseTimeEntity {
     @Column(nullable = false)
     private String contents;
 
-    @Column(nullable = false, columnDefinition = "BOOLEAN DEFAULT TRUE")
-    private Boolean deleted;
+    @Column(nullable = false, columnDefinition = "BOOLEAN DEFAULT FALSE")
+    private Boolean deleted = false;
 
     public Question(String title, String contents) {
         this.title = title;

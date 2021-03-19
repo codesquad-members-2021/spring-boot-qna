@@ -2,9 +2,9 @@ package com.codessquad.qna.web.controller;
 
 import com.codessquad.qna.web.domain.Question;
 import com.codessquad.qna.web.domain.QuestionRepository;
+import com.codessquad.qna.web.domain.User;
 import com.codessquad.qna.web.exceptions.auth.UnauthorizedAccessException;
 import com.codessquad.qna.web.exceptions.questions.QuestionNotFoundException;
-import com.codessquad.qna.web.domain.User;
 import com.codessquad.qna.web.utils.SessionUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -36,7 +36,7 @@ public class QuestionsController {
 
     @GetMapping
     public String getQuestionList(Model model) {
-        model.addAttribute("questions", questionRepository.findAll());
+        model.addAttribute("questions", questionRepository.findAllByDeletedFalse());
         return "index";
     }
 
