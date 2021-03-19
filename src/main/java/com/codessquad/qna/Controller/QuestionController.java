@@ -14,10 +14,14 @@ import org.springframework.web.bind.annotation.PostMapping;
 @Controller
 public class QuestionController {
 
-    @Autowired
-    private QuestionRepostory questionRepostory;
+    private final QuestionRepostory questionRepostory;
 
-    private Logger logger = LoggerFactory.getLogger(UserController.class);
+    private final Logger logger = LoggerFactory.getLogger(UserController.class);
+
+    public QuestionController (QuestionRepostory questionRepostory) {
+        this.questionRepostory = questionRepostory;
+    }
+
 
     @GetMapping("/qna/form")
     public String questionList() {
