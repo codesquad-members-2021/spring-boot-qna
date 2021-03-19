@@ -1,6 +1,7 @@
 package com.codesquad.qna.service;
 
 import com.codesquad.qna.domain.User;
+import com.codesquad.qna.exception.UserNotFoundException;
 import com.codesquad.qna.repository.UserRepository;
 import com.codesquad.qna.util.HttpSessionUtils;
 import org.slf4j.Logger;
@@ -40,12 +41,12 @@ public class UserService {
 
     public User findUserByUserId(Long id) {
         return userRepository.findById(id)
-                .orElseThrow(IllegalArgumentException::new);
+                .orElseThrow(UserNotFoundException::new);
     }
 
     public User findUserByUserId(String userId) {
         return userRepository.findByUserId(userId)
-                .orElseThrow(IllegalArgumentException::new);
+                .orElseThrow(UserNotFoundException::new);
     }
 
     public User findUserBySession(Long id, HttpSession session) {
