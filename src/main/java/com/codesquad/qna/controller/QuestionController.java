@@ -2,6 +2,7 @@ package com.codesquad.qna.controller;
 
 import com.codesquad.qna.domain.Question;
 import com.codesquad.qna.domain.User;
+import com.codesquad.qna.exception.IllegalUserAccessException;
 import com.codesquad.qna.service.QuestionService;
 import com.codesquad.qna.util.HttpSessionUtils;
 import org.slf4j.Logger;
@@ -45,7 +46,7 @@ public class QuestionController {
         logger.error("Sessioned User : {}, Writer : {}", sessionedUser.getUserId(), question.getWriter());
 
         if (!sessionedUser.isMatchedUserId(question.getWriter())) {
-            throw new IllegalStateException("You can't modify other user's question!!");
+            throw new IllegalUserAccessException();
         }
 
         model.addAttribute(question);
@@ -54,7 +55,7 @@ public class QuestionController {
     }
 
     @PutMapping("/{id}/form")
-    public String update(@PathVariable("id") long id, Question updatedQuestion, HttpSession session ) {
+    public String update(@PathVariable("id") long id, Question updatedQuestion, HttpSession session) {
         if (!HttpSessionUtils.isLoginUser(session)) {
             return "redirect:/users/loginForm";
         }
@@ -63,7 +64,7 @@ public class QuestionController {
         Question question = questionService.findQuestionById(id);
 
         if (!sessionedUser.isMatchedUserId(question.getWriter())) {
-            throw new IllegalStateException("You can't modify other user's question!!");
+            throw new IllegalUserAccessException();
         }
 
         questionService.update(question, updatedQuestion);
@@ -103,7 +104,7 @@ public class QuestionController {
         Question question = questionService.findQuestionById(id);
 
         if (!sessionedUser.isMatchedUserId(question.getWriter())) {
-            throw new IllegalStateException("You can't modify other user's question!!");
+            throw new IllegalUserAccessException();
         }
 
         questionService.delete(question);

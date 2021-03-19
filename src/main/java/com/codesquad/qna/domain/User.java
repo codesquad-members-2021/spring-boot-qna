@@ -79,10 +79,10 @@ public class User {
     }
 
     public boolean isMatchedPassword(User user) {
-        return password.equals(user.password);
+        return this.password.equals(user.password);
     }
 
     public boolean isMatchedPassword(String password) {
-        return password.equals(password);
+        return this.password.equals(password);
     }
 }

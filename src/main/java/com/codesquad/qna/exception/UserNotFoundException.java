@@ -5,4 +5,3 @@ public class UserNotFoundException extends RuntimeException {
         super("Cannot find the user, because it is not registered.");
     }
 }
-

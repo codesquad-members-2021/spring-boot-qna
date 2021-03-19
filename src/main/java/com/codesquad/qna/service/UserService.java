@@ -1,6 +1,7 @@
 package com.codesquad.qna.service;
 
 import com.codesquad.qna.domain.User;
+import com.codesquad.qna.exception.IllegalUserAccessException;
 import com.codesquad.qna.exception.UserNotFoundException;
 import com.codesquad.qna.repository.UserRepository;
 import com.codesquad.qna.util.HttpSessionUtils;
@@ -54,7 +55,7 @@ public class UserService {
         logger.debug("User : {} found", sessionedUser.getUserId());
 
         if (!sessionedUser.isMatchedId(id)) {
-            throw new IllegalStateException("You can't modify other user's info!!");
+            throw new IllegalUserAccessException();
         }
 
         User user = findUserByUserId(id);

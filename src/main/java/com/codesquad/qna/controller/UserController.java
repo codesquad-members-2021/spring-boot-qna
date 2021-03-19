@@ -1,6 +1,7 @@
 package com.codesquad.qna.controller;
 
 import com.codesquad.qna.domain.User;
+import com.codesquad.qna.exception.UnauthorizedUserAccessException;
 import com.codesquad.qna.service.UserService;
 import com.codesquad.qna.util.HttpSessionUtils;
 import org.slf4j.Logger;
@@ -35,7 +36,7 @@ public class UserController {
         User user = userService.findUserByUserId(userId);
 
         if (!user.isMatchedPassword(password)) {
-            return "redirect:/users/loginForm";
+            throw new UnauthorizedUserAccessException("Password does not match!");
         }
 
         logger.debug("User : {} Login Success!", user.getUserId());
@@ -83,21 +84,16 @@ public class UserController {
     }
 
     @PutMapping("/{id}")
-    public String update(@PathVariable Long id, User updatedUser, String newPassword, Errors errors,Model model, HttpSession session) {
+    public String update(@PathVariable Long id, User updatedUser, String newPassword, Model model, HttpSession session) {
         if (!HttpSessionUtils.isLoginUser(session)) {
             return "redirect:/users/loginForm";
         }
 
         User user = userService.findUserBySession(id, session);
 
-        if (errors.hasErrors()) {
-            model.addAttribute("user", user);
-            return "/user/updateForm";
-        }
-
         if (!user.isMatchedPassword(updatedUser)) {
             logger.debug("Password : \"{}\" does not match \"{}\"", updatedUser.getPassword(), user.getPassword());
-            throw new IllegalStateException("Password does not match!");
+            throw new UnauthorizedUserAccessException("Password does not match!");
         }
         userService.update(user, updatedUser, newPassword);
 
