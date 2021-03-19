@@ -3,7 +3,6 @@ package com.codessquad.qna.controller;
 import com.codessquad.qna.domain.Answer;
 import com.codessquad.qna.domain.User;
 import com.codessquad.qna.service.AnswerService;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
@@ -27,16 +26,17 @@ public class ApiAnswerController {
     }
 
     @DeleteMapping("/{answerId}")
-    public String deleteAnswer(@PathVariable Long id, @PathVariable("answerId") Long answerId, HttpSession session) {
+    public boolean deleteAnswer(@PathVariable Long id, @PathVariable Long answerId, HttpSession session) {
         if (!HttpSessionUtils.isLoginUser(session)) {
-            return "/user/login";
+            return false;
         }
         Answer answer = answerService.findById(answerId);
         User loginUser = HttpSessionUtils.getSessionUser(session);
         if (answer.isMatch(loginUser)) {
             answerService.delete(answer);
+            return true;
         }
-        return "redirect:/questions/" + id;
+        return false;
     }
 
 }
