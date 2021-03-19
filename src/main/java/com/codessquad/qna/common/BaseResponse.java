@@ -29,12 +29,12 @@ public abstract class BaseResponse {
             return self();
         }
 
-        public T createdDate(LocalDateTime createdDateTime) {
+        public T createdDateTime(LocalDateTime createdDateTime) {
             this.createdDateTime = createdDateTime;
             return self();
         }
 
-        public T modifiedDate(LocalDateTime modifiedDateTime) {
+        public T modifiedDateTime(LocalDateTime modifiedDateTime) {
             this.modifiedDateTime = modifiedDateTime;
             return self();
         }

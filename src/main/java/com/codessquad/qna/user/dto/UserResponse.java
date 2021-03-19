@@ -49,8 +49,8 @@ public class UserResponse extends BaseResponse {
     public static UserResponse from(User user) {
         Builder builder = new Builder()
                 .id(user.getId())
-                .createdDate(user.getCreatedDateTime())
-                .modifiedDate(user.getModifiedDateTime())
+                .createdDateTime(user.getCreatedDateTime())
+                .modifiedDateTime(user.getModifiedDateTime())
                 .userId(user.getUserId())
                 .name(user.getName())
                 .email(user.getEmail());

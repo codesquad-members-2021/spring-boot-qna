@@ -50,8 +50,8 @@ public class AnswerResponse extends BaseResponse {
     public static AnswerResponse from(Answer answer) {
         Builder builder = new Builder()
                 .id(answer.getId())
-                .createdDate(answer.getCreatedDateTime())
-                .modifiedDate(answer.getModifiedDateTime())
+                .createdDateTime(answer.getCreatedDateTime())
+                .modifiedDateTime(answer.getModifiedDateTime())
                 .questionId(answer.getQuestion().getId())
                 .writer(UserResponse.from(answer.getWriter()))
                 .contents(answer.getContents());

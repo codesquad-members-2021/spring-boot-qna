@@ -62,8 +62,8 @@ public class QuestionResponse extends BaseResponse {
     public static QuestionResponse from(Question question) {
         Builder builder = new Builder()
                 .id(question.getId())
-                .createdDate(question.getCreatedDateTime())
-                .modifiedDate(question.getModifiedDateTime())
+                .createdDateTime(question.getCreatedDateTime())
+                .modifiedDateTime(question.getModifiedDateTime())
                 .title(question.getTitle())
                 .writer(UserResponse.from(question.getWriter()))
                 .contents(question.getContents())
