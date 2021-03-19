@@ -1,6 +1,7 @@
 package com.codessquad.qna.domain.user;
 
 import javax.persistence.*;
+import java.util.Objects;
 
 @Entity
 public class User {
@@ -46,14 +47,42 @@ public class User {
         return email;
     }
 
-    public boolean matchPassword(String prevPasswrod) {
-        return this.password.equals(prevPasswrod);
+    public boolean matchId(Long id) {
+        return this.id == id;
     }
 
-    public void update(User updateUser) {
+    public boolean matchUser(User user) {
+        return this.equals(user);
+    }
+
+    public boolean matchPassword(String password) {
+        return this.password.equals(password);
+    }
+
+    public User update(User updateUser) {
         this.password = updateUser.password;
         this.name = updateUser.name;
-        this.email = email;
+        this.email = updateUser.email;
+
+        return this;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (!(o instanceof User)) {
+            return false;
+        }
+        User user = (User) o;
+        return id == user.id
+                && userId.equals(user.userId);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, userId);
     }
 
     @Override

@@ -1,63 +1,122 @@
 package com.codessquad.qna.web;
 
+import com.codessquad.qna.domain.answer.Answer;
 import com.codessquad.qna.domain.question.Question;
-import com.codessquad.qna.domain.question.QuestionRepository;
+import com.codessquad.qna.domain.user.User;
+import com.codessquad.qna.exception.IllegalUserAccessException;
+import com.codessquad.qna.exception.QuestionNotFoundException;
+import com.codessquad.qna.exception.UserNotFoundException;
+import com.codessquad.qna.service.AnswerService;
+import com.codessquad.qna.service.QuestionService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
 
-import java.util.Optional;
+import javax.servlet.http.HttpSession;
+import java.util.List;
+
+import static com.codessquad.qna.domain.user.HttpSessionUtils.getUserFromSession;
+import static com.codessquad.qna.domain.user.HttpSessionUtils.isLoginUser;
 
 @Controller
+@RequestMapping("/questions")
 public class QuestionController {
+    private static Logger logger = LoggerFactory.getLogger(QuestionController.class);
 
-    private Logger logger = LoggerFactory.getLogger(QuestionController.class);
+    private final QuestionService questionService;
+    private final AnswerService answerService;
 
-    private final QuestionRepository questionRepository;
-
-    @Autowired
-    public QuestionController(QuestionRepository questionRepository) {
-        this.questionRepository = questionRepository;
+    public QuestionController(QuestionService questionService,
+                              AnswerService answerService) {
+        this.questionService = questionService;
+        this.answerService = answerService;
     }
 
-    @GetMapping("/questions/form")
-    public String getQuestionFormPage() {
-        return "qna/form";
+    @GetMapping("/form")
+    public String getQuestionFormPage(HttpSession session) {
+        return isLoginUser(session) ?
+                "qna/form" : "redirect:/users/loginForm";
     }
 
-    @PostMapping("/questions")
-    public String submitQuestion(Question question, Model model) {
-        questionRepository.save(question);
-        model.addAttribute(question);
-
-        logger.debug("question : {} ", question.toString());
+    @PostMapping("/")
+    public String submitQuestion(String title, String contents,
+                                 HttpSession session) {
+        User loginedUser = getUserFromSession(session);
+        Question question = new Question(loginedUser, title, contents);
+        questionService.createQuestion(question);
 
         return "redirect:/";
     }
 
     @GetMapping("/")
     public String getQuestionListPage(Model model) {
-        model.addAttribute("questionList", questionRepository.findAll());
+        model.addAttribute("questionList", questionService.findAll());
         return "home";
     }
 
-    @GetMapping("/questions/{index}")
-    public String getQuestionDetail(@PathVariable(("index")) long index, Model model) {
-        Optional<Question> question = questionRepository.findById(index);
-
-        if (!question.isPresent()) {
-            return "redirect:/";
+    @GetMapping("/{questionId}")
+    public String getQuestionDetail(@PathVariable(("questionId")) Long id, Model model, HttpSession session) {
+        if (!isLoginUser(session)) {
+            throw new UserNotFoundException();
         }
 
-        model.addAttribute("question", question.get());
+        Question question = questionService.findById(id);
+        List<Answer> answers = answerService.findAnswerListByQuestion(question);
 
-        logger.debug("question : {} ", question.toString());
+        model.addAttribute("question", question);
+        model.addAttribute("answerList", answers);
+
+        logger.debug("question : {} ", question);
+        logger.debug("answer : {} ", answers);
 
         return "/qna/show";
+    }
+
+    @GetMapping("/{id}/form")
+    public String getUpdateForm(@PathVariable Long id, Model model, HttpSession session) {
+        User loginedUser = getUserFromSession(session);
+        Question question = questionService.findById(id);
+
+        if (!loginedUser.matchUser(question.getWriter())) {
+            throw new IllegalUserAccessException();
+        }
+
+        model.addAttribute("question", question);
+        return "qna/updateForm";
+    }
+
+    @PutMapping("/{id}")
+    public String updateQuestion(@PathVariable Long id, Question updateQuestion, HttpSession session) {
+        User loginedUser = getUserFromSession(session);
+        Question question = questionService.findById(id);
+
+        if (!loginedUser.matchUser(question.getWriter())) {
+            throw new IllegalStateException("자신의 정보만 수정할 수 있습니다.");
+        }
+
+        questionService.update(question, updateQuestion);
+
+        return "redirect:/";
+    }
+
+    @DeleteMapping("{id}")
+    public String delete(@PathVariable Long id, HttpSession session) {
+        User loginedUser = getUserFromSession(session);
+        Question question = questionService.findById(id);
+
+        if (!question.isSameWriter(loginedUser)) {
+            throw new IllegalUserAccessException();
+        }
+
+        questionService.deleteBy(id);
+
+        return "redirect:/";
+    }
+
+    @ExceptionHandler(QuestionNotFoundException.class)
+    public String handleQuestionNotFoundException() {
+        return "redirect:/";
     }
 }

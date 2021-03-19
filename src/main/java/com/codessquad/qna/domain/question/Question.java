@@ -1,41 +1,44 @@
 package com.codessquad.qna.domain.question;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
+import com.codessquad.qna.domain.BaseTimeEntity;
+import com.codessquad.qna.domain.answer.Answer;
+import com.codessquad.qna.domain.user.User;
+
+import javax.persistence.*;
+import java.util.List;
 
 @Entity
-public class Question {
-    private static final String DATE_FORMAT = "yyyy-MM-dd HH:mm:ss";
+public class Question extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long index;
+    private long id;
 
-    private String writer;
+    @ManyToOne
+    @JoinColumn(foreignKey = @ForeignKey(name = "fk_question_writer"))
+    private User writer;
     private String title;
     private String contents;
-    private String createdTime;
 
-    protected Question() {
+    @OneToMany(mappedBy = "question")
+    @OrderBy("id DESC")
+    private List<Answer> answers;
+
+    public Question() {
     }
 
-    public Question(String writer, String title, String contents) {
+    public Question(User writer, String title, String contents) {
+        super();
         this.writer = writer;
         this.title = title;
         this.contents = contents;
-        this.createdTime = LocalDateTime.now()
-                .format(DateTimeFormatter.ofPattern(DATE_FORMAT));
     }
 
-    public long getIndex() {
-        return index;
+    public long getId() {
+        return id;
     }
 
-    public String getWriter() {
+    public User getWriter() {
         return writer;
     }
 
@@ -47,18 +50,22 @@ public class Question {
         return contents;
     }
 
-    public String getCreatedTime() {
-        return createdTime;
+    public boolean isSameWriter(User user) {
+        return writer.equals(user);
+    }
+
+    public void update(Question updateQuestion) {
+        this.title = updateQuestion.title;
+        this.contents = updateQuestion.contents;
     }
 
     @Override
     public String toString() {
         return "Question{" +
-                "id=" + index +
+                "id=" + id +
                 ", writer='" + writer + '\'' +
                 ", title='" + title + '\'' +
                 ", contents='" + contents + '\'' +
-                ", createdTime='" + createdTime + '\'' +
                 '}';
     }
 }
