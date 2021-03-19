@@ -1,43 +1,61 @@
 package com.codessquad.qna.answer.dto;
 
 import com.codessquad.qna.answer.domain.Answer;
+import com.codessquad.qna.common.BaseResponse;
 import com.codessquad.qna.user.dto.UserResponse;
 
-import java.time.LocalDateTime;
-
-import static com.codessquad.qna.common.DateUtils.format;
-
-public class AnswerResponse {
-    private Long id;
+public class AnswerResponse extends BaseResponse {
     private Long questionId;
     private UserResponse writer;
     private String contents;
-    private LocalDateTime createdDate;
-    private LocalDateTime modifiedDate;
 
-    protected AnswerResponse() {}
+    public AnswerResponse(Builder builder) {
+        super(builder);
+        this.questionId = builder.questionId;
+        this.writer = builder.writer;
+        this.contents = builder.contents;
+    }
 
-    public AnswerResponse(Long id, Long questionId, UserResponse writer, String contents, LocalDateTime createdDate, LocalDateTime modifiedDate) {
-        this.id = id;
-        this.questionId = questionId;
-        this.writer = writer;
-        this.contents = contents;
-        this.createdDate = createdDate;
-        this.modifiedDate = modifiedDate;
+    private static class Builder extends BaseResponse.Builder<Builder> {
+        private Long questionId;
+        private UserResponse writer;
+        private String contents;
+
+        @Override
+        protected Builder self() {
+            return this;
+        }
+
+        @Override
+        protected AnswerResponse build() {
+            return new AnswerResponse(this);
+        }
+
+        private Builder questionId(Long questionId) {
+            this.questionId = questionId;
+            return this;
+        }
+
+        private Builder writer(UserResponse writer) {
+            this.writer = writer;
+            return this;
+        }
+
+        private Builder contents(String contents) {
+            this.contents = contents;
+            return this;
+        }
     }
 
     public static AnswerResponse from(Answer answer) {
-        return new AnswerResponse(
-                answer.getId(),
-                answer.getQuestion().getId(),
-                UserResponse.from(answer.getWriter()),
-                answer.getContents(),
-                answer.getCreatedDate(),
-                answer.getModifiedDate());
-    }
-
-    public Long getId() {
-        return id;
+        Builder builder = new Builder()
+                .id(answer.getId())
+                .createdDate(answer.getCreatedDateTime())
+                .modifiedDate(answer.getModifiedDateTime())
+                .questionId(answer.getQuestion().getId())
+                .writer(UserResponse.from(answer.getWriter()))
+                .contents(answer.getContents());
+        return new AnswerResponse(builder);
     }
 
     public Long getQuestionId() {
@@ -50,13 +68,5 @@ public class AnswerResponse {
 
     public String getContents() {
         return contents;
-    }
-
-    public String getFormattedCreatedDate() {
-        return format(createdDate);
-    }
-
-    public String getFormattedModifiedDate() {
-        return format(modifiedDate);
     }
 }

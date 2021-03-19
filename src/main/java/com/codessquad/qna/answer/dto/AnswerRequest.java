@@ -16,10 +16,6 @@ public class AnswerRequest {
         this.contents = contents;
     }
 
-    public String getContents() {
-        return contents;
-    }
-
     public Answer toAnswer(Question question, User writer) {
         return new Answer(question, writer, contents);
     }

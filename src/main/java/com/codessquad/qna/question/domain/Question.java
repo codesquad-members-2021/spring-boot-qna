@@ -1,7 +1,7 @@
 package com.codessquad.qna.question.domain;
 
 import com.codessquad.qna.answer.domain.Answer;
-import com.codessquad.qna.common.BaseTimeEntity;
+import com.codessquad.qna.common.BaseEntity;
 import com.codessquad.qna.user.domain.User;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import org.hibernate.annotations.Where;
@@ -11,11 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-public class Question extends BaseTimeEntity {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
+public class Question extends BaseEntity {
     @ManyToOne
     @JoinColumn(foreignKey = @ForeignKey(name = "fk_question_writer"))
     private User writer;
@@ -32,18 +28,12 @@ public class Question extends BaseTimeEntity {
     @JsonBackReference
     private List<Answer> answers = new ArrayList<>();
 
-    private boolean deleted = false;
-
     protected Question() {}
 
     public Question(User writer, String title, String contents) {
         this.writer = writer;
         this.title = title;
         this.contents = contents;
-    }
-
-    public Long getId() {
-        return id;
     }
 
     public User getWriter() {
@@ -65,13 +55,5 @@ public class Question extends BaseTimeEntity {
     public void update(Question question) {
         this.title = question.title;
         this.contents = question.contents;
-    }
-
-    public void delete() {
-        this.deleted = true;
-    }
-
-    public boolean isDeleted() {
-        return deleted;
     }
 }
