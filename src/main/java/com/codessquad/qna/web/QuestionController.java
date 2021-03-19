@@ -41,10 +41,10 @@ public class QuestionController {
     }
 
     @PostMapping("/")
-    public String submitQuestion(String title, String contents,
+    public String submitQuestion(String title, String content,
                                  HttpSession session) {
         User loginedUser = getUserFromSession(session);
-        Question question = new Question(loginedUser, title, contents);
+        Question question = new Question(loginedUser, title, content);
         questionService.createQuestion(question);
 
         return "redirect:/";

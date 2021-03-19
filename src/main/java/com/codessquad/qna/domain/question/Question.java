@@ -18,7 +18,7 @@ public class Question extends BaseTimeEntity {
     @JoinColumn(foreignKey = @ForeignKey(name = "fk_question_writer"))
     private User writer;
     private String title;
-    private String contents;
+    private String content;
 
     @OneToMany(mappedBy = "question")
     @OrderBy("id DESC")
@@ -27,11 +27,11 @@ public class Question extends BaseTimeEntity {
     public Question() {
     }
 
-    public Question(User writer, String title, String contents) {
+    public Question(User writer, String title, String content) {
         super();
         this.writer = writer;
         this.title = title;
-        this.contents = contents;
+        this.content = content;
     }
 
     public long getId() {
@@ -46,8 +46,8 @@ public class Question extends BaseTimeEntity {
         return title;
     }
 
-    public String getContents() {
-        return contents;
+    public String getContent() {
+        return content;
     }
 
     public boolean isSameWriter(User user) {
@@ -56,7 +56,7 @@ public class Question extends BaseTimeEntity {
 
     public void update(Question updateQuestion) {
         this.title = updateQuestion.title;
-        this.contents = updateQuestion.contents;
+        this.content = updateQuestion.content;
     }
 
     @Override
@@ -65,7 +65,7 @@ public class Question extends BaseTimeEntity {
                 "id=" + id +
                 ", writer='" + writer + '\'' +
                 ", title='" + title + '\'' +
-                ", contents='" + contents + '\'' +
+                ", content='" + content + '\'' +
                 '}';
     }
 }

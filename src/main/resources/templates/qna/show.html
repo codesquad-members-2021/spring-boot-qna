@@ -31,7 +31,7 @@
                         </div>
                     </div>
                     <div class="article-doc">
-                        {{question.contents}}
+                        {{question.content}}
                     </div>
                     <div class="article-util">
                         <ul class="article-util-list">
@@ -70,7 +70,7 @@
                                     </div>
                                 </div>
                                 <div class="article-doc comment-doc">
-                                    <p>{{comments}}</p>
+                                    <p>{{comment}}</p>
                                 </div>
                                 <div class="article-util">
                                     <ul class="article-util-list">
@@ -92,7 +92,7 @@
                             <form class="answer-write" method = "POST" action="/questions/{{question.id}}/answers/">
                                 <div class="form-group" style="padding:14px;">
                                     <textarea class="form-control" placeholder="Update your status"
-                                              id="comments" name="comments"></textarea>
+                                              id="comment" name="comment"></textarea>
                                 </div>
                                 <input type = "submit" class="btn btn-success pull-right" value = "답변하기"/>
                                 <div class="clearfix" />

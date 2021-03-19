@@ -31,11 +31,11 @@ public class AnswerController {
     }
 
     @PostMapping("/")
-    public String createAnswer(@PathVariable Long questionId, String comments,
+    public String createAnswer(@PathVariable Long questionId, String comment,
                                HttpSession session) {
         User writer = getUserFromSession(session);
         Question question = questionService.findById(questionId);
-        Answer answer = new Answer(writer, question, comments);
+        Answer answer = new Answer(writer, question, comment);
 
         answerService.createAnswer(answer);
         logger.debug("answer : {}", answer);

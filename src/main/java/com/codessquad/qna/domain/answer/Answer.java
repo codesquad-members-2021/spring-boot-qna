@@ -21,15 +21,15 @@ public class Answer extends BaseTimeEntity {
     @JoinColumn (foreignKey = @ForeignKey(name = "fk_answer_to_user"))
     private User writer;
 
-    private String comments;
+    private String comment;
 
     public Answer() {
     }
 
-    public Answer(User writer, Question question, String comments) {
+    public Answer(User writer, Question question, String comment) {
         this.writer = writer;
         this.question = question;
-        this.comments = comments;
+        this.comment = comment;
     }
 
     public Long getId() {
@@ -44,8 +44,8 @@ public class Answer extends BaseTimeEntity {
         return writer;
     }
 
-    public String getComments() {
-        return comments;
+    public String getComment() {
+        return comment;
     }
 
     public boolean matchWriter(User loginedUser) {
@@ -58,7 +58,7 @@ public class Answer extends BaseTimeEntity {
                 "id=" + id +
                 ", question=" + question +
                 ", writer=" + writer +
-                ", comments='" + comments + '\'' +
+                ", comment='" + comment + '\'' +
                 '}';
     }
 }
