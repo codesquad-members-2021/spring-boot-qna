@@ -41,16 +41,22 @@ public class QuestionController {
 
     @PutMapping("/{id}")
     public String update(@PathVariable long id, String contents, String title, HttpSession session) {
-        User user = HttpSessionUtil.getUser(session);
-        questionService.updateQuestion(id, title, contents, user);
-        return "redirect:/questions/" + id;
+        Question question = questionService.getQuestion(id);
+        if (HttpSessionUtil.isAuthorized(question.getWriter().getId(), session)) {
+            questionService.updateQuestion(id, title, contents);
+            return "redirect:/questions/" + id;
+        }
+        throw new IllegalStateException("자신의 글만 수정할 수 있습니다.");
     }
 
     @DeleteMapping("/{id}")
     public String delete(@PathVariable long id, HttpSession session) {
-        User user = HttpSessionUtil.getUser(session);
-        questionService.deleteQuestion(id, user);
-        return "redirect:/";
+        Question question = questionService.getQuestion(id);
+        if (HttpSessionUtil.isAuthorized(question.getWriter().getId(), session)) {
+            questionService.deleteQuestion(id);
+            return "redirect:/";
+        }
+        throw new IllegalStateException("자신의 글만 삭제할 수 있습니다.");
     }
 
     @GetMapping("/form")
