@@ -62,7 +62,7 @@ public class QuestionController {
             return "redirect:/users/login";
         }
         assert sessionUser != null;
-        if (!qna.checkWriter(sessionUser.getUserId())) {
+        if (!qna.checkWriter(sessionUser)) {
             throw new IllegalStateException("자신의 질문만 수정할 수 있습니다.");
         }
 
@@ -88,7 +88,7 @@ public class QuestionController {
             return "redirect:/users/login";
         }
         assert sessionUser != null;
-        if (!qna.checkWriter(sessionUser.getUserId())) {
+        if (!qna.checkWriter(sessionUser)) {
             throw new IllegalStateException("자신의 질문만 삭제할 수 있습니다.");
         }
 
