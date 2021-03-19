@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.servlet.http.HttpSession;
+import javax.validation.Valid;
 
 import static com.codessquad.qna.common.HttpSessionUtils.checkAuthorization;
 import static com.codessquad.qna.common.HttpSessionUtils.getUserAttribute;
@@ -28,7 +29,7 @@ public class AnswerController {
     }
 
     @PostMapping
-    public String createAnswer(@PathVariable Long questionId, AnswerRequest answerRequest, HttpSession session) {
+    public String createAnswer(@PathVariable Long questionId, @Valid AnswerRequest answerRequest, HttpSession session) {
         User writer = getUserAttribute(session);
         Question question = questionService.getQuestionFromRepository(questionId);
         answerService.save(answerRequest, question, writer);

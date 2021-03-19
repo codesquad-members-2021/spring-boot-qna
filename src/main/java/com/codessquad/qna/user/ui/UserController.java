@@ -3,14 +3,12 @@ package com.codessquad.qna.user.ui;
 import com.codessquad.qna.user.application.UserService;
 import com.codessquad.qna.user.domain.User;
 import com.codessquad.qna.user.dto.UserRequest;
-import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import javax.persistence.EntityNotFoundException;
 import javax.servlet.http.HttpSession;
+import javax.validation.Valid;
 
 import static com.codessquad.qna.common.HttpSessionUtils.*;
 
@@ -25,8 +23,8 @@ public class UserController {
     }
 
     @PostMapping
-    public String createUser(User user) {
-        userService.save(UserRequest.from(user));
+    public String createUser(@Valid UserRequest userRequest) {
+        userService.save(userRequest);
         return "redirect:/users";
     }
 
@@ -65,19 +63,9 @@ public class UserController {
     }
 
     @PutMapping("{id}")
-    public String updateUser(@PathVariable Long id, User user, HttpSession session) {
+    public String updateUser(@PathVariable Long id, @Valid UserRequest userRequest, HttpSession session) {
         checkAuthorization(id, session);
-        userService.updateUser(id, UserRequest.from(user));
+        userService.updateUser(id, userRequest);
         return "redirect:/users";
-    }
-
-    @ExceptionHandler(DataIntegrityViolationException.class)
-    public ResponseEntity handleIllegalArgsException(DataIntegrityViolationException e) {
-        return ResponseEntity.badRequest().build();
-    }
-
-    @ExceptionHandler(EntityNotFoundException.class)
-    public ResponseEntity handleNotFoundException(EntityNotFoundException e) {
-        return ResponseEntity.notFound().build();
     }
 }

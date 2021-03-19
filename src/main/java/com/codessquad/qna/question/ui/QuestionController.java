@@ -8,6 +8,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
+import javax.validation.Valid;
 
 import static com.codessquad.qna.common.HttpSessionUtils.*;
 
@@ -21,7 +22,7 @@ public class QuestionController {
     }
 
     @PostMapping
-    public String createQuestion(QuestionRequest questionRequest, HttpSession session) {
+    public String createQuestion(@Valid QuestionRequest questionRequest, HttpSession session) {
         User writer = getUserAttribute(session);
         questionService.save(questionRequest, writer);
         return "redirect:/questions";
@@ -52,7 +53,7 @@ public class QuestionController {
     }
 
     @PutMapping("{id}")
-    public String updateQuestion(@PathVariable Long id, QuestionRequest questionRequest, HttpSession session) {
+    public String updateQuestion(@PathVariable Long id, @Valid QuestionRequest questionRequest, HttpSession session) {
         checkQuestionAuthorization(id, session);
         User writer = getUserAttribute(session);
         questionService.updateQuestion(id, questionRequest, writer);
