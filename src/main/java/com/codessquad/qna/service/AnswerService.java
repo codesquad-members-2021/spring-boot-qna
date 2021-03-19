@@ -6,6 +6,7 @@ import com.codessquad.qna.domain.Question;
 import com.codessquad.qna.domain.User;
 import com.codessquad.qna.exception.NoSearchObjectException;
 import com.codessquad.qna.repository.AnswerRepository;
+import com.codessquad.qna.repository.QuestionRepository;
 import com.codessquad.qna.valid.UserValidator;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -16,17 +17,17 @@ import org.springframework.transaction.annotation.Transactional;
 public class AnswerService {
 
     private final AnswerRepository answerRepository;
-    private final QuestionService questionService;
+    private final QuestionRepository questionRepository;
 
-    public AnswerService(AnswerRepository answerRepository, QuestionService questionService) {
+    public AnswerService(AnswerRepository answerRepository, QuestionRepository questionRepository) {
         this.answerRepository = answerRepository;
-        this.questionService = questionService;
+        this.questionRepository = questionRepository;
     }
 
     @Transactional
     public Answer write(User writer, String contents, Long questionId) {
         UserValidator.validate(writer);
-        Question question = questionService.findById(questionId);
+        Question question = questionRepository.findById(questionId).orElseThrow(() -> new NoSearchObjectException("질문"));
         Answer answer = new Answer(writer, question, contents);
         return answerRepository.save(answer);
     }
