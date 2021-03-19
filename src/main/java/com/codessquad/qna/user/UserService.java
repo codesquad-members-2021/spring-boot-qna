@@ -29,24 +29,28 @@ public class UserService {
         return UserDTO.of(result);
     }
 
+    private UserDTO readUser(String userId) {
+        User result = userRepository.findByUserId(userId)
+                .orElseThrow(() -> new ResourceNotFoundException("존재하지 않는 사용자 입니다. id : " + userId));
+
+        return UserDTO.of(result);
+    }
+
     public UserDTO readVerifiedUser(Long id, UserDTO verificationTarget) {
         User result = readUser(id).toEntity();
-
         result.verifyWith(verificationTarget.toEntity());
 
         return UserDTO.of(result);
     }
 
-    public UserDTO readLoginableUser(String userId, String password) {
+    public UserDTO readPasswordVerifiedUser(String userId, String password) {
         try {
-            User user = userRepository.findByUserId(userId)
-                    .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 사용자 입니다. id : " + userId));
-
+            User user = readUser(userId).toEntity();
             user.checkPassword(password);
 
             return UserDTO.of(user);
 
-        } catch (IllegalArgumentException e) {
+        } catch (ResourceNotFoundException | IllegalArgumentException e) {
             throw new LoginFailedException(e);
         }
     }

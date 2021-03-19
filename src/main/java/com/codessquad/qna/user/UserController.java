@@ -54,7 +54,9 @@ public class UserController {
 
     @PostMapping("/login")
     public String login(String userId, String password, HttpSession session) {
-        SessionUtils.setSessionUser(session, userService.readLoginableUser(userId, password));
+        UserDTO verifiedUser = userService.readPasswordVerifiedUser(userId, password);
+
+        SessionUtils.setSessionUser(session, verifiedUser);
 
         return "redirect:/";
     }
