@@ -11,8 +11,10 @@
 <div class="container" id="main">
     <div class="col-md-12 col-sm-12 col-lg-12">
         <div class="panel panel-default">
+
+            {{#Qna}}
             <header class="qna-header">
-                <h2 class="qna-title">{{Qna.title}}</h2>
+                <h2 class="qna-title">{{title}}</h2>
             </header>
             <div class="content-main">
                 <article class="article">
@@ -22,28 +24,29 @@
                                  class="article-author-thumb" alt="">
                         </div>
                         <div class="article-header-text">
-                            <a href="/users/{{Qna.id}}" class="article-author-name">{{Qna.writer}}</a>
+                            <a href="/users/{{id}}" class="article-author-name">{{writer.userId}}</a>
                             <a href="/questions/413" class="article-header-time" title="퍼머링크">
-                                {{Qna.getFormattedDateTime}}
+                                {{FormattedDateTime}}
                                 <i class="icon-link"></i>
                             </a>
                         </div>
                     </div>
                     <div class="article-doc">
-                        <p>{{Qna.contents}}</p>
+                        <p>{{contents}}</p>
                     </div>
                     <div class="article-util">
                         <ul class="article-util-list">
                             <li>
-                                <a class="link-modify-article" href="/qna/{{Qna.id}}/form">수정</a>
+                                <a class="link-modify-article" href="/qna/{{id}}/form">수정</a>
                             </li>
                             <li>
-                                <form class="form-delete" action="/qna/{{Qna.id}}/delete" method="POST">
+                                <form class="form-delete" action="/qna/{{id}}/delete" method="POST">
                                     <input type="hidden" name="_method" value="DELETE">
                                     <button class="link-delete-article" type="submit">삭제</button>
                                 </form>
                             </li>
                             <li>
+                                {{/Qna}}
                                 <a class="link-modify-article" href="/">목록</a>
                             </li>
                         </ul>
