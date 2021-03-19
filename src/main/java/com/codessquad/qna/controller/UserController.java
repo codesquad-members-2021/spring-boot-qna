@@ -2,6 +2,7 @@ package com.codessquad.qna.controller;
 
 import com.codessquad.qna.model.User;
 import com.codessquad.qna.service.UserService;
+import org.omg.CORBA.Request;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import static com.codessquad.qna.controller.HttpSessionUtils.USER_SESSION_KEY;
@@ -34,7 +36,8 @@ public class UserController {
     }
 
     @PostMapping("/user/form")
-    public String signUp(User user) {
+    public String signUp(User user, HttpServletRequest request) {
+        request.setAttribute("path", "/user/form");
         this.userService.save(user);
         logger.info("회원가입 요청");
         return "redirect:/user/list";
@@ -47,7 +50,8 @@ public class UserController {
     }
 
     @PostMapping("/user/login")
-    public String login(String userId, String password, HttpSession session) {
+    public String login(String userId, String password, HttpServletRequest request, HttpSession session) {
+        request.setAttribute("path", "/user/login");
         session.setAttribute(USER_SESSION_KEY, this.userService.login(userId, password));
         logger.info("로그인 요청");
         return "redirect:/";
@@ -82,7 +86,8 @@ public class UserController {
     }
 
     @PutMapping("/user/{id}/form")
-    public String updateProfile(@PathVariable("id") Long id, User user, String oldPassword, HttpSession session) {
+    public String updateProfile(@PathVariable("id") Long id, User user, String oldPassword, HttpServletRequest request, HttpSession session) {
+        request.setAttribute("path", "/user/updateForm");
         this.userService.update(id, user, oldPassword, getUserFromSession(session));
         logger.info("유저 정보 수정 요청");
         return "redirect:/user/list";

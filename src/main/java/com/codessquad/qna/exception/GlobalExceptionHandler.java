@@ -4,6 +4,12 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+
+import static com.codessquad.qna.controller.HttpSessionUtils.getUserFromSession;
+import static com.codessquad.qna.controller.HttpSessionUtils.isLoginUser;
+
 @ControllerAdvice
 public class GlobalExceptionHandler {
 
@@ -18,23 +24,13 @@ public class GlobalExceptionHandler {
         return "/user/login";
     }
 
-    @ExceptionHandler(DuplicateUserIdFoundException.class)
-    private  String handleDuplicateUserIdFoundException(Model model, DuplicateUserIdFoundException e) {
+    @ExceptionHandler(UserAccountException.class)
+    private String handleUserAccountException(Model model, HttpSession session, HttpServletRequest request, UserAccountException e) {
         model.addAttribute("errorMessage", e.getMessage());
-        return "/user/form";
-    }
-
-    @ExceptionHandler(IdOrPasswordNotMatchException.class)
-    private String handleIdOrPasswordNotMatchException(Model model, IdOrPasswordNotMatchException e) {
-        model.addAttribute("errorMessage", e.getMessage());
-        return "/user/login";
-    }
-
-    @ExceptionHandler(CurrentPasswordNotMatchException.class)
-    private String handleCurrentPasswordNotMatchException(Model model, CurrentPasswordNotMatchException e) {
-        model.addAttribute("user", e.getUser());
-        model.addAttribute("errorMessage", e.getMessage());
-        return "/user/updateForm";
+        if (isLoginUser(session)) {
+            model.addAttribute("user", getUserFromSession(session));
+        }
+        return (String) request.getAttribute("path");
     }
 
     @ExceptionHandler(WriterOfAnswerListNotMatchException.class)

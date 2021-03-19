@@ -19,19 +19,20 @@ public class UserService {
 
     public void save(User user) {
         if (this.userRepository.findByUserId(user.getUserId()).isPresent()) {
-            throw new DuplicateUserIdFoundException();
+            throw new UserAccountException("이미 사용 중인 아이디입니다.");
         }
         this.userRepository.save(user);
     }
 
     public User login(String userId, String password) {
-        return this.userRepository.findByUserIdAndPassword(userId, password).orElseThrow(IdOrPasswordNotMatchException::new);
+        return this.userRepository.findByUserIdAndPassword(userId, password).orElseThrow(() ->
+                new UserAccountException("아이디 또는 비밀번호가 일치하지 않습니다."));
     }
 
     public void update(Long id, User user, String oldPassword, User sessionUser) {
         User loginUser = verifyUser(id, sessionUser);
         if (!loginUser.matchPassword(oldPassword)) {
-            throw new CurrentPasswordNotMatchException(user);
+            throw new UserAccountException("기존 비밀번호가 일치하지 않습니다.");
         }
         loginUser.update(user);
         this.userRepository.save(loginUser);
