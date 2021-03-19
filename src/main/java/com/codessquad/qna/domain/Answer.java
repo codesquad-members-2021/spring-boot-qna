@@ -32,6 +32,8 @@ public class Answer {
 
     @Column(nullable = false, length = 20)
     private final ZonedDateTime replyTime = ZonedDateTime.now(ZoneId.of("Asia/Seoul"));
+    @Column(nullable = false)
+    private boolean answerDeleted = false;
 
     public Long getAnswerId() {
         return answerId;
@@ -55,6 +57,10 @@ public class Answer {
 
     public String getReplyContents() {
         return replyContents;
+    }
+
+    public boolean isAnswerDeleted() {
+        return answerDeleted;
     }
 
     public void setAnswerId(Long id) {
@@ -81,15 +87,7 @@ public class Answer {
         this.replyContents = replyContents;
     }
 
-    @Override
-    public String toString() {
-        return "Answer{" +
-                "id=" + answerId +
-                ", question=" + question +
-                ", replyId='" + replyId + '\'' +
-                ", replyAuthor='" + replyAuthor + '\'' +
-                ", replyContents='" + replyContents + '\'' +
-                ", replyTime=" + replyTime +
-                '}';
+    public void setAnswerDeleted(boolean answerDeleted) {
+        this.answerDeleted = answerDeleted;
     }
 }

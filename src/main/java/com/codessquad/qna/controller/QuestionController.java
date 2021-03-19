@@ -1,8 +1,8 @@
 package com.codessquad.qna.controller;
 
-import com.codessquad.qna.utils.HttpSessionUtils;
 import com.codessquad.qna.domain.Question;
 import com.codessquad.qna.service.QuestionService;
+import com.codessquad.qna.utils.HttpSessionUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -59,7 +59,7 @@ public class QuestionController {
     }
 
     @DeleteMapping("/questions/{id}") // 질문 삭제: 접근경로가 다른 메서드와 동일해도, 맵핑이 다르면 함수의 오버로드 같이 요청에 따라 다르게 인식하는건가?
-    private String deleteQuestion(@PathVariable Long id, HttpSession session, Model model) {
+    private String deleteQuestion(@PathVariable Long id, HttpSession session) {
         HttpSessionUtils.checkValidOf(session);
         questionService.confirmWriter(HttpSessionUtils.getLoginUserOf(session), questionService.findById(id));
         questionService.deleteById(id); // soft delete로 변경해야함.
