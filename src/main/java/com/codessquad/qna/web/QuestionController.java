@@ -46,9 +46,7 @@ public class QuestionController {
     public String update(@PathVariable Long id, Model model, HttpSession session) {
         User loggedinUser = getUserFromSession(session);
         Question question = getQuestionById(id);
-        if (!question.isPostWriter(loggedinUser)) {
-            throw new IllegalStateException("자신의 질문만 수정할 수 있습니다.");
-        }
+        checkValid(question, loggedinUser);
         model.addAttribute("question", question);
         return "/qna/updateForm";
     }
@@ -57,9 +55,7 @@ public class QuestionController {
     public String updateForm(@PathVariable Long id, String title, String contents, HttpSession session) {
         User loggedinUser = getUserFromSession(session);
         Question question = getQuestionById(id);
-        if (!question.isPostWriter(loggedinUser)) {
-            throw new IllegalStateException("자신의 질문만 수정할 수 있습니다.");
-        }
+        checkValid(question, loggedinUser);
         question.update(title, contents);
         questionRepository.save(question);
         return "redirect:/questions/{id}";
@@ -69,14 +65,19 @@ public class QuestionController {
     public String delete(@PathVariable Long id, HttpSession session) {
         User loggedinUser = getUserFromSession(session);
         Question question = getQuestionById(id);
-        if (!question.isPostWriter(loggedinUser)) {
-            throw new IllegalStateException("자신의 질문만 수정할 수 있습니다.");
-        }
+        checkValid(question, loggedinUser);
         questionRepository.delete(question);
         return "redirect:/";
     }
 
     private Question getQuestionById(Long id) {
         return questionRepository.findById(id).orElseThrow(NoQuestionException::new);
+    }
+
+    private boolean checkValid(Question question, User user) {
+        if (!question.isPostWriter(user)) {
+            throw new IllegalStateException("자신의 질문만 접근 가능합니다.");
+        }
+        return true;
     }
 }
