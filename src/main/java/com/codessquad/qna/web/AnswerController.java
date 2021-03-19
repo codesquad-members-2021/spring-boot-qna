@@ -22,7 +22,6 @@ public class AnswerController {
     private final AnswerRepository answerRepository;
     private final QuestionRepository questionRepository;
 
-
     public AnswerController(AnswerRepository answerRepository, QuestionRepository questionRepository) {
         this.answerRepository = answerRepository;
         this.questionRepository = questionRepository;
