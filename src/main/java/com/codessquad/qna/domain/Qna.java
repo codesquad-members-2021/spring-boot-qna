@@ -60,7 +60,7 @@ public class Qna {
     }
 
     public boolean checkWriter(String userId) {
-        return this.writer.equals(userId);
+        return this.writer.getUserId().equals(userId);
     }
 
     public void update(Qna updateQna) {
