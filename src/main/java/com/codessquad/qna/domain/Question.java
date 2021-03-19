@@ -22,7 +22,7 @@ public class Question {
     private String title;
     private String contents;
     private LocalDateTime createdDateTime;
-    private int point;
+    private int countOfAnswers;
     private boolean deleted;
 
     @OneToMany(mappedBy = "question")
@@ -37,7 +37,7 @@ public class Question {
         this.title = title;
         this.contents = contents;
         this.createdDateTime = LocalDateTime.now();
-        this.point = 0;
+        this.countOfAnswers = 0;
         this.deleted = false;
     }
 
@@ -69,8 +69,8 @@ public class Question {
         this.createdDateTime = createdDateTime;
     }
 
-    public int getPoint() {
-        return point;
+    public int getCountOfAnswers() {
+        return countOfAnswers;
     }
 
     public List<Answer> getAnswers() {
@@ -112,4 +112,13 @@ public class Question {
             answer.delete();
         }
     }
+
+    public void addAnswer() {
+        this.countOfAnswers += 1;
+    }
+
+    public void deleteAnswer() {
+        this.countOfAnswers -= 1;
+    }
+
 }

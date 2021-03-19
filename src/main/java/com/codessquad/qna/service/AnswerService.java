@@ -21,12 +21,16 @@ public class AnswerService {
                 .orElseThrow(NotFoundException::new);
         answer.setQuestion(question);
         answer.setWriter(writer);
+        question.addAnswer();
         return answerRepository.save(answer);
     }
 
-    public void delete(Long answerId, Long questionId, User loginUser) {
-        Answer answer = answerWithAuthentication(answerId, questionId, loginUser);
+    public void delete(Long questionId, Long answerId, User loginUser) {
+        Answer answer = answerWithAuthentication(questionId, answerId, loginUser);
         answer.delete();
+        Question question = questionRepository.findById(questionId).orElseThrow(NotFoundException::new);
+        question.deleteAnswer();
+        questionRepository.save(question);
         answerRepository.save(answer);
     }
 
