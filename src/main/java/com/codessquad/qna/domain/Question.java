@@ -9,11 +9,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
-public class Question {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+public class Question extends AbstractEntity {
 
     @ManyToOne
     @JoinColumn(foreignKey = @ForeignKey(name = "fk_question_writer"))
@@ -21,7 +17,6 @@ public class Question {
 
     private String title;
     private String contents;
-    private LocalDateTime createdDateTime;
     private int countOfAnswers;
     private boolean deleted;
 
@@ -36,13 +31,8 @@ public class Question {
     public Question(String title, String contents) {
         this.title = title;
         this.contents = contents;
-        this.createdDateTime = LocalDateTime.now();
         this.countOfAnswers = 0;
         this.deleted = false;
-    }
-
-    public Long getId() {
-        return id;
     }
 
     public User getWriter() {
@@ -59,14 +49,6 @@ public class Question {
 
     public String getContents() {
         return contents;
-    }
-
-    public LocalDateTime getCreatedDateTime() {
-        return createdDateTime;
-    }
-
-    public void setCreatedDateTime(LocalDateTime createdDateTime) {
-        this.createdDateTime = createdDateTime;
     }
 
     public int getCountOfAnswers() {
