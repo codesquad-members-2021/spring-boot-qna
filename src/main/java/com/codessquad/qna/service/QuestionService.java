@@ -42,7 +42,7 @@ public class QuestionService {
     public Question verifyQuestion(Long id, User sessionUser) {
         Question question = findById(id);
         if (!question.matchWriter(sessionUser)) {
-            throw new UserSessionException("접근권한이 없는 유저입니다.");
+            throw new UserSessionException();
         }
         return question;
     }

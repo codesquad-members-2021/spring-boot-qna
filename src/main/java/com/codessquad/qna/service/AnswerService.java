@@ -38,7 +38,7 @@ public class AnswerService {
     public Answer verifyAnswer(Long id, User sessionUser) {
         Answer targetAnswer = findById(id);
         if (!targetAnswer.matchWriter(sessionUser)) {
-            throw new UserSessionException("접근권한이 없는 유저입니다.");
+            throw new UserSessionException();
         }
         return targetAnswer;
     }

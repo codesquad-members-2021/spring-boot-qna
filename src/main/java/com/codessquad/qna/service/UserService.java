@@ -39,7 +39,7 @@ public class UserService {
 
     public User verifyUser(Long id, User sessionUser) {
         if (!sessionUser.matchId(id)) {
-            throw new UserSessionException("접근권한이 없는 유저입니다.");
+            throw new UserSessionException();
         }
         return sessionUser;
     }

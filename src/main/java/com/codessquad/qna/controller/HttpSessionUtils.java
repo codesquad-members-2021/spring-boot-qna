@@ -15,7 +15,7 @@ public class HttpSessionUtils {
 
     public static User getUserFromSession(HttpSession session) {
         if (!isLoginUser(session)) {
-            throw new UserSessionException("로그인이 필요한 서비스입니다.");
+            throw new UserSessionException();
         }
         return (User) session.getAttribute(USER_SESSION_KEY);
     }
