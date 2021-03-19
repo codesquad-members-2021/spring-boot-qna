@@ -4,9 +4,11 @@ import com.codessquad.qna.exception.type.DuplicateIdFoundException;
 import com.codessquad.qna.exception.type.IncorrectAccountException;
 import com.codessquad.qna.exception.type.NotFoundException;
 import com.codessquad.qna.exception.type.UnauthorizedException;
+import org.springframework.http.HttpStatus;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.ResponseStatus;
 
 /**
  * Created by 68936@naver.com on 2021-03-18 오전 2:43
@@ -26,7 +28,8 @@ public class CustomExceptionHandler {
         return "user/login_failed";
     }
     @ExceptionHandler(IllegalArgumentException.class)
-    public String IllegalArgumentException(){
+    public String IllegalArgumentException(IllegalArgumentException e, Model model){
+        model.addAttribute("serverError",e.getMessage());
         return "error/500";
     }
     @ExceptionHandler(UnauthorizedException.class)
@@ -34,6 +37,8 @@ public class CustomExceptionHandler {
         model.addAttribute("errorMessage","권한이 없습니다.");
         return "error/404";
     }
+
+    @ResponseStatus(HttpStatus.NOT_FOUND)
     @ExceptionHandler(NotFoundException.class)
     public String NotFoundException(){
         return "error/404";

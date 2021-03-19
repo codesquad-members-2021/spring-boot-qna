@@ -34,7 +34,7 @@
                             <li>
                                 <form class="form-delete" action="/questions/{{id}}" method="POST">
                                     <input type="hidden" name="_method" value="DELETE">
-                                    <button class="link-delete-article" type="submit">삭제</button>
+                                    <button class="link-delete-article" type="submit">삭제1111</button>
                                 </form>
                             </li>
                             <li>
@@ -69,14 +69,17 @@
                                 <div class="article-util">
                                     <ul class="article-util-list">
                                         <li>
-                                            <a class="link-modify-article"
-                                               href="/questions/413/answers/1405/form">수정</a>
+                                            <form class="form-update" action="/questions/{{question.id}}/answers/{{answer.id}}/form"
+                                                  method="post">
+                                                <input type="hidden" name="_method" value="PUT">
+                                                <button type="submit" class="delete-answer-button2">수정</button>
+                                            </form>
                                         </li>
                                         <li>
-                                            <form class="form-delete" action="/questions/{{question.id}}/answers/{{id}}"
+                                            <form class="form-delete" action="/questions/{{question.id}}/answers/{{answerId}}"
                                                   method="POST">
                                                 <input type="hidden" name="_method" value="DELETE">
-                                                <button type="submit" class="delete-answer-button">삭제</button>
+                                                <button type="submit" class="delete-answer-button">삭제2222</button>
                                             </form>
                                         </li>
                                     </ul>
@@ -125,7 +128,7 @@
                 <li>
                     <form class="delete-answer-form" action="/api/questions/{3}/answers/{4}" method="POST">
                         <input type="hidden" name="_method" value="DELETE">
-                        <button type="submit" class="delete-answer-button">삭제</button>
+                        <button type="submit" class="delete-answer-button">삭제3333</button>
                     </form>
                 </li>
             </ul>

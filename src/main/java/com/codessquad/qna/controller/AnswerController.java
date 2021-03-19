@@ -3,7 +3,9 @@ package com.codessquad.qna.controller;
 import com.codessquad.qna.domain.Answer;
 import com.codessquad.qna.domain.User;
 import com.codessquad.qna.exception.type.NotFoundException;
+import com.codessquad.qna.exception.type.UnauthorizedException;
 import com.codessquad.qna.repository.AnswerRepository;
+import com.codessquad.qna.service.QuestionService;
 import com.codessquad.qna.utils.HttpSessionUtils;
 import com.codessquad.qna.utils.ValidUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,13 +26,14 @@ import java.util.Objects;
 public class AnswerController {
 
     private final AnswerRepository answerRepository;
+    private final QuestionService questionService;
 
     @Autowired
-    public AnswerController(AnswerRepository answerRepository) {
+    public AnswerController(AnswerRepository answerRepository, QuestionService questionService) {
         this.answerRepository = answerRepository;
+        this.questionService = questionService;
     }
 
-    //@PathVariable("question.id") Long questionId, @PathVariable("id") Long id, Model model
     @PostMapping("/questions/{question.id}/answers")
     public String createAnswer(Answer answer, HttpSession session) {
         HttpSessionUtils.checkValidOf(session);
@@ -42,17 +45,18 @@ public class AnswerController {
         return "redirect:/questions/{question.id}";
     }
 
-    @DeleteMapping("/questions/{question.id}/answers/{id}")
-    public String deleteAnswer(HttpSession session, @PathVariable Long id){
+    @DeleteMapping("/questions/{question.id}/answers/{answerId}")
+    public String deleteAnswer(HttpSession session, @PathVariable("answerId") Long id) {
         ValidUtils.checkIllegalArgumentOf(id);
-
         HttpSessionUtils.checkValidOf(session);
-        User findUser = HttpSessionUtils.getLoginUserOf(session);
-        Answer answer = answerRepository.findById(id).orElseThrow(NotFoundException::new);
 
-        if(Objects.equals(findUser.getUserId(),answer.getReplyId())) {
-            answerRepository.delete(answer);
+        User loginUser = HttpSessionUtils.getLoginUserOf(session);
+        Answer selectedAnswer = answerRepository.findById(id).orElseThrow(NotFoundException::new);
+
+        if (!Objects.equals(loginUser.getUserId(), selectedAnswer.getReplyId())) {
+            throw new UnauthorizedException();
         }
+        answerRepository.delete(selectedAnswer);
         return "redirect:/questions/{question.id}";
     }
 

@@ -17,7 +17,7 @@ import java.util.Optional;
 public class Answer {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Long answerId;
 
     @ManyToOne
     @JoinColumn(foreignKey = @ForeignKey(name = "fk_answer_to_question"))
@@ -32,6 +32,10 @@ public class Answer {
 
     @Column(nullable = false, length = 20)
     private final ZonedDateTime replyTime = ZonedDateTime.now(ZoneId.of("Asia/Seoul"));
+
+    public Long getAnswerId() {
+        return answerId;
+    }
 
     public String getTime() {
         return replyTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
@@ -53,6 +57,10 @@ public class Answer {
         return replyContents;
     }
 
+    public void setAnswerId(Long id) {
+        this.answerId = id;
+    }
+
     public void setQuestion(Question question) {
         question = Optional.ofNullable(question).orElseThrow(IllegalArgumentException::new);
         this.question = question;
@@ -71,5 +79,17 @@ public class Answer {
     public void setReplyContents(String replyContents) {
         ValidUtils.checkIllegalArgumentOf(replyContents);
         this.replyContents = replyContents;
+    }
+
+    @Override
+    public String toString() {
+        return "Answer{" +
+                "id=" + answerId +
+                ", question=" + question +
+                ", replyId='" + replyId + '\'' +
+                ", replyAuthor='" + replyAuthor + '\'' +
+                ", replyContents='" + replyContents + '\'' +
+                ", replyTime=" + replyTime +
+                '}';
     }
 }
