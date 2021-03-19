@@ -5,6 +5,7 @@ import com.codessquad.qna.exception.ResourceNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
@@ -55,13 +56,14 @@ public class UserService {
         }
     }
 
-    public void createUser(UserDTO userDTO) {
-        userRepository.findByUserId(userDTO.getUserId())
-                .ifPresent(user -> {
-                    throw new LoginFailedException("이미 존재하는 ID 입니다.");
-                });
+    public void createUser(UserDTO user) {
+        Optional<User> existedUser = userRepository.findByUserId(user.getUserId());
 
-        userRepository.save(userDTO.toEntity());
+        if (existedUser.isPresent()) {
+            throw new LoginFailedException("이미 존재하는 ID 입니다.");
+        }
+
+        userRepository.save(user.toEntity());
     }
 
     public UserDTO updateUser(UserDTO existedUser, UserDTO newUser) {
