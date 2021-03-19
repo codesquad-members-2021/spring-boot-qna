@@ -1,18 +1,11 @@
 package com.codessquad.qna.domain;
 
-import com.codessquad.qna.util.DateTimeUtils;
-
 import javax.persistence.*;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-public class Question {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+public class Question extends AbstractEntity {
 
     @ManyToOne
     @JoinColumn(name = "user_id")
@@ -27,7 +20,6 @@ public class Question {
 
     private String title;
     private String contents;
-    private LocalDateTime createDateTime;
     private int countOfAnswer = 0;
 
     public void addAnswer(Answer answer) {
@@ -42,22 +34,6 @@ public class Question {
 
     public List<Answer> getAnswerList() {
         return answerList;
-    }
-
-    public String getFormatCreateDateTime() {
-        return createDateTime.format(DateTimeUtils.dateTimeFormatter);
-    }
-
-    public void setCreateDateTime(LocalDateTime createDateTime) {
-        this.createDateTime = createDateTime;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
     }
 
     public void changeWriter(User writer) {

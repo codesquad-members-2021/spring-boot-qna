@@ -1,18 +1,12 @@
 package com.codessquad.qna.domain;
 
 import com.codessquad.qna.domain.dto.AnswerDto;
-import com.codessquad.qna.util.DateTimeUtils;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
 
 @Entity
-public class Answer {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+public class Answer extends AbstractEntity {
 
     @ManyToOne
     @JoinColumn(name = "user_id")
@@ -27,7 +21,6 @@ public class Answer {
     private DisplayStatus status = DisplayStatus.OPEN;
 
     private String contents;
-    private LocalDateTime createDateTime;
 
     public Answer() {
     }
@@ -35,17 +28,8 @@ public class Answer {
     public Answer(User writer, Question question, String contents) {
         this.writer = writer;
         this.contents = contents;
-        this.createDateTime = LocalDateTime.now();
         this.question = question;
         question.addAnswer(this);
-    }
-
-    public String getFormatCreateDateTime() {
-        return createDateTime.format(DateTimeUtils.dateTimeFormatter);
-    }
-
-    public LocalDateTime getCreateDateTime() {
-        return createDateTime;
     }
 
     public User getWriter() {
@@ -54,10 +38,6 @@ public class Answer {
 
     public String getContents() {
         return contents;
-    }
-
-    public Long getId() {
-        return id;
     }
 
     public DisplayStatus getStatus() {

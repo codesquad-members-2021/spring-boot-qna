@@ -11,8 +11,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDateTime;
-
 @Service
 @Transactional(readOnly = true)
 public class QuestionService {
@@ -27,7 +25,6 @@ public class QuestionService {
     @Transactional
     public void write(Question question, User user) {
         question.changeWriter(user);
-        question.setCreateDateTime(LocalDateTime.now());
         QuestionValidator.validate(question);
 
         questionRepository.save(question);

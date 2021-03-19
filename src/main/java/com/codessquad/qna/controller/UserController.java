@@ -53,7 +53,7 @@ public class UserController {
     }
 
     @PutMapping("/{id}")
-    public String userUpdate(@PathVariable Long id, User updatedUser, String newPassword, Model model, HttpSession session) {
+    public String userUpdate(@PathVariable Long id, User updatedUser, String newPassword, HttpSession session) {
         User user = HttpSessionUtils.getUserFromSession(session);
         user.checkSameUser(id);
         userService.update(updatedUser, newPassword, id);
