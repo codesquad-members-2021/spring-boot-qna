@@ -20,7 +20,7 @@ public class QuestionService {
         this.questionRepository = questionRepository;
     }
 
-    public QuestionResponse saveQuestion(QuestionRequest questionRequest, User writer) {
+    public QuestionResponse save(QuestionRequest questionRequest, User writer) {
         Question question = questionRepository.save(questionRequest.toQuestion(writer));
         return QuestionResponse.of(question);
     }

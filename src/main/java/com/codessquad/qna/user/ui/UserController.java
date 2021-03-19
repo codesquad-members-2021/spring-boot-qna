@@ -30,7 +30,7 @@ public class UserController {
 
     @PostMapping
     public ResponseEntity<UserResponse> createUser(@RequestBody @Valid UserRequest userRequest) {
-        UserResponse userResponse = userService.saveUser(userRequest);
+        UserResponse userResponse = userService.save(userRequest);
         return ResponseEntity
                 .created(URI.create("/users/" + userResponse.getId()))
                 .body(userResponse);
@@ -38,7 +38,7 @@ public class UserController {
 
     @PostMapping("create")
     public String createUser(User user) {
-        userService.saveUser(UserRequest.of(user));
+        userService.save(UserRequest.of(user));
         return "redirect:/users";
     }
 

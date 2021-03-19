@@ -23,7 +23,7 @@ public class UserService {
         this.userRepository = userRepository;
     }
 
-    public UserResponse saveUser(UserRequest userRequest) {
+    public UserResponse save(UserRequest userRequest) {
         User user = userRepository.save(userRequest.toUser());
         return UserResponse.of(user);
     }

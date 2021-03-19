@@ -18,7 +18,7 @@ public class AnswerService {
         this.answerRepository = answerRepository;
     }
 
-    public AnswerResponse saveAnswer(AnswerRequest answerRequest, Question question, User writer) {
+    public AnswerResponse save(AnswerRequest answerRequest, Question question, User writer) {
         Answer answer = answerRepository.save(answerRequest.toAnswer(question, writer));
         return AnswerResponse.of(answer);
     }

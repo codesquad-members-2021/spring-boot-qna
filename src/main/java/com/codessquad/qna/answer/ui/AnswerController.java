@@ -31,7 +31,7 @@ public class AnswerController {
     public String createAnswer(@PathVariable Long questionId, AnswerRequest answerRequest, HttpSession session) {
         User writer = getUserAttribute(session);
         Question question = questionService.getQuestionFromRepository(questionId);
-        answerService.saveAnswer(answerRequest, question, writer);
+        answerService.save(answerRequest, question, writer);
         return String.format("redirect:/questions/%d", questionId);
     }
 

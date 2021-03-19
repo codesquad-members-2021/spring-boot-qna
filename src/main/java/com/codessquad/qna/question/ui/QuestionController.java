@@ -23,7 +23,7 @@ public class QuestionController {
     @PostMapping("create")
     public String createQuestion(QuestionRequest questionRequest, HttpSession session) {
         User writer = getUserAttribute(session);
-        questionService.saveQuestion(questionRequest, writer);
+        questionService.save(questionRequest, writer);
         return "redirect:/questions";
     }
 
