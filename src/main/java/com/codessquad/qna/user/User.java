@@ -111,7 +111,7 @@ public class User {
     }
 
     private void checkId(Long id) {
-        if (this.id.longValue() != id.longValue()) {
+        if (!this.id.equals(id)) {
             throw new IllegalArgumentException("잘못된 ID입니다. id : " + id);
         }
     }
