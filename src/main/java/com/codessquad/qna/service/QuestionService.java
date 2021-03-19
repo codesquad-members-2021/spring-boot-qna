@@ -2,6 +2,7 @@ package com.codessquad.qna.service;
 
 import com.codessquad.qna.domain.Question;
 import com.codessquad.qna.domain.QuestionRepository;
+import com.codessquad.qna.domain.User;
 import com.codessquad.qna.dto.QuestionDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -28,5 +29,9 @@ public class QuestionService {
 
     public Question findQuestionById(long id) {
         return questionRepository.findById(id).orElseThrow(IllegalArgumentException::new);
+    }
+
+    public boolean verifyQuestion(Question question, User sessionedUser) {
+        return sessionedUser.isMatchingUserId(question.getWriter());
     }
 }
