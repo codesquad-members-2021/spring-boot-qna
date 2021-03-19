@@ -3,6 +3,7 @@ package com.codessquad.qna;
 import com.codessquad.qna.exception.NoQuestionException;
 import com.codessquad.qna.exception.NoSessionedUserException;
 import com.codessquad.qna.exception.NoUserException;
+import com.codessquad.qna.exception.NotMatchException;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -16,13 +17,19 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(IllegalStateException.class)
-    public String handleIllegalStateException() {
+    public String handleIllegalStateException(IllegalStateException e) {
         return "/exception/unableToAccessToOthers";
     }
 
     @ExceptionHandler(NoSessionedUserException.class)
-    public String handleNoSessionedUserException(Model model) {
-        model.addAttribute("errorMessage", "로그인이 필요합니다.");
+    public String handleNoSessionedUserException(Model model, NoSessionedUserException e) {
+        model.addAttribute("errorMessage", e.getMessage());
+        return "/user/login";
+    }
+
+    @ExceptionHandler(NotMatchException.class)
+    public String handle(Model model, NotMatchException e) {
+        model.addAttribute("errorMessage", e.getMessage());
         return "/user/login";
     }
 }

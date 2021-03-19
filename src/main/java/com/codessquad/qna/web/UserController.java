@@ -2,6 +2,7 @@ package com.codessquad.qna.web;
 
 import com.codessquad.qna.domain.User;
 import com.codessquad.qna.exception.NoUserException;
+import com.codessquad.qna.exception.NotMatchException;
 import com.codessquad.qna.repository.UserRepository;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -34,11 +35,10 @@ public class UserController {
     }
 
     @PostMapping("/login")
-    public String login(String userId, String password, HttpSession session, Model model) {
+    public String login(String userId, String password, HttpSession session) {
         User user = userRepository.findByUserId(userId).orElseThrow(NoUserException::new);
         if (!user.isPasswordMatching(password)) {
-            model.addAttribute("errorMessage", "아이디와 비밀번호가 일치하지 않습니다.");
-            return "/user/login";
+            throw new NotMatchException();
         }
         session.setAttribute(USER_SESSION_KEY, user);
         return "redirect:/";
