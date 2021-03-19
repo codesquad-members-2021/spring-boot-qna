@@ -20,7 +20,7 @@ public class AnswerService {
 
     public AnswerResponse save(AnswerRequest answerRequest, Question question, User writer) {
         Answer answer = answerRepository.save(answerRequest.toAnswer(question, writer));
-        return AnswerResponse.of(answer);
+        return AnswerResponse.from(answer);
     }
 
     public void deleteAnswer(Long id) {

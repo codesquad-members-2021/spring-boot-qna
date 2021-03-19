@@ -22,27 +22,27 @@ public class QuestionService {
 
     public QuestionResponse save(QuestionRequest questionRequest, User writer) {
         Question question = questionRepository.save(questionRequest.toQuestion(writer));
-        return QuestionResponse.of(question);
+        return QuestionResponse.from(question);
     }
 
     public List<QuestionResponse> getQuestions() {
         List<QuestionResponse> questionResponses = new ArrayList<>();
         for (Question question : questionRepository.findAllByDeleted(false)) {
-            questionResponses.add(QuestionResponse.of(question));
+            questionResponses.add(QuestionResponse.from(question));
         }
         return questionResponses;
     }
 
     public QuestionResponse getQuestion(Long id) {
         Question question = getQuestionFromRepository(id);
-        return QuestionResponse.of(question);
+        return QuestionResponse.from(question);
     }
 
     public QuestionResponse updateQuestion(Long id, QuestionRequest questionRequest, User writer) {
         Question question = getQuestionFromRepository(id);
         question.update(questionRequest.toQuestion(writer));
         questionRepository.save(question); // HELP: 이유를 모르겠지만 dirty checking 이 동작하지 않는다.
-        return QuestionResponse.of(question);
+        return QuestionResponse.from(question);
     }
 
     public void deleteQuestion(Long id) {

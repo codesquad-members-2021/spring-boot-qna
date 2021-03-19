@@ -19,7 +19,7 @@ public class QuestionRequest {
         this.contents = contents;
     }
 
-    public static QuestionRequest of(Question question) {
+    public static QuestionRequest from(Question question) {
         return new QuestionRequest(question.getTitle(), question.getContents());
     }
 

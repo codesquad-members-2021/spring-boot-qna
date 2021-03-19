@@ -38,7 +38,7 @@ public class UserController {
 
     @PostMapping("create")
     public String createUser(User user) {
-        userService.save(UserRequest.of(user));
+        userService.save(UserRequest.from(user));
         return "redirect:/users";
     }
 
@@ -79,7 +79,7 @@ public class UserController {
     @PutMapping("{id}")
     public String updateUser(@PathVariable Long id, User user, HttpSession session) {
         checkAuthorization(id, session);
-        userService.updateUser(id, UserRequest.of(user));
+        userService.updateUser(id, UserRequest.from(user));
         return "redirect:/users";
     }
 

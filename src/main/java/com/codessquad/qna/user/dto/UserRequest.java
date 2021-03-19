@@ -29,7 +29,7 @@ public class UserRequest {
         this.email = email;
     }
 
-    public static UserRequest of(User user) {
+    public static UserRequest from(User user) {
         return new UserRequest(
                 user.getUserId(),
                 user.getPassword(),

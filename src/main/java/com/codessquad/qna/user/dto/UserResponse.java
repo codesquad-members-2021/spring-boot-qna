@@ -23,7 +23,7 @@ public class UserResponse {
         this.modifiedDate = modifiedDate;
     }
 
-    public static UserResponse of(User user) {
+    public static UserResponse from(User user) {
         return new UserResponse(
                 user.getId(),
                 user.getUserId(),

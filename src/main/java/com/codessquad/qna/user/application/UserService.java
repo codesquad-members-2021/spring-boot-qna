@@ -25,20 +25,20 @@ public class UserService {
 
     public UserResponse save(UserRequest userRequest) {
         User user = userRepository.save(userRequest.toUser());
-        return UserResponse.of(user);
+        return UserResponse.from(user);
     }
 
     public List<UserResponse> getUsers() {
         List<UserResponse> userResponses = new ArrayList<>();
         for (User user : userRepository.findAll()) {
-            userResponses.add(UserResponse.of(user));
+            userResponses.add(UserResponse.from(user));
         }
         return userResponses;
     }
 
     public UserResponse getUser(Long id) {
         User user = getUserFromRepository(id);
-        return UserResponse.of(user);
+        return UserResponse.from(user);
     }
 
     // FIXME: 나중에 LoginRequest 와 LoginResponse dto 를 사용해서 테스트 가능하게 리팩토링해야한다.
@@ -62,7 +62,7 @@ public class UserService {
         User user = getUserFromRepository(id);
         user.update(userRequest.toUser());
         userRepository.save(user); // HELP: 이유를 모르겠지만 dirty checking 이 동작하지 않는다.
-        return UserResponse.of(user);
+        return UserResponse.from(user);
     }
 
     private User getUserFromRepository(Long id) {

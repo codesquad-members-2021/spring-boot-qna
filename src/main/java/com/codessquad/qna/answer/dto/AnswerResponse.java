@@ -27,7 +27,7 @@ public class AnswerResponse {
         this.modifiedDate = modifiedDate;
     }
 
-    public static AnswerResponse of(Answer answer) {
+    public static AnswerResponse from(Answer answer) {
         return new AnswerResponse(
                 answer.getId(),
                 answer.getQuestion(),

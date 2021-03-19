@@ -32,7 +32,7 @@ public class QuestionResponse {
         this.modifiedDate = modifiedDate;
     }
 
-    public static QuestionResponse of(Question question) {
+    public static QuestionResponse from(Question question) {
         return new QuestionResponse(
                 question.getId(),
                 question.getWriter(),
