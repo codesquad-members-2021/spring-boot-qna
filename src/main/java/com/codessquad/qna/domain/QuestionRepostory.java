@@ -1,6 +1,6 @@
 package com.codessquad.qna.domain;
 
-import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface QuestionRepostory extends CrudRepository<Question,Long> {
+public interface QuestionRepostory extends JpaRepository<Question,Long> {
 }
