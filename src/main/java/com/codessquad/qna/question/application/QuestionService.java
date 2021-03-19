@@ -41,7 +41,7 @@ public class QuestionService {
     public QuestionResponse updateQuestion(Long id, QuestionRequest questionRequest, User writer) {
         Question question = getQuestionFromRepository(id);
         question.update(questionRequest.toQuestion(writer));
-        questionRepository.save(question); // HELP: 이유를 모르겠지만 dirty checking 이 동작하지 않는다.
+        questionRepository.save(question);
         return QuestionResponse.from(question);
     }
 

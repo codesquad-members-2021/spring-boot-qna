@@ -61,7 +61,7 @@ public class UserService {
     public UserResponse updateUser(Long id, UserRequest userRequest) {
         User user = getUserFromRepository(id);
         user.update(userRequest.toUser());
-        userRepository.save(user); // HELP: 이유를 모르겠지만 dirty checking 이 동작하지 않는다.
+        userRepository.save(user);
         return UserResponse.from(user);
     }
 

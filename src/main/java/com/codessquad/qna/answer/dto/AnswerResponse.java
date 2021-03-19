@@ -1,8 +1,7 @@
 package com.codessquad.qna.answer.dto;
 
 import com.codessquad.qna.answer.domain.Answer;
-import com.codessquad.qna.question.domain.Question;
-import com.codessquad.qna.user.domain.User;
+import com.codessquad.qna.user.dto.UserResponse;
 
 import java.time.LocalDateTime;
 
@@ -10,17 +9,17 @@ import static com.codessquad.qna.common.DateUtils.format;
 
 public class AnswerResponse {
     private Long id;
-    private Question question;
-    private User writer;
+    private Long questionId;
+    private UserResponse writer;
     private String contents;
     private LocalDateTime createdDate;
     private LocalDateTime modifiedDate;
 
     protected AnswerResponse() {}
 
-    public AnswerResponse(Long id, Question question, User writer, String contents, LocalDateTime createdDate, LocalDateTime modifiedDate) {
+    public AnswerResponse(Long id, Long questionId, UserResponse writer, String contents, LocalDateTime createdDate, LocalDateTime modifiedDate) {
         this.id = id;
-        this.question = question;
+        this.questionId = questionId;
         this.writer = writer;
         this.contents = contents;
         this.createdDate = createdDate;
@@ -30,8 +29,8 @@ public class AnswerResponse {
     public static AnswerResponse from(Answer answer) {
         return new AnswerResponse(
                 answer.getId(),
-                answer.getQuestion(),
-                answer.getWriter(),
+                answer.getQuestion().getId(),
+                UserResponse.from(answer.getWriter()),
                 answer.getContents(),
                 answer.getCreatedDate(),
                 answer.getModifiedDate());
@@ -41,11 +40,11 @@ public class AnswerResponse {
         return id;
     }
 
-    public Question getQuestion() {
-        return question;
+    public Long getQuestionId() {
+        return questionId;
     }
 
-    public User getWriter() {
+    public UserResponse getWriter() {
         return writer;
     }
 

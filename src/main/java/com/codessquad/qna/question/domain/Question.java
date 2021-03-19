@@ -3,9 +3,11 @@ package com.codessquad.qna.question.domain;
 import com.codessquad.qna.answer.domain.Answer;
 import com.codessquad.qna.common.BaseTimeEntity;
 import com.codessquad.qna.user.domain.User;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -27,8 +29,9 @@ public class Question extends BaseTimeEntity {
     @OneToMany(mappedBy = "question")
     @OrderBy("id ASC")
     @Where(clause = "deleted = false")
-    private List<Answer> answers;
-    
+    @JsonBackReference
+    private List<Answer> answers = new ArrayList<>();
+
     private boolean deleted = false;
 
     protected Question() {}
