@@ -4,30 +4,26 @@ import com.codessquad.qna.domain.Answer;
 import com.codessquad.qna.domain.User;
 import com.codessquad.qna.service.AnswerService;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
 
 
-@Controller
-@RequestMapping("/questions/{id}/answers")
-public class AnswerController {
+@RestController
+@RequestMapping("/api/questions/{id}/answers")
+public class ApiAnswerController {
     private final AnswerService answerService;
 
-    public AnswerController(AnswerService answerService) {
+    public ApiAnswerController(AnswerService answerService) {
         this.answerService = answerService;
     }
 
     @PostMapping
-    public String createAnswer(@PathVariable Long id, String contents, HttpSession session) {
+    public Answer createAnswer(@PathVariable Long id, String contents, HttpSession session) {
         if (!HttpSessionUtils.isLoginUser(session)) {
-            return "/user/login";
+            return null;
         }
-        answerService.create(id, contents, session);
-        return "redirect:/questions/" + id;
+        return answerService.create(id, contents, session);
     }
 
     @DeleteMapping("/{answerId}")

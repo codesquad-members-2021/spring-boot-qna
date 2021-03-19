@@ -1,5 +1,7 @@
 package com.codessquad.qna.domain;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import java.time.LocalDateTime;
@@ -29,6 +31,7 @@ public class Question {
     private LocalDateTime createdDateTime = LocalDateTime.now();
 
     @OneToMany(mappedBy = "question")
+    @JsonManagedReference
     @OrderBy("id ASC")
     private List<Answer> answers;
 

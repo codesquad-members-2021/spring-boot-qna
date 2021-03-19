@@ -1,5 +1,7 @@
 package com.codessquad.qna.domain;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import java.time.LocalDateTime;
@@ -15,6 +17,7 @@ public class Answer {
 
     @ManyToOne
     @JoinColumn(foreignKey = @ForeignKey(name = "fk_answer_to_question"))
+    @JsonBackReference
     private Question question;
 
     @ManyToOne

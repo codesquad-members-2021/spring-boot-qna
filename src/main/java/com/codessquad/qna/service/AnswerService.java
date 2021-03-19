@@ -26,12 +26,12 @@ public class AnswerService {
         this.questionRepository = questionRepository;
     }
 
-    public void create(Long id, String contents, HttpSession session) {
+    public Answer create(Long id, String contents, HttpSession session) {
         Question question = questionRepository.findById(id).orElseThrow(NotFoundException::new);
         User loginUser = HttpSessionUtils.getSessionUser(session);
         Answer answer = new Answer(question, loginUser, contents);
         logger.info("answer : {}. ", answer);
-        answerRepository.save(answer);
+        return answerRepository.save(answer);
     }
 
     public void delete(Answer answer) {

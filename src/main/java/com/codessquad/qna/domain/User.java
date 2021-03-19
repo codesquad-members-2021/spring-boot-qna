@@ -1,5 +1,7 @@
 package com.codessquad.qna.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 
@@ -15,6 +17,7 @@ public class User {
     private String userId;
 
     @NotBlank(message = "비밀번호는 필수 입력 값입니다.")
+    @JsonIgnore
     private String password;
 
     @NotBlank(message = "이름은 필수 입력 값입니다.")
