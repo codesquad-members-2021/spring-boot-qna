@@ -12,8 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.persistence.EntityNotFoundException;
 import javax.servlet.http.HttpSession;
 
-import static com.codessquad.qna.common.HttpSessionUtils.USER_SESSION_KEY;
-import static com.codessquad.qna.common.HttpSessionUtils.checkAuthorization;
+import static com.codessquad.qna.common.HttpSessionUtils.*;
 
 @Controller
 @RequestMapping("/users")
@@ -33,15 +32,15 @@ public class UserController {
 
     @PostMapping("login")
     public String login(String userId, String password, HttpSession session) {
-        session.setAttribute(USER_SESSION_KEY, userService.login(userId, password));
+        User user = userService.login(userId, password);
+        setUserAttribute(user, session);
         return "redirect:/";
     }
 
     // FIXME: 로그아웃은 POST 로 구현해야한다.
     @GetMapping("logout")
     public String logout(HttpSession session) {
-        session.removeAttribute(USER_SESSION_KEY);
-        session.invalidate();
+        clearSession(session);
         return "redirect:/";
     }
 
