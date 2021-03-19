@@ -2,7 +2,6 @@ package com.codessquad.qna.service;
 
 import com.codessquad.qna.exception.NotFoundException;
 import com.codessquad.qna.exception.UserSessionException;
-import com.codessquad.qna.exception.WriterOfAnswerListNotMatchException;
 import com.codessquad.qna.model.Question;
 import com.codessquad.qna.model.User;
 import com.codessquad.qna.repository.QuestionRepository;
@@ -30,13 +29,14 @@ public class QuestionService {
         this.questionRepository.save(targetQuestion);
     }
 
-    public void delete(Long id, User sessionUser) {
+    public boolean delete(Long id, User sessionUser) {
         Question targetQuestion = verifyQuestion(id, sessionUser);
-        if (!targetQuestion.matchWriterOfAnswerList()) {
-            throw new WriterOfAnswerListNotMatchException(id);
+        if (targetQuestion.matchWriterOfAnswerList()) {
+            targetQuestion.delete();
+            this.questionRepository.save(targetQuestion);
+            return true;
         }
-        targetQuestion.delete();
-        this.questionRepository.save(targetQuestion);
+        return false;
     }
 
     public Question verifyQuestion(Long id, User sessionUser) {

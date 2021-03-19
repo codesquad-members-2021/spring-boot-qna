@@ -33,9 +33,4 @@ public class GlobalExceptionHandler {
         return (String) request.getAttribute("path");
     }
 
-    @ExceptionHandler(WriterOfAnswerListNotMatchException.class)
-    private String handleWriterOfAnswerListNotMatchException(WriterOfAnswerListNotMatchException e) {
-        return "redirect:/question/" + e.getQuestionId();
-    }
-
 }

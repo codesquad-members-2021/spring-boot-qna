@@ -67,9 +67,9 @@ public class QuestionController {
 
     @DeleteMapping("/question/{id}")
     public String deleteQuestion(@PathVariable("id") Long id, HttpSession session) {
-        this.questionService.delete(id, getUserFromSession(session));
+        boolean result = this.questionService.delete(id, getUserFromSession(session));
         logger.info("질문 삭제 요청");
-        return "redirect:/";
+        return result ? "redirect:/" : "redirect:/question/" + id;
     }
 
 }
