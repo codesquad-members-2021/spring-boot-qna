@@ -30,7 +30,7 @@ public class AbstractEntity {
     }
 
     public String getFormatCreateDateTime() {
-        return createDateTime.format(DateTimeUtils.dateTimeFormatter);
+        return DateTimeUtils.formatDateTime(createDateTime);
     }
 
     public LocalDateTime getCreateDateTime() {
