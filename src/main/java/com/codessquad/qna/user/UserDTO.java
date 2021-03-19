@@ -10,7 +10,7 @@ public class UserDTO {
     private String name;
     private String email;
 
-    public UserDTO(){
+    public UserDTO() {
     }
 
     public UserDTO(Long id, String userId, String password, String name, String email) {
@@ -74,7 +74,13 @@ public class UserDTO {
     }
 
     public User toEntity() {
-        return new User(id, userId, password, name, email);
+        return User.builder()
+                .setId(id)
+                .setUserId(userId)
+                .setPassword(password)
+                .setName(name)
+                .setEmail(email)
+                .build();
     }
 
     @Override
