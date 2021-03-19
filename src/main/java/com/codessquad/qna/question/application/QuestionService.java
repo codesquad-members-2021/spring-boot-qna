@@ -32,7 +32,7 @@ public class QuestionService {
         return QuestionResponse.from(question);
     }
 
-    public List<QuestionResponse> getQuestions() {
+    public List<QuestionResponse> getList() {
         List<QuestionResponse> questionResponses = new ArrayList<>();
         for (Question question : questionRepository.findAllByDeletedIsFalse()) {
             questionResponses.add(QuestionResponse.from(question));
@@ -40,19 +40,19 @@ public class QuestionService {
         return questionResponses;
     }
 
-    public QuestionResponse getQuestion(Long id) {
+    public QuestionResponse get(Long id) {
         Question question = getQuestionFromRepository(id);
         return QuestionResponse.from(question);
     }
 
-    public QuestionResponse updateQuestion(Long id, QuestionRequest questionRequest, User writer) {
+    public QuestionResponse update(Long id, QuestionRequest questionRequest, User writer) {
         Question question = getQuestionFromRepository(id);
         question.update(questionRequest.toQuestion(writer));
         questionRepository.save(question);
         return QuestionResponse.from(question);
     }
 
-    public void deleteQuestion(Long id) {
+    public void delete(Long id) {
         Question question = getQuestionFromRepository(id);
         if (!question.isDeletable()) {
             throw new QuestionNotDeletableException();

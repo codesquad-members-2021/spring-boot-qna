@@ -36,19 +36,19 @@ public class QuestionController {
 
     @GetMapping
     public String getQuestions(Model model) {
-        model.addAttribute("questions", questionService.getQuestions());
+        model.addAttribute("questions", questionService.getList());
         return "question/list";
     }
 
     @GetMapping("{id}")
     public String getQuestion(@PathVariable Long id, Model model) {
-        model.addAttribute("question", questionService.getQuestion(id));
+        model.addAttribute("question", questionService.get(id));
         return "question/show";
     }
 
     @GetMapping("{id}/form")
     public String getUpdateForm(@PathVariable Long id, Model model) {
-        model.addAttribute("question", questionService.getQuestion(id));
+        model.addAttribute("question", questionService.get(id));
         return "question/updateForm";
     }
 
@@ -56,17 +56,17 @@ public class QuestionController {
     public String updateQuestion(@PathVariable Long id, @Valid QuestionRequest questionRequest, HttpSession session) {
         checkQuestionAuthorization(id, session);
         User writer = getUserAttribute(session);
-        questionService.updateQuestion(id, questionRequest, writer);
+        questionService.update(id, questionRequest, writer);
         return String.format("redirect:/questions/%d", id);
     }
 
     @DeleteMapping("{id}")
     public String deleteQuestion(@PathVariable Long id, HttpSession session) {
         checkQuestionAuthorization(id, session);
-        questionService.deleteQuestion(id);
+        questionService.delete(id);
         return String.format("redirect:/questions", id);
     }
-    
+
     private void checkQuestionAuthorization(Long id, HttpSession session) {
         User writer = questionService.getWriter(id);
         checkAuthorization(writer, session);

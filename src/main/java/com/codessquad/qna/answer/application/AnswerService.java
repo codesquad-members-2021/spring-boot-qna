@@ -15,7 +15,7 @@ public class AnswerService {
         this.answerRepository = answerRepository;
     }
 
-    public void deleteAnswer(Long id) {
+    public void delete(Long id) {
         Answer answer = getAnswerFromRepository(id);
         answer.delete();
         answerRepository.save(answer);
@@ -25,7 +25,7 @@ public class AnswerService {
         return getAnswerFromRepository(id).getWriter();
     }
 
-    public Answer getAnswerFromRepository(Long id) {
+    private Answer getAnswerFromRepository(Long id) {
         Answer answer = answerRepository.findById(id)
                 .orElseThrow(() -> new AnswerNotFoundException(id));
         if (answer.isDeleted()) {

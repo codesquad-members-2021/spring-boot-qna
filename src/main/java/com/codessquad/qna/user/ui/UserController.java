@@ -34,7 +34,7 @@ public class UserController {
         setUserAttribute(user, session);
         return "redirect:/";
     }
-    
+
     @GetMapping("logout")
     public String logout(HttpSession session) {
         clearSession(session);
@@ -44,27 +44,27 @@ public class UserController {
 
     @GetMapping
     public String getUsers(Model model) {
-        model.addAttribute("users", userService.getUsers());
+        model.addAttribute("users", userService.getList());
         return "user/list";
     }
 
     @GetMapping("{id}")
     public String getProfile(@PathVariable Long id, Model model) {
-        model.addAttribute("user", userService.getUser(id));
+        model.addAttribute("user", userService.get(id));
         return "user/profile";
     }
 
     @GetMapping("{id}/form")
     public String getForm(@PathVariable Long id, Model model, HttpSession session) {
         checkAuthorization(id, session);
-        model.addAttribute("user", userService.getUser(id));
+        model.addAttribute("user", userService.get(id));
         return "user/updateForm";
     }
 
     @PutMapping("{id}")
     public String updateUser(@PathVariable Long id, @Valid UserRequest userRequest, HttpSession session) {
         checkAuthorization(id, session);
-        userService.updateUser(id, userRequest);
+        userService.update(id, userRequest);
         return "redirect:/users";
     }
 }

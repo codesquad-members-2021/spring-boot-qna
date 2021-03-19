@@ -25,7 +25,7 @@ public class UserService {
         return UserResponse.from(user);
     }
 
-    public List<UserResponse> getUsers() {
+    public List<UserResponse> getList() {
         List<UserResponse> userResponses = new ArrayList<>();
         for (User user : userRepository.findAll()) {
             userResponses.add(UserResponse.from(user));
@@ -33,7 +33,7 @@ public class UserService {
         return userResponses;
     }
 
-    public UserResponse getUser(Long id) {
+    public UserResponse get(Long id) {
         User user = getUserFromRepository(id);
         return UserResponse.from(user);
     }
@@ -48,7 +48,7 @@ public class UserService {
         return user;
     }
 
-    public UserResponse updateUser(Long id, UserRequest userRequest) {
+    public UserResponse update(Long id, UserRequest userRequest) {
         User user = getUserFromRepository(id);
         user.update(userRequest.toUser());
         userRepository.save(user);

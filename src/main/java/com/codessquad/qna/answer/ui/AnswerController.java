@@ -37,10 +37,10 @@ public class AnswerController {
     @DeleteMapping("{id}")
     public String deleteAnswer(@PathVariable Long questionId, @PathVariable Long id, HttpSession session) {
         checkAnswerAuthorization(id, session);
-        answerService.deleteAnswer(id);
+        answerService.delete(id);
         return "redirect:/questions/" + questionId;
     }
-    
+
     private void checkAnswerAuthorization(Long id, HttpSession session) {
         User writer = answerService.getWriter(id);
         checkAuthorization(writer, session);
