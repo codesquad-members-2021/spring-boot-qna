@@ -62,9 +62,14 @@ public class UsersController {
 
     @PostMapping("/login")
     public String processLogin(String userId, String password, HttpSession session) {
-        User foundUser = userRepository.findByUserId(userId)
-                .orElseThrow(UserNotFoundException::new);
-        verifyAuthorizedAccess(foundUser, password);
+        User foundUser = null;
+        try {
+            foundUser = userRepository.findByUserId(userId)
+                    .orElseThrow(UserNotFoundException::new);
+            verifyAuthorizedAccess(foundUser, password);
+        } catch (RuntimeException e) {
+            return "redirect:/users/login-form";
+        }
         SessionUtil.setLoginUser(session, foundUser);
         LOGGER.info("user login : {}", foundUser.getUserId());
         return "redirect:/";
