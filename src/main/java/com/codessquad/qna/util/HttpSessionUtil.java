@@ -20,4 +20,9 @@ public class HttpSessionUtil {
         }
         throw new UserNotFoundInSessionException();
     }
+
+    public static boolean isAuthorized(Long userId, HttpSession session) {
+        User user = getUser(session);
+        return userId == user.getId();
+    }
 }
