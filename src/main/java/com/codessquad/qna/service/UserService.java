@@ -36,7 +36,6 @@ public class UserService {
             toUpdate.update(user);
             userRepository.save(toUpdate);
         }
-        return;
     }
 
     public User getUser(long id) {
