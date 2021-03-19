@@ -59,8 +59,8 @@ public class Qna {
         return createdDateTime.format(DateTimeFormatter.ISO_LOCAL_DATE_TIME);
     }
 
-    public boolean checkWriter(String userId) {
-        return this.writer.getUserId().equals(userId);
+    public boolean checkWriter(User loginUser) {
+        return this.writer.equals(loginUser);
     }
 
     public void update(Qna updateQna) {
