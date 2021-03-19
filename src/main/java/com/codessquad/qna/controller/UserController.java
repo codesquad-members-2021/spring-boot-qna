@@ -1,6 +1,7 @@
 package com.codessquad.qna.controller;
 
 import com.codessquad.qna.domain.User;
+import com.codessquad.qna.domain.dto.UserDto;
 import com.codessquad.qna.service.UserService;
 import com.codessquad.qna.util.HttpSessionUtils;
 import org.slf4j.Logger;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("/users")
@@ -33,14 +35,17 @@ public class UserController {
     @GetMapping
     public String renderUserList(Model model) {
         List<User> getUsers = userService.findAll();
-        model.addAttribute("users", getUsers);
+        List<UserDto> userDtos = getUsers.stream()
+                .map(o -> o.returnDto())
+                .collect(Collectors.toList());
+        model.addAttribute("users", userDtos);
         return "user/list";
     }
 
     @GetMapping("/{userId}")
     public String renderProfile(@PathVariable Long userId, Model model) {
         User user = userService.findById(userId);
-        model.addAttribute("user", user);
+        model.addAttribute("user", user.returnDto());
         return "user/profile";
     }
 
@@ -48,7 +53,7 @@ public class UserController {
     public String renderUpdateForm(@PathVariable Long id, Model model, HttpSession session) {
         User user = HttpSessionUtils.getUserFromSession(session);
         user.checkSameUser(id);
-        model.addAttribute("user", user);
+        model.addAttribute("user", user.returnDto());
         return "user/userUpdateForm";
     }
 
