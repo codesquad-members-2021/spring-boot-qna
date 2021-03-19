@@ -30,6 +30,10 @@ function addAnswer(e) {
         $(".qna-comment-slipp-articles").prepend(template);
 
         $(".answer-write textarea").val("");
+
+        var count = "<strong>" + data.question.countOfAnswer+ "</strong>개의 의견";
+        document.getElementById("qna-comment-count").innerHTML = count;
+
     }
 }
 
@@ -45,13 +49,16 @@ function deleteAnswer(e) {
     $.ajax({
         type: 'delete',
         url: url,
-        dataType: 'text',
+        dataType: 'json',
         error: function (xhr, status) {
             console.log("error");
         },
         success: function (data, status) {
             console.log("success");
             deleteBtn.closest("article").remove();
+
+            var count = "<strong>" + (data.question.countOfAnswer)+ "</strong>개의 의견";
+            document.getElementById("qna-comment-count").innerHTML = count;
         }
     });
 }

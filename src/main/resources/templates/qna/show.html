@@ -45,7 +45,7 @@
 
                 <div class="qna-comment">
                     <div class="qna-comment-slipp">
-                        <p class="qna-comment-count"><strong>{{question.countOfAnswer}}</strong>개의 의견</p>
+                        <p id="qna-comment-count"><strong>{{question.countOfAnswer}}</strong>개의 의견</p>
                         <div class="qna-comment-slipp-articles">
 
                             {{#answers}}
@@ -112,7 +112,7 @@
         <div class="article-util">
             <ul class="article-util-list">
                 <li>
-                    <a class="link-modify-article" href="/api/qna/updateAnswer/{3}">수정</a>
+                    <a class="link-modify-article" href="/api/questions/{3}/answers/{4}">수정</a>
                 </li>
                 <li>
                     <a class="link-delete-article" href="/api/questions/{3}/answers/{4}">삭제</a>
