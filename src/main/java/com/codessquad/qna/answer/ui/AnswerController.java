@@ -32,14 +32,14 @@ public class AnswerController {
         User writer = getUserAttribute(session);
         Question question = questionService.getQuestionFromRepository(questionId);
         answerService.save(answerRequest, question, writer);
-        return String.format("redirect:/questions/%d", questionId);
+        return "redirect:/questions/" + questionId;
     }
 
     @DeleteMapping("{id}")
     public String deleteAnswer(@PathVariable Long questionId, @PathVariable Long id, HttpSession session) {
         checkAnswerAuthorization(id, session);
         answerService.deleteAnswer(id);
-        return String.format("redirect:/questions/%d", questionId);
+        return "redirect:/questions/" + questionId;
     }
 
     // FIXME: 권한 인증과 관련된 부분은 AOP 로 분리해야한다.
