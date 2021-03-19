@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
 
+import static com.codessquad.qna.HttpSessionUtils.*;
+
 @Controller
 @RequestMapping("/users")
 public class UserController {
@@ -28,19 +30,19 @@ public class UserController {
     public String login(String userId, String password, HttpSession session) {
         User user = userService.findByUserId(userId);
 
-        if (!password.equals(user.getPassword())) {
+        if (!user.matchPassword(password)) {
             return "redirect:/users/login";
         }
 
         logger.info("User Logged In: {}", user);
-        session.setAttribute("user", user);
+        session.setAttribute(USER_SESSION_KEY, user);
 
         return "redirect:/";
     }
 
     @GetMapping("/logout")
     public String logout(HttpSession session) {
-        session.removeAttribute("user");
+        session.removeAttribute(USER_SESSION_KEY);
         return "redirect:/";
     }
 
@@ -65,14 +67,29 @@ public class UserController {
     }
 
     @GetMapping("/{id}/form")
-    public String showModifyProfile(@PathVariable long id, Model model) {
+    public String showModifyProfile(@PathVariable long id, Model model, HttpSession session) {
+        if (!isLoginUser(session)) {
+            return "redirect:/users/login";
+        }
+        User sessionedUser = getUserFromSession(session);
+        if (!sessionedUser.matchId(id)) {
+            throw new IllegalArgumentException("User Can Only Change Their Info");
+        }
         User user = userService.findById(id);
         model.addAttribute("user", user);
         return "user/updateForm";
     }
 
     @PutMapping("/{id}/update")
-    public String modifyProfile(@PathVariable long id, User updatedUser, String oldPassword) {
+    public String modifyProfile(@PathVariable long id, User updatedUser, String oldPassword, HttpSession session) {
+        if (!isLoginUser(session)) {
+            return "redirect:/users/login";
+        }
+        User sessionedUser = getUserFromSession(session);
+        if (!sessionedUser.matchId(id)) {
+            throw new IllegalArgumentException("User Can Only Change Their Info");
+        }
+
         User user = userService.findById(id);
 
         if (!user.verifyPassword(oldPassword)) {
@@ -85,8 +102,8 @@ public class UserController {
         return "redirect:/users";
     }
 
-//    @ExceptionHandler(IllegalArgumentException.class)
-//    public String handleException() {
-//        return "error";
-//    }
+    @ExceptionHandler(IllegalArgumentException.class)
+    public String handleException() {
+        return "error";
+    }
 }

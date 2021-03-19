@@ -51,6 +51,14 @@ public class User {
         return email;
     }
 
+    public boolean matchPassword(String passwordToMatch) {
+        return this.password.equals(passwordToMatch);
+    }
+
+    public boolean matchId(long idToMatch) {
+        return this.id == idToMatch;
+    }
+
     public User updateProfile(User updatedUser) {
         if (updatedUser.password.isEmpty()) {
             this.password = updatedUser.password;
