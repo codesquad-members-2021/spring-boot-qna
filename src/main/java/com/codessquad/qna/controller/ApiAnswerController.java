@@ -5,8 +5,6 @@ import com.codessquad.qna.exception.ForbiddenException;
 import com.codessquad.qna.exception.NotFoundException;
 import com.codessquad.qna.exception.NotLoggedInException;
 import com.codessquad.qna.service.AnswerService;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -18,7 +16,6 @@ import javax.servlet.http.HttpSession;
 public class ApiAnswerController {
 
     private final AnswerService answerService;
-    private final Logger log = LoggerFactory.getLogger(ApiAnswerController.class);
 
     @Autowired
     public ApiAnswerController(AnswerService answerService) {
@@ -26,7 +23,7 @@ public class ApiAnswerController {
     }
 
     @PostMapping()
-    public Answer createAnswer(@PathVariable("questionId") Long questionId, Answer answer, HttpSession session){
+    public Answer createAnswer(@PathVariable("questionId") Long questionId, Answer answer, HttpSession session) {
         return answerService.create(questionId, answer, HttpSessionUtils.loginUser(session));
     }
 
@@ -35,7 +32,7 @@ public class ApiAnswerController {
             @PathVariable("questionId") Long questionId,
             @PathVariable("answerId") Long answerId, HttpSession session) {
         answerService.delete(questionId, answerId, HttpSessionUtils.loginUser(session));
-        return "hello";
+        return "OK";
     }
 
     @ResponseStatus(HttpStatus.UNAUTHORIZED)

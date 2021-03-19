@@ -4,19 +4,13 @@ import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import javax.persistence.*;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
+import javax.persistence.Entity;
+import javax.persistence.ForeignKey;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 
 @Entity
-public class Answer {
-
-    private static final DateTimeFormatter FORMAT_yyyy_MM_dd_HHmm = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
-
-    @Id
-    @GeneratedValue
-    @JsonProperty
-    private Long id;
+public class Answer extends AbstractEntity {
 
     @ManyToOne
     @JoinColumn(foreignKey = @ForeignKey(name = "fk_answer_to_question"))
@@ -31,9 +25,6 @@ public class Answer {
     @JsonProperty
     private String comment;
 
-    @JsonProperty
-    private LocalDateTime createdDateTime;
-
     @JsonIgnore
     private boolean deleted;
 
@@ -42,12 +33,7 @@ public class Answer {
 
     public Answer(String comment) {
         this.comment = comment;
-        this.createdDateTime = LocalDateTime.now();
         this.deleted = false;
-    }
-
-    public Long getId() {
-        return id;
     }
 
     public Question getQuestion() {
@@ -70,11 +56,6 @@ public class Answer {
         return comment;
     }
 
-    @JsonGetter("time")
-    public String getFormattedTime() {
-        return createdDateTime.format(FORMAT_yyyy_MM_dd_HHmm);
-    }
-
     @JsonGetter("questionId")
     public Long getTheQuestionId() {
         return question.getId();
@@ -82,14 +63,6 @@ public class Answer {
 
     public boolean isDeleted() {
         return deleted;
-    }
-
-    public LocalDateTime getCreatedDateTime() {
-        return createdDateTime;
-    }
-
-    public void setCreatedDateTime(LocalDateTime createdDateTime) {
-        this.createdDateTime = createdDateTime;
     }
 
     public void updateAnswer(Answer updatingAnswer) {

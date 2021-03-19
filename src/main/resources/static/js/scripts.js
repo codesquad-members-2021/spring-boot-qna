@@ -17,7 +17,7 @@ function addAnswer(e) {
           data.questionId,
           data.writer.id,
           data.comment,
-          data.time,
+          data.createdDateTime,
           data.writer.name
       );
       $('.qna-comment-slipp-articles').append(template);

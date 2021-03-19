@@ -3,16 +3,12 @@ package com.codessquad.qna.domain;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
 import java.util.Objects;
 
 @Entity
-public class User {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @JsonProperty
-    private Long id;
+public class User extends AbstractEntity {
 
     @Column(nullable = false, length = 20, unique = true)
     @JsonProperty
@@ -37,10 +33,6 @@ public class User {
         this.email = email;
     }
 
-    public Long getId() {
-        return id;
-    }
-
     public String getUserId() {
         return userId;
     }
@@ -57,10 +49,6 @@ public class User {
         return this.password.equals(oldPassword);
     }
 
-    public boolean matchesId(Long id) {
-        return this.id.equals(id);
-    }
-
     public void update(User newUserInfo) {
         this.password = newUserInfo.password;
         this.name = newUserInfo.name;
@@ -72,11 +60,11 @@ public class User {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         User user = (User) o;
-        return Objects.equals(id, user.id) && Objects.equals(userId, user.userId);
+        return Objects.equals(getId(), user.getId()) && Objects.equals(userId, user.userId);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, userId);
+        return Objects.hash(getId(), userId);
     }
 }

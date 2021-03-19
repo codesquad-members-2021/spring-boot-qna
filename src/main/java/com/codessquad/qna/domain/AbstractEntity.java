@@ -7,11 +7,14 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Objects;
 
 @MappedSuperclass
 @EntityListeners(AuditingEntityListener.class)
 public class AbstractEntity {
+
+    private static final DateTimeFormatter FORMAT_yyyy_MM_dd_HHmm = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
 
     @Id
     @JsonProperty
@@ -30,6 +33,27 @@ public class AbstractEntity {
 
     public LocalDateTime getCreatedDateTime() {
         return createdDateTime;
+    }
+
+    @JsonProperty("createdDateTime")
+    public String getFormattedCreatedDateTime() {
+        return getFormattedDateTime(createdDateTime);
+    }
+
+    @JsonProperty("modifiedDateTime")
+    public String getFormattedModifitedDateTime() {
+        return getFormattedDateTime(modifiedDateTime);
+    }
+
+    private String getFormattedDateTime(LocalDateTime localDateTime) {
+        if (localDateTime == null) {
+            return "";
+        }
+        return localDateTime.format(FORMAT_yyyy_MM_dd_HHmm);
+    }
+
+    public boolean matchesId(Long id) {
+        return this.id.equals(id);
     }
 
     @Override
