@@ -1,6 +1,7 @@
 package com.codesquad.qna.util;
 
 import com.codesquad.qna.domain.User;
+import com.codesquad.qna.exception.UnauthorizedUserAccessException;
 
 import javax.servlet.http.HttpSession;
 
@@ -13,7 +14,7 @@ public class HttpSessionUtils {
 
     public static User getUserFromSession(HttpSession session) {
         if (!isLoginUser(session)) {
-            return null;
+            throw new UnauthorizedUserAccessException();
         }
         return (User) session.getAttribute(USER_SESSION_KEY);
     }
