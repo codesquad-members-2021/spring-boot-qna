@@ -1,10 +1,13 @@
 package com.codessquad.qna.web.domain;
 
+import org.hibernate.annotations.SQLDelete;
+
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
+@SQLDelete(sql = "UPDATE QUESTION SET DELETED = TRUE WHERE ID = ?")
 public class Question extends BaseTimeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -17,8 +20,14 @@ public class Question extends BaseTimeEntity {
     @OneToMany(mappedBy = "question", cascade = CascadeType.REMOVE)
     private List<Answer> answers;
 
+    @Column(nullable = false)
     private String title;
+
+    @Column(nullable = false)
     private String contents;
+
+    @Column(nullable = false, columnDefinition = "BOOLEAN DEFAULT TRUE")
+    private Boolean deleted;
 
     public Question(String title, String contents) {
         this.title = title;
@@ -75,6 +84,10 @@ public class Question extends BaseTimeEntity {
 
     public void setAnswers(List<Answer> answers) {
         this.answers = answers;
+    }
+
+    public Boolean getDeleted() {
+        return deleted;
     }
 
     @Override

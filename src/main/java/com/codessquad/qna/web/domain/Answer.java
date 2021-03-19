@@ -1,9 +1,11 @@
 package com.codessquad.qna.web.domain;
 
+import org.hibernate.annotations.SQLDelete;
+
 import javax.persistence.*;
-import java.time.LocalDateTime;
 
 @Entity
+@SQLDelete(sql = "UPDATE ANSWER SET DELETED = TRUE WHERE ID = ?")
 public class Answer extends BaseTimeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -19,6 +21,9 @@ public class Answer extends BaseTimeEntity {
 
     @Column(nullable = false, length = 400)
     private String contents;
+
+    @Column(columnDefinition = "BOOLEAN DEFAULT TRUE")
+    private Boolean deleted;
 
     public Answer(String contents, Question question, User writer) {
         this.contents = contents;
@@ -63,6 +68,10 @@ public class Answer extends BaseTimeEntity {
 
     public void setQuestion(Question question) {
         this.question = question;
+    }
+
+    public Boolean getDeleted() {
+        return deleted;
     }
 
     @Override
