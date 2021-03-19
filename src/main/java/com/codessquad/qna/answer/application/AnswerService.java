@@ -2,12 +2,8 @@ package com.codessquad.qna.answer.application;
 
 import com.codessquad.qna.answer.domain.Answer;
 import com.codessquad.qna.answer.domain.AnswerRepository;
-import com.codessquad.qna.answer.dto.AnswerRequest;
-import com.codessquad.qna.answer.dto.AnswerResponse;
 import com.codessquad.qna.answer.exception.AnswerDeletedException;
 import com.codessquad.qna.answer.exception.AnswerNotFoundException;
-import com.codessquad.qna.question.domain.Question;
-import com.codessquad.qna.user.domain.User;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -16,11 +12,6 @@ public class AnswerService {
 
     public AnswerService(AnswerRepository answerRepository) {
         this.answerRepository = answerRepository;
-    }
-
-    public AnswerResponse save(AnswerRequest answerRequest, Question question, User writer) {
-        Answer answer = answerRepository.save(answerRequest.toAnswer(question, writer));
-        return AnswerResponse.from(answer);
     }
 
     public void deleteAnswer(Long id) {

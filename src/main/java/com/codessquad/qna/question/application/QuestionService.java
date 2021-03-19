@@ -1,5 +1,9 @@
 package com.codessquad.qna.question.application;
 
+import com.codessquad.qna.answer.domain.Answer;
+import com.codessquad.qna.answer.domain.AnswerRepository;
+import com.codessquad.qna.answer.dto.AnswerRequest;
+import com.codessquad.qna.answer.dto.AnswerResponse;
 import com.codessquad.qna.question.domain.Question;
 import com.codessquad.qna.question.domain.QuestionRepository;
 import com.codessquad.qna.question.dto.QuestionRequest;
@@ -15,9 +19,11 @@ import java.util.List;
 @Service
 public class QuestionService {
     private final QuestionRepository questionRepository;
+    private final AnswerRepository answerRepository;
 
-    public QuestionService(QuestionRepository questionRepository) {
+    public QuestionService(QuestionRepository questionRepository, AnswerRepository answerRepository) {
         this.questionRepository = questionRepository;
+        this.answerRepository = answerRepository;
     }
 
     public QuestionResponse save(QuestionRequest questionRequest, User writer) {
@@ -51,13 +57,17 @@ public class QuestionService {
         questionRepository.save(question);
     }
 
-    public Long getWriterId(Long id) {
-        return getQuestionFromRepository(id)
-                .getWriter()
-                .getId();
+    public User getWriter(Long id) {
+        return getQuestionFromRepository(id).getWriter();
     }
 
-    public Question getQuestionFromRepository(Long id) {
+    public AnswerResponse addAnswer(Long questionId, AnswerRequest answerRequest, User writer) {
+        Question question = getQuestionFromRepository(questionId);
+        Answer answer = answerRepository.save(answerRequest.toAnswer(question, writer));
+        return AnswerResponse.from(answer);
+    }
+
+    private Question getQuestionFromRepository(Long id) {
         Question question = questionRepository.findById(id)
                 .orElseThrow(() -> new QuestionNotFoundException(id));
         if (question.isDeleted()) {

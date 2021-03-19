@@ -3,7 +3,6 @@ package com.codessquad.qna.answer.ui;
 import com.codessquad.qna.answer.application.AnswerService;
 import com.codessquad.qna.answer.dto.AnswerRequest;
 import com.codessquad.qna.question.application.QuestionService;
-import com.codessquad.qna.question.domain.Question;
 import com.codessquad.qna.user.domain.User;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -31,8 +30,7 @@ public class AnswerController {
     @PostMapping
     public String createAnswer(@PathVariable Long questionId, @Valid AnswerRequest answerRequest, HttpSession session) {
         User writer = getUserAttribute(session);
-        Question question = questionService.getQuestionFromRepository(questionId);
-        answerService.save(answerRequest, question, writer);
+        questionService.addAnswer(questionId, answerRequest, writer);
         return "redirect:/questions/" + questionId;
     }
 

@@ -15,12 +15,16 @@ public class HttpSessionUtils {
     public static void checkLoggedIn(HttpSession session) {
         getUserAttribute(session);
     }
-    
+
     public static void checkAuthorization(Long id, HttpSession session) {
         boolean authorized = getUserAttribute(session).matchId(id);
         if (!authorized) {
             throw new UnauthorizedException("허가받지 않은 사용자입니다.");
         }
+    }
+
+    public static void checkAuthorization(User user, HttpSession session) {
+        checkAuthorization(user.getId(), session);
     }
 
     public static User getUserAttribute(HttpSession session) {
