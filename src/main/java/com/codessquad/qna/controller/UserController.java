@@ -1,7 +1,7 @@
 package com.codessquad.qna.controller;
 
 import com.codessquad.qna.entity.User;
-import com.codessquad.qna.exception.UserIdNotFoundException;
+import com.codessquad.qna.exception.UserNotFoundException;
 import com.codessquad.qna.service.UserService;
 import com.codessquad.qna.util.HttpSessionUtil;
 import org.slf4j.Logger;
@@ -80,7 +80,7 @@ public class UserController {
                 return "redirect:/";
             }
             return "redirect:/users/login/failed";
-        } catch (UserIdNotFoundException ex) {
+        } catch (UserNotFoundException ex) {
             return "redirect:/users/login/failed";
         }
     }
