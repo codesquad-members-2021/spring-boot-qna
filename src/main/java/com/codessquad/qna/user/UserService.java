@@ -2,6 +2,7 @@ package com.codessquad.qna.user;
 
 import com.codessquad.qna.exception.LoginFailedException;
 import com.codessquad.qna.exception.ResourceNotFoundException;
+import com.codessquad.qna.exception.UserExistedException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -60,7 +61,7 @@ public class UserService {
         Optional<User> existedUser = userRepository.findByUserId(user.getUserId());
 
         if (existedUser.isPresent()) {
-            throw new LoginFailedException("이미 존재하는 ID 입니다.");
+            throw new UserExistedException();
         }
 
         userRepository.save(user.toEntity());

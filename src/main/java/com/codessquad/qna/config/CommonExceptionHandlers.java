@@ -3,6 +3,7 @@ package com.codessquad.qna.config;
 import com.codessquad.qna.exception.InsufficientAuthenticationException;
 import com.codessquad.qna.exception.LoginFailedException;
 import com.codessquad.qna.exception.ResourceNotFoundException;
+import com.codessquad.qna.exception.UserExistedException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -27,6 +28,14 @@ public class CommonExceptionHandlers {
     @ExceptionHandler(LoginFailedException.class)
     public ModelAndView loginFailedExceptionHandler(LoginFailedException e) {
         logger.error("LoginFailedException", e);
+
+        return new ModelAndView("/error/401", "errMessage", e.getMessage());
+    }
+
+    @ResponseStatus(HttpStatus.UNAUTHORIZED)
+    @ExceptionHandler(UserExistedException.class)
+    public ModelAndView userExistedExceptionHandler(UserExistedException e) {
+        logger.error("UserExistedException", e);
 
         return new ModelAndView("/error/401", "errMessage", e.getMessage());
     }
