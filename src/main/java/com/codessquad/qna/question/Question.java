@@ -19,6 +19,7 @@ public class Question {
     @Column(nullable = false, length = 5000)
     private String contents;
 
+    private boolean deleted;
     private LocalDateTime createDateTime;
     private LocalDateTime updateDateTime;
 
@@ -105,6 +106,10 @@ public class Question {
 
     public String getContents() {
         return contents;
+    }
+
+    public void delete() {
+        deleted = true;
     }
 
     public LocalDateTime getCreateDateTime() {

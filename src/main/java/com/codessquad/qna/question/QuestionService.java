@@ -18,7 +18,7 @@ public class QuestionService {
     }
 
     public List<Question> readAll() {
-        List<Question> result = questionRepository.findAll();
+        List<Question> result = questionRepository.findAllByDeletedFalse();
 
         for (Question question : result) {
             question.setAnswers(answerService.readAll(question.getId()));
@@ -60,6 +60,7 @@ public class QuestionService {
         Question question = readVerifiedQuestion(id, currentSessionUser);
 
         answerService.deleteAll(question.getAnswers());
-        questionRepository.delete(question);
+        question.delete();
+        questionRepository.save(question);
     }
 }
