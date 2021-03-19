@@ -28,7 +28,7 @@ public class AnswersController {
     public String createAnswer(@PathVariable("questionId") long questionId, String answerContents,
                                HttpSession session) {
         User sessionUser = SessionUtil.getLoginUser(session);
-        Question targetQuestion = questionRepository.findById(questionId)
+        Question targetQuestion = questionRepository.findByIdAndDeletedFalse(questionId)
                 .orElseThrow(QuestionNotFoundException::new);
 
         answersRepository.save(new Answer(answerContents, targetQuestion, sessionUser));
@@ -38,7 +38,7 @@ public class AnswersController {
     @DeleteMapping("/{answerId}")
     public String deleteAnswer(@PathVariable("answerId") long answerId, HttpSession session) {
         User sessionUser = SessionUtil.getLoginUser(session);
-        Answer targetAnswer = answersRepository.findById(answerId)
+        Answer targetAnswer = answersRepository.findByIdAndDeletedFalse(answerId)
                 .orElseThrow(AnswerNotFoundException::new);
 
         Question targetQuestion = targetAnswer.getQuestion();
