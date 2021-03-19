@@ -10,7 +10,6 @@ import com.codessquad.qna.repository.QuestionRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
-
 import javax.servlet.http.HttpSession;
 import java.util.List;
 
@@ -39,8 +38,9 @@ public class QuestionService {
         questionRepository.save(question);
     }
 
-    public void delete(Question question, Long questionId, User loginUser) {
+    public void delete(Long questionId, User loginUser) {
         List<Answer> activeAnswers = findAnswers(questionId);
+        Question question = findById(questionId);
         if (question.canDelete(question, loginUser, activeAnswers)) {
             for (Answer answer : activeAnswers) {
                 answer.delete();
@@ -61,6 +61,5 @@ public class QuestionService {
     public List<Answer> findAnswers(Long questionId) {
         return answerRepository.findAllByQuestionIdAndIsDeleteFalse(questionId);
     }
-
 
 }
