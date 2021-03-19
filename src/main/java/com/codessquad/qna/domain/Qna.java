@@ -12,9 +12,9 @@ public class Qna {
     @GeneratedValue
     private Long id;
 
-    @Column(nullable = false)
-    private String writer;
-
+    @ManyToOne
+    @JoinColumn(foreignKey = @ForeignKey(name = "fk_question_writer"))
+    private User writer;
     private String title;
     private String contents;
     private LocalDateTime createdDateTime = LocalDateTime.now();
@@ -23,11 +23,11 @@ public class Qna {
         return id;
     }
 
-    public String getWriter() {
+    public User getWriter() {
         return writer;
     }
 
-    public void setWriter(String writer) {
+    public void setWriter(User writer) {
         this.writer = writer;
     }
 

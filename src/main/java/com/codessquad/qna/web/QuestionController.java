@@ -35,15 +35,10 @@ public class QuestionController {
         }
         User sessionUser = HttpSessionUtils.getUserFromSession(session);
         assert sessionUser != null;
-        qna.setWriter(sessionUser.getUserId());
+        qna.setWriter(sessionUser);
 
         qnaRepository.save(qna);
         return "redirect:/";
-    }
-
-    private boolean checkEmpty(Qna qna) {
-        return qna.getTitle().equals("")
-                || qna.getContents().equals("");
     }
 
     @GetMapping
