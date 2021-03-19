@@ -125,10 +125,6 @@ public class User {
         }
     }
 
-    public UserDTO toDTO() {
-        return new UserDTO(id, userId, password, name, email);
-    }
-
     @Override
     public String toString() {
         return "User{" +

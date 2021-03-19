@@ -21,6 +21,15 @@ public class UserDTO {
         this.email = email;
     }
 
+    public static UserDTO of(User user) {
+        return new UserDTO(
+                user.getId(),
+                user.getUserId(), user.getPassword(),
+                user.getName(),
+                user.getEmail()
+        );
+    }
+
     public Long getId() {
         return id;
     }

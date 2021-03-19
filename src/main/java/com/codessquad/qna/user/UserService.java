@@ -18,14 +18,15 @@ public class UserService {
 
     public List<UserDTO> readUsers() {
         return StreamSupport.stream(userRepository.findAll().spliterator(), true)
-                .map(User::toDTO)
+                .map(UserDTO::of)
                 .collect(Collectors.toList());
     }
 
     public UserDTO readUser(Long id) {
-        return userRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("존재하지 않는 사용자 입니다. id : " + id))
-                .toDTO();
+        User result = userRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("존재하지 않는 사용자 입니다. id : " + id));
+
+        return UserDTO.of(result);
     }
 
     public UserDTO readVerifiedUser(Long id, UserDTO verificationTarget) {
@@ -33,7 +34,7 @@ public class UserService {
 
         result.verifyWith(verificationTarget.toEntity());
 
-        return result.toDTO();
+        return UserDTO.of(result);
     }
 
     public UserDTO readLoginableUser(String userId, String password) {
@@ -43,7 +44,7 @@ public class UserService {
 
             user.checkPassword(password);
 
-            return user.toDTO();
+            return UserDTO.of(user);
 
         } catch (IllegalArgumentException e) {
             throw new LoginFailedException(e);
@@ -63,7 +64,7 @@ public class UserService {
         User userToUpdate = existedUser.toEntity();
 
         userToUpdate.update(newUser);
-
-        return userRepository.save(userToUpdate).toDTO();
+        User updatedUser = userRepository.save(userToUpdate);
+        return UserDTO.of(updatedUser);
     }
 }
