@@ -11,4 +11,16 @@ public class GlobalControllerExceptionHandler {
         model.addAttribute("errorMessage", e.getMessage());
         return "/user/login";
     }
+
+    @ExceptionHandler(IllegalUserAccessException.class)
+    private String handleIllegalUserAccessException(Model model, IllegalUserAccessException e) {
+        model.addAttribute("errorMessage", e.getMessage());
+        return "/user/login";
+    }
+
+    @ExceptionHandler(UnauthorizedUserAccessException.class)
+    private String handleUnauthorizedUserAccessException(Model model, UnauthorizedUserAccessException e) {
+        model.addAttribute("errorMessage", e.getMessage());
+        return "/user/login";
+    }
 }
