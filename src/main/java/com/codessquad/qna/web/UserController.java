@@ -34,10 +34,11 @@ public class UserController {
     }
 
     @PostMapping("/login")
-    public String login(String userId, String password, HttpSession session) {
+    public String login(String userId, String password, HttpSession session, Model model) {
         User user = userRepository.findByUserId(userId).orElseThrow(NoUserException::new);
         if (!user.isPasswordMatching(password)) {
-            return "redirect:/users/loginForm";
+            model.addAttribute("errorMessage", "아이디와 비밀번호가 일치하지 않습니다.");
+            return "/user/login";
         }
         session.setAttribute(USER_SESSION_KEY, user);
         return "redirect:/";
