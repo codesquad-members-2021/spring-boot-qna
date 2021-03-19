@@ -9,6 +9,7 @@ import com.codessquad.qna.question.domain.QuestionRepository;
 import com.codessquad.qna.question.dto.QuestionRequest;
 import com.codessquad.qna.question.dto.QuestionResponse;
 import com.codessquad.qna.question.exception.QuestionDeletedException;
+import com.codessquad.qna.question.exception.QuestionNotDeletableException;
 import com.codessquad.qna.question.exception.QuestionNotFoundException;
 import com.codessquad.qna.user.domain.User;
 import org.springframework.stereotype.Service;
@@ -53,6 +54,9 @@ public class QuestionService {
 
     public void deleteQuestion(Long id) {
         Question question = getQuestionFromRepository(id);
+        if (!question.isDeletable()) {
+            throw new QuestionNotDeletableException("삭제할 수 없는 질문입니다.");
+        }
         question.delete();
         questionRepository.save(question);
     }

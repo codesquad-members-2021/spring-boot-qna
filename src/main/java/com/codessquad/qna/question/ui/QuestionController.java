@@ -66,16 +66,9 @@ public class QuestionController {
         questionService.deleteQuestion(id);
         return String.format("redirect:/questions", id);
     }
-
-    // FIXME: 권한 인증과 관련된 부분은 AOP 로 분리해야한다.
+    
     private void checkQuestionAuthorization(Long id, HttpSession session) {
         User writer = questionService.getWriter(id);
         checkAuthorization(writer, session);
-        /**
-         * NOTE: UserController 에서의 권한 인증과 동일한 로직을 사용하기 위해
-         * 포비 영상에서 Question 도메인에 isSameWriter 메서드를 구현한 것과 다르게,
-         * 일부러 getWriterId 라는 게터를 questionService 에 정의하였다.
-         * 권한 로직을 AOP 로 분리하기 위해서라도, 권한 인증 로직은 동일한 메서드를 활용하도록 할 예정이다.
-         */
     }
 }

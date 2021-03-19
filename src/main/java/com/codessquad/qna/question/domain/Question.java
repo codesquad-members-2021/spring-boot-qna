@@ -56,4 +56,8 @@ public class Question extends BaseEntity {
         this.title = question.title;
         this.contents = question.contents;
     }
+
+    public boolean isDeletable() {
+        return answers.size() == 0;
+    }
 }
