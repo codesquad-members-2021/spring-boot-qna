@@ -42,7 +42,7 @@ public class QuestionsController {
 
     @GetMapping("/{questionId}")
     public String getOneQuestion(@PathVariable("questionId") long questionId, Model model) {
-        Question foundQuestion = questionRepository.findById(questionId)
+        Question foundQuestion = questionRepository.findByIdAndDeletedFalse(questionId)
                 .orElseThrow(QuestionNotFoundException::new);
         model.addAttribute("question", foundQuestion);
         return "qna/show";
@@ -76,7 +76,7 @@ public class QuestionsController {
 
     private Question verifyQuestionAndGet(HttpSession session, Long questionId) {
         User sessionUser = SessionUtil.getLoginUser(session);
-        Question currentQuestion = questionRepository.findById(questionId)
+        Question currentQuestion = questionRepository.findByIdAndDeletedFalse(questionId)
                 .orElseThrow(QuestionNotFoundException::new);
         verifyAuthorizedAccess(currentQuestion, sessionUser);
         return currentQuestion;
