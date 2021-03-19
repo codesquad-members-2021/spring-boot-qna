@@ -1,6 +1,7 @@
 package com.codessquad.qna.controller;
 
 import com.codessquad.qna.domain.Question;
+import com.codessquad.qna.exception.type.NotDeleteException;
 import com.codessquad.qna.service.QuestionService;
 import com.codessquad.qna.utils.HttpSessionUtils;
 import org.springframework.stereotype.Controller;
@@ -62,7 +63,11 @@ public class QuestionController {
     private String deleteQuestion(@PathVariable Long id, HttpSession session) {
         HttpSessionUtils.checkValidOf(session);
         questionService.confirmWriter(HttpSessionUtils.getLoginUserOf(session), questionService.findById(id));
-        questionService.deleteById(id); // soft delete로 변경해야함.
-        return "redirect:/";
+
+        if (questionService.findById(id).getAnswers().size() == 0) {
+            questionService.deleteById(id); // soft delete로 변경해야함.
+            return "redirect:/";
+        }
+        throw new NotDeleteException(); //TODO. 댓글이 모두 삭제돼야 지울 수 있음. [예외 만들기] **********************************************************************************
     }
 }

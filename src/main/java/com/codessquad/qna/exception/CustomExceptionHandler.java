@@ -1,9 +1,6 @@
 package com.codessquad.qna.exception;
 
-import com.codessquad.qna.exception.type.DuplicateIdFoundException;
-import com.codessquad.qna.exception.type.IncorrectAccountException;
-import com.codessquad.qna.exception.type.NotFoundException;
-import com.codessquad.qna.exception.type.UnauthorizedException;
+import com.codessquad.qna.exception.type.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -35,6 +32,11 @@ public class CustomExceptionHandler {
     @ExceptionHandler(UnauthorizedException.class)
     public String UnauthorizedException(Model model){
         model.addAttribute("errorMessage","권한이 없습니다.");
+        return "error/404";
+    }
+    @ExceptionHandler(NotDeleteException.class)
+    public String NotDeleteException(Model model){
+        model.addAttribute("errorMessage","모든 답변이 삭제돼야, 질문을 삭제할 수 있습니다.");
         return "error/404";
     }
 
