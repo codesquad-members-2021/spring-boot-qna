@@ -1,7 +1,4 @@
-package com.codessquad.qna.web.questions;
-
-import com.codessquad.qna.web.answers.Answer;
-import com.codessquad.qna.web.users.User;
+package com.codessquad.qna.web.domain;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;

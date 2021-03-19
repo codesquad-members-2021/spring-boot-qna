@@ -1,5 +1,6 @@
-package com.codessquad.qna.web.users;
+package com.codessquad.qna.web.domain;
 
+import com.codessquad.qna.web.domain.User;
 import org.springframework.data.repository.CrudRepository;
 
 import java.util.Optional;

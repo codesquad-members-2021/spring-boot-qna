@@ -1,5 +1,7 @@
-package com.codessquad.qna.web.users;
+package com.codessquad.qna.web.controller;
 
+import com.codessquad.qna.web.domain.User;
+import com.codessquad.qna.web.domain.UserRepository;
 import com.codessquad.qna.web.exceptions.auth.UnauthorizedAccessException;
 import com.codessquad.qna.web.exceptions.users.UserNotFoundException;
 import com.codessquad.qna.web.utils.SessionUtil;

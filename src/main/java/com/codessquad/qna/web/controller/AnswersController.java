@@ -1,11 +1,9 @@
-package com.codessquad.qna.web.answers;
+package com.codessquad.qna.web.controller;
 
+import com.codessquad.qna.web.domain.*;
 import com.codessquad.qna.web.exceptions.answers.AnswerNotFoundException;
 import com.codessquad.qna.web.exceptions.auth.UnauthorizedAccessException;
 import com.codessquad.qna.web.exceptions.questions.QuestionNotFoundException;
-import com.codessquad.qna.web.questions.Question;
-import com.codessquad.qna.web.questions.QuestionRepository;
-import com.codessquad.qna.web.users.User;
 import com.codessquad.qna.web.utils.SessionUtil;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.DeleteMapping;

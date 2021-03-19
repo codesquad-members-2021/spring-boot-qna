@@ -1,4 +1,4 @@
-package com.codessquad.qna.web.users;
+package com.codessquad.qna.web.domain;
 
 import javax.persistence.*;
 

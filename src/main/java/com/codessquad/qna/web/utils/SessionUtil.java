@@ -1,7 +1,7 @@
 package com.codessquad.qna.web.utils;
 
 import com.codessquad.qna.web.exceptions.users.NoLoginUserException;
-import com.codessquad.qna.web.users.User;
+import com.codessquad.qna.web.domain.User;
 
 import javax.servlet.http.HttpSession;
 
