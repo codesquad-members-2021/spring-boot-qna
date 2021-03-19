@@ -48,7 +48,7 @@ public class QuestionController {
 
         questionService.update(id, newQuestion);
 
-        return "redirect:/questions";
+        return "redirect:/questions/" + id;
     }
 
     @DeleteMapping("/{id}")
