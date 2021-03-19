@@ -38,7 +38,7 @@ public class UserController {
     public String login(String userId, String password, HttpSession session) {
         User user = userRepository.findByUserId(userId).orElseThrow(NoUserException::new);
         if (!user.isPasswordMatching(password)) {
-            throw new NotMatchException();
+            throw new IllegalStateException("아이디 혹은 비밀번호가 일치하지 않습니다.");
         }
         session.setAttribute(USER_SESSION_KEY, user);
         return "redirect:/";
@@ -78,7 +78,7 @@ public class UserController {
         }
         User user = loggedinUser;
         if (!user.isPasswordMatching(inputPassword)) {
-            return "redirect:/users/{id}/form";
+            throw new NotMatchException();
         }
         user.update(updatedUser);
         userRepository.save(user);

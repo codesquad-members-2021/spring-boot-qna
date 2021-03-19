@@ -17,8 +17,9 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(IllegalStateException.class)
-    public String handleIllegalStateException(IllegalStateException e) {
-        return "/exception/unableToAccessToOthers";
+    public String handleIllegalStateException(Model model, IllegalStateException e) {
+        model.addAttribute("errorMessage", e.getMessage());
+        return "/user/login";
     }
 
     @ExceptionHandler(NoSessionedUserException.class)
@@ -28,8 +29,8 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(NotMatchException.class)
-    public String handle(Model model, NotMatchException e) {
+    public String handleNotMatchException(Model model, NotMatchException e) {
         model.addAttribute("errorMessage", e.getMessage());
-        return "/user/login";
+        return "/user/updateForm";
     }
 }
