@@ -26,7 +26,7 @@
 회원 프로필 조회
 
 - GET `/user/{id}`
-    - userProfile
+    - ModelAndView("userProfile")
 
 비밀번호 확인
 

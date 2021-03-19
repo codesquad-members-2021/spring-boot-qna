@@ -1,12 +1,15 @@
 package com.codessquad.qna.controller;
 
 import com.codessquad.qna.repository.Question;
+import com.codessquad.qna.repository.QuestionRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.servlet.ModelAndView;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -17,12 +20,14 @@ import java.util.List;
 @RequestMapping("/questions")
 public class QuestionController {
 
-    private static String dateTimeFormat = "yyyy-MM-dd HH:mm";
+    @Autowired
+    private QuestionRepository questionRepository;
 
-    private List<Question> questions = new ArrayList<>();
+    private static String dateTimeFormat = "yyyy-MM-dd HH:mm";
 
     @GetMapping
     public String showQuestions(Model model) {
+        Iterable<Question> questions = questionRepository.findAll();
         model.addAttribute("questions", questions);
         return "index";
     }
@@ -33,8 +38,7 @@ public class QuestionController {
         DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern(dateTimeFormat);
         String dateTimeString = dateTime.format(dateTimeFormatter);
         question.setDateTime(dateTimeString);
-        question.setId((long) (questions.size() + 1));
-        questions.add(question);
+        questionRepository.save(question);
         return "redirect:/";
     }
 
@@ -44,9 +48,9 @@ public class QuestionController {
     }
 
     @GetMapping("/{id}")
-    public String showQuestion(@PathVariable("id") int id, Model model) {
-        Question question = questions.get(id - 1);
-        model.addAttribute("question", question);
-        return "questionDetail";
+    public ModelAndView showQuestion(@PathVariable("id") Long id) {
+        ModelAndView modelAndView = new ModelAndView("questionDetail");
+        modelAndView.addObject("question", questionRepository.findById(id).get());
+        return modelAndView;
     }
 }

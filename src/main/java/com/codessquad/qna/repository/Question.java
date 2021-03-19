@@ -1,10 +1,20 @@
 package com.codessquad.qna.repository;
 
+import javax.persistence.*;
+
+@Entity
 public class Question {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @Column(nullable = false)
     private String writer;
+    @Column(nullable = false)
     private String dateTime;
+    @Column(nullable = false)
     private String title;
+    @Column(nullable = false)
     private String contents;
 
     public Long getId() {
