@@ -9,6 +9,10 @@ import java.util.Arrays;
 import java.util.List;
 
 public class DummyDataFactory {
+
+    private DummyDataFactory() {
+    }
+
     public static List<User> createUsers() {
         return Arrays.asList(
                 User.builder()
