@@ -30,7 +30,7 @@ public class UserService {
         return UserDTO.of(result);
     }
 
-    private UserDTO readUser(String userId) {
+    private UserDTO read(String userId) {
         User result = userRepository.findByUserId(userId)
                 .orElseThrow(() -> new ResourceNotFoundException("존재하지 않는 사용자 입니다. id : " + userId));
 
@@ -46,7 +46,7 @@ public class UserService {
 
     public UserDTO readPasswordVerifiedUser(String userId, String password) {
         try {
-            User user = readUser(userId).toEntity();
+            User user = read(userId).toEntity();
             user.checkPassword(password);
 
             return UserDTO.of(user);
@@ -56,7 +56,7 @@ public class UserService {
         }
     }
 
-    public void createUser(UserDTO user) {
+    public void create(UserDTO user) {
         Optional<User> existedUser = userRepository.findByUserId(user.getUserId());
 
         if (existedUser.isPresent()) {

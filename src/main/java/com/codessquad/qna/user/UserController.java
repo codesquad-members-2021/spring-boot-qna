@@ -32,7 +32,7 @@ public class UserController {
 
     @PostMapping
     public String create(UserDTO user) {
-        userService.createUser(user);
+        userService.create(user);
         return "redirect:/users";
     }
 
