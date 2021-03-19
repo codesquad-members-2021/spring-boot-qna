@@ -53,9 +53,13 @@ public class QuestionService {
         questionRepository.delete(question);
     }
 
-    private Answer readVerifiedAnswer(Long id, UserDTO user) {
-        Answer answer = answerRepository.findById(id)
+    private Answer readAnswer(Long id) {
+        return answerRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("존재하지 않는 답변입니다. id : " + id));
+    }
+
+    public Answer readVerifiedAnswer(Long id, UserDTO user) {
+        Answer answer = readAnswer(id);
 
         answer.verifyWriter(user.toEntity());
 
@@ -64,6 +68,13 @@ public class QuestionService {
 
     public void createAnswer(Answer answer) {
         answerRepository.save(answer);
+    }
+
+    public void updateAnswer(Long id, Answer newAnswer) {
+        Answer existedAnswer = readAnswer(id);
+
+        existedAnswer.update(newAnswer);
+        answerRepository.save(existedAnswer);
     }
 
     public void deleteAnswers(List<Answer> answers) {

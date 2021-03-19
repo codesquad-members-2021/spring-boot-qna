@@ -69,6 +69,13 @@ public class Answer {
         writer.verifyWith(target);
     }
 
+    public void update(Answer newAnswer) {
+        verifyWriter(newAnswer.getWriter());
+
+        this.comment = newAnswer.comment;
+        this.updateDateTime = LocalDateTime.now();
+    }
+
     @Override
     public String toString() {
         return "Answer{" +
