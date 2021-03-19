@@ -1,7 +1,9 @@
 package com.codessquad.qna.controller;
 
 import com.codessquad.qna.domain.Question;
-import com.codessquad.qna.repository.QuestionRepository;
+import com.codessquad.qna.service.QuestionService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -13,29 +15,28 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @Controller
 @RequestMapping("/questions")
 public class QuestionController {
-    @Autowired
-    private final QuestionRepository questionRepository;
+    private final Logger logger = LoggerFactory.getLogger(QuestionController.class);
+    private final QuestionService questionService;
 
-    public QuestionController(QuestionRepository questionRepository) {
-        this.questionRepository = questionRepository;
+    @Autowired
+    public QuestionController(QuestionService questionService) {
+        this.questionService = questionService;
     }
 
     @PostMapping
     public String createQuestion(Question newQuestion) {
 
-        if(!isValidQuestion(newQuestion)){
-            return "/questions/form";
+        if (!isValidQuestion(newQuestion)) {
+            return "question/form";
         }
 
-        if (!questionRepository.save(newQuestion)) {
-            return "/questions/form";
-        }
+        questionService.add(newQuestion);
 
         return "redirect:/";
     }
 
     private boolean isValidQuestion(Question question) {
-        if (question == null){
+        if (question == null) {
             return false;
         }
         if ("".equals(question.getWriter()) || question.getWriter() == null) {
@@ -51,11 +52,10 @@ public class QuestionController {
         return true;
     }
 
-    @GetMapping("/{questionId}")
-    public String showQuestionInDetail(@PathVariable(name = "questionId") int targetId, Model model) {
+    @GetMapping("/{id}")
+    public String showQuestionInDetail(@PathVariable long id, Model model) {
+        model.addAttribute("question", questionService.getOneById(id).orElse(null));
 
-        model.addAttribute("question", questionRepository.getOne(targetId));
-
-        return "/questions/show";
+        return "question/show";
     }
 }
