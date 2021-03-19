@@ -78,16 +78,15 @@
                                 </div>
                             </article>
                             {{/answers}}
-                            <form class="answer-write" action="/api/questions/{{question.id}}/answers/" method="POST">
-                                <div class="form-group" style="padding:14px;">
+                        </div>
+                        <form class="answer-write" action="/api/questions/{{question.id}}/answers/" method="POST">
+                            <div class="form-group" style="padding:14px;">
                                     <textarea class="form-control" name="contents" id="contents"
                                               placeholder="Update your status"></textarea>
-                                </div>
-                                <input type="submit" class="btn btn-success pull-right pull-right" value="답변하기"/>
-                                <div class="clearfix"/>
-
-                            </form>
-                        </div>
+                            </div>
+                            <input type="submit" class="btn btn-success pull-right pull-right" value="답변하기"/>
+                            <div class="clearfix"/>
+                        </form>
                     </div>
                 </div>
             </div>
