@@ -6,8 +6,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.StreamSupport;
 
 @Service
 public class QuestionService {
@@ -20,8 +18,7 @@ public class QuestionService {
     }
 
     public List<Question> readQuestions() {
-        return StreamSupport.stream(questionRepository.findAll().spliterator(), true)
-                .collect(Collectors.toList());
+        return questionRepository.findAll();
     }
 
     public Question readQuestion(Long id) {
