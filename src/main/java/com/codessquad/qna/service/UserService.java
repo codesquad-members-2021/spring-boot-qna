@@ -2,7 +2,7 @@ package com.codessquad.qna.service;
 
 import com.codessquad.qna.utils.ValidUtils;
 import com.codessquad.qna.domain.User;
-import com.codessquad.qna.exception.type.DuplicateIdFoundException;
+import com.codessquad.qna.exception.type.DuplicateException;
 import com.codessquad.qna.exception.type.IncorrectAccountException;
 import com.codessquad.qna.exception.type.UnauthorizedException;
 import com.codessquad.qna.repository.UserRepository;
@@ -35,7 +35,7 @@ public class UserService {
                     duplicateCheck.set(true); // ID 중복 발생
                 });
         if (duplicateCheck.get() && !update) {  // 중복이면서, 업데이트가 아닐때 예외발생, AtomicBoolean을 처음써봐서 이런식으로 해도 되는건지 잘 모르겠다.
-            throw new DuplicateIdFoundException();
+            throw new DuplicateException();
         } else {
             userRepository.save(user);
         }

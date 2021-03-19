@@ -15,9 +15,9 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 
 @ControllerAdvice
 public class CustomExceptionHandler {
-    @ExceptionHandler(DuplicateIdFoundException.class)
-    public String DuplicateIdFound(Model model){
-        model.addAttribute("DuplicateIdFound",true); // 중복아이디
+    @ExceptionHandler(DuplicateException.class)
+    public String DuplicateException(Model model){
+        model.addAttribute("DuplicateException",true); // 중복아이디
         return "user/form";
     }
     @ExceptionHandler(IncorrectAccountException.class)

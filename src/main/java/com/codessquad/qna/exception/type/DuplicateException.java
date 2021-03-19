@@ -5,8 +5,8 @@ package com.codessquad.qna.exception.type;
  * Blog : https://velog.io/@san
  * Github : https://github.com/sanhee
  */
-public class DuplicateIdFoundException extends RuntimeException{
-    public DuplicateIdFoundException() {
+public class DuplicateException extends RuntimeException{
+    public DuplicateException() {
         super("중복된 아이디입니다.");
     }
 }
