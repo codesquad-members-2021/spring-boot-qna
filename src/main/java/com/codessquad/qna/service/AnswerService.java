@@ -45,7 +45,7 @@ public class AnswerService {
 
     public Answer findById(Long id) {
         Answer answer = this.answerRepository.findById(id).orElseThrow(AnswerNotFoundException::new);
-        if (answer.isDelete()) {
+        if (answer.isDeleted()) {
             throw new AnswerNotFoundException();
         }
         return answer;

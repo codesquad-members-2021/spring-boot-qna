@@ -48,12 +48,12 @@ public class QuestionService {
     }
 
     public List<Question> findAll() {
-        return this.questionRepository.findAllByIsDeleteFalse();
+        return this.questionRepository.findAllByDeletedFalse();
     }
 
     public Question findById(Long id) {
         Question question = this.questionRepository.findById(id).orElseThrow(QuestionNotFoundException::new);
-        if (question.isDelete()) {
+        if (question.isDeleted()) {
             throw new QuestionNotFoundException();
         }
         return question;

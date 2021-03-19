@@ -24,8 +24,8 @@ public class Answer {
     @Column(nullable = false)
     private Date date;
 
-    @Column(nullable = false)
-    private boolean isDelete;
+    @Column(columnDefinition = "boolean default false")
+    private boolean deleted;
 
     @ManyToOne
     @OnDelete(action = OnDeleteAction.CASCADE)
@@ -44,7 +44,6 @@ public class Answer {
         this.writer = writer;
         this.date = new Date();
         this.question = question;
-        this.isDelete = false;
     }
 
     public void update(Answer answer) {
@@ -53,7 +52,7 @@ public class Answer {
     }
 
     public void delete() {
-        this.isDelete = true;
+        this.deleted = true;
     }
 
     public Long getId() {
@@ -89,12 +88,12 @@ public class Answer {
         this.date = date;
     }
 
-    public boolean isDelete() {
-        return isDelete;
+    public boolean isDeleted() {
+        return deleted;
     }
 
-    public void setDelete(boolean delete) {
-        isDelete = delete;
+    public void setDeleted(boolean deleted) {
+        this.deleted = deleted;
     }
 
     public Question getQuestion() {

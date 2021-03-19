@@ -26,8 +26,8 @@ public class Question {
     @Column(nullable = false)
     private Date date;
 
-    @Column(nullable = false)
-    private boolean isDelete;
+    @Column(columnDefinition = "boolean default false")
+    private boolean deleted;
 
     @OneToMany(mappedBy = "question", cascade = CascadeType.REMOVE)
     private List<Answer> answers;
@@ -47,7 +47,6 @@ public class Question {
     public void save(User writer) {
         this.writer = writer;
         this.date = new Date();
-        this.isDelete = false;
     }
 
     public void update(Question question) {
@@ -57,7 +56,7 @@ public class Question {
     }
 
     public void delete() {
-        this.isDelete = true;
+        this.deleted = true;
         this.answers.forEach(Answer::delete);
     }
 
@@ -102,17 +101,17 @@ public class Question {
         this.date = date;
     }
 
-    public boolean isDelete() {
-        return isDelete;
+    public boolean isDeleted() {
+        return deleted;
     }
 
-    public void setDelete(boolean delete) {
-        isDelete = delete;
+    public void setDeleted(boolean deleted) {
+        this.deleted = deleted;
     }
 
     public List<Answer> getAnswers() {
         return answers.stream()
-                .filter(answer -> !answer.isDelete())
+                .filter(answer -> !answer.isDeleted())
                 .collect(Collectors.toList());
     }
 
