@@ -12,7 +12,7 @@
     <div class="col-md-12 col-sm-12 col-lg-12">
         <div class="panel panel-default">
 
-            {{#Qna}}
+            {{#question}}
             <header class="qna-header">
                 <h2 class="qna-title">{{title}}</h2>
             </header>
@@ -37,16 +37,16 @@
                     <div class="article-util">
                         <ul class="article-util-list">
                             <li>
-                                <a class="link-modify-article" href="/qna/{{id}}/form">수정</a>
+                                <a class="link-modify-article" href="/question/{{id}}/form">수정</a>
                             </li>
                             <li>
-                                <form class="form-delete" action="/qna/{{id}}/delete" method="POST">
+                                <form class="form-delete" action="/question/{{id}}/delete" method="POST">
                                     <input type="hidden" name="_method" value="DELETE">
                                     <button class="link-delete-article" type="submit">삭제</button>
                                 </form>
                             </li>
                             <li>
-                                {{/Qna}}
+                                {{/question}}
                                 <a class="link-modify-article" href="/">목록</a>
                             </li>
                         </ul>

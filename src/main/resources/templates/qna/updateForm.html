@@ -9,10 +9,10 @@
 {{> base/nav}}
 
 <div class="container" id="main">
-    {{#qna}}
+    {{#question}}
     <div class="col-md-12 col-sm-12 col-lg-10 col-lg-offset-1">
         <div class="panel panel-default content-main">
-            <form action="/qna/{{id}}/form" method="post" name="question">
+            <form action="/question/{{id}}/form" method="post" name="question">
                 <div class="form-group">
                     <label for="title">제목</label>
                     <input type="text" class="form-control" id="title" name="title" placeholder="제목"
@@ -23,7 +23,7 @@
                     <textarea name="contents" id="contents" rows="5" class="form-control" >{{contents}}</textarea>
                 </div>
 
-                {{/qna}}
+                {{/question}}
                 <button type="submit" class="btn btn-success clearfix pull-right">질문하기</button>
                 <div class="clearfix"></div>
             </form>

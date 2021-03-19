@@ -1,13 +1,11 @@
 package com.codessquad.qna.domain;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 @Entity
-public class Qna {
+public class Question {
     @Id
     @GeneratedValue
     private Long id;
@@ -63,7 +61,7 @@ public class Qna {
         return this.writer.equals(loginUser);
     }
 
-    public void update(Qna updateQna) {
+    public void update(Question updateQna) {
         this.title = updateQna.title;
         this.contents = updateQna.contents;
     }
