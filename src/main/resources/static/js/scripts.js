@@ -19,7 +19,8 @@ function addAnswer(e) {
     });
 
     function onError() {
-
+        alert("로그인이 필요합니다.");
+        $(".answer-write textarea").val("");
     }
 
     function onSuccess(data, status) {
