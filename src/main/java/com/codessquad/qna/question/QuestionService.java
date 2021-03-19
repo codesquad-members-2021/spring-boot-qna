@@ -17,36 +17,36 @@ public class QuestionService {
         this.answerRepository = answerRepository;
     }
 
-    public List<Question> readQuestions() {
+    public List<Question> readAll() {
         return questionRepository.findAll();
     }
 
-    public Question readQuestion(Long id) {
+    public Question read(Long id) {
         return questionRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("질문이 존재하지 않습니다. id : " + id));
     }
 
     public Question readVerifiedQuestion(Long id, UserDTO user) {
-        Question result = readQuestion(id);
+        Question result = read(id);
 
         result.verifyWriter(user.toEntity());
 
         return result;
     }
 
-    public void createQuestion(Question question) {
+    public void create(Question question) {
         questionRepository.save(question);
     }
 
-    public void updateQuestion(Long id, Question newQuestion) {
-        Question existedQuestion = readQuestion(id);
+    public void update(Long id, Question newQuestion) {
+        Question existedQuestion = read(id);
 
         existedQuestion.update(newQuestion);
         questionRepository.save(existedQuestion);
     }
 
     @Transactional
-    public void deleteQuestion(Long id, UserDTO currentSessionUser) {
+    public void delete(Long id, UserDTO currentSessionUser) {
         Question question = readVerifiedQuestion(id, currentSessionUser);
 
         deleteAnswers(question.getAnswers());

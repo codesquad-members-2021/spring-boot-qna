@@ -21,33 +21,33 @@ public class UserController {
     }
 
     @GetMapping
-    public ModelAndView readUsers() {
-        return new ModelAndView("/user/list", "users", userService.readUsers());
+    public ModelAndView readAll() {
+        return new ModelAndView("/user/list", "users", userService.readAll());
     }
 
     @GetMapping("/{id}")
-    public ModelAndView readUser(@PathVariable Long id) {
-        return new ModelAndView("/user/profile", "user", userService.readUser(id));
+    public ModelAndView read(@PathVariable Long id) {
+        return new ModelAndView("/user/profile", "user", userService.read(id));
     }
 
     @PostMapping
-    public String createUser(UserDTO user) {
+    public String create(UserDTO user) {
         userService.createUser(user);
         return "redirect:/users";
     }
 
     @GetMapping("/{id}/form")
-    public ModelAndView viewUserUpdateForm(@PathVariable Long id, HttpSession session) {
+    public ModelAndView viewUpdateForm(@PathVariable Long id, HttpSession session) {
         UserDTO result = userService.readVerifiedUser(id, SessionUtils.getSessionUser(session));
 
         return new ModelAndView("/user/updateForm", "user", result);
     }
 
     @PutMapping("/{id}")
-    public String updateUser(@PathVariable Long id, UserDTO newUser, HttpSession session) {
+    public String update(@PathVariable Long id, UserDTO newUser, HttpSession session) {
         UserDTO verifiedUser = userService.readVerifiedUser(id, SessionUtils.getSessionUser(session));
 
-        SessionUtils.setSessionUser(session, userService.updateUser(verifiedUser, newUser));
+        SessionUtils.setSessionUser(session, userService.update(verifiedUser, newUser));
 
         return "redirect:/users";
     }

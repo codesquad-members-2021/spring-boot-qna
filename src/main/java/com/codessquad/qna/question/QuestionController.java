@@ -17,50 +17,50 @@ public class QuestionController {
     }
 
     @GetMapping
-    public ModelAndView readQuestions() {
-        return new ModelAndView("/qna/list", "questions", questionService.readQuestions());
+    public ModelAndView readAll() {
+        return new ModelAndView("/qna/list", "questions", questionService.readAll());
     }
 
     @PostMapping
-    public String createQuestion(Question question, HttpSession session) {
+    public String create(Question question, HttpSession session) {
         question.setWriter(SessionUtils.getSessionUser(session).toEntity());
 
-        questionService.createQuestion(question);
+        questionService.create(question);
 
         return "redirect:/questions";
     }
 
     @GetMapping("/{id}")
-    public ModelAndView readQuestion(@PathVariable Long id) {
-        return new ModelAndView("/qna/show", "question", questionService.readQuestion(id));
+    public ModelAndView read(@PathVariable Long id) {
+        return new ModelAndView("/qna/show", "question", questionService.read(id));
     }
 
     @GetMapping("/{id}/form")
-    public ModelAndView readQuestionUpdateForm(@PathVariable Long id, HttpSession session) {
+    public ModelAndView readUpdateForm(@PathVariable Long id, HttpSession session) {
         Question result = questionService.readVerifiedQuestion(id, SessionUtils.getSessionUser(session));
 
         return new ModelAndView("/qna/updateForm", "question", result);
     }
 
     @PutMapping("/{id}")
-    public String updateQuestion(@PathVariable Long id, Question newQuestion, HttpSession session) {
+    public String update(@PathVariable Long id, Question newQuestion, HttpSession session) {
         newQuestion.setWriter(SessionUtils.getSessionUser(session).toEntity());
 
-        questionService.updateQuestion(id, newQuestion);
+        questionService.update(id, newQuestion);
 
         return "redirect:/questions";
     }
 
     @DeleteMapping("/{id}")
-    public String deleteQuestion(@PathVariable Long id, HttpSession session) {
-        questionService.deleteQuestion(id, SessionUtils.getSessionUser(session));
+    public String delete(@PathVariable Long id, HttpSession session) {
+        questionService.delete(id, SessionUtils.getSessionUser(session));
 
         return "redirect:/questions";
     }
 
     @PostMapping("/{questionId}/answers")
     public String createAnswer(@PathVariable Long questionId, Answer answer, HttpSession session) {
-        answer.setQuestion(questionService.readQuestion(questionId));
+        answer.setQuestion(questionService.read(questionId));
         answer.setWriter(SessionUtils.getSessionUser(session).toEntity());
 
         questionService.createAnswer(answer);
