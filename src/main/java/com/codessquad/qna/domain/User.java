@@ -1,6 +1,7 @@
 package com.codessquad.qna.domain;
 
 import com.codessquad.qna.domain.dto.UserDto;
+import com.codessquad.qna.exception.IllegalUserAccessException;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -56,6 +57,12 @@ public class User extends AbstractEntity {
         this.userId = user.getUserId();
         this.email = user.getEmail();
         this.password = newPassword;
+    }
+
+    public void checkSameUser(Long newId) {
+        if (getId() != newId) {
+            throw new IllegalUserAccessException("자신의 정보만 수정 가능");
+        }
     }
 
     public UserDto returnDto() {

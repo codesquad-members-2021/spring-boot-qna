@@ -1,6 +1,5 @@
 package com.codessquad.qna.domain;
 
-import com.codessquad.qna.exception.IllegalUserAccessException;
 import com.codessquad.qna.util.DateTimeUtils;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
@@ -28,12 +27,6 @@ public class AbstractEntity {
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    public void checkSameUser(Long newId) {
-        if (this.id != newId) {
-            throw new IllegalUserAccessException("자신의 정보만 수정 가능");
-        }
     }
 
     public String getFormatCreateDateTime() {
