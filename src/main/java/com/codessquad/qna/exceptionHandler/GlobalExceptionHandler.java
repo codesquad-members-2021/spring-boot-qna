@@ -3,6 +3,7 @@ package com.codessquad.qna.exceptionHandler;
 import com.codessquad.qna.exception.QuestionNotFoundException;
 import com.codessquad.qna.exception.UserNotFoundException;
 import com.codessquad.qna.exception.UserNotFoundInSessionException;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
@@ -10,14 +11,14 @@ import javax.servlet.http.HttpServletResponse;
 
 @ControllerAdvice
 public class GlobalExceptionHandler {
-    @ExceptionHandler(UserNotFoundException.class)
-    public String userIdNotFoundException(UserNotFoundException ex) {
-        return "/error/404";
-    }
-
-    @ExceptionHandler(QuestionNotFoundException.class)
-    public String questionNotFoundException(QuestionNotFoundException ex) {
-        return "/error/404";
+    @ExceptionHandler({
+            UserNotFoundException.class,
+            QuestionNotFoundException.class,
+            IllegalStateException.class
+    })
+    public String exceptionPage(RuntimeException ex, Model model) {
+        model.addAttribute("errorMessage", ex.getMessage());
+        return "/error/handledError";
     }
 
     @ExceptionHandler(UserNotFoundInSessionException.class)
