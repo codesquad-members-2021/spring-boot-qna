@@ -41,11 +41,6 @@ public class QuestionController {
         return "redirect:/";
     }
 
-    private boolean checkEmpty(Qna qna) {
-        return qna.getTitle().equals("")
-                || qna.getContents().equals("");
-    }
-
     @GetMapping
     public String qnaList(Model model) {
         model.addAttribute("qnaList", qnaRepository.findAll());
