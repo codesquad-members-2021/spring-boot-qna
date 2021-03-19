@@ -1,7 +1,7 @@
 package com.codessquad.qna.web;
 
-import com.codessquad.qna.domain.Qna;
-import com.codessquad.qna.domain.QnaRepository;
+import com.codessquad.qna.domain.Question;
+import com.codessquad.qna.domain.QuestionRepository;
 import com.codessquad.qna.domain.User;
 import com.codessquad.qna.exception.NoQuestionException;
 import com.codessquad.qna.exception.NoUserException;
@@ -12,11 +12,11 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpSession;
 
 @Controller
-@RequestMapping("/qna")
+@RequestMapping("/question")
 public class QuestionController {
-    private final QnaRepository qnaRepository;
+    private final QuestionRepository qnaRepository;
 
-    public QuestionController(QnaRepository qnaRepository) {
+    public QuestionController(QuestionRepository qnaRepository) {
         this.qnaRepository = qnaRepository;
     }
 
@@ -29,7 +29,7 @@ public class QuestionController {
     }
 
     @PostMapping
-    public String createNewQna(Qna qna, HttpSession session) {
+    public String createNewQna(Question qna, HttpSession session) {
         if (!HttpSessionUtils.isLoginUser(session)) {
             return "redirect:/users/login";
         }
@@ -43,19 +43,19 @@ public class QuestionController {
 
     @GetMapping
     public String qnaList(Model model) {
-        model.addAttribute("qnaList", qnaRepository.findAll());
+        model.addAttribute("question", qnaRepository.findAll());
         return "index";
     }
 
-    @GetMapping("/{qnaId}")
-    public String showOneQuestion(@PathVariable long qnaId, Model model) {
-        model.addAttribute("Qna", qnaRepository.findById(qnaId).orElseThrow(NoQuestionException::new));
+    @GetMapping("/{id}")
+    public String showOneQuestion(@PathVariable long id, Model model) {
+        model.addAttribute("question", qnaRepository.findById(id).orElseThrow(NoQuestionException::new));
         return "qna/show";
     }
 
     @GetMapping("{id}/form")
     public String editQna(@PathVariable long id, Model model, HttpSession session) {
-        Qna qna = qnaRepository.findById(id).orElseThrow(NoUserException::new);
+        Question qna = qnaRepository.findById(id).orElseThrow(NoUserException::new);
         User sessionUser = HttpSessionUtils.getUserFromSession(session);
 
         if (!HttpSessionUtils.isLoginUser(session)) {
@@ -66,14 +66,14 @@ public class QuestionController {
             throw new IllegalStateException("자신의 질문만 수정할 수 있습니다.");
         }
 
-        model.addAttribute("qna", qna);
+        model.addAttribute("question", qna);
 
         return "qna/updateForm";
     }
 
     @PostMapping("{id}/form")
-    public String update(@PathVariable long id, Qna updateQna, HttpSession session) {
-        Qna qna = qnaRepository.findById(id).orElseThrow(NoUserException::new);
+    public String update(@PathVariable long id, Question updateQna, HttpSession session) {
+        Question qna = qnaRepository.findById(id).orElseThrow(NoUserException::new);
         qna.update(updateQna);
         qnaRepository.save(qna);
         return "redirect:/";
@@ -81,7 +81,7 @@ public class QuestionController {
 
     @DeleteMapping("{id}/delete")
     public String delete(@PathVariable long id, HttpSession session) {
-        Qna qna = qnaRepository.findById(id).orElseThrow(NoUserException::new);
+        Question qna = qnaRepository.findById(id).orElseThrow(NoUserException::new);
         User sessionUser = HttpSessionUtils.getUserFromSession(session);
 
         if (!HttpSessionUtils.isLoginUser(session)) {
