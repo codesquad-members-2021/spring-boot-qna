@@ -35,10 +35,13 @@ public class QuestionAcceptanceTest extends AcceptanceTest {
     @DisplayName("존재하지 않는 질문을 조회하면 실패한다.")
     @Test
     void getQuestionNotExist() {
+        // given
+        long inValidId = 736;
+
         // when
         ExtractableResponse<Response> actualResponse = RestAssured.given().log().all()
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
-                .when().get(QUESTION_PATH + "/{id}", 100)
+                .when().get(QUESTION_PATH + "/{id}", inValidId)
                 .then().log().all().extract();
 
         // then
