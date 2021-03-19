@@ -21,6 +21,7 @@ public class QuestionController {
     public QuestionController(QuestionService questionService) {
         this.questionService = questionService;
     }
+
     @GetMapping("/questions/form")
     public String viewQuestionForm(HttpSession session){
         if(!HttpSessionUtils.isLoginUser(session))
@@ -30,7 +31,7 @@ public class QuestionController {
 
     @PostMapping("/questions")
     public String createQuestion(QuestionDto questionDto, HttpSession session) {
-        questionService.create(questionDto);
+        questionService.create(questionDto,session);
         return "redirect:/";
     }
 
