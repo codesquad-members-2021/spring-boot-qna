@@ -19,7 +19,6 @@ public class Question {
     private String contents;
 
     private LocalDateTime createDateTime;
-
     private LocalDateTime updateDateTime;
 
     @ManyToOne
