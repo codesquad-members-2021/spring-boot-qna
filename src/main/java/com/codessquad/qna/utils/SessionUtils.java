@@ -15,7 +15,7 @@ public class SessionUtils {
     public static UserDTO getSessionUser(HttpSession session) {
         checkSessionUserExists(session);
 
-        return UserDTO.of((User) session.getAttribute(SESSION_USER));
+        return UserDTO.from((User) session.getAttribute(SESSION_USER));
     }
 
     public static void checkSessionUserExists(HttpSession session) {

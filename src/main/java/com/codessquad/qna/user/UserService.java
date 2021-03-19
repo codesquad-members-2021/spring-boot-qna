@@ -19,7 +19,7 @@ public class UserService {
 
     public List<UserDTO> readAll() {
         return StreamSupport.stream(userRepository.findAll().spliterator(), true)
-                .map(UserDTO::of)
+                .map(UserDTO::from)
                 .collect(Collectors.toList());
     }
 
@@ -27,21 +27,21 @@ public class UserService {
         User result = userRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("존재하지 않는 사용자 입니다. id : " + id));
 
-        return UserDTO.of(result);
+        return UserDTO.from(result);
     }
 
     private UserDTO read(String userId) {
         User result = userRepository.findByUserId(userId)
                 .orElseThrow(() -> new ResourceNotFoundException("존재하지 않는 사용자 입니다. id : " + userId));
 
-        return UserDTO.of(result);
+        return UserDTO.from(result);
     }
 
     public UserDTO readVerifiedUser(Long id, UserDTO verificationTarget) {
         User result = read(id).toEntity();
         result.verifyWith(verificationTarget.toEntity());
 
-        return UserDTO.of(result);
+        return UserDTO.from(result);
     }
 
     public UserDTO readPasswordVerifiedUser(String userId, String password) {
@@ -49,7 +49,7 @@ public class UserService {
             User user = read(userId).toEntity();
             user.checkPassword(password);
 
-            return UserDTO.of(user);
+            return UserDTO.from(user);
 
         } catch (ResourceNotFoundException | IllegalArgumentException e) {
             throw new LoginFailedException(e);
@@ -71,6 +71,6 @@ public class UserService {
 
         userToUpdate.update(newUser);
         User updatedUser = userRepository.save(userToUpdate);
-        return UserDTO.of(updatedUser);
+        return UserDTO.from(updatedUser);
     }
 }

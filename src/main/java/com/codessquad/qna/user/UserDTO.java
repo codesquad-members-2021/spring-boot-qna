@@ -21,7 +21,7 @@ public class UserDTO {
         this.email = email;
     }
 
-    public static UserDTO of(User user) {
+    public static UserDTO from(User user) {
         return new UserDTO(
                 user.getId(),
                 user.getUserId(), user.getPassword(),
