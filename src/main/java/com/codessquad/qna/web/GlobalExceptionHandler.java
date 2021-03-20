@@ -1,5 +1,6 @@
 package com.codessquad.qna.web;
 
+import com.codessquad.qna.web.exception.IllegalAccessException;
 import com.codessquad.qna.web.exception.IllegalEntityIdException;
 import com.codessquad.qna.web.exception.LoginFailException;
 import com.codessquad.qna.web.exception.NotLoginException;
@@ -33,5 +34,11 @@ public class GlobalExceptionHandler {
     public String handleNotLoginException(NotLoginException e, Model model) {
         model.addAttribute("errorMessage", e.getMessage());
         return "user/loginError";
+    }
+
+    @ExceptionHandler(IllegalAccessException.class)
+    public String handleIllegalAccessException(IllegalAccessException e, Model model) {
+        model.addAttribute("errorMessage", e.getMessage());
+        return "/errorPage";
     }
 }

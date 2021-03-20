@@ -2,6 +2,7 @@ package com.codessquad.qna.web.controller;
 
 import com.codessquad.qna.web.HttpSessionUtils;
 import com.codessquad.qna.web.domain.User;
+import com.codessquad.qna.web.exception.IllegalAccessException;
 import com.codessquad.qna.web.exception.NotLoginException;
 import com.codessquad.qna.web.service.UserService;
 import org.springframework.stereotype.Controller;
@@ -63,14 +64,10 @@ public class UserController {
 
         User loginUser = HttpSessionUtils.getSessionedUser(session);
         if (!loginUser.isSameId(id)) {
-            throw new IllegalStateException("자신의 정보만 수정할 수 있습니다");
+            throw new IllegalAccessException();
         }
 
-        try {
-            model.addAttribute("user", loginUser);
-        } catch (IllegalStateException e) {
-            return "redirect:/";
-        }
+        model.addAttribute("user", loginUser);
         return "/user/updateForm";
     }
 
@@ -82,7 +79,7 @@ public class UserController {
 
         User loginUser = HttpSessionUtils.getSessionedUser(session);
         if (!loginUser.isSameId(id)) {
-            throw new IllegalStateException("자신의 정보만 수정할 수 있습니다");
+            throw new IllegalAccessException();
         }
 
         userService.updateUser(testPassword, loginUser, user);

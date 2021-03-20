@@ -2,6 +2,7 @@ package com.codessquad.qna.web.controller;
 
 import com.codessquad.qna.web.HttpSessionUtils;
 import com.codessquad.qna.web.domain.Question;
+import com.codessquad.qna.web.exception.IllegalAccessException;
 import com.codessquad.qna.web.exception.LoginFailException;
 import com.codessquad.qna.web.exception.NotLoginException;
 import com.codessquad.qna.web.service.QuestionService;
@@ -58,7 +59,7 @@ public class QuestionController {
 
         Question originQuestion = questionService.findQuestion(id);
         if (!originQuestion.isSameWriter(HttpSessionUtils.getSessionedUser(session))) {
-            throw new IllegalStateException("자신의 질문만 수정할 수 있습니다");
+            throw new IllegalAccessException();
         }
 
         model.addAttribute("question", originQuestion);
@@ -73,7 +74,7 @@ public class QuestionController {
 
         Question originQuestion = questionService.findQuestion(id);
         if (!originQuestion.isSameWriter(HttpSessionUtils.getSessionedUser(session))) {
-            throw new IllegalStateException("자신의 질문만 수정할 수 있습니다");
+            throw new IllegalAccessException();
         }
 
         questionService.updateQuestion(originQuestion, question);
@@ -88,7 +89,7 @@ public class QuestionController {
 
         Question originQuestion = questionService.findQuestion(id);
         if (!originQuestion.isSameWriter(HttpSessionUtils.getSessionedUser(session))) {
-            throw new IllegalStateException("자신의 질문만 삭제할 수 있습니다");
+            throw new IllegalAccessException();
         }
 
         questionService.deleteQuestion(id);
