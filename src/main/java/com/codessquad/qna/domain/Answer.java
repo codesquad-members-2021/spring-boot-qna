@@ -34,6 +34,18 @@ public class Answer {
         createdDate = LocalDateTime.now();
     }
 
+    public User getWriter() {
+        return writer;
+    }
+
+    public Question getQuestion() {
+        return question;
+    }
+
+    public String getContents() {
+        return contents;
+    }
+
     public String getFormattedCreatedDate(){
         if (createdDate == null){
             return "";

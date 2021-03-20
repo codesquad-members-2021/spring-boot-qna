@@ -67,6 +67,10 @@ public class Question {
         return answers;
     }
 
+    public void setAnswers(List<Answer> answers) {
+        this.answers = answers;
+    }
+
     public String getFormattedCreatedDate(){
         if (createdDate == null){
             return "";
