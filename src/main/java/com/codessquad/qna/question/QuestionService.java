@@ -20,15 +20,11 @@ public class QuestionService {
     }
 
     public List<QuestionDTO> readAll() {
-        List<QuestionDTO> result = questionRepository.findAllByDeletedFalse().stream()
-                .map(QuestionDTO::from)
+        List<Question> questions = questionRepository.findAllByDeletedFalse();
+
+        return questions.stream()
+                .map(question -> QuestionDTO.of(question, answerService.countBy(question)))
                 .collect(Collectors.toList());
-
-        for (QuestionDTO question : result) {
-            question.setAnswers(answerService.readAll(question.getId()));
-        }
-
-        return result;
     }
 
     private Question readExistedQuestion(Long id) {

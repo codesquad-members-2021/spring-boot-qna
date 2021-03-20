@@ -69,7 +69,7 @@ public class AnswerService {
         return AnswerDTO.of(deletedAnswer, countBy(deletedAnswer.getQuestion()));
     }
 
-    private int countBy(Question question) {
+    public int countBy(Question question) {
         return answerRepository.countByQuestionAndDeletedFalse(question);
     }
 }
