@@ -33,13 +33,10 @@ public class AbstractEntity {
         return this.id.equals(newId);
     }
 
-    @JsonProperty("createdDateTime")
     public String getCreatedDateTime() {
-        return createdDateTime.format(FORMATTER_PATTERN);
-    }
-
-    @JsonProperty("modifiedDateTime")
-    public String getModifiedDateTime() {
+        if (modifiedDateTime == null) {
+            return createdDateTime.format(FORMATTER_PATTERN);
+        }
         return modifiedDateTime.format(FORMATTER_PATTERN);
     }
 
