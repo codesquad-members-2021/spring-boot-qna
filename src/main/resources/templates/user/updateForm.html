@@ -5,7 +5,7 @@
             {{#errorMessage}}
             <div class="alert alert-danger" role="alert">{{this}}</div>
             {{/errorMessage}}
-            <form name="user" method="post" action="/users/{{user.id}}">
+            <form name="user" method="post" action="/users/{{id}}">
                 <input type="hidden" name="_method" value="put"/>
                 <div class="form-group">
                     <label for="userId">사용자 아이디</label>

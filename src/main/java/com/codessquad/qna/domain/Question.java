@@ -28,7 +28,7 @@ public class Question {
     @OrderBy("id asc")
     private List<Answer> answers;
 
-    public Question() {
+    protected Question() {
     }
 
     public Question(User writer, String title, String contents) {
@@ -65,13 +65,17 @@ public class Question {
         return answers;
     }
 
+    public int getAnswerNum() {
+        return answers.size();
+    }
+
     public boolean isPostWriter(User user) {
         return user.isUserMatching(writer);
     }
 
-    public void update(String updatedTitle, String updatedContents) {
-        this.title = updatedTitle;
-        this.contents = updatedContents;
+    public void update(Question updatedQuestion) {
+        this.title = updatedQuestion.title;
+        this.contents = updatedQuestion.contents;
         this.updatedPostTime = LocalDateTime.now();
     }
 

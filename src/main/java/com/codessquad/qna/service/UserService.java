@@ -2,10 +2,10 @@ package com.codessquad.qna.service;
 
 import com.codessquad.qna.domain.User;
 import com.codessquad.qna.exception.NotFoundException;
-import com.codessquad.qna.exception.PasswordNotMatchException;
 import com.codessquad.qna.repository.UserRepository;
 import org.springframework.stereotype.Service;
-import org.springframework.ui.Model;
+
+import java.util.List;
 
 @Service
 public class UserService {
@@ -20,8 +20,8 @@ public class UserService {
         userRepository.save(user);
     }
 
-    public void showUserList(Model model) {
-        model.addAttribute("users", userRepository.findAll());
+    public List<User> getUserList() {
+        return userRepository.findAll();
     }
 
     public User findUserByUserId(String userId) {
@@ -40,15 +40,8 @@ public class UserService {
         }
     }
 
-    public void update(String password, User user, User updatedUser) {
-        checkValidWhenUpdate(user, password);
+    public void update(User user, User updatedUser) {
         user.update(updatedUser);
         save(user);
-    }
-
-    private void checkValidWhenUpdate(User user, String password) {
-        if (!user.isPasswordMatching(password)) {
-            throw new PasswordNotMatchException();
-        }
     }
 }

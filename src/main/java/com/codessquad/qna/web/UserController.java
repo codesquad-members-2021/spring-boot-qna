@@ -1,7 +1,6 @@
 package com.codessquad.qna.web;
 
 import com.codessquad.qna.domain.User;
-import com.codessquad.qna.repository.UserRepository;
 import com.codessquad.qna.service.UserService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -29,7 +28,7 @@ public class UserController {
 
     @GetMapping
     public String list(Model model) {
-        userService.showUserList(model);
+        model.addAttribute("users", userService.getUserList());
         return "user/list";
     }
 
@@ -64,10 +63,14 @@ public class UserController {
     }
 
     @PutMapping("/{id}")
-    public String updateForm(@PathVariable Long id, String inputPassword, User updatedUser, HttpSession session) {
+    public String updateForm(@PathVariable Long id, String inputPassword, User updatedUser, Model model, HttpSession session) {
         User loggedinUser = getUserFromSession(session);
         userService.checkValidById(loggedinUser, id);
-        userService.update(inputPassword, loggedinUser, updatedUser);
+        if (!loggedinUser.isPasswordMatching(inputPassword)) {
+            model.addAttribute("errorMessage", "비밀번호가 일치하지 않습니다.");
+            return "/user/updateForm";
+        }
+        userService.update(loggedinUser, updatedUser);
         return "redirect:/users";
     }
 }

@@ -2,7 +2,6 @@ package com.codessquad.qna;
 
 import com.codessquad.qna.exception.NoSessionedUserException;
 import com.codessquad.qna.exception.NotFoundException;
-import com.codessquad.qna.exception.PasswordNotMatchException;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -25,11 +24,5 @@ public class GlobalExceptionHandler {
     public String handleNoSessionedUserException(Model model, NoSessionedUserException e) {
         model.addAttribute("errorMessage", e.getMessage());
         return "/user/login";
-    }
-
-    @ExceptionHandler(PasswordNotMatchException.class)
-    public String handlePasswordNotMatchException(Model model, PasswordNotMatchException e) {
-        model.addAttribute("errorMessage", e.getMessage());
-        return "/user/updateForm";
     }
 }
