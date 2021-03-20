@@ -14,12 +14,12 @@
                             </strong>
                             <div class="auth-info">
                                 <i class="icon-add-comment"></i>
-                                <span class="time">{{formatDate createDateTime "yyyy-MM-dd HH:mm"}}</span>
-                                <a href="/users/{{writer}}" class="author">{{writer}}</a>
+                                <span class="time">{{formatDateTime createDateTime}}</span>
+                                <a href="/users/{{writer.id}}" class="author">{{writer.name}}</a>
                             </div>
                             <div class="reply" title="댓글">
                                 <i class="icon-reply"></i>
-                                <span class="point">8</span>
+                                <span class="point">{{answers.length}}</span>
                             </div>
                         </div>
                     </div>
@@ -40,7 +40,7 @@
                     </ul>
                 </div>
                 <div class="col-md-3 qna-write">
-                    <a href="/questions/form" class="btn btn-primary pull-right" role="button">질문하기</a>
+                    {{#if sessionedUser}}<a href="/questions/form" class="btn btn-primary pull-right" role="button">질문하기</a>{{/if}}
                 </div>
             </div>
         </div>

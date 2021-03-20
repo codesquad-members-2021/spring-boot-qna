@@ -1,37 +1,60 @@
 package com.codessquad.qna.question;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import com.codessquad.qna.utils.SessionUtils;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import javax.servlet.http.HttpSession;
 
 @Controller
 @RequestMapping("/questions")
 public class QuestionController {
-    @Autowired
-    private QuestionRepository questionRepository;
+    private final QuestionService questionService;
+
+    public QuestionController(QuestionService questionService) {
+        this.questionService = questionService;
+    }
 
     @GetMapping
-    public ModelAndView getQuestions() {
-        return new ModelAndView("/qna/list", "questions", questionRepository.findAll());
+    public ModelAndView readAll() {
+        return new ModelAndView("/qna/list", "questions", questionService.readAll());
     }
 
     @PostMapping
-    public String createQuestions(Question question) {
-        questionRepository.save(question);
+    public String create(Question question, HttpSession session) {
+        question.setWriter(SessionUtils.getSessionUser(session).toEntity());
+
+        questionService.create(question);
+
         return "redirect:/questions";
     }
 
     @GetMapping("/{id}")
-    public ModelAndView getQuestion(@PathVariable Long id) {
-        Question question = questionRepository.findById(id).get();
-        return new ModelAndView("/qna/show", "question", question);
+    public ModelAndView read(@PathVariable Long id) {
+        return new ModelAndView("/qna/show", "question", questionService.read(id));
+    }
+
+    @GetMapping("/{id}/form")
+    public ModelAndView viewUpdateForm(@PathVariable Long id, HttpSession session) {
+        Question result = questionService.readVerifiedQuestion(id, SessionUtils.getSessionUser(session));
+
+        return new ModelAndView("/qna/updateForm", "question", result);
+    }
+
+    @PutMapping("/{id}")
+    public String update(@PathVariable Long id, Question newQuestion, HttpSession session) {
+        newQuestion.setWriter(SessionUtils.getSessionUser(session).toEntity());
+
+        questionService.update(id, newQuestion);
+
+        return "redirect:/questions/" + id;
+    }
+
+    @DeleteMapping("/{id}")
+    public String delete(@PathVariable Long id, HttpSession session) {
+        questionService.delete(id, SessionUtils.getSessionUser(session));
+
+        return "redirect:/questions";
     }
 }

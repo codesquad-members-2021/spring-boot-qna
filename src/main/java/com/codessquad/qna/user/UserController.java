@@ -1,60 +1,70 @@
 package com.codessquad.qna.user;
 
+import com.codessquad.qna.utils.SessionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
-import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.StreamSupport;
+import javax.servlet.http.HttpSession;
 
 @Controller
 @RequestMapping("/users")
 public class UserController {
-    Logger logger = LoggerFactory.getLogger(this.getClass());
+    private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
-    @Autowired
-    private UserRepository userRepository;
+    private final UserService userService;
+
+    public UserController(UserService userService) {
+        this.userService = userService;
+    }
 
     @GetMapping
-    public ModelAndView getUsers() {
-        List<UserDTO> users = StreamSupport.stream(userRepository.findAll().spliterator(), true)
-                .map(User::toDTO)
-                .collect(Collectors.toList());
-
-        return new ModelAndView("/user/list", "users", users);
+    public ModelAndView readAll() {
+        return new ModelAndView("/user/list", "users", userService.readAll());
     }
 
     @GetMapping("/{id}")
-    public ModelAndView getUser(@PathVariable Long id) {
-        User user = userRepository.findById(id).get();
-        return new ModelAndView("/user/profile", "user", user.toDTO());
+    public ModelAndView read(@PathVariable Long id) {
+        return new ModelAndView("/user/profile", "user", userService.read(id));
     }
 
     @PostMapping
-    public String createUser(UserDTO user) {
-        userRepository.save(user.toEntity());
+    public String create(UserDTO user) {
+        userService.create(user);
         return "redirect:/users";
     }
 
     @GetMapping("/{id}/form")
-    public ModelAndView getUserUpdateForm(@PathVariable Long id) {
-        User user = userRepository.findById(id).get();
-        return new ModelAndView("/user/updateForm", "user", user.toDTO());
+    public ModelAndView viewUpdateForm(@PathVariable Long id, HttpSession session) {
+        UserDTO result = userService.readVerifiedUser(id, SessionUtils.getSessionUser(session));
+
+        return new ModelAndView("/user/updateForm", "user", result);
     }
 
     @PutMapping("/{id}")
-    public String updateUser(@PathVariable Long id, UserDTO newUser) {
-        User existedUser = userRepository.findById(id).get();
+    public String update(@PathVariable Long id, UserDTO newUser, HttpSession session) {
+        UserDTO verifiedUser = userService.readVerifiedUser(id, SessionUtils.getSessionUser(session));
 
-        existedUser.checkPassword(newUser.getPassword());
-        existedUser.update(newUser);
-
-        userRepository.save(existedUser);
+        SessionUtils.setSessionUser(session, userService.update(verifiedUser, newUser));
 
         return "redirect:/users";
+    }
+
+    @PostMapping("/login")
+    public String login(String userId, String password, HttpSession session) {
+        UserDTO verifiedUser = userService.readPasswordVerifiedUser(userId, password);
+
+        SessionUtils.setSessionUser(session, verifiedUser);
+
+        return "redirect:/";
+    }
+
+    @GetMapping("/logout")
+    public String logout(HttpSession session) {
+        SessionUtils.removeSessionUser(session);
+
+        return "redirect:/";
     }
 }
