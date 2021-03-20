@@ -1,5 +1,7 @@
 package com.codessquad.qna.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -29,6 +31,7 @@ public class Question {
     @Column(columnDefinition = "boolean default false")
     private boolean deleted;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "question", cascade = CascadeType.REMOVE)
     private List<Answer> answers;
 

@@ -1,5 +1,7 @@
 package com.codessquad.qna.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -15,6 +17,7 @@ public class User {
     @Column(nullable = false, unique = true)
     private String userId;
 
+    @JsonIgnore
     @Column(nullable = false)
     private String password;
 
