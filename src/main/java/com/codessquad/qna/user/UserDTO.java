@@ -1,12 +1,18 @@
 package com.codessquad.qna.user;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.springframework.util.StringUtils;
 
 public class UserDTO {
     private Long id;
     private String userId;
+
+    @JsonIgnore
     private String password;
+
+    @JsonIgnore
     private String newPassword;
+    
     private String name;
     private String email;
 
