@@ -19,12 +19,12 @@ public class AnswerDTO {
     private LocalDateTime updateDateTime;
     private Long questionId;
     private UserDTO writer;
-    private Integer answersCount;
+    private int answersCount;
 
     public AnswerDTO() {
     }
 
-    public AnswerDTO(Long id, String comment, LocalDateTime createDateTime, LocalDateTime updateDateTime, Long questionId, UserDTO writer, Integer answersCount) {
+    public AnswerDTO(Long id, String comment, LocalDateTime createDateTime, LocalDateTime updateDateTime, Long questionId, UserDTO writer, int answersCount) {
         this.id = id;
         this.comment = comment;
         this.createDateTime = createDateTime;
@@ -84,7 +84,7 @@ public class AnswerDTO {
         private LocalDateTime updateDateTime;
         private Long questionId;
         private UserDTO writer;
-        private Integer answersCount;
+        private int answersCount;
 
         public Builder setId(Long id) {
             this.id = id;
@@ -116,7 +116,7 @@ public class AnswerDTO {
             return this;
         }
 
-        public Builder setAnswersCount(Integer answersCount) {
+        public Builder setAnswersCount(int answersCount) {
             this.answersCount = answersCount;
             return this;
         }
