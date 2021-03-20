@@ -35,7 +35,7 @@ public class UserController {
         return "redirect:/";
     }
 
-    @PostMapping("/create")
+    @PostMapping()
     public String create(CreateUserRequest request) {
         userService.create(request);
         return "redirect:/users";
@@ -59,7 +59,7 @@ public class UserController {
         return "user/updateForm";
     }
 
-    @PutMapping("/{id}/update")
+    @PutMapping("/{id}")
     public String updateProfile(@PathVariable long id, User updatedUser, String oldPassword) {
         userService.updateProfile(id, updatedUser, oldPassword);
         return "redirect:/users";

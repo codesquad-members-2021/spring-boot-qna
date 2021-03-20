@@ -26,7 +26,7 @@ public class QuestionController {
         return "redirect:/";
     }
 
-    @PutMapping("/{id}/update")
+    @PutMapping("/{id}")
     public String update(@PathVariable long id, QuestionRequest request) {
         questionService.update(id, request);
         return "redirect:/questions/" + id;
@@ -47,7 +47,7 @@ public class QuestionController {
         return "qna/updateForm";
     }
 
-    @DeleteMapping("/{id}/delete")
+    @DeleteMapping("/{id}")
     public String delete(@PathVariable long id, HttpSession session) {
         questionService.delete(id, session);
         return "redirect:/";
