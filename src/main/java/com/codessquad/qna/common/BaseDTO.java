@@ -38,6 +38,14 @@ public class BaseDTO {
         return createDateTime;
     }
 
+    public String getFormattedDateTime() {
+        if (createDateTime == null) {
+            return "";
+        }
+
+        return createDateTime.format(Constant.DEFAULT_DATE_TIME_FORMATTER);
+    }
+
     public void setCreateDateTime(LocalDateTime createDateTime) {
         this.createDateTime = createDateTime;
     }
