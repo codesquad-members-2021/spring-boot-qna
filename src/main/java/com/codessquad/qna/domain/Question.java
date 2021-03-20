@@ -69,7 +69,6 @@ public class Question {
     }
 
     public void setWriter(User writer) {
-        writer = Optional.ofNullable(writer).orElseThrow(IllegalArgumentException::new);
         this.writer = writer;
     }
 
