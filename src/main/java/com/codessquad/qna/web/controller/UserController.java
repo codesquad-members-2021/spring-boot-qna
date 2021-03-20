@@ -56,11 +56,7 @@ public class UserController {
 
     @GetMapping("/{id}")
     public String getProfile(@PathVariable long id, Model model) {
-        try {
-            model.addAttribute("user", userService.findUser(id));
-        } catch (IllegalStateException e) {
-            return "redirect:/";
-        }
+        model.addAttribute("user", userService.findUser(id));
         return "/user/profile";
     }
 
@@ -97,11 +93,4 @@ public class UserController {
         userService.updateUser(testPassword, loginUser, user);
         return "redirect:/users";
     }
-
-//    @ExceptionHandler(IllegalStateException.class)
-//    public String hello() {
-//        return  "redirect:/users/loginForm";
-//    }
-//
-//    /// 세션 private /// SESSION........
 }

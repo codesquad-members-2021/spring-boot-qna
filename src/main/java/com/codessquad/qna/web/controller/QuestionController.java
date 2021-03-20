@@ -44,11 +44,7 @@ public class QuestionController {
 
     @GetMapping("/{id}")
     public String getQuestion(@PathVariable long id, Model model) {
-        try {
-            model.addAttribute("question", questionService.findQuestion(id));
-        } catch (IllegalStateException e) {
-            return "redirect:/";
-        }
+        model.addAttribute("question", questionService.findQuestion(id));
         return "/qna/show";
     }
 
@@ -63,7 +59,6 @@ public class QuestionController {
             throw new IllegalStateException("자신의 질문만 수정할 수 있습니다");
         }
 
-        //try-catch 할까 말까
         model.addAttribute("question", originQuestion);
         return "/qna/updateForm";
     }

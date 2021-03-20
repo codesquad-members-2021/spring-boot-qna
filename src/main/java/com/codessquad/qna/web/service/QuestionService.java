@@ -2,6 +2,7 @@ package com.codessquad.qna.web.service;
 
 import com.codessquad.qna.web.domain.Question;
 import com.codessquad.qna.web.domain.User;
+import com.codessquad.qna.web.exception.IllegalEntityIdException;
 import com.codessquad.qna.web.repository.QuestionRepository;
 import org.springframework.stereotype.Service;
 
@@ -25,7 +26,7 @@ public class QuestionService {
     public Question findQuestion(long id) {
         return questionRepository
                 .findById(id)
-                .orElseThrow(()-> new IllegalStateException("찾는 질문이 없습니다"));
+                .orElseThrow(IllegalEntityIdException::new);
     }
 
     public void updateQuestion(Question originQuestion, Question question) {

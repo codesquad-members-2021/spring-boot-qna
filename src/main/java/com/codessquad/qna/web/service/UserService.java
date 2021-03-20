@@ -1,6 +1,7 @@
 package com.codessquad.qna.web.service;
 
 import com.codessquad.qna.web.domain.User;
+import com.codessquad.qna.web.exception.IllegalEntityIdException;
 import com.codessquad.qna.web.repository.UserRepository;
 import org.springframework.stereotype.Service;
 
@@ -31,7 +32,7 @@ public class UserService {
     public User findUser(long id) {
         return userRepository
                 .findById(id)
-                .orElseThrow(() -> new IllegalStateException("찾는 회원이 없습니다"));
+                .orElseThrow(IllegalEntityIdException::new);
     }
 
     private User findUser(String userId) {
