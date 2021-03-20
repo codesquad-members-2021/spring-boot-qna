@@ -14,7 +14,7 @@ public class AnswerDTO {
     private String comment;
 
     @JsonFormat(pattern = Constant.DEFAULT_DATE_TIME_FORMAT)
-    private LocalDateTime createDateTime = LocalDateTime.now();
+    private LocalDateTime createDateTime;
 
     private LocalDateTime updateDateTime;
     private Long questionId;
@@ -145,6 +145,10 @@ public class AnswerDTO {
 
     public LocalDateTime getCreateDateTime() {
         return createDateTime;
+    }
+
+    public void setCreateDateTime(LocalDateTime createDateTime) {
+        this.createDateTime = createDateTime;
     }
 
     public LocalDateTime getUpdateDateTime() {

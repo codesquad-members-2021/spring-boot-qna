@@ -1,5 +1,6 @@
 package com.codessquad.qna.answer;
 
+import com.codessquad.qna.common.BaseEntity;
 import com.codessquad.qna.question.Question;
 import com.codessquad.qna.user.User;
 
@@ -7,15 +8,9 @@ import javax.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
-public class Answer {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
+public class Answer extends BaseEntity {
     private String comment;
     private boolean deleted;
-    private LocalDateTime createDateTime;
-    private LocalDateTime updateDateTime;
 
     @ManyToOne
     @JoinColumn(foreignKey = @ForeignKey(name = "fk_answer_question"))
@@ -29,11 +24,10 @@ public class Answer {
     }
 
     public Answer(Long id, String comment, boolean deleted, LocalDateTime createDateTime, LocalDateTime updateDateTime, Question question, User writer) {
-        this.id = id;
+        super(id, createDateTime, updateDateTime);
+
         this.comment = comment;
         this.deleted = deleted;
-        this.createDateTime = createDateTime;
-        this.updateDateTime = updateDateTime;
         this.question = question;
         this.writer = writer;
     }
@@ -91,24 +85,12 @@ public class Answer {
         }
     }
 
-    public Long getId() {
-        return id;
-    }
-
     public String getComment() {
         return comment;
     }
 
     public void delete() {
         deleted = true;
-    }
-
-    public LocalDateTime getCreateDateTime() {
-        return createDateTime;
-    }
-
-    public LocalDateTime getUpdateDateTime() {
-        return updateDateTime;
     }
 
     public Question getQuestion() {
@@ -131,16 +113,15 @@ public class Answer {
         verifyWriter(newAnswer.getWriter());
 
         this.comment = newAnswer.comment;
-        this.updateDateTime = LocalDateTime.now();
     }
 
     @Override
     public String toString() {
         return "Answer{" +
-                "id=" + id +
+                "id=" + getId() +
                 ", comment='" + comment + '\'' +
-                ", createDateTime=" + createDateTime +
-                ", updateDateTime=" + updateDateTime +
+                ", createDateTime=" + getCreateDateTime() +
+                ", updateDateTime=" + getUpdateDateTime() +
                 ", question=" + question.getId() +
                 ", writer=" + writer +
                 '}';

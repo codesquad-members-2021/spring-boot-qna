@@ -1,17 +1,14 @@
 package com.codessquad.qna.user;
 
+import com.codessquad.qna.common.BaseEntity;
 import com.codessquad.qna.exception.InsufficientAuthenticationException;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
 import java.util.Objects;
 
 @Entity
-public class User {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
+public class User extends BaseEntity {
     @Column(nullable = false, length = 20, unique = true)
     private String userId;
 
@@ -28,7 +25,8 @@ public class User {
     }
 
     public User(Long id, String userId, String password, String name, String email) {
-        this.id = id;
+        super(id);
+
         this.userId = userId;
         this.password = password;
         this.name = name;
@@ -76,10 +74,6 @@ public class User {
         }
     }
 
-    public Long getId() {
-        return id;
-    }
-
     public String getUserId() {
         return userId;
     }
@@ -111,7 +105,7 @@ public class User {
     }
 
     private void checkId(Long id) {
-        if (!this.id.equals(id)) {
+        if (!getId().equals(id)) {
             throw new IllegalArgumentException("잘못된 ID입니다. id : " + id);
         }
     }
@@ -130,12 +124,12 @@ public class User {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         User user = (User) o;
-        return Objects.equals(id, user.id) && Objects.equals(userId, user.userId);
+        return Objects.equals(getId(), user.getId()) && Objects.equals(userId, user.userId);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, userId);
+        return Objects.hash(getId(), userId);
     }
 
     @Override
