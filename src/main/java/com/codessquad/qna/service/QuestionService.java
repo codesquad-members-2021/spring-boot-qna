@@ -23,16 +23,16 @@ public class QuestionService {
         this.answerRepository = answerRepository;
     }
 
-    public void add(Question newQuestion){
+    public void add(Question newQuestion) {
         Question question = questionRepository.save(newQuestion);
         logger.info("after save" + question.toString());
     }
 
-    public List<Question> getAllQuestions(){
+    public List<Question> getAllQuestions() {
         return questionRepository.findAll();
     }
 
-    public Optional<Question> getOneById(Long id){
+    public Optional<Question> getOneById(Long id) {
         return questionRepository.findById(id);
     }
 
