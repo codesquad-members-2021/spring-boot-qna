@@ -1,6 +1,7 @@
 package com.codessquad.qna.controller;
 
 import javax.servlet.http.HttpSession;
+
 import com.codessquad.qna.domain.User;
 
 public class HttpSessionUtils {
@@ -11,7 +12,7 @@ public class HttpSessionUtils {
     }
 
     public static User getSessionUser(HttpSession session) {
-        if (!isLoginUser(session)){
+        if (!isLoginUser(session)) {
             return null;
         }
         return (User) session.getAttribute(USER_SESSION_KEY);

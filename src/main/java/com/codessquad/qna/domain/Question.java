@@ -4,12 +4,10 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 @Entity
-public class Question extends AbstractEntity{
+public class Question extends AbstractEntity {
 
     @ManyToOne
     @JoinColumn(foreignKey = @ForeignKey(name = "fk_question_writer"))
@@ -113,7 +111,7 @@ public class Question extends AbstractEntity{
         int count = 0;
         for (Answer answer : answers) {
             if (!answer.isDeleted()) {
-                count +=1;
+                count += 1;
             }
         }
         return count;

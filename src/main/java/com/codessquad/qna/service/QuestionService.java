@@ -10,12 +10,14 @@ import com.codessquad.qna.repository.QuestionRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
+
 import javax.servlet.http.HttpSession;
 import java.util.List;
 
 @Service
 public class QuestionService {
     private static final Logger logger = LoggerFactory.getLogger(QuestionService.class);
+
     private final QuestionRepository questionRepository;
     private final AnswerService answerService;
 
