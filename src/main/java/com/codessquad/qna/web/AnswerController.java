@@ -34,7 +34,7 @@ public class AnswerController {
     }
 
     @DeleteMapping("/{answerId}")
-    public String delete(@PathVariable Long answerId, Long questionId, HttpSession session) {
+    public String delete(@PathVariable Long answerId, HttpSession session) {
         User loggedinUser = getUserFromSession(session);
         Answer answer = answerService.findAnswer(answerId);
         answerService.delete(loggedinUser, answer);

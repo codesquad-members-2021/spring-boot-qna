@@ -54,6 +54,10 @@ public class Answer {
         return postTime.format(DATE_TIME_FORMATTER);
     }
 
+    public boolean isAnswerWriter(User user) {
+        return user.isUserMatching(writer);
+    }
+
     @Override
     public String toString() {
         return "Answer{" +
@@ -62,9 +66,5 @@ public class Answer {
                 ", contents='" + contents + '\'' +
                 ", createdTime=" + postTime +
                 '}';
-    }
-
-    public boolean isAnswerWriter(User user) {
-        return user.isUserMatching(writer);
     }
 }

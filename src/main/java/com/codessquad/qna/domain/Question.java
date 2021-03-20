@@ -1,11 +1,14 @@
 package com.codessquad.qna.domain;
 
+import org.hibernate.annotations.Where;
+
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 @Entity
+@Where(clause = "deleted = false")
 public class Question {
     private static final DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
     @Id
@@ -23,6 +26,7 @@ public class Question {
 
     private LocalDateTime postTime;
     private LocalDateTime updatedPostTime;
+    private boolean deleted;
 
     @OneToMany(mappedBy = "question")
     @OrderBy("id asc")
@@ -65,18 +69,43 @@ public class Question {
         return answers;
     }
 
+    public boolean isDeleted() {
+        return deleted;
+    }
+
     public int getAnswerNum() {
         return answers.size();
+    }
+
+    public boolean isAnswerEmpty() {
+        return answers.size() == 0;
     }
 
     public boolean isPostWriter(User user) {
         return user.isUserMatching(writer);
     }
 
+    public boolean isAnswerWriterSame() {
+        for (Answer answer : answers) {
+            if (!answer.isAnswerWriter(writer)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
     public void update(Question updatedQuestion) {
         this.title = updatedQuestion.title;
         this.contents = updatedQuestion.contents;
         this.updatedPostTime = LocalDateTime.now();
+    }
+
+    public void setDeletedTrue() {
+        deleted = true;
+    }
+
+    public void deleteAnswers() {
+        answers.clear();
     }
 
     @Override

@@ -43,6 +43,13 @@ public class QuestionService {
 
     public void delete(Question question, User user) {
         checkValid(question, user);
-        questionRepository.delete(question);
+        if (!question.isAnswerWriterSame()) {
+            // Todo: 예외 발생을 해야하나.. 새로운 예외 페이지도 만들어야하나..
+        }
+        if (question.isAnswerEmpty()) {
+            question.setDeletedTrue();
+            question.deleteAnswers();
+            questionRepository.save(question);
+        }
     }
 }
