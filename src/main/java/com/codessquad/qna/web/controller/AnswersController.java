@@ -41,12 +41,12 @@ public class AnswersController {
         Answer targetAnswer = answersRepository.findByIdAndDeletedFalse(answerId)
                 .orElseThrow(AnswerNotFoundException::new);
 
-        Question targetQuestion = targetAnswer.getQuestion();
         if (!targetAnswer.isMatchingWriter(sessionUser)) {
             throw new UnauthorizedAccessException("자신의 답변만 삭제할 수 있습니다");
         }
-
         this.answersRepository.delete(targetAnswer);
+
+        Question targetQuestion = targetAnswer.getQuestion();
         return "redirect:/questions/" + targetQuestion.getId();
     }
 
