@@ -1,8 +1,10 @@
 package com.codessquad.qna.exception;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.ResponseStatus;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -18,6 +20,7 @@ public class GlobalExceptionHandler {
         return "redirect:/";
     }
 
+    @ResponseStatus(HttpStatus.UNAUTHORIZED)
     @ExceptionHandler(UserSessionException.class)
     private String handleUserSessionException(Model model, UserSessionException e) {
         model.addAttribute("errorMessage", e.getMessage());
