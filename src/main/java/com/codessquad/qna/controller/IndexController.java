@@ -16,7 +16,7 @@ public class IndexController {
 
     @GetMapping("/")
     public String goMain(Model model) {
-        model.addAttribute("questions", questionService.findAll());
+        model.addAttribute("questions", questionService.pagingList());
         return "index";
     }
 }

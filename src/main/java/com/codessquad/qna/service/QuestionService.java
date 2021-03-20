@@ -4,6 +4,8 @@ import com.codessquad.qna.domain.answer.Answer;
 import com.codessquad.qna.domain.answer.AnswerRepository;
 import com.codessquad.qna.domain.question.Question;
 import com.codessquad.qna.domain.question.QuestionRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -57,5 +59,11 @@ public class QuestionService {
             throw new IllegalArgumentException("다른 사용자의 답변이 있습니다.");
         }
         question.delete();
+    }
+
+    public Page<Question> pagingList() {
+        PageRequest pageRequest = PageRequest.of(0, 15);
+        Page<Question> questions = questionRepository.findAll(pageRequest);
+        return questions;
     }
 }
