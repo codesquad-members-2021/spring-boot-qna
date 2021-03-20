@@ -22,9 +22,9 @@ dependencies {
 	testImplementation group: 'org.assertj', name: 'assertj-core', version: '3.18.1'
 	// https://mvnrepository.com/artifact/com.h2database/h2
 	compile 'com.h2database:h2'
-	//lombok
-	compileOnly 'org.projectlombok:lombok'
-	annotationProcessor 'org.projectlombok:lombok'
+	//swagger
+	compile group: 'io.springfox', name: 'springfox-swagger2', version: '2.9.2'
+	compile group: 'io.springfox', name: 'springfox-swagger-ui', version: '2.9.2'
 }
 
 test {
