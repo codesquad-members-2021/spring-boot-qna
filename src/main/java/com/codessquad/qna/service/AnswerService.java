@@ -1,11 +1,15 @@
 package com.codessquad.qna.service;
 
 import com.codessquad.qna.domain.Answer;
+import com.codessquad.qna.domain.Question;
+import com.codessquad.qna.domain.User;
 import com.codessquad.qna.repository.AnswerRepository;
 import com.codessquad.qna.repository.QuestionRepository;
+import com.codessquad.qna.util.HttpSessionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.servlet.http.HttpSession;
 import java.util.List;
 
 @Service
@@ -19,7 +23,11 @@ public class AnswerService {
         this.questionRepository = questionRepository;
     }
 
-    public void create(Answer answer){
+    public void create(Long id, String contents, HttpSession session){
+        User loginUser = HttpSessionUtils.getUserFromSession(session);
+        Question question = questionRepository.findById(id).orElse(null);
+        Answer answer = new Answer(question, contents, loginUser);
+
         answerRepository.save(answer);
     }
 
