@@ -41,10 +41,6 @@ public class Answer {
         this.createdAt = LocalDateTime.now();
     }
 
-    public static Answer toEntity(User writer, Question question, String contents) {
-        return new Answer(writer, question, contents);
-    }
-
     public Long getId() {
         return id;
     }
@@ -79,9 +75,43 @@ public class Answer {
         }
     }
 
-
     public boolean isMatchingWriter(User user) {
         return writer.isMatchingWriter(user);
     }
 
+//    public static Answer toEntity(User writer, Question question, String contents) {
+//        return new Answer(writer, question, contents);
+//    }
+
+    static public class Builder {
+        private User writer;
+        private Question question;
+        private String contents;
+
+        public Builder() {
+
+        }
+
+        public Builder(Answer answer) {
+            this.writer = answer.writer;
+            this.question = answer.question;
+            this.contents = answer.contents;
+        }
+
+        public Builder writer(User writer){
+            this.writer = writer;
+            return this;
+        }
+        public Builder question(Question question){
+            this.question = question;
+            return this;
+        }
+        public Builder contents(String contents){
+            this.contents = contents;
+            return this;
+        }
+
+        public Answer build() {return new Answer(writer, question, contents);}
+
+    }
 }

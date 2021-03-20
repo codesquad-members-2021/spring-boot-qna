@@ -22,8 +22,12 @@ public class CreateUserRequest {
         this.email = email;
     }
 
-    //TODO : 빌더 구현하면 new User -> builder로 User 인스턴스 생성
     public User toEntity(){
-        return new User(userId, password, name, email);
+        return new User.Builder()
+                .userId(userId)
+                .password(password)
+                .name(name)
+                .email(email)
+                .build();
     }
 }

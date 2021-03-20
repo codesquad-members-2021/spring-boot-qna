@@ -2,7 +2,6 @@ package com.codessquad.qna.web.domain.question;
 
 import com.codessquad.qna.web.domain.answer.Answer;
 import com.codessquad.qna.web.domain.user.User;
-import com.codessquad.qna.web.dto.question.QuestionRequest;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -42,10 +41,6 @@ public class Question {
 
     protected Question() {
 
-    }
-
-    public static Question toEntity(User writer, QuestionRequest request) {
-        return new Question(writer, request.getTitle(), request.getContents());
     }
 
     public Long getId() {
@@ -97,5 +92,38 @@ public class Question {
                 ", contents='" + contents + '\'' +
                 ", createdAt=" + createdAt +
                 '}';
+    }
+
+
+    static public class Builder {
+        private User writer;
+        private String title;
+        private String contents;
+
+        public Builder() {
+
+        }
+
+        public Builder(Question question) {
+            this.writer = question.writer;
+            this.title = question.title;
+            this.contents = question.contents;
+        }
+
+        public Builder writer(User writer){
+            this.writer = writer;
+            return this;
+        }
+        public Builder title(String title){
+            this.title = title;
+            return this;
+        }
+        public Builder contents(String contents){
+            this.contents = contents;
+            return this;
+        }
+
+        public Question build() {return new Question(writer, title, contents);}
+
     }
 }

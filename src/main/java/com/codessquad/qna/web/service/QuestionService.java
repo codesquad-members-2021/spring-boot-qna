@@ -26,7 +26,7 @@ public class QuestionService {
 
     public void create(QuestionRequest request, HttpSession session){
         User loginUser = SessionUtils.getLoginUser(session);
-        Question question = Question.toEntity(loginUser, request);
+        Question question = request.toEntity(loginUser);
         questionRepository.save(question);
     }
 

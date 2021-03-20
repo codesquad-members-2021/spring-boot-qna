@@ -27,7 +27,13 @@ public class AnswerService {
         User loginUser = SessionUtils.getLoginUser(session);
 
         Question question = getQuestionById(questionId);
-        Answer answer = Answer.toEntity(loginUser, question, contents);
+
+        Answer answer = new Answer.Builder()
+                .writer(loginUser)
+                .question(question)
+                .contents(contents)
+                .build();
+
         answerRepository.save(answer);
     }
 
