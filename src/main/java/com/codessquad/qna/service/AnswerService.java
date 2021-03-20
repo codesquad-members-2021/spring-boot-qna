@@ -18,9 +18,9 @@ public class AnswerService {
         this.questionService = questionService;
     }
 
-    public void save(Long id, Answer answer, User sessionUser) {
+    public Answer save(Long id, Answer answer, User sessionUser) {
         answer.save(sessionUser, questionService.findById(id));
-        this.answerRepository.save(answer);
+        return this.answerRepository.save(answer);
     }
 
     public void update(Long id, Answer answer, User sessionUser) {
