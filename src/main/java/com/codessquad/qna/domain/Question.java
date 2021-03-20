@@ -71,11 +71,25 @@ public class Question {
         this.answers = answers;
     }
 
-    public String getFormattedCreatedDate(){
-        if (createdDate == null){
+    public String getFormattedCreatedDate() {
+        if (createdDate == null) {
             return "";
         }
         return createdDate.format(DateTimeFormatter.ofPattern("yyyy.MM.dd HH:mm"));
+    }
+
+    public boolean isEmpty() {
+        if (this.writer == null) {
+            return true;
+        }
+        if ("".equals(this.title) || this.title == null) {
+            return true;
+        }
+        if ("".equals(this.contents) || this.contents == null) {
+            return true;
+        }
+
+        return false;
     }
 
     @Override
