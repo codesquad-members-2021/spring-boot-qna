@@ -16,10 +16,19 @@ public class PageBlock {
     }
 
     public void createPageBlocks(int currentPage) {
-        int pageCount = blockSize - currentPage + 1;
-        currentPage = validateStartPage(currentPage, pageCount);
-        int maxPage = currentPage + DEFAULT_PAGE_COUNT;
-        for (int i = currentPage; i < maxPage; i++) {
+        int maxPageIdx = currentPage + DEFAULT_PAGE_COUNT;
+
+        if (blockSize < maxPageIdx) {
+            maxPageIdx = blockSize;
+        }
+
+        int count = maxPageIdx - (currentPage + 1);
+
+        if (count <= 4) {
+            currentPage -= (DEFAULT_PAGE_COUNT - (count + 1));
+        }
+
+        for (int i = currentPage; i <= maxPageIdx; i++) {
             if (i > blockSize) {
                 break;
             }
@@ -30,16 +39,6 @@ public class PageBlock {
     public List<Integer> getBlocks() {
         return blocks;
     }
-
-    private int validateStartPage(int currentPage, int pageCount) {
-        if (currentPage > 5) {
-            currentPage -= (DEFAULT_PAGE_COUNT - pageCount);
-        } else if (pageCount < 5) {
-            currentPage /= 5;
-        }
-        return currentPage;
-    }
-
 
     private int getStartIndex() {
         return blockSize / 5;
