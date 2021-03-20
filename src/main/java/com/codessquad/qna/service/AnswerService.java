@@ -29,10 +29,10 @@ public class AnswerService {
         this.answerRepository.save(targetAnswer);
     }
 
-    public void delete(Long id, User sessionUser) {
+    public Answer delete(Long id, User sessionUser) {
         Answer targetAnswer = verifyAnswer(id, sessionUser);
         targetAnswer.delete();
-        this.answerRepository.save(targetAnswer);
+        return this.answerRepository.save(targetAnswer);
     }
 
     public Answer verifyAnswer(Long id, User sessionUser) {
