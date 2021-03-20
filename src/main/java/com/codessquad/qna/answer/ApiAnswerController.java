@@ -19,20 +19,19 @@ public class ApiAnswerController {
     }
 
     @PostMapping
-    public Answer create(@PathVariable Long questionId, Answer answer, HttpSession session) {
+    public AnswerDTO create(@PathVariable Long questionId, Answer answer, HttpSession session) {
         answer.setQuestion(Question.builder().setId(questionId).build());
         answer.setWriter(SessionUtils.getSessionUser(session).toEntity());
 
-        return answerService.create(answer);
+        AnswerDTO result = answerService.create(answer);
+
+        return result;
     }
 
     @DeleteMapping("/{id}")
     public AnswerDTO delete(@PathVariable Long questionId, @PathVariable Long id, HttpSession session) {
-        Answer result = answerService.delete(id, SessionUtils.getSessionUser(session));
-        Question question = questionService.read(questionId);
+        AnswerDTO result = answerService.delete(id, SessionUtils.getSessionUser(session));
 
-        result.setQuestion(question);
-
-        return AnswerDTO.from(result);
+        return result;
     }
 }

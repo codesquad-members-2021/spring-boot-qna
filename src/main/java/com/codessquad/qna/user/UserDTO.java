@@ -22,6 +22,10 @@ public class UserDTO {
     }
 
     public static UserDTO from(User user) {
+        if (user == null) {
+            return new UserDTO();
+        }
+
         return new UserDTO(
                 user.getId(),
                 user.getUserId(), user.getPassword(),

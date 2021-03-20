@@ -5,6 +5,7 @@ import com.codessquad.qna.user.UserDTO;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class AnswerService {
@@ -14,29 +15,38 @@ public class AnswerService {
         this.answerRepository = answerRepository;
     }
 
-    public List<Answer> readAll(Long questionId) {
-        return answerRepository.findAllByQuestionIdAndDeletedFalse(questionId);
+    public List<AnswerDTO> readAll(Long questionId) {
+        return answerRepository.findAllByQuestionIdAndDeletedFalse(questionId).stream()
+                .map(AnswerDTO::from)
+                .collect(Collectors.toList());
     }
 
-    private Answer read(Long id) {
-        return answerRepository.findById(id)
+    private AnswerDTO read(Long id) {
+        return AnswerDTO.from(answerRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("존재하지 않는 답변입니다. id : " + id)));
+    }
+
+    public AnswerDTO readVerifiedAnswer(Long id, UserDTO user) {
+        Answer answer = answerRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("존재하지 않는 답변입니다. id : " + id));
-    }
-
-    public Answer readVerifiedAnswer(Long id, UserDTO user) {
-        Answer answer = read(id);
 
         answer.verifyWriter(user.toEntity());
 
-        return answer;
+        return AnswerDTO.from(answer);
     }
 
-    public Answer create(Answer answer) {
-        return answerRepository.save(answer);
+    public AnswerDTO create(Answer answer) {
+        Answer savedAnswer = answerRepository.save(answer);
+
+        int answersCount = countBy(savedAnswer.getQuestion().getId());
+        AnswerDTO result = AnswerDTO.of(savedAnswer, answersCount);
+
+        return result;
     }
 
     public void update(Long id, Answer newAnswer) {
-        Answer existedAnswer = read(id);
+        Answer existedAnswer = answerRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("존재하지 않는 답변입니다. id : " + id));
 
         existedAnswer.update(newAnswer);
         answerRepository.save(existedAnswer);
@@ -50,10 +60,19 @@ public class AnswerService {
         answerRepository.saveAll(answers);
     }
 
-    public Answer delete(Long id, UserDTO currentSessionUser) {
-        Answer answer = readVerifiedAnswer(id, currentSessionUser);
-        answer.delete();
+    public AnswerDTO delete(Long id, UserDTO currentSessionUser) {
+        Answer answer = answerRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("존재하지 않는 답변입니다. id : " + id));
 
-        return answerRepository.save(answer);
+        answer.verifyWriter(currentSessionUser.toEntity());
+        answer.delete();
+        Answer deletedAnswer = answerRepository.save(answer);
+
+        int answersCount = countBy(deletedAnswer.getQuestion().getId());
+        return AnswerDTO.of(answerRepository.save(answer), answersCount);
+    }
+
+    public int countBy(Long questionId) {
+        return answerRepository.countByQuestionIdAndDeletedFalse(questionId);
     }
 }

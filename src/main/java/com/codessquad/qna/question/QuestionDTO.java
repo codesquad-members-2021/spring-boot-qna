@@ -1,10 +1,12 @@
 package com.codessquad.qna.question;
 
+import com.codessquad.qna.answer.AnswerDTO;
 import com.codessquad.qna.common.Constant;
 import com.codessquad.qna.user.UserDTO;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 public class QuestionDTO {
     private Long id;
@@ -16,19 +18,21 @@ public class QuestionDTO {
 
     private LocalDateTime updateDateTime;
     private UserDTO writer;
-    private int answerCount;
+    private List<AnswerDTO> answers;
+    private int answersCount;
 
     public QuestionDTO() {
     }
 
-    public QuestionDTO(Long id, String title, String contents, LocalDateTime createDateTime, LocalDateTime updateDateTime, UserDTO writer, int answerCount) {
+    public QuestionDTO(Long id, String title, String contents, LocalDateTime createDateTime, LocalDateTime updateDateTime, UserDTO writer, List<AnswerDTO> answers, int answersCount) {
         this.id = id;
         this.title = title;
         this.contents = contents;
         this.createDateTime = createDateTime;
         this.updateDateTime = updateDateTime;
         this.writer = writer;
-        this.answerCount = answerCount;
+        this.answers = answers;
+        this.answersCount = answersCount;
     }
 
     public static QuestionDTO from(Question question) {
@@ -39,13 +43,15 @@ public class QuestionDTO {
                 .setCreateDateTime(question.getCreateDateTime())
                 .setUpdateDateTime(question.getUpdateDateTime())
                 .setWriter(UserDTO.from(question.getWriter()))
-                .setAnswerCount(question.getAnswers().size())
+                .setAnswers(AnswerDTO.from(question.getAnswers()))
+                .setAnswersCount(question.getAnswers() != null ? question.getAnswers().size() : 0)
                 .build();
     }
 
     public static Builder builder() {
         return new Builder();
     }
+
 
     public static class Builder {
         private Long id;
@@ -54,7 +60,8 @@ public class QuestionDTO {
         private LocalDateTime createDateTime;
         private LocalDateTime updateDateTime;
         private UserDTO writer;
-        private int answerCount;
+        private List<AnswerDTO> answers;
+        private int answersCount;
 
         public Builder setId(Long id) {
             this.id = id;
@@ -86,13 +93,18 @@ public class QuestionDTO {
             return this;
         }
 
-        public Builder setAnswerCount(int answerCount) {
-            this.answerCount = answerCount;
+        public Builder setAnswers(List<AnswerDTO> answers) {
+            this.answers = answers;
+            return this;
+        }
+
+        public Builder setAnswersCount(int answersCount) {
+            this.answersCount = answersCount;
             return this;
         }
 
         public QuestionDTO build() {
-            return new QuestionDTO(id, title, contents, createDateTime, updateDateTime, writer, answerCount);
+            return new QuestionDTO(id, title, contents, createDateTime, updateDateTime, writer, answers, answersCount);
         }
     }
 
@@ -144,11 +156,19 @@ public class QuestionDTO {
         this.writer = writer;
     }
 
-    public int getAnswerCount() {
-        return answerCount;
+    public List<AnswerDTO> getAnswers() {
+        return answers;
     }
 
-    public void setAnswerCount(int answerCount) {
-        this.answerCount = answerCount;
+    public void setAnswers(List<AnswerDTO> answers) {
+        this.answers = answers;
+    }
+
+    public int getAnswersCount() {
+        return answersCount;
+    }
+
+    public void setAnswersCount(int answersCount) {
+        this.answersCount = answersCount;
     }
 }

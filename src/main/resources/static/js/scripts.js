@@ -39,12 +39,13 @@ function onSuccess(data, status) {
             data.writer.userId,
             data.createDateTime,
             data.comment,
-            data.question.id,
+            data.questionId,
             data.id
         );
 
     $(".answer-write").before(answer);
     $(".answer-write textarea").val("");
+    $(".qna-comment-count").children().text(data.answersCount)
 }
 
 $(".qna-comment-slipp-articles").click(deleteAnswer);
@@ -64,7 +65,7 @@ function deleteAnswer(e) {
             },
             success: function (data, status) {
                 $(e.target).closest("article").remove();
-                $(".qna-comment-count").children().text(data.question.answerCount)
+                $(".qna-comment-count").children().text(data.answersCount)
             }
         })
     }

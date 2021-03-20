@@ -29,7 +29,7 @@ public class AnswerController {
 
     @GetMapping("/{id}/form")
     public ModelAndView viewUpdateForm(@PathVariable Long questionId, @PathVariable Long id, HttpSession session) {
-        Answer result = answerService.readVerifiedAnswer(id, SessionUtils.getSessionUser(session));
+        AnswerDTO result = answerService.readVerifiedAnswer(id, SessionUtils.getSessionUser(session));
 
         return new ModelAndView("/qna/answerUpdateForm", "answer", result);
     }

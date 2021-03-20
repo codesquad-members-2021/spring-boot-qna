@@ -3,11 +3,13 @@ package com.codessquad.qna.question;
 import com.codessquad.qna.answer.Answer;
 import com.codessquad.qna.answer.AnswerService;
 import com.codessquad.qna.exception.InsufficientAuthenticationException;
+import com.codessquad.qna.exception.ResourceNotFoundException;
 import com.codessquad.qna.user.UserDTO;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class QuestionService {
@@ -19,19 +21,21 @@ public class QuestionService {
         this.answerService = answerService;
     }
 
-    public List<Question> readAll() {
-        List<Question> result = questionRepository.findAllByDeletedFalse();
+    public List<QuestionDTO> readAll() {
+        List<QuestionDTO> result = questionRepository.findAllByDeletedFalse().stream()
+                .map(QuestionDTO::from)
+                .collect(Collectors.toList());
 
-        for (Question question : result) {
+        for (QuestionDTO question : result) {
             question.setAnswers(answerService.readAll(question.getId()));
         }
 
         return result;
     }
 
-    public Question read(Long id) {
-        Question result = questionRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("질문이 존재하지 않습니다. id : " + id));
+    public QuestionDTO read(Long id) {
+        QuestionDTO result = QuestionDTO.from(questionRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("질문이 존재하지 않습니다. id : " + id)));
 
         result.setAnswers(answerService.readAll(id));
 
@@ -39,7 +43,8 @@ public class QuestionService {
     }
 
     public Question readVerifiedQuestion(Long id, UserDTO user) {
-        Question result = read(id);
+        Question result = questionRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("질문이 존재하지 않습니다. id : " + id));
 
         result.verifyWriter(user.toEntity());
 
@@ -51,7 +56,8 @@ public class QuestionService {
     }
 
     public void update(Long id, Question newQuestion) {
-        Question existedQuestion = read(id);
+        Question existedQuestion = questionRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("질문이 존재하지 않습니다. id : " + id));
 
         existedQuestion.update(newQuestion);
         questionRepository.save(existedQuestion);
