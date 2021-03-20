@@ -9,7 +9,7 @@ import java.time.format.DateTimeFormatter;
 @Entity
 public class Qna {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(nullable = false)
