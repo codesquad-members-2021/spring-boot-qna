@@ -2,7 +2,7 @@ package com.codessquad.qna.web;
 
 import com.codessquad.qna.domain.User;
 import com.codessquad.qna.exception.NotFoundException;
-import com.codessquad.qna.exception.NotMatchException;
+import com.codessquad.qna.exception.PasswordNotMatchException;
 import com.codessquad.qna.repository.UserRepository;
 import com.codessquad.qna.service.UserService;
 import org.springframework.stereotype.Controller;
@@ -76,7 +76,7 @@ public class UserController {
         checkValidById(loggedinUser, id);
         User user = loggedinUser;
         if (!user.isPasswordMatching(inputPassword)) {
-            throw new NotMatchException();
+            throw new PasswordNotMatchException();
         }
         user.update(updatedUser);
         userRepository.save(user);
