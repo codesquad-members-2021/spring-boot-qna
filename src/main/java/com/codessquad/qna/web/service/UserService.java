@@ -4,8 +4,8 @@ import com.codessquad.qna.web.domain.user.User;
 import com.codessquad.qna.web.domain.user.UserRepository;
 import com.codessquad.qna.web.dto.user.CreateUserRequest;
 import com.codessquad.qna.web.exception.CRUDAuthenticationException;
+import com.codessquad.qna.web.exception.EntityNotFoundException;
 import com.codessquad.qna.web.exception.FailedLoginException;
-import com.codessquad.qna.web.exception.UserNotFoundException;
 import com.codessquad.qna.web.utils.SessionUtils;
 import org.springframework.stereotype.Service;
 
@@ -28,7 +28,7 @@ public class UserService {
         }
 
         User user = userRepository.findByUserId(userId)
-                .orElseThrow(() -> new UserNotFoundException("No user with userId " + userId));
+                .orElseThrow(() -> new EntityNotFoundException("No user with userId " + userId));
 
         if (!user.isMatchingPassword(password)) {
             throw new FailedLoginException();
@@ -65,7 +65,7 @@ public class UserService {
     }
 
     public User findUserById(Long id) {
-        return userRepository.findById(id).orElseThrow(() -> new UserNotFoundException("No user with id number " + id));
+        return userRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("No user with id number " + id));
     }
 
 }

@@ -5,9 +5,8 @@ import com.codessquad.qna.web.domain.answer.AnswerRepository;
 import com.codessquad.qna.web.domain.question.Question;
 import com.codessquad.qna.web.domain.question.QuestionRepository;
 import com.codessquad.qna.web.domain.user.User;
-import com.codessquad.qna.web.exception.AnswerNotFoundException;
 import com.codessquad.qna.web.exception.CRUDAuthenticationException;
-import com.codessquad.qna.web.exception.QuestionNotFoundException;
+import com.codessquad.qna.web.exception.EntityNotFoundException;
 import com.codessquad.qna.web.utils.SessionUtils;
 import org.springframework.stereotype.Service;
 
@@ -35,7 +34,7 @@ public class AnswerService {
     public void delete(long questionId, long id, HttpSession session){
         User loginUser = SessionUtils.getLoginUser(session);
         Answer answer = answerRepository.findById(id)
-                .orElseThrow(() -> new AnswerNotFoundException("Cannot found answer number " + id));
+                .orElseThrow(() -> new EntityNotFoundException("Cannot found answer number " + id));
 
         if (!answer.isMatchingWriter(loginUser)) {
             throw new CRUDAuthenticationException("Only writer can delete this answer post!");
@@ -45,6 +44,6 @@ public class AnswerService {
 
     private Question getQuestionById(Long id) {
         return questionRepository.findById(id)
-                .orElseThrow(() -> new QuestionNotFoundException("Cannot found question number " + id));
+                .orElseThrow(() -> new EntityNotFoundException("Cannot found question number " + id));
     }
 }

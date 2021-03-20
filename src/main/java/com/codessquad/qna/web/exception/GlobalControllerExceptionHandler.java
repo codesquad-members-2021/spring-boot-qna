@@ -12,7 +12,7 @@ public class GlobalControllerExceptionHandler {
         return "redirect:/users/login-form";
     }
 
-    @ExceptionHandler({UserNotFoundException.class, QuestionNotFoundException.class, AnswerNotFoundException.class})
+    @ExceptionHandler(EntityNotFoundException.class)
     public ModelAndView handleNotFoundException(Exception e) {
         ModelAndView mav = new ModelAndView("error/notFoundError");
         mav.addObject("errorMessage", e.getMessage());
