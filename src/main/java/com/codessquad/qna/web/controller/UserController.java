@@ -2,6 +2,7 @@ package com.codessquad.qna.web.controller;
 
 import com.codessquad.qna.web.HttpSessionUtils;
 import com.codessquad.qna.web.domain.User;
+import com.codessquad.qna.web.exception.NotLoginException;
 import com.codessquad.qna.web.service.UserService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -57,7 +58,7 @@ public class UserController {
     @GetMapping("/{id}/form")
     public String getUpdateForm(@PathVariable long id, Model model, HttpSession session) {
         if (!HttpSessionUtils.isLoginUser(session)) {
-            return "redirect:/users/loginForm";
+            throw new NotLoginException();
         }
 
         User loginUser = HttpSessionUtils.getSessionedUser(session);
@@ -76,7 +77,7 @@ public class UserController {
     @PutMapping("/{id}")
     public String updateUser(@PathVariable long id, String testPassword, User user, HttpSession session) {
         if (!HttpSessionUtils.isLoginUser(session)) {
-            return "redirect:/users/loginForm";
+            throw new NotLoginException();
         }
 
         User loginUser = HttpSessionUtils.getSessionedUser(session);
