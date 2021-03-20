@@ -24,22 +24,24 @@ public class UserService {
                 .collect(Collectors.toList());
     }
 
-    public UserDTO read(Long id) {
-        User result = userRepository.findById(id)
+    private User readExistedUser(Long id) {
+        return userRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("존재하지 않는 사용자 입니다. id : " + id));
-
-        return UserDTO.from(result);
     }
 
-    private UserDTO read(String userId) {
-        User result = userRepository.findByUserId(userId)
+    private User readExistedUser(String userId) {
+        return userRepository.findByUserId(userId)
                 .orElseThrow(() -> new ResourceNotFoundException("존재하지 않는 사용자 입니다. id : " + userId));
+    }
+
+    public UserDTO read(Long id) {
+        User result = readExistedUser(id);
 
         return UserDTO.from(result);
     }
 
     public UserDTO readVerifiedUser(Long id, UserDTO verificationTarget) {
-        User result = read(id).toEntity();
+        User result = readExistedUser(id);
         result.verifyWith(verificationTarget.toEntity());
 
         return UserDTO.from(result);
@@ -47,7 +49,7 @@ public class UserService {
 
     public UserDTO readPasswordVerifiedUser(String userId, String password) {
         try {
-            User user = read(userId).toEntity();
+            User user = readExistedUser(userId);
             user.checkPassword(password);
 
             return UserDTO.from(user);

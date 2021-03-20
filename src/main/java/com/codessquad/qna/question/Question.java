@@ -1,6 +1,7 @@
 package com.codessquad.qna.question;
 
 import com.codessquad.qna.answer.Answer;
+import com.codessquad.qna.exception.InsufficientAuthenticationException;
 import com.codessquad.qna.user.User;
 
 import javax.persistence.*;
@@ -142,6 +143,15 @@ public class Question {
 
     public boolean isWriterDifferentFrom(Answer answer) {
         return !answer.isWriterSameAs(writer);
+    }
+
+    public void checkDeletable(User writer) {
+        verifyWriter(writer);
+
+        boolean differentWriterExists = answers.stream().anyMatch(this::isWriterDifferentFrom);
+        if (differentWriterExists) {
+            throw new InsufficientAuthenticationException("다른 작성자가 작성한 답변이 있으면 삭제할 수 없습니다.");
+        }
     }
 
     public void update(Question newQuestion) {

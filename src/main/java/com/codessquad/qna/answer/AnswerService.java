@@ -21,14 +21,13 @@ public class AnswerService {
                 .collect(Collectors.toList());
     }
 
-    private AnswerDTO read(Long id) {
-        return AnswerDTO.from(answerRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("존재하지 않는 답변입니다. id : " + id)));
+    private Answer readExistedAnswer(Long id) {
+        return answerRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("존재하지 않는 답변입니다. id : " + id));
     }
 
     public AnswerDTO readVerifiedAnswer(Long id, UserDTO user) {
-        Answer answer = answerRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("존재하지 않는 답변입니다. id : " + id));
+        Answer answer = readExistedAnswer(id);
 
         answer.verifyWriter(user.toEntity());
 
@@ -45,8 +44,7 @@ public class AnswerService {
     }
 
     public void update(Long id, AnswerDTO newAnswer) {
-        Answer existedAnswer = answerRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("존재하지 않는 답변입니다. id : " + id));
+        Answer existedAnswer = readExistedAnswer(id);
 
         existedAnswer.update(newAnswer.toEntity());
         answerRepository.save(existedAnswer);
@@ -61,8 +59,7 @@ public class AnswerService {
     }
 
     public AnswerDTO delete(Long id, UserDTO currentSessionUser) {
-        Answer answer = answerRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("존재하지 않는 답변입니다. id : " + id));
+        Answer answer = readExistedAnswer(id);
 
         answer.verifyWriter(currentSessionUser.toEntity());
         answer.delete();
@@ -72,7 +69,7 @@ public class AnswerService {
         return AnswerDTO.of(answerRepository.save(answer), answersCount);
     }
 
-    public int countBy(Long questionId) {
+    private int countBy(Long questionId) {
         return answerRepository.countByQuestionIdAndDeletedFalse(questionId);
     }
 }

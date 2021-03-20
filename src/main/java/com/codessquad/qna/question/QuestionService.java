@@ -1,8 +1,6 @@
 package com.codessquad.qna.question;
 
-import com.codessquad.qna.answer.Answer;
 import com.codessquad.qna.answer.AnswerService;
-import com.codessquad.qna.exception.InsufficientAuthenticationException;
 import com.codessquad.qna.exception.ResourceNotFoundException;
 import com.codessquad.qna.user.UserDTO;
 import org.springframework.stereotype.Service;
@@ -33,9 +31,13 @@ public class QuestionService {
         return result;
     }
 
+    private Question readExistedQuestion(Long id) {
+        return questionRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("질문이 존재하지 않습니다. id : " + id));
+    }
+
     public QuestionDTO read(Long id) {
-        QuestionDTO result = QuestionDTO.from(questionRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("질문이 존재하지 않습니다. id : " + id)));
+        QuestionDTO result = QuestionDTO.from(readExistedQuestion(id));
 
         result.setAnswers(answerService.readAll(id));
 
@@ -43,8 +45,7 @@ public class QuestionService {
     }
 
     public QuestionDTO readVerifiedQuestion(Long id, UserDTO user) {
-        Question result = questionRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("질문이 존재하지 않습니다. id : " + id));
+        Question result = readExistedQuestion(id);
 
         result.verifyWriter(user.toEntity());
 
@@ -56,8 +57,7 @@ public class QuestionService {
     }
 
     public void update(Long id, QuestionDTO newQuestion) {
-        Question existedQuestion = questionRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("질문이 존재하지 않습니다. id : " + id));
+        Question existedQuestion = readExistedQuestion(id);
 
         existedQuestion.update(newQuestion.toEntity());
         questionRepository.save(existedQuestion);
@@ -65,15 +65,8 @@ public class QuestionService {
 
     @Transactional
     public void delete(Long id, UserDTO currentSessionUser) {
-        Question question = readVerifiedQuestion(id, currentSessionUser).toEntity();
-        List<Answer> answer = question.getAnswers();
-
-        boolean differentWriterExists = answer.stream()
-                .anyMatch(question::isWriterDifferentFrom);
-
-        if (differentWriterExists) {
-            throw new InsufficientAuthenticationException("다른 작성자가 작성한 답변이 있으면 삭제할 수 없습니다.");
-        }
+        Question question = readExistedQuestion(id);
+        question.checkDeletable(currentSessionUser.toEntity());
 
         answerService.deleteAll(question.getAnswers());
         question.delete();
