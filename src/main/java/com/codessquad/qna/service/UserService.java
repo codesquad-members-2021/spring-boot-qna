@@ -1,11 +1,11 @@
 package com.codessquad.qna.service;
 
-import com.codessquad.qna.utils.ValidUtils;
 import com.codessquad.qna.domain.User;
 import com.codessquad.qna.exception.type.DuplicateException;
 import com.codessquad.qna.exception.type.IncorrectAccountException;
-import com.codessquad.qna.exception.type.UnauthorizedException;
+import com.codessquad.qna.exception.type.NotFoundException;
 import com.codessquad.qna.repository.UserRepository;
+import com.codessquad.qna.utils.ValidUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -28,7 +28,6 @@ public class UserService {
     }
 
     public void save(User user, boolean update) {
-        user = Optional.ofNullable(user).orElseThrow(IllegalArgumentException::new);
         AtomicBoolean duplicateCheck = new AtomicBoolean(false); //m 멀티스레드 환경에서 경쟁상태가 발생할 수 있으므로, 람다식 내부에서 지역변수(boolean)는 수정이 불가능하다.
         userRepository.findByUserId(user.getUserId())
                 .ifPresent(u -> {
@@ -46,22 +45,18 @@ public class UserService {
     }
 
     public User getById(Long primaryKey) {
-        ValidUtils.checkIllegalArgumentOf(primaryKey);
-        return userRepository.findById(primaryKey).orElseThrow(IncorrectAccountException::new);
+        return userRepository.findById(primaryKey).orElseThrow(NotFoundException::new);
     }
 
     // getById() 오버로딩
     public User getById(String userId) {
         ValidUtils.checkIllegalArgumentOf(userId);
-        return userRepository.findByUserId(userId).orElseThrow(IncorrectAccountException::new);
+        return userRepository.findByUserId(userId).orElseThrow(NotFoundException::new);
     }
 
     public void authenticateOfId(User selectedUser, User loginUser) {
-        selectedUser = Optional.ofNullable(selectedUser).orElseThrow(IllegalArgumentException::new);
-        loginUser = Optional.ofNullable(loginUser).orElseThrow(IllegalArgumentException::new);
-
         if (!Objects.equals(selectedUser.getUserId(), loginUser.getUserId())) {
-            throw new UnauthorizedException();
+            throw new IncorrectAccountException("아이디가 잘못됐습니다.");
         }
     }
     public void authenticateOfPw(User selectedUser, User loginUser) {
@@ -69,26 +64,24 @@ public class UserService {
         loginUser = Optional.ofNullable(loginUser).orElseThrow(IllegalArgumentException::new);
 
         if (!Objects.equals(selectedUser.getPassword(), loginUser.getPassword())) {
-            throw new UnauthorizedException();
+            throw new IncorrectAccountException("비밀번호가 잘못됐습니다.");
         }
     }
 
-    public void checkValidOfLogin(String userId, String password) { // 나중에 ValidUtils로 빼야할 것 같다.
-        ValidUtils.checkIllegalArgumentOf(userId, password);
+    public void checkValidOfLogin(String userId, String password) {
         User findUser = getById(userId);
         if (!Objects.equals(password, findUser.getPassword())) {
-            throw new IncorrectAccountException();
+            throw new IncorrectAccountException("loginFail");
         }
     }
 
     public User update(User originUserData, User updateUserData) {
         originUserData = Optional.ofNullable(originUserData).orElseThrow(IllegalArgumentException::new);
-        updateUserData = Optional.ofNullable(updateUserData).orElseThrow(IllegalArgumentException::new);
 
         authenticateOfId(originUserData, updateUserData);
         authenticateOfPw(originUserData, updateUserData);
 
-        originUserData.setName(updateUserData.getName()); // 이 역할을 User 클래스가 해야할지.. 고민
+        originUserData.setName(updateUserData.getName());
         originUserData.setPassword(updateUserData.getNewPassword());
         originUserData.setEmail(updateUserData.getEmail());
         return originUserData;

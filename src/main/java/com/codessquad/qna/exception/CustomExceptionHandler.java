@@ -21,8 +21,13 @@ public class CustomExceptionHandler {
         return "user/form";
     }
     @ExceptionHandler(IncorrectAccountException.class)
-    public String NotFoundId(){
-        return "user/login_failed";
+    public String NotFoundId(IncorrectAccountException e, Model model){
+        if(e.getMessage().equals("loginFail")) {
+            return "user/login_failed";
+        }else{
+            model.addAttribute("errorMessage",e.getMessage());
+            return "error/404";
+        }
     }
     @ExceptionHandler(IllegalArgumentException.class)
     public String IllegalArgumentException(IllegalArgumentException e, Model model){

@@ -6,7 +6,7 @@ package com.codessquad.qna.exception.type;
  * Github : https://github.com/sanhee
  */
 public class IncorrectAccountException extends RuntimeException{
-    public IncorrectAccountException() {
-        super("계정정보가 올바르지 않습니다.");
+    public IncorrectAccountException(String msg) {
+        super(msg);
     }
 }

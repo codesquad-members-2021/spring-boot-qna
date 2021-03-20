@@ -46,7 +46,6 @@ public class User {
     }
 
     public void setPrimaryKey(Long primaryKey) {
-        ValidUtils.checkIllegalArgumentOf(primaryKey);
         this.primaryKey = primaryKey;
     }
 
