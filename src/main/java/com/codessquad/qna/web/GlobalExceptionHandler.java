@@ -1,7 +1,9 @@
 package com.codessquad.qna.web;
 
-import com.codessquad.qna.web.exception.*;
 import com.codessquad.qna.web.exception.IllegalAccessException;
+import com.codessquad.qna.web.exception.IllegalEntityIdException;
+import com.codessquad.qna.web.exception.LoginFailException;
+import com.codessquad.qna.web.exception.NotLoginException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.ui.Model;
@@ -36,12 +38,5 @@ public class GlobalExceptionHandler {
     public String handleIllegalAccessException(IllegalAccessException e, Model model) {
         model.addAttribute("errorMessage", e.getMessage());
         return "/errorPage";
-    }
-
-    @ExceptionHandler(DuplicatedUserIdException.class)
-    public String handleDuplicatedUserId(DuplicatedUserIdException e, Model model) {
-        logger.error(e.getMessage());
-        model.addAttribute("errorMessage", e.getMessage());
-        return "/user/formWithError";
     }
 }

@@ -39,7 +39,12 @@ public class UserController {
     }
 
     @PostMapping
-    public String createUser(User user) {
+    public String createUser(User user, Model model) {
+        if(userService.checkDuplicateID(user)){
+            System.out.println("hello");
+            model.addAttribute("errorMessage", "이미 존재하는 아이디입니다");
+            return "/user/updateFormWithError";
+        }
         userService.signUp(user);
         return "redirect:/users";
     }
