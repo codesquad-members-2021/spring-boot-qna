@@ -18,14 +18,14 @@
                             <div class="auth-info">
                                 <i class="icon-add-comment"></i>
                                 <span class="time">{{createdDateTime}}</span>
+                                <span class="point">[답변수 : {{countAnswer}}]</span>
                                 {{#writer}}
                                 <a href="/users/{{id}}" class="author">{{userId}}</a>
                                 {{/writer}}
                             </div>
                             <div class="reply" title="댓글">
                                 <i class="icon-reply"></i>
-<!--                                <span class="point">{{id}}</span>-->
-                                <span class="point">{{countAnswer}}</span>
+                                <span class="point">{{id}}</span>
                             </div>
                         </div>
                     </div>
