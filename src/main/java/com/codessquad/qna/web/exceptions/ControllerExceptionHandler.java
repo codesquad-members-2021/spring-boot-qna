@@ -17,35 +17,35 @@ public class ControllerExceptionHandler {
 
     @ExceptionHandler(UnauthorizedAccessException.class)
     public String handleUnauthorizedAccessException(UnauthorizedAccessException exception, Model model) {
-        logErrorState("허가되지 않은 접근이 발견되었습니다!", exception, model);
+        processErrorState("허가되지 않은 접근이 발견되었습니다!", exception, model);
         return "/error/global-error";
     }
 
     @ExceptionHandler(NoLoginUserException.class)
     public String handleNoLoginUserException(NoLoginUserException exception, Model model) {
-        logErrorState("현재 로그인된 상태가 아닙니다", exception, model);
+        processErrorState("현재 로그인된 상태가 아닙니다", exception, model);
         return "/error/global-error";
     }
 
     @ExceptionHandler(UserNotFoundException.class)
     public String handleUserNotFoundException(UserNotFoundException exception, Model model) {
-        logErrorState("요청한 사용자 정보를 찾을 수 없습니다.", exception, model);
+        processErrorState("요청한 사용자 정보를 찾을 수 없습니다.", exception, model);
         return "/error/global-error";
     }
 
     @ExceptionHandler(QuestionNotFoundException.class)
     public String handleQuestionNotFoundException(QuestionNotFoundException exception, Model model) {
-        logErrorState("요청한 질문 정보를 찾을 수 없습니다.", exception, model);
+        processErrorState("요청한 질문 정보를 찾을 수 없습니다.", exception, model);
         return "/error/global-error";
     }
 
     @ExceptionHandler(AnswerNotFoundException.class)
     public String handleAnswerNotFoundException(AnswerNotFoundException exception, Model model) {
-        logErrorState("요청한 답변 정보를 찾을 수 없습니다.", exception, model);
+        processErrorState("요청한 답변 정보를 찾을 수 없습니다.", exception, model);
         return "/error/global-error";
     }
 
-    private void logErrorState(String errorMessage, Exception exception, Model model) {
+    private void processErrorState(String errorMessage, Exception exception, Model model) {
         LOGGER.warn(errorMessage);
         exception.printStackTrace();
         model.addAttribute("errorMessage", errorMessage);
