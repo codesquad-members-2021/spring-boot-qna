@@ -25,13 +25,7 @@ public class UserController {
 
     @PostMapping("/login")
     public String login(String userId, String password, HttpSession session) {
-        User user;
-        try {
-            user = userService.login(userId, password);
-        } catch (IllegalStateException e) {
-            return "user/loginFailed";
-        }
-
+        User user = userService.login(userId, password);
         session.setAttribute(HttpSessionUtils.USER_SESSION_KEY, user);
         return "redirect:/";
     }
@@ -67,7 +61,7 @@ public class UserController {
         }
 
         User loginUser = HttpSessionUtils.getSessionedUser(session);
-        if (!loginUser.isSameId(id)){
+        if (!loginUser.isSameId(id)) {
             throw new IllegalStateException("자신의 정보만 수정할 수 있습니다");
         }
 
@@ -86,7 +80,7 @@ public class UserController {
         }
 
         User loginUser = HttpSessionUtils.getSessionedUser(session);
-        if (!loginUser.isSameId(id)){
+        if (!loginUser.isSameId(id)) {
             throw new IllegalStateException("자신의 정보만 수정할 수 있습니다");
         }
 

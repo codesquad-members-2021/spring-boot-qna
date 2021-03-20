@@ -2,9 +2,11 @@ package com.codessquad.qna.web.service;
 
 import com.codessquad.qna.web.domain.User;
 import com.codessquad.qna.web.exception.IllegalEntityIdException;
+import com.codessquad.qna.web.exception.LoginFailException;
 import com.codessquad.qna.web.repository.UserRepository;
 import org.springframework.stereotype.Service;
 
+import javax.security.auth.login.FailedLoginException;
 import java.util.List;
 
 @Service
@@ -38,7 +40,7 @@ public class UserService {
     private User findUser(String userId) {
         return userRepository
                 .findByUserId(userId)
-                .orElseThrow(() -> new IllegalStateException("찾는 회원이 없습니다"));
+                .orElseThrow(() -> new LoginFailException("입력하신 아이디에 해당하는 회원이 없습니다"));
     }
 
     public void updateUser(String testPassword, User loginUser, User user) {
@@ -49,7 +51,7 @@ public class UserService {
 
     private void validatePassword(User user, String testPassword) {
         if (!user.isMatchingPassword(testPassword)) {
-            throw new IllegalStateException("잘못된 비밀번호 입니다");
+            throw new LoginFailException("잘못된 비밀번호 입니다");
         }
     }
 }
