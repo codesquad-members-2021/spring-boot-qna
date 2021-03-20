@@ -8,10 +8,6 @@ import javax.validation.constraints.NotBlank;
 @Entity
 public class User extends AbstractEntity {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
     @Column(nullable = false, length = 20, unique = true)
     @NotBlank(message = "아이디는 필수 입력 값입니다.")
     private String userId;
@@ -74,7 +70,7 @@ public class User extends AbstractEntity {
     @Override
     public String toString() {
         return "User{" +
-                "id=" + id +
+                "id=" + getId() +
                 ", userId='" + userId + '\'' +
                 ", password='" + password + '\'' +
                 ", name='" + name + '\'' +
