@@ -1,6 +1,5 @@
 package com.codessquad.qna.answer;
 
-import com.codessquad.qna.question.Question;
 import com.codessquad.qna.question.QuestionService;
 import com.codessquad.qna.utils.SessionUtils;
 import org.springframework.web.bind.annotation.*;
@@ -11,17 +10,15 @@ import javax.servlet.http.HttpSession;
 @RequestMapping("/api/questions/{questionId}/answers")
 public class ApiAnswerController {
     private final AnswerService answerService;
-    private final QuestionService questionService;
 
-    public ApiAnswerController(AnswerService answerService, QuestionService questionService) {
+    public ApiAnswerController(AnswerService answerService) {
         this.answerService = answerService;
-        this.questionService = questionService;
     }
 
     @PostMapping
-    public AnswerDTO create(@PathVariable Long questionId, Answer answer, HttpSession session) {
-        answer.setQuestion(Question.builder().setId(questionId).build());
-        answer.setWriter(SessionUtils.getSessionUser(session).toEntity());
+    public AnswerDTO create(@PathVariable Long questionId, AnswerDTO answer, HttpSession session) {
+        answer.setQuestionId(questionId);
+        answer.setWriter(SessionUtils.getSessionUser(session));
 
         AnswerDTO result = answerService.create(answer);
 

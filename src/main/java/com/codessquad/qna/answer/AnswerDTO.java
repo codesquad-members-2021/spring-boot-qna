@@ -1,6 +1,7 @@
 package com.codessquad.qna.answer;
 
 import com.codessquad.qna.common.Constant;
+import com.codessquad.qna.question.Question;
 import com.codessquad.qna.user.UserDTO;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
@@ -13,7 +14,7 @@ public class AnswerDTO {
     private String comment;
 
     @JsonFormat(pattern = Constant.DEFAULT_DATE_TIME_FORMAT)
-    private LocalDateTime createDateTime;
+    private LocalDateTime createDateTime = LocalDateTime.now();
 
     private LocalDateTime updateDateTime;
     private Long questionId;
@@ -64,6 +65,16 @@ public class AnswerDTO {
 
     public static Builder builder() {
         return new Builder();
+    }
+
+    public Answer toEntity() {
+        return Answer.builder()
+                .setId(id)
+                .setComment(comment)
+                .setCreateDateTime(createDateTime)
+                .setQuestion(Question.builder().setId(questionId).build())
+                .setWriter(writer.toEntity())
+                .build();
     }
 
     public static class Builder {
@@ -134,10 +145,6 @@ public class AnswerDTO {
 
     public LocalDateTime getCreateDateTime() {
         return createDateTime;
-    }
-
-    public void setCreateDateTime(LocalDateTime createDateTime) {
-        this.createDateTime = createDateTime;
     }
 
     public LocalDateTime getUpdateDateTime() {

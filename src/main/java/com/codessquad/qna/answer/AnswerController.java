@@ -1,6 +1,5 @@
 package com.codessquad.qna.answer;
 
-import com.codessquad.qna.question.Question;
 import com.codessquad.qna.utils.SessionUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -17,16 +16,6 @@ public class AnswerController {
         this.answerService = answerService;
     }
 
-    @PostMapping
-    public String create(@PathVariable Long questionId, Answer answer, HttpSession session) {
-        answer.setQuestion(Question.builder().setId(questionId).build());
-        answer.setWriter(SessionUtils.getSessionUser(session).toEntity());
-
-        answerService.create(answer);
-
-        return "redirect:/questions/" + questionId;
-    }
-
     @GetMapping("/{id}/form")
     public ModelAndView viewUpdateForm(@PathVariable Long questionId, @PathVariable Long id, HttpSession session) {
         AnswerDTO result = answerService.readVerifiedAnswer(id, SessionUtils.getSessionUser(session));
@@ -35,8 +24,8 @@ public class AnswerController {
     }
 
     @PutMapping("/{id}")
-    public String update(@PathVariable Long questionId, @PathVariable Long id, Answer newAnswer, HttpSession session) {
-        newAnswer.setWriter(SessionUtils.getSessionUser(session).toEntity());
+    public String update(@PathVariable Long questionId, @PathVariable Long id, AnswerDTO newAnswer, HttpSession session) {
+        newAnswer.setWriter(SessionUtils.getSessionUser(session));
 
         answerService.update(id, newAnswer);
 

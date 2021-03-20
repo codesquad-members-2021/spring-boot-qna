@@ -1,9 +1,7 @@
 package com.codessquad.qna.answer;
 
-import com.codessquad.qna.common.Constant;
 import com.codessquad.qna.question.Question;
 import com.codessquad.qna.user.User;
-import com.fasterxml.jackson.annotation.JsonFormat;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -16,10 +14,7 @@ public class Answer {
 
     private String comment;
     private boolean deleted;
-
-    @JsonFormat(pattern = Constant.DEFAULT_DATE_TIME_FORMAT)
     private LocalDateTime createDateTime;
-
     private LocalDateTime updateDateTime;
 
     @ManyToOne
@@ -33,11 +28,67 @@ public class Answer {
     protected Answer() {
     }
 
-    public Answer(String comment, LocalDateTime createDateTime, Question question, User writer) {
+    public Answer(Long id, String comment, boolean deleted, LocalDateTime createDateTime, LocalDateTime updateDateTime, Question question, User writer) {
+        this.id = id;
         this.comment = comment;
-        this.createDateTime = createDateTime == null ? LocalDateTime.now() : createDateTime;
+        this.deleted = deleted;
+        this.createDateTime = createDateTime;
+        this.updateDateTime = updateDateTime;
         this.question = question;
         this.writer = writer;
+    }
+
+    public static Builder builder() {
+        return new Builder();
+    }
+
+    public static class Builder {
+        private Long id;
+        private String comment;
+        private boolean deleted;
+        private LocalDateTime createDateTime;
+        private LocalDateTime updateDateTime;
+        private Question question;
+        private User writer;
+
+        public Builder setId(Long id) {
+            this.id = id;
+            return this;
+        }
+
+        public Builder setComment(String comment) {
+            this.comment = comment;
+            return this;
+        }
+
+        public Builder setDeleted(boolean deleted) {
+            this.deleted = deleted;
+            return this;
+        }
+
+        public Builder setCreateDateTime(LocalDateTime createDateTime) {
+            this.createDateTime = createDateTime;
+            return this;
+        }
+
+        public Builder setUpdateDateTime(LocalDateTime updateDateTime) {
+            this.updateDateTime = updateDateTime;
+            return this;
+        }
+
+        public Builder setQuestion(Question question) {
+            this.question = question;
+            return this;
+        }
+
+        public Builder setWriter(User writer) {
+            this.writer = writer;
+            return this;
+        }
+
+        public Answer build() {
+            return new Answer(id, comment, deleted, createDateTime, updateDateTime, question, writer);
+        }
     }
 
     public Long getId() {
@@ -70,10 +121,6 @@ public class Answer {
 
     public User getWriter() {
         return writer;
-    }
-
-    public void setWriter(User writer) {
-        this.writer = writer;
     }
 
     public void verifyWriter(User target) {

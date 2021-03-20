@@ -35,8 +35,8 @@ public class AnswerService {
         return AnswerDTO.from(answer);
     }
 
-    public AnswerDTO create(Answer answer) {
-        Answer savedAnswer = answerRepository.save(answer);
+    public AnswerDTO create(AnswerDTO answer) {
+        Answer savedAnswer = answerRepository.save(answer.toEntity());
 
         int answersCount = countBy(savedAnswer.getQuestion().getId());
         AnswerDTO result = AnswerDTO.of(savedAnswer, answersCount);
@@ -44,11 +44,11 @@ public class AnswerService {
         return result;
     }
 
-    public void update(Long id, Answer newAnswer) {
+    public void update(Long id, AnswerDTO newAnswer) {
         Answer existedAnswer = answerRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("존재하지 않는 답변입니다. id : " + id));
 
-        existedAnswer.update(newAnswer);
+        existedAnswer.update(newAnswer.toEntity());
         answerRepository.save(existedAnswer);
     }
 
