@@ -56,7 +56,7 @@ public class UserService {
 
     public void authenticateOfId(User selectedUser, User loginUser) {
         if (!Objects.equals(selectedUser.getUserId(), loginUser.getUserId())) {
-            throw new IncorrectAccountException("아이디가 잘못됐습니다.");
+            throw new IncorrectAccountException("타인의 정보는 열람할 수 없습니다.");
         }
     }
     public void authenticateOfPw(User selectedUser, User loginUser) {
