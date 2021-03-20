@@ -33,11 +33,7 @@ public class QuestionService {
     }
 
     public QuestionDTO read(Long id) {
-        QuestionDTO result = QuestionDTO.from(readExistedQuestion(id));
-
-        result.setAnswers(answerService.readAll(id));
-
-        return result;
+        return QuestionDTO.of(readExistedQuestion(id), answerService.readAll(id));
     }
 
     public QuestionDTO readVerifiedQuestion(Long id, UserDTO user) {

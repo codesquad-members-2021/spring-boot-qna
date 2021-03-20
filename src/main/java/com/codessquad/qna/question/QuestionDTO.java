@@ -49,6 +49,19 @@ public class QuestionDTO {
                 .build();
     }
 
+    public static QuestionDTO of(Question question, List<AnswerDTO> answers) {
+        return builder()
+                .setId(question.getId())
+                .setTitle(question.getTitle())
+                .setContents(question.getContents())
+                .setCreateDateTime(question.getCreateDateTime())
+                .setUpdateDateTime(question.getUpdateDateTime())
+                .setWriter(UserDTO.from(question.getWriter()))
+                .setAnswers(answers)
+                .setAnswersCount(answers.size())
+                .build();
+    }
+
     public static QuestionDTO of(Question question, int answersCount) {
         return builder()
                 .setId(question.getId())
