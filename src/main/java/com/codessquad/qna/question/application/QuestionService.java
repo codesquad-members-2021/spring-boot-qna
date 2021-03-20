@@ -52,13 +52,14 @@ public class QuestionService {
         return QuestionResponse.from(question);
     }
 
-    public void delete(Long id) {
+    public QuestionResponse delete(Long id) {
         Question question = getQuestionFromRepository(id);
         if (!question.isDeletable()) {
             throw new QuestionNotDeletableException();
         }
         question.delete();
         questionRepository.save(question);
+        return QuestionResponse.from(question);
     }
 
     public User getWriter(Long id) {

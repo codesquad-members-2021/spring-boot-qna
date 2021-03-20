@@ -3,7 +3,6 @@ package com.codessquad.qna.answer.domain;
 import com.codessquad.qna.common.BaseEntity;
 import com.codessquad.qna.question.domain.Question;
 import com.codessquad.qna.user.domain.User;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import javax.persistence.*;
 
@@ -11,7 +10,6 @@ import javax.persistence.*;
 public class Answer extends BaseEntity {
     @ManyToOne
     @JoinColumn(foreignKey = @ForeignKey(name = "fk_answer_to_question"))
-    @JsonManagedReference
     private Question question;
 
     @ManyToOne

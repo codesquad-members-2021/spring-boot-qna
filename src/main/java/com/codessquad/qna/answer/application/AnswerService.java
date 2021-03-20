@@ -2,6 +2,7 @@ package com.codessquad.qna.answer.application;
 
 import com.codessquad.qna.answer.domain.Answer;
 import com.codessquad.qna.answer.domain.AnswerRepository;
+import com.codessquad.qna.answer.dto.AnswerResponse;
 import com.codessquad.qna.answer.exception.AnswerDeletedException;
 import com.codessquad.qna.answer.exception.AnswerNotFoundException;
 import com.codessquad.qna.user.domain.User;
@@ -15,10 +16,11 @@ public class AnswerService {
         this.answerRepository = answerRepository;
     }
 
-    public void delete(Long id) {
+    public AnswerResponse delete(Long id) {
         Answer answer = getAnswerFromRepository(id);
         answer.delete();
         answerRepository.save(answer);
+        return AnswerResponse.from(answer);
     }
 
     public User getWriter(Long id) {

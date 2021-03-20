@@ -3,7 +3,6 @@ package com.codessquad.qna.question.domain;
 import com.codessquad.qna.answer.domain.Answer;
 import com.codessquad.qna.common.BaseEntity;
 import com.codessquad.qna.user.domain.User;
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
@@ -23,9 +22,8 @@ public class Question extends BaseEntity {
     private String contents;
 
     @OneToMany(mappedBy = "question")
-    @OrderBy("id ASC")
+    @OrderBy("id DESC")
     @Where(clause = "deleted = false")
-    @JsonBackReference
     private List<Answer> answers = new ArrayList<>();
 
     protected Question() {}

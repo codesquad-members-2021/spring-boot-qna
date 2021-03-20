@@ -22,7 +22,7 @@ public class QuestionController {
     }
 
     @PostMapping
-    public String createQuestion(@Valid QuestionRequest questionRequest, HttpSession session) {
+    public String create(@Valid QuestionRequest questionRequest, HttpSession session) {
         User writer = getUserAttribute(session);
         questionService.save(questionRequest, writer);
         return "redirect:/questions";
@@ -35,13 +35,13 @@ public class QuestionController {
     }
 
     @GetMapping
-    public String getQuestions(Model model) {
+    public String getList(Model model) {
         model.addAttribute("questions", questionService.getList());
         return "question/list";
     }
 
     @GetMapping("{id}")
-    public String getQuestion(@PathVariable Long id, Model model) {
+    public String get(@PathVariable Long id, Model model) {
         model.addAttribute("question", questionService.get(id));
         return "question/show";
     }
@@ -53,7 +53,7 @@ public class QuestionController {
     }
 
     @PutMapping("{id}")
-    public String updateQuestion(@PathVariable Long id, @Valid QuestionRequest questionRequest, HttpSession session) {
+    public String update(@PathVariable Long id, @Valid QuestionRequest questionRequest, HttpSession session) {
         checkQuestionAuthorization(id, session);
         User writer = getUserAttribute(session);
         questionService.update(id, questionRequest, writer);
@@ -61,7 +61,7 @@ public class QuestionController {
     }
 
     @DeleteMapping("{id}")
-    public String deleteQuestion(@PathVariable Long id, HttpSession session) {
+    public String delete(@PathVariable Long id, HttpSession session) {
         checkQuestionAuthorization(id, session);
         questionService.delete(id);
         return String.format("redirect:/questions", id);
