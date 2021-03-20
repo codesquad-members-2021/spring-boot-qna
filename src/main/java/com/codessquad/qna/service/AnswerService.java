@@ -23,7 +23,7 @@ public class AnswerService {
         this.questionRepository = questionRepository;
     }
 
-    public void create(Long id, String contents, HttpSession session){
+    public void create(Long id, String contents, HttpSession session) {
         User loginUser = HttpSessionUtils.getUserFromSession(session);
         Question question = questionRepository.findById(id).orElse(null);
         Answer answer = new Answer(question, contents, loginUser);

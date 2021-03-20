@@ -5,7 +5,6 @@ import com.codessquad.qna.service.UserService;
 import com.codessquad.qna.util.HttpSessionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -20,7 +19,6 @@ public class UserController {
     private final Logger logger = LoggerFactory.getLogger(UserController.class);
     private final UserService userService;
 
-    @Autowired
     public UserController(UserService userService) {
         this.userService = userService;
     }
@@ -63,7 +61,7 @@ public class UserController {
 
         User sessionedUser = HttpSessionUtils.getUserFromSession(session);
 
-        if (!sessionedUser.isEqualUserId(user.getUserId())){
+        if (!sessionedUser.isEqualUserId(user.getUserId())) {
             throw new IllegalStateException("본인의 정보만 수정할 수 있습니다.");
         }
 
@@ -102,12 +100,12 @@ public class UserController {
         // 아이디 존재여부 확인
         // TODO: userId에 해당하는 User가 없는 경우, 왜 null 처리가 되지 않나?
         User loginUser = userService.getOneByUserId(userId).orElse(null);
-        if (loginUser == null){
+        if (loginUser == null) {
             return "redirect:/users/login";
         }
 
         // 비밀번호 일치여부 확인
-        if(!loginUser.isEqualPassword(password)){
+        if (!loginUser.isEqualPassword(password)) {
             return "redirect:/users/login";
         }
 
@@ -118,7 +116,7 @@ public class UserController {
     }
 
     @GetMapping("/logout")
-    public String logout(HttpSession session){
+    public String logout(HttpSession session) {
         session.removeAttribute(USER_SESSION_KEY);
 
         return "redirect:/";
