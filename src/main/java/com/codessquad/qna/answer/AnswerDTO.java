@@ -1,22 +1,15 @@
 package com.codessquad.qna.answer;
 
-import com.codessquad.qna.common.Constant;
+import com.codessquad.qna.common.BaseDTO;
 import com.codessquad.qna.question.Question;
 import com.codessquad.qna.user.UserDTO;
-import com.fasterxml.jackson.annotation.JsonFormat;
 
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class AnswerDTO {
-    private Long id;
+public class AnswerDTO extends BaseDTO {
     private String comment;
-
-    @JsonFormat(pattern = Constant.DEFAULT_DATE_TIME_FORMAT)
-    private LocalDateTime createDateTime;
-
-    private LocalDateTime updateDateTime;
     private Long questionId;
     private UserDTO writer;
     private int answersCount;
@@ -25,10 +18,9 @@ public class AnswerDTO {
     }
 
     public AnswerDTO(Long id, String comment, LocalDateTime createDateTime, LocalDateTime updateDateTime, Long questionId, UserDTO writer, int answersCount) {
-        this.id = id;
+        super(id, createDateTime, updateDateTime);
+
         this.comment = comment;
-        this.createDateTime = createDateTime;
-        this.updateDateTime = updateDateTime;
         this.questionId = questionId;
         this.writer = writer;
         this.answersCount = answersCount;
@@ -69,9 +61,9 @@ public class AnswerDTO {
 
     public Answer toEntity() {
         return Answer.builder()
-                .setId(id)
+                .setId(getId())
                 .setComment(comment)
-                .setCreateDateTime(createDateTime)
+                .setCreateDateTime(getCreateDateTime())
                 .setQuestion(Question.builder().setId(questionId).build())
                 .setWriter(writer.toEntity())
                 .build();
@@ -127,36 +119,12 @@ public class AnswerDTO {
 
     }
 
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
     public String getComment() {
         return comment;
     }
 
     public void setComment(String comment) {
         this.comment = comment;
-    }
-
-    public LocalDateTime getCreateDateTime() {
-        return createDateTime;
-    }
-
-    public void setCreateDateTime(LocalDateTime createDateTime) {
-        this.createDateTime = createDateTime;
-    }
-
-    public LocalDateTime getUpdateDateTime() {
-        return updateDateTime;
-    }
-
-    public void setUpdateDateTime(LocalDateTime updateDateTime) {
-        this.updateDateTime = updateDateTime;
     }
 
     public Long getQuestionId() {

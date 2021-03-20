@@ -1,23 +1,16 @@
 package com.codessquad.qna.question;
 
 import com.codessquad.qna.answer.AnswerDTO;
-import com.codessquad.qna.common.Constant;
+import com.codessquad.qna.common.BaseDTO;
 import com.codessquad.qna.user.UserDTO;
-import com.fasterxml.jackson.annotation.JsonFormat;
 
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class QuestionDTO {
-    private Long id;
+public class QuestionDTO extends BaseDTO {
     private String title;
     private String contents;
-
-    @JsonFormat(pattern = Constant.DEFAULT_DATE_TIME_FORMAT)
-    private LocalDateTime createDateTime;
-
-    private LocalDateTime updateDateTime;
     private UserDTO writer;
     private List<AnswerDTO> answers;
     private int answersCount;
@@ -26,11 +19,10 @@ public class QuestionDTO {
     }
 
     public QuestionDTO(Long id, String title, String contents, LocalDateTime createDateTime, LocalDateTime updateDateTime, UserDTO writer, List<AnswerDTO> answers, int answersCount) {
-        this.id = id;
+        super(id, createDateTime, updateDateTime);
+
         this.title = title;
         this.contents = contents;
-        this.createDateTime = createDateTime;
-        this.updateDateTime = updateDateTime;
         this.writer = writer;
         this.answers = answers;
         this.answersCount = answersCount;
@@ -80,11 +72,11 @@ public class QuestionDTO {
 
     public Question toEntity() {
         Question.Builder questionBuilder = Question.builder()
-                .setId(id)
+                .setId(getId())
                 .setTitle(title)
                 .setContents(contents)
-                .setCreateDateTime(createDateTime)
-                .setUpdateDateTime(updateDateTime)
+                .setCreateDateTime(getCreateDateTime())
+                .setUpdateDateTime(getUpdateDateTime())
                 .setWriter(writer.toEntity());
 
         if (answers != null) {
@@ -150,14 +142,6 @@ public class QuestionDTO {
         }
     }
 
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
     public String getTitle() {
         return title;
     }
@@ -172,22 +156,6 @@ public class QuestionDTO {
 
     public void setContents(String contents) {
         this.contents = contents;
-    }
-
-    public LocalDateTime getCreateDateTime() {
-        return createDateTime;
-    }
-
-    public void setCreateDateTime(LocalDateTime createDateTime) {
-        this.createDateTime = createDateTime;
-    }
-
-    public LocalDateTime getUpdateDateTime() {
-        return updateDateTime;
-    }
-
-    public void setUpdateDateTime(LocalDateTime updateDateTime) {
-        this.updateDateTime = updateDateTime;
     }
 
     public UserDTO getWriter() {

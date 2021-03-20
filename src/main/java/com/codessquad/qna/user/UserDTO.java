@@ -1,10 +1,10 @@
 package com.codessquad.qna.user;
 
+import com.codessquad.qna.common.BaseDTO;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.springframework.util.StringUtils;
 
-public class UserDTO {
-    private Long id;
+public class UserDTO extends BaseDTO {
     private String userId;
 
     @JsonIgnore
@@ -12,7 +12,7 @@ public class UserDTO {
 
     @JsonIgnore
     private String newPassword;
-    
+
     private String name;
     private String email;
 
@@ -20,7 +20,8 @@ public class UserDTO {
     }
 
     public UserDTO(Long id, String userId, String password, String name, String email) {
-        this.id = id;
+        super(id);
+
         this.userId = userId;
         this.password = password;
         this.name = name;
@@ -38,14 +39,6 @@ public class UserDTO {
                 user.getName(),
                 user.getEmail()
         );
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
     }
 
     public String getUserId() {
@@ -94,7 +87,7 @@ public class UserDTO {
 
     public User toEntity() {
         return User.builder()
-                .setId(id)
+                .setId(getId())
                 .setUserId(userId)
                 .setPassword(password)
                 .setName(name)
@@ -105,7 +98,7 @@ public class UserDTO {
     @Override
     public String toString() {
         return "UserDTO{" +
-                "id=" + id +
+                "id=" + getId() +
                 ", userId='" + userId + '\'' +
                 ", password='" + password + '\'' +
                 ", newPassword='" + newPassword + '\'' +
