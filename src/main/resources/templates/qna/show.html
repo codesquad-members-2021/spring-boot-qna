@@ -19,7 +19,7 @@
                                 <img src="https://graph.facebook.com/v2.3/100000059371774/picture" class="article-author-thumb" alt="">
                             </div>
                             <div class="article-header-text">
-                                <a href="/user/{{writer}}/profile" class="article-author-name">{{writer}}</a>
+                                <a href="/user/{{writer.userId}}/profile" class="article-author-name">{{writer.userId}}</a>
                                 <a href="/questions/413" class="article-header-time" title="퍼머링크">
                                     {{date}}
                                     <i class="icon-link"></i>
@@ -46,7 +46,7 @@
                             </ul>
                         </div>
                     </article>
-                {{/question}}
+
                     <div class="qna-comment">
                         <div class="qna-comment-slipp">
                             <p class="qna-comment-count"><strong>{{answers.length}}</strong>개의 의견</p>
@@ -58,7 +58,7 @@
                                             <img src="https://graph.facebook.com/v2.3/1324855987/picture" class="article-author-thumb" alt="">
                                         </div>
                                         <div class="article-header-text">
-                                            <a href="/user/{{writer}}/profile" class="article-author-name">{{writer}}</a>
+                                            <a href="/user/{{writer.userId}}/profile" class="article-author-name">{{writer.userId}}</a>
                                             <a href="#answer-1434" class="article-header-time" title="퍼머링크">
                                                 {{date}}
                                             </a>
@@ -82,7 +82,6 @@
                                     </div>
                                 </article>
                                 {{/answers}}
-                                {{#question}}
                                 <form class="submit-write" name="answer" method="post" action="/answer/{{id}}">
                                     <div class="form-group" style="padding:14px;">
                                         <textarea class="form-control" placeholder="Update your status" name="contents"></textarea>
@@ -90,11 +89,12 @@
                                     <button class="btn btn-success pull-right" type="submit">답변하기</button>
                                     <div class="clearfix" />
                                 </form>
-                                {{/question}}
                             </div>
                         </div>
                     </div>
+
                 </div>
+                {{/question}}
             </div>
         </div>
     </div>

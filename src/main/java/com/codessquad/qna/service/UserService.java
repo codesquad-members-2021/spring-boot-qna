@@ -1,12 +1,12 @@
 package com.codessquad.qna.service;
 
+import com.codessquad.qna.exception.*;
 import com.codessquad.qna.model.User;
 import com.codessquad.qna.repository.UserRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class UserService {
@@ -17,38 +17,32 @@ public class UserService {
         this.userRepository = userRepository;
     }
 
-    public boolean save(User user) {
-        User duplicateUser = findByUserId(user.getUserId());
-        if (!duplicateUser.nonNull()) {
-            this.userRepository.save(user);
-            return true;
+    public void save(User user) {
+        if (this.userRepository.findByUserId(user.getUserId()).isPresent()) {
+            throw new UserAccountException("이미 사용 중인 아이디입니다.");
         }
-        return false;
+        this.userRepository.save(user);
     }
 
     public User login(String userId, String password) {
-        User targetUser = findByUserId(userId);
-        if (targetUser.nonNull() && targetUser.matchPassword(password)) {
-            return targetUser;
-        }
-        return new User();
+        return this.userRepository.findByUserIdAndPassword(userId, password).orElseThrow(() ->
+                new UserAccountException("아이디 또는 비밀번호가 일치하지 않습니다."));
     }
 
-    public boolean update(Long id, User user, String oldPassword, User sessionUser) {
+    public void update(Long id, User user, String oldPassword, User sessionUser) {
         User loginUser = verifyUser(id, sessionUser);
-        if (loginUser.nonNull() && loginUser.matchPassword(oldPassword)) {
-            loginUser.update(user);
-            this.userRepository.save(loginUser);
-            return true;
+        if (!loginUser.matchPassword(oldPassword)) {
+            throw new UserAccountException("기존 비밀번호가 일치하지 않습니다.");
         }
-        return false;
+        loginUser.update(user);
+        this.userRepository.save(loginUser);
     }
 
     public User verifyUser(Long id, User sessionUser) {
-        if (sessionUser.matchId(id)) {
-            return sessionUser;
+        if (!sessionUser.matchId(id)) {
+            throw new UserSessionException();
         }
-        return new User();
+        return sessionUser;
     }
 
     public List<User> findAll() {
@@ -58,8 +52,7 @@ public class UserService {
     }
 
     public User findByUserId(String userId) {
-        Optional<User> user = this.userRepository.findByUserId(userId);
-        return user.orElseGet(User::new);
+        return this.userRepository.findByUserId(userId).orElseThrow(NotFoundException::new);
     }
 
 }

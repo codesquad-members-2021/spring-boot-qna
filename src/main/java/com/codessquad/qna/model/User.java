@@ -24,10 +24,6 @@ public class User {
     @Column(nullable = false)
     private String email;
 
-    public boolean nonNull() {
-        return this.id != null;
-    }
-
     public boolean matchId(Long id) {
         return this.id.equals(id);
     }
