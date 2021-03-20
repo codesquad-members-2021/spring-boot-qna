@@ -2,7 +2,7 @@ package com.codessquad.qna.web;
 
 import com.codessquad.qna.domain.Question;
 import com.codessquad.qna.domain.User;
-import com.codessquad.qna.exception.NoQuestionException;
+import com.codessquad.qna.exception.NotFoundException;
 import com.codessquad.qna.repository.QuestionRepository;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -71,7 +71,7 @@ public class QuestionController {
     }
 
     private Question getQuestionById(Long id) {
-        return questionRepository.findById(id).orElseThrow(NoQuestionException::new);
+        return questionRepository.findById(id).orElseThrow(() -> new NotFoundException("해당 게시글이 존재하지 않습니다."));
     }
 
     private boolean checkValid(Question question, User user) {

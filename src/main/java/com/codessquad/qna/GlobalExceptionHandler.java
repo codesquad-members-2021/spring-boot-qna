@@ -1,8 +1,7 @@
 package com.codessquad.qna;
 
-import com.codessquad.qna.exception.NoQuestionException;
 import com.codessquad.qna.exception.NoSessionedUserException;
-import com.codessquad.qna.exception.NoUserException;
+import com.codessquad.qna.exception.NotFoundException;
 import com.codessquad.qna.exception.NotMatchException;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -11,9 +10,9 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 @ControllerAdvice
 public class GlobalExceptionHandler {
 
-    @ExceptionHandler({NoUserException.class, NoQuestionException.class})
-    public String handleNotExistException() {
-        return "/exception/notExistHandle";
+    @ExceptionHandler(NotFoundException.class)
+    public String handleNotFoundException() {
+        return "/exception/notFoundHandle";
     }
 
     @ExceptionHandler(IllegalStateException.class)

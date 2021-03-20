@@ -67,4 +67,8 @@ public class Answer {
                 ", createdTime=" + postTime +
                 '}';
     }
+
+    public boolean isAnswerWriter(User user) {
+        return user.isUserMatching(writer);
+    }
 }

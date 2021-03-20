@@ -1,9 +1,10 @@
 package com.codessquad.qna.web;
 
 import com.codessquad.qna.domain.User;
-import com.codessquad.qna.exception.NoUserException;
+import com.codessquad.qna.exception.NotFoundException;
 import com.codessquad.qna.exception.NotMatchException;
 import com.codessquad.qna.repository.UserRepository;
+import com.codessquad.qna.service.UserService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -16,27 +17,30 @@ import static com.codessquad.qna.web.HttpSessionUtils.*;
 @RequestMapping("/users")
 public class UserController {
 
+    //Todo : repository는 service 완성하고 삭제하기
     private final UserRepository userRepository;
+    private final UserService userService;
 
-    public UserController(UserRepository userRepository) {
+    public UserController(UserRepository userRepository, UserService userService) {
         this.userRepository = userRepository;
+        this.userService = userService;
     }
 
     @PostMapping
     public String create(User user) {
-        userRepository.save(user);
+        userService.saveUser(user);
         return "redirect:/users";
     }
 
     @GetMapping
     public String list(Model model) {
-        model.addAttribute("users", userRepository.findAll());
+        userService.showUserList(model);
         return "user/list";
     }
 
     @PostMapping("/login")
     public String login(String userId, String password, HttpSession session) {
-        User user = userRepository.findByUserId(userId).orElseThrow(NoUserException::new);
+        User user = userRepository.findByUserId(userId).orElseThrow(() -> new NotFoundException("해당 유저가 존재하지 않습니다."));
         if (!user.isPasswordMatching(password)) {
             throw new IllegalStateException("아이디 혹은 비밀번호가 일치하지 않습니다.");
         }
