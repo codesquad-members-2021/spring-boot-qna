@@ -1,48 +1,34 @@
 package com.codessquad.qna.web.controller;
 
-import com.codessquad.qna.web.domain.answer.Answer;
-import com.codessquad.qna.web.domain.answer.AnswerRepository;
-import com.codessquad.qna.web.domain.question.QuestionRepository;
 import com.codessquad.qna.web.domain.question.Question;
-import com.codessquad.qna.web.domain.user.User;
 import com.codessquad.qna.web.dto.question.QuestionRequest;
-import com.codessquad.qna.web.exception.CRUDAuthenticationException;
-import com.codessquad.qna.web.exception.QuestionNotFoundException;
+import com.codessquad.qna.web.service.QuestionService;
 import com.codessquad.qna.web.utils.SessionUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
-import java.util.List;
 
 @Controller
 @RequestMapping("/questions")
 public class QuestionController {
 
-    private final QuestionRepository questionRepository;
-    private final AnswerRepository answerRepository;
+    private final QuestionService questionService;
 
-    public QuestionController(QuestionRepository questionRepository, AnswerRepository answerRepository) {
-        this.questionRepository = questionRepository;
-        this.answerRepository = answerRepository;
+    public QuestionController(QuestionService questionService) {
+        this.questionService = questionService;
     }
 
     @PostMapping()
     public String create(QuestionRequest request, HttpSession session) {
-        User loginUser = SessionUtils.getLoginUser(session);
-        Question question = Question.toEntity(loginUser, request);
-        questionRepository.save(question);
-
+        questionService.create(request, session);
         return "redirect:/";
     }
 
     @PutMapping("/{id}/update")
-    public String update(@PathVariable long id, QuestionRequest post) {
-        Question question = getQuestionById(id);
-        question.update(post.getTitle(), post.getContents());
-        questionRepository.save(question);
-
+    public String update(@PathVariable long id, QuestionRequest request) {
+        questionService.update(id, request);
         return "redirect:/questions/" + id;
     }
 
@@ -55,49 +41,22 @@ public class QuestionController {
     }
 
     @GetMapping("/{id}/form")
-    public String updateForm(@PathVariable long id, Model model, HttpSession session) {
-        Question question = getQuestionById(id);
-        User writer = question.getWriter();
-        User loginUser = SessionUtils.getLoginUser(session);
-
-        if (!loginUser.isMatchingWriter(writer)) {
-            throw new CRUDAuthenticationException("Cannot edit other user's posts");
-        }
-
+    public String updateForm(@PathVariable long id, HttpSession session, Model model) {
+        Question question = questionService.authenticate(id, session);
         model.addAttribute("question", question);
-
         return "qna/updateForm";
     }
 
-
     @DeleteMapping("/{id}/delete")
     public String delete(@PathVariable long id, HttpSession session) {
-        Question question = getQuestionById(id);
-        User loginUser = SessionUtils.getLoginUser(session);
-
-        if (!question.isMatchingWriter(loginUser)) {
-            throw new CRUDAuthenticationException("Cannot edit other user's posts");
-        }
-
-        questionRepository.delete(question);
-
+        questionService.delete(id, session);
         return "redirect:/";
     }
 
     @GetMapping("/{id}")
     public String show(@PathVariable long id, Model model) {
-        Question question = getQuestionById(id);
-        model.addAttribute("question", question);
-
-        List<Answer> answers = answerRepository.findByQuestionId(id);
-        model.addAttribute("answers", answers);
-
+        model.addAttribute("question", questionService.getQuestionById(id));
+        model.addAttribute("answers", questionService.list(id));
         return "/qna/show";
     }
-
-    private Question getQuestionById(Long id) {
-        return questionRepository.findById(id)
-                .orElseThrow(() -> new QuestionNotFoundException("Cannot found question number " + id));
-    }
-
 }
