@@ -33,6 +33,7 @@ public class Question {
 
     @JsonIgnore
     @OneToMany(mappedBy = "question", cascade = CascadeType.REMOVE)
+    @OrderBy("id DESC")
     private List<Answer> answers;
 
     public boolean matchWriter(User writer) {
