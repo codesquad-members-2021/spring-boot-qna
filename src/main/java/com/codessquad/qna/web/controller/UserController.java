@@ -4,9 +4,8 @@ import com.codessquad.qna.web.domain.user.User;
 
 import com.codessquad.qna.web.domain.user.UserRepository;
 
-import com.codessquad.qna.web.exception.CRUDAuthenticationException;
-import com.codessquad.qna.web.exception.UserNotFoundException;
-import com.codessquad.qna.web.utils.SessionUtils;
+import com.codessquad.qna.web.dto.user.CreateUserRequest;
+import com.codessquad.qna.web.service.UserService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -17,22 +16,16 @@ import javax.servlet.http.HttpSession;
 @RequestMapping("/users")
 public class UserController {
 
-    private final UserRepository userRepository;
+    private final UserService userService;
 
-    public UserController(UserRepository userRepository) {
-        this.userRepository = userRepository;
+    public UserController(UserService userService) {
+        this.userService = userService;
     }
 
     @PostMapping("/login")
     public String login(String userId, String password, HttpSession session) {
-        User user = userRepository.findByUserId(userId).orElseThrow(() -> new UserNotFoundException("No user with userId " + userId));
-
-        if (!user.isMatchingPassword(password)) {
-            return "redirect:/users/login-form";
-        }
-
+        User user = userService.login(userId, password, session);
         session.setAttribute("sessionedUser", user);
-
         return "redirect:/";
     }
 
@@ -43,51 +36,32 @@ public class UserController {
     }
 
     @PostMapping("/create")
-    public String create(User user) {
-        userRepository.save(user);
+    public String create(CreateUserRequest request) {
+        userService.create(request);
         return "redirect:/users";
     }
 
     @GetMapping()
     public String list(Model model) {
-        model.addAttribute("users", userRepository.findAll());
+        model.addAttribute("users", userService.list());
         return "user/list";
     }
 
     @GetMapping("/{id}")
     public String show(@PathVariable long id, Model model) {
-        User user = findUserById(id);
-        model.addAttribute("user", user);
+        model.addAttribute("user", userService.findUserById(id));
         return "user/profile";
     }
 
     @GetMapping("/{id}/form")
     public String updateForm(@PathVariable long id, Model model, HttpSession session) {
-        User user = findUserById(id);
-        User loginUser = SessionUtils.getLoginUser(session);
-
-        if (!loginUser.isMatchingWriter(user)) {
-            throw new CRUDAuthenticationException("Users can only edit their own profile information");
-        }
-
-        model.addAttribute("user", user);
-
+        model.addAttribute("user", userService.verifyUser(id, session));
         return "user/updateForm";
     }
 
     @PutMapping("/{id}/update")
     public String updateProfile(@PathVariable long id, User updatedUser, String oldPassword) {
-        User user = findUserById(id);
-
-        if (user.isMatchingPassword(oldPassword)) {
-            user.update(updatedUser);
-            userRepository.save(user);
-        }
-
+        userService.updateProfile(id, updatedUser, oldPassword);
         return "redirect:/users";
-    }
-
-    private User findUserById(Long id) {
-        return userRepository.findById(id).orElseThrow(() -> new UserNotFoundException("No user with id number " + id));
     }
 }
