@@ -1,7 +1,7 @@
 package com.codessquad.qna.domain;
 
 import javax.persistence.*;
-import java.util.Objects;
+import javax.validation.constraints.NotBlank;
 
 @Entity
 public class User {
@@ -11,12 +11,16 @@ public class User {
     private Long id;
 
     @Column(nullable = false, length = 20, unique = true)
+    @NotBlank(message = "아이디는 필수 입력 값입니다.")
     private String userId;
 
+    @NotBlank(message = "비밀번호는 필수 입력 값입니다.")
     private String password;
 
+    @NotBlank(message = "이름은 필수 입력 값입니다.")
     private String name;
 
+    @NotBlank(message = "이메일은 필수 입력 값입니다.")
     private String email;
 
     public Long getId() {
@@ -69,10 +73,7 @@ public class User {
     }
 
     public boolean matchId(Long newId) {
-        if (newId == null) {
-            return false;
-        }
-        return newId.equals(id);
+        return this.id.equals(newId);
     }
 
     @Override

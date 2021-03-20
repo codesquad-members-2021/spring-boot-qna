@@ -19,6 +19,12 @@ public class QuestionController {
         this.questionService = questionService;
     }
 
+    @GetMapping
+    public String showList(Model model) {
+        model.addAttribute("questions", questionService.findAllQuestion());
+        return "index";
+    }
+
     @GetMapping("/form")
     public String createQuestion(HttpSession session) {
         if (!HttpSessionUtils.isLoginUser(session)) {
@@ -37,8 +43,12 @@ public class QuestionController {
     }
 
     @GetMapping("/{id}")
-    public ModelAndView viewQuestion(@PathVariable Long id) {
-        return getQuestionRepository("/qna/show", id);
+    public ModelAndView showQuestion(@PathVariable Long id) {
+        ModelAndView modelAndView = new ModelAndView("/qna/show");
+        modelAndView.addObject("question", questionService.findById(id));
+        modelAndView.addObject("answersList", questionService.findAnswers(id));
+        modelAndView.addObject("answerCount", questionService.findAnswers(id).size());
+        return modelAndView;
     }
 
     @GetMapping("/{id}/confirm")
@@ -55,7 +65,7 @@ public class QuestionController {
         return "redirect:/";
     }
 
-    @PutMapping("/{id}/update")
+    @PutMapping("/{id}/put")
     public String updateQuestion(@PathVariable Long id, String title, String contents) {
         questionService.update(id, title, contents);
         return "redirect:/questions/" + id;
@@ -63,19 +73,9 @@ public class QuestionController {
 
     @DeleteMapping("/{id}/delete")
     public String deleteQuestion(@PathVariable Long id, HttpSession session) {
-        Question question = questionService.findById(id);
         User loginUser = HttpSessionUtils.getSessionUser(session);
-        if (question.matchUser(loginUser)) {
-            questionService.delete(question);
-            return "redirect:/";
-        }
+        questionService.delete(id, loginUser);
         return "redirect:/";
-    }
-
-    private ModelAndView getQuestionRepository(String viewName, Long id) {
-        ModelAndView modelAndView = new ModelAndView(viewName);
-        modelAndView.addObject("question", questionService.findById(id));
-        return modelAndView;
     }
 
 }

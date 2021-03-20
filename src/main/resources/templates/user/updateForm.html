@@ -10,7 +10,7 @@
             <form class="form-update" action="/users/update/{{id}}" method="post">
                 <input type="hidden" name="_method" value="put" />
                 <div class="form-group">
-                    <label>{{userId}} 회원 정보 수정</label>
+                    <label>{{user.userId}} 회원 정보 수정</label>
                 </div>
                 <div class="form-group">
                     <label for="password">새로운 비밀번호</label>
@@ -18,11 +18,11 @@
                 </div>
                 <div class="form-group">
                     <label for="name">새로운 이름</label>
-                    <input class="form-control" id="name" name="name" placeholder="Name">
+                    <input class="form-control" id="name" name="name" placeholder="Name" value="{{user.name}}">
                 </div>
                 <div class="form-group">
                     <label for="email">새로운 이메일</label>
-                    <input type="email" class="form-control" id="email" name="email" placeholder="Email">
+                    <input type="email" class="form-control" id="email" name="email" placeholder="Email" value="{{user.email}}">
                 </div>
                 <button type="submit" class="btn btn-success clearfix pull-right" >개인정보수정</button>
                 <div class="clearfix"/>

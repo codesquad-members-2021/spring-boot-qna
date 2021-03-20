@@ -2,6 +2,7 @@ package com.codessquad.qna.controller;
 
 import com.codessquad.qna.domain.User;
 import com.codessquad.qna.service.UserService;
+import com.codessquad.qna.exception.UnauthorizedAccessException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -70,13 +71,13 @@ public class UserController {
         }
         User tempUser = HttpSessionUtils.getSessionUser(httpSession);
         if (!tempUser.matchId(id)) {
-            throw new IllegalStateException("자신의 정보만 수정 가능합니다.");
+            throw new UnauthorizedAccessException("자신의 정보만 수정 가능합니다.");
         }
         return "redirect:/users/confirm/{id}";
     }
 
     @GetMapping(CONFIRM_INFO)
-    public ModelAndView confirmUserInfo(@PathVariable Long id) {
+    public ModelAndView confirmForm(@PathVariable Long id) {
         return getUserRepository("/user/confirmUserInfo", id);
     }
 
@@ -90,7 +91,7 @@ public class UserController {
     }
 
     @GetMapping(UPDATE_INFO)
-    public ModelAndView updateUserInfo(@PathVariable Long id) {
+    public ModelAndView updateForm(@PathVariable Long id) {
         return getUserRepository("user/updateForm", id);
     }
 
@@ -103,7 +104,7 @@ public class UserController {
     private ModelAndView getUserRepository(String viewName, Long id) {
         ModelAndView modelAndView = new ModelAndView(viewName);
         User user = userService.findById(id);
-        modelAndView.addObject("userId", user.getUserId());
+        modelAndView.addObject("user", user);
         return modelAndView;
     }
 
