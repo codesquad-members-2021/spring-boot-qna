@@ -46,7 +46,7 @@ public class AnswerController {
     @DeleteMapping("/answer/{id}")
     public String deleteAnswer(@PathVariable("id") Long id, HttpSession session) {
         this.answerService.delete(id, getUserFromSession(session));
-        logger.info("질문 삭제 요청");
+        logger.info("댓글 삭제 요청");
         return "redirect:/question/" + this.answerService.findQuestionId(id);
     }
 
