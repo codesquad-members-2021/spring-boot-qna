@@ -15,8 +15,10 @@ public class Question {
     @ManyToOne
     @JoinColumn(foreignKey = @ForeignKey(name = "fk_questions_writer"))
     private User writer;
+    @Column(length = 45)
     private String title;
-    @Lob
+
+    @Column(length = 50000)
     private String contents;
     private LocalDateTime createdDateTime = LocalDateTime.now();
 
