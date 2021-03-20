@@ -72,7 +72,7 @@
                                            href="javascript:;">수정</a>
                                     </li>
                                     <li>
-                                        <form action="/answers/{{this.id}}" class="delete-answer-form"
+                                        <form action="/questions/answers/{{this.id}}" class="delete-answer-form"
                                               method="POST">
                                             <input name="_method" type="hidden" value="DELETE">
                                             <button class="delete-answer-button" type="submit">삭제</button>
@@ -83,7 +83,7 @@
                         </article>
                         {{/each}}
 
-                        <form class="submit-write" action="/answers/{{question.id}}" method="post">
+                        <form class="submit-write" action="/questions/{{question.id}}/answers" method="post">
                             <div class="form-group" style="padding:14px;">
                                 <textarea type="text" id="answerContents" name="answerContents" class="form-control"
                                           placeholder="Update your status"></textarea>
