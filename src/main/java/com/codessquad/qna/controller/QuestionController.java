@@ -28,12 +28,12 @@ public class QuestionController {
     public String createQuestion(Question newQuestion, HttpSession session) {
         User sessionUser = HttpSessionUtils.getUserFromSession(session);
         newQuestion.setWriter(sessionUser);
-        if (!isValidQuestion(newQuestion)) {
+
+        if (newQuestion.isEmpty()) {
             return "question/form";
         }
 
         questionService.add(newQuestion);
-
         return "redirect:/";
     }
 
@@ -43,23 +43,6 @@ public class QuestionController {
             return "user/login";
         }
         return "question/form";
-    }
-
-    private boolean isValidQuestion(Question question) {
-        if (question == null) {
-            return false;
-        }
-        if (question.getWriter() == null) {
-            return false;
-        }
-        if ("".equals(question.getTitle()) || question.getTitle() == null) {
-            return false;
-        }
-        if ("".equals(question.getContents()) || question.getContents() == null) {
-            return false;
-        }
-
-        return true;
     }
 
     @GetMapping("/{id}")
