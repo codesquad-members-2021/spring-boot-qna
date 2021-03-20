@@ -6,7 +6,7 @@ import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 
 @Entity
-public class User {
+public class User extends AbstractEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -25,10 +25,6 @@ public class User {
 
     @NotBlank(message = "이메일은 필수 입력 값입니다.")
     private String email;
-
-    public Long getId() {
-        return id;
-    }
 
     public void setUserId(String userId) {
         this.userId = userId;
@@ -73,10 +69,6 @@ public class User {
             return false;
         }
         return newPassword.equals(password);
-    }
-
-    public boolean matchId(Long newId) {
-        return this.id.equals(newId);
     }
 
     @Override
