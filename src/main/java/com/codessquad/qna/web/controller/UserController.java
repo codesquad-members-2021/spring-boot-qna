@@ -40,8 +40,7 @@ public class UserController {
 
     @PostMapping
     public String createUser(User user, Model model) {
-        if(userService.checkDuplicateID(user)){
-            System.out.println("hello");
+        if (userService.checkDuplicateID(user)) {
             model.addAttribute("errorMessage", "이미 존재하는 아이디입니다");
             return "/user/updateFormWithError";
         }
@@ -87,7 +86,7 @@ public class UserController {
             throw new IllegalAccessException();
         }
 
-        if (!loginUser.isMatchingPassword(testPassword)){
+        if (!loginUser.isMatchingPassword(testPassword)) {
             model.addAttribute("errorMessage", "비밀번호가 틀렸습니다");
             return "/user/formWithError";
         }

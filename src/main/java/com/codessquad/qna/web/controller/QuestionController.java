@@ -3,7 +3,6 @@ package com.codessquad.qna.web.controller;
 import com.codessquad.qna.web.HttpSessionUtils;
 import com.codessquad.qna.web.domain.Question;
 import com.codessquad.qna.web.exception.IllegalAccessException;
-import com.codessquad.qna.web.exception.LoginFailException;
 import com.codessquad.qna.web.exception.NotLoginException;
 import com.codessquad.qna.web.service.QuestionService;
 import org.springframework.stereotype.Controller;

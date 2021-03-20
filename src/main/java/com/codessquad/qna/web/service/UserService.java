@@ -23,7 +23,7 @@ public class UserService {
     }
 
     public void signUp(User user) {
-          userRepository.save(user);
+        userRepository.save(user);
     }
 
     public boolean checkDuplicateID(User user) {
