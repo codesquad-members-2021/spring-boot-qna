@@ -1,6 +1,7 @@
 package com.codessquad.qna.answer;
 
 import com.codessquad.qna.exception.ResourceNotFoundException;
+import com.codessquad.qna.question.Question;
 import com.codessquad.qna.user.UserDTO;
 import org.springframework.stereotype.Service;
 
@@ -37,7 +38,7 @@ public class AnswerService {
     public AnswerDTO create(AnswerDTO answer) {
         Answer savedAnswer = answerRepository.save(answer.toEntity());
 
-        int answersCount = countBy(savedAnswer.getQuestion().getId());
+        int answersCount = countBy(savedAnswer.getQuestion());
         AnswerDTO result = AnswerDTO.of(savedAnswer, answersCount);
 
         return result;
@@ -65,11 +66,10 @@ public class AnswerService {
         answer.delete();
         Answer deletedAnswer = answerRepository.save(answer);
 
-        int answersCount = countBy(deletedAnswer.getQuestion().getId());
-        return AnswerDTO.of(answerRepository.save(answer), answersCount);
+        return AnswerDTO.of(deletedAnswer, countBy(deletedAnswer.getQuestion()));
     }
 
-    private int countBy(Long questionId) {
-        return answerRepository.countByQuestionIdAndDeletedFalse(questionId);
+    private int countBy(Question question) {
+        return answerRepository.countByQuestionAndDeletedFalse(question);
     }
 }
