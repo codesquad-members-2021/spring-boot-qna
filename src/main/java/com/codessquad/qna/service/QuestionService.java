@@ -4,8 +4,6 @@ import com.codessquad.qna.domain.answer.Answer;
 import com.codessquad.qna.domain.answer.AnswerRepository;
 import com.codessquad.qna.domain.question.Question;
 import com.codessquad.qna.domain.question.QuestionRepository;
-import com.codessquad.qna.exception.AnotherAnswerException;
-import com.codessquad.qna.exception.NotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -59,5 +57,11 @@ public class QuestionService {
             throw new AnotherAnswerException();
         }
         question.delete();
+    }
+
+    public Page<Question> pagingList() {
+        PageRequest pageRequest = PageRequest.of(0, 15);
+        Page<Question> questions = questionRepository.findAll(pageRequest);
+        return questions;
     }
 }
