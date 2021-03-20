@@ -52,7 +52,6 @@ public class UserService {
     }
 
     public void updateUser(String testPassword, User loginUser, User user) {
-        validatePassword(loginUser, testPassword);
         loginUser.update(user);
         userRepository.save(loginUser);
     }

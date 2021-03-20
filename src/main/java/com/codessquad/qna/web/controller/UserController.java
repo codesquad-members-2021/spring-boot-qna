@@ -72,7 +72,7 @@ public class UserController {
     }
 
     @PutMapping("/{id}")
-    public String updateUser(@PathVariable long id, String testPassword, User user, HttpSession session) {
+    public String updateUser(@PathVariable long id, String testPassword, User user, HttpSession session, Model model) {
         if (!HttpSessionUtils.isLoginUser(session)) {
             throw new NotLoginException();
         }
@@ -80,6 +80,11 @@ public class UserController {
         User loginUser = HttpSessionUtils.getSessionedUser(session);
         if (!loginUser.isSameId(id)) {
             throw new IllegalAccessException();
+        }
+
+        if (!loginUser.isMatchingPassword(testPassword)){
+            model.addAttribute("errorMessage", "비밀번호가 틀렸습니다");
+            return "/user/formWithError";
         }
 
         userService.updateUser(testPassword, loginUser, user);
