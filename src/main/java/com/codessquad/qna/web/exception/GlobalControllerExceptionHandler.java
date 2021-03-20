@@ -7,7 +7,7 @@ import org.springframework.web.servlet.ModelAndView;
 @ControllerAdvice
 public class GlobalControllerExceptionHandler {
 
-    @ExceptionHandler(NotLoginException.class)
+    @ExceptionHandler(FailedLoginException.class)
     public String handleNotLoginException() {
         return "redirect:/users/login-form";
     }
