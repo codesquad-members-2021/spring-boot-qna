@@ -37,7 +37,7 @@ public class QuestionController {
 
     @GetMapping("/{id}/form")
     public ModelAndView viewUpdateForm(@PathVariable Long id, HttpSession session) {
-        Question result = questionService.readVerifiedQuestion(id, SessionUtils.getSessionUser(session)).toEntity();
+        QuestionDTO result = questionService.readVerifiedQuestion(id, SessionUtils.getSessionUser(session));
 
         return new ModelAndView("/qna/updateForm", "question", result);
     }
