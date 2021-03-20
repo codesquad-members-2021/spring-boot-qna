@@ -31,6 +31,8 @@ public class Question extends AbstractEntity{
     @Column(nullable = false)
     private boolean isDelete;
 
+    private int countAnswer;
+
     public Question() {
     }
 
@@ -105,6 +107,16 @@ public class Question extends AbstractEntity{
             }
         }
         return true;
+    }
+
+    public int getCountAnswer() {
+        int count = 0;
+        for (Answer answer : answers) {
+            if (!answer.isDeleted()) {
+                count +=1;
+            }
+        }
+        return count;
     }
 
     @Override

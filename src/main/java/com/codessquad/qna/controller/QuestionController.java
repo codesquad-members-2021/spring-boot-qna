@@ -50,7 +50,6 @@ public class QuestionController {
         ModelAndView modelAndView = new ModelAndView("/qna/show");
         modelAndView.addObject("question", questionService.findById(id));
         modelAndView.addObject("answersList", answerService.findAnswers(id));
-        modelAndView.addObject("answerCount", answerService.findAnswers(id).size());
         return modelAndView;
     }
 
