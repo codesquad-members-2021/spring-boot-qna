@@ -42,30 +42,30 @@ public class QuestionService {
         return result;
     }
 
-    public Question readVerifiedQuestion(Long id, UserDTO user) {
+    public QuestionDTO readVerifiedQuestion(Long id, UserDTO user) {
         Question result = questionRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("질문이 존재하지 않습니다. id : " + id));
 
         result.verifyWriter(user.toEntity());
 
-        return result;
+        return QuestionDTO.from(result);
     }
 
-    public void create(Question question) {
-        questionRepository.save(question);
+    public void create(QuestionDTO question) {
+        questionRepository.save(question.toEntity());
     }
 
-    public void update(Long id, Question newQuestion) {
+    public void update(Long id, QuestionDTO newQuestion) {
         Question existedQuestion = questionRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("질문이 존재하지 않습니다. id : " + id));
 
-        existedQuestion.update(newQuestion);
+        existedQuestion.update(newQuestion.toEntity());
         questionRepository.save(existedQuestion);
     }
 
     @Transactional
     public void delete(Long id, UserDTO currentSessionUser) {
-        Question question = readVerifiedQuestion(id, currentSessionUser);
+        Question question = readVerifiedQuestion(id, currentSessionUser).toEntity();
         List<Answer> answer = question.getAnswers();
 
         boolean differentWriterExists = answer.stream()

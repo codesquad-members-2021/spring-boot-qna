@@ -7,6 +7,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class QuestionDTO {
     private Long id;
@@ -50,6 +51,22 @@ public class QuestionDTO {
 
     public static Builder builder() {
         return new Builder();
+    }
+
+    public Question toEntity() {
+        Question.Builder questionBuilder = Question.builder()
+                .setId(id)
+                .setTitle(title)
+                .setContents(contents)
+                .setCreateDateTime(createDateTime)
+                .setUpdateDateTime(updateDateTime)
+                .setWriter(writer.toEntity());
+
+        if (answers != null) {
+            questionBuilder.setAnswers(answers.stream().map(AnswerDTO::toEntity).collect(Collectors.toList()));
+        }
+
+        return questionBuilder.build();
     }
 
 
