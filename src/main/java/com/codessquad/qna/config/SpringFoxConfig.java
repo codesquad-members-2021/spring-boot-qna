@@ -11,7 +11,6 @@ public class SpringFoxConfig {
     @Bean
     public Docket api() {
         return new Docket(DocumentationType.SWAGGER_2)
-                .groupName("spring-boot-qna")
                 .select()
                 .paths(PathSelectors.ant("/api/**"))
                 .build();
