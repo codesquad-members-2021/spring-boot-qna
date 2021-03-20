@@ -1,51 +1,64 @@
 package com.codessquad.qna.user.dto;
 
+import com.codessquad.qna.common.BaseResponse;
 import com.codessquad.qna.user.domain.User;
 
-import java.time.LocalDateTime;
-
-public class UserResponse {
-    private Long id;
+public class UserResponse extends BaseResponse {
     private String userId;
-    private String password;
     private String name;
     private String email;
-    private LocalDateTime createdDate;
-    private LocalDateTime modifiedDate;
 
-    protected UserResponse() {}
-
-    public UserResponse(Long id, String userId, String password, String name, String email, LocalDateTime createdDate, LocalDateTime modifiedDate) {
-        this.id = id;
-        this.userId = userId;
-        this.password = password;
-        this.name = name;
-        this.email = email;
-        this.createdDate = createdDate;
-        this.modifiedDate = modifiedDate;
+    public UserResponse(Builder builder) {
+        super(builder);
+        this.userId = builder.userId;
+        this.name = builder.name;
+        this.email = builder.email;
     }
 
-    public static UserResponse of(User user) {
-        return new UserResponse(
-                user.getId(),
-                user.getUserId(),
-                user.getPassword(),
-                user.getName(),
-                user.getEmail(),
-                user.getCreatedDate(),
-                user.getModifiedDate());
+    private static class Builder extends BaseResponse.Builder<Builder> {
+        private String userId;
+        private String name;
+        private String email;
+
+        @Override
+        protected Builder self() {
+            return this;
+        }
+
+        @Override
+        protected UserResponse build() {
+            return new UserResponse(this);
+        }
+
+        private Builder userId(String userId) {
+            this.userId = userId;
+            return this;
+        }
+
+        private Builder name(String name) {
+            this.name = name;
+            return this;
+        }
+
+        private Builder email(String email) {
+            this.email = email;
+            return this;
+        }
     }
 
-    public Long getId() {
-        return id;
+    public static UserResponse from(User user) {
+        Builder builder = new Builder()
+                .id(user.getId())
+                .createdDateTime(user.getCreatedDateTime())
+                .modifiedDateTime(user.getModifiedDateTime())
+                .userId(user.getUserId())
+                .name(user.getName())
+                .email(user.getEmail());
+        return new UserResponse(builder);
     }
 
     public String getUserId() {
         return userId;
-    }
-
-    public String getPassword() {
-        return password;
     }
 
     public String getName() {
@@ -54,13 +67,5 @@ public class UserResponse {
 
     public String getEmail() {
         return email;
-    }
-
-    public LocalDateTime getCreatedDate() {
-        return createdDate;
-    }
-
-    public LocalDateTime getModifiedDate() {
-        return modifiedDate;
     }
 }

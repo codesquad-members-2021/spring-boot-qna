@@ -4,43 +4,59 @@ import com.codessquad.qna.user.domain.User;
 import com.codessquad.qna.user.domain.UserRepository;
 import com.codessquad.qna.user.dto.UserRequest;
 import com.codessquad.qna.user.dto.UserResponse;
+import com.codessquad.qna.user.exception.LoginFailedException;
 import com.codessquad.qna.user.exception.UserNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class UserService {
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
 
     public UserService(UserRepository userRepository) {
         this.userRepository = userRepository;
     }
 
-    public UserResponse saveUser(UserRequest userRequest) {
+    public UserResponse save(UserRequest userRequest) {
         User user = userRepository.save(userRequest.toUser());
-        return UserResponse.of(user);
+        return UserResponse.from(user);
     }
 
-    public List<UserResponse> getUsers() {
+    public List<UserResponse> getList() {
         List<UserResponse> userResponses = new ArrayList<>();
         for (User user : userRepository.findAll()) {
-            userResponses.add(UserResponse.of(user));
+            userResponses.add(UserResponse.from(user));
         }
         return userResponses;
     }
 
-    public UserResponse getUser(Long id) {
-        User user = userRepository.findById(id)
-                .orElseThrow(() -> new UserNotFoundException("존재하지 않는 유저입니다; id: " + id));
-        return UserResponse.of(user);
+    public UserResponse get(Long id) {
+        User user = getUserFromRepository(id);
+        return UserResponse.from(user);
     }
 
-    public UserResponse updateUser(Long id, UserRequest userRequest) {
-        User user = userRepository.findById(id)
-                .orElseThrow(() -> new UserNotFoundException("존재하지 않는 유저는 수정이 불가능합니다; id: " + id));
+    // FIXME: 나중에 LoginRequest 와 LoginResponse dto 를 사용해서 테스트 가능하게 리팩토링해야한다.
+    public User login(String userId, String password) {
+        User user = Optional.ofNullable(userRepository.findByUserId(userId))
+                .orElseThrow(() -> new LoginFailedException("잘못된 userId 로 로그인 했습니다."));
+        if (!user.matchPassword(password)) {
+            throw new LoginFailedException("잘못된 password 로 로그인 했습니다.");
+        }
+        return user;
+    }
+
+    public UserResponse update(Long id, UserRequest userRequest) {
+        User user = getUserFromRepository(id);
         user.update(userRequest.toUser());
-        return UserResponse.of(user);
+        userRepository.save(user);
+        return UserResponse.from(user);
+    }
+
+    private User getUserFromRepository(Long id) {
+        return userRepository.findById(id)
+                .orElseThrow(() -> new UserNotFoundException(id));
     }
 }

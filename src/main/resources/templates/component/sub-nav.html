@@ -21,10 +21,14 @@
         <div class="collapse navbar-collapse" id="navbar-collapse2">
             <ul class="nav navbar-nav navbar-right">
                 <li class="nav-item"><a href="/questions">Posts</a></li>
-                <li class="nav-item"><a href="/users/login" role="button">로그인</a></li>
+                {{^sessionUser}}
+                <li class="nav-item"><a href="/login" role="button">로그인</a></li>
                 <li class="nav-item"><a href="/join" role="button">회원가입</a></li>
-                <li class="nav-item"><a href="#" role="button">로그아웃</a></li>
-                <li class="nav-item"><a href="#" role="button">개인정보수정</a></li>
+                {{/sessionUser}}
+                {{#sessionUser}}
+                <li class="nav-item"><a href="/users/logout" role="button">로그아웃</a></li>
+                <li class="nav-item"><a href="/users/{{id}}/form" role="button">개인정보수정</a></li>
+                {{/sessionUser}}
             </ul>
         </div>
     </div>

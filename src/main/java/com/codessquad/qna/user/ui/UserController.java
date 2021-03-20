@@ -3,16 +3,14 @@ package com.codessquad.qna.user.ui;
 import com.codessquad.qna.user.application.UserService;
 import com.codessquad.qna.user.domain.User;
 import com.codessquad.qna.user.dto.UserRequest;
-import com.codessquad.qna.user.dto.UserResponse;
-import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import javax.persistence.EntityNotFoundException;
+import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
-import java.net.URI;
+
+import static com.codessquad.qna.common.HttpSessionUtils.*;
 
 @Controller
 @RequestMapping("/users")
@@ -25,50 +23,48 @@ public class UserController {
     }
 
     @PostMapping
-    public ResponseEntity<UserResponse> createUser(@RequestBody @Valid UserRequest userRequest) {
-        UserResponse userResponse = userService.saveUser(userRequest);
-        return ResponseEntity
-                .created(URI.create("/users/" + userResponse.getId()))
-                .body(userResponse);
-    }
-
-    @PostMapping("create")
-    public String createUser(User user) {
-        userService.saveUser(UserRequest.of(user));
+    public String createUser(@Valid UserRequest userRequest) {
+        userService.save(userRequest);
         return "redirect:/users";
     }
 
+    @PostMapping("login")
+    public String login(String userId, String password, HttpSession session) {
+        User user = userService.login(userId, password);
+        setUserAttribute(user, session);
+        return "redirect:/";
+    }
+
+    @GetMapping("logout")
+    public String logout(HttpSession session) {
+        clearSession(session);
+        return "redirect:/";
+    }
+
+
     @GetMapping
     public String getUsers(Model model) {
-        model.addAttribute("users", userService.getUsers());
+        model.addAttribute("users", userService.getList());
         return "user/list";
     }
 
     @GetMapping("{id}")
-    public String user_profile(@PathVariable Long id, Model model) {
-        model.addAttribute("user", userService.getUser(id));
+    public String getProfile(@PathVariable Long id, Model model) {
+        model.addAttribute("user", userService.get(id));
         return "user/profile";
     }
 
     @GetMapping("{id}/form")
-    public String user_form(@PathVariable Long id, Model model) {
-        model.addAttribute("user", userService.getUser(id));
+    public String getForm(@PathVariable Long id, Model model, HttpSession session) {
+        checkAuthorization(id, session);
+        model.addAttribute("user", userService.get(id));
         return "user/updateForm";
     }
 
     @PutMapping("{id}")
-    public String updateUser(@PathVariable Long id, User user) {
-        userService.updateUser(id, UserRequest.of(user));
+    public String updateUser(@PathVariable Long id, @Valid UserRequest userRequest, HttpSession session) {
+        checkAuthorization(id, session);
+        userService.update(id, userRequest);
         return "redirect:/users";
-    }
-
-    @ExceptionHandler(DataIntegrityViolationException.class)
-    public ResponseEntity handleIllegalArgsException(DataIntegrityViolationException e) {
-        return ResponseEntity.badRequest().build();
-    }
-
-    @ExceptionHandler(EntityNotFoundException.class)
-    public ResponseEntity handleNotFoundException(EntityNotFoundException e) {
-        return ResponseEntity.notFound().build();
     }
 }

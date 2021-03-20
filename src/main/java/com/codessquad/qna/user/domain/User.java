@@ -1,15 +1,12 @@
 package com.codessquad.qna.user.domain;
 
-import com.codessquad.qna.common.BaseTimeEntity;
+import com.codessquad.qna.common.BaseEntity;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
 
 @Entity
-public class User extends BaseTimeEntity {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
+public class User extends BaseEntity {
     @Column(nullable = false, unique = true, length = 20)
     private String userId;
 
@@ -31,10 +28,6 @@ public class User extends BaseTimeEntity {
         this.email = email;
     }
 
-    public Long getId() {
-        return id;
-    }
-
     public String getUserId() {
         return userId;
     }
@@ -51,9 +44,17 @@ public class User extends BaseTimeEntity {
         return email;
     }
 
-    public void update(User newUser) {
-        this.password = newUser.password;
-        this.name = newUser.name;
-        this.email = newUser.email;
+    public void update(User user) {
+        this.password = user.password;
+        this.name = user.name;
+        this.email = user.email;
+    }
+
+    public boolean matchId(Long id) {
+        return id.equals(getId());
+    }
+
+    public boolean matchPassword(String password) {
+        return this.password.equals(password);
     }
 }

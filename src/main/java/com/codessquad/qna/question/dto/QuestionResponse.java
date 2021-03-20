@@ -1,46 +1,77 @@
 package com.codessquad.qna.question.dto;
 
+import com.codessquad.qna.answer.dto.AnswerResponse;
+import com.codessquad.qna.common.BaseResponse;
 import com.codessquad.qna.question.domain.Question;
+import com.codessquad.qna.user.dto.UserResponse;
 
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
+import java.util.List;
+import java.util.stream.Collectors;
 
-public class QuestionResponse {
-    private Long id;
-    private String writer;
+public class QuestionResponse extends BaseResponse {
+    private UserResponse writer;
     private String title;
     private String contents;
-    private String createdDate;
-    private String modifiedDate;
+    private List<AnswerResponse> answers;
 
-    protected QuestionResponse() {}
-
-    public QuestionResponse(Long id, String writer, String title, String contents, LocalDateTime createdDate, LocalDateTime modifiedDate) {
-        this.id = id;
-        this.writer = writer;
-        this.title = title;
-        this.contents = contents;
-
-        // FIXME: dto 에서의 로직을 삭제해야한다; 프론트에서 자바스크립트로 format 할수 있도록 한다.
-        this.createdDate = format(createdDate);
-        this.modifiedDate = format(modifiedDate);
+    private QuestionResponse(Builder builder) {
+        super(builder);
+        this.writer = builder.writer;
+        this.title = builder.title;
+        this.contents = builder.contents;
+        this.answers = builder.answers;
     }
 
-    public static QuestionResponse of(Question question) {
-        return new QuestionResponse(
-                question.getId(),
-                question.getWriter(),
-                question.getTitle(),
-                question.getContents(),
-                question.getCreatedDate(),
-                question.getModifiedDate());
+    private static class Builder extends BaseResponse.Builder<Builder> {
+        private UserResponse writer;
+        private String title;
+        private String contents;
+        private List<AnswerResponse> answers;
+
+        @Override
+        protected Builder self() {
+            return this;
+        }
+
+        @Override
+        protected QuestionResponse build() {
+            return new QuestionResponse(this);
+        }
+
+        private Builder writer(UserResponse writer) {
+            this.writer = writer;
+            return this;
+        }
+
+        private Builder title(String title) {
+            this.title = title;
+            return this;
+        }
+
+        private Builder contents(String contents) {
+            this.contents = contents;
+            return this;
+        }
+
+        private Builder answers(List<AnswerResponse> answers) {
+            this.answers = answers;
+            return this;
+        }
     }
 
-    public Long getId() {
-        return id;
+    public static QuestionResponse from(Question question) {
+        Builder builder = new Builder()
+                .id(question.getId())
+                .createdDateTime(question.getCreatedDateTime())
+                .modifiedDateTime(question.getModifiedDateTime())
+                .title(question.getTitle())
+                .writer(UserResponse.from(question.getWriter()))
+                .contents(question.getContents())
+                .answers(question.getAnswers().stream().map(AnswerResponse::from).collect(Collectors.toList()));
+        return new QuestionResponse(builder);
     }
 
-    public String getWriter() {
+    public UserResponse getWriter() {
         return writer;
     }
 
@@ -52,15 +83,7 @@ public class QuestionResponse {
         return contents;
     }
 
-    public String getCreatedDate() {
-        return createdDate;
-    }
-
-    public String getModifiedDate() {
-        return modifiedDate;
-    }
-
-    private String format(LocalDateTime localDateTime) {
-        return localDateTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd hh:mm"));
+    public List<AnswerResponse> getAnswers() {
+        return answers;
     }
 }
