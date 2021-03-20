@@ -1,10 +1,9 @@
 package com.codessquad.qna.user;
 
 import com.codessquad.qna.exception.InsufficientAuthenticationException;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
-import java.util.Arrays;
-import java.util.List;
 import java.util.Objects;
 
 @Entity
@@ -17,6 +16,7 @@ public class User {
     private String userId;
 
     @Column(nullable = false, length = 20)
+    @JsonIgnore
     private String password;
 
     @Column(nullable = false, length = 20)

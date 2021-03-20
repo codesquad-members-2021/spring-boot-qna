@@ -82,7 +82,7 @@
                           </article>
                           {{/each}}
                           {{#if sessionedUser}}
-                          <form class="submit-write" name="answer" action="/questions/{{question.id}}/answers" method="post">
+                          <form class="answer-write" name="answer" action="/api/questions/{{question.id}}/answers" method="post">
                               <div class="form-group" style="padding:14px;">
                                   <textarea class="form-control" placeholder="Update your status" name="comment"></textarea>
                               </div>

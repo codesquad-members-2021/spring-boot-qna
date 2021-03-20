@@ -1,7 +1,9 @@
 package com.codessquad.qna.answer;
 
+import com.codessquad.qna.common.Constant;
 import com.codessquad.qna.question.Question;
 import com.codessquad.qna.user.User;
+import com.fasterxml.jackson.annotation.JsonFormat;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -14,7 +16,10 @@ public class Answer {
 
     private String comment;
     private boolean deleted;
+
+    @JsonFormat(pattern = Constant.DEFAULT_DATE_TIME_FORMAT)
     private LocalDateTime createDateTime;
+
     private LocalDateTime updateDateTime;
 
     @ManyToOne

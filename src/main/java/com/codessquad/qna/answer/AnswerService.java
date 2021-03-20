@@ -31,8 +31,8 @@ public class AnswerService {
         return answer;
     }
 
-    public void create(Answer answer) {
-        answerRepository.save(answer);
+    public Answer create(Answer answer) {
+        return answerRepository.save(answer);
     }
 
     public void update(Long id, Answer newAnswer) {
