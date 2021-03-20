@@ -1,6 +1,7 @@
 package com.codessquad.qna.controller;
 
 
+import com.codessquad.qna.domain.Result;
 import com.codessquad.qna.domain.User;
 import com.codessquad.qna.exception.NotFoundException;
 import com.codessquad.qna.service.UserService;
@@ -24,7 +25,7 @@ public class ApiUserController {
 
     @ResponseStatus(HttpStatus.NOT_FOUND)
     @ExceptionHandler(NotFoundException.class)
-    public String notFound() {
-        return "Not Found";
+    public Result notFound() {
+        return Result.notFound();
     }
 }

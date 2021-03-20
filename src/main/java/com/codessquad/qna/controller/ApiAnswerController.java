@@ -1,6 +1,7 @@
 package com.codessquad.qna.controller;
 
 import com.codessquad.qna.domain.Answer;
+import com.codessquad.qna.domain.Result;
 import com.codessquad.qna.exception.ForbiddenException;
 import com.codessquad.qna.exception.NotFoundException;
 import com.codessquad.qna.exception.NotLoggedInException;
@@ -28,28 +29,28 @@ public class ApiAnswerController {
     }
 
     @DeleteMapping("/{answerId}")
-    public String deleteAnswer(
+    public Result deleteAnswer(
             @PathVariable("questionId") Long questionId,
             @PathVariable("answerId") Long answerId, HttpSession session) {
         answerService.delete(questionId, answerId, HttpSessionUtils.loginUser(session));
-        return "OK";
+        return Result.ok();
     }
 
     @ResponseStatus(HttpStatus.UNAUTHORIZED)
     @ExceptionHandler(NotLoggedInException.class)
-    public String handleNotLoggedIn() {
-        return "redirect:/users/login";
+    public Result handleNotLoggedIn() {
+        return Result.found("/users/login");
     }
 
     @ResponseStatus(HttpStatus.FORBIDDEN)
     @ExceptionHandler(ForbiddenException.class)
-    public String handleForbidden() {
-        return "FORBIDDEN";
+    public Result handleForbidden() {
+        return Result.fobidden();
     }
 
     @ResponseStatus(HttpStatus.NOT_FOUND)
     @ExceptionHandler(NotFoundException.class)
-    public String handleNotFound() {
-        return "NOT_FOUND";
+    public Result handleNotFound() {
+        return Result.notFound();
     }
 }
