@@ -1,7 +1,7 @@
 package com.codessquad.qna.service;
 
 import com.codessquad.qna.entity.User;
-import com.codessquad.qna.exception.UserIdNotFoundException;
+import com.codessquad.qna.exception.UserNotFoundException;
 import com.codessquad.qna.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -31,15 +31,18 @@ public class UserService {
     }
 
     public void updateUser(User user) {
-        User toUpdate = userRepository.findByUserId(user.getUserId()).orElseThrow(UserIdNotFoundException::new);
+        User toUpdate = userRepository.findByUserId(user.getUserId()).orElseThrow(UserNotFoundException::new);
         if (toUpdate.verify(user)) {
             toUpdate.update(user);
             userRepository.save(toUpdate);
         }
-        return;
+    }
+
+    public User getUser(long id) {
+        return userRepository.findById(id).orElseThrow(UserNotFoundException::new);
     }
 
     public User getUser(String userId) {
-        return userRepository.findByUserId(userId).orElseThrow(UserIdNotFoundException::new);
+        return userRepository.findByUserId(userId).orElseThrow(UserNotFoundException::new);
     }
 }

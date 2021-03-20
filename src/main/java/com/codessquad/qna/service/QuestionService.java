@@ -21,11 +21,22 @@ public class QuestionService {
         questionRepository.save(question);
     }
 
+    public void updateQuestion(long questionId, String title, String contents) {
+        Question question = getQuestion(questionId);
+        question.update(title, contents);
+        questionRepository.save(question);
+    }
+
+    public void deleteQuestion(long questionId) {
+        Question question = getQuestion(questionId);
+        questionRepository.delete(question);
+    }
+
     public List<Question> getQuestions() {
         return questionRepository.findAll();
     }
 
-    public Question getQuestion(long index) {
-        return questionRepository.findById(index).orElseThrow(QuestionNotFoundException::new);
+    public Question getQuestion(long id) {
+        return questionRepository.findById(id).orElseThrow(QuestionNotFoundException::new);
     }
 }

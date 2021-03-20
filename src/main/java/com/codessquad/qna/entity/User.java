@@ -28,6 +28,10 @@ public class User {
         this.email = email;
     }
 
+    public Long getId() {
+        return id;
+    }
+
     public String getUserId() {
         return userId;
     }

@@ -1,16 +1,18 @@
 package com.codessquad.qna.controller;
 
 import com.codessquad.qna.entity.Question;
+import com.codessquad.qna.entity.User;
+import com.codessquad.qna.exception.UserNotFoundInSessionException;
 import com.codessquad.qna.service.QuestionService;
+import com.codessquad.qna.util.HttpSessionUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
+
+import javax.servlet.http.HttpSession;
 
 @Controller
 @RequestMapping("/questions")
@@ -30,15 +32,56 @@ public class QuestionController {
     }
 
     @PostMapping
-    public String create(Question question) {
-        questionService.addQuestion(question);
+    public String create(String title, String contents, HttpSession session) {
+        User user = HttpSessionUtil.getUser(session);
+        Question toCreate = new Question(user, title, contents);
+        questionService.addQuestion(toCreate);
         return "redirect:/";
     }
 
-    @GetMapping("/{index}")
-    public String detail(@PathVariable int index, Model model) {
-        Question question = questionService.getQuestion(index);
+    @PutMapping("/{id}")
+    public String update(@PathVariable long id, String contents, String title, HttpSession session) {
+        Question question = questionService.getQuestion(id);
+        if (HttpSessionUtil.isAuthorized(question.getWriter().getId(), session)) {
+            questionService.updateQuestion(id, title, contents);
+            return "redirect:/questions/" + id;
+        }
+        throw new IllegalStateException("자신의 글만 수정할 수 있습니다.");
+    }
+
+    @DeleteMapping("/{id}")
+    public String delete(@PathVariable long id, HttpSession session) {
+        Question question = questionService.getQuestion(id);
+        if (HttpSessionUtil.isAuthorized(question.getWriter().getId(), session)) {
+            questionService.deleteQuestion(id);
+            return "redirect:/";
+        }
+        throw new IllegalStateException("자신의 글만 삭제할 수 있습니다.");
+    }
+
+    @GetMapping("/form")
+    public String form(HttpSession session) {
+        if (!HttpSessionUtil.hasUser(session)) {
+            throw new UserNotFoundInSessionException();
+        }
+        return "qna/form";
+    }
+
+    @GetMapping("/{id}")
+    public String detail(@PathVariable int id, Model model) {
+        Question question = questionService.getQuestion(id);
         model.addAttribute("question", question);
         return "qna/show";
+    }
+
+    @GetMapping("/{id}/form")
+    public String updateForm(@PathVariable int id, Model model, HttpSession session) {
+        User user = HttpSessionUtil.getUser(session);
+        Question question = questionService.getQuestion(id);
+        if (!question.getWriter().verify(user)) {
+            throw new IllegalStateException("자신의 글만 수정할 수 있습니다.");
+        }
+        model.addAttribute("question", question);
+        return "/qna/updateForm";
     }
 }
