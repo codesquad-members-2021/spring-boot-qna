@@ -34,7 +34,7 @@ public class UserService {
     public User findUser(long id) {
         return userRepository
                 .findById(id)
-                .orElseThrow(IllegalEntityIdException::new);
+                .orElseThrow(() -> new IllegalEntityIdException("id(번호)에 해당하는 회원이 없습니다"));
     }
 
     private User findUser(String userId) {

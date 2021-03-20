@@ -26,7 +26,7 @@ public class QuestionService {
     public Question findQuestion(long id) {
         return questionRepository
                 .findById(id)
-                .orElseThrow(IllegalEntityIdException::new);
+                .orElseThrow(() -> new IllegalEntityIdException("id(번호)에 해당하는 질문이 없습니다"));
     }
 
     public void updateQuestion(Question originQuestion, Question question) {
