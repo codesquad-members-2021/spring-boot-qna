@@ -23,7 +23,6 @@ public class Answer {
     private String contents;
 
     private LocalDateTime postTime;
-    private LocalDateTime updatedPostTime;
 
     public Answer() {
     }
@@ -52,10 +51,7 @@ public class Answer {
     }
 
     public String getFormattedPostTime() {
-        if (updatedPostTime == null) {
-            return postTime.format(DATE_TIME_FORMATTER);
-        }
-        return updatedPostTime.format(DATE_TIME_FORMATTER);
+        return postTime.format(DATE_TIME_FORMATTER);
     }
 
     @Override

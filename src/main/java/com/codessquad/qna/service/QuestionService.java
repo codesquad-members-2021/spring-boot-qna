@@ -35,12 +35,14 @@ public class QuestionService {
         }
     }
 
-    public void update(Question question, Question newQuestion) {
+    public void update(Question question, Question newQuestion, User user) {
+        checkValid(question, user);
         question.update(newQuestion);
         questionRepository.save(question);
     }
 
-    public void delete(Question question) {
+    public void delete(Question question, User user) {
+        checkValid(question, user);
         questionRepository.delete(question);
     }
 }

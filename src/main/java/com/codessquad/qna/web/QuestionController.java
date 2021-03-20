@@ -54,8 +54,7 @@ public class QuestionController {
     public String updateForm(@PathVariable Long id, Question updatedQuestion, HttpSession session) {
         User loggedinUser = getUserFromSession(session);
         Question question = questionService.findQuestion(id);
-        questionService.checkValid(question, loggedinUser);
-        questionService.update(question, updatedQuestion);
+        questionService.update(question, updatedQuestion, loggedinUser);
         return "redirect:/questions/{id}";
     }
 
@@ -63,8 +62,7 @@ public class QuestionController {
     public String delete(@PathVariable Long id, HttpSession session) {
         User loggedinUser = getUserFromSession(session);
         Question question = questionService.findQuestion(id);
-        questionService.checkValid(question, loggedinUser);
-        questionService.delete(question);
+        questionService.delete(question, loggedinUser);
         return "redirect:/";
     }
 }
