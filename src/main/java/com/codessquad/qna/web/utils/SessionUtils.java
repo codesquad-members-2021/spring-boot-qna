@@ -1,6 +1,7 @@
 package com.codessquad.qna.web.utils;
 
 import com.codessquad.qna.web.domain.user.User;
+import com.codessquad.qna.web.exception.EntityNotFoundException;
 
 import javax.servlet.http.HttpSession;
 import java.util.Optional;
