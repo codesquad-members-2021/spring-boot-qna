@@ -1,12 +1,12 @@
 package com.codessquad.qna.web.service;
 
 import com.codessquad.qna.web.domain.User;
+import com.codessquad.qna.web.exception.DuplicatedUserIdException;
 import com.codessquad.qna.web.exception.IllegalEntityIdException;
 import com.codessquad.qna.web.exception.LoginFailException;
 import com.codessquad.qna.web.repository.UserRepository;
 import org.springframework.stereotype.Service;
 
-import javax.security.auth.login.FailedLoginException;
 import java.util.List;
 
 @Service
@@ -24,7 +24,15 @@ public class UserService {
     }
 
     public void signUp(User user) {
+          validateUserID(user);
           userRepository.save(user);
+    }
+
+    private void validateUserID(User user) {
+        userRepository.findByUserId(user.getUserId())
+                .ifPresent(x -> {
+                    throw new DuplicatedUserIdException();
+                });
     }
 
     public List<User> findUsers() {
