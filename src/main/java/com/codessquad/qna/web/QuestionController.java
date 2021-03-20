@@ -34,7 +34,6 @@ public class QuestionController {
             return "redirect:/users/login";
         }
         User sessionUser = HttpSessionUtils.getUserFromSession(session);
-        assert sessionUser != null;
         qna.setWriter(sessionUser);
 
         qnaRepository.save(qna);
@@ -61,7 +60,6 @@ public class QuestionController {
         if (!HttpSessionUtils.isLoginUser(session)) {
             return "redirect:/users/login";
         }
-        assert sessionUser != null;
         if (!qna.checkWriter(sessionUser)) {
             throw new IllegalStateException("자신의 질문만 수정할 수 있습니다.");
         }
@@ -79,7 +77,7 @@ public class QuestionController {
         return "redirect:/";
     }
 
-    @DeleteMapping("{id}/delete")
+    @DeleteMapping("{id}")
     public String delete(@PathVariable long id, HttpSession session) {
         Question qna = qnaRepository.findById(id).orElseThrow(NoUserException::new);
         User sessionUser = HttpSessionUtils.getUserFromSession(session);
@@ -87,7 +85,6 @@ public class QuestionController {
         if (!HttpSessionUtils.isLoginUser(session)) {
             return "redirect:/users/login";
         }
-        assert sessionUser != null;
         if (!qna.checkWriter(sessionUser)) {
             throw new IllegalStateException("자신의 질문만 삭제할 수 있습니다.");
         }
