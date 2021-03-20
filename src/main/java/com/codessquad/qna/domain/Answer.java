@@ -59,7 +59,7 @@ public class Answer {
         return replyContents;
     }
 
-    public boolean isAnswerDeleted() {
+    public boolean isDeleted() {
         return answerDeleted;
     }
 

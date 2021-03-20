@@ -1,5 +1,9 @@
 package com.codessquad.qna.utils;
 
+import com.codessquad.qna.exception.type.UnauthorizedException;
+
+import java.util.Objects;
+
 /**
  * Created by 68936@naver.com on 2021-03-19 오전 12:21
  * Blog : https://velog.io/@san
@@ -19,6 +23,19 @@ public class ValidUtils {
     public static void checkIllegalArgumentOf(Long l) {
         if( l == null ){
             throw new IllegalArgumentException();
+        }
+    }
+
+    public static void checkIllegalArgumentOf(Long l, Long l2) {
+        if( (l == null) || (l2 == null) ){
+            throw new IllegalArgumentException();
+        }
+    }
+
+    public static void authenticateOfId(String selectedUser, String loginUser) {
+        ValidUtils.checkIllegalArgumentOf(selectedUser, loginUser);
+        if (!Objects.equals(selectedUser, loginUser)) {
+            throw new UnauthorizedException();
         }
     }
 }

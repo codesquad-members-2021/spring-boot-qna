@@ -56,7 +56,7 @@ public class Question {
         List<Answer> enableAnswers = new ArrayList<>();
 
         for(Answer answer : answers){
-            if(!answer.isAnswerDeleted()){
+            if(!answer.isDeleted()){
                 enableAnswers.add(answer);
             }
         }

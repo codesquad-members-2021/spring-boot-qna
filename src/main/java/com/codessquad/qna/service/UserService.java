@@ -56,7 +56,7 @@ public class UserService {
         return userRepository.findByUserId(userId).orElseThrow(IncorrectAccountException::new);
     }
 
-    public void authenticateOfId(User selectedUser, User loginUser) { // 네이밍 고민
+    public void authenticateOfId(User selectedUser, User loginUser) {
         selectedUser = Optional.ofNullable(selectedUser).orElseThrow(IllegalArgumentException::new);
         loginUser = Optional.ofNullable(loginUser).orElseThrow(IllegalArgumentException::new);
 
@@ -64,7 +64,6 @@ public class UserService {
             throw new UnauthorizedException();
         }
     }
-
     public void authenticateOfPw(User selectedUser, User loginUser) {
         selectedUser = Optional.ofNullable(selectedUser).orElseThrow(IllegalArgumentException::new);
         loginUser = Optional.ofNullable(loginUser).orElseThrow(IllegalArgumentException::new);
