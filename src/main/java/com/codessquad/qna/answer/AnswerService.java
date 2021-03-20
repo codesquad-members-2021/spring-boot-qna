@@ -50,10 +50,10 @@ public class AnswerService {
         answerRepository.saveAll(answers);
     }
 
-    public void delete(Long id, UserDTO currentSessionUser) {
+    public Answer delete(Long id, UserDTO currentSessionUser) {
         Answer answer = readVerifiedAnswer(id, currentSessionUser);
         answer.delete();
 
-        answerRepository.save(answer);
+        return answerRepository.save(answer);
     }
 }

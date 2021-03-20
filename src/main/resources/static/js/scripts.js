@@ -46,3 +46,26 @@ function onSuccess(data, status) {
     $(".answer-write").before(answer);
     $(".answer-write textarea").val("");
 }
+
+$(".qna-comment-slipp-articles").click(deleteAnswer);
+
+function deleteAnswer(e) {
+    if (e.target.className == "link-delete-article") {
+        e.preventDefault();
+
+        const url = $(e.target).attr("href");
+
+        $.ajax({
+            type: 'delete',
+            url: url,
+            dataType: 'json',
+            error: function (xhr, status) {
+                console.error("error")
+            },
+            success: function (data, status) {
+                $(e.target).closest("article").remove();
+                $(".qna-comment-count").children().text(data.question.answerCount)
+            }
+        })
+    }
+}
