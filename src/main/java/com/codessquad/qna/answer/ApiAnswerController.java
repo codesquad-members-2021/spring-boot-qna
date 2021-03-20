@@ -1,6 +1,5 @@
 package com.codessquad.qna.answer;
 
-import com.codessquad.qna.question.QuestionService;
 import com.codessquad.qna.utils.SessionUtils;
 import org.springframework.web.bind.annotation.*;
 
