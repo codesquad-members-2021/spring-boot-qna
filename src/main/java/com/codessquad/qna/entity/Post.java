@@ -10,6 +10,7 @@ import java.util.Collections;
 import java.util.List;
 
 @Entity
+@Where(clause = "deleted = false")
 public class Post {
 
     @Id
