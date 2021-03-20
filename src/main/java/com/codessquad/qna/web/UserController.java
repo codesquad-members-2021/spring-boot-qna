@@ -53,10 +53,7 @@ public class UserController {
             return "redirect:/users/login";
         }
 
-        User sessionUser = HttpSessionUtils.getUserFromSession(session);
-        User user = userRepository.findById(sessionUser.getId()).orElseThrow(NoUserException::new);
-
-        model.addAttribute("user", user);
+        model.addAttribute("user", userRepository.findById(id).orElseThrow(NoUserException::new));
         return "user/profile";
     }
 
@@ -67,7 +64,6 @@ public class UserController {
         }
 
         User sessionUser = HttpSessionUtils.getUserFromSession(session);
-
 
         if (!sessionUser.checkId(id)) {
             throw new IllegalStateException("자신의 정보만 수정할 수 있습니다.");
