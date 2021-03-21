@@ -79,9 +79,6 @@ public class Question {
     }
 
     public boolean isEmpty() {
-        if (this.writer == null) {
-            return true;
-        }
         if ("".equals(this.title) || this.title == null) {
             return true;
         }

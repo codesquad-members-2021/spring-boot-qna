@@ -37,9 +37,7 @@ public class UserController {
             return "user/form";
         }
 
-        // 중복회원 검사
-        User user = userService.getOneByUserId(newUser.getUserId()).orElse(null);
-        if (user != null) {
+        if (userService.isRedundantUser(newUser)) {
             model.addAttribute("errorMessage", "이미 존재하는 회원입니다.");
             return "user/form";
         }

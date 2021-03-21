@@ -1,6 +1,7 @@
 package com.codessquad.qna.service;
 
 import com.codessquad.qna.domain.Question;
+import com.codessquad.qna.domain.User;
 import com.codessquad.qna.repository.AnswerRepository;
 import com.codessquad.qna.repository.QuestionRepository;
 import org.slf4j.Logger;
@@ -21,9 +22,9 @@ public class QuestionService {
         this.questionRepository = questionRepository;
     }
 
-    public void add(Question newQuestion) {
-        Question question = questionRepository.save(newQuestion);
-        logger.info("after save" + question.toString());
+    public void addQuestion(Question newQuestion, User user) {
+        newQuestion.setWriter(user);
+        questionRepository.save(newQuestion);
     }
 
     public List<Question> getAllQuestions() {

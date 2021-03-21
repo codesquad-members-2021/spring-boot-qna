@@ -26,14 +26,12 @@ public class QuestionController {
 
     @PostMapping
     public String createQuestion(Question newQuestion, HttpSession session) {
-        User sessionUser = HttpSessionUtils.getUserFromSession(session);
-        newQuestion.setWriter(sessionUser);
-
         if (newQuestion.isEmpty()) {
             return "question/form";
         }
 
-        questionService.add(newQuestion);
+        User sessionUser = HttpSessionUtils.getUserFromSession(session);
+        questionService.addQuestion(newQuestion, sessionUser);
         return "redirect:/";
     }
 
@@ -42,6 +40,7 @@ public class QuestionController {
         if (!HttpSessionUtils.isLoginUser(session)) {
             return "user/login";
         }
+
         return "question/form";
     }
 
@@ -49,7 +48,7 @@ public class QuestionController {
     public String showQuestionInDetail(@PathVariable long questionId, Model model) {
         Question testQuestion = questionService.getOneById(questionId).orElse(null);
         model.addAttribute("question", testQuestion);
-        logger.info(" testQuestion " + testQuestion.getAnswers().toString());
+
         return "question/show";
     }
 
