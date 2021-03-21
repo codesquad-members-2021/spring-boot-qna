@@ -1,27 +1,47 @@
 package com.codessquad.qna.domain;
 
+import org.hibernate.annotations.Where;
+
 import javax.persistence.*;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.List;
 
 @Entity
 public class Question {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Long questionId;
 
-    @Column(nullable = false, length = 20)
-    private String writer;
+    @ManyToOne
+    @JoinColumn(foreignKey = @ForeignKey(name = "fk_question_writer"))
+    private User writer;
+
     private String title;
+
+    @Lob
     private String contents;
 
+    private LocalDateTime createdDate;
+
+    @Column(columnDefinition = "boolean default false")
+    private boolean deleted;
+
+    @OneToMany(mappedBy = "question")
+    @OrderBy("id ASC")
+    @Where(clause = "deleted=false")
+    private List<Answer> answers;
+
     public Question() {
+        this.createdDate = LocalDateTime.now();
     }
 
-    public Long getId() {
-        return id;
+    public Long getQuestionId() {
+        return questionId;
     }
 
-    public String getWriter() {
+    public User getWriter() {
         return writer;
     }
 
@@ -33,11 +53,11 @@ public class Question {
         return contents;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public void setQuestionId(Long questionId) {
+        this.questionId = questionId;
     }
 
-    public void setWriter(String writer) {
+    public void setWriter(User writer) {
         this.writer = writer;
     }
 
@@ -49,13 +69,62 @@ public class Question {
         this.contents = contents;
     }
 
+    public List<Answer> getAnswers() {
+        return answers;
+    }
+
+    public void setAnswers(List<Answer> answers) {
+        this.answers = answers;
+    }
+
+    public String getFormattedCreatedDate() {
+        if (createdDate == null) {
+            return "";
+        }
+        return createdDate.format(DateTimeFormatter.ofPattern("yyyy.MM.dd HH:mm"));
+    }
+
+    public boolean isEmpty() {
+        if ("".equals(this.title) || this.title == null) {
+            return true;
+        }
+        if ("".equals(this.contents) || this.contents == null) {
+            return true;
+        }
+
+        return false;
+    }
+
+    public boolean isDeleted() {
+        return deleted;
+    }
+
+    public void deleted() {
+        deleted = true;
+        answers.forEach(answer -> deleted());
+    }
+
     @Override
     public String toString() {
         return "Question{" +
-                "id=" + id +
+                "id=" + questionId +
                 ", writer='" + writer + '\'' +
                 ", title='" + title + '\'' +
                 ", contents='" + contents + '\'' +
                 '}';
+    }
+
+    public void updateQuestionInfo(String title, String contents) {
+        this.title = title;
+        this.contents = contents;
+    }
+
+    public void updateQuestionInfo(Question question) {
+        this.title = question.getTitle();
+        this.contents = question.getContents();
+    }
+
+    public boolean isEqualWriter(User sessionUser) {
+        return writer.isEqualUserId(sessionUser.getUserId());
     }
 }

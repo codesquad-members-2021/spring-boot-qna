@@ -1,6 +1,8 @@
 package com.codessquad.qna.service;
 
 import com.codessquad.qna.domain.Question;
+import com.codessquad.qna.domain.User;
+import com.codessquad.qna.repository.AnswerRepository;
 import com.codessquad.qna.repository.QuestionRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,28 +18,30 @@ public class QuestionService {
     private final QuestionRepository questionRepository;
 
     @Autowired
-    public QuestionService(QuestionRepository questionRepository) {
+    public QuestionService(QuestionRepository questionRepository, AnswerRepository answerRepository) {
         this.questionRepository = questionRepository;
     }
 
-    public void add(Question newQuestion){
-        Question question = questionRepository.save(newQuestion);
-        logger.info("after save" + question.toString());
+    public void addQuestion(Question newQuestion, User user) {
+        newQuestion.setWriter(user);
+        questionRepository.save(newQuestion);
     }
 
-    public List<Question> getAllQuestions(){
-        return questionRepository.findAll();
+    public List<Question> getAllQuestions() {
+        return questionRepository.findAllByAndDeletedFalse();
     }
 
-    public Optional<Question> getOneById(Long id){
-        return questionRepository.findById(id);
+    public Optional<Question> getOneById(Long id) {
+        return questionRepository.findByQuestionIdAndDeletedFalse(id);
     }
 
     public void updateInfo(Question presentQuestion, Question referenceQuestion) {
-        // TODO: setter 안쓰고 id 바꾸는 방법?
-        referenceQuestion.setId(presentQuestion.getId());
+        presentQuestion.updateQuestionInfo(referenceQuestion);
+        questionRepository.save(presentQuestion);
+    }
 
-        questionRepository.delete(presentQuestion);
-        questionRepository.save(referenceQuestion);
+    public void remove(Question question) {
+        question.deleted();
+        questionRepository.save(question);
     }
 }

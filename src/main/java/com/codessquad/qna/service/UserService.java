@@ -21,16 +21,12 @@ public class UserService {
     }
 
     public User join(User newUser) {
-        checkRedundancy(newUser);
-
         return userRepository.save(newUser);
     }
 
-    private void checkRedundancy(User user) {
+    public boolean isRedundantUser(User user) {
         User redundantUser = userRepository.findByUserId(user.getUserId()).orElse(null);
-        if (redundantUser != null) {
-            throw new IllegalStateException();
-        }
+        return redundantUser != null;
     }
 
     public List<User> getAllUsers() {
@@ -41,12 +37,9 @@ public class UserService {
         return userRepository.findById(id);
     }
 
-    public void updateInfo(User presentUser, User referenceUser) {
-
-        referenceUser.setUserId(presentUser.getUserId());
-
-        userRepository.delete(presentUser);
-        userRepository.save(referenceUser);
+    public void updateInfo(User presentUser, User referenceUser, String newPassword) {
+        presentUser.updateUserInfo(referenceUser, newPassword);
+        userRepository.save(presentUser);
     }
 
     public Optional<User> getOneByUserId(String userId) {
