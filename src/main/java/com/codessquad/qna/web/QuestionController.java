@@ -59,7 +59,7 @@ public class QuestionController {
     }
 
     @DeleteMapping("/{id}/delete")
-    public String delete(@PathVariable Long id, HttpSession session) {
+    public String delete(@PathVariable Long id, HttpSession session) throws IllegalAccessException {
         User loggedinUser = getUserFromSession(session);
         Question question = questionService.findQuestion(id);
         questionService.delete(question, loggedinUser);

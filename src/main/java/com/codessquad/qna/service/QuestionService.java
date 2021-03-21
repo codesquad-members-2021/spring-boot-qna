@@ -41,10 +41,10 @@ public class QuestionService {
         questionRepository.save(question);
     }
 
-    public void delete(Question question, User user) {
+    public void delete(Question question, User user) throws IllegalAccessException {
         checkValid(question, user);
         if (!question.isAnswerWriterSame()) {
-            // Todo: 예외 발생을 해야하나.. 새로운 예외 페이지도 만들어야하나..
+            throw new IllegalAccessException("다른 사용자의 댓글이 포함되어있습니다.");
         }
         if (question.isAnswerEmpty()) {
             question.setDeletedTrue();

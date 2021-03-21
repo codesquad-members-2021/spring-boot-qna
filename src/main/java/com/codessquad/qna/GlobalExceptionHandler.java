@@ -25,4 +25,9 @@ public class GlobalExceptionHandler {
         model.addAttribute("errorMessage", e.getMessage());
         return "/user/login";
     }
+
+    @ExceptionHandler(IllegalAccessException.class)
+    public String handleIllegalAccessException() {
+        return "/exception/illegalAccessHandle";
+    }
 }

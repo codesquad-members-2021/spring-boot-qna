@@ -33,7 +33,8 @@ public class AnswerService {
 
     public void delete(User user, Answer answer) {
         checkValid(user, answer);
-        answerRepository.delete(answer);
+        answer.setDeletedTrue();
+        answerRepository.save(answer);
     }
 
     private void checkValid(User user, Answer answer) {

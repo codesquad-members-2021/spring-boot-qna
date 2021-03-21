@@ -30,6 +30,7 @@ public class Question {
 
     @OneToMany(mappedBy = "question")
     @OrderBy("id asc")
+    @Where(clause = "deleted = false")
     private List<Answer> answers;
 
     protected Question() {

@@ -1,10 +1,13 @@
 package com.codessquad.qna.domain;
 
+import org.hibernate.annotations.Where;
+
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 @Entity
+@Where(clause = "deleted = false")
 public class Answer {
     private static final DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
     @Id
@@ -23,6 +26,7 @@ public class Answer {
     private String contents;
 
     private LocalDateTime postTime;
+    private boolean deleted;
 
     public Answer() {
     }
@@ -56,6 +60,10 @@ public class Answer {
 
     public boolean isAnswerWriter(User user) {
         return user.isUserMatching(writer);
+    }
+
+    public void setDeletedTrue() {
+        deleted = true;
     }
 
     @Override
