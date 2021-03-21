@@ -20,6 +20,10 @@ public class QuestionService {
         questionRepository.save(newQuestion);
     }
 
+    public void modifyQuestion(Question question, Question modifiedQuestion) {
+        questionRepository.save(question.updateQuestion(modifiedQuestion));
+    }
+
     public List<Question> listAllQuestions() {
         return questionRepository.findAllByOrderByIdDesc();
     }

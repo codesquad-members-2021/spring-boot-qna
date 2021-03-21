@@ -71,6 +71,12 @@ public class Question {
         return timeCreated.format(DATE_TIME_FORMATTER);
     }
 
+    public Question updateQuestion(Question modifiedQuestion) {
+        this.title = modifiedQuestion.getTitle();
+        this.contents = modifiedQuestion.getContents();
+        return this;
+    }
+
     @Override
     public String toString() {
         return "Question{" +

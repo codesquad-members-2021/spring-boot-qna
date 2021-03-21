@@ -1,6 +1,7 @@
 package com.codessquad.qna.controller;
 
 import com.codessquad.qna.domain.Question;
+import com.codessquad.qna.domain.User;
 import com.codessquad.qna.service.QuestionService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -48,6 +49,28 @@ public class QnaController {
         Question question = questionService.findById(id);
         model.addAttribute("question", question);
         return "qna/show";
+    }
+
+    @GetMapping("/{id}/form")
+    public String updateForm(@PathVariable long id, HttpSession session, Model model) {
+        Question question = questionService.findById(id);
+        User user = getUserFromSession(session);
+        if (!question.getWriter().equals(user.getUserId())) { // 로그인 된 유저와 질문 작성자 불일치 시
+            // TODO: throw exception
+        }
+        model.addAttribute("question", question);
+        return "qna/updateForm";
+    }
+
+    @PutMapping("/{id}/modify")
+    public String modifyQuestion(@PathVariable long id, HttpSession session, Question modifiedQuestion) {
+        Question originalQuestion = questionService.findById(id);
+        User user = getUserFromSession(session);
+        if (!originalQuestion.getWriter().equals(user.getUserId())) { // 작성자와 로그인 된 사용자가 불일치 시
+            // TODO: throw exception
+        }
+        questionService.modifyQuestion(originalQuestion, modifiedQuestion);
+        return "redirect:/";
     }
 
     @ExceptionHandler(IllegalArgumentException.class)
