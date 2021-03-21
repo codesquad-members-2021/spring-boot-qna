@@ -1,25 +1,20 @@
 package com.codessquad.qna.domain;
 
-import com.codessquad.qna.util.DateTimeUtils;
+import com.codessquad.qna.exception.IllegalUserAccessException;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-public class Question {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+public class Question extends AbstractEntity {
 
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User writer;
 
     @OneToMany(mappedBy = "question", cascade = CascadeType.ALL)
-    @OrderBy("id ASC ")
+    @OrderBy("id DESC ")
     private List<Answer> answerList = new ArrayList<>();
 
     @Enumerated(EnumType.STRING)
@@ -27,30 +22,20 @@ public class Question {
 
     private String title;
     private String contents;
-    private LocalDateTime createDateTime;
+    private int countOfAnswer = 0;
 
     public void addAnswer(Answer answer) {
         answerList.add(answer);
+        countOfAnswer++;
+    }
+
+    public void deleteAnswer(Answer answer) {
+        answerList.remove(answer);
+        countOfAnswer--;
     }
 
     public List<Answer> getAnswerList() {
         return answerList;
-    }
-
-    public String getFormatCreateDateTime() {
-        return createDateTime.format(DateTimeUtils.dateTimeFormatter);
-    }
-
-    public void setCreateDateTime(LocalDateTime createDateTime) {
-        this.createDateTime = createDateTime;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
     }
 
     public void changeWriter(User writer) {
@@ -77,10 +62,8 @@ public class Question {
         return contents;
     }
 
-    public int getOpenAnswerCount() {
-        return (int) answerList.stream()
-                .filter(answer -> answer.getStatus() == DisplayStatus.OPEN)
-                .count();
+    public int getCountOfAnswer() {
+        return countOfAnswer;
     }
 
     public DisplayStatus getStatus() {
@@ -104,4 +87,9 @@ public class Question {
         this.status = displayStatus;
     }
 
+    public void checkSameUser(Long newId) {
+        if (writer.getId() != newId) {
+            throw new IllegalUserAccessException("자신의 정보만 수정 가능");
+        }
+    }
 }

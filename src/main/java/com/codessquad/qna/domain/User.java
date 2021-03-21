@@ -2,14 +2,11 @@ package com.codessquad.qna.domain;
 
 import com.codessquad.qna.exception.IllegalUserAccessException;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
 
 @Entity
-public class User {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+public class User extends AbstractEntity {
 
     @Column(nullable = false, length = 20, unique = true)
     private String userId;
@@ -17,6 +14,16 @@ public class User {
     private String name;
     private String password;
     private String email;
+
+    protected User() {
+    }
+
+    public User(Long id, String userId, String name, String email) {
+        super.setId(id);
+        this.userId = userId;
+        this.name = name;
+        this.email = email;
+    }
 
     public String getUserId() {
         return userId;
@@ -50,14 +57,6 @@ public class User {
         this.email = email;
     }
 
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
     public boolean checkPassword(String password) {
         return this.password.equals(password);
     }
@@ -70,8 +69,9 @@ public class User {
     }
 
     public void checkSameUser(Long newId) {
-        if (this.id != newId) {
+        if (getId() != newId) {
             throw new IllegalUserAccessException("자신의 정보만 수정 가능");
         }
     }
+
 }

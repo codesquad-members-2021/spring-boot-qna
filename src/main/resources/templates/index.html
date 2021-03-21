@@ -14,26 +14,26 @@
             <ul class="list">
                 {{#Questions}}
                 {{#if (checkStatus status)}}
-                    <li>
-                        <div class="wrap">
-                            <div class="main">
-                                <strong class="subject">
-                                    <a href="/questions/{{id}}">{{title}}</a>
-                                </strong>
-                                <div class="auth-info">
-                                    <i class="icon-add-comment"></i>
-                                    <span class="time">{{formatCreateDateTime}}</span>
-                                    {{#writer}}
-                                    <a href="/users/profile" class="author">{{userId}}</a>
-                                    {{/writer}}
-                                </div>
-                                <div class="reply" title="댓글">
-                                    <i class="icon-reply"></i>
-                                    <span class="point">{{openAnswerCount}}</span>
-                                </div>
+                <li>
+                    <div class="wrap">
+                        <div class="main">
+                            <strong class="subject">
+                                <a href="/questions/{{id}}">{{title}}</a>
+                            </strong>
+                            <div class="auth-info">
+                                <i class="icon-add-comment"></i>
+                                <span class="time">{{formatCreateDateTime}}</span>
+                                {{#writer}}
+                                <a href="/users/profile" class="author">{{userId}}</a>
+                                {{/writer}}
+                            </div>
+                            <div class="reply" title="댓글">
+                                <i class="icon-reply"></i>
+                                <span class="point">{{countOfAnswer}}</span>
                             </div>
                         </div>
-                    </li>
+                    </div>
+                </li>
                 {{/if}}
                 {{/Questions}}
             </ul>

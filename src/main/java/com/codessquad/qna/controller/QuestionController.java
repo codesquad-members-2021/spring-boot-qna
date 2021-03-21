@@ -1,7 +1,7 @@
 package com.codessquad.qna.controller;
 
 import com.codessquad.qna.domain.Question;
-import com.codessquad.qna.domain.User;
+import com.codessquad.qna.domain.dto.UserDto;
 import com.codessquad.qna.service.QuestionService;
 import com.codessquad.qna.util.HttpSessionUtils;
 import org.slf4j.Logger;
@@ -26,7 +26,7 @@ public class QuestionController {
 
     @PostMapping
     public String createQuestion(Question question, HttpSession session) {
-        User user = HttpSessionUtils.getUserFromSession(session);
+        UserDto user = HttpSessionUtils.getUserFromSession(session);
         questionService.write(question, user);
         return "redirect:/";
     }
@@ -48,8 +48,8 @@ public class QuestionController {
     @GetMapping("/{id}/form")
     public String renderUpdateForm(@PathVariable Long id, Model model, HttpSession session) {
         Question findQuestion = questionService.findById(id);
-        User user = HttpSessionUtils.getUserFromSession(session);
-        user.checkSameUser(findQuestion.getWriter().getId());
+        UserDto user = HttpSessionUtils.getUserFromSession(session);
+        findQuestion.checkSameUser(user.getId());
         model.addAttribute("question", findQuestion);
         return "qna/updateForm";
 
@@ -57,7 +57,7 @@ public class QuestionController {
 
     @PutMapping("/{id}")
     public String questionUpdate(@PathVariable Long id, Question updateQuestion, HttpSession session) {
-        User user = HttpSessionUtils.getUserFromSession(session);
+        UserDto user = HttpSessionUtils.getUserFromSession(session);
         questionService.update(id, updateQuestion, user);
         return "redirect:/questions/" + id;
 
@@ -65,7 +65,7 @@ public class QuestionController {
 
     @DeleteMapping("/{id}")
     public String questionDelete(@PathVariable Long id, HttpSession session) {
-        User user = HttpSessionUtils.getUserFromSession(session);
+        UserDto user = HttpSessionUtils.getUserFromSession(session);
         questionService.delete(id, user);
         return "redirect:/";
 

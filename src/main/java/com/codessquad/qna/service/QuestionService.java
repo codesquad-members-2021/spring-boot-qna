@@ -2,7 +2,7 @@ package com.codessquad.qna.service;
 
 import com.codessquad.qna.domain.DisplayStatus;
 import com.codessquad.qna.domain.Question;
-import com.codessquad.qna.domain.User;
+import com.codessquad.qna.domain.dto.UserDto;
 import com.codessquad.qna.exception.NoSearchObjectException;
 import com.codessquad.qna.repository.QuestionRepository;
 import com.codessquad.qna.valid.QuestionValidator;
@@ -10,8 +10,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.time.LocalDateTime;
 
 @Service
 @Transactional(readOnly = true)
@@ -25,9 +23,8 @@ public class QuestionService {
     }
 
     @Transactional
-    public void write(Question question, User user) {
-        question.changeWriter(user);
-        question.setCreateDateTime(LocalDateTime.now());
+    public void write(Question question, UserDto user) {
+        question.changeWriter(user.returnEntity());
         QuestionValidator.validate(question);
 
         questionRepository.save(question);
@@ -38,17 +35,17 @@ public class QuestionService {
     }
 
     @Transactional
-    public void update(Long questionId, Question question, User user) {
+    public void update(Long questionId, Question question, UserDto user) {
         Question findQuestion = findById(questionId);
-        user.checkSameUser(findQuestion.getWriter().getId());
+        findQuestion.checkSameUser(user.getId());
         findQuestion.questionUpdate(question);
         QuestionValidator.validate(findQuestion);
     }
 
     @Transactional
-    public void delete(Long id, User user) {
+    public void delete(Long id, UserDto user) {
         Question question = findById(id);
-        user.checkSameUser(question.getWriter().getId());
+        question.checkSameUser(user.getId());
         question.checkSameUserFromOpenAnswer();
         question.changeStatus(DisplayStatus.CLOSE);
     }
