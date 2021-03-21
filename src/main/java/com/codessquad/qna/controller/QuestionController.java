@@ -24,7 +24,7 @@ public class QuestionController {
 
     @PostMapping("")
     public String question(Question question){
-        
+
         questionService.registerQuestion(question);
 
         return "redirect:/";
