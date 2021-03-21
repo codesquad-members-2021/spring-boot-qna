@@ -47,10 +47,10 @@ public class AnswerController {
     public String delete(@PathVariable Long questionId,
                         @PathVariable Long id,
                          HttpSession session) {
-        User loginedUser = getUserFromSession(session);
+        User loggedInUser = getUserFromSession(session);
         Answer answer = answerService.findById(id);
 
-        if(!answer.matchWriter(loginedUser)) {
+        if(!answer.matchWriter(loggedInUser)) {
             throw new IllegalUserAccessException();
         }
 

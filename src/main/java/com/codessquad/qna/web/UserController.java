@@ -18,6 +18,7 @@ import static com.codessquad.qna.domain.user.HttpSessionUtils.getUserFromSession
 @RequestMapping("/users")
 public class UserController {
     private static Logger logger = LoggerFactory.getLogger(UserController.class);
+
     private final UserService userService;
 
     public UserController(UserService userService) {
@@ -44,23 +45,23 @@ public class UserController {
 
     @GetMapping("/{id}")
     public String getUserProfile(@PathVariable Long id, Model model, HttpSession session) {
-        User user = getUserFromSession(session);
+        User loggedInUser = getUserFromSession(session);
 
-        if (!user.matchId(id)) {
+        if (!loggedInUser.matchId(id)) {
             throw new IllegalUserAccessException();
         }
 
-        model.addAttribute("user", user);
-        logger.debug("user : {}", user);
+        model.addAttribute("user", loggedInUser);
+        logger.debug("user : {}", loggedInUser);
 
         return "user/profile";
     }
 
     @GetMapping("/{id}/form")
     public String getUpdateForm(@PathVariable Long id, Model model, HttpSession session) {
-        User loginedUser = getUserFromSession(session);
+        User loggedInUser = getUserFromSession(session);
 
-        if (!loginedUser.matchId(id)) {
+        if (!loggedInUser.matchId(id)) {
             throw new IllegalUserAccessException();
         }
 
@@ -74,9 +75,9 @@ public class UserController {
     @PutMapping("/{id}")
     public String update(@PathVariable Long id, String prevPassword,
                          User updateUser, HttpSession session) {
-        User loginedUser = getUserFromSession(session);
+        User loggedInUser = getUserFromSession(session);
 
-        if (!loginedUser.matchId(id)) {
+        if (!loggedInUser.matchId(id)) {
             throw new IllegalUserAccessException();
         }
 
@@ -100,15 +101,15 @@ public class UserController {
 
     @PostMapping("/login")
     public String login(String userId, String password, HttpSession session) {
-        User user = userService.findUser(userId);
+        User loggedInUser = userService.findUser(userId);
 
-        if (!user.matchPassword(password)) {
+        if (!loggedInUser.matchPassword(password)) {
             logger.error("로그인에 실패하셨습니다.");
             return "user/login_failed";
         }
 
-        logger.debug("login : {}", user);
-        session.setAttribute(USER_SESSION_KEY, user);
+        logger.debug("login : {}", loggedInUser);
+        session.setAttribute(USER_SESSION_KEY, loggedInUser);
 
         return "redirect:/";
     }

@@ -50,8 +50,8 @@ public class Answer extends BaseTimeEntity {
         return comment;
     }
 
-    public boolean matchWriter(User loginedUser) {
-        return writer.equals(loginedUser);
+    public boolean matchWriter(User loggedInUser) {
+        return writer.equals(loggedInUser);
     }
 
     @Override

@@ -18,7 +18,7 @@ import javax.servlet.http.HttpSession;
 import java.util.List;
 
 import static com.codessquad.qna.domain.user.HttpSessionUtils.getUserFromSession;
-import static com.codessquad.qna.domain.user.HttpSessionUtils.isLoginUser;
+import static com.codessquad.qna.domain.user.HttpSessionUtils.isLoggedInUser;
 
 @Controller
 @RequestMapping("/questions")
@@ -36,7 +36,7 @@ public class QuestionController {
 
     @GetMapping("/form")
     public String getQuestionFormPage(HttpSession session) {
-        return isLoginUser(session) ?
+        return isLoggedInUser(session) ?
                 "qna/form" : "redirect:/users/loginForm";
     }
 
@@ -58,7 +58,7 @@ public class QuestionController {
 
     @GetMapping("/{questionId}")
     public String getQuestionDetail(@PathVariable(("questionId")) Long id, Model model, HttpSession session) {
-        if (!isLoginUser(session)) {
+        if (!isLoggedInUser(session)) {
             throw new UserNotFoundException();
         }
 
@@ -76,10 +76,10 @@ public class QuestionController {
 
     @GetMapping("/{id}/form")
     public String getUpdateForm(@PathVariable Long id, Model model, HttpSession session) {
-        User loginedUser = getUserFromSession(session);
+        User loggedInUser = getUserFromSession(session);
         Question question = questionService.findById(id);
 
-        if (!loginedUser.matchUser(question.getWriter())) {
+        if (!loggedInUser.matchUser(question.getWriter())) {
             throw new IllegalUserAccessException();
         }
 
@@ -89,10 +89,10 @@ public class QuestionController {
 
     @PutMapping("/{id}")
     public String updateQuestion(@PathVariable Long id, Question updateQuestion, HttpSession session) {
-        User loginedUser = getUserFromSession(session);
+        User loggedInUser = getUserFromSession(session);
         Question question = questionService.findById(id);
 
-        if (!loginedUser.matchUser(question.getWriter())) {
+        if (!loggedInUser.matchUser(question.getWriter())) {
             throw new IllegalStateException("자신의 정보만 수정할 수 있습니다.");
         }
 
@@ -103,10 +103,10 @@ public class QuestionController {
 
     @DeleteMapping("{id}")
     public String delete(@PathVariable Long id, HttpSession session) {
-        User loginedUser = getUserFromSession(session);
+        User loggedInUser = getUserFromSession(session);
         Question question = questionService.findById(id);
 
-        if (!question.isSameWriter(loginedUser)) {
+        if (!question.isSameWriter(loggedInUser)) {
             throw new IllegalUserAccessException();
         }
 
