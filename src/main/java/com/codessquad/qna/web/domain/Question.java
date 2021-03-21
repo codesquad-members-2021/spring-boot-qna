@@ -4,6 +4,7 @@ import com.codessquad.qna.web.utility.QuestionUtility;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 public class Question {
@@ -13,7 +14,7 @@ public class Question {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(foreignKey = @ForeignKey(name = "fk_question_writer"), nullable=false)
+    @JoinColumn(foreignKey = @ForeignKey(name = "fk_question_writer"), nullable = false)
     private User writer;
 
     @Column(nullable = false, length = 20)
@@ -59,5 +60,4 @@ public class Question {
         this.title = title;
         this.contents = contents;
     }
-
 }

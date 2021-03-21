@@ -2,6 +2,7 @@ package com.codessquad.qna.web.controllers;
 
 import com.codessquad.qna.web.domain.Question;
 import com.codessquad.qna.web.domain.User;
+import com.codessquad.qna.web.service.AnswerService;
 import com.codessquad.qna.web.service.QuestionService;
 import com.codessquad.qna.web.service.UserService;
 import com.codessquad.qna.web.utility.SessionUtility;
@@ -18,9 +19,11 @@ import java.util.*;
 public class QuestionController {
 
     private QuestionService questionService;
+    private AnswerService answerService;
 
-    private QuestionController(QuestionService questionService) {
+    private QuestionController(QuestionService questionService, AnswerService answerService) {
         this.questionService = questionService;
+        this.answerService = answerService;
     }
 
     @GetMapping("/form")
@@ -47,6 +50,8 @@ public class QuestionController {
     public String showQuestion(@PathVariable("id") Long id, Model model) {
         Question question = questionService.findById(id);
         model.addAttribute("question", question);
+
+        model.addAttribute("answers", answerService.findByQuestionId(id));
         return "qna/show";
     }
 
@@ -81,5 +86,4 @@ public class QuestionController {
         questionService.delete(question);
         return "redirect:/";
     }
-
 }
