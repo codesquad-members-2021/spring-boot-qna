@@ -21,16 +21,12 @@ public class UserService {
     }
 
     public User join(User newUser) {
-        checkRedundancy(newUser);
-
         return userRepository.save(newUser);
     }
 
-    private void checkRedundancy(User user) {
+    public boolean isRedundantUser(User user) {
         User redundantUser = userRepository.findByUserId(user.getUserId()).orElse(null);
-        if (redundantUser != null) {
-            throw new IllegalStateException();
-        }
+        return redundantUser != null;
     }
 
     public List<User> getAllUsers() {
