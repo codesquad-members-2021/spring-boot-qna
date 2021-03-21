@@ -52,7 +52,7 @@ class ApiQuestionControllerTest {
                 .andReturn()
                 .getModelAndView()
                 .getModelMap()));
-        Criteria cri = new Criteria(1, 15);
+        Criteria cri = new Criteria(1);
         Page<Question> paging = questionService.pagingList(cri);
 
         assertThat(paging.getNumber()).isEqualTo(0);

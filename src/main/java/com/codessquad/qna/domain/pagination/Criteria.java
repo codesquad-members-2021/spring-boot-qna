@@ -2,39 +2,27 @@ package com.codessquad.qna.domain.pagination;
 
 public class Criteria {
 
-    private int pageNum;
-    private int amount;
+    private int pageNum; // 현재 page 번호
+    private int size;    // page당 게시물 수, 15로 고정
 
-    public Criteria() {
-        this(1, 10);
-    }
-
-    public Criteria(int pageNum, int amount) {
+    public Criteria(int pageNum) {
         this.pageNum = pageNum;
-        this.amount = amount;
+        this.size = 15;
     }
 
     public int getPageNum() {
         return pageNum;
     }
 
-    public void setPageNum(int pageNum) {
-        this.pageNum = pageNum;
-    }
-
-    public int getAmount() {
-        return amount;
-    }
-
-    public void setAmount(int amount) {
-        this.amount = amount;
+    public int getSize() {
+        return size;
     }
 
     @Override
     public String toString() {
         return "Criteria{" +
                 "pageNum=" + pageNum +
-                ", amount=" + amount +
+                ", size=" + size +
                 '}';
     }
 }
