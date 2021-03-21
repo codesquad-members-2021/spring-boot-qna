@@ -1,8 +1,8 @@
 package com.codessquad.qna.service;
 
 import com.codessquad.qna.domain.*;
+import com.codessquad.qna.exception.ForbiddenException;
 import com.codessquad.qna.exception.NotFoundException;
-import com.codessquad.qna.exception.UnauthorizedAccessException;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -16,17 +16,21 @@ public class AnswerService {
         this.answerRepository = answerRepository;
     }
 
-    public void create(Long questionId, Answer answer, User writer) {
+    public Answer create(Long questionId, Answer answer, User writer) {
         Question question = questionRepository.findById(questionId)
                 .orElseThrow(NotFoundException::new);
         answer.setQuestion(question);
         answer.setWriter(writer);
-        answerRepository.save(answer);
+        question.addAnswer();
+        return answerRepository.save(answer);
     }
 
-    public void delete(Long answerId, Long questionId, User loginUser) {
-        Answer answer = answerWithAuthentication(answerId, questionId, loginUser);
+    public void delete(Long questionId, Long answerId, User loginUser) {
+        Answer answer = answerWithAuthentication(questionId, answerId, loginUser);
         answer.delete();
+        Question question = questionRepository.findById(questionId).orElseThrow(NotFoundException::new);
+        question.deleteAnswer();
+        questionRepository.save(question);
         answerRepository.save(answer);
     }
 
@@ -34,7 +38,7 @@ public class AnswerService {
         Answer answer = answerRepository.findByIdAndQuestionIdAndDeletedFalse(answerId, questionId)
                 .orElseThrow(NotFoundException::new);
         if (!answer.matchesWriter(loginUser)) {
-            throw new UnauthorizedAccessException("다른 사람의 답변을 수정하거나 삭제할 수 없습니다.");
+            throw new ForbiddenException("다른 사람의 답변을 수정하거나 삭제할 수 없습니다.");
         }
         return answer;
     }

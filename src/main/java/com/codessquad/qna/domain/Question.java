@@ -1,18 +1,14 @@
 package com.codessquad.qna.domain;
 
 import com.codessquad.qna.exception.ForbiddenException;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
-public class Question {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+public class Question extends AbstractEntity {
 
     @ManyToOne
     @JoinColumn(foreignKey = @ForeignKey(name = "fk_question_writer"))
@@ -20,12 +16,12 @@ public class Question {
 
     private String title;
     private String contents;
-    private LocalDateTime createdDateTime;
-    private int point;
+    private int countOfAnswers;
     private boolean deleted;
 
     @OneToMany(mappedBy = "question")
     @Where(clause = "deleted = false")
+    @JsonIgnore
     private List<Answer> answers;
 
     protected Question() {
@@ -34,13 +30,8 @@ public class Question {
     public Question(String title, String contents) {
         this.title = title;
         this.contents = contents;
-        this.createdDateTime = LocalDateTime.now();
-        this.point = 0;
+        this.countOfAnswers = 0;
         this.deleted = false;
-    }
-
-    public Long getId() {
-        return id;
     }
 
     public User getWriter() {
@@ -59,16 +50,8 @@ public class Question {
         return contents;
     }
 
-    public LocalDateTime getCreatedDateTime() {
-        return createdDateTime;
-    }
-
-    public void setCreatedDateTime(LocalDateTime createdDateTime) {
-        this.createdDateTime = createdDateTime;
-    }
-
-    public int getPoint() {
-        return point;
+    public int getCountOfAnswers() {
+        return countOfAnswers;
     }
 
     public List<Answer> getAnswers() {
@@ -110,4 +93,13 @@ public class Question {
             answer.delete();
         }
     }
+
+    public void addAnswer() {
+        this.countOfAnswers += 1;
+    }
+
+    public void deleteAnswer() {
+        this.countOfAnswers -= 1;
+    }
+
 }

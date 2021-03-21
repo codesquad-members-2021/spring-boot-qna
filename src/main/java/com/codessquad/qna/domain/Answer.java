@@ -1,29 +1,31 @@
 package com.codessquad.qna.domain;
 
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
+import com.fasterxml.jackson.annotation.JsonGetter;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
-import javax.persistence.*;
-import java.time.LocalDateTime;
+import javax.persistence.Entity;
+import javax.persistence.ForeignKey;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 
 @Entity
-public class Answer {
-
-    @Id
-    @GeneratedValue
-    private Long id;
+public class Answer extends AbstractEntity {
 
     @ManyToOne
-    @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(foreignKey = @ForeignKey(name = "fk_answer_to_question"))
+    @JsonIgnore
     private Question question;
 
     @ManyToOne
     @JoinColumn(foreignKey = @ForeignKey(name = "fk_answer_writer"))
+    @JsonProperty
     private User writer;
 
+    @JsonProperty
     private String comment;
-    private LocalDateTime createdDateTime;
+
+    @JsonIgnore
     private boolean deleted;
 
     protected Answer() {
@@ -31,12 +33,7 @@ public class Answer {
 
     public Answer(String comment) {
         this.comment = comment;
-        this.createdDateTime = LocalDateTime.now();
         this.deleted = false;
-    }
-
-    public Long getId() {
-        return id;
     }
 
     public Question getQuestion() {
@@ -59,16 +56,13 @@ public class Answer {
         return comment;
     }
 
+    @JsonGetter("questionId")
+    public Long getTheQuestionId() {
+        return question.getId();
+    }
+
     public boolean isDeleted() {
         return deleted;
-    }
-
-    public LocalDateTime getCreatedDateTime() {
-        return createdDateTime;
-    }
-
-    public void setCreatedDateTime(LocalDateTime createdDateTime) {
-        this.createdDateTime = createdDateTime;
     }
 
     public void updateAnswer(Answer updatingAnswer) {

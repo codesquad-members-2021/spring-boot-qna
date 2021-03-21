@@ -3,7 +3,7 @@
     <div class="col-md-12 col-sm-12 col-lg-10 col-lg-offset-1">
         <div class="panel panel-default content-main">
             {{#answer}}
-            <form class="submit-write" action="/questions/{{question.id}}/answers/{{id}}" method="POST">
+            <form class="submit-update" action="/questions/{{question.id}}/answers/{{id}}" method="POST">
                 <input type="hidden" name="_method" value="PUT">
                 <div class="form-group" style="padding:14px;">
                     <textarea class="form-control" name="comment" placeholder="Update your status">{{comment}}</textarea>
