@@ -52,7 +52,7 @@ public class QuestionController {
 
     @GetMapping("/")
     public String getQuestionListPage(Model model) {
-        model.addAttribute("questionList", questionService.findAll());
+        model.addAttribute("questionList", questionService.findUnRemovedList());
         return "home";
     }
 
@@ -110,7 +110,7 @@ public class QuestionController {
             throw new IllegalUserAccessException();
         }
 
-        questionService.deleteBy(id);
+        questionService.deleteBy(id, question);
 
         return "redirect:/";
     }

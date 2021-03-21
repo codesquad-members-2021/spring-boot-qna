@@ -26,8 +26,8 @@ public class AnswerService {
     /**
      * 답변 조회
      */
-    public Answer findById(Long id) {
-        return answerRepository.findById(id)
+    public Answer findByIdIfExist(Long id) {
+        return answerRepository.findByIdAndDeletedFalse(id)
                 .orElseThrow(AnswerNotFoundException::new);
     }
 

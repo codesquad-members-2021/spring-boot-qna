@@ -48,7 +48,7 @@ public class AnswerController {
                         @PathVariable Long id,
                          HttpSession session) {
         User loggedInUser = getUserFromSession(session);
-        Answer answer = answerService.findById(id);
+        Answer answer = answerService.findByIdIfExist(id);
 
         if(!answer.matchWriter(loggedInUser)) {
             throw new IllegalUserAccessException();

@@ -3,11 +3,13 @@ package com.codessquad.qna.domain.answer;
 import com.codessquad.qna.domain.BaseTimeEntity;
 import com.codessquad.qna.domain.question.Question;
 import com.codessquad.qna.domain.user.User;
+import org.hibernate.annotations.SQLDelete;
 
 import javax.persistence.*;
 import java.util.Objects;
 
 @Entity
+@SQLDelete(sql = "UPDATE ANSWER SET DELETED = TRUE WHERE ID = ?")
 public class Answer extends BaseTimeEntity {
 
     @Id
@@ -24,6 +26,8 @@ public class Answer extends BaseTimeEntity {
 
     @Column(length = 20000)
     private String comment;
+
+    private boolean deleted = false;
 
     public Answer() {
     }
@@ -52,6 +56,14 @@ public class Answer extends BaseTimeEntity {
 
     public boolean matchWriter(User loggedInUser) {
         return writer.equals(loggedInUser);
+    }
+
+    public void delete() {
+        this.deleted = true;
+    }
+
+    public boolean isDeleted() {
+        return deleted;
     }
 
     @Override
