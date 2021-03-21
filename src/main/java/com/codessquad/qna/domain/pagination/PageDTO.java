@@ -9,11 +9,13 @@ public class PageDTO {
     private int endPage;
     private boolean prev;
     private boolean next;
+    private int prevEndPage;
+    private int nextStartPage;
 
     private int total;
     private Criteria cri;
 
-    List<PageNumber> numbers = new ArrayList<>();
+    private List<PageNumber> numbers = new ArrayList<>();
 
     public PageDTO(Criteria cri, int total) {
         this.cri = cri;
@@ -33,9 +35,11 @@ public class PageDTO {
 
         int pageStartNumber = this.startPage;
         for (int i = 0; i <= this.endPage - this.startPage; i++) {
-             numbers.add(new PageNumber(pageStartNumber++));
+             numbers.add(new PageNumber(pageStartNumber++, cri.getPageNum()));
         }
 
+        prevEndPage = startPage - 1;
+        nextStartPage = endPage + 1;
     }
 
     public int getStartPage() {
@@ -64,5 +68,13 @@ public class PageDTO {
 
     public List<PageNumber> getNumbers() {
         return numbers;
+    }
+
+    public int getNextStartPage() {
+        return nextStartPage;
+    }
+
+    public int getPrevEndPage() {
+        return prevEndPage;
     }
 }
