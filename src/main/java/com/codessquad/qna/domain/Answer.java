@@ -25,6 +25,9 @@ public class Answer {
 
     private LocalDateTime createdDate;
 
+    @Column(columnDefinition = "boolean default false")
+    private boolean deleted;
+
     public Answer() {
     }
 
@@ -33,6 +36,7 @@ public class Answer {
         this.writer = loginUser;
         this.contents = contents;
         createdDate = LocalDateTime.now();
+        deleted = false;
     }
 
     public Long getAnswerId() {
@@ -58,6 +62,14 @@ public class Answer {
         return createdDate.format(DateTimeFormatter.ofPattern("yyyy.MM.dd HH:mm"));
     }
 
+    public boolean isDeleted() {
+        return deleted;
+    }
+
+    public void deleted() {
+        deleted = true;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -78,11 +90,12 @@ public class Answer {
     @Override
     public String toString() {
         return "Answer{" +
-                "id=" + answerId +
+                "answerId=" + answerId +
                 ", writer=" + writer +
                 ", question=" + question +
                 ", contents='" + contents + '\'' +
                 ", createdDate=" + createdDate +
+                ", deleted=" + deleted +
                 '}';
     }
 }

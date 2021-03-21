@@ -6,6 +6,8 @@ import com.codessquad.qna.domain.User;
 import com.codessquad.qna.repository.AnswerRepository;
 import com.codessquad.qna.repository.QuestionRepository;
 import com.codessquad.qna.util.HttpSessionUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,6 +17,7 @@ import java.util.Optional;
 
 @Service
 public class AnswerService {
+    Logger logger = LoggerFactory.getLogger(AnswerService.class);
     private final AnswerRepository answerRepository;
     private final QuestionRepository questionRepository;
 
@@ -25,21 +28,23 @@ public class AnswerService {
     }
 
     public Optional<Answer> getOneById(long answerId) {
-        return answerRepository.findById(answerId);
+        return answerRepository.findByAnswerIdAndDeletedFalse(answerId);
     }
 
     public void create(Long id, String contents, HttpSession session) {
         User loginUser = HttpSessionUtils.getUserFromSession(session);
-        Question question = questionRepository.findById(id).orElse(null);
+        Question question = questionRepository.findByQuestionIdAndDeletedFalse(id).orElse(null);
 
         answerRepository.save(new Answer(question, contents, loginUser));
     }
 
-    public void remove(long id) {
-        answerRepository.deleteById(id);
+    public void remove(Answer answer) {
+        answer.deleted();
+        Answer testAnswer = answerRepository.save(answer);
+        logger.info("testAnswer: " + testAnswer.toString());
     }
 
     public List<Answer> findAll() {
-        return answerRepository.findAll();
+        return answerRepository.findAllByAndDeletedFalse();
     }
 }
