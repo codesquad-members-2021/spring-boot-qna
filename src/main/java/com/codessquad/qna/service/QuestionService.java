@@ -3,15 +3,12 @@ package com.codessquad.qna.service;
 import com.codessquad.qna.domain.*;
 import com.codessquad.qna.exception.*;
 import com.codessquad.qna.repository.QuestionRepository;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
-import org.springframework.data.domain.Pageable;
-
+import org.springframework.ui.Model;
 import javax.servlet.http.HttpSession;
 
-import java.util.List;
+import java.util.*;
 
 import static com.codessquad.qna.controller.HttpSessionUtils.*;
 
@@ -20,7 +17,6 @@ public class QuestionService {
 
     private final QuestionRepository questionRepository;
 
-    @Autowired
     public QuestionService(QuestionRepository questionRepository) {
         this.questionRepository = questionRepository;
     }
@@ -46,12 +42,6 @@ public class QuestionService {
         return questionRepository.findAll();
     }
 
-//    public Page<Question> findPage(int pageNumber) {
-//        int pageSize = 15;
-//        Pageable pageable = PageRequest.of(pageNumber - 1, pageSize);
-//        return questionRepository.findAll(pageable);
-//    }
-
     public Page<Question> findPage(Pageable pageable) {
         return questionRepository.findAll(pageable);
     }
@@ -70,6 +60,55 @@ public class QuestionService {
         if (question.isNotSameAuthor(loginUser)) {
             throw new IllegalUserAccessException();
         }
+    }
+
+    private class PageNumber {
+        private int pageId;
+        private boolean active;
+        private int pageNumber;
+
+        private PageNumber(int pageId, boolean active, int pageNumber) {
+            this.pageId = pageId;
+            this.active = active;
+            this.pageNumber = pageNumber;
+        }
+
+        public int getPageId() {
+            return pageId;
+        }
+
+        public boolean isActive() {
+            return active;
+        }
+
+        public int getPageNumber() {
+            return pageNumber;
+        }
+    }
+
+    public void addPages(Model model, Pageable pageable) {
+        Page<Question> page = findPage(pageable);
+        model.addAttribute("page", page);
+        model.addAttribute("hasPrevious", page.hasPrevious());
+        model.addAttribute("hasNext", page.hasNext());
+        model.addAttribute("previous", pageable.previousOrFirst().getPageNumber());
+        model.addAttribute("next", pageable.next().getPageNumber());
+        List<PageNumber> pages = new ArrayList<>();
+        for (int pageId = 0; pageId < page.getTotalPages(); pageId++) {
+            if (Math.abs(pageId - pageable.getPageNumber()) <= 2) {
+                boolean active = false;
+                if (pageable.getPageNumber() == pageId) {
+                    active = true;
+                }
+                pages.add(new PageNumber(pageId, active, pageId + 1));
+                while (pages.size() > 5) {
+                    pages.remove(0);
+                }
+            } else if (pages.size() < 5) {
+                pages.add(new PageNumber(pageId, false, pageId + 1));
+            }
+        }
+        model.addAttribute("pages", pages);
     }
 }
 
