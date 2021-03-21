@@ -106,6 +106,7 @@ public class Question {
         this.title = title;
         this.contents = contents;
     }
+
     public void updateQuestionInfo(Question question) {
         this.title = question.getTitle();
         this.contents = question.getContents();

@@ -25,7 +25,8 @@ public class Answer {
 
     private LocalDateTime createdDate;
 
-    public Answer(){}
+    public Answer() {
+    }
 
     public Answer(Question question, String contents, User loginUser) {
         this.question = question;
@@ -50,8 +51,8 @@ public class Answer {
         return contents;
     }
 
-    public String getFormattedCreatedDate(){
-        if (createdDate == null){
+    public String getFormattedCreatedDate() {
+        if (createdDate == null) {
             return "";
         }
         return createdDate.format(DateTimeFormatter.ofPattern("yyyy.MM.dd HH:mm"));
