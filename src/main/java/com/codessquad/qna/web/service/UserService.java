@@ -44,7 +44,7 @@ public class UserService {
         return userRepository.findAll();
     }
 
-    public User verifyUser(long id, HttpSession session){
+    public User verifiedUser(long id, HttpSession session){
         User user = findUserById(id);
         User loginUser = SessionUtils.getLoginUser(session);
 
@@ -54,7 +54,8 @@ public class UserService {
         return user;
     }
 
-    public User updateProfile(User user, User updatedUser, String oldPassword){
+    public User updateProfile(long id, User updatedUser, String oldPassword, HttpSession session){
+        User user = verifiedUser(id, session);
         if (user.isMatchingPassword(oldPassword)) {
             user.update(updatedUser);
             userRepository.save(user);

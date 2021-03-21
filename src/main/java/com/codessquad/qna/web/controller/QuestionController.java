@@ -21,15 +21,14 @@ public class QuestionController {
     }
 
     @PostMapping()
-    public String create(QuestionRequest request, HttpSession session) {
-        questionService.create(request, session);
+    public String create(HttpSession session, QuestionRequest request) {
+        questionService.create(session, request);
         return "redirect:/";
     }
 
     @PutMapping("/{id}")
-    public String update(@PathVariable long id, QuestionRequest request, HttpSession session) {
-        Question question = questionService.authenticate(id, session);
-        questionService.update(question, request);
+    public String update(@PathVariable long id, HttpSession session, QuestionRequest request) {
+        questionService.update(id, session, request);
         return "redirect:/questions/" + id;
     }
 

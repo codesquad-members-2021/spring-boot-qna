@@ -24,15 +24,22 @@ public class QuestionService {
         this.answerRepository = answerRepository;
     }
 
-    public void create(QuestionRequest request, HttpSession session){
+    public void create(HttpSession session, QuestionRequest request){
         User loginUser = SessionUtils.getLoginUser(session);
         Question question = request.toEntity(loginUser);
         questionRepository.save(question);
     }
 
-    public void update(Question question, QuestionRequest request){
+    public void update(long id, HttpSession session, QuestionRequest request){
+        Question question = authenticate(id, session);
         question.update(request.getTitle(), request.getContents());
         questionRepository.save(question);
+    }
+
+
+    public void delete(long id, HttpSession session){
+        Question question = authenticate(id, session);
+        questionRepository.delete(question);
     }
 
     public Question authenticate(long id, HttpSession session){
@@ -45,22 +52,11 @@ public class QuestionService {
         }
         return question;
     }
-
-    public void delete(long id, HttpSession session){
-        Question question = getQuestionById(id);
-        User loginUser = SessionUtils.getLoginUser(session);
-
-        if (!question.isMatchingWriter(loginUser)) {
-            throw new CRUDAuthenticationException("Cannot edit other user's posts");
-        }
-        questionRepository.delete(question);
-    }
-
     public List<Answer> list(long questionId){
         return answerRepository.findByQuestionId(questionId);
     }
 
-    public Question getQuestionById(Long id) {
+    public Question getQuestionById(long id) {
         return questionRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Cannot found question number " + id));
     }
