@@ -1,6 +1,6 @@
 package com.codessquad.qna.util;
 
-import com.codessquad.qna.domain.User;
+import com.codessquad.qna.domain.dto.UserDto;
 
 import javax.servlet.http.HttpSession;
 
@@ -11,11 +11,15 @@ public class HttpSessionUtils {
     private HttpSessionUtils() {
     }
 
-    public static User getUserFromSession(HttpSession session) {
+    public static UserDto getUserFromSession(HttpSession session) {
         if (!isLoginUser(session)) {
             throw new IllegalArgumentException("로그인 되어 있지 않음");
         }
-        return (User) session.getAttribute(USER_SESSION_KEY);
+        return (UserDto) session.getAttribute(USER_SESSION_KEY);
+    }
+
+    public static void updateSessionUser(UserDto user, HttpSession session) {
+        session.setAttribute(USER_SESSION_KEY, user);
     }
 
     private static boolean isLoginUser(HttpSession session) {
