@@ -30,6 +30,7 @@ public class QuestionController {
         logger.debug("total : " + page.getTotalElements());
         logger.debug("total page : " + page.getTotalPages());
         model.addAttribute("questions", page);
+        model.addAttribute("pageNumber", pageNumber);
         return "qna/list";
     }
 
