@@ -1,5 +1,6 @@
 package com.codessquad.qna.controller;
 
+import com.codessquad.qna.HttpSessionUtils;
 import com.codessquad.qna.domain.User;
 import com.codessquad.qna.service.UserService;
 import org.springframework.stereotype.Controller;
@@ -8,6 +9,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+
+import javax.servlet.http.HttpSession;
 
 @Controller
 @RequestMapping("/users")
@@ -43,8 +46,52 @@ public class UserController {
         return "/user/profile";
     }
 
+    @GetMapping("/loginForm")
+    public String loginForm() {
+
+        return "/user/login";
+    }
+
+    @PostMapping("/login")
+    public String login(String userId, String password, HttpSession session){
+
+        User user = userService.findById(userId);
+
+        if(user == null){
+
+            return "redirect:/users/loginForm";
+        }
+
+        if(!user.matchPassword(password)){
+
+            return "redirect:/users/loginForm";
+        }
+
+        session.setAttribute(HttpSessionUtils.USER_SESSION_KEY, user);
+
+        return "redirect:/";
+    }
+
+    @GetMapping("/logout")
+    public String logout(HttpSession session) {
+
+        session.removeAttribute("sessionedUser");
+
+        return "redirect:/";
+    }
+
     @GetMapping("/{id}/validation")
-    public String userValidation(@PathVariable Long id, Model model){
+    public String userValidation(@PathVariable Long id, Model model, HttpSession session){
+
+        User sessionedUser = (User)session.getAttribute("sessionedUser");
+
+        if(!HttpSessionUtils.isLoginUser(session)) {
+            return "redirect:/users/form";
+        }
+
+        if(!sessionedUser.matchId(id)) {
+            return "redirect:/users/form";
+        }
 
         model.addAttribute("id", id);
 
@@ -52,10 +99,15 @@ public class UserController {
     }
 
     @PostMapping("/validation")
-    public String validationUser(User user, Model model) {
+    public String validationUser(User user, Model model, HttpSession session) {
 
+        User sessionedUser = (User)session.getAttribute("sessionedUser");
 
-        if(userService.validationUserInfo(user.getId(), user.getPassword())){
+        if(!HttpSessionUtils.isLoginUser(session)) {
+            return "redirect:/users/form";
+        }
+
+        if(userService.validationUserInfo(user.getId())){
 
             model.addAttribute("user", user);
 
@@ -66,7 +118,17 @@ public class UserController {
     }
 
     @PostMapping("/{id}")
-    public String userUpdate(@PathVariable Long id, User newUser){
+    public String userUpdate(@PathVariable Long id, User newUser, HttpSession session){
+
+        User sessionedUser = (User)session.getAttribute("sessionedUser");
+
+        if(!HttpSessionUtils.isLoginUser(session)) {
+            return "redirect:/users/form";
+        }
+
+        if(!sessionedUser.matchId(id)) {
+            return "redirect:/users/form";
+        }
 
         User user = userService.findUser(id).get();
 

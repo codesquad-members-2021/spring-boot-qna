@@ -30,11 +30,18 @@ public class UserService {
         return repository.findById(id);
     }
 
-    public boolean validationUserInfo(Long id, String password) {
+    public boolean validationUserInfo(Long userId) {
 
-        User user = repository.findById(id).get();
+        User user = repository.findById(userId).get();
 
-        return user.matchPassword(password);
+        return user.matchPassword(user.getPassword());
+    }
+
+    public User findById(String userId){
+
+        User user = repository.findByUserId(userId);
+
+        return user;
     }
 
 
