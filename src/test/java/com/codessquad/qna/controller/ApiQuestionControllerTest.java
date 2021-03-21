@@ -1,5 +1,6 @@
 package com.codessquad.qna.controller;
 
+import com.codessquad.qna.domain.pagination.Criteria;
 import com.codessquad.qna.domain.question.Question;
 import com.codessquad.qna.service.QuestionService;
 import org.junit.jupiter.api.BeforeEach;
@@ -51,8 +52,8 @@ class ApiQuestionControllerTest {
                 .andReturn()
                 .getModelAndView()
                 .getModelMap()));
-
-        Page<Question> paging = questionService.pagingList();
+        Criteria cri = new Criteria(1, 15);
+        Page<Question> paging = questionService.pagingList(cri);
 
         assertThat(paging.getNumber()).isEqualTo(0);
         assertThat(paging.getSize()).isEqualTo(15);

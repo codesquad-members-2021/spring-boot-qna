@@ -1,5 +1,7 @@
 package com.codessquad.qna.controller;
 
+import com.codessquad.qna.domain.pagination.Criteria;
+import com.codessquad.qna.domain.pagination.PageDTO;
 import com.codessquad.qna.service.QuestionService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -15,8 +17,11 @@ public class IndexController {
     }
 
     @GetMapping("/")
-    public String goMain(Model model) {
-        model.addAttribute("questions", questionService.pagingList());
+    public String goMain(Criteria cri, Model model) {
+        cri.setPageNum(1);
+        cri.setAmount(15);
+        model.addAttribute("pageMaker", new PageDTO(cri, 100));
+        model.addAttribute("questions", questionService.pagingList(cri));
         return "index";
     }
 }
