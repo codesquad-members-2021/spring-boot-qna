@@ -31,4 +31,8 @@ public class QuestionService {
     public Question findById(Long id) {
         return questionRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Question Not Found"));
     }
+
+    public void deleteQuestion(Question question) {
+        questionRepository.delete(question);
+    }
 }

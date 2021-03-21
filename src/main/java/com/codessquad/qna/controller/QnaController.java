@@ -67,9 +67,22 @@ public class QnaController {
         Question originalQuestion = questionService.findById(id);
         User user = getUserFromSession(session);
         if (!originalQuestion.getWriter().equals(user.getUserId())) { // 작성자와 로그인 된 사용자가 불일치 시
-            // TODO: throw exception
+            // TODO: throw exception "다른 사람의 글을 수정할 수 없다."와 같은 에러 메시지를 출력하는 페이지로 이동하도록
         }
         questionService.modifyQuestion(originalQuestion, modifiedQuestion);
+        return "redirect:/";
+    }
+
+    @DeleteMapping("/{id}")
+    public String deleteQuestion(@PathVariable long id, HttpSession session) {
+        Question question = questionService.findById(id);
+        User user = getUserFromSession(session);
+        if (!question.getWriter().equals(user.getUserId())) {
+            // TODO: 로그인 안 됐으면 로그인 화면 이동, 다른 유저면 에러페이지
+            System.out.println("not logged in");
+            return "redirect:/users/login";
+        }
+        questionService.deleteQuestion(question);
         return "redirect:/";
     }
 
