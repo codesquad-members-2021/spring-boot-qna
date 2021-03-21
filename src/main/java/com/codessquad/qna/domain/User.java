@@ -15,6 +15,16 @@ public class User extends AbstractEntity {
     private String password;
     private String email;
 
+    protected User() {
+    }
+
+    public User(Long id, String userId, String name, String email) {
+        super.setId(id);
+        this.userId = userId;
+        this.name = name;
+        this.email = email;
+    }
+
     public String getUserId() {
         return userId;
     }
