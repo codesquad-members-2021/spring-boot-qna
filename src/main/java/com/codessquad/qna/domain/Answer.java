@@ -65,6 +65,10 @@ public class Answer {
         return answerId.equals(answer.answerId);
     }
 
+    public boolean isEqualWriter(User sessionUser) {
+        return writer.isEqualUserId(sessionUser.getUserId());
+    }
+
     @Override
     public int hashCode() {
         return Objects.hash(answerId);

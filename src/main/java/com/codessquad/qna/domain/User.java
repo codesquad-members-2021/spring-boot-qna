@@ -86,6 +86,13 @@ public class User {
         return false;
     }
 
+    public void updateUserInfo(User referenceUser, String newPassword){
+        this.userId = referenceUser.getUserId();
+        this.password = newPassword;
+        this.name = referenceUser.getName();
+        this.email = referenceUser.getEmail();
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

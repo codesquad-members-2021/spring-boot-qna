@@ -1,5 +1,6 @@
 package com.codessquad.qna.controller;
 
+import com.codessquad.qna.domain.Result;
 import com.codessquad.qna.domain.User;
 import com.codessquad.qna.service.UserService;
 import com.codessquad.qna.util.HttpSessionUtils;
@@ -24,17 +25,29 @@ public class UserController {
     }
 
     @PostMapping
-    public String createUser(User newUser) {
+    public String createUser(User newUser, Model model) {
 
-        // newUser가 null이거나 속성이 빈값일 경우
+        if(newUser == null){
+            model.addAttribute("errorMessage", "회원가입에 실패하였습니다.");
+            return "user/form";
+        }
+
         if (newUser.isEmpty()) {
+            model.addAttribute("errorMessage", "회원가입 필드가 누락되었습니다.");
+            return "user/form";
+        }
+
+        // 중복회원 검사
+        User user = userService.getOneByUserId(newUser.getUserId()).orElse(null);
+        if(user != null){
+            model.addAttribute("errorMessage", "이미 존재하는 회원입니다.");
             return "user/form";
         }
 
         User savedUser = userService.join(newUser);
 
-        // 회원의 속성을 비교하여 정상적으로 회원가입 되었는 지 확인
         if (!savedUser.equals(newUser)) {
+            model.addAttribute("errorMessage", "회원가입에 실패하였습니다.");
             return "user/form";
         }
 
@@ -49,20 +62,27 @@ public class UserController {
     }
 
     @GetMapping("/{id}")
-    public String showUserInDetail(@PathVariable long id, Model model) {
-        model.addAttribute("user", userService.getOneById(id).orElse(null));
+    public String showUserInDetail(@PathVariable long id, Model model, HttpSession session) {
+        User user = userService.getOneById(id).orElse(null);
+        Result result = checkSession(session, user);
 
+        if (!result.isValid()) {
+            model.addAttribute("errorMessage", result.getErrorMessage());
+            return "user/login";
+        }
+
+        model.addAttribute("user", user);
         return "user/profile";
     }
 
     @GetMapping("/{id}/form")
     public String moveToUpdateForm(@PathVariable long id, Model model, HttpSession session) {
         User user = userService.getOneById(id).orElse(null);
+        Result result = checkSession(session, user);
 
-        User sessionedUser = HttpSessionUtils.getUserFromSession(session);
-
-        if (!sessionedUser.isEqualUserId(user.getUserId())) {
-            throw new IllegalStateException("본인의 정보만 수정할 수 있습니다.");
+        if (!result.isValid()) {
+            model.addAttribute("errorMessage", result.getErrorMessage());
+            return "user/login";
         }
 
         model.addAttribute("id", user.getId());
@@ -72,46 +92,53 @@ public class UserController {
     }
 
     @PutMapping("/{id}")
-    public String updateUser(@PathVariable long id, User referenceUser, HttpSession session) {
-        User presentUser = userService.getOneById(id).orElse(null);
+    public String updateUser(@PathVariable long id, User referenceUser, String newPassword, HttpSession session, Model model) {
+        User user = userService.getOneById(id).orElse(null);
+        Result result = checkSession(session, user);
 
-        User sessionedUser = HttpSessionUtils.getUserFromSession(session);
-
-        if (presentUser == null) {
-            logger.info("present empty");
-            return "redirect:/users";
+        if (user == null) {
+            model.addAttribute("errorMessage", "존재하지 않는 회원입니다.");
+            model.addAttribute("userId", user.getUserId());
+            return "user/update";
         }
         if (referenceUser.isEmpty()) {
-            logger.info("reference empty");
-            return "redirect:/users";
+            model.addAttribute("errorMessage", "비어있는 필드가 있습니다.");
+            model.addAttribute("userId", user.getUserId());
+            return "user/update";
         }
 
-        if (!presentUser.isEqualPassword(referenceUser.getPassword())) {
-            logger.info("isEqualPassword");
-            return "redirect:/users";
+        if (!user.isEqualPassword(referenceUser.getPassword())) {
+            model.addAttribute("errorMessage", "비밀번호가 일치하지 않습니다.");
+            model.addAttribute("userId", user.getUserId());
+            return "user/update";
         }
 
-        userService.updateInfo(presentUser, referenceUser);
-        return "redirect:/users";
+        if (!result.isValid()) {
+            model.addAttribute("errorMessage", result.getErrorMessage());
+            return "user/login";
+        }
+
+        userService.updateInfo(user, referenceUser, newPassword);
+        return "redirect:/";
     }
 
     @PostMapping("/login")
-    public String login(String userId, String password, HttpSession session) {
-        // 아이디 존재여부 확인
-        // TODO: userId에 해당하는 User가 없는 경우, 왜 null 처리가 되지 않나?
-        User loginUser = userService.getOneByUserId(userId).orElse(null);
-        if (loginUser == null) {
-            return "redirect:/users/login";
+    public String login(String userId, String password, HttpSession session, Model model) {
+        User user = userService.getOneByUserId(userId).orElse(null);
+
+        if (user == null) {
+            model.addAttribute("errorMessage", "존재하지 않는 회원입니다.");
+            model.addAttribute("userId", userId);
+            return "user/login";
         }
 
-        // 비밀번호 일치여부 확인
-        if (!loginUser.isEqualPassword(password)) {
-            return "redirect:/users/login";
+        if (!user.isEqualPassword(password)) {
+            model.addAttribute("errorMessage", "비밀번호가 일치하지 않습니다.");
+            model.addAttribute("userId", userId);
+            return "user/login";
         }
 
-        // 세션 처리
-        session.setAttribute(USER_SESSION_KEY, loginUser);
-
+        session.setAttribute(USER_SESSION_KEY, user);
         return "redirect:/";
     }
 
@@ -120,5 +147,18 @@ public class UserController {
         session.removeAttribute(USER_SESSION_KEY);
 
         return "redirect:/";
+    }
+
+    private Result checkSession(HttpSession session, User user) {
+        if (!HttpSessionUtils.isLoginUser(session)) {
+            return Result.fail("로그인이 필요합니다.");
+        }
+
+        User sessionUser = HttpSessionUtils.getUserFromSession(session);
+        if (!user.equals(sessionUser)) {
+            return Result.fail("자신만이 사용자의 정보를 확인 및 수정할 수 있습니다.");
+        }
+
+        return Result.ok();
     }
 }
