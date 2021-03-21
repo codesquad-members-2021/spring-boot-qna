@@ -2,6 +2,7 @@ package com.codessquad.qna.controller;
 
 import com.codessquad.qna.domain.Answer;
 import com.codessquad.qna.domain.Result;
+import com.codessquad.qna.domain.User;
 import com.codessquad.qna.service.AnswerService;
 import com.codessquad.qna.util.HttpSessionUtils;
 import org.springframework.stereotype.Controller;
@@ -43,20 +44,18 @@ public class AnswerController {
         }
 
         answerService.remove(answerId);
-        //TODO: 특정 질문으로 리다이렉트
-        return "redirect:/";
+        return "redirect:/questions/{questionId}";
     }
 
-    //TODO: 중복이므로 클래스 분리 필
     private Result checkSession(HttpSession session, Answer answer) {
         if (!HttpSessionUtils.isLoginUser(session)) {
             return Result.fail("로그인이 필요합니다.");
         }
 
-//        User sessionUser = HttpSessionUtils.getUserFromSession(session);
-//        if (!answer.isEqualWriter(sessionUser)) {
-//            return Result.fail("자신이 쓴 글만 수정 및 삭제가 가능합니다.");
-//        }
+        User sessionUser = HttpSessionUtils.getUserFromSession(session);
+        if (!answer.isEqualWriter(sessionUser)) {
+            return Result.fail("자신이 쓴 글만 수정 및 삭제가 가능합니다.");
+        }
 
         return Result.ok();
     }

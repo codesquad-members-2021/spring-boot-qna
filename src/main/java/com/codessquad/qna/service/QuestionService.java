@@ -36,6 +36,7 @@ public class QuestionService {
         return questionRepository.findById(id);
     }
 
+    //TODO: 로직 변경, delete 부분 제거
     public void updateInfo(Question presentQuestion, Question referenceQuestion) {
         // TODO: setter 안쓰고 id 바꾸는 방법?
         referenceQuestion.setQuestionId(presentQuestion.getQuestionId());

@@ -41,12 +41,10 @@ public class UserService {
         return userRepository.findById(id);
     }
 
-    public void updateInfo(User presentUser, User referenceUser) {
+    public void updateInfo(User presentUser, User referenceUser, String newPassword) {
 
-        referenceUser.setUserId(presentUser.getUserId());
-
-        userRepository.delete(presentUser);
-        userRepository.save(referenceUser);
+        presentUser.updateUserInfo(referenceUser, newPassword);
+        userRepository.save(presentUser);
     }
 
     public Optional<User> getOneByUserId(String userId) {
