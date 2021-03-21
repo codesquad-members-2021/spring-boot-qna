@@ -5,7 +5,7 @@ import java.util.List;
 
 public class PageBlock {
 
-    private static final int DEFAULT_PAGE_COUNT = 5;
+    private static final int DEFAULT_PAGE_COUNT = 4;
 
     private final List<Integer> blocks;
     private final int blockSize;
