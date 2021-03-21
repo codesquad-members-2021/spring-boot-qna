@@ -21,7 +21,7 @@ public class ApiAnswerController {
     @PostMapping
     public AnswerDto create(@PathVariable Long questionId, String contents, HttpSession session) {
         User user = HttpSessionUtils.getUserFromSession(session);
-        return answerService.write(user, contents, questionId).returnDto();
+        return answerService.write(user, contents, questionId);
     }
 
     @DeleteMapping("/{id}")

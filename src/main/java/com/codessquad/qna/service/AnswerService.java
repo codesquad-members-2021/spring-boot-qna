@@ -4,6 +4,7 @@ import com.codessquad.qna.domain.Answer;
 import com.codessquad.qna.domain.DisplayStatus;
 import com.codessquad.qna.domain.Question;
 import com.codessquad.qna.domain.User;
+import com.codessquad.qna.domain.dto.AnswerDto;
 import com.codessquad.qna.exception.NoSearchObjectException;
 import com.codessquad.qna.repository.AnswerRepository;
 import com.codessquad.qna.repository.QuestionRepository;
@@ -25,11 +26,11 @@ public class AnswerService {
     }
 
     @Transactional
-    public Answer write(User writer, String contents, Long questionId) {
+    public AnswerDto write(User writer, String contents, Long questionId) {
         UserValidator.validate(writer);
         Question question = questionRepository.findById(questionId).orElseThrow(() -> new NoSearchObjectException("질문"));
         Answer answer = new Answer(writer, question, contents);
-        return answerRepository.save(answer);
+        return AnswerDto.createDto(answerRepository.save(answer));
     }
 
     public Answer findById(Long answerId) {
