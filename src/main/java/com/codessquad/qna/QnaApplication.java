@@ -1,5 +1,8 @@
 package com.codessquad.qna;
 
+import com.codessquad.qna.domain.Question;
+import com.codessquad.qna.repository.QuestionRepository;
+import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
@@ -10,6 +13,8 @@ import springfox.documentation.service.ApiInfo;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spring.web.plugins.Docket;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
+
+import java.util.stream.IntStream;
 
 @SpringBootApplication
 @EnableJpaAuditing
@@ -35,5 +40,12 @@ public class QnaApplication {
                 .title("mySpringApi")
                 .version("0.1")
                 .build();
+    }
+
+    @Bean
+    public CommandLineRunner runner(QuestionRepository questionRepository) throws Exception {
+        return args -> {
+            IntStream.rangeClosed(2, 100).forEach(o -> questionRepository.save(new Question()));
+        };
     }
 }
