@@ -10,7 +10,7 @@ public class Question {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Long questionId;
 
     @ManyToOne
     @JoinColumn(foreignKey = @ForeignKey(name = "fk_question_writer"))
@@ -31,8 +31,8 @@ public class Question {
         this.createdDate = LocalDateTime.now();
     }
 
-    public Long getId() {
-        return id;
+    public Long getQuestionId() {
+        return questionId;
     }
 
     public User getWriter() {
@@ -47,8 +47,8 @@ public class Question {
         return contents;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public void setQuestionId(Long questionId) {
+        this.questionId = questionId;
     }
 
     public void setWriter(User writer) {
@@ -95,7 +95,7 @@ public class Question {
     @Override
     public String toString() {
         return "Question{" +
-                "id=" + id +
+                "id=" + questionId +
                 ", writer='" + writer + '\'' +
                 ", title='" + title + '\'' +
                 ", contents='" + contents + '\'' +

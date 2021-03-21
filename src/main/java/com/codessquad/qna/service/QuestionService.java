@@ -38,7 +38,7 @@ public class QuestionService {
 
     public void updateInfo(Question presentQuestion, Question referenceQuestion) {
         // TODO: setter 안쓰고 id 바꾸는 방법?
-        referenceQuestion.setId(presentQuestion.getId());
+        referenceQuestion.setQuestionId(presentQuestion.getQuestionId());
 
         questionRepository.delete(presentQuestion);
         questionRepository.save(referenceQuestion);

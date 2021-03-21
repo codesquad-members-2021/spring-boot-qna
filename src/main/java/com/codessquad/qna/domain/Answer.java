@@ -10,7 +10,7 @@ public class Answer {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Long answerId;
 
     @ManyToOne
     @JoinColumn(foreignKey = @ForeignKey(name = "fk_answer_writer"))
@@ -32,6 +32,10 @@ public class Answer {
         this.writer = loginUser;
         this.contents = contents;
         createdDate = LocalDateTime.now();
+    }
+
+    public Long getAnswerId() {
+        return answerId;
     }
 
     public User getWriter() {
@@ -58,18 +62,18 @@ public class Answer {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Answer answer = (Answer) o;
-        return id.equals(answer.id);
+        return answerId.equals(answer.answerId);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id);
+        return Objects.hash(answerId);
     }
 
     @Override
     public String toString() {
         return "Answer{" +
-                "id=" + id +
+                "id=" + answerId +
                 ", writer=" + writer +
                 ", question=" + question +
                 ", contents='" + contents + '\'' +
