@@ -5,6 +5,7 @@ import com.codessquad.qna.domain.answer.Answer;
 import com.codessquad.qna.domain.user.User;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -12,17 +13,20 @@ public class Question extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private Long id;
 
     @ManyToOne
     @JoinColumn(foreignKey = @ForeignKey(name = "fk_question_writer"))
     private User writer;
-    private String title;
+
+    @Column(length = 20000)
     private String content;
 
     @OneToMany(mappedBy = "question")
     @OrderBy("id DESC")
-    private List<Answer> answers;
+    private final List<Answer> answers = new ArrayList<>();
+
+    private String title;
 
     public Question() {
     }
@@ -34,7 +38,7 @@ public class Question extends BaseTimeEntity {
         this.content = content;
     }
 
-    public long getId() {
+    public Long getId() {
         return id;
     }
 
