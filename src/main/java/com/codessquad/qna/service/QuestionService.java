@@ -7,6 +7,7 @@ import com.codessquad.qna.domain.question.Question;
 import com.codessquad.qna.domain.question.QuestionRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -63,8 +64,8 @@ public class QuestionService {
     }
 
     public Page<Question> pagingList(Criteria cri) {
-        PageRequest pageRequest = PageRequest.of(cri.getPageNum() - 1, cri.getAmount());
-        Page<Question> questions = questionRepository.findAll(pageRequest);
+        PageRequest pageRequest = PageRequest.of(cri.getPageNum() - 1, cri.getAmount(), Sort.by("id").descending());
+        Page<Question> questions = questionRepository.findAllByDeletedIsFalse(pageRequest);
         return questions;
     }
 }
