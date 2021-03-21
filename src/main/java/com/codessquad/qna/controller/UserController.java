@@ -1,6 +1,8 @@
 package com.codessquad.qna.controller;
 
 import com.codessquad.qna.domain.User;
+import com.codessquad.qna.exception.IllegalUserAccessException;
+import com.codessquad.qna.exception.UserNotFoundException;
 import com.codessquad.qna.service.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,16 +29,18 @@ public class UserController {
     public String loginForm() { return "/user/login"; }
 
     @PostMapping("/login")
-    public String login(String userId, String password, HttpSession session) {
+    public String login(String userId, String password, HttpSession session, Model model) {
         Optional<User> tempUser = userService.findByUserId(userId);
 
         if (!tempUser.isPresent()) {
-            return "user/login_failed";
+            model.addAttribute("errorMessage", "errorMessage");
+            return "user/login";
         }
 
         User user = tempUser.get();
         if (!user.matchPassword(password)) {
-            return "user/login_failed";
+            model.addAttribute("errorMessage", "errorMessage");
+            return "user/login";
         }
 
         logger.info("User Logged In: {}", user);
@@ -76,30 +80,33 @@ public class UserController {
         if (!isLoginUser(session)) {
             return "redirect:/users/login";
         }
-        User sessionedUser = getUserFromSession(session);
-        if (!sessionedUser.matchId(id)) {
-            throw new IllegalArgumentException("User Can Only Change Their Info");
+        User user = validateUser(id, session);
+        model.addAttribute("user", user);
+        return "user/updateForm";
+    }
+
+    @GetMapping("/{id}/wrongPassword")
+    public String modifyProfileWithErrMsg(@PathVariable long id, Model model, HttpSession session) {
+        if (!isLoginUser(session)) {
+            return "redirect:/users/login";
         }
-        User user = userService.findById(id);
+        User user = validateUser(id, session);
+        model.addAttribute("errorMessage", "errorMessage");
         model.addAttribute("user", user);
         return "user/updateForm";
     }
 
     @PutMapping("/{id}/update")
-    public String modifyProfile(@PathVariable long id, User updatedUser, String oldPassword, HttpSession session) {
+    public String modifyProfile(@PathVariable long id, User updatedUser, String oldPassword,
+                                HttpSession session, Model model) {
         if (!isLoginUser(session)) {
             return "redirect:/users/login";
         }
-        User sessionedUser = getUserFromSession(session);
-        if (!sessionedUser.matchId(id)) {
-            throw new IllegalArgumentException("User Can Only Change Their Info");
-        }
-
-        User user = userService.findById(id);
+        User user = validateUser(id, session);
 
         if (!user.matchPassword(oldPassword)) {
-            logger.debug("Old Password Does Not Match");
-            return "redirect:/users";
+            model.addAttribute("user", user);
+            return "redirect:/users/{id}/wrongPassword";
         }
 
         logger.info("Updated info: {}", updatedUser);
@@ -107,8 +114,16 @@ public class UserController {
         return "redirect:/users";
     }
 
-    @ExceptionHandler(IllegalArgumentException.class)
+    private User validateUser(@PathVariable long id, HttpSession session) {
+        User sessionedUser = getUserFromSession(session);
+        if (!sessionedUser.matchId(id)) {
+            throw new IllegalUserAccessException();
+        }
+        return userService.findById(id);
+    }
+
+    @ExceptionHandler(UserNotFoundException.class)
     public String handleException() {
-        return "error";
+        return "redirect:/";
     }
 }

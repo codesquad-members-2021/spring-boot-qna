@@ -26,26 +26,9 @@ public class Question {
         this.writer = writer;
         this.title = title;
         this.contents = contents;
-        this.timeCreated = LocalDateTime.now();
     }
 
     protected Question() {}
-
-    public void setWriter(String writer) {
-        this.writer = writer;
-    }
-
-    public void setTimeCreated() {
-        this.timeCreated = LocalDateTime.now();
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    public void setContents(String contents) {
-        this.contents = contents;
-    }
 
     public String getWriter() {
         return writer;
@@ -75,6 +58,10 @@ public class Question {
         this.title = modifiedQuestion.getTitle();
         this.contents = modifiedQuestion.getContents();
         return this;
+    }
+
+    public boolean isSameUser(User user) {
+        return this.writer.equals(user.getUserId());
     }
 
     @Override

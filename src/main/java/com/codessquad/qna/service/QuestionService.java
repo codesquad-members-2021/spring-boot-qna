@@ -3,6 +3,7 @@ package com.codessquad.qna.service;
 import com.codessquad.qna.domain.Question;
 import com.codessquad.qna.domain.QuestionRepository;
 import com.codessquad.qna.domain.User;
+import com.codessquad.qna.exception.QuestionNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -29,7 +30,7 @@ public class QuestionService {
     }
 
     public Question findById(Long id) {
-        return questionRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Question Not Found"));
+        return questionRepository.findById(id).orElseThrow(QuestionNotFoundException::new);
     }
 
     public void deleteQuestion(Question question) {
