@@ -102,9 +102,13 @@ public class Question {
                 '}';
     }
 
-    public void updateInfo(String title, String contents) {
+    public void updateQuestionInfo(String title, String contents) {
         this.title = title;
         this.contents = contents;
+    }
+    public void updateQuestionInfo(Question question) {
+        this.title = question.getTitle();
+        this.contents = question.getContents();
     }
 
     public boolean isEqualWriter(User sessionUser) {

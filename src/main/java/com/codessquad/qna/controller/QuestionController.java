@@ -68,7 +68,7 @@ public class QuestionController {
     }
 
     @PutMapping("/{questionId}")
-    public String updateQuestion(@PathVariable long questionId, String title, String contents, HttpSession session, Model model) {
+    public String updateQuestion(@PathVariable long questionId, Question referenceQuestion, HttpSession session, Model model) {
         Question question = questionService.getOneById(questionId).orElse(null);
         Result result = checkSession(session, question);
 
@@ -77,8 +77,7 @@ public class QuestionController {
             return "user/login";
         }
 
-        question.updateInfo(title, contents);
-        questionService.add(question);
+        questionService.updateInfo(question, referenceQuestion);
         return "redirect:/";
     }
 
