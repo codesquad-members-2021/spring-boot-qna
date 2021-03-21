@@ -2,6 +2,7 @@ package com.codessquad.qna.service;
 
 import com.codessquad.qna.domain.User;
 import com.codessquad.qna.domain.dto.UserDto;
+import com.codessquad.qna.exception.IllegalUserAccessException;
 import com.codessquad.qna.exception.IllegalUserUpdateException;
 import com.codessquad.qna.exception.NoSearchObjectException;
 import com.codessquad.qna.repository.UserRepository;
@@ -31,13 +32,17 @@ public class UserService {
         return userRepository.save(user).getId();
     }
 
-    public User findById(Long userId) {
+    private User findById(Long userId) {
         return userRepository.findById(userId).orElseThrow(() -> new NoSearchObjectException("유저"));
+    }
+
+    public UserDto findByIdToDto(Long userId) {
+        return UserDto.createDto(findById(userId));
     }
 
     public List<UserDto> findAll() {
         return userRepository.findAll().stream()
-                .map(o -> o.returnDto())
+                .map(UserDto::createDto)
                 .collect(Collectors.toList());
     }
 
@@ -58,8 +63,18 @@ public class UserService {
         }
     }
 
-    public User findByUserId(String userId) {
+    public UserDto findByUserIdToDto(String userId) {
+        return UserDto.createDto(findByUserId(userId));
+    }
+
+    private User findByUserId(String userId) {
         return userRepository.findByUserId(userId).orElseThrow(() -> new NoSearchObjectException("유저"));
+    }
+
+    public void checkSameUser(UserDto userDto, Long id) {
+        if (userDto.getId() != id) {
+            throw new IllegalUserAccessException("자신의 정보만 수정 가능");
+        }
     }
 
 }
