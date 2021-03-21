@@ -12,6 +12,7 @@ public class AnswerDto {
     private final String createDateTime;
 
     private AnswerDto(Answer answer) {
+        //todo : 빌더 패턴으로 변경
         this.id = answer.getId();
         this.writerUserId = answer.getWriter().getUserId();
         this.status = answer.getStatus();

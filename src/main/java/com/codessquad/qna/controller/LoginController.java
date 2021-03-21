@@ -1,6 +1,6 @@
 package com.codessquad.qna.controller;
 
-import com.codessquad.qna.domain.User;
+import com.codessquad.qna.domain.dto.UserDto;
 import com.codessquad.qna.service.UserService;
 import com.codessquad.qna.util.HttpSessionUtils;
 import org.slf4j.Logger;
@@ -25,7 +25,7 @@ public class LoginController {
     @PostMapping("/login")
     public String login(String userId, String password, HttpSession session) {
         userService.checkLoginable(userId, password);
-        User user = userService.findByUserId(userId);
+        UserDto user = userService.findByUserIdToDto(userId);
         session.setAttribute(HttpSessionUtils.USER_SESSION_KEY, user);
         return "redirect:/";
     }

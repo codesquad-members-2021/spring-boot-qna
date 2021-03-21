@@ -40,24 +40,25 @@ public class UserController {
 
     @GetMapping("/{userId}")
     public String renderProfile(@PathVariable Long userId, Model model) {
-        User user = userService.findById(userId);
-        model.addAttribute("user", user.returnDto());
+        UserDto user = userService.findByIdToDto(userId);
+        model.addAttribute("user", user);
         return "user/profile";
     }
 
     @GetMapping("/{id}/form")
     public String renderUpdateForm(@PathVariable Long id, Model model, HttpSession session) {
-        User user = HttpSessionUtils.getUserFromSession(session);
-        user.checkSameUser(id);
-        model.addAttribute("user", user.returnDto());
+        UserDto user = HttpSessionUtils.getUserFromSession(session);
+        userService.checkSameUser(user, id);
+        model.addAttribute("user", user);
         return "user/userUpdateForm";
     }
 
     @PutMapping("/{id}")
     public String userUpdate(@PathVariable Long id, User updatedUser, String newPassword, HttpSession session) {
-        User user = HttpSessionUtils.getUserFromSession(session);
-        user.checkSameUser(id);
+        UserDto user = HttpSessionUtils.getUserFromSession(session);
+        userService.checkSameUser(user, id);
         userService.update(updatedUser, newPassword, id);
+        HttpSessionUtils.updateSessionUser(UserDto.createDto(updatedUser), session);
         return "redirect:/";
     }
 
