@@ -60,8 +60,8 @@ public class UserController {
     }
 
     @PutMapping("/{id}")
-    public String updateProfile(@PathVariable long id, User updatedUser, String oldPassword) {
-        userService.updateProfile(id, updatedUser, oldPassword);
+    public String updateProfile(@PathVariable long id, User updatedUser, String oldPassword, HttpSession session) {
+        userService.updateProfile(userService.verifyUser(id, session), updatedUser, oldPassword);
         return "redirect:/users";
     }
 }

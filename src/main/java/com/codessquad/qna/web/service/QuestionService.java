@@ -30,8 +30,7 @@ public class QuestionService {
         questionRepository.save(question);
     }
 
-    public void update(long id, QuestionRequest request){
-        Question question = getQuestionById(id);
+    public void update(Question question, QuestionRequest request){
         question.update(request.getTitle(), request.getContents());
         questionRepository.save(question);
     }

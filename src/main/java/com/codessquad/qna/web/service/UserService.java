@@ -7,12 +7,10 @@ import com.codessquad.qna.web.exception.CRUDAuthenticationException;
 import com.codessquad.qna.web.exception.EntityNotFoundException;
 import com.codessquad.qna.web.exception.FailedLoginException;
 import com.codessquad.qna.web.utils.SessionUtils;
-import org.hibernate.Session;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpSession;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class UserService {
@@ -56,9 +54,7 @@ public class UserService {
         return user;
     }
 
-    public User updateProfile(long id, User updatedUser, String oldPassword){
-        User user = findUserById(id);
-
+    public User updateProfile(User user, User updatedUser, String oldPassword){
         if (user.isMatchingPassword(oldPassword)) {
             user.update(updatedUser);
             userRepository.save(user);
