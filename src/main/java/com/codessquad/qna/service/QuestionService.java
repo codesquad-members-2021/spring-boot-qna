@@ -1,5 +1,6 @@
 package com.codessquad.qna.service;
 
+import com.codessquad.qna.domain.pagination.Criteria;
 import com.codessquad.qna.domain.answer.Answer;
 import com.codessquad.qna.domain.answer.AnswerRepository;
 import com.codessquad.qna.domain.question.Question;
@@ -61,8 +62,8 @@ public class QuestionService {
         question.delete();
     }
 
-    public Page<Question> pagingList() {
-        PageRequest pageRequest = PageRequest.of(0, 15);
+    public Page<Question> pagingList(Criteria cri) {
+        PageRequest pageRequest = PageRequest.of(cri.getPageNum() - 1, cri.getAmount());
         Page<Question> questions = questionRepository.findAll(pageRequest);
         return questions;
     }

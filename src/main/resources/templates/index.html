@@ -29,9 +29,17 @@
                 <div class="col-md-3"></div>
                 <div class="col-md-6 text-center">
                     <ul class="pagination center-block" style="display:inline-block;">
+                        {{#pageMaker.prev}}
                         <li><a href="#">«</a></li>
-                        <li><a href="#">1</a></li>
+                        {{/pageMaker.prev}}
+
+                        {{#pageMaker.numbers}}
+                        <li><a href="#">{{number}}</a></li>
+                        {{/pageMaker.numbers}}
+
+                        {{#pageMaker.next}}
                         <li><a href="#">»</a></li>
+                        {{/pageMaker.next}}
                     </ul>
                 </div>
                 <div class="col-md-3 qna-write">
@@ -44,3 +52,10 @@
 {{/partial}}
 
 {{> component/base}}
+
+<script>
+    var Handlebars = require('handlebars');
+    var paginate = require('handlebars-paginate');
+
+    Handlebars.registerHelper('paginate', paginate);
+</script>

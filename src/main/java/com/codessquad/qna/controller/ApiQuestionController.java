@@ -1,5 +1,6 @@
 package com.codessquad.qna.controller;
 
+import com.codessquad.qna.domain.pagination.Criteria;
 import com.codessquad.qna.domain.question.Question;
 import com.codessquad.qna.service.QuestionService;
 import org.springframework.data.domain.Page;
@@ -18,7 +19,7 @@ public class ApiQuestionController {
     }
 
     @GetMapping("/")
-    public Page<Question> pagingList() {
-        return questionService.pagingList();
+    public Page<Question> pagingList(Criteria cri) {
+        return questionService.pagingList(cri);
     }
 }
