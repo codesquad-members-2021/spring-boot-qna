@@ -45,17 +45,17 @@ public class QuestionController {
         return "question/form";
     }
 
-    @GetMapping("/{id}")
-    public String showQuestionInDetail(@PathVariable long id, Model model) {
-        Question testQuestion = questionService.getOneById(id).orElse(null);
+    @GetMapping("/{questionId}")
+    public String showQuestionInDetail(@PathVariable long questionId, Model model) {
+        Question testQuestion = questionService.getOneById(questionId).orElse(null);
         model.addAttribute("question", testQuestion);
         logger.info(" testQuestion " + testQuestion.getAnswers().toString());
         return "question/show";
     }
 
-    @GetMapping("/{id}/form")
-    public String moveToUpdateForm(@PathVariable long id, Model model, HttpSession session) {
-        Question question = questionService.getOneById(id).orElse(null);
+    @GetMapping("/{questionId}/form")
+    public String moveToUpdateForm(@PathVariable long questionId, Model model, HttpSession session) {
+        Question question = questionService.getOneById(questionId).orElse(null);
         Result result = checkSession(session, question);
 
         if (!result.isValid()) {
@@ -67,9 +67,9 @@ public class QuestionController {
         return "question/update";
     }
 
-    @PutMapping("/{id}")
-    public String updateQuestion(@PathVariable long id, String title, String contents, HttpSession session, Model model) {
-        Question question = questionService.getOneById(id).orElse(null);
+    @PutMapping("/{questionId}")
+    public String updateQuestion(@PathVariable long questionId, String title, String contents, HttpSession session, Model model) {
+        Question question = questionService.getOneById(questionId).orElse(null);
         Result result = checkSession(session, question);
 
         if (!result.isValid()) {
@@ -82,9 +82,9 @@ public class QuestionController {
         return "redirect:/";
     }
 
-    @DeleteMapping("/{id}")
-    public String deleteQuestion(@PathVariable long id, HttpSession session, Model model) {
-        Question question = questionService.getOneById(id).orElse(null);
+    @DeleteMapping("/{questionId}")
+    public String deleteQuestion(@PathVariable long questionId, HttpSession session, Model model) {
+        Question question = questionService.getOneById(questionId).orElse(null);
         Result result = checkSession(session, question);
 
         if (!result.isValid()) {
@@ -92,7 +92,7 @@ public class QuestionController {
             return "user/login";
         }
 
-        questionService.remove(id);
+        questionService.remove(questionId);
         return "redirect:/";
     }
 
