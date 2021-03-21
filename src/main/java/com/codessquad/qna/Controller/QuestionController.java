@@ -5,6 +5,7 @@ import com.codessquad.qna.domain.QuestionRepostory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.expression.ExpressionException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -43,11 +44,10 @@ public class QuestionController {
     }
 
     @GetMapping("/qna/{index}")
-    public String showProfile(@PathVariable Long id, Model model) {
-        Question currentQuestion = questionRepostory.findById(id).get();
+    public String showProfile(@PathVariable Long id, Model model) throws Exception{
+        Question currentQuestion = questionRepostory.findById(id).orElseThrow(() -> new Exception("데이터 검색에 실패하였습니다"));
         model.addAttribute("question",currentQuestion);
         logger.info("update Question : " + currentQuestion.toString());
         return "/qna/show";
     }
-
 }

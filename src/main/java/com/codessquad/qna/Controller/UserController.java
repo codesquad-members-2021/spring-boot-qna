@@ -47,8 +47,8 @@ public class UserController {
     }
 
     @PutMapping("/{id}")
-    public String updateUser(@PathVariable Long id,User newUser) {
-        User currentUser = userRepository.findById(id).get();
+    public String updateUser(@PathVariable Long id,User newUser) throws Exception {
+        User currentUser = userRepository.findById(id).orElseThrow(() -> new Exception("데이터 검색에 실패하였습니다"));
         currentUser.update(newUser);
         userRepository.save(currentUser);
         logger.info("update User : " + currentUser.toString());
