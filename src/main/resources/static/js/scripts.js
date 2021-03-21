@@ -6,6 +6,7 @@ function addAnswer(e) {
 
     var queryString = $(".answer-write").serialize();
     var url = $(".answer-write").attr("action");
+    var strArr = queryString.split('=');
     console.log("queryString : " + queryString);
     console.log("url : " + url);
 
@@ -13,15 +14,22 @@ function addAnswer(e) {
         type: 'post',
         url: url,
         data: queryString,
+        contents: strArr[1],
         dataType: 'json',
         error: onError,
         success: onSuccess,
     });
 }
 
-function onError(data, status) {
+function onError(data, status, contents) {
     console.log("Error");
     console.log("data : " + JSON.stringify(data));
+    if (isEmpty(contents)) {
+        alert("내용을 입력해주세요.")
+    }
+    else {
+        alert("로그인한 유저만 작성 가능합니다.");
+    }
 }
 
 function onSuccess(data, status) {
@@ -52,6 +60,7 @@ function deleteAnswer(e) {
             console.log("error")
         },
         success: function (data, status) {
+            location.reload();
             console.log("delete success")
             if (data) {
                 deleteBtn.closest("article").remove();
@@ -60,7 +69,6 @@ function deleteAnswer(e) {
             }
         }
     });
-    location.reload();
 }
 
 String.prototype.format = function () {
@@ -72,3 +80,7 @@ String.prototype.format = function () {
             ;
     });
 };
+
+var isEmpty = function (val) {
+    return val === "" || val === null || val === undefined;
+}
