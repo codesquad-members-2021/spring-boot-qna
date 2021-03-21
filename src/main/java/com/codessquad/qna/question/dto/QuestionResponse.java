@@ -13,6 +13,7 @@ public class QuestionResponse extends BaseResponse {
     private String title;
     private String contents;
     private List<AnswerResponse> answers;
+    private Integer countOfAnswer;
 
     private QuestionResponse(Builder builder) {
         super(builder);
@@ -20,6 +21,7 @@ public class QuestionResponse extends BaseResponse {
         this.title = builder.title;
         this.contents = builder.contents;
         this.answers = builder.answers;
+        this.countOfAnswer = builder.countOfAnswer;
     }
 
     private static class Builder extends BaseResponse.Builder<Builder> {
@@ -27,6 +29,7 @@ public class QuestionResponse extends BaseResponse {
         private String title;
         private String contents;
         private List<AnswerResponse> answers;
+        private Integer countOfAnswer;
 
         @Override
         protected Builder self() {
@@ -57,6 +60,11 @@ public class QuestionResponse extends BaseResponse {
             this.answers = answers;
             return this;
         }
+
+        private Builder countOfAnswer(Integer countOfAnswer) {
+            this.countOfAnswer = countOfAnswer;
+            return this;
+        }
     }
 
     public static QuestionResponse from(Question question) {
@@ -67,7 +75,8 @@ public class QuestionResponse extends BaseResponse {
                 .title(question.getTitle())
                 .writer(UserResponse.from(question.getWriter()))
                 .contents(question.getContents())
-                .answers(question.getAnswers().stream().map(AnswerResponse::from).collect(Collectors.toList()));
+                .answers(question.getAnswers().stream().map(AnswerResponse::from).collect(Collectors.toList()))
+                .countOfAnswer(question.getCountOfAnswer());
         return new QuestionResponse(builder);
     }
 
@@ -85,5 +94,9 @@ public class QuestionResponse extends BaseResponse {
 
     public List<AnswerResponse> getAnswers() {
         return answers;
+    }
+
+    public Integer getCountOfAnswer() {
+        return countOfAnswer;
     }
 }

@@ -1,6 +1,5 @@
 package com.codessquad.qna.answer.ui;
 
-import com.codessquad.qna.answer.application.AnswerService;
 import com.codessquad.qna.answer.dto.AnswerRequest;
 import com.codessquad.qna.answer.dto.AnswerResponse;
 import com.codessquad.qna.question.application.QuestionService;
@@ -16,11 +15,9 @@ import static com.codessquad.qna.common.HttpSessionUtils.getUserAttribute;
 @RestController
 @RequestMapping("/api/questions/{questionId}/answers")
 public class ApiAnswerController {
-    private final AnswerService answerService;
     private final QuestionService questionService;
 
-    public ApiAnswerController(AnswerService answerService, QuestionService questionService) {
-        this.answerService = answerService;
+    public ApiAnswerController(QuestionService questionService) {
         this.questionService = questionService;
     }
 
@@ -33,11 +30,11 @@ public class ApiAnswerController {
     @DeleteMapping("{id}")
     public AnswerResponse deleteAnswer(@PathVariable Long questionId, @PathVariable Long id, HttpSession session) {
         checkAnswerAuthorization(id, session);
-        return answerService.delete(id);
+        return questionService.deleteAnswer(id);
     }
 
     private void checkAnswerAuthorization(Long id, HttpSession session) {
-        User writer = answerService.getWriter(id);
+        User writer = questionService.getAnswerWriter(id);
         checkAuthorization(writer, session);
     }
 }

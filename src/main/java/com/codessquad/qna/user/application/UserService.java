@@ -7,12 +7,14 @@ import com.codessquad.qna.user.dto.UserResponse;
 import com.codessquad.qna.user.exception.LoginFailedException;
 import com.codessquad.qna.user.exception.UserNotFoundException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 @Service
+@Transactional
 public class UserService {
     private final UserRepository userRepository;
 
@@ -25,6 +27,7 @@ public class UserService {
         return UserResponse.from(user);
     }
 
+    @Transactional(readOnly = true)
     public List<UserResponse> getList() {
         List<UserResponse> userResponses = new ArrayList<>();
         for (User user : userRepository.findAll()) {
@@ -33,6 +36,7 @@ public class UserService {
         return userResponses;
     }
 
+    @Transactional(readOnly = true)
     public UserResponse get(Long id) {
         User user = getUserFromRepository(id);
         return UserResponse.from(user);
@@ -51,7 +55,6 @@ public class UserService {
     public UserResponse update(Long id, UserRequest userRequest) {
         User user = getUserFromRepository(id);
         user.update(userRequest.toUser());
-        userRepository.save(user);
         return UserResponse.from(user);
     }
 

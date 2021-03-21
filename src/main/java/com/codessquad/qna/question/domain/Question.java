@@ -26,6 +26,8 @@ public class Question extends BaseEntity {
     @Where(clause = "deleted = false")
     private List<Answer> answers = new ArrayList<>();
 
+    private Integer countOfAnswer = 0;
+
     protected Question() {}
 
     public Question(User writer, String title, String contents) {
@@ -48,6 +50,18 @@ public class Question extends BaseEntity {
 
     public List<Answer> getAnswers() {
         return answers;
+    }
+
+    public Integer getCountOfAnswer() {
+        return countOfAnswer;
+    }
+
+    public void addCountOfAnswer() {
+        countOfAnswer++;
+    }
+
+    public void deleteCountOfAnswer() {
+        countOfAnswer--;
     }
 
     public void update(Question question) {

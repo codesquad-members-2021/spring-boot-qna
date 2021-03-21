@@ -1,6 +1,5 @@
 package com.codessquad.qna.answer.ui;
 
-import com.codessquad.qna.answer.application.AnswerService;
 import com.codessquad.qna.answer.dto.AnswerRequest;
 import com.codessquad.qna.question.application.QuestionService;
 import com.codessquad.qna.user.domain.User;
@@ -19,11 +18,9 @@ import static com.codessquad.qna.common.HttpSessionUtils.getUserAttribute;
 @Controller
 @RequestMapping("/questions/{questionId}/answers")
 public class AnswerController {
-    private final AnswerService answerService;
     private final QuestionService questionService;
 
-    public AnswerController(AnswerService answerService, QuestionService questionService) {
-        this.answerService = answerService;
+    public AnswerController(QuestionService questionService) {
         this.questionService = questionService;
     }
 
@@ -37,12 +34,12 @@ public class AnswerController {
     @DeleteMapping("{id}")
     public String delete(@PathVariable Long questionId, @PathVariable Long id, HttpSession session) {
         checkAnswerAuthorization(id, session);
-        answerService.delete(id);
+        questionService.deleteAnswer(id);
         return "redirect:/questions/" + questionId;
     }
 
     private void checkAnswerAuthorization(Long id, HttpSession session) {
-        User writer = answerService.getWriter(id);
+        User writer = questionService.getAnswerWriter(id);
         checkAuthorization(writer, session);
     }
 }
