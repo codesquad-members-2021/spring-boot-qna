@@ -19,9 +19,10 @@ public class IndexController {
     }
 
     @GetMapping("/")
-    public String goMain(Optional<Integer> pageNum, Model model) {
-        Criteria cri = new Criteria(pageNum.orElse(new Integer(1)), 15);
-        model.addAttribute("pageMaker", new PageDTO(cri, 100));
+    public String goMain(Optional<Integer> pageNum, Model model) { // 메인화면(Url 매핑 -> "/") 진입 시 1페이지로 설정
+        Criteria cri = new Criteria(pageNum.orElse(new Integer(1)));
+        int notDeletedQuestionSize = questionService.notDeletedSize();
+        model.addAttribute("pageMaker", new PageDTO(cri, notDeletedQuestionSize));
         model.addAttribute("questions", questionService.pagingList(cri));
         return "index";
     }
