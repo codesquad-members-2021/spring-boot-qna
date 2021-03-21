@@ -68,10 +68,6 @@ public class User {
         return this;
     }
 
-    public boolean verifyPassword(String oldPassword) {
-        return this.password.equals(oldPassword);
-    }
-
     @Override
     public String toString() {
         return "User{" +

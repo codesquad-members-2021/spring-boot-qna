@@ -20,7 +20,7 @@ public class Question {
     @Column(nullable = false, length = 2000)
     private String contents;
 
-    private LocalDateTime timeCreated;
+    private LocalDateTime timeCreated = LocalDateTime.now();
 
     public Question(String writer, String title, String contents) {
         this.writer = writer;

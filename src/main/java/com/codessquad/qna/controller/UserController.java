@@ -4,7 +4,6 @@ import com.codessquad.qna.domain.User;
 import com.codessquad.qna.service.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -22,7 +21,6 @@ public class UserController {
 
     private final UserService userService;
 
-    @Autowired
     public UserController(UserService userService) { this.userService = userService; }
 
     @GetMapping("/login")
@@ -99,7 +97,7 @@ public class UserController {
 
         User user = userService.findById(id);
 
-        if (!user.verifyPassword(oldPassword)) {
+        if (!user.matchPassword(oldPassword)) {
             logger.debug("Old Password Does Not Match");
             return "redirect:/users";
         }
