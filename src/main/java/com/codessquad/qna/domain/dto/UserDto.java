@@ -20,6 +20,10 @@ public class UserDto {
         return new UserDto(user);
     }
 
+    public User returnEntity() {
+        return new User(id, userId, name, email);
+    }
+
     public Long getId() {
         return id;
     }
