@@ -3,6 +3,9 @@ package com.codessquad.qna.controller;
 import com.codessquad.qna.domain.Question;
 import com.codessquad.qna.exception.NotLoggedInException;
 import com.codessquad.qna.service.QuestionService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -13,6 +16,8 @@ import javax.servlet.http.HttpSession;
 @RequestMapping("/questions")
 public class QuestionController {
 
+    private final Logger logger = LoggerFactory.getLogger(QuestionController.class);
+
     private final QuestionService questionService;
 
     public QuestionController(QuestionService questionService) {
@@ -20,8 +25,11 @@ public class QuestionController {
     }
 
     @GetMapping
-    public String list(Model model) {
-        model.addAttribute("questions", questionService.questions());
+    public String list(@RequestParam(name = "page", defaultValue = "1") int pageNumber, Model model) {
+        Page<Question> page = questionService.questionsPage(pageNumber);
+        logger.debug("total : " + page.getTotalElements());
+        logger.debug("total page : " + page.getTotalPages());
+        model.addAttribute("questions", page);
         return "qna/list";
     }
 
