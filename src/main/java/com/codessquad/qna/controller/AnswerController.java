@@ -43,7 +43,7 @@ public class AnswerController {
             return "user/login";
         }
 
-        answerService.remove(answerId);
+        answerService.remove(answer);
         return "redirect:/questions/{questionId}";
     }
 

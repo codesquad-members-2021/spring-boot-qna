@@ -90,7 +90,7 @@ public class QuestionController {
             return "user/login";
         }
 
-        questionService.remove(questionId);
+        questionService.remove(question);
         return "redirect:/";
     }
 

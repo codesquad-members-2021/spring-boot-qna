@@ -28,11 +28,11 @@ public class QuestionService {
     }
 
     public List<Question> getAllQuestions() {
-        return questionRepository.findAll();
+        return questionRepository.findAllByAndDeletedFalse();
     }
 
     public Optional<Question> getOneById(Long id) {
-        return questionRepository.findById(id);
+        return questionRepository.findByQuestionIdAndDeletedFalse(id);
     }
 
     public void updateInfo(Question presentQuestion, Question referenceQuestion) {
@@ -40,7 +40,8 @@ public class QuestionService {
         questionRepository.save(presentQuestion);
     }
 
-    public void remove(long id) {
-        questionRepository.deleteById(id);
+    public void remove(Question question) {
+        question.deleted();
+        questionRepository.save(question);
     }
 }
