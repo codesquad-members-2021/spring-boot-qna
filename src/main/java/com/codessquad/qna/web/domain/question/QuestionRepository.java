@@ -1,6 +1,7 @@
 package com.codessquad.qna.web.domain.question;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
@@ -14,6 +15,14 @@ public interface QuestionRepository extends JpaRepository<Question, Long> {
     @Query("SELECT q FROM #{#entityName} q WHERE q.isActive=true AND q.id=?1")
     Optional<Question> findById(long id);
 
+    @Query("UPDATE #{#entityName} q SET q.isActive=false WHERE q.id=?1")
+    @Modifying
+    void softDelete(Long id);
 
-public interface QuestionRepository extends CrudRepository<Question, Long> {
+    @Override
+    default void delete(Question question) {
+        softDelete(question.getId());
+    }
+
+
 }
