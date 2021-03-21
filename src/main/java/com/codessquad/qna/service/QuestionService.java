@@ -17,7 +17,7 @@ public class QuestionService {
     }
 
     public void save(Question question, User user) {
-        Question newQuestion = new Question(user.getName(), question.getTitle(), question.getContents());
+        Question newQuestion = new Question(user, question.getTitle(), question.getContents());
         questionRepository.save(newQuestion);
     }
 

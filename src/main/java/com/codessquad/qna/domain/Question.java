@@ -12,8 +12,9 @@ public class Question {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @Column(nullable = false)
-    private String writer;
+    @ManyToOne
+    @JoinColumn(foreignKey = @ForeignKey(name = "fk_question_writer"))
+    private User writer;
 
     private String title;
 
@@ -22,7 +23,7 @@ public class Question {
 
     private LocalDateTime timeCreated = LocalDateTime.now();
 
-    public Question(String writer, String title, String contents) {
+    public Question(User writer, String title, String contents) {
         this.writer = writer;
         this.title = title;
         this.contents = contents;
@@ -30,7 +31,7 @@ public class Question {
 
     protected Question() {}
 
-    public String getWriter() {
+    public User getWriter() {
         return writer;
     }
 
