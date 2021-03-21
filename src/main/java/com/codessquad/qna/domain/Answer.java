@@ -1,5 +1,6 @@
 package com.codessquad.qna.domain;
 
+import com.codessquad.qna.exception.IllegalUserAccessException;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
@@ -50,6 +51,12 @@ public class Answer extends AbstractEntity {
     public void deleteAnswer(DisplayStatus displayStatus) {
         this.question.deleteAnswer(this);
         this.status = displayStatus;
+    }
+
+    public void checkSameUser(Long newId) {
+        if (writer.getId() != newId) {
+            throw new IllegalUserAccessException("자신의 정보만 수정 가능");
+        }
     }
 
 }
