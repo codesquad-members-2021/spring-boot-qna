@@ -43,7 +43,7 @@ public class QuestionService {
     public void delete(Long questionId, User loginUser) {
         List<Answer> activeAnswers = answerService.findAnswers(questionId);
         Question question = findById(questionId);
-        if (question.canDelete(question, loginUser, activeAnswers)) {
+        if (question.canDelete(loginUser, activeAnswers)) {
             for (Answer answer : activeAnswers) {
                 answer.delete();
             }

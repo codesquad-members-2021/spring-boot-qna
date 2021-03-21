@@ -92,8 +92,8 @@ public class Question extends AbstractEntity {
         return isDelete;
     }
 
-    public boolean canDelete(Question question, User loginUser, List<Answer> activeAnswers) {
-        if (!question.matchUser(loginUser)) {
+    public boolean canDelete(User loginUser, List<Answer> activeAnswers) {
+        if (!this.matchUser(loginUser)) {
             return false;
         }
         if (activeAnswers.size() == 0) {
