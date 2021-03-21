@@ -42,7 +42,6 @@ public class UserService {
     }
 
     public void updateInfo(User presentUser, User referenceUser, String newPassword) {
-
         presentUser.updateUserInfo(referenceUser, newPassword);
         userRepository.save(presentUser);
     }
