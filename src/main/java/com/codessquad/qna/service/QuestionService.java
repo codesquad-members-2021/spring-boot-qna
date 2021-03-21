@@ -15,12 +15,10 @@ import java.util.Optional;
 public class QuestionService {
     private final Logger logger = LoggerFactory.getLogger(QuestionService.class);
     private final QuestionRepository questionRepository;
-    private final AnswerRepository answerRepository;
 
     @Autowired
     public QuestionService(QuestionRepository questionRepository, AnswerRepository answerRepository) {
         this.questionRepository = questionRepository;
-        this.answerRepository = answerRepository;
     }
 
     public void add(Question newQuestion) {

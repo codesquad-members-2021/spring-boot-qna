@@ -65,6 +65,7 @@ public class User {
     public boolean isEqualPassword(String expected) {
         return this.password.equals(expected);
     }
+
     public boolean isEqualUserId(String expected) {
         return this.userId.equals(expected);
     }
@@ -86,7 +87,7 @@ public class User {
         return false;
     }
 
-    public void updateUserInfo(User referenceUser, String newPassword){
+    public void updateUserInfo(User referenceUser, String newPassword) {
         this.userId = referenceUser.getUserId();
         this.password = newPassword;
         this.name = referenceUser.getName();

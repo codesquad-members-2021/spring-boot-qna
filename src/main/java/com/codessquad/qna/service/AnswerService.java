@@ -31,14 +31,14 @@ public class AnswerService {
     public void create(Long id, String contents, HttpSession session) {
         User loginUser = HttpSessionUtils.getUserFromSession(session);
         Question question = questionRepository.findById(id).orElse(null);
-        Answer answer = new Answer(question, contents, loginUser);
 
-        answerRepository.save(answer);
+        answerRepository.save(new Answer(question, contents, loginUser));
     }
 
     public void remove(long id) {
         answerRepository.deleteById(id);
     }
+
     public List<Answer> findAll() {
         return answerRepository.findAll();
     }

@@ -27,7 +27,7 @@ public class UserController {
     @PostMapping
     public String createUser(User newUser, Model model) {
 
-        if(newUser == null){
+        if (newUser == null) {
             model.addAttribute("errorMessage", "회원가입에 실패하였습니다.");
             return "user/form";
         }
@@ -39,7 +39,7 @@ public class UserController {
 
         // 중복회원 검사
         User user = userService.getOneByUserId(newUser.getUserId()).orElse(null);
-        if(user != null){
+        if (user != null) {
             model.addAttribute("errorMessage", "이미 존재하는 회원입니다.");
             return "user/form";
         }
