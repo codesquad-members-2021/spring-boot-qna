@@ -1,6 +1,5 @@
 package com.codessquad.qna.domain;
 
-import com.codessquad.qna.domain.dto.UserDto;
 import com.codessquad.qna.exception.IllegalUserAccessException;
 
 import javax.persistence.Column;
@@ -65,7 +64,4 @@ public class User extends AbstractEntity {
         }
     }
 
-    public UserDto returnDto() {
-        return new UserDto(this);
-    }
 }

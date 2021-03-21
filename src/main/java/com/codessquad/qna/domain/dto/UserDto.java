@@ -9,11 +9,15 @@ public class UserDto {
     private final String name;
     private final String email;
 
-    public UserDto(User user) {
+    private UserDto(User user) {
         this.id = user.getId();
         this.userId = user.getUserId();
         this.name = user.getName();
         this.email = user.getEmail();
+    }
+
+    public static UserDto createDto(User user) {
+        return new UserDto(user);
     }
 
     public Long getId() {

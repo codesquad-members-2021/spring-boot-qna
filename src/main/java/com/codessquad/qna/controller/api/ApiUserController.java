@@ -19,6 +19,6 @@ public class ApiUserController {
 
     @GetMapping("/{id}")
     public UserDto show(@PathVariable Long id) {
-        return userService.findById(id).returnDto();
+        return UserDto.createDto(userService.findById(id));
     }
 }
