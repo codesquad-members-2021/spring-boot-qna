@@ -1,6 +1,7 @@
 package com.codessquad.qna.service;
 
 import com.codessquad.qna.domain.User;
+import com.codessquad.qna.domain.dto.UserDto;
 import com.codessquad.qna.exception.IllegalUserUpdateException;
 import com.codessquad.qna.exception.NoSearchObjectException;
 import com.codessquad.qna.repository.UserRepository;
@@ -11,6 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional(readOnly = true)
@@ -33,8 +35,10 @@ public class UserService {
         return userRepository.findById(userId).orElseThrow(() -> new NoSearchObjectException("유저"));
     }
 
-    public List<User> findAll() {
-        return userRepository.findAll();
+    public List<UserDto> findAll() {
+        return userRepository.findAll().stream()
+                .map(o -> o.returnDto())
+                .collect(Collectors.toList());
     }
 
     @Transactional

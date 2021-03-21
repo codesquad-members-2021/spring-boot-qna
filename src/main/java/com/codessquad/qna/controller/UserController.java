@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("/users")
@@ -34,11 +33,8 @@ public class UserController {
 
     @GetMapping
     public String renderUserList(Model model) {
-        List<User> getUsers = userService.findAll();
-        List<UserDto> userDtos = getUsers.stream()
-                .map(o -> o.returnDto())
-                .collect(Collectors.toList());
-        model.addAttribute("users", userDtos);
+        List<UserDto> getUsers = userService.findAll();
+        model.addAttribute("users", getUsers);
         return "user/list";
     }
 
