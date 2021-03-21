@@ -9,21 +9,21 @@
 
                         {{#questions}}
                         <div class="main">
-                            <a>{{index}}</a>
+                            <a>{{id}}</a>
                             <strong class="subject">
-                                <a href="/questions/{{index}}">{{title}}</a>
+                                <a href="/questions/{{id}}">{{id}}</a>
                             </strong>
 
                             <div class="auth-info">
                                 <i class="icon-add-comment"></i>
                                 <span class="time">{{nowDate}}</span>
-                                <a href="user/profile.html" class="author">{{writer}}</a>
+                                <a href="user/profile" class="author">{{writer}}</a>
                             </div>
 
                             <div class="reply" title="댓글">
                                 <i class="icon-reply"></i>
                                 <span class="point"></span>
-                                <a href="/qna/show.html"></a>
+                                <a href="/qna/show"></a>
                             </div>
 
                         </div>

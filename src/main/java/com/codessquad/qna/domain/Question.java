@@ -18,6 +18,14 @@ public class Question {
     private int index;
     private LocalDate nowDate;
 
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
     public LocalDate getNowDate() {
         return nowDate;
     }

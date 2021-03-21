@@ -30,10 +30,10 @@ public class QuestionController {
         return "redirect:/";
     }
 
-    @GetMapping("/{index}")
-    public String showQuestionDetail(@PathVariable Long index, Model model) {
-
-        model.addAttribute("question", questionService.findQuestion(index).get());
+    @GetMapping("/{id}")
+    public String showQuestionDetail(@PathVariable Long id, Model model) {
+        System.out.println("showQuestoinD" + id);
+        model.addAttribute("question", questionService.findQuestion(id).get());
 
         return "/qna/show";
     }
