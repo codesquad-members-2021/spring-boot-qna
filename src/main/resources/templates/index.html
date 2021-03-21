@@ -30,17 +30,23 @@
                 <div class="col-md-6 text-center">
                     <ul class="pagination center-block" style="display:inline-block;">
                         {{#pageMaker.prev}}
-                        <li><a href="#">«</a></li>
+                        <li class="pagination_button"><a href="{{pageMaker.prevEndPage}}">«</a></li>
                         {{/pageMaker.prev}}
 
                         {{#pageMaker.numbers}}
-                        <li><a href="#">{{number}}</a></li>
+                        <li class="pagination_button {{#active}} active {{/active}}">
+                            <a href="{{number}}">{{number}}</a>
+                        </li>
                         {{/pageMaker.numbers}}
 
                         {{#pageMaker.next}}
-                        <li><a href="#">»</a></li>
+                        <li class="pagination_button"><a href="{{pageMaker.nextStartPage}}">»</a></li>
                         {{/pageMaker.next}}
                     </ul>
+                    <form id="actionForm" action="" method="get">
+                        <input type="hidden" name="pageNum" value="{{pageMaker.cri.pageNum}}">
+                        <input type="hidden" name="amount" value="{{pageMaker.cri.amount}}">
+                    </form>
                 </div>
                 <div class="col-md-3 qna-write">
                     <a href="questions/form" class="btn btn-primary pull-right" role="button">질문하기</a>
@@ -52,10 +58,3 @@
 {{/partial}}
 
 {{> component/base}}
-
-<script>
-    var Handlebars = require('handlebars');
-    var paginate = require('handlebars-paginate');
-
-    Handlebars.registerHelper('paginate', paginate);
-</script>

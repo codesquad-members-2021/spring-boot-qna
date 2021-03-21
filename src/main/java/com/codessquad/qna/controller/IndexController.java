@@ -7,6 +7,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
+import java.util.Optional;
+
 @Controller
 public class IndexController {
 
@@ -17,9 +19,8 @@ public class IndexController {
     }
 
     @GetMapping("/")
-    public String goMain(Criteria cri, Model model) {
-        cri.setPageNum(1);
-        cri.setAmount(15);
+    public String goMain(Optional<Integer> pageNum, Model model) {
+        Criteria cri = new Criteria(pageNum.orElse(new Integer(1)), 15);
         model.addAttribute("pageMaker", new PageDTO(cri, 100));
         model.addAttribute("questions", questionService.pagingList(cri));
         return "index";

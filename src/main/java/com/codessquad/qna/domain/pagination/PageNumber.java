@@ -1,12 +1,18 @@
 package com.codessquad.qna.domain.pagination;
 
 public class PageNumber {
-    int number;
+    private int number;
+    private boolean active;
 
-    PageNumber(int number) {
+    public PageNumber(int number, int currentPageNum) {
         this.number = number;
+        this.active = number == currentPageNum;
     }
     public int getNumber() {
         return number;
+    }
+
+    public boolean getActive() {
+        return active;
     }
 }

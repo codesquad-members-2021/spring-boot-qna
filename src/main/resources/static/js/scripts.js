@@ -64,6 +64,17 @@ function deleteAnswer(e) {
     });
 }
 
+var actionForm = $("#actionForm");
+
+$(".pagination_button a").on("click", function(e) {
+    e.preventDefault();
+
+    console.log("click");
+
+    actionForm.find("input[name=pageNum]").val($(this).attr("href"));
+    actionForm.submit();
+});
+
 String.prototype.format = function () {
     var args = arguments;
     return this.replace(/{(\d+)}/g, function (match, number) {
