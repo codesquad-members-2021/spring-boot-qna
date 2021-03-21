@@ -58,7 +58,7 @@ public class User {
         return this.password.equals(password);
     }
 
-    public boolean checkId(long id) {
+    public boolean userIdConfirmation(long id) {
         return this.id == id;
     }
 

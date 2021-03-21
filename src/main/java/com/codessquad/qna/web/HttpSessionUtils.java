@@ -15,9 +15,8 @@ public class HttpSessionUtils {
 
     public static User getUserFromSession(HttpSession session) {
         if (!isLoginUser(session)) {
-            return null;
+            throw new IllegalStateException("로그인 되어있지 않습니다. 로그인을 먼저 한 후, 시도해주세요.");
         }
-
         return (User) session.getAttribute(USER_SESSION_KEY);
     }
 }

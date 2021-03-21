@@ -3,6 +3,7 @@ package com.codessquad.qna.web;
 import com.codessquad.qna.domain.Question;
 import com.codessquad.qna.domain.QuestionRepository;
 import com.codessquad.qna.domain.User;
+import com.codessquad.qna.exception.AccessDeniedException;
 import com.codessquad.qna.exception.NoQuestionException;
 import com.codessquad.qna.exception.NoUserException;
 import org.springframework.stereotype.Controller;
@@ -29,19 +30,19 @@ public class QuestionController {
     }
 
     @PostMapping
-    public String createNewQna(Question qna, HttpSession session) {
+    public String createNewQuestion(Question question, HttpSession session) {
         if (!HttpSessionUtils.isLoginUser(session)) {
             return "redirect:/users/login";
         }
         User sessionUser = HttpSessionUtils.getUserFromSession(session);
-        qna.setWriter(sessionUser);
+        question.setWriter(sessionUser);
 
-        qnaRepository.save(qna);
+        qnaRepository.save(question);
         return "redirect:/";
     }
 
     @GetMapping
-    public String qnaList(Model model) {
+    public String showQuestionList(Model model) {
         model.addAttribute("question", qnaRepository.findAll());
         return "index";
     }
@@ -53,43 +54,43 @@ public class QuestionController {
     }
 
     @GetMapping("{id}/form")
-    public String editQna(@PathVariable long id, Model model, HttpSession session) {
-        Question qna = qnaRepository.findById(id).orElseThrow(NoUserException::new);
+    public String editQuestion(@PathVariable long id, Model model, HttpSession session) {
+        Question question = qnaRepository.findById(id).orElseThrow(NoUserException::new);
         User sessionUser = HttpSessionUtils.getUserFromSession(session);
 
         if (!HttpSessionUtils.isLoginUser(session)) {
             return "redirect:/users/login";
         }
-        if (!qna.checkWriter(sessionUser)) {
-            throw new IllegalStateException("자신의 질문만 수정할 수 있습니다.");
+        if (question.userConfirmation(sessionUser)) {
+            throw new AccessDeniedException();
         }
 
-        model.addAttribute("question", qna);
+        model.addAttribute("question", question);
 
         return "qna/updateForm";
     }
 
-    @PostMapping("{id}/form")
-    public String update(@PathVariable long id, Question updateQna, HttpSession session) {
-        Question qna = qnaRepository.findById(id).orElseThrow(NoUserException::new);
-        qna.update(updateQna);
-        qnaRepository.save(qna);
+    @PostMapping("{id}")
+    public String updateQuestion(@PathVariable long id, Question updateQuestion) {
+        Question question = qnaRepository.findById(id).orElseThrow(NoUserException::new);
+        question.update(updateQuestion);
+        qnaRepository.save(question);
         return "redirect:/";
     }
 
     @DeleteMapping("{id}")
     public String delete(@PathVariable long id, HttpSession session) {
-        Question qna = qnaRepository.findById(id).orElseThrow(NoUserException::new);
+        Question question = qnaRepository.findById(id).orElseThrow(NoUserException::new);
         User sessionUser = HttpSessionUtils.getUserFromSession(session);
 
         if (!HttpSessionUtils.isLoginUser(session)) {
             return "redirect:/users/login";
         }
-        if (!qna.checkWriter(sessionUser)) {
-            throw new IllegalStateException("자신의 질문만 삭제할 수 있습니다.");
+        if (question.userConfirmation(sessionUser)) {
+            throw new AccessDeniedException();
         }
 
-        qnaRepository.delete(qna);
+        qnaRepository.delete(question);
         return "redirect:/";
     }
 

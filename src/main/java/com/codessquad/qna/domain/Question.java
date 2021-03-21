@@ -57,7 +57,7 @@ public class Question {
         return createdDateTime.format(DateTimeFormatter.ISO_LOCAL_DATE_TIME);
     }
 
-    public boolean checkWriter(User loginUser) {
+    public boolean userConfirmation(User loginUser) {
         return this.writer.equals(loginUser);
     }
 
