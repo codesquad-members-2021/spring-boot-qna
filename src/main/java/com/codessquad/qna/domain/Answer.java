@@ -1,6 +1,5 @@
 package com.codessquad.qna.domain;
 
-import com.codessquad.qna.domain.dto.AnswerDto;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
@@ -53,7 +52,4 @@ public class Answer extends AbstractEntity {
         this.status = displayStatus;
     }
 
-    public AnswerDto returnDto() {
-        return new AnswerDto(this);
-    }
 }

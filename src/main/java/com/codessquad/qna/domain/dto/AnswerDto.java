@@ -11,13 +11,17 @@ public class AnswerDto {
     private final String contents;
     private final String createDateTime;
 
-    public AnswerDto(Answer answer) {
+    private AnswerDto(Answer answer) {
         this.id = answer.getId();
         this.writerUserId = answer.getWriter().getUserId();
         this.status = answer.getStatus();
         this.contents = answer.getContents();
         this.createDateTime = answer.getFormatCreateDateTime();
         this.questionId = answer.getQuestion().getId();
+    }
+
+    public static AnswerDto createDto(Answer answer) {
+        return new AnswerDto(answer);
     }
 
     public Long getId() {
