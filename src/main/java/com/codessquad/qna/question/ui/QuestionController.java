@@ -3,6 +3,7 @@ package com.codessquad.qna.question.ui;
 import com.codessquad.qna.question.application.QuestionService;
 import com.codessquad.qna.question.dto.QuestionRequest;
 import com.codessquad.qna.user.domain.User;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -35,8 +36,8 @@ public class QuestionController {
     }
 
     @GetMapping
-    public String getList(Model model) {
-        model.addAttribute("questions", questionService.getList());
+    public String getList(Pageable pageable, Model model) {
+        model.addAttribute("questions", questionService.getList(pageable));
         return "question/list";
     }
 

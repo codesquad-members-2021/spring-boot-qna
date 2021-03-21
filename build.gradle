@@ -23,6 +23,10 @@ dependencies {
     // form-validator
     implementation group: 'org.hibernate', name: 'hibernate-validator', version: '7.0.1.Final'
 
+    // swagger
+    implementation 'io.springfox:springfox-swagger2:2.9.2'
+    implementation 'io.springfox:springfox-swagger-ui:2.9.2'
+
     // h2
     runtimeOnly 'com.h2database:h2'
 

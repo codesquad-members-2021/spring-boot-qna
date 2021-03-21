@@ -14,6 +14,7 @@ import com.codessquad.qna.question.exception.QuestionDeletedException;
 import com.codessquad.qna.question.exception.QuestionNotDeletableException;
 import com.codessquad.qna.question.exception.QuestionNotFoundException;
 import com.codessquad.qna.user.domain.User;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -37,9 +38,9 @@ public class QuestionService {
     }
 
     @Transactional(readOnly = true)
-    public List<QuestionResponse> getList() {
+    public List<QuestionResponse> getList(Pageable pageable) {
         List<QuestionResponse> questionResponses = new ArrayList<>();
-        for (Question question : questionRepository.findAllByDeletedIsFalse()) {
+        for (Question question : questionRepository.findAllByDeletedIsFalse(pageable)) {
             questionResponses.add(QuestionResponse.from(question));
         }
         return questionResponses;

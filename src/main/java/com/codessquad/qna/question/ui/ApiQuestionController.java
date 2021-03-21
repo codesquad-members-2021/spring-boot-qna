@@ -4,6 +4,7 @@ import com.codessquad.qna.question.application.QuestionService;
 import com.codessquad.qna.question.dto.QuestionRequest;
 import com.codessquad.qna.question.dto.QuestionResponse;
 import com.codessquad.qna.user.domain.User;
+import org.springframework.data.domain.Pageable;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
@@ -14,7 +15,8 @@ import java.util.List;
 import static com.codessquad.qna.common.HttpSessionUtils.checkAuthorization;
 import static com.codessquad.qna.common.HttpSessionUtils.getUserAttribute;
 
-@RestController("/api/questions")
+@RestController
+@RequestMapping("/api/questions")
 public class ApiQuestionController {
     private final QuestionService questionService;
 
@@ -29,8 +31,8 @@ public class ApiQuestionController {
     }
 
     @GetMapping
-    public List<QuestionResponse> getList(Model model) {
-        return questionService.getList();
+    public List<QuestionResponse> getList(Pageable pageable) {
+        return questionService.getList(pageable);
     }
 
     @GetMapping("{id}")
