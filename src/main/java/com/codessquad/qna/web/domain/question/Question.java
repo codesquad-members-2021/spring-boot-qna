@@ -27,6 +27,9 @@ public class Question {
     @Column(nullable = false)
     private String contents;
 
+    @Column(name="is_active")
+    private boolean isActive = true;
+
     private LocalDateTime createdAt;
 
     @OneToMany(mappedBy = "question", cascade = CascadeType.ALL)

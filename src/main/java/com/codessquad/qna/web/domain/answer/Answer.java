@@ -23,9 +23,11 @@ public class Answer {
     @JoinColumn(foreignKey = @ForeignKey(name = "fk_answer_to_question"))
     private Question question;
 
-
     @Column(nullable = false)
     private String contents;
+
+    @Column(name="is_active")
+    private boolean isActive = true;
 
     private LocalDateTime createdAt;
 
