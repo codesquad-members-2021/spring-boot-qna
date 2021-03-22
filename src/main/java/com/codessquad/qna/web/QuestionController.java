@@ -6,6 +6,7 @@ import com.codessquad.qna.domain.User;
 import com.codessquad.qna.exception.AccessDeniedException;
 import com.codessquad.qna.exception.NoQuestionException;
 import com.codessquad.qna.exception.NoUserException;
+import com.codessquad.qna.service.QuestionService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -15,10 +16,10 @@ import javax.servlet.http.HttpSession;
 @Controller
 @RequestMapping("/question")
 public class QuestionController {
-    private final QuestionRepository qnaRepository;
+    private final QuestionService questionService;
 
-    public QuestionController(QuestionRepository qnaRepository) {
-        this.qnaRepository = qnaRepository;
+    public QuestionController(QuestionService questionService) {
+        this.questionService = questionService;
     }
 
     @GetMapping("/form")
@@ -35,28 +36,26 @@ public class QuestionController {
             return "redirect:/users/login";
         }
         User sessionUser = HttpSessionUtils.getUserFromSession(session);
+        questionService.save(sessionUser, question);
 
-        question.setWriter(sessionUser);
-
-        qnaRepository.save(question);
         return "redirect:/";
     }
 
     @GetMapping
     public String showQuestionList(Model model) {
-        model.addAttribute("question", qnaRepository.findAll());
+        model.addAttribute("question", questionService.getQuestionList());
         return "index";
     }
 
     @GetMapping("/{id}")
     public String showOneQuestion(@PathVariable long id, Model model) {
-        model.addAttribute("question", qnaRepository.findById(id).orElseThrow(NoQuestionException::new));
+        model.addAttribute("question", questionService.getQuestionById(id));
         return "qna/show";
     }
 
     @GetMapping("{id}/form")
     public String editQuestion(@PathVariable long id, Model model, HttpSession session) {
-        Question question = qnaRepository.findById(id).orElseThrow(NoUserException::new);
+        Question question = questionService.getQuestionById(id);
 
         User sessionUser = HttpSessionUtils.getUserFromSession(session);
 
@@ -74,15 +73,13 @@ public class QuestionController {
 
     @PostMapping("{id}")
     public String update(@PathVariable long id, Question updateQuestion) {
-        Question question = qnaRepository.findById(id).orElseThrow(NoUserException::new);
-        question.update(updateQuestion);
-        qnaRepository.save(question);
+        questionService.updateQuestion(id, updateQuestion);
         return "redirect:/";
     }
 
     @DeleteMapping("{id}")
     public String delete(@PathVariable long id, HttpSession session) {
-        Question question = qnaRepository.findById(id).orElseThrow(NoUserException::new);
+        Question question = questionService.getQuestionById(id);
 
         User sessionUser = HttpSessionUtils.getUserFromSession(session);
 
@@ -93,7 +90,7 @@ public class QuestionController {
             throw new AccessDeniedException();
         }
 
-        qnaRepository.delete(question);
+        questionService.delete(question);
         return "redirect:/";
     }
 }
