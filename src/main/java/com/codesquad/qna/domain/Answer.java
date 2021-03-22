@@ -26,9 +26,11 @@ public class Answer {
     protected Answer() {
     }
 
-    public Answer(User writer, String contents) {
+    public Answer(User writer, Question question, String contents) {
         this.writer = writer;
+        this.question = question;
         this.contents = contents;
+        this.createdDateTime = LocalDateTime.now();
     }
 
     @Override

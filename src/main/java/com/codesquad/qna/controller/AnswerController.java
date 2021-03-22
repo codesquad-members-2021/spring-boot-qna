@@ -1,8 +1,10 @@
 package com.codesquad.qna.controller;
 
 import com.codesquad.qna.domain.Answer;
+import com.codesquad.qna.domain.Question;
 import com.codesquad.qna.domain.User;
 import com.codesquad.qna.service.AnswerService;
+import com.codesquad.qna.service.QuestionService;
 import com.codesquad.qna.util.HttpSessionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -16,10 +18,12 @@ import javax.servlet.http.HttpSession;
 @RequestMapping("/questions/{id}/answers")
 public class AnswerController {
     private final AnswerService answerService;
+    private final QuestionService questionService;
 
     @Autowired
-    public AnswerController(AnswerService answerService) {
+    public AnswerController(AnswerService answerService, QuestionService questionService) {
         this.answerService = answerService;
+        this.questionService = questionService;
     }
 
     @PostMapping
@@ -29,7 +33,8 @@ public class AnswerController {
         }
 
         User sessionedUser = HttpSessionUtils.getUserFromSession(session);
-        Answer answer = new Answer(sessionedUser, contents);
+        Question question = questionService.findQuestionById(id);
+        Answer answer = new Answer(sessionedUser, question, contents);
         answerService.save(answer);
 
         return "redirect:/questions/{id}";
