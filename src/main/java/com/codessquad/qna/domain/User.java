@@ -1,20 +1,19 @@
 package com.codessquad.qna.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 
 @Entity
-public class User {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+public class User extends AbstractEntity {
 
     @Column(nullable = false, length = 20, unique = true)
     @NotBlank(message = "아이디는 필수 입력 값입니다.")
     private String userId;
 
     @NotBlank(message = "비밀번호는 필수 입력 값입니다.")
+    @JsonIgnore
     private String password;
 
     @NotBlank(message = "이름은 필수 입력 값입니다.")
@@ -22,10 +21,6 @@ public class User {
 
     @NotBlank(message = "이메일은 필수 입력 값입니다.")
     private String email;
-
-    public Long getId() {
-        return id;
-    }
 
     public void setUserId(String userId) {
         this.userId = userId;
@@ -72,14 +67,10 @@ public class User {
         return newPassword.equals(password);
     }
 
-    public boolean matchId(Long newId) {
-        return this.id.equals(newId);
-    }
-
     @Override
     public String toString() {
         return "User{" +
-                "id=" + id +
+                "id=" + getId() +
                 ", userId='" + userId + '\'' +
                 ", password='" + password + '\'' +
                 ", name='" + name + '\'' +

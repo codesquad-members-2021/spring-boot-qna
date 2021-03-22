@@ -1,20 +1,16 @@
 package com.codessquad.qna.domain;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 
 @Entity
-public class Answer {
-    private static final DateTimeFormatter pattern = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+public class Answer extends AbstractEntity {
 
     @ManyToOne
     @JoinColumn(foreignKey = @ForeignKey(name = "fk_answer_to_question"))
+    @JsonBackReference
     private Question question;
 
     @ManyToOne
@@ -28,22 +24,13 @@ public class Answer {
     @Column(nullable = false)
     private boolean isDelete;
 
-    private LocalDateTime createdDateTime;
-
     public Answer() {
-        createdDateTime = LocalDateTime.now();
     }
 
     public Answer(Question question, User writer, String contents) {
         this.question = question;
         this.writer = writer;
         this.contents = contents;
-        this.isDelete = false;
-        this.createdDateTime = LocalDateTime.now();
-    }
-
-    public Long getId() {
-        return id;
     }
 
     public Question getQuestion() {
@@ -52,10 +39,6 @@ public class Answer {
 
     public User getWriter() {
         return writer;
-    }
-
-    public String getCreatedDateTime() {
-        return createdDateTime.format(pattern);
     }
 
     public String getContents() {
@@ -70,10 +53,8 @@ public class Answer {
         this.isDelete = true;
     }
 
-    public boolean matchUser(User loginUser) {
-        String loginUserId = loginUser.getUserId();
-        String writerId = this.writer.getUserId();
-        return writerId.equals(loginUserId);
+    public boolean isMatch(User loginUser) {
+        return this.writer.getUserId().equals(loginUser.getUserId());
     }
 
     public boolean isDeleted() {
@@ -83,10 +64,10 @@ public class Answer {
     @Override
     public String toString() {
         return "Answer{" +
-                "id=" + id +
+                "id=" + getId() +
                 ", contents='" + contents + '\'' +
                 ", deleted=" + isDelete +
-                ", createdDateTime=" + createdDateTime +
+                ", createdDateTime=" + getCreatedDateTime() +
                 '}';
     }
 

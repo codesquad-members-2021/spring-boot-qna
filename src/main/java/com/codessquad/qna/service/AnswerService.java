@@ -11,11 +11,14 @@ import com.codessquad.qna.repository.QuestionRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
+
 import javax.servlet.http.HttpSession;
+import java.util.List;
 
 @Service
 public class AnswerService {
     private static final Logger logger = LoggerFactory.getLogger(AnswerService.class);
+
     private final AnswerRepository answerRepository;
     private final QuestionRepository questionRepository;
 
@@ -24,12 +27,12 @@ public class AnswerService {
         this.questionRepository = questionRepository;
     }
 
-    public void create(Long id, String contents, HttpSession session) {
+    public Answer create(Long id, String contents, HttpSession session) {
         Question question = questionRepository.findById(id).orElseThrow(NotFoundException::new);
         User loginUser = HttpSessionUtils.getSessionUser(session);
         Answer answer = new Answer(question, loginUser, contents);
         logger.info("answer : {}. ", answer);
-        answerRepository.save(answer);
+        return answerRepository.save(answer);
     }
 
     public void delete(Answer answer) {
@@ -39,6 +42,10 @@ public class AnswerService {
 
     public Answer findById(Long id) {
         return answerRepository.findById(id).orElseThrow(NotFoundException::new);
+    }
+
+    public List<Answer> findAnswers(Long questionId) {
+        return answerRepository.findAllByQuestionIdAndIsDeleteFalse(questionId);
     }
 
 }

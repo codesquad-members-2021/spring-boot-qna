@@ -1,18 +1,13 @@
 package com.codessquad.qna.domain;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 @Entity
-public class Question {
-    private static final DateTimeFormatter FORMATTER_PATTERN = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+public class Question extends AbstractEntity {
 
     @ManyToOne
     @JoinColumn(foreignKey = @ForeignKey(name = "fk_question_writer"))
@@ -26,17 +21,17 @@ public class Question {
     @NotBlank(message = "내용은 필수 입력 값입니다.")
     private String contents;
 
-    private LocalDateTime createdDateTime;
-
     @OneToMany(mappedBy = "question")
+    @JsonManagedReference
     @OrderBy("id ASC")
     private List<Answer> answers;
 
     @Column(nullable = false)
     private boolean isDelete;
 
+    private int countAnswer;
+
     public Question() {
-        createdDateTime = LocalDateTime.now();
     }
 
     public Question(User writer, String title, String contents) {
@@ -44,14 +39,12 @@ public class Question {
         this.writer = writer;
         this.title = title;
         this.contents = contents;
-        this.createdDateTime = LocalDateTime.now();
         this.isDelete = false;
     }
 
     public void updateQuestion(String title, String contents) {
         this.title = title;
         this.contents = contents;
-        this.createdDateTime = LocalDateTime.now();
     }
 
     public void setWriter(User writer) {
@@ -66,14 +59,6 @@ public class Question {
         this.contents = contents;
     }
 
-    public void setCreatedDateTime(LocalDateTime createdDateTime) {
-        this.createdDateTime = createdDateTime;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
     public User getWriter() {
         return writer;
     }
@@ -84,10 +69,6 @@ public class Question {
 
     public String getContents() {
         return contents;
-    }
-
-    public String getCreatedDateTime() {
-        return createdDateTime.format(FORMATTER_PATTERN);
     }
 
     public List<Answer> getAnswers() {
@@ -111,29 +92,39 @@ public class Question {
         return isDelete;
     }
 
-    public boolean canDelete(Question question, User loginUser, List<Answer> activeAnswers) {
-        if (!question.matchUser(loginUser)) {
+    public boolean canDelete(User loginUser, List<Answer> activeAnswers) {
+        if (!this.matchUser(loginUser)) {
             return false;
         }
         if (activeAnswers.size() == 0) {
             return true;
         }
         for (Answer answer : activeAnswers) {
-            if (!answer.matchUser(loginUser)) {
+            if (!answer.isMatch(loginUser)) {
                 return false;
             }
         }
         return true;
     }
 
+    public int getCountAnswer() {
+        int count = 0;
+        for (Answer answer : answers) {
+            if (!answer.isDeleted()) {
+                count += 1;
+            }
+        }
+        return count;
+    }
+
     @Override
     public String toString() {
         return "Question{" +
-                "id=" + id +
+                "id=" + getId() +
                 ", writer=" + writer +
                 ", title='" + title + '\'' +
                 ", contents='" + contents + '\'' +
-                ", createdDateTime=" + createdDateTime +
+                ", createdDateTime=" + getCreatedDateTime() +
                 '}';
     }
 

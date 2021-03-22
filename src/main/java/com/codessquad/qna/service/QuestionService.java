@@ -10,17 +10,19 @@ import com.codessquad.qna.repository.QuestionRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
+
 import javax.servlet.http.HttpSession;
 import java.util.List;
 
 @Service
 public class QuestionService {
     private static final Logger logger = LoggerFactory.getLogger(QuestionService.class);
-    private final QuestionRepository questionRepository;
-    private final AnswerRepository answerRepository;
 
-    public QuestionService(AnswerRepository answerRepository, QuestionRepository questionRepository) {
-        this.answerRepository = answerRepository;
+    private final QuestionRepository questionRepository;
+    private final AnswerService answerService;
+
+    public QuestionService(AnswerService answerService, QuestionRepository questionRepository) {
+        this.answerService = answerService;
         this.questionRepository = questionRepository;
     }
 
@@ -39,9 +41,9 @@ public class QuestionService {
     }
 
     public void delete(Long questionId, User loginUser) {
-        List<Answer> activeAnswers = findAnswers(questionId);
+        List<Answer> activeAnswers = answerService.findAnswers(questionId);
         Question question = findById(questionId);
-        if (question.canDelete(question, loginUser, activeAnswers)) {
+        if (question.canDelete(loginUser, activeAnswers)) {
             for (Answer answer : activeAnswers) {
                 answer.delete();
             }
@@ -56,10 +58,6 @@ public class QuestionService {
 
     public List<Question> findAllQuestion() {
         return this.questionRepository.findAllByIsDeleteFalse();
-    }
-
-    public List<Answer> findAnswers(Long questionId) {
-        return answerRepository.findAllByQuestionIdAndIsDeleteFalse(questionId);
     }
 
 }
