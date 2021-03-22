@@ -2,6 +2,8 @@ package com.codessquad.qna.domain;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.util.Objects;
+
 @Entity
 public class Question {
 
@@ -14,6 +16,10 @@ public class Question {
     private int index;
     private LocalDate nowDate;
 
+    @ManyToOne
+    @JoinColumn(foreignKey = @ForeignKey(name = "fk_question_writer"))
+    private User writer;
+
     protected Question() {
     }
 
@@ -22,10 +28,6 @@ public class Question {
         this.content = content;
         this.writer = writer;
     }
-
-    @ManyToOne
-    @JoinColumn(foreignKey = @ForeignKey(name = "fk_question_writer"))
-    private User writer;
 
     public Long getId() {
         return id;
@@ -79,6 +81,11 @@ public class Question {
     public void updqte(String title, String content) {
         this.title = title;
         this.content = content;
+    }
+
+    public boolean isSameWriter(User loginUser) {
+
+        return this.writer.equals(loginUser);
     }
 
     @Override

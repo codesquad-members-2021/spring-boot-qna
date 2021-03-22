@@ -55,7 +55,21 @@ public class QuestionController {
     }
 
     @GetMapping("/{id}/form")
-    public String updateForm(@PathVariable Long id, Model model) {
+    public String updateForm(@PathVariable Long id, Model model, HttpSession session) {
+
+        if(!HttpSessionUtils.isLoginUser(session)) {//ok
+
+            return "/users/loginForm";
+        }
+
+        User loginUser = HttpSessionUtils.getUserFromSession(session);
+
+        Question question = questionService.findQuestion(id).get();
+
+        if(!question.isSameWriter(loginUser)) {//ok
+
+            return "/users/loginForm";//->본인글만 삭제 가
+        }
 
         model.addAttribute("question", questionService.findQuestion(id).get());
 
@@ -63,9 +77,21 @@ public class QuestionController {
     }
 
     @PutMapping("/{id}")
-    public String update(@PathVariable Long id, String title, String content) {
+    public String update(@PathVariable Long id, String title, String content, HttpSession session) {
+
+        if(!HttpSessionUtils.isLoginUser(session)) {
+
+            return "/qna/form";
+        }
+
+        User loginUser = HttpSessionUtils.getUserFromSession(session);
 
         Question question = questionService.findQuestion(id).get();
+
+        if(!question.isSameWriter(loginUser)) {
+
+            return "/users/loginForm";
+        }
 
         question.updqte(title, content);
 
@@ -75,9 +101,23 @@ public class QuestionController {
     }
 
     @DeleteMapping("/{id}")
-    public String delete(@PathVariable Long id) {
+    public String delete(@PathVariable Long id, HttpSession session) {
 
-        questionService.delete(id);
+        if(!HttpSessionUtils.isLoginUser(session)) {//!login -> out
+
+            return "/qna/form";
+        }
+
+        User loginUser = HttpSessionUtils.getUserFromSession(session);
+
+        Question question = questionService.findQuestion(id).get();
+
+        if(!question.isSameWriter(loginUser)) {//not same user -> out
+
+            return "/users/loginForm";
+        }
+
+        questionService.delete(id);//login & same user -> delete
 
         return "redirect:/";
     }
