@@ -26,7 +26,8 @@ public class QuestionService {
     }
 
     public Question findQuestion(Long id) {
-        return questionRepository.findById(id).orElseThrow(() -> new NotFoundException("해당 게시글이 존재하지 않습니다."));
+        return questionRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException("해당 게시글이 존재하지 않습니다."));
     }
 
     public void checkValid(Question question, User user) {

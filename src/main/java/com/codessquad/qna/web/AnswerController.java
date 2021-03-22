@@ -4,6 +4,7 @@ import com.codessquad.qna.domain.Answer;
 import com.codessquad.qna.domain.Question;
 import com.codessquad.qna.domain.User;
 import com.codessquad.qna.service.AnswerService;
+import com.codessquad.qna.service.QuestionService;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -19,15 +20,17 @@ import static com.codessquad.qna.web.HttpSessionUtils.getUserFromSession;
 public class AnswerController {
 
     private final AnswerService answerService;
+    private final QuestionService questionService;
 
-    public AnswerController(AnswerService answerService) {
+    public AnswerController(AnswerService answerService, QuestionService questionService) {
         this.answerService = answerService;
+        this.questionService = questionService;
     }
 
     @PostMapping
     public String create(@PathVariable Long questionId, String contents, HttpSession session) {
         User loggedinUser = getUserFromSession(session);
-        Question question = answerService.findQuestion(questionId);
+        Question question = questionService.findQuestion(questionId);
         Answer answer = new Answer(loggedinUser, question, contents);
         answerService.save(answer);
         return "redirect:/questions/{questionId}";

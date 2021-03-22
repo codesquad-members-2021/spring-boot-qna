@@ -81,7 +81,7 @@ public class Question {
     }
 
     public boolean isAnswerEmpty() {
-        return answers.size() == 0;
+        return answers.isEmpty();
     }
 
     public boolean isPostWriter(User user) {
