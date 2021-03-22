@@ -4,12 +4,12 @@ import com.codessquad.qna.domain.User;
 import com.codessquad.qna.domain.UserRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import javax.servlet.http.HttpSession;
 
-import javax.swing.plaf.PanelUI;
 
 @Controller
 @RequestMapping("/user")
@@ -18,6 +18,8 @@ public class UserController {
     private static final Logger logger = LoggerFactory.getLogger(UserController.class);
 
     private final UserRepository userRepository;
+
+    private final static String SESSION_KEY_USER_OBJECT = "loginUser";
 
     public UserController(UserRepository userRepository) {
         this.userRepository = userRepository;
@@ -41,7 +43,7 @@ public class UserController {
     }
 
     @GetMapping("/list")
-    public String list(Model model) {
+    public String list(Model model, HttpSession session) {
         model.addAttribute("userlist",userRepository.findAll());
         return "user/list";
     }
