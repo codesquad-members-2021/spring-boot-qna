@@ -1,6 +1,7 @@
 package com.codessquad.qna.service;
 
 import com.codessquad.qna.entity.Question;
+import com.codessquad.qna.entity.User;
 import com.codessquad.qna.exception.QuestionNotFoundException;
 import com.codessquad.qna.repository.QuestionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,8 +18,8 @@ public class QuestionService {
         this.questionRepository = questionRepository;
     }
 
-    public void addQuestion(Question question) {
-        questionRepository.save(question);
+    public void addQuestion(User user, String title, String contents) {
+        questionRepository.save(new Question(user, title, contents));
     }
 
     public void updateQuestion(long questionId, String title, String contents) {
