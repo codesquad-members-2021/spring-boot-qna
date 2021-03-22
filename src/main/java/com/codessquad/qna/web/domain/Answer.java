@@ -21,9 +21,7 @@ public class Answer extends BaseTimeEntity {
 
     @Column(nullable = false, length = 400)
     private String contents;
-
-    @Column(columnDefinition = "BOOLEAN DEFAULT FALSE")
-    private Boolean deleted = false;
+    private boolean deleted = false;
 
     public Answer(String contents, Question question, User writer) {
         this.contents = contents;
@@ -70,8 +68,12 @@ public class Answer extends BaseTimeEntity {
         this.question = question;
     }
 
-    public Boolean getDeleted() {
+    public boolean isDeleted() {
         return deleted;
+    }
+
+    public void setDeleted(boolean deleted) {
+        this.deleted = deleted;
     }
 
     @Override

@@ -28,7 +28,7 @@ public class Question extends BaseTimeEntity {
     private String contents;
 
     @Column(nullable = false, columnDefinition = "BOOLEAN DEFAULT FALSE")
-    private Boolean deleted = false;
+    private boolean deleted = false;
 
     public Question(String title, String contents) {
         this.title = title;
@@ -87,8 +87,12 @@ public class Question extends BaseTimeEntity {
         this.answers = answers;
     }
 
-    public Boolean getDeleted() {
+    public boolean isDeleted() {
         return deleted;
+    }
+
+    public void setDeleted(boolean deleted) {
+        this.deleted = deleted;
     }
 
     @Override
