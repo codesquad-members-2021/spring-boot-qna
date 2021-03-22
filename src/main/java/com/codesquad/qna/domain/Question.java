@@ -20,7 +20,7 @@ public class Question {
     @NotEmpty(message = "Title may not be empty")
     private String title;
 
-    @Column(length = 3000)
+    @Lob
     private String contents;
     private LocalDateTime createdDateTime;
 
