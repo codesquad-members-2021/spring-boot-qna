@@ -10,7 +10,9 @@ import java.util.List;
 @Entity
 @Where(clause = "deleted = false")
 public class Question {
+
     private static final DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

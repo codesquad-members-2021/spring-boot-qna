@@ -9,7 +9,9 @@ import java.time.format.DateTimeFormatter;
 @Entity
 @Where(clause = "deleted = false")
 public class Answer {
+
     private static final DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+
     @Id
     @GeneratedValue
     private Long id;
