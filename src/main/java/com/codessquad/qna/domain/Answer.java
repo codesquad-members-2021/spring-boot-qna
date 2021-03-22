@@ -25,13 +25,16 @@ public class Answer {
 
     @Column(nullable = false, length = 20)
     private String replyId;
+
     @Column(nullable = false, length = 20)
     private String replyAuthor;
+
     @Column(nullable = false, length = 500)
     private String replyContents;
 
     @Column(nullable = false, length = 20)
     private final ZonedDateTime replyTime = ZonedDateTime.now(ZoneId.of("Asia/Seoul"));
+
     @Column(nullable = false)
     private boolean answerDeleted = false;
 

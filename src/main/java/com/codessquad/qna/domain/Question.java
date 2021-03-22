@@ -26,10 +26,13 @@ public class Question {
 
     @Column(nullable = false, length = 20)
     private String title;
+
     @Column(nullable = false, length = 500)
     private String contents;
+
     @Column(nullable = false, length = 20)
     private final ZonedDateTime time = ZonedDateTime.now(ZoneId.of("Asia/Seoul"));
+
     @Column(nullable = false)
     private boolean questionDeleted = false;
 
