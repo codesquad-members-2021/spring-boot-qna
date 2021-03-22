@@ -1,9 +1,16 @@
 package com.codessquad.qna.domain;
 
+import javax.persistence.*;
 import java.util.Objects;
 
+@Entity
 public class User {
 
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+    @Column(nullable = false, length = 20)
     private String userId;
     private String password;
     private String name;
@@ -16,6 +23,10 @@ public class User {
         this.password = copyUser.password;
         this.name = copyUser.name;
         this.email = copyUser.email;
+    }
+
+    public Long getId() {
+        return id;
     }
 
     public String getUserId() {

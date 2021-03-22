@@ -11,21 +11,20 @@
           <table class="table table-hover">
               <thead>
                 <tr>
-                    <th>#</th> <th>작성자(writer)</th> <th>제목</th> <th></th>
+                    <th>#</th> <th>사용자 아이디</th> <th>이름</th> <th>이메일</th><th></th>
                 </tr>
               </thead>
               <tbody>
-                {{#questionList}}
+                {{#userlist}}
                 <tr>
-                    <th scope="row"> </th>
-                    <td>{{writer}}</td>
-                    <td><a href="/qna/{{index}}"/>{{title}}</td>
-                    <td>{{article}}</td>
-                    <!--
-                    <td><a href="/qna/{{index}}" class="btn btn-success" role="button">수정</a></td>-->
+                    <th scope="row"> {{id}} </th>
+                    <td><a href="/user/{{userId}}" />{{userId}}</td>
+                    <td>{{name}}</td>
+                    <td>{{email}}</td>
+                    <td><a href="/user/{{id}}/form" class="btn btn-success" role="button">수정</a></td>
 
                 </tr>
-                {{/questionList}}
+                {{/userlist}}
 
               </tbody>
           </table>

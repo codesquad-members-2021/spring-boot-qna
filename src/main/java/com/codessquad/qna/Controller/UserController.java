@@ -1,80 +1,65 @@
 package com.codessquad.qna.Controller;
 
 import com.codessquad.qna.domain.User;
+import com.codessquad.qna.domain.UserRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import java.util.ArrayList;
-import java.util.List;
+import org.springframework.web.bind.annotation.*;
+
+import javax.swing.plaf.PanelUI;
 
 @Controller
+@RequestMapping("/user")
 public class UserController {
 
-    private Logger logger = LoggerFactory.getLogger(UserController.class);
-    final private List<User> userList = new ArrayList<>();
+    private static final Logger logger = LoggerFactory.getLogger(UserController.class);
 
-    @GetMapping("users/form.html")
+    private final UserRepository userRepository;
+
+    public UserController(UserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
+
+    @GetMapping
+    public String userListShow() {
+        return "redirect:/user/list";
+    }
+
+    @GetMapping("/form")
     public String signUpForm() {
         logger.info("signUpForm >> users/form.html: in");
-        return "users/form";
+        return "user/form";
     }
 
-    @PostMapping("/users/create")
+    @PostMapping("/create")
     public String userCreate(User user) {
-        userList.add(user);
-        return "redirect:/users/list";
+        userRepository.save(user);
+        return "redirect:/user/list";
     }
 
-    @GetMapping("/users/list")
+    @GetMapping("/list")
     public String list(Model model) {
-        logger.info("userslist");
-        model.addAttribute("userlist",userList);
-        return "users/list";
+        model.addAttribute("userlist",userRepository.findAll());
+        return "user/list";
     }
 
-    @GetMapping("/users/{userId}")
-    public String showProfile(@PathVariable String userId, Model model) {
-        User currentUser = getUserByUserId(userId);
-        model.addAttribute("user",currentUser);
+    @PutMapping("/{id}")
+    public String updateUser(@PathVariable Long id,User newUser) throws Exception {
+        User currentUser = userRepository.findById(id).orElseThrow(() -> new Exception("데이터 검색에 실패하였습니다"));
+        currentUser.update(newUser);
+        userRepository.save(currentUser);
         logger.info("update User : " + currentUser.toString());
-        return "/users/profile";
+        return "redirect:/user";
     }
 
-    public User getUserByUserId(String userId) {
-        for(User user: userList) {
-            if(user.getUserId().equals(userId)) {
-                return user;
-            }
-        }
-        return null;
+    @GetMapping("/{id}/form")
+    public String getUserupdateForm(@PathVariable Long id , Model model) {
+        User user = userRepository.findById(id).get();
+        model.addAttribute("user",user);
+        return "user/updateForm";
     }
-
-    @GetMapping("/users")
-    public String userListShow() {
-        return "redirect:/users/list";
-    }
-
-    @GetMapping("/users/{userId}/form")
-    public String updateForm(@PathVariable(name="userId") String userId, Model model) {
-        System.out.println("updateForm@@@");
-        User currentUser;
-        for(User user : userList) {
-            if(user.getUserId().equals(userId)) {
-                model.addAttribute("user",user);
-                break;
-            }
-        }
-        return "users/updateForm";
-    }
-
-    @PostMapping("/users/update")
-    public String updateConfirm(User newUser) {
-        return "redirect:/users";
-    }
-
 
 }
