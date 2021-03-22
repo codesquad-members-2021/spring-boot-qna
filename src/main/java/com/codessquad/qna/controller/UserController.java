@@ -49,22 +49,20 @@ public class UserController {
         return "passwordCheckForm";
     }
 
-//    @PostMapping("/{userId}/password-check")
-//    public String checkPassword(User targetUser, Model model) {
-//        for (User user : users) {
-//            if (user.isSameId(targetUser.getUserId())) {
-//                String passwordBefore = user.getPassword();
-//                if (passwordBefore.equals(targetUser.getPassword())) {
-//                    model.addAttribute("user", user);
-//                    return "userUpdateForm";
-//                }
-//            }
-//        }
-//        return "redirect:/";
-//    }
-//
+    @PostMapping("/{userId}/password-check")
+    public String checkPassword(User targetUser, Model model) {
+        User user = userRepository.findByUserId(targetUser.getUserId());
+        String passwordBefore = user.getPassword();
+        if (passwordBefore.equals(targetUser.getPassword())) {
+            model.addAttribute("user", user);
+            return "userUpdateForm";
+        }
+        return "redirect:/";
+    }
+
 //    @PostMapping("/{userId}/edit")
 //    public String updateUser(@PathVariable("userId") String userId, User targetUser) {
+//        Iterable<User> users = userRepository.findAll();
 //        for (User user : users) {
 //            if (user.isSameId(userId)) {
 //                user.setPassword(targetUser.getPassword());
