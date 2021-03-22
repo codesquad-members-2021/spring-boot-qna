@@ -23,6 +23,10 @@ public class QuestionService {
         questionRepository.save(question);
     }
 
+    public void save(Question updateQuestion){
+        questionRepository.save(updateQuestion);
+    }
+
     public List<Question> findQuestions() {
         return questionRepository.findAll();
     }
@@ -34,4 +38,5 @@ public class QuestionService {
     public boolean verifyQuestion(Question question, User sessionedUser) {
         return sessionedUser.isMatchingUserId(question.getWriter());
     }
+
 }
