@@ -34,6 +34,10 @@ public class Question {
         this.writer = writer;
     }
 
+    public void setWriter(User writer) {
+        this.writer = writer.getName();
+    }
+
     public String getTitle() {
         return title;
     }
