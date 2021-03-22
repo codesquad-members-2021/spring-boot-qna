@@ -40,36 +40,10 @@ public class QuestionController {
             return "redirect:/users/loginForm";
         }
 
-        User sessionedUser = HttpSessionUtils.getUserFromSession(session);
-        Question question = questionService.findQuestionById(id);
-
-        logger.error("Sessioned User : {}, Writer : {}", sessionedUser.getUserId(), question.getWriter());
-
-        if (!sessionedUser.isMatchedUserId(question.getWriter())) {
-            throw new IllegalUserAccessException();
-        }
-
+        Question question = findQuestionWithSession(id, session);
         model.addAttribute(question);
 
         return "/qna/updateForm";
-    }
-
-    @PutMapping("/{id}/form")
-    public String update(@PathVariable("id") long id, Question updatedQuestion, HttpSession session) {
-        if (!HttpSessionUtils.isLoginUser(session)) {
-            return "redirect:/users/loginForm";
-        }
-
-        User sessionedUser = HttpSessionUtils.getUserFromSession(session);
-        Question question = questionService.findQuestionById(id);
-
-        if (!sessionedUser.isMatchedUserId(question.getWriter())) {
-            throw new IllegalUserAccessException();
-        }
-
-        questionService.update(question, updatedQuestion);
-
-        return "redirect:/questions";
     }
 
     @GetMapping()
@@ -88,10 +62,22 @@ public class QuestionController {
     }
 
     @GetMapping("/{id}")
-    public String show(@PathVariable("id") long id, Model model) {
+    public String show(@PathVariable("id") Long id, Model model) {
         Question question = questionService.findQuestionById(id);
         model.addAttribute("question", question);
         return "/qna/show";
+    }
+
+    @PutMapping("/{id}/form")
+    public String update(@PathVariable("id") Long id, Question updatedQuestion, HttpSession session) {
+        if (!HttpSessionUtils.isLoginUser(session)) {
+            return "redirect:/users/loginForm";
+        }
+
+        Question question = findQuestionWithSession(id, session);
+        questionService.update(question, updatedQuestion);
+
+        return "redirect:/questions";
     }
 
     @DeleteMapping("/{id}")
@@ -100,15 +86,19 @@ public class QuestionController {
             return "redirect:/users/loginForm";
         }
 
+        Question question = findQuestionWithSession(id, session);
+        questionService.delete(question);
+
+        return "redirect:/questions";
+    }
+
+    private Question findQuestionWithSession(Long id, HttpSession session) {
         User sessionedUser = HttpSessionUtils.getUserFromSession(session);
         Question question = questionService.findQuestionById(id);
 
         if (!sessionedUser.isMatchedUserId(question.getWriter())) {
             throw new IllegalUserAccessException();
         }
-
-        questionService.delete(question);
-
-        return "redirect:/questions";
+        return question;
     }
 }
