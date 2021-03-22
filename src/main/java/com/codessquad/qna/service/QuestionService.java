@@ -1,9 +1,12 @@
 package com.codessquad.qna.service;
 
+import com.codessquad.qna.HttpSessionUtils;
 import com.codessquad.qna.domain.Question;
+import com.codessquad.qna.domain.User;
 import com.codessquad.qna.repository.QuestionRepository;
 import org.springframework.stereotype.Service;
 
+import javax.servlet.http.HttpSession;
 import java.util.List;
 import java.util.Optional;
 
@@ -33,5 +36,18 @@ public class QuestionService {
     public void delete(Long id) {
 
         questionRepository.deleteById(id);
+    }
+
+    public void  hasPermission(HttpSession session, Question question) {
+
+        if(!HttpSessionUtils.isLoginUser(session)) {
+            throw new IllegalStateException("로그인 필요함");
+       }
+
+        User loginUser = HttpSessionUtils.getUserFromSession(session);
+
+        if(!question.isSameWriter(loginUser)) {
+            throw new IllegalStateException("본인 글만 수정, 삭제 가능");
+        }
     }
 }

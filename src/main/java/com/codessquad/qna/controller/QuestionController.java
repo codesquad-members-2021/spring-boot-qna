@@ -57,19 +57,9 @@ public class QuestionController {
     @GetMapping("/{id}/form")
     public String updateForm(@PathVariable Long id, Model model, HttpSession session) {
 
-        if(!HttpSessionUtils.isLoginUser(session)) {//ok
-
-            return "/users/loginForm";
-        }
-
-        User loginUser = HttpSessionUtils.getUserFromSession(session);
-
         Question question = questionService.findQuestion(id).get();
 
-        if(!question.isSameWriter(loginUser)) {//ok
-
-            return "/users/loginForm";//->본인글만 삭제 가
-        }
+        questionService.hasPermission(session, question);
 
         model.addAttribute("question", questionService.findQuestion(id).get());
 
@@ -79,19 +69,10 @@ public class QuestionController {
     @PutMapping("/{id}")
     public String update(@PathVariable Long id, String title, String content, HttpSession session) {
 
-        if(!HttpSessionUtils.isLoginUser(session)) {
-
-            return "/qna/form";
-        }
-
-        User loginUser = HttpSessionUtils.getUserFromSession(session);
 
         Question question = questionService.findQuestion(id).get();
 
-        if(!question.isSameWriter(loginUser)) {
-
-            return "/users/loginForm";
-        }
+        questionService.hasPermission(session, question);
 
         question.updqte(title, content);
 
@@ -103,21 +84,11 @@ public class QuestionController {
     @DeleteMapping("/{id}")
     public String delete(@PathVariable Long id, HttpSession session) {
 
-        if(!HttpSessionUtils.isLoginUser(session)) {//!login -> out
-
-            return "/qna/form";
-        }
-
-        User loginUser = HttpSessionUtils.getUserFromSession(session);
-
         Question question = questionService.findQuestion(id).get();
 
-        if(!question.isSameWriter(loginUser)) {//not same user -> out
+        questionService.hasPermission(session, question);
 
-            return "/users/loginForm";
-        }
-
-        questionService.delete(id);//login & same user -> delete
+        questionService.delete(id);
 
         return "redirect:/";
     }
