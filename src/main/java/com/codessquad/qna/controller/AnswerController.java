@@ -1,8 +1,8 @@
 package com.codessquad.qna.controller;
 
 import com.codessquad.qna.domain.Answer;
-import com.codessquad.qna.domain.Result;
 import com.codessquad.qna.domain.User;
+import com.codessquad.qna.exception.NotLoggedInException;
 import com.codessquad.qna.service.AnswerService;
 import com.codessquad.qna.util.HttpSessionUtils;
 import org.springframework.stereotype.Controller;
@@ -36,28 +36,21 @@ public class AnswerController {
     @DeleteMapping("/{answerId}")
     public String deleteAnswer(@PathVariable long answerId, HttpSession session, Model model) {
         Answer answer = answerService.getOneById(answerId).orElse(null);
-        Result result = checkSession(session, answer);
-
-        if (!result.isValid()) {
-            model.addAttribute("errorMessage", result.getErrorMessage());
-            return "user/login";
-        }
+        checkSession(session, answer);
 
         answerService.remove(answer);
         return "redirect:/questions/{questionId}";
     }
 
-    private Result checkSession(HttpSession session, Answer answer) {
+    private void checkSession(HttpSession session, Answer answer) {
         if (!HttpSessionUtils.isLoginUser(session)) {
-            return Result.fail("로그인이 필요합니다.");
+            throw new NotLoggedInException();
         }
 
         User sessionUser = HttpSessionUtils.getUserFromSession(session);
         if (!answer.isEqualWriter(sessionUser)) {
-            return Result.fail("자신이 쓴 글만 수정 및 삭제가 가능합니다.");
+            throw new NotLoggedInException("자신의 글만 수정 및 삭제가 가능합니다.");
         }
-
-        return Result.ok();
     }
 
 }
