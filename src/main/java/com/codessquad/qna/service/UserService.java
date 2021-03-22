@@ -3,6 +3,7 @@ package com.codessquad.qna.service;
 import com.codessquad.qna.domain.User;
 import com.codessquad.qna.exception.JoinFailedException;
 import com.codessquad.qna.exception.LoginFailedException;
+import com.codessquad.qna.exception.UnauthorizedAccessException;
 import com.codessquad.qna.repository.UserRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -33,7 +34,7 @@ public class UserService {
         }
     }
 
-    public boolean isRedundantUser(User user) {
+    private boolean isRedundantUser(User user) {
         User redundantUser = userRepository.findByUserId(user.getUserId()).orElse(null);
         return redundantUser != null;
     }
@@ -58,6 +59,10 @@ public class UserService {
     }
 
     public void updateInfo(User presentUser, User referenceUser, String newPassword) {
+        if (!referenceUser.isEqualPassword(referenceUser.getPassword())) {
+            throw  new UnauthorizedAccessException("비밀번호가 일치하지 않습니다.");
+        }
+
         presentUser.updateUserInfo(referenceUser, newPassword);
         userRepository.save(presentUser);
     }

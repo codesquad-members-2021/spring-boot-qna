@@ -85,12 +85,6 @@ public class UserController {
             return "user/update";
         }
 
-        if (!user.isEqualPassword(referenceUser.getPassword())) {
-            model.addAttribute("errorMessage", "비밀번호가 일치하지 않습니다.");
-            model.addAttribute("userId", user.getUserId());
-            return "user/update";
-        }
-
         userService.updateInfo(user, referenceUser, newPassword);
         return "redirect:/";
     }
