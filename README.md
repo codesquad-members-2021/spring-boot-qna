@@ -30,15 +30,15 @@
 
 비밀번호 확인
 
-- GET `/user/{userId}/password-check`
+- GET `/user/{id}/password-check`
     - passwordCheckForm
-- POST `/user/{userId}/password-check`
+- POST `/user/{id}/password-check`
     - if 비밀번호 일치) userUpdateForm
     - if 비밀번호 불일치) redirect:/
 
 회원정보 수정
 
-- POST `/user/{userId}/edit`
+- PUT `/user/{userId}`
     - redirect:/user
   
 ### QuestionController
@@ -57,5 +57,5 @@
 
 질문 조회 (상세보기)
 
-- GET `/questions/{index}`
+- GET `/questions/{id}`
     - questionDetail

@@ -13,8 +13,6 @@ import org.springframework.web.servlet.ModelAndView;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.List;
 
 @Controller
 @RequestMapping("/questions")
@@ -26,14 +24,14 @@ public class QuestionController {
     private static String dateTimeFormat = "yyyy-MM-dd HH:mm";
 
     @GetMapping
-    public String showQuestions(Model model) {
+    public String questionList(Model model) {
         Iterable<Question> questions = questionRepository.findAll();
         model.addAttribute("questions", questions);
         return "index";
     }
 
     @PostMapping
-    public String makeNewQuestion(Question question) {
+    public String newQuestion(Question question) {
         LocalDateTime dateTime = LocalDateTime.now();
         DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern(dateTimeFormat);
         String dateTimeString = dateTime.format(dateTimeFormatter);
@@ -43,12 +41,12 @@ public class QuestionController {
     }
 
     @GetMapping("/new")
-    public String toQnaForm() {
+    public String qnaInputPage() {
         return "questionInputForm";
     }
 
     @GetMapping("/{id}")
-    public ModelAndView showQuestion(@PathVariable("id") Long id) {
+    public ModelAndView question(@PathVariable("id") Long id) {
         ModelAndView modelAndView = new ModelAndView("questionDetail");
         modelAndView.addObject("question", questionRepository.findById(id).get());
         return modelAndView;

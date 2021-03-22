@@ -18,14 +18,14 @@ public class UserController {
     private UserRepository userRepository;
 
     @GetMapping
-    public String showUserList(Model model) {
+    public String userList(Model model) {
         Iterable<User> users = userRepository.findAll();
         model.addAttribute("users", users);
         return "userList";
     }
 
     @GetMapping("/new")
-    public String toSignupPage() {
+    public String signupPage() {
         return "userSignup";
     }
 
@@ -36,14 +36,14 @@ public class UserController {
     }
 
     @GetMapping("/{id}")
-    public ModelAndView showProfile(@PathVariable Long id) {
+    public ModelAndView userProfile(@PathVariable Long id) {
         ModelAndView modelAndView = new ModelAndView("userProfile");
         modelAndView.addObject("user", userRepository.findById(id).get());
         return modelAndView;
     }
 
     @GetMapping("/{id}/password-check")
-    public String toCheckPasswordPage(@PathVariable("id") Long id, Model model) {
+    public String passwordCheckPage(@PathVariable("id") Long id, Model model) {
         User user = userRepository.findById(id).orElseGet(User::new);
         model.addAttribute("user", user);
         return "passwordCheckForm";
