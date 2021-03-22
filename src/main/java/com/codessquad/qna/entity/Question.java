@@ -10,13 +10,17 @@ public class Question {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
+
     @ManyToOne
     @JoinColumn(foreignKey = @ForeignKey(name = "fk_question_writer"))
     private User writer;
+
     @Column(nullable = false, length = 100)
     private String title;
+
     @Column(nullable = false, length = 3000)
     private String contents;
+
     @Column(nullable = false)
     private LocalDateTime writeDateTime;
 
