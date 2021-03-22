@@ -62,3 +62,4 @@ public class QuestionController {
         return "qna/updateForm";
     }
 }
+
