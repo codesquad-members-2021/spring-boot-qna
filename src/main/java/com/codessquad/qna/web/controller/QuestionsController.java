@@ -82,8 +82,8 @@ public class QuestionsController {
         return currentQuestion;
     }
 
-    private void verifyAuthorizedAccess(Question currentQuestion, User loginUser) {
-        if (!currentQuestion.isMatchingWriter(loginUser)) {
+    private void verifyAuthorizedAccess(Question question, User loginUser) {
+        if (!question.isMatchingWriter(loginUser)) {
             throw new UnauthorizedAccessException("자신이 작성한 질문만 수정 혹은 삭제할 수 있습니다");
         }
     }
