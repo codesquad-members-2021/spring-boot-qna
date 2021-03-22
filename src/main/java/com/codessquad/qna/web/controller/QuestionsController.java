@@ -20,7 +20,6 @@ import static com.codessquad.qna.web.utils.ExceptionConstants.CANNOT_MODIFY_ANOT
 @RequestMapping("/questions")
 public class QuestionsController {
     private static final Logger LOGGER = LoggerFactory.getLogger(QuestionsController.class);
-
     private final QuestionRepository questionRepository;
 
     public QuestionsController(QuestionRepository questionRepository) {
@@ -52,7 +51,7 @@ public class QuestionsController {
 
     @GetMapping("/{questionId}/modify-form")
     public String modifyForm(@PathVariable("questionId") long questionId,
-                                Model model, HttpSession session) {
+                             Model model, HttpSession session) {
         Question currentQuestion = verifyQuestionAndGet(session, questionId);
         model.addAttribute("currentQuestion", currentQuestion);
         return "qna/modify-form";

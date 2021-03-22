@@ -19,9 +19,8 @@ import static com.codessquad.qna.web.utils.ExceptionConstants.PASSWORD_NOT_MATCH
 @Controller
 @RequestMapping("/users")
 public class UsersController {
-    private final UserRepository userRepository;
-
     private static final Logger LOGGER = LoggerFactory.getLogger(UsersController.class);
+    private final UserRepository userRepository;
 
     public UsersController(UserRepository userRepository) {
         this.userRepository = userRepository;
