@@ -48,13 +48,12 @@ public class QuestionController {
     public String showQuestion(@PathVariable("id") Long id, Model model) {
         Question question = questionService.findById(id);
         model.addAttribute("question", question);
-
         model.addAttribute("answers", answerService.findByQuestionId(id));
         return "qna/show";
     }
 
     @GetMapping("{id}/update")
-    public String clickUpdateQuestion(@PathVariable Long id, Model model, HttpSession session) {
+    public String showUpdateForm(@PathVariable Long id, Model model, HttpSession session) {
         Question question = questionService.findById(id);
         User writer = question.getWriter();
 
