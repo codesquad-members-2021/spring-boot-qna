@@ -1,6 +1,7 @@
 package com.codessquad.qna.service;
 
 import com.codessquad.qna.domain.User;
+import com.codessquad.qna.exception.LoginFailedException;
 import com.codessquad.qna.repository.UserRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,6 +28,17 @@ public class UserService {
     public boolean isRedundantUser(User user) {
         User redundantUser = userRepository.findByUserId(user.getUserId()).orElse(null);
         return redundantUser != null;
+    }
+
+    public User authenticateUser(String userId, String password){
+        User user = userRepository.findByUserId(userId)
+                .orElseThrow(() -> new LoginFailedException("존재하지 않는 회원입니다."));
+
+        if (!user.isEqualPassword(password)) {
+            throw new LoginFailedException("비밀번호가 일치하지 않습니다.");
+        }
+
+        return user;
     }
 
     public List<User> getAllUsers() {
