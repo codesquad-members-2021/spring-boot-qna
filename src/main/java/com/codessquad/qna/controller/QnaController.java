@@ -68,7 +68,7 @@ public class QnaController {
 
         Question originalQuestion = validateQuestionWriter(id, session);
         questionService.modifyQuestion(originalQuestion, modifiedQuestion);
-        return "redirect:/";
+        return String.format("redirect:/questions/%d", id);
     }
 
     @DeleteMapping("/{id}")

@@ -62,7 +62,7 @@ public class Question {
     }
 
     public boolean isSameUser(User user) {
-        return this.writer.equals(user.getUserId());
+        return this.writer.equals(user);
     }
 
     @Override
