@@ -5,11 +5,10 @@ import com.codessquad.qna.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
+
+import java.util.Optional;
 
 @Controller
 @RequestMapping("/user")
@@ -43,15 +42,16 @@ public class UserController {
         return modelAndView;
     }
 
-    @GetMapping("/{userId}/password-check")
-    public String toCheckPasswordPage(@PathVariable("userId") String userId, Model model) {
-        model.addAttribute("userId", userId);
+    @GetMapping("/{id}/password-check")
+    public String toCheckPasswordPage(@PathVariable("id") Long id, Model model) {
+        User user = userRepository.findById(id).orElseGet(User::new);
+        model.addAttribute("user", user);
         return "passwordCheckForm";
     }
 
-    @PostMapping("/{userId}/password-check")
-    public String checkPassword(User targetUser, Model model) {
-        User user = userRepository.findByUserId(targetUser.getUserId());
+    @PostMapping("/{id}/password-check")
+    public String checkPassword(@PathVariable("id") Long id, User targetUser, Model model) {
+        User user = userRepository.findById(id).orElseGet(User::new);
         String passwordBefore = user.getPassword();
         if (passwordBefore.equals(targetUser.getPassword())) {
             model.addAttribute("user", user);
@@ -60,18 +60,14 @@ public class UserController {
         return "redirect:/";
     }
 
-//    @PostMapping("/{userId}/edit")
-//    public String updateUser(@PathVariable("userId") String userId, User targetUser) {
-//        Iterable<User> users = userRepository.findAll();
-//        for (User user : users) {
-//            if (user.isSameId(userId)) {
-//                user.setPassword(targetUser.getPassword());
-//                user.setName(targetUser.getName());
-//                user.setEmail(targetUser.getEmail());
-//                break;
-//            }
-//        }
-//        return "redirect:/user";
-//    }
+    @PutMapping("/{id}")
+    public String updateUser(@PathVariable("id") Long id, User targetUser) {
+        User user = userRepository.findById(id).orElseGet(User::new);
+        user.setPassword(targetUser.getPassword());
+        user.setName(targetUser.getName());
+        user.setEmail(targetUser.getEmail());
+        userRepository.save(user);
+        return "redirect:/user";
+    }
 }
 
