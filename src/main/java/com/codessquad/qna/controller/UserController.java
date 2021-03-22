@@ -7,10 +7,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.util.ArrayList;
@@ -43,36 +40,17 @@ public class UserController {
     }
 
     @GetMapping("/{id}")
-    public String showProfile(@PathVariable Long id) {
-        ModelAndView mav = new ModelAndView("user/profile");
-        mav.addObject("user", userRepository.findById(id).get());
-        return "/user/profile";
+    public String showUpdateForm(@PathVariable Long id, Model model) {
+        model.addAttribute("user", userRepository.findById(id).get());
+        return "/user/update";
     }
 
-//    @GetMapping("/{userId}")
-//    public String showProfile(@PathVariable String userId, Model model) {
-//        int index = 0;
-//        for (User user : users) {
-//            if(user.getUserId().equals(userId)) {
-//                index = users.indexOf(user);
-//                logger.info("tempUser = " + users.get(index));
-//            }
-//        }
-//        model.addAttribute("user", users.get(index));
-//        return "/user/profile";
-//    }
-
-    @PostMapping("/{userId}/update")
-    public String updateUserInfo(@PathVariable String userId, User updateUser) {
-        for (User user : users) {
-            if(user.getUserId().equals(userId)) {
-                int index = users.indexOf(user);
-                users.set(index, updateUser);
-                logger.info("updateUser = " + updateUser);
-            }
-        }
+   @PutMapping("/{id}/update")
+    public String updateUserInfo(@PathVariable Long id, User updateUser) {
+        User user = userRepository.findById(id).get();
+        user.update(updateUser);
+        userRepository.save(user);
         return "redirect:/users";
-
     }
 
 }
