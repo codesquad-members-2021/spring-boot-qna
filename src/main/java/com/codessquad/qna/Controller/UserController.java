@@ -58,8 +58,8 @@ public class UserController {
     }
 
     @GetMapping("/{id}/form")
-    public String getUserupdateForm(@PathVariable Long id , Model model) {
-        User user = userRepository.findById(id).get();
+    public String getUserupdateForm(@PathVariable Long id , Model model) throws Exception{
+        User user = userRepository.findById(id).orElseThrow(() -> new Exception());
         model.addAttribute("user",user);
         return "user/updateForm";
     }
