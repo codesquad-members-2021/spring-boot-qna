@@ -1,11 +1,8 @@
 package com.codessquad.qna.web;
 
+import com.codessquad.qna.service.UserService;
 import com.codessquad.qna.domain.User;
-import com.codessquad.qna.repository.UserRepository;
 import com.codessquad.qna.exception.AccessDeniedException;
-import com.codessquad.qna.exception.NoUserException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,33 +15,24 @@ import javax.servlet.http.HttpSession;
 @Controller
 @RequestMapping("/users")
 public class UserController {
-    private final Logger logger = LoggerFactory.getLogger(QuestionController.class);
-    private final UserRepository userRepository;
+    private final UserService userService;
 
-    public UserController(UserRepository userRepository) {
-        this.userRepository = userRepository;
+    public UserController(UserService userService) {
+        this.userService = userService;
     }
 
     @PostMapping
     public String create(User user) {
-        if (checkEmpty(user)) {
+        if (userService.checkEmpty(user)) {
             return "user/form";
         }
-        userRepository.save(user);
+        userService.save(user);
         return "redirect:/users";
-
-    }
-
-    private boolean checkEmpty(User user) {
-        return user.getUserId().equals("")
-                || user.getPassword().equals("")
-                || user.getEmail().equals("")
-                || user.getName().equals("");
     }
 
     @GetMapping
     public String getUserList(Model model) {
-        model.addAttribute("users", userRepository.findAll());
+        model.addAttribute("users", userService.getUserList());
         return "user/list";
     }
 
@@ -54,7 +42,7 @@ public class UserController {
             return "redirect:/users/login";
         }
 
-        model.addAttribute("user", userRepository.findById(id).orElseThrow(NoUserException::new));
+        model.addAttribute("user", userService.getUserById(id));
         return "user/profile";
     }
 
@@ -75,15 +63,9 @@ public class UserController {
         return "user/updateForm";
     }
 
-    @PostMapping("/{id}/form")
+    @PostMapping("/{id}")
     public String update(@PathVariable long id, User updateUser, String newPassword) {
-        User user = userRepository.findById(id).orElseThrow(NoUserException::new);
-        if (!user.checkPassword(updateUser.getPassword())) {
-            logger.info("Error: 올바르지 않은 패스워드입니다.정보가 유지됩니다.");
-        }
-        user.update(updateUser, newPassword);
-
-        userRepository.save(user);
+        userService.updateUser(id, updateUser, newPassword);
         return "redirect:/users";
     }
 
@@ -94,10 +76,10 @@ public class UserController {
 
     @PostMapping("/login")
     public String login(String userId, String password, HttpSession session) {
-        User user = userRepository.findByUserId(userId);
         if (HttpSessionUtils.isLoginUser(session)) {
             return "redirect:/users/login";
         }
+        User user = userService.getUserByUserId(userId);
         if (!user.checkPassword(password)) {
             return "redirect:/users/login";
         }

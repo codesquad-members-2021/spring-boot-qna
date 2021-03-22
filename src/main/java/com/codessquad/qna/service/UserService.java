@@ -1,4 +1,4 @@
-package com.codessquad.qna;
+package com.codessquad.qna.service;
 
 import com.codessquad.qna.domain.User;
 import com.codessquad.qna.exception.NoUserException;
