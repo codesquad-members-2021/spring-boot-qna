@@ -2,57 +2,64 @@ package com.codessquad.qna.web.controller;
 
 import com.codessquad.qna.web.domain.user.User;
 
-import com.codessquad.qna.web.domain.user.UserRepository;
-
-import javassist.NotFoundException;
+import com.codessquad.qna.web.dto.user.CreateUserRequest;
+import com.codessquad.qna.web.service.UserService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+
+import javax.servlet.http.HttpSession;
 
 @Controller
 @RequestMapping("/users")
 public class UserController {
 
-    private final UserRepository userRepository;
+    private final UserService userService;
 
-    public UserController(UserRepository userRepository) {
-        this.userRepository = userRepository;
+    public UserController(UserService userService) {
+        this.userService = userService;
     }
 
-    @PostMapping("/create")
-    public String create(User user) {
-        userRepository.save(user);
+    @PostMapping("/login")
+    public String login(String userId, String password, HttpSession session) {
+        User user = userService.login(userId, password, session);
+        session.setAttribute("sessionedUser", user);
+        return "redirect:/";
+    }
+
+    @GetMapping("/logout")
+    public String logout(HttpSession session) {
+        session.removeAttribute("sessionedUser");
+        return "redirect:/";
+    }
+
+    @PostMapping()
+    public String create(CreateUserRequest request) {
+        userService.create(request);
         return "redirect:/users";
     }
 
     @GetMapping()
     public String list(Model model) {
-        model.addAttribute("users", userRepository.findAll());
+        model.addAttribute("users", userService.list());
         return "user/list";
     }
 
     @GetMapping("/{id}")
-    public String show(@PathVariable long id, Model model) throws NotFoundException {
-        User user = userRepository.findById(id).orElseThrow(() -> new NotFoundException("No user with id number " + id));
-        model.addAttribute("user", user);
+    public String show(@PathVariable long id, Model model) {
+        model.addAttribute("user", userService.findUserById(id));
         return "user/profile";
     }
 
     @GetMapping("/{id}/form")
-    public String updateForm(@PathVariable long id, Model model) throws NotFoundException{
-        User user = userRepository.findById(id).orElseThrow(() -> new NotFoundException("No user with id number " + id));
-        model.addAttribute("user", user);
+    public String updateForm(@PathVariable long id, HttpSession session, Model model) {
+        model.addAttribute("user", userService.verifiedUser(id, session));
         return "user/updateForm";
     }
 
-    @PutMapping("/{id}/update")
-    public String updateProfile(@PathVariable long id, User updatedUser, String oldPassword) throws NotFoundException{
-        User user = userRepository.findById(id).orElseThrow(() -> new NotFoundException("No user with id number " + id));
-        if(user.isMatchingPassword(oldPassword)){
-            user.update(updatedUser);
-            userRepository.save(user);
-        }
+    @PutMapping("/{id}")
+    public String updateProfile(@PathVariable long id, User updatedUser, String oldPassword, HttpSession session) {
+        userService.updateProfile(id, updatedUser, oldPassword, session);
         return "redirect:/users";
     }
-
 }

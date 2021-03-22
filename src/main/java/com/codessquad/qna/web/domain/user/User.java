@@ -1,10 +1,12 @@
 package com.codessquad.qna.web.domain.user;
 
-import javax.persistence.Id;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
+import com.codessquad.qna.web.domain.answer.Answer;
+import com.codessquad.qna.web.domain.question.Question;
+
+import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
 
 @Entity
 public class User {
@@ -25,6 +27,9 @@ public class User {
     @Column(nullable = false)
     private String email;
 
+    @OneToMany(mappedBy = "writer", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<Answer> answers = new ArrayList<>();
+
     public User(String userId, String password, String name, String email) {
         this.userId = userId;
         this.password = password;
@@ -32,7 +37,7 @@ public class User {
         this.email = email;
     }
 
-    protected User(){
+    protected User() {
 
     }
 
@@ -56,14 +61,42 @@ public class User {
         return email;
     }
 
-    public boolean isMatchingPassword(String password){
+    public List<Answer> getAnswers() {
+        return answers;
+    }
+
+    public void addAnswer(Answer answer) {
+        answers.add(answer);
+        if (answer.getWriter() != this) {
+            answer.setWriter(this);
+        }
+    }
+
+    public boolean isMatchingPassword(String password) {
         return this.password.equals(password);
     }
 
-    public void update(User user){
+    public boolean isMatchingWriter(User user) {
+        return this.equals(user);
+    }
+
+    public void update(User user) {
         this.password = user.password;
         this.name = user.name;
         this.email = user.email;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        User user = (User) o;
+        return Objects.equals(id, user.id) && Objects.equals(userId, user.userId);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, userId);
     }
 
     @Override
@@ -77,5 +110,47 @@ public class User {
                 '}';
     }
 
+    static public class Builder {
+        private String userId;
+        private String password;
+        private String name;
+        private String email;
+
+        public Builder() {
+
+        }
+
+        public Builder(User user) {
+            this.userId = user.userId;
+            this.password = user.password;
+            this.name = user.name;
+            this.email = user.email;
+        }
+
+        public Builder userId(String userId) {
+            this.userId = userId;
+            return this;
+        }
+
+        public Builder password(String password) {
+            this.password = password;
+            return this;
+        }
+
+        public Builder name(String name) {
+            this.name = name;
+            return this;
+        }
+
+        public Builder email(String email) {
+            this.email = email;
+            return this;
+        }
+
+        public User build() {
+            return new User(userId, password, name, email);
+        }
+
+    }
 
 }
