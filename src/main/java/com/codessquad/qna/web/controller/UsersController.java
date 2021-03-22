@@ -39,8 +39,7 @@ public class UsersController {
 
     @GetMapping("/{userId}")
     public String getOneUser(@PathVariable("userId") long id, Model model) {
-        User foundUser = userRepository.findById(id)
-                .orElseThrow(UserNotFoundException::new);
+        User foundUser = userRepository.findById(id).orElseThrow(UserNotFoundException::new);
         model.addAttribute("foundUser", foundUser);
         return "user/profile";
     }
@@ -55,7 +54,7 @@ public class UsersController {
                              String name, String email, HttpSession session) {
         User loginUser = SessionUtil.getLoginUser(session);
         User foundUser = userRepository.findById(id).orElseThrow(UserNotFoundException::new);
-        if(!loginUser.isMatchingId(foundUser)){
+        if (!loginUser.isMatchingId(foundUser)) {
             throw new UnauthorizedAccessException("타인의 개인정보를 수정할 수 없습니다");
         }
         verifyAuthorizedAccess(loginUser, prevPassword);
@@ -68,8 +67,7 @@ public class UsersController {
     public String processLogin(String userId, String password, HttpSession session) {
         User foundUser = null;
         try {
-            foundUser = userRepository.findByUserId(userId)
-                    .orElseThrow(UserNotFoundException::new);
+            foundUser = userRepository.findByUserId(userId).orElseThrow(UserNotFoundException::new);
             verifyAuthorizedAccess(foundUser, password);
         } catch (RuntimeException e) {
             return "redirect:/users/login-form";
