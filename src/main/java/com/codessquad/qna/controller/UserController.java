@@ -26,7 +26,6 @@ public class UserController {
 
     @PostMapping
     public String createUser(User newUser, Model model) {
-
         if (newUser == null) {
             model.addAttribute("errorMessage", "회원가입에 실패하였습니다.");
             return "user/form";
