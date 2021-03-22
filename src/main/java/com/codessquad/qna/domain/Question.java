@@ -7,7 +7,7 @@ import java.time.format.DateTimeFormatter;
 @Entity
 public class Question {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @ManyToOne
@@ -59,7 +59,11 @@ public class Question {
         return createdDateTime.format(DateTimeFormatter.ISO_LOCAL_DATE_TIME);
     }
 
+<<<<<<< HEAD:src/main/java/com/codessquad/qna/domain/Question.java
     public boolean checkWriter(User loginUser) {
+=======
+    public boolean userConfirmation(User loginUser) {
+>>>>>>> 34c9f84725566db738f456b1ef6a70331028c6b6:src/main/java/com/codessquad/qna/domain/Qna.java
         return this.writer.equals(loginUser);
     }
 

@@ -1,7 +1,12 @@
 package com.codessquad.qna.web;
 
 import com.codessquad.qna.domain.User;
+<<<<<<< HEAD
 import com.codessquad.qna.repository.UserRepository;
+=======
+import com.codessquad.qna.domain.UserRepository;
+import com.codessquad.qna.exception.AccessDeniedException;
+>>>>>>> 34c9f84725566db738f456b1ef6a70331028c6b6
 import com.codessquad.qna.exception.NoUserException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -42,21 +47,18 @@ public class UserController {
     }
 
     @GetMapping
-    public String getList(Model model) {
+    public String getUserList(Model model) {
         model.addAttribute("users", userRepository.findAll());
         return "user/list";
     }
 
     @GetMapping("/{id}")
-    public String getOneUserProfile(@PathVariable long id, Model model, HttpSession session) {
+    public String userProfile(@PathVariable long id, Model model, HttpSession session) {
         if (!HttpSessionUtils.isLoginUser(session)) {
             return "redirect:/users/login";
         }
 
-        User sessionUser = HttpSessionUtils.getUserFromSession(session);
-        User user = userRepository.findById(sessionUser.getId()).orElseThrow(NoUserException::new);
-
-        model.addAttribute("user", user);
+        model.addAttribute("user", userRepository.findById(id).orElseThrow(NoUserException::new));
         return "user/profile";
     }
 
@@ -68,9 +70,8 @@ public class UserController {
 
         User sessionUser = HttpSessionUtils.getUserFromSession(session);
 
-
-        if (!sessionUser.checkId(id)) {
-            throw new IllegalStateException("자신의 정보만 수정할 수 있습니다.");
+        if (!sessionUser.userIdConfirmation(id)) {
+            throw new AccessDeniedException();
         }
 
         model.addAttribute("user", sessionUser);
