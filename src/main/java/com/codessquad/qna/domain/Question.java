@@ -7,7 +7,7 @@ import java.time.format.DateTimeFormatter;
 @Entity
 public class Question {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @ManyToOne
@@ -59,7 +59,7 @@ public class Question {
         return createdDateTime.format(DateTimeFormatter.ISO_LOCAL_DATE_TIME);
     }
 
-    public boolean checkWriter(User loginUser) {
+    public boolean userConfirmation(User loginUser) {
         return this.writer.equals(loginUser);
     }
 

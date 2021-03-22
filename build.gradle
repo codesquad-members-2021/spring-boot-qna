@@ -20,8 +20,9 @@ dependencies {
     implementation'org.springframework.boot:spring-boot-starter-mustache'
     developmentOnly 'org.springframework.boot:spring-boot-devtools'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
-    testImplementation group: 'com.h2database', name: 'h2', version: '1.4.197'
+    testImplementation group: 'com.h2database', name: 'h2', version: '1.4.200'
     runtimeOnly 'com.h2database:h2'
+    implementation group: 'ch.qos.logback', name: 'logback-classic', version: '1.2.3'
 }
 
 test {
