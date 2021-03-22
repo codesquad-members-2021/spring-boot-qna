@@ -11,13 +11,13 @@
                         <div class="main">
                             <a>{{id}}</a>
                             <strong class="subject">
-                                <a href="/questions/{{id}}">{{id}}</a>
+                                <a href="/questions/{{id}}">{{title}}</a>
                             </strong>
 
                             <div class="auth-info">
                                 <i class="icon-add-comment"></i>
                                 <span class="time">{{nowDate}}</span>
-                                <a href="user/profile" class="author">{{writer}}</a>
+                                <a href="user/profile" class="author">{{writer.userId}}</a>
                             </div>
 
                             <div class="reply" title="댓글">

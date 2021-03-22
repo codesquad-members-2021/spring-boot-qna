@@ -1,9 +1,6 @@
 package com.codessquad.qna.domain;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.time.LocalDate;
 @Entity
 public class Question {
@@ -12,11 +9,23 @@ public class Question {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String writer;
     private String title;
     private String content;
     private int index;
     private LocalDate nowDate;
+
+    protected Question() {
+    }
+
+    public Question(String title, String content, User writer) {
+        this.title = title;
+        this.content = content;
+        this.writer = writer;
+    }
+
+    @ManyToOne
+    @JoinColumn(foreignKey = @ForeignKey(name = "fk_question_writer"))
+    private User writer;
 
     public Long getId() {
         return id;
@@ -42,11 +51,12 @@ public class Question {
         this.index = index;
     }
 
-    public String getWriter() {
+    public User getWriter() {
         return writer;
     }
 
-    public void setWriter(String writer) {
+
+    public void setWriter(User writer) {
         this.writer = writer;
     }
 
@@ -63,6 +73,11 @@ public class Question {
     }
 
     public void setContent(String content) {
+        this.content = content;
+    }
+
+    public void updqte(String title, String content) {
+        this.title = title;
         this.content = content;
     }
 
