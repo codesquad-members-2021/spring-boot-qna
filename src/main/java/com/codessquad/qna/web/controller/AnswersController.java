@@ -35,7 +35,7 @@ public class AnswersController {
         return "redirect:/questions/" + questionId;
     }
 
-    @DeleteMapping("/answers/{answerId}")
+    @DeleteMapping("/{questionId}/answers/{answerId}")
     public String deleteAnswer(@PathVariable("answerId") long answerId, HttpSession session) {
         User sessionUser = SessionUtil.getLoginUser(session);
         Answer targetAnswer = answersRepository.findByIdAndDeletedFalse(answerId)
