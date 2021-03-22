@@ -25,7 +25,7 @@ public class QuestionService {
 
     public void updateQuestion(long questionId, String title, String contents, User tryToUpdate) {
         Question question = getQuestion(questionId);
-        if (question.getWriter().getId() == tryToUpdate.getId()) {
+        if (question.isWriter(tryToUpdate)) {
             question.update(title, contents);
             questionRepository.save(question);
             return;
@@ -35,7 +35,7 @@ public class QuestionService {
 
     public void deleteQuestion(long questionId, User tryToDelete) {
         Question question = getQuestion(questionId);
-        if (question.getWriter().getId() == tryToDelete.getId()) {
+        if (question.isWriter(tryToDelete)) {
             questionRepository.delete(question);
             return;
         }

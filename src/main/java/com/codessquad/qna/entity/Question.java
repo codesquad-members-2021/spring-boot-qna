@@ -62,4 +62,8 @@ public class Question {
         this.title = title;
         this.contents = contents;
     }
+
+    public boolean isWriter(User user) {
+        return writer.isSameId(user);
+    }
 }

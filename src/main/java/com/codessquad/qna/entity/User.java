@@ -61,4 +61,8 @@ public class User {
     public boolean verify(User toVerify) {
         return this.userId.equals(toVerify.userId) && this.password.equals(toVerify.password);
     }
+
+    public boolean isSameId(User user) {
+        return this.userId == user.userId;
+    }
 }
