@@ -16,8 +16,8 @@ import java.util.*;
 @RequestMapping("/questions")
 public class QuestionController {
 
-    private QuestionService questionService;
-    private AnswerService answerService;
+    private final QuestionService questionService;
+    private final AnswerService answerService;
 
     private QuestionController(QuestionService questionService, AnswerService answerService) {
         this.questionService = questionService;

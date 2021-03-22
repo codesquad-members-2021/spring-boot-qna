@@ -17,14 +17,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.servlet.http.HttpSession;
 
-
-
 @Controller
 @RequestMapping("/questions/{questionId}/answers")
 public class AnswerController {
 
-    private AnswerService answerService;
-    private QuestionService questionService;
+    private final AnswerService answerService;
+    private final QuestionService questionService;
 
     private AnswerController(AnswerService answerService, QuestionService questionService) {
         this.answerService = answerService;
