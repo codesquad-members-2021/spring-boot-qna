@@ -2,7 +2,6 @@ package com.codesquad.qna.domain;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotEmpty;
 
 @Entity
 public class User {
@@ -66,11 +65,24 @@ public class User {
 
     public void update(User user) {
         this.userId = user.userId;
+        this.password = user.password;
         this.name = user.name;
         this.email = user.email;
     }
 
-    public boolean matchPassword(User user) {
-        return password.equals(user.password);
+    public boolean isMatchedId(Long id) {
+        return this.id.equals(id);
+    }
+
+    public boolean isMatchedUserId(String userId) {
+        return this.userId.equals(userId);
+    }
+
+    public boolean isMatchedPassword(User user) {
+        return this.password.equals(user.password);
+    }
+
+    public boolean isMatchedPassword(String password) {
+        return this.password.equals(password);
     }
 }

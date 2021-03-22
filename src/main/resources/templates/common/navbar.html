@@ -19,6 +19,11 @@
                 </div>
             </form>
             <ul class="nav navbar-nav navbar-right">
+                {{#if sessionedUser}}
+                <li>
+                    <a href="/users/{{sessionedUser.id}}">{{sessionedUser.userId}}</a>
+                </li>
+                {{/if}}
                 <li>
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="glyphicon glyphicon-bell"></i></a>
                     <ul class="dropdown-menu">

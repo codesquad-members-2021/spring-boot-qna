@@ -12,7 +12,7 @@ public class Question {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @Column(nullable = false, length = 32, unique = true)
+    @Column(nullable = false, length = 32)
     private String writer;
 
     @Column(nullable = false)
@@ -61,4 +61,19 @@ public class Question {
         return DateTimeUtils.formatByPattern(createdDateTime);
     }
 
+    public void update(Question updatedQuestion) {
+        this.title = updatedQuestion.title;
+        this.contents = updatedQuestion.contents;
+    }
+
+    @Override
+    public String toString() {
+        return "Question{" +
+                "id=" + id +
+                ", writer='" + writer + '\'' +
+                ", title='" + title + '\'' +
+                ", contents='" + contents + '\'' +
+                ", createdDateTime=" + createdDateTime +
+                '}';
+    }
 }
