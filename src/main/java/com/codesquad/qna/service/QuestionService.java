@@ -29,7 +29,7 @@ public class QuestionService {
 
     public void save(Question question, HttpSession session) {
         User sessionedUser = HttpSessionUtils.getUserFromSession(session);
-        Question newQuestion = new Question(sessionedUser.getUserId(), question.getTitle(), question.getContents());
+        Question newQuestion = new Question(sessionedUser, question.getTitle(), question.getContents());
 
         logger.error("Question : {}", question);
 
