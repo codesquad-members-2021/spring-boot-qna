@@ -35,20 +35,20 @@ public class UsersController {
     }
 
     @GetMapping
-    public String getUserList(Model model) {
+    public String userList(Model model) {
         model.addAttribute("users", userRepository.findAll());
         return "user/list";
     }
 
     @GetMapping("/{userId}")
-    public String getOneUser(@PathVariable("userId") long id, Model model) {
+    public String userDetail(@PathVariable("userId") long id, Model model) {
         User foundUser = userRepository.findById(id).orElseThrow(UserNotFoundException::new);
         model.addAttribute("foundUser", foundUser);
         return "user/profile";
     }
 
     @GetMapping("/modify-form")
-    public String getModifyUserPage() {
+    public String modifyForm() {
         return "user/modify-form";
     }
 
@@ -67,7 +67,7 @@ public class UsersController {
     }
 
     @PostMapping("/login")
-    public String processLogin(String userId, String password, HttpSession session) {
+    public String doLogin(String userId, String password, HttpSession session) {
         User foundUser = null;
         try {
             foundUser = userRepository.findByUserId(userId).orElseThrow(UserNotFoundException::new);
@@ -81,7 +81,7 @@ public class UsersController {
     }
 
     @PostMapping("/logout")
-    public String processLogout(HttpSession session) {
+    public String doLogout(HttpSession session) {
         User sessionUser = SessionUtil.getLoginUser(session);
         LOGGER.info("user logout : {}", sessionUser.getUserId());
         SessionUtil.removeLoginUser(session);

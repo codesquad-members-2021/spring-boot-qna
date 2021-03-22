@@ -37,13 +37,13 @@ public class QuestionsController {
     }
 
     @GetMapping
-    public String getQuestionList(Model model) {
+    public String questionList(Model model) {
         model.addAttribute("questions", questionRepository.findAllByDeletedFalse());
         return "index";
     }
 
     @GetMapping("/{questionId}")
-    public String getOneQuestion(@PathVariable("questionId") long questionId, Model model) {
+    public String questionDetail(@PathVariable("questionId") long questionId, Model model) {
         Question foundQuestion = questionRepository.findByIdAndDeletedFalse(questionId)
                 .orElseThrow(QuestionNotFoundException::new);
         model.addAttribute("question", foundQuestion);
@@ -51,7 +51,7 @@ public class QuestionsController {
     }
 
     @GetMapping("/{questionId}/modify-form")
-    public String getModifyPage(@PathVariable("questionId") long questionId,
+    public String modifyForm(@PathVariable("questionId") long questionId,
                                 Model model, HttpSession session) {
         Question currentQuestion = verifyQuestionAndGet(session, questionId);
         model.addAttribute("currentQuestion", currentQuestion);
