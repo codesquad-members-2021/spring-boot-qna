@@ -1,5 +1,7 @@
 package com.codessquad.qna.domain;
 
+import org.hibernate.annotations.CreationTimestamp;
+
 import javax.persistence.*;
 import java.time.LocalDate;
 import java.util.Objects;
@@ -14,6 +16,7 @@ public class Question {
     private String title;
     private String content;
     private int index;
+    @CreationTimestamp
     private LocalDate nowDate;
 
     @ManyToOne

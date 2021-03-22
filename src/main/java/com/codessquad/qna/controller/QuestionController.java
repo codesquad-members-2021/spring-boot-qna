@@ -46,6 +46,7 @@ public class QuestionController {
 
     @GetMapping("/qna/form")
     public String qnaForm(HttpSession session) {
+
         if(HttpSessionUtils.isLoginUser(session)) {
 
             return "/qna/form";
