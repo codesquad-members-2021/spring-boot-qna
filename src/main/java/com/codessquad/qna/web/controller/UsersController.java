@@ -50,10 +50,14 @@ public class UsersController {
         return "user/modify-form";
     }
 
-    @PutMapping
-    public String modifyUser(String prevPassword, String newPassword,
+    @PutMapping("/{id}")
+    public String modifyUser(@PathVariable long id, String prevPassword, String newPassword,
                              String name, String email, HttpSession session) {
         User loginUser = SessionUtil.getLoginUser(session);
+        User foundUser = userRepository.findById(id).orElseThrow(UserNotFoundException::new);
+        if(!loginUser.isMatchingId(foundUser)){
+            throw new UnauthorizedAccessException("타인의 개인정보를 수정할 수 없습니다");
+        }
         verifyAuthorizedAccess(loginUser, prevPassword);
         loginUser.update(newPassword, name, email);
         userRepository.save(loginUser);
