@@ -1,8 +1,9 @@
 package com.codessquad.qna.web.service;
 
 import com.codessquad.qna.web.domain.User;
+import com.codessquad.qna.web.exception.IllegalEntityIdException;
+import com.codessquad.qna.web.exception.LoginFailException;
 import com.codessquad.qna.web.repository.UserRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -11,21 +12,22 @@ import java.util.List;
 public class UserService {
     private final UserRepository userRepository;
 
-    @Autowired
     public UserService(UserRepository userRepository) {
         this.userRepository = userRepository;
     }
 
+    public User login(String userId, String password) {
+        User user = findUser(userId);
+        validatePassword(user, password);
+        return user;
+    }
+
     public void signUp(User user) {
-        validateUserID(user);
         userRepository.save(user);
     }
 
-    private void validateUserID(User user) {
-        userRepository.findByUserId(user.getUserId())
-                .ifPresent(x -> {
-                    throw new IllegalStateException("이미 존재하는 아이디입니다");
-                });
+    public boolean checkDuplicateID(User user) {
+        return userRepository.findByUserId(user.getUserId()).isPresent();
     }
 
     public List<User> findUsers() {
@@ -35,19 +37,23 @@ public class UserService {
     public User findUser(long id) {
         return userRepository
                 .findById(id)
-                .orElseThrow(() -> new IllegalStateException("찾는 user가 없습니다"));
+                .orElseThrow(() -> new IllegalEntityIdException("id(번호)에 해당하는 회원이 없습니다"));
     }
 
-    public void updateUser(long id, String testPassword, User user) {
-        User originUser = findUser(id);
-        validatePassword(originUser, testPassword);
-        originUser.update(user);
-        userRepository.save(originUser);
+    private User findUser(String userId) {
+        return userRepository
+                .findByUserId(userId)
+                .orElseThrow(() -> new LoginFailException("입력하신 아이디에 해당하는 회원이 없습니다"));
     }
 
-    private void validatePassword(User originUser, String testPassword) {
-        if (!originUser.isMatchingPassword(testPassword)) {
-            throw new IllegalStateException("잘못된 비밀번호 입니다");
+    public void updateUser(String testPassword, User loginUser, User user) {
+        loginUser.update(user);
+        userRepository.save(loginUser);
+    }
+
+    private void validatePassword(User user, String testPassword) {
+        if (!user.isMatchingPassword(testPassword)) {
+            throw new LoginFailException("잘못된 비밀번호 입니다");
         }
     }
 }

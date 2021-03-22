@@ -1,14 +1,15 @@
 package com.codessquad.qna.web.domain;
 
 import javax.persistence.*;
+import java.util.Objects;
 
 @Entity
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private long id;
 
-    @Column(nullable = false, length = 20)
+    @Column(nullable = false, length = 20, unique = true)
     private String userId;
     private String password;
     private String name;
@@ -51,12 +52,29 @@ public class User {
     }
 
     public boolean isMatchingPassword(String testPassword) {
-        return password.equals(testPassword);
+        return this.password.equals(testPassword);
+    }
+
+    public boolean isSameId(long id) {
+        return this.id == id;
     }
 
     public void update(User user) {
-        this.setPassword(user.getPassword());
-        this.setName(user.getName());
-        this.setEmail(user.getEmail());
+        this.password = user.password;
+        this.name = user.name;
+        this.email = user.email;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof User)) return false;
+        User user = (User) o;
+        return Objects.equals(getId(), user.getId());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getId());
     }
 }
