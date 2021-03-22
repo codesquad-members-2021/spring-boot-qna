@@ -61,6 +61,13 @@ public class Question {
         return contents;
     }
 
+    public void update(Question question){
+        this.writer = question.getWriter();
+        this.contents = question.getContents();
+        this.time = question.getTime();
+        this.title = question.getTitle();
+    }
+
     @Override
     public String toString() {
         return "Question{" +
