@@ -1,6 +1,5 @@
 package com.codessquad.qna.domain;
 
-
 import java.util.Objects;
 import javax.persistence.*;
 

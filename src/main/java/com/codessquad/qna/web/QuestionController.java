@@ -30,7 +30,6 @@ public class QuestionController {
     }
 
     @PostMapping
-
     public String createNewQuestion(Question question, HttpSession session) {
         if (!HttpSessionUtils.isLoginUser(session)) {
             return "redirect:/users/login";
@@ -58,6 +57,7 @@ public class QuestionController {
     @GetMapping("{id}/form")
     public String editQuestion(@PathVariable long id, Model model, HttpSession session) {
         Question question = qnaRepository.findById(id).orElseThrow(NoUserException::new);
+
         User sessionUser = HttpSessionUtils.getUserFromSession(session);
 
         if (!HttpSessionUtils.isLoginUser(session)) {
@@ -72,7 +72,6 @@ public class QuestionController {
         return "qna/updateForm";
     }
 
-
     @PostMapping("{id}")
     public String update(@PathVariable long id, Question updateQuestion) {
         Question question = qnaRepository.findById(id).orElseThrow(NoUserException::new);
@@ -84,6 +83,7 @@ public class QuestionController {
     @DeleteMapping("{id}")
     public String delete(@PathVariable long id, HttpSession session) {
         Question question = qnaRepository.findById(id).orElseThrow(NoUserException::new);
+
         User sessionUser = HttpSessionUtils.getUserFromSession(session);
 
         if (!HttpSessionUtils.isLoginUser(session)) {
