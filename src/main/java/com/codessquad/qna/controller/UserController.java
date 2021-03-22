@@ -1,7 +1,7 @@
 package com.codessquad.qna.controller;
 
-import com.codessquad.qna.domain.Result;
 import com.codessquad.qna.domain.User;
+import com.codessquad.qna.exception.NotLoggedInException;
 import com.codessquad.qna.service.UserService;
 import com.codessquad.qna.util.HttpSessionUtils;
 import org.slf4j.Logger;
@@ -62,12 +62,7 @@ public class UserController {
     @GetMapping("/{id}")
     public String showUserInDetail(@PathVariable long id, Model model, HttpSession session) {
         User user = userService.getOneById(id).orElse(null);
-        Result result = checkSession(session, user);
-
-        if (!result.isValid()) {
-            model.addAttribute("errorMessage", result.getErrorMessage());
-            return "user/login";
-        }
+        checkSession(session, user);
 
         model.addAttribute("user", user);
         return "user/profile";
@@ -76,12 +71,7 @@ public class UserController {
     @GetMapping("/{id}/form")
     public String moveToUpdateForm(@PathVariable long id, Model model, HttpSession session) {
         User user = userService.getOneById(id).orElse(null);
-        Result result = checkSession(session, user);
-
-        if (!result.isValid()) {
-            model.addAttribute("errorMessage", result.getErrorMessage());
-            return "user/login";
-        }
+        checkSession(session, user);
 
         model.addAttribute("id", user.getId());
         model.addAttribute("userId", user.getUserId());
@@ -92,7 +82,7 @@ public class UserController {
     @PutMapping("/{id}")
     public String updateUser(@PathVariable long id, User referenceUser, String newPassword, HttpSession session, Model model) {
         User user = userService.getOneById(id).orElse(null);
-        Result result = checkSession(session, user);
+        checkSession(session, user);
 
         if (user == null) {
             model.addAttribute("errorMessage", "존재하지 않는 회원입니다.");
@@ -109,11 +99,6 @@ public class UserController {
             model.addAttribute("errorMessage", "비밀번호가 일치하지 않습니다.");
             model.addAttribute("userId", user.getUserId());
             return "user/update";
-        }
-
-        if (!result.isValid()) {
-            model.addAttribute("errorMessage", result.getErrorMessage());
-            return "user/login";
         }
 
         userService.updateInfo(user, referenceUser, newPassword);
@@ -133,16 +118,14 @@ public class UserController {
         return "redirect:/";
     }
 
-    private Result checkSession(HttpSession session, User user) {
+    private void checkSession(HttpSession session, User user) {
         if (!HttpSessionUtils.isLoginUser(session)) {
-            return Result.fail("로그인이 필요합니다.");
+            throw new NotLoggedInException();
         }
 
         User sessionUser = HttpSessionUtils.getUserFromSession(session);
         if (!user.equals(sessionUser)) {
-            return Result.fail("자신만이 사용자의 정보를 확인 및 수정할 수 있습니다.");
+            throw new NotLoggedInException("자신의 글만 수정 및 삭제가 가능합니다.");
         }
-
-        return Result.ok();
     }
 }
