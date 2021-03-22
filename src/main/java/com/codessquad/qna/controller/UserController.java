@@ -2,6 +2,7 @@ package com.codessquad.qna.controller;
 
 import com.codessquad.qna.domain.Result;
 import com.codessquad.qna.domain.User;
+import com.codessquad.qna.exception.LoginFailedException;
 import com.codessquad.qna.service.UserService;
 import com.codessquad.qna.util.HttpSessionUtils;
 import org.slf4j.Logger;
@@ -122,18 +123,17 @@ public class UserController {
 
     @PostMapping("/login")
     public String login(String userId, String password, HttpSession session, Model model) {
-        User user = userService.getOneByUserId(userId).orElse(null);
+        User user = userService.getOneByUserId(userId)
+                .orElseThrow(() -> new LoginFailedException("존재하지 않는 회원입니다."));
 
-        if (user == null) {
-            model.addAttribute("errorMessage", "존재하지 않는 회원입니다.");
-            model.addAttribute("userId", userId);
-            return "user/login";
-        }
-
+//        if (user == null) {
+//            model.addAttribute("errorMessage", "존재하지 않는 회원입니다.");
+//            model.addAttribute("userId", userId);
+//            return "user/login";
+//        }
+//
         if (!user.isEqualPassword(password)) {
-            model.addAttribute("errorMessage", "비밀번호가 일치하지 않습니다.");
-            model.addAttribute("userId", userId);
-            return "user/login";
+            throw new LoginFailedException("비밀번호가 일치하지 않습니다.");
         }
 
         session.setAttribute(USER_SESSION_KEY, user);
