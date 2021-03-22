@@ -74,4 +74,12 @@ public class QuestionController {
         return String.format("redirect:/questions/%d", id);
     }
 
+    @DeleteMapping("/{id}")
+    public String delete(@PathVariable Long id) {
+
+        questionService.delete(id);
+
+        return "redirect:/";
+    }
+
 }

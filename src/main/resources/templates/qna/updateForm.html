@@ -6,7 +6,7 @@
 
             {{#question}}
 
-            <form name="question" method="post" action="/questions{{id}}">
+            <form name="question" method="post" action="/questions/{{id}}">
                 <input type="hidden" name="_method" value="put" />
                 <div class="form-group">
                     질문 수정하기
@@ -19,7 +19,7 @@
                     <label for="content">내용</label>
                     <textarea name="content" id="content" rows="5" class="form-control">{{content}}</textarea>
                 </div>
-                <button type="submit" class="btn btn-success clearfix pull-right">질문하기</button>
+                <button type="submit" class="btn btn-success clearfix pull-right">수정하기</button>
                 <div class="clearfix" />
             </form>
 
