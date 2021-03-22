@@ -3,6 +3,7 @@ package com.codessquad.qna.entity;
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 
 @Entity
 @Table(name = "QUESTION")
@@ -23,6 +24,9 @@ public class Question {
 
     @Column(nullable = false)
     private LocalDateTime writeDateTime;
+
+    @OneToMany(mappedBy = "question")
+    private List<Answer> answers;
 
     protected Question() {
     }
@@ -56,6 +60,10 @@ public class Question {
 
     public String getFormattedWriteDateTime() {
         return writeDateTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"));
+    }
+
+    public List<Answer> getAnswers() {
+        return answers;
     }
 
     public void update(String title, String contents) {
