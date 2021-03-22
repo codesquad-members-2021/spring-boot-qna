@@ -1,5 +1,6 @@
 package com.codessquad.qna.controller.advice;
 
+import com.codessquad.qna.exception.JoinFailedException;
 import com.codessquad.qna.exception.LoginFailedException;
 import com.codessquad.qna.exception.NotLoggedInException;
 import org.springframework.ui.Model;
@@ -19,5 +20,11 @@ public class GlobalControllerExceptionHandler {
     public String handleNotLoggedIn(NotLoggedInException notLoggedInException, Model model) {
         model.addAttribute("errorMessage", notLoggedInException.getMessage());
         return "/user/login";
+    }
+
+    @ExceptionHandler(JoinFailedException.class)
+    public String handleJoinFailed(JoinFailedException joinFailedException, Model model) {
+        model.addAttribute("errorMessage", joinFailedException.getMessage());
+        return "user/form";
     }
 }

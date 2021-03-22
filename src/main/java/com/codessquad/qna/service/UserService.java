@@ -1,6 +1,7 @@
 package com.codessquad.qna.service;
 
 import com.codessquad.qna.domain.User;
+import com.codessquad.qna.exception.JoinFailedException;
 import com.codessquad.qna.exception.LoginFailedException;
 import com.codessquad.qna.repository.UserRepository;
 import org.slf4j.Logger;
@@ -21,8 +22,15 @@ public class UserService {
         this.userRepository = userRepository;
     }
 
-    public User join(User newUser) {
-        return userRepository.save(newUser);
+    public void join(User newUser) {
+        if (isRedundantUser(newUser)) {
+            throw new JoinFailedException("이미 존재하는 회원입니다.");
+        }
+
+        User savedUser = userRepository.save(newUser);
+        if (!savedUser.equals(newUser)) {
+            throw new JoinFailedException();
+        }
     }
 
     public boolean isRedundantUser(User user) {

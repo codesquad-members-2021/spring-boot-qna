@@ -37,17 +37,7 @@ public class UserController {
             return "user/form";
         }
 
-        if (userService.isRedundantUser(newUser)) {
-            model.addAttribute("errorMessage", "이미 존재하는 회원입니다.");
-            return "user/form";
-        }
-
-        User savedUser = userService.join(newUser);
-
-        if (!savedUser.equals(newUser)) {
-            model.addAttribute("errorMessage", "회원가입에 실패하였습니다.");
-            return "user/form";
-        }
+        userService.join(newUser);
 
         return "redirect:/users";
     }
