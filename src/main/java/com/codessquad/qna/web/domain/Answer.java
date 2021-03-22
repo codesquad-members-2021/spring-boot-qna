@@ -29,7 +29,7 @@ public class Answer extends BaseTimeEntity {
         this.writer = writer;
     }
 
-    public Answer() {
+    protected Answer() {
     }
 
     public boolean isMatchingWriter(User anotherWriter) {
