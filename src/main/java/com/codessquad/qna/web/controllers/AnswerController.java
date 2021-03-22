@@ -31,9 +31,7 @@ public class AnswerController {
 
     @PostMapping
     public String addAnswer(@PathVariable Long questionId, HttpSession session, String contents) {
-        Question question = questionService.findById(questionId);
-        User writer = SessionUtility.findSessionedUser(session);
-        answerService.save(new Answer(question, writer, contents));
+        answerService.saveAnswerToQuestion(questionId, session, contents);
         return "redirect:/questions/" + questionId;
     }
 }
