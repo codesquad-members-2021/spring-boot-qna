@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class HomeController {
 
     @GetMapping
-    public String processHomePathRequest() {
+    public String home() {
         return "redirect:/questions";
     }
 }
