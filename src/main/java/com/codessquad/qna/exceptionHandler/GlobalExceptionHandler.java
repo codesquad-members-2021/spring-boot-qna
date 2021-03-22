@@ -14,10 +14,16 @@ import javax.servlet.http.HttpServletResponse;
 public class GlobalExceptionHandler {
     @ExceptionHandler({
             UserNotFoundException.class,
-            QuestionNotFoundException.class,
-            NotAuthorizedException.class
+            QuestionNotFoundException.class
     })
     public String exceptionPage(RuntimeException ex, Model model) {
+        model.addAttribute("errorMessage", ex.getMessage());
+        return "/error/handledError";
+    }
+
+    @ExceptionHandler(NotAuthorizedException.class)
+    public String notAuthorizedException(NotAuthorizedException ex, Model model, HttpServletResponse response) {
+        response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
         model.addAttribute("errorMessage", ex.getMessage());
         return "/error/handledError";
     }
