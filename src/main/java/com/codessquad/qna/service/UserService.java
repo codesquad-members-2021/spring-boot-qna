@@ -29,10 +29,11 @@ public class UserService {
                 .orElseThrow(() -> new NotFoundException("해당 유저가 존재하지 않습니다."));
     }
 
-    public void checkValidByPassword(User user, String password) {
+    public boolean checkValidByPassword(User user, String password) {
         if (!user.isPasswordMatching(password)) {
-            throw new IllegalStateException("아이디 혹은 비밀번호가 일치하지 않습니다.");
+            return false;
         }
+        return true;
     }
 
     public void checkValidById(User user, Long id) {

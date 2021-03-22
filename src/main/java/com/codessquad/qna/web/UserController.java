@@ -35,7 +35,9 @@ public class UserController {
     @PostMapping("/login")
     public String login(String userId, String password, HttpSession session) {
         User user = userService.findUserByUserId(userId);
-        userService.checkValidByPassword(user, password);
+        if (!userService.checkValidByPassword(user, password)) {
+            throw new IllegalStateException("아이디 혹은 비밀번호가 일치하지 않습니다.");
+        }
         session.setAttribute(USER_SESSION_KEY, user);
         return "redirect:/";
     }
@@ -66,7 +68,7 @@ public class UserController {
     public String updateForm(@PathVariable Long id, String inputPassword, User updatedUser, Model model, HttpSession session) {
         User loggedinUser = getUserFromSession(session);
         userService.checkValidById(loggedinUser, id);
-        if (!loggedinUser.isPasswordMatching(inputPassword)) {
+        if (!userService.checkValidByPassword(loggedinUser, inputPassword)) {
             model.addAttribute("errorMessage", "비밀번호가 일치하지 않습니다.");
             return "/user/updateForm";
         }
