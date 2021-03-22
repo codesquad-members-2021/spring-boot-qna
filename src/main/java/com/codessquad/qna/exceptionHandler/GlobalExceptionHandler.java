@@ -1,5 +1,6 @@
 package com.codessquad.qna.exceptionHandler;
 
+import com.codessquad.qna.exception.NotAuthorizedException;
 import com.codessquad.qna.exception.QuestionNotFoundException;
 import com.codessquad.qna.exception.UserNotFoundException;
 import com.codessquad.qna.exception.UserNotFoundInSessionException;
@@ -14,7 +15,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler({
             UserNotFoundException.class,
             QuestionNotFoundException.class,
-            IllegalStateException.class
+            NotAuthorizedException.class
     })
     public String exceptionPage(RuntimeException ex, Model model) {
         model.addAttribute("errorMessage", ex.getMessage());

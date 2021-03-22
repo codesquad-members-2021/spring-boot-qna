@@ -2,6 +2,7 @@ package com.codessquad.qna.service;
 
 import com.codessquad.qna.entity.Question;
 import com.codessquad.qna.entity.User;
+import com.codessquad.qna.exception.NotAuthorizedException;
 import com.codessquad.qna.exception.QuestionNotFoundException;
 import com.codessquad.qna.repository.QuestionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,7 +30,7 @@ public class QuestionService {
             questionRepository.save(question);
             return;
         }
-        throw new IllegalStateException("자신의 글만 수정할 수 있습니다.");
+        throw new NotAuthorizedException();
     }
 
     public void deleteQuestion(long questionId, User tryToDelete) {
@@ -38,7 +39,7 @@ public class QuestionService {
             questionRepository.delete(question);
             return;
         }
-        throw new IllegalStateException(("자신의 글만 삭제할 수 있습니다."));
+        throw new NotAuthorizedException();
     }
 
     public List<Question> getQuestions() {

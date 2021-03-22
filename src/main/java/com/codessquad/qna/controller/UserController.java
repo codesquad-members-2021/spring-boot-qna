@@ -1,6 +1,7 @@
 package com.codessquad.qna.controller;
 
 import com.codessquad.qna.entity.User;
+import com.codessquad.qna.exception.NotAuthorizedException;
 import com.codessquad.qna.exception.UserNotFoundException;
 import com.codessquad.qna.service.UserService;
 import com.codessquad.qna.util.HttpSessionUtil;
@@ -50,7 +51,7 @@ public class UserController {
             model.addAttribute("user", user);
             return "user/updateForm";
         }
-        throw new IllegalStateException("자신의 정보만 수정할 수 있습니다.");
+        throw new NotAuthorizedException();
     }
 
     @PutMapping("/{id}/update")
@@ -59,7 +60,7 @@ public class UserController {
             userService.updateUser(user);
             return "redirect:/users";
         }
-        throw new IllegalStateException("자신의 정보만 수정할 수 있습니다.");
+        throw new NotAuthorizedException();
     }
 
     @GetMapping("/login")
