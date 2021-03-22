@@ -40,22 +40,16 @@ public class QuestionController {
 
     @PutMapping("/{id}")
     public String update(@PathVariable long id, String contents, String title, HttpSession session) {
-        Question question = questionService.getQuestion(id);
-        if (HttpSessionUtil.isAuthorized(question.getWriter().getId(), session)) {
-            questionService.updateQuestion(id, title, contents);
-            return "redirect:/questions/" + id;
-        }
-        throw new IllegalStateException("자신의 글만 수정할 수 있습니다.");
+        User tryToUpdate = HttpSessionUtil.getUser(session);
+        questionService.updateQuestion(id, title, contents, tryToUpdate);
+        return "redirect:/questions/" + id;
     }
 
     @DeleteMapping("/{id}")
     public String delete(@PathVariable long id, HttpSession session) {
-        Question question = questionService.getQuestion(id);
-        if (HttpSessionUtil.isAuthorized(question.getWriter().getId(), session)) {
-            questionService.deleteQuestion(id);
-            return "redirect:/";
-        }
-        throw new IllegalStateException("자신의 글만 삭제할 수 있습니다.");
+        User tryToDelete = HttpSessionUtil.getUser(session);
+        questionService.deleteQuestion(id, tryToDelete);
+        return "redirect:/";
     }
 
     @GetMapping("/form")
@@ -75,9 +69,8 @@ public class QuestionController {
 
     @GetMapping("/{id}/form")
     public String updateForm(@PathVariable int id, Model model, HttpSession session) {
-        User user = HttpSessionUtil.getUser(session);
         Question question = questionService.getQuestion(id);
-        if (!question.getWriter().verify(user)) {
+        if (HttpSessionUtil.isAuthorized(question.getWriter().getId(), session)) {
             throw new IllegalStateException("자신의 글만 수정할 수 있습니다.");
         }
         model.addAttribute("question", question);

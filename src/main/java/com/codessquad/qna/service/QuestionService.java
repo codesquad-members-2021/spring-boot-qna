@@ -22,15 +22,23 @@ public class QuestionService {
         questionRepository.save(new Question(user, title, contents));
     }
 
-    public void updateQuestion(long questionId, String title, String contents) {
+    public void updateQuestion(long questionId, String title, String contents, User tryToUpdate) {
         Question question = getQuestion(questionId);
-        question.update(title, contents);
-        questionRepository.save(question);
+        if (question.getWriter().getId() == tryToUpdate.getId()) {
+            question.update(title, contents);
+            questionRepository.save(question);
+            return;
+        }
+        throw new IllegalStateException("자신의 글만 수정할 수 있습니다.");
     }
 
-    public void deleteQuestion(long questionId) {
+    public void deleteQuestion(long questionId, User tryToDelete) {
         Question question = getQuestion(questionId);
-        questionRepository.delete(question);
+        if (question.getWriter().getId() == tryToDelete.getId()) {
+            questionRepository.delete(question);
+            return;
+        }
+        throw new IllegalStateException(("자신의 글만 삭제할 수 있습니다."));
     }
 
     public List<Question> getQuestions() {
