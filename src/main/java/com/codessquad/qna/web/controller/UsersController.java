@@ -13,6 +13,9 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
 
+import static com.codessquad.qna.web.utils.ExceptionConstants.CANNOT_MODIFY_ANOTHER_USER;
+import static com.codessquad.qna.web.utils.ExceptionConstants.PASSWORD_NOT_MATCHING;
+
 @Controller
 @RequestMapping("/users")
 public class UsersController {
@@ -55,7 +58,7 @@ public class UsersController {
         User loginUser = SessionUtil.getLoginUser(session);
         User foundUser = userRepository.findById(id).orElseThrow(UserNotFoundException::new);
         if (!loginUser.isMatchingId(foundUser)) {
-            throw new UnauthorizedAccessException("타인의 개인정보를 수정할 수 없습니다");
+            throw new UnauthorizedAccessException(CANNOT_MODIFY_ANOTHER_USER);
         }
         verifyAuthorizedAccess(loginUser, prevPassword);
         loginUser.update(newPassword, name, email);
@@ -87,7 +90,7 @@ public class UsersController {
 
     private void verifyAuthorizedAccess(User user, String password) {
         if (!user.isMatchingPassword(password)) {
-            throw new UnauthorizedAccessException("패스워드가 일치하지 않습니다");
+            throw new UnauthorizedAccessException(PASSWORD_NOT_MATCHING);
         }
     }
 }

@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.servlet.http.HttpSession;
 
+import static com.codessquad.qna.web.utils.ExceptionConstants.CANNOT_MODIFY_ANOTHER_USERS_ANSWER;
+
 @Controller
 @RequestMapping("/questions")
 public class AnswersController {
@@ -42,7 +44,7 @@ public class AnswersController {
                 .orElseThrow(AnswerNotFoundException::new);
 
         if (!targetAnswer.isMatchingWriter(sessionUser)) {
-            throw new UnauthorizedAccessException("자신의 답변만 삭제할 수 있습니다");
+            throw new UnauthorizedAccessException(CANNOT_MODIFY_ANOTHER_USERS_ANSWER);
         }
         this.answersRepository.delete(targetAnswer);
 

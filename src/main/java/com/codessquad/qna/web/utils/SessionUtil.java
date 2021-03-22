@@ -5,6 +5,8 @@ import com.codessquad.qna.web.exceptions.users.NoLoginUserException;
 
 import javax.servlet.http.HttpSession;
 
+import static com.codessquad.qna.web.utils.ExceptionConstants.ONLY_FOR_LOGGED_IN_USER;
+
 public class SessionUtil {
     private final static String SESSION_KEY_LOGIN_USER = "loginUser";
 
@@ -18,7 +20,7 @@ public class SessionUtil {
     public static User getLoginUser(HttpSession session) {
         User loginUser = (User) session.getAttribute(SESSION_KEY_LOGIN_USER);
         if (loginUser == null) {
-            throw new NoLoginUserException("로그인된 사용자만 이용할 수 있는 기능입니다");
+            throw new NoLoginUserException(ONLY_FOR_LOGGED_IN_USER);
         }
         return loginUser;
     }

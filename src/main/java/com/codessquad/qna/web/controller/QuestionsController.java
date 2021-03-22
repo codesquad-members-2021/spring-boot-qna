@@ -14,6 +14,8 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
 
+import static com.codessquad.qna.web.utils.ExceptionConstants.CANNOT_MODIFY_ANOTHER_USERS_QUESTION;
+
 @Controller
 @RequestMapping("/questions")
 public class QuestionsController {
@@ -84,7 +86,7 @@ public class QuestionsController {
 
     private void verifyAuthorizedAccess(Question question, User loginUser) {
         if (!question.isMatchingWriter(loginUser)) {
-            throw new UnauthorizedAccessException("자신이 작성한 질문만 수정 혹은 삭제할 수 있습니다");
+            throw new UnauthorizedAccessException(CANNOT_MODIFY_ANOTHER_USERS_QUESTION);
         }
     }
 }
