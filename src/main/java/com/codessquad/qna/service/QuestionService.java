@@ -47,7 +47,7 @@ public class QuestionService {
             throw new IllegalAccessException("다른 사용자의 댓글이 포함되어있습니다.");
         }
         if (question.isAnswerEmpty()) {
-            question.setDeletedTrue();
+            question.delete();
             question.deleteAnswers();
             questionRepository.save(question);
         }

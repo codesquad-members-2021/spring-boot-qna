@@ -103,7 +103,7 @@ public class Question {
         this.updatedPostTime = LocalDateTime.now();
     }
 
-    public void setDeletedTrue() {
+    public void delete() {
         deleted = true;
     }
 
