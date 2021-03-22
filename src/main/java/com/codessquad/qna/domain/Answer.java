@@ -3,8 +3,7 @@ package com.codessquad.qna.domain;
 import com.codessquad.qna.utils.ValidUtils;
 
 import javax.persistence.*;
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Optional;
 
@@ -33,7 +32,7 @@ public class Answer {
     private String replyContents;
 
     @Column(nullable = false, length = 20)
-    private final ZonedDateTime replyTime = ZonedDateTime.now(ZoneId.of("Asia/Seoul"));
+    private final LocalDateTime replyTime = LocalDateTime.now();
 
     @Column(nullable = false)
     private boolean answerDeleted = false;
