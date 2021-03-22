@@ -69,7 +69,7 @@ public class UsersController {
         try {
             foundUser = userRepository.findByUserId(userId).orElseThrow(UserNotFoundException::new);
             verifyAuthorizedAccess(foundUser, password);
-        } catch (RuntimeException e) {
+        } catch (UnauthorizedAccessException | UserNotFoundException exception) {
             return "redirect:/users/login-form";
         }
         SessionUtil.setLoginUser(session, foundUser);
