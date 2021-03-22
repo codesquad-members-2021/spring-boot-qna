@@ -2,9 +2,12 @@ package com.codessquad.qna.web.domain;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 @Entity
 public class Answer {
+    private static final DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
@@ -24,10 +27,27 @@ public class Answer {
     protected Answer() {
     }
 
-    public Answer(User writer, String contents) {
+    public Answer(User writer, Question question, String contents) {
         this.writer = writer;
+        this.question = question;
         this.contents = contents;
         this.createdDateTime = LocalDateTime.now();
     }
+
+    public User getWriter() {
+        return this.writer;
+    }
+
+    public String getContents() {
+        return this.contents;
+    }
+
+    public String getFormattedCreatedDate() {
+        if (createdDateTime == null) {
+            return "";
+        }
+        return createdDateTime.format(DATE_TIME_FORMATTER);
+    }
+
 
 }

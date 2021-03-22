@@ -3,6 +3,8 @@ package com.codessquad.qna.web.domain;
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 public class Question {
@@ -15,12 +17,17 @@ public class Question {
     @ManyToOne
     @JoinColumn(foreignKey = @ForeignKey(name = "fk_questions_writer"))
     private User writer;
+
     @Column(length = 45)
     private String title;
 
     @Column(length = 50000)
     private String contents;
     private LocalDateTime createdDateTime = LocalDateTime.now();
+
+    @OneToMany(mappedBy = "question")
+    @OrderBy("id ASC")
+    private List<Answer> answers = new ArrayList<>();
 
     public void setWriter(User writer) {
         this.writer = writer;
@@ -52,6 +59,14 @@ public class Question {
 
     public String getContents() {
         return contents;
+    }
+
+    public List<Answer> getAnswers() {
+        return this.answers;
+    }
+
+    public long getAnswersSize() {
+        return this.answers.size();
     }
 
     public String getFormattedCreatedDate() {
