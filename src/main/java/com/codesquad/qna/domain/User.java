@@ -2,6 +2,7 @@ package com.codesquad.qna.domain;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
+import java.util.Objects;
 
 @Entity
 public class User {
@@ -84,5 +85,18 @@ public class User {
 
     public boolean isMatchedPassword(String password) {
         return this.password.equals(password);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof User)) return false;
+        User user = (User) o;
+        return getId().equals(user.getId()) && getUserId().equals(user.getUserId());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getId(), getUserId());
     }
 }

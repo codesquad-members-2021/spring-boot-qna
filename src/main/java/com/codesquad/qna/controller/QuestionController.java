@@ -96,7 +96,7 @@ public class QuestionController {
         User sessionedUser = HttpSessionUtils.getUserFromSession(session);
         Question question = questionService.findQuestionById(id);
 
-        if (!sessionedUser.isMatchedUserId(question.getWriter())) {
+        if (!question.isSameWriter(sessionedUser)) {
             throw new IllegalUserAccessException();
         }
         return question;

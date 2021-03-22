@@ -62,4 +62,8 @@ public class Question {
         this.title = updatedQuestion.title;
         this.contents = updatedQuestion.contents;
     }
+
+    public boolean isSameWriter(User sessionedUser) {
+        return this.writer.equals(sessionedUser);
+    }
 }
