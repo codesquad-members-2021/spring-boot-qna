@@ -1,12 +1,11 @@
 package com.codessquad.qna.question.domain;
 
 import com.codessquad.qna.answer.domain.Answer;
+import com.codessquad.qna.answer.domain.Answers;
 import com.codessquad.qna.common.BaseEntity;
 import com.codessquad.qna.user.domain.User;
-import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
-import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -21,10 +20,8 @@ public class Question extends BaseEntity {
     @Lob
     private String contents;
 
-    @OneToMany(mappedBy = "question")
-    @OrderBy("id DESC")
-    @Where(clause = "deleted = false")
-    private List<Answer> answers = new ArrayList<>();
+    @Embedded
+    private Answers answers = new Answers();
 
     private Integer countOfAnswer = 0;
 
@@ -49,7 +46,7 @@ public class Question extends BaseEntity {
     }
 
     public List<Answer> getAnswers() {
-        return answers;
+        return answers.getList();
     }
 
     public Integer getCountOfAnswer() {
@@ -70,6 +67,6 @@ public class Question extends BaseEntity {
     }
 
     public boolean isDeletable() {
-        return answers.size() == 0;
+        return answers.isEmpty();
     }
 }
