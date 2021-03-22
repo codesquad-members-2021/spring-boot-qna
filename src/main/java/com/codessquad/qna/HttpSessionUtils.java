@@ -24,4 +24,9 @@ public class HttpSessionUtils {
 
         return sessionedUser;
     }
+
+    public static void setUserSessionKey(HttpSession session, User user) {
+
+        session.setAttribute(USER_SESSION_KEY, user);
+    }
 }

@@ -1,8 +1,6 @@
 package com.codessquad.qna.domain;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
 
 @Entity
@@ -72,10 +70,6 @@ public class User {
         this.name = newUser.name;
         this.email = newUser.email;
         this.password = newUser.password;
-    }
-
-    public void userValidation(User user) {
-
     }
 
     @Override

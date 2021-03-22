@@ -1,9 +1,11 @@
 package com.codessquad.qna.service;
 
+import com.codessquad.qna.HttpSessionUtils;
 import com.codessquad.qna.domain.User;
 import com.codessquad.qna.repository.UserRepository;
 import org.springframework.stereotype.Service;
 
+import javax.servlet.http.HttpSession;
 import java.util.List;
 import java.util.Optional;
 
@@ -30,11 +32,13 @@ public class UserService {
         return repository.findById(id);
     }
 
-    public boolean validationUserInfo(Long userId) {
+    public boolean validationUserInfo(User user, HttpSession session) {
 
-        User user = repository.findById(userId).get();
+        User sessionedUser = HttpSessionUtils.getUserFromSession(session);
 
-        return user.matchPassword(user.getPassword());
+        User newUser = repository.findById(user.getId()).get();
+
+        return sessionedUser.matchPassword(newUser.getPassword());
     }
 
     public User findById(String userId){

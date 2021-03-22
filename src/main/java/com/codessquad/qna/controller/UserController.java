@@ -67,7 +67,7 @@ public class UserController {
             return "redirect:/users/loginForm";
         }
 
-        session.setAttribute(HttpSessionUtils.USER_SESSION_KEY, user);
+        HttpSessionUtils.setUserSessionKey(session, user);
 
         return "redirect:/";
     }
@@ -100,20 +100,19 @@ public class UserController {
 
     @PostMapping("/validation")
     public String validationUser(User user, Model model, HttpSession session) {
-
-        User sessionedUser = (User)session.getAttribute("sessionedUser");
-
+        System.out.println("0");
         if(!HttpSessionUtils.isLoginUser(session)) {
+            System.out.println("1");
             return "redirect:/users/form";
         }
 
-        if(userService.validationUserInfo(user.getId())){
-
+        if(userService.validationUserInfo(user, session)){//세션값이랑 입력받은 값 같으면 업데이트
+            System.out.println("2");
             model.addAttribute("user", user);
 
             return "/user/updateForm";
         }
-
+        System.out.println("3");
         return "/user/validationUser";
     }
 

@@ -21,7 +21,7 @@ public class QuestionController {
     }
 
     @PostMapping("")
-    public String question(String title, String content,  HttpSession session) {
+    public String questionRegister(String title, String content, HttpSession session) {
 
         if(!HttpSessionUtils.isLoginUser(session)) {
             return "redirect:/users/loginForm";
