@@ -34,12 +34,7 @@ public class UserService {
         }
     }
 
-    private boolean isRedundantUser(User user) {
-        User redundantUser = userRepository.findByUserId(user.getUserId()).orElse(null);
-        return redundantUser != null;
-    }
-
-    public User authenticateUser(String userId, String password){
+    public User authenticateUser(String userId, String password) {
         User user = userRepository.findByUserId(userId)
                 .orElseThrow(() -> new LoginFailedException("존재하지 않는 회원입니다."));
 
@@ -50,17 +45,9 @@ public class UserService {
         return user;
     }
 
-    public List<User> getAllUsers() {
-        return userRepository.findAll();
-    }
-
-    public Optional<User> getOneById(Long id) {
-        return userRepository.findById(id);
-    }
-
     public void updateInfo(User presentUser, User referenceUser, String newPassword) {
         if (!referenceUser.isEqualPassword(referenceUser.getPassword())) {
-            throw  new UnauthorizedAccessException("비밀번호가 일치하지 않습니다.");
+            throw new UnauthorizedAccessException("비밀번호가 일치하지 않습니다.");
         }
 
         presentUser.updateUserInfo(referenceUser, newPassword);
@@ -70,5 +57,17 @@ public class UserService {
     public Optional<User> getOneByUserId(String userId) {
         return userRepository.findByUserId(userId);
     }
-}
 
+    public List<User> getAllUsers() {
+        return userRepository.findAll();
+    }
+
+    public Optional<User> getOneById(Long id) {
+        return userRepository.findById(id);
+    }
+
+    private boolean isRedundantUser(User user) {
+        User redundantUser = userRepository.findByUserId(user.getUserId()).orElse(null);
+        return redundantUser != null;
+    }
+}
