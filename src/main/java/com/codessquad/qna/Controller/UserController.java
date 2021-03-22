@@ -64,4 +64,19 @@ public class UserController {
         return "user/updateForm";
     }
 
+    @PostMapping("/login")
+    public String loginProcess(String userId, String passWord, HttpSession session) {
+        User foundUser = userRepository.findByUserId(userId);
+        if(foundUser == null) {//중복 코드가 심해진다.
+            return "redirect:/user/form";
+        }
+
+        if(!foundUser.isMatchingPassword(passWord)) {
+            return "redirect:/user/form";
+        }
+
+        session.setAttribute(SESSION_KEY_USER_OBJECT,foundUser);
+
+        return  "redirect:/";
+    }
 }

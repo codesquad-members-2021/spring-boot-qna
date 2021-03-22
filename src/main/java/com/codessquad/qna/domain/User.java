@@ -90,5 +90,9 @@ public class User {
                 '}';
     }
 
+    public boolean isMatchingPassword(String password) {
+        return this.password.equals(password);
+    }
+
 
 }
