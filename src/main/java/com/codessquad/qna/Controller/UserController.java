@@ -8,9 +8,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import static com.codessquad.qna.utils.SessionUtil.getLoginUser;
-import static com.codessquad.qna.utils.SessionUtil.removeLoginUser;
-import static com.codessquad.qna.utils.SessionUtil.setLoginUser;
+
+import static com.codessquad.qna.utils.SessionUtil.*;
 
 @Controller
 @RequestMapping("/user")
@@ -82,7 +81,11 @@ public class UserController {
 
     @GetMapping("/{id}/form")
     public String getUserUpdateForm(@PathVariable Long id, Model model, HttpSession session) throws Exception {
-
+        User foundUser = (User)userRepository.findById(id).get(); //get 안티패턴 수정해야함@@@@@@@@@@@@
+        if (!isValidUser(session, foundUser)) {
+            logger.info("Login Failure : wrong password");
+            return "redirect:/user/form";
+        }
         User loginUser = getLoginUser(session);
         model.addAttribute("user", loginUser);
 
