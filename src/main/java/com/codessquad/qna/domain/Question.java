@@ -1,9 +1,10 @@
 package com.codessquad.qna.domain;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import org.graalvm.compiler.lir.LIRInstruction;
+
+import javax.persistence.*;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 @Entity
 public class Question {
@@ -11,6 +12,10 @@ public class Question {
     @Id
     @GeneratedValue
     private Long id;
+
+    @ManyToOne
+    @JoinColumn(foreignKey = @ForeignKey(name= "fk_question_writer"))
+    private User user;
 
     @Column(nullable = false, length = 20)
     private String writer;
@@ -21,6 +26,24 @@ public class Question {
     @Column(nullable = false, length = 5000)
     private String contents;
 
+    private LocalDateTime createDate;
+
+    public Question() {
+    }
+
+    public Question(String writer, String title, String contents) {
+        this.writer = writer;
+        this.title = title;
+        this.contents = contents;
+        this.createDate =  LocalDateTime.now();
+    }
+
+    public String getFormattedCreatedDate() {
+        if(createDate == null) {
+            return "";
+        }
+        return createDate.format(DateTimeFormatter.ofPattern("yyyy.MM.dd HH:mm:ss"));
+    }
 
     public Long getId() {
         return id;
@@ -54,6 +77,13 @@ public class Question {
         this.contents = contents;
     }
 
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
 
     @Override
     public String toString() {
@@ -64,4 +94,6 @@ public class Question {
                 ", contents='" + contents + '\'' +
                 '}';
     }
+
+
 }
