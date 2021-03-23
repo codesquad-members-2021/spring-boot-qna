@@ -24,4 +24,8 @@ public class SessionUtility {
             throw new InvalidUserException(errorMessage);
         }
     }
+
+    public static void setUser(User user, HttpSession session) {
+        session.setAttribute(SESSIONED_USER, user);
+    }
 }
