@@ -24,21 +24,23 @@ public class QuestionController {
 
     @GetMapping("/form")
     public String form(HttpSession session) {
-        if (!HttpSessionUtils.isLoginUser(session)) {
+        try {
+            hasPermission(session);
+            return "qna/form";
+        } catch (AccessDeniedException e) {
             return "redirect:/users/login";
         }
-        return "qna/form";
     }
 
     @PostMapping
     public String createNewQuestion(Question question, HttpSession session) {
-        if (!HttpSessionUtils.isLoginUser(session)) {
+        try {
+            hasPermission(session);
+            questionService.save(HttpSessionUtils.getUserFromSession(session), question);
+            return "redirect:/";
+        } catch (AccessDeniedException e) {
             return "redirect:/users/login";
         }
-        User sessionUser = HttpSessionUtils.getUserFromSession(session);
-        questionService.save(sessionUser, question);
-
-        return "redirect:/";
     }
 
     @GetMapping
@@ -55,20 +57,14 @@ public class QuestionController {
 
     @GetMapping("{id}/form")
     public String editQuestion(@PathVariable long id, Model model, HttpSession session) {
-        Question question = questionService.getQuestionById(id);
-
-        User sessionUser = HttpSessionUtils.getUserFromSession(session);
-
-        if (!HttpSessionUtils.isLoginUser(session)) {
+        try {
+            Question question = questionService.getQuestionById(id);
+            hasPermission(question, session);
+            model.addAttribute("question", question);
+            return "qna/updateForm";
+        } catch (AccessDeniedException e) {
             return "redirect:/users/login";
         }
-        if (question.userConfirmation(sessionUser)) {
-            throw new AccessDeniedException();
-        }
-
-        model.addAttribute("question", question);
-
-        return "qna/updateForm";
     }
 
     @PostMapping("{id}")
@@ -79,18 +75,32 @@ public class QuestionController {
 
     @DeleteMapping("{id}")
     public String delete(@PathVariable long id, HttpSession session) {
-        Question question = questionService.getQuestionById(id);
+        try {
+            Question question = questionService.getQuestionById(id);
+            hasPermission(question, session);
+            questionService.delete(question);
 
-        User sessionUser = HttpSessionUtils.getUserFromSession(session);
-
-        if (!HttpSessionUtils.isLoginUser(session)) {
+            return "redirect:/";
+        } catch (AccessDeniedException e) {
             return "redirect:/users/login";
         }
-        if (question.userConfirmation(sessionUser)) {
+    }
+
+    private void hasPermission(Question question, HttpSession session) {
+        if (!HttpSessionUtils.isLoginUser(session)) {
             throw new AccessDeniedException();
         }
 
-        questionService.delete(question);
-        return "redirect:/";
+        User sessionUser = HttpSessionUtils.getUserFromSession(session);
+
+        if (!question.userConfirmation(sessionUser)) {
+            throw new AccessDeniedException();
+        }
+    }
+
+    private void hasPermission(HttpSession session) {
+        if (!HttpSessionUtils.isLoginUser(session)) {
+            throw new AccessDeniedException();
+        }
     }
 }
