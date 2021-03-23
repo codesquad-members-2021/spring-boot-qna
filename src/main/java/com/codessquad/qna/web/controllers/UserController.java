@@ -74,16 +74,14 @@ public class UserController {
     @PostMapping("/login")
     public String loginUser(String userId, String password, HttpSession session) {
         User user = userService.findByUserId(userId);
-        if (user == null || !user.matchesPassword(password)) {
-            throw new LoginException();
-        }
-        session.setAttribute("sessionedUser", user);
+        userService.verifyUser(user, password);
+        session.setAttribute(SessionUtility.SESSIONED_USER, user);
         return "redirect:/";
     }
 
     @GetMapping("/logout")
     public String logoutUser(HttpSession session) {
-        session.removeAttribute("sessionedUser");
+        session.removeAttribute(SessionUtility.SESSIONED_USER);
         return "redirect:/";
     }
 }

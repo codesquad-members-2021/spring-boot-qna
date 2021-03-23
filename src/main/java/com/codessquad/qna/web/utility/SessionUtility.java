@@ -7,10 +7,11 @@ import com.codessquad.qna.web.exception.InvalidUserException;
 import javax.servlet.http.HttpSession;
 
 public class SessionUtility {
+    public static final String SESSIONED_USER = "sessionedUser";
     private SessionUtility() { }
 
     public static User findSessionedUser(HttpSession session) {
-        Object value = session.getAttribute("sessionedUser");
+        Object value = session.getAttribute(SESSIONED_USER);
         if (value == null) {
             throw new LoginException("로그인해주십시오.");
         }
