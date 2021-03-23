@@ -58,7 +58,7 @@ public class Question {
     }
 
     public String getWriteTime() {
-        if(writeTime == null) {
+        if (writeTime == null) {
             return "";
         }
         return writeTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"));
@@ -68,15 +68,4 @@ public class Question {
         this.writeTime = writeTime;
     }
 
-
-
-    @Override
-    public String toString() {
-        return "Question{" +
-                "questionId=" + id +
-                ", writer='" + writer + '\'' +
-                ", subject='" + title + '\'' +
-                ", content='" + contents + '\'' +
-                '}';
-    }
 }
