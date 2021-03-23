@@ -47,7 +47,7 @@ public class AnswerController {
         if(!answer.isSameWriter(HttpSessionUtils.getSessionedUser(session))) {
             throw new IllegalAccessException();
         }
-        
+
         answerService.deleteAnswer(answer);
         return "redirect:/questions/{questionId}";
     }

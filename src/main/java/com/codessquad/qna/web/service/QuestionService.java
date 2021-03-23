@@ -34,7 +34,7 @@ public class QuestionService {
         questionRepository.save(originQuestion);
     }
 
-    public void deleteQuestion(long id) {
-        questionRepository.deleteById(id);
+    public void deleteQuestion(Question question) {
+        questionRepository.delete(question);
     }
 }

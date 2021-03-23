@@ -91,8 +91,7 @@ public class QuestionController {
             throw new IllegalAccessException();
         }
 
-        //여기 question 넣는 것으로 변경
-        questionService.deleteQuestion(id);
+        questionService.deleteQuestion(originQuestion);
         return "redirect:/questions";
     }
 }
