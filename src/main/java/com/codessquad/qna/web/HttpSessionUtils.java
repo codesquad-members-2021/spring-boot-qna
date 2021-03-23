@@ -14,4 +14,12 @@ public class HttpSessionUtils {
     public static User getSessionedUser(HttpSession session) {
         return isLoginUser(session) ?  (User) session.getAttribute(USER_SESSION_KEY) : null;
     }
+
+    public static void setUser(HttpSession session, User user) {
+        session.setAttribute(USER_SESSION_KEY, user);
+    }
+
+    public static void removeUser(HttpSession session) {
+        session.removeAttribute(USER_SESSION_KEY);
+    }
 }

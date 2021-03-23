@@ -19,17 +19,15 @@ import javax.servlet.http.HttpSession;
 @RequestMapping("/questions/{questionId}/answers")
 public class AnswerController {
     private final AnswerService answerService;
-    private final QuestionService questionService;
 
-    public AnswerController(AnswerService answerService, QuestionService questionService) {
+    public AnswerController(AnswerService answerService) {
         this.answerService = answerService;
-        this.questionService = questionService;
     }
 
     @PostMapping
     public String createAnswer(@PathVariable long questionId, String contents, HttpSession session) {
         checkLogin(session);
-        answerService.postAnswer(HttpSessionUtils.getSessionedUser(session), questionService.findQuestion(questionId), contents);
+        answerService.postAnswer(HttpSessionUtils.getSessionedUser(session), questionId, contents);
         return String.format("redirect:/questions/%d", questionId);
     };
 

@@ -1,7 +1,6 @@
 package com.codessquad.qna.web.controller;
 
 import com.codessquad.qna.web.HttpSessionUtils;
-import com.codessquad.qna.web.domain.Question;
 import com.codessquad.qna.web.domain.User;
 import com.codessquad.qna.web.exception.IllegalAccessException;
 import com.codessquad.qna.web.exception.NotLoginException;
@@ -29,13 +28,13 @@ public class UserController {
     @PostMapping("/login")
     public String login(String userId, String password, HttpSession session) {
         User user = userService.login(userId, password);
-        session.setAttribute(HttpSessionUtils.USER_SESSION_KEY, user);
+        HttpSessionUtils.setUser(session, user);
         return "redirect:/";
     }
 
     @GetMapping("logout")
     public String logout(HttpSession session) {
-        session.removeAttribute(HttpSessionUtils.USER_SESSION_KEY);
+        HttpSessionUtils.removeUser(session);
         return "redirect:/";
     }
 
@@ -73,7 +72,7 @@ public class UserController {
         checkLogin(session);
 
         User loginUser = validateAndGetUser(id, session);
-        if(!userService.isMatchingPassword(user, testPassword)) {
+        if(!userService.isMatchingPassword(loginUser, testPassword)) {
             model.addAttribute("errorMessage", "비밀번호가 틀렸습니다");
             return "/user/formWithError";
         }
