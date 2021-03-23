@@ -1,8 +1,11 @@
 package com.codessquad.qna.domain;
 
 import javax.persistence.*;
+import javax.servlet.http.HttpSession;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+
+import static com.codessquad.qna.utils.SessionUtil.getLoginUser;
 
 @Entity
 public class Question {
@@ -26,6 +29,14 @@ public class Question {
     private final String PATTERN_FORMAT = "yyyy.MM.dd HH:mm:ss";
 
     public Question() {
+    }
+
+    public Question(Question question, HttpSession session) {
+        this.writer = getLoginUser(session);
+        this.title = question.title;
+        this.contents = question.contents;
+        this.creationDate = question.creationDate;
+
     }
 
     public Question(String writer, String title, String contents) {

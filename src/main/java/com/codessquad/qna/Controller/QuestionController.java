@@ -46,9 +46,8 @@ public class QuestionController {
 
     @PostMapping("/questions")
     public String createQuestion(Question question, HttpSession session) {
-        User sessionUser = SessionUtil.getLoginUser(session);
-        question.setWriter(sessionUser);
-        questionRepostory.save(question);
+        Question addNewQuestion = new Question(question,session);
+        questionRepostory.save(addNewQuestion);
         return "redirect:/qna/list";
     }
 
