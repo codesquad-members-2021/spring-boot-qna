@@ -43,7 +43,7 @@ public class UserController {
     }
 
     @GetMapping("/list")
-    public String list(Model model, HttpSession session) {
+    public String list(Model model) {
         model.addAttribute("userlist", userRepository.findAll());
         return "user/list";
     }
