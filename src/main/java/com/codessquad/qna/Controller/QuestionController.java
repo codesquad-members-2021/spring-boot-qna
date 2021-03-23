@@ -44,7 +44,7 @@ public class QuestionController {
         return "qna/form";
     }
 
-    @PostMapping("/qna/questions")
+    @PostMapping("/questions")
     public String createQuestion(Question question, HttpSession session) {
         User sessionUser = SessionUtil.getLoginUser(session);
         question.setWriter(sessionUser);
@@ -52,13 +52,13 @@ public class QuestionController {
         return "redirect:/qna/list";
     }
 
-    @GetMapping("/qna/list")
+    @GetMapping("/list")
     public String showQuestionList(Model model) {
         model.addAttribute("questionList", questionRepostory.findAll());
         return "qna/list";
     }
 
-    @GetMapping("/qna/{index}")
+    @GetMapping("/{id}")
     public String showProfile(@PathVariable Long id, Model model) throws Exception {
         Question currentQuestion = questionRepostory.findById(id).orElseThrow(() -> new Exception("데이터 검색에 실패하였습니다"));
         model.addAttribute("question", currentQuestion);
