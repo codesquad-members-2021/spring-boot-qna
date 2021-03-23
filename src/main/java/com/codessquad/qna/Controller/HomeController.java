@@ -7,8 +7,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 public class HomeController {
 
     @GetMapping("/")
-    public String Home() {
-        return "/index";
+    public String home() {
+        return "redirect:/qna/list";
     }
 
 }
