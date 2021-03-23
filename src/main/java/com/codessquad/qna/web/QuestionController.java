@@ -1,6 +1,7 @@
 package com.codessquad.qna.web;
 
 import com.codessquad.qna.domain.Question;
+import com.codessquad.qna.domain.Result;
 import com.codessquad.qna.repository.QuestionRepository;
 import com.codessquad.qna.domain.User;
 import com.codessquad.qna.exception.AccessDeniedException;
@@ -24,13 +25,12 @@ public class QuestionController {
 
     @GetMapping("/form")
     public String form(HttpSession session, Model model) {
-        try {
-            hasPermission(session);
-            return "qna/form";
-        } catch (IllegalStateException e) {
-            model.addAttribute("errorMessage", e.getMessage());
+        Result result = valid(session);
+        if (!result.isValid()) {
+            model.addAttribute("errorMessage", result.getErrorMessage());
             return "/user/login";
         }
+        return "qna/form";
     }
 
     @PostMapping
@@ -53,15 +53,15 @@ public class QuestionController {
 
     @GetMapping("{id}/form")
     public String editQuestion(@PathVariable long id, Model model, HttpSession session) {
-        try {
-            Question question = questionService.getQuestionById(id);
-            hasPermission(question, session);
-            model.addAttribute("question", question);
-            return "qna/updateForm";
-        } catch (IllegalStateException | AccessDeniedException e) {
-            model.addAttribute("errorMessage", e.getMessage());
+        Question question = questionService.getQuestionById(id);
+
+        Result result = valid(question, session);
+        if (!result.isValid()) {
+            model.addAttribute("errorMessage", result.getErrorMessage());
             return "/user/login";
         }
+        model.addAttribute("question", question);
+        return "qna/updateForm";
     }
 
     @PostMapping("{id}")
@@ -72,33 +72,38 @@ public class QuestionController {
 
     @DeleteMapping("{id}")
     public String delete(@PathVariable long id, Model model, HttpSession session) {
-        try {
-            Question question = questionService.getQuestionById(id);
-            hasPermission(question, session);
-            questionService.delete(question);
+        Question question = questionService.getQuestionById(id);
 
-            return "redirect:/";
-        } catch (IllegalStateException | AccessDeniedException e) {
-            model.addAttribute("errorMessage", e.getMessage());
+        Result result = valid(question, session);
+        if (!result.isValid()) {
+            model.addAttribute("errorMessage", result.getErrorMessage());
             return "/user/login";
         }
+        questionService.delete(question);
+
+        return "redirect:/";
+
     }
 
-    private void hasPermission(Question question, HttpSession session) {
+    private Result valid(Question question, HttpSession session) {
         if (!HttpSessionUtils.isLoginUser(session)) {
-            throw new IllegalStateException("로그인을 먼저 진행해주세요.");
+            return Result.fail("로그인을 먼저 진행해주세요.");
         }
 
         User sessionUser = HttpSessionUtils.getUserFromSession(session);
 
         if (!question.userConfirmation(sessionUser)) {
-            throw new AccessDeniedException();
+            return Result.fail("수정할 수 있는 권한이 없습니다.");
         }
+
+        return Result.ok();
     }
 
-    private void hasPermission(HttpSession session) {
+    private Result valid(HttpSession session) {
         if (!HttpSessionUtils.isLoginUser(session)) {
-            throw new IllegalStateException("로그인을 먼저 진행해주세요.");
+            return Result.fail("로그인을 먼저 진행해주세요.");
         }
+
+        return Result.ok();
     }
 }
