@@ -72,6 +72,10 @@ public class User {
         return password.equals(inputPassword);
     }
 
+    public boolean hasSamePassword(User user) {
+        return this.password.equals(user.password);
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

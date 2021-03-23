@@ -32,16 +32,18 @@ public class UserService {
     }
 
     public boolean isCorrectPassword(User user, User newInfoUser) {
-        return user.getPassword().equals(newInfoUser.getPassword());
+        return user.hasSamePassword(newInfoUser);
     }
 
     public User findByUserId(String userId) {
         return userRepository.findByUserId(userId).orElseThrow(() ->new InvalidUserException("사용자가 존재하지 않습니다."));
     }
 
-    public void verifyUser(User user, String password) {
-        if (user == null || !user.matchesPassword(password)) {
+    public User verifyUser(String userId, String password) {
+        User user = findByUserId(userId);
+        if (!user.matchesPassword(password)) {
             throw new LoginException();
         }
+        return user;
     }
 }
