@@ -32,6 +32,13 @@ public class Answer extends BaseTimeEntity {
     protected Answer() {
     }
 
+    public boolean isValid() {
+        if (contents == null) {
+            return false;
+        }
+        return !contents.isEmpty();
+    }
+
     public boolean isMatchingWriter(User anotherWriter) {
         return writer.isMatchingId(anotherWriter);
     }

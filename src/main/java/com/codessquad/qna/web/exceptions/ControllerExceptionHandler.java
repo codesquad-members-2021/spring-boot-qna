@@ -47,7 +47,7 @@ public class ControllerExceptionHandler {
     }
 
     @ExceptionHandler(LoginFailedException.class)
-    public String handleLoginFailedException(LoginFailedException exception, Model model) {
+    public String handleLoginFailedException(LoginFailedException exception) {
         logException("로그인에 실패했습니다", exception);
         return "redirect:/users/login-form";
     }

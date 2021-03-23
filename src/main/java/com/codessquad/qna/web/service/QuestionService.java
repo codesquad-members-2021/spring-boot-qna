@@ -3,11 +3,13 @@ package com.codessquad.qna.web.service;
 import com.codessquad.qna.web.domain.Question;
 import com.codessquad.qna.web.domain.QuestionRepository;
 import com.codessquad.qna.web.domain.User;
+import com.codessquad.qna.web.exceptions.InvalidEntityException;
 import com.codessquad.qna.web.exceptions.auth.UnauthorizedAccessException;
 import com.codessquad.qna.web.exceptions.questions.QuestionNotFoundException;
 import org.springframework.stereotype.Service;
 
-import static com.codessquad.qna.web.utils.ExceptionConstants.CANNOT_MODIFY_ANOTHER_USERS_QUESTION;
+import static com.codessquad.qna.web.utils.ExceptionConstants.CANNOT_MODIFY_OR_DELETE_ANOTHER_USERS_QUESTION;
+import static com.codessquad.qna.web.utils.ExceptionConstants.EMPTY_FIELD_IN_QUESTION_ENTITY;
 
 @Service
 public class QuestionService {
@@ -18,6 +20,7 @@ public class QuestionService {
     }
 
     public void createQuestion(Question question, User writer) {
+        verifyQuestionEntityIsValid(question);
         question.setWriter(writer);
         questionRepository.save(question);
     }
@@ -30,28 +33,38 @@ public class QuestionService {
         return questionRepository.findByIdAndDeletedFalse(id).orElseThrow(QuestionNotFoundException::new);
     }
 
-    public Question verifyQuestionAndGet(User sessionUser, Long questionId) {
-        Question currentQuestion = questionRepository.findByIdAndDeletedFalse(questionId)
-                .orElseThrow(QuestionNotFoundException::new);
-        verifyAuthorizedAccess(currentQuestion, sessionUser);
-        return currentQuestion;
+    public Question verifyIsOwnerAndGetQuestionDetail(long questionId, User loginUser) {
+        Question question = questionRepository.findByIdAndDeletedFalse(questionId).orElseThrow(QuestionNotFoundException::new);
+        verifyIsQuestionOwner(question, loginUser);
+        return question;
     }
 
-    public Question modifyQuestion(User sessionUser, long questionId, String newTitle, String newContents) {
-        Question question = verifyQuestionAndGet(sessionUser, questionId);
-        question.update(newTitle, newContents);
+    public Question modifyQuestion(User loginUser, long questionId, Question newQuestion) {
+        Question question = questionRepository.findByIdAndDeletedFalse(questionId)
+                .orElseThrow(QuestionNotFoundException::new);
+        verifyIsQuestionOwner(question, loginUser);
+        verifyQuestionEntityIsValid(newQuestion);
+        question.update(newQuestion);
         questionRepository.save(question);
         return question;
     }
 
-    public void deleteQuestion(User sessionUser, long questionId) {
-        Question currentQuestion = verifyQuestionAndGet(sessionUser, questionId);
-        questionRepository.delete(currentQuestion);
+    public void deleteQuestion(User loginUser, long questionId) {
+        Question question = questionRepository.findByIdAndDeletedFalse(questionId)
+                .orElseThrow(QuestionNotFoundException::new);
+        verifyIsQuestionOwner(question, loginUser);
+        questionRepository.delete(question);
     }
 
-    private void verifyAuthorizedAccess(Question question, User loginUser) {
+    private void verifyQuestionEntityIsValid(Question question) {
+        if (!question.isValid()) {
+            throw new InvalidEntityException(EMPTY_FIELD_IN_QUESTION_ENTITY);
+        }
+    }
+
+    private void verifyIsQuestionOwner(Question question, User loginUser) {
         if (!question.isMatchingWriter(loginUser)) {
-            throw new UnauthorizedAccessException(CANNOT_MODIFY_ANOTHER_USERS_QUESTION);
+            throw new UnauthorizedAccessException(CANNOT_MODIFY_OR_DELETE_ANOTHER_USERS_QUESTION);
         }
     }
 }

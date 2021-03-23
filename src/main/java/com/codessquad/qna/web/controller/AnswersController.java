@@ -24,15 +24,15 @@ public class AnswersController {
     @PostMapping("/{questionId}/answers")
     public String createAnswer(@PathVariable("questionId") long questionId, String answerContents,
                                HttpSession session) {
-        User sessionUser = SessionUtil.getLoginUser(session);
-        answerService.createAnswer(sessionUser, questionId, answerContents);
+        User loginUser = SessionUtil.getLoginUser(session);
+        answerService.createAnswer(loginUser, questionId, answerContents);
         return "redirect:/questions/" + questionId;
     }
 
     @DeleteMapping("/{questionId}/answers/{answerId}")
     public String deleteAnswer(@PathVariable("answerId") long answerId, HttpSession session) {
-        User sessionUser = SessionUtil.getLoginUser(session);
-        Question targetQuestion = answerService.deleteAnswer(sessionUser, answerId);
+        User loginUser = SessionUtil.getLoginUser(session);
+        Question targetQuestion = answerService.deleteAnswer(loginUser, answerId);
         return "redirect:/questions/" + targetQuestion.getId();
     }
 

@@ -1,7 +1,6 @@
 package com.codessquad.qna.web.controller;
 
 import com.codessquad.qna.web.domain.User;
-import com.codessquad.qna.web.exceptions.auth.UnauthorizedAccessException;
 import com.codessquad.qna.web.service.UserService;
 import com.codessquad.qna.web.utils.SessionUtil;
 import org.slf4j.Logger;
@@ -11,8 +10,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
-
-import static com.codessquad.qna.web.utils.ExceptionConstants.PASSWORD_NOT_MATCHING;
 
 @Controller
 @RequestMapping("/users")
@@ -65,8 +62,8 @@ public class UsersController {
 
     @PostMapping("/logout")
     public String doLogout(HttpSession session) {
-        User sessionUser = SessionUtil.getLoginUser(session);
-        LOGGER.info("user logout : {}", sessionUser.getUserId());
+        User loginUser = SessionUtil.getLoginUser(session);
+        LOGGER.info("user logout : {}", loginUser.getUserId());
         SessionUtil.removeLoginUser(session);
         return "redirect:/";
     }

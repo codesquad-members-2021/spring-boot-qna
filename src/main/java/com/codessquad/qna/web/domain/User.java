@@ -41,10 +41,7 @@ public class User extends BaseTimeEntity {
         if (password == null || name == null || email == null) {
             return false;
         }
-        if (password.isEmpty() || name.isEmpty() || email.isEmpty()) {
-            return false;
-        }
-        return true;
+        return !password.isEmpty() && !name.isEmpty() && !email.isEmpty();
     }
 
     public Long getId() {

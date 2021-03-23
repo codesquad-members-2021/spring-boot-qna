@@ -24,8 +24,8 @@ public class QuestionsController {
 
     @PostMapping
     public String createQuestion(Question newQuestion, HttpSession session) {
-        User sessionUser = SessionUtil.getLoginUser(session);
-        questionService.createQuestion(newQuestion, sessionUser);
+        User loginUser = SessionUtil.getLoginUser(session);
+        questionService.createQuestion(newQuestion, loginUser);
         LOGGER.info("question created {}", newQuestion);
         return "redirect:/";
     }
@@ -45,25 +45,25 @@ public class QuestionsController {
 
     @GetMapping("/{questionId}/modify-form")
     public String modifyForm(@PathVariable("questionId") long questionId, Model model, HttpSession session) {
-        User sessionUser = SessionUtil.getLoginUser(session);
-        Question modifiedQuestion = questionService.verifyQuestionAndGet(sessionUser, questionId);
+        User loginUser = SessionUtil.getLoginUser(session);
+        Question modifiedQuestion = questionService.verifyIsOwnerAndGetQuestionDetail(questionId, loginUser);
         model.addAttribute("currentQuestion", modifiedQuestion);
         return "qna/modify-form";
     }
 
     @PutMapping("/{questionId}")
     public String modifyQuestion(@PathVariable("questionId") long questionId,
-                                 String newTitle, String newContents, HttpSession session) {
-        User sessionUser = SessionUtil.getLoginUser(session);
-        Question modifiedQuestion = questionService.modifyQuestion(sessionUser, questionId, newTitle, newContents);
+                                 Question newQuestion, HttpSession session) {
+        User loginUser = SessionUtil.getLoginUser(session);
+        Question modifiedQuestion = questionService.modifyQuestion(loginUser, questionId, newQuestion);
         LOGGER.info("question modified {}", modifiedQuestion);
         return "redirect:/questions/" + modifiedQuestion.getId();
     }
 
     @DeleteMapping("/{questionId}")
     public String deleteQuestion(@PathVariable("questionId") long questionId, HttpSession session) {
-        User sessionUser = SessionUtil.getLoginUser(session);
-        questionService.deleteQuestion(sessionUser, questionId);
+        User loginUser = SessionUtil.getLoginUser(session);
+        questionService.deleteQuestion(loginUser, questionId);
         return "redirect:/";
     }
 }

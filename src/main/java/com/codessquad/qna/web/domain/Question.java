@@ -42,9 +42,16 @@ public class Question extends BaseTimeEntity {
         return writer.isMatchingId(anotherWriter);
     }
 
-    public void update(String newTitle, String newContents) {
-        title = newTitle;
-        contents = newContents;
+    public void update(Question newQuestion) {
+        title = newQuestion.title;
+        contents = newQuestion.contents;
+    }
+
+    public boolean isValid() {
+        if (title == null || contents == null) {
+            return false;
+        }
+        return !title.isEmpty() && !contents.isEmpty();
     }
 
     public Long getId() {
