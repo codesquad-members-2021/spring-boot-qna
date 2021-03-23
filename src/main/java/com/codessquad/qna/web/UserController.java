@@ -2,6 +2,7 @@ package com.codessquad.qna.web;
 
 import com.codessquad.qna.domain.User;
 import com.codessquad.qna.domain.UserRepository;
+import com.codessquad.qna.exception.AccessDeniedException;
 import com.codessquad.qna.exception.NoUserException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -11,6 +12,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+
+import javax.servlet.http.HttpSession;
 
 @Controller
 @RequestMapping("/users")
@@ -40,34 +43,72 @@ public class UserController {
     }
 
     @GetMapping
-    public String getList(Model model) {
+    public String getUserList(Model model) {
         model.addAttribute("users", userRepository.findAll());
         return "user/list";
     }
 
     @GetMapping("/{id}")
-    public String getOneUserProfile(@PathVariable long id, Model model) {
+    public String userProfile(@PathVariable long id, Model model, HttpSession session) {
+        if (!HttpSessionUtils.isLoginUser(session)) {
+            return "redirect:/users/login";
+        }
+
         model.addAttribute("user", userRepository.findById(id).orElseThrow(NoUserException::new));
         return "user/profile";
     }
 
     @GetMapping("/{id}/form")
-    public String editUserInfo(@PathVariable long id, Model model) {
-        model.addAttribute("user", userRepository.findById(id).orElseThrow(NoUserException::new));
+    public String editUserInfo(@PathVariable long id, Model model, HttpSession session) {
+        if (!HttpSessionUtils.isLoginUser(session)) {
+            return "redirect:/users/login";
+        }
+
+        User sessionUser = HttpSessionUtils.getUserFromSession(session);
+
+        if (!sessionUser.userIdConfirmation(id)) {
+            throw new AccessDeniedException();
+        }
+
+        model.addAttribute("user", sessionUser);
+
         return "user/updateForm";
     }
 
-    @PostMapping("/{id}/form")
+    @PostMapping("/{id}")
     public String update(@PathVariable long id, User updateUser, String newPassword) {
         User user = userRepository.findById(id).orElseThrow(NoUserException::new);
-        if (user.checkPassword(updateUser.getPassword())) {
-            user.update(updateUser, newPassword);
-            userRepository.save(user);
-        }
         if (!user.checkPassword(updateUser.getPassword())) {
-            logger.info("Error: 올바르지 않은 패스워드입니다.정보가 유지됩니다.");
+            throw new IllegalStateException("비밀번호가 올바르지 않습니다.");
         }
+        user.update(updateUser, newPassword);
+
+        userRepository.save(user);
         return "redirect:/users";
+    }
+
+    @GetMapping("/login")
+    public String loginForm() {
+        return "user/login";
+    }
+
+    @PostMapping("/login")
+    public String login(String userId, String password, HttpSession session) {
+        User user = userRepository.findByUserId(userId);
+        if (HttpSessionUtils.isLoginUser(session)) {
+            return "redirect:/users/login";
+        }
+        if (!user.checkPassword(password)) {
+            return "redirect:/users/login";
+        }
+        session.setAttribute(HttpSessionUtils.USER_SESSION_KEY, user);
+        return "redirect:/";
+    }
+
+    @GetMapping("/logout")
+    public String logout(HttpSession session) {
+        session.removeAttribute(HttpSessionUtils.USER_SESSION_KEY);
+        return "redirect:/";
     }
 
 }

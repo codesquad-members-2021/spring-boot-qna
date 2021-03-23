@@ -1,48 +1,97 @@
 package com.codessquad.qna.web;
 
-import com.codessquad.qna.domain.Qna;
-import com.codessquad.qna.domain.QnaRepository;
+import com.codessquad.qna.domain.Question;
+import com.codessquad.qna.domain.QuestionRepository;
+import com.codessquad.qna.domain.User;
+import com.codessquad.qna.exception.AccessDeniedException;
 import com.codessquad.qna.exception.NoQuestionException;
+import com.codessquad.qna.exception.NoUserException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
+
+import javax.servlet.http.HttpSession;
 
 @Controller
-@RequestMapping("/qna")
+@RequestMapping("/question")
 public class QuestionController {
-    private final QnaRepository qnaRepository;
+    private final QuestionRepository qnaRepository;
 
-    public QuestionController(QnaRepository qnaRepository) {
+    public QuestionController(QuestionRepository qnaRepository) {
         this.qnaRepository = qnaRepository;
     }
 
-    @PostMapping
-    public String createNewQna(Qna qna) {
-        if (checkEmpty(qna)) {
-            return "qna/form";
+    @GetMapping("/form")
+    public String form(HttpSession session) {
+        if (!HttpSessionUtils.isLoginUser(session)) {
+            return "redirect:/users/login";
         }
-        qnaRepository.save(qna);
+        return "qna/form";
+    }
+
+    @PostMapping
+    public String createNewQuestion(Question question, HttpSession session) {
+        if (!HttpSessionUtils.isLoginUser(session)) {
+            return "redirect:/users/login";
+        }
+        User sessionUser = HttpSessionUtils.getUserFromSession(session);
+        question.setWriter(sessionUser);
+
+        qnaRepository.save(question);
         return "redirect:/";
     }
 
-    private boolean checkEmpty(Qna qna) {
-        return qna.getWriter().equals("")
-                || qna.getTitle().equals("")
-                || qna.getContents().equals("");
-    }
-
     @GetMapping
-    public String qnaList(Model model) {
-        model.addAttribute("qnaList", qnaRepository.findAll());
+    public String showQuestionList(Model model) {
+        model.addAttribute("question", qnaRepository.findAll());
         return "index";
     }
 
-    @GetMapping("/{qnaId}")
-    public String showOneQuestion(@PathVariable long qnaId, Model model) {
-        model.addAttribute("Qna", qnaRepository.findById(qnaId).orElseThrow(NoQuestionException::new));
+    @GetMapping("/{id}")
+    public String showOneQuestion(@PathVariable long id, Model model) {
+        model.addAttribute("question", qnaRepository.findById(id).orElseThrow(NoQuestionException::new));
         return "qna/show";
     }
+
+    @GetMapping("{id}/form")
+    public String editQuestion(@PathVariable long id, Model model, HttpSession session) {
+        Question question = qnaRepository.findById(id).orElseThrow(NoUserException::new);
+        User sessionUser = HttpSessionUtils.getUserFromSession(session);
+
+        if (!HttpSessionUtils.isLoginUser(session)) {
+            return "redirect:/users/login";
+        }
+        if (question.userConfirmation(sessionUser)) {
+            throw new AccessDeniedException();
+        }
+
+        model.addAttribute("question", question);
+
+        return "qna/updateForm";
+    }
+
+    @PostMapping("{id}")
+    public String updateQuestion(@PathVariable long id, Question updateQuestion) {
+        Question question = qnaRepository.findById(id).orElseThrow(NoUserException::new);
+        question.update(updateQuestion);
+        qnaRepository.save(question);
+        return "redirect:/";
+    }
+
+    @DeleteMapping("{id}")
+    public String delete(@PathVariable long id, HttpSession session) {
+        Question question = qnaRepository.findById(id).orElseThrow(NoUserException::new);
+        User sessionUser = HttpSessionUtils.getUserFromSession(session);
+
+        if (!HttpSessionUtils.isLoginUser(session)) {
+            return "redirect:/users/login";
+        }
+        if (question.userConfirmation(sessionUser)) {
+            throw new AccessDeniedException();
+        }
+
+        qnaRepository.delete(question);
+        return "redirect:/";
+    }
+
 }

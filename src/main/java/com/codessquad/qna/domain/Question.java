@@ -1,36 +1,32 @@
 package com.codessquad.qna.domain;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 @Entity
-public class Qna {
+public class Question {
+    private static final DateTimeFormatter DATE_TIME_FORMAT = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
-    private String writer;
-
+    @ManyToOne
+    @JoinColumn(foreignKey = @ForeignKey(name = "fk_question_writer"))
+    private User writer;
     private String title;
-
-    @Column(nullable = false)
     private String contents;
-
     private LocalDateTime createdDateTime = LocalDateTime.now();
 
     public Long getId() {
         return id;
     }
 
-    public String getWriter() {
+    public User getWriter() {
         return writer;
     }
 
-    public void setWriter(String writer) {
+    public void setWriter(User writer) {
         this.writer = writer;
     }
 
@@ -54,12 +50,21 @@ public class Qna {
         return createdDateTime;
     }
 
-    public void setCreatedDateTime(LocalDateTime createdDateTime){
+    public void setCreatedDateTime(LocalDateTime createdDateTime) {
         this.createdDateTime = createdDateTime;
     }
 
     public String getFormattedDateTime() {
-        return createdDateTime.format(DateTimeFormatter.ISO_LOCAL_DATE_TIME);
+        return createdDateTime.format(DATE_TIME_FORMAT);
+    }
+
+    public boolean userConfirmation(User loginUser) {
+        return this.writer.equals(loginUser);
+    }
+
+    public void update(Question updateQna) {
+        this.title = updateQna.title;
+        this.contents = updateQna.contents;
     }
 
     @Override
