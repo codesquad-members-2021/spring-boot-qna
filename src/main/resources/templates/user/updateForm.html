@@ -5,7 +5,7 @@
         <div class="panel panel-default content-main">
             {{#user}}
             <form name="question" method="post" action="/users/{{id}}">
-
+                <input type="hidden" name="_method" value="put" />
 
                 <div class="form-group">
                     <label for="name">변경할 이름</label>
