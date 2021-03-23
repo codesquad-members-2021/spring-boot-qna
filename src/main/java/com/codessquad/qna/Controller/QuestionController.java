@@ -29,7 +29,7 @@ public class QuestionController {
     }
 
     @GetMapping("/")
-    public String qnapage() {
+    public String qnaPage() {
         return "redirect:/qna/list";
     }
 
@@ -77,14 +77,10 @@ public class QuestionController {
         return String.format("redirect:/qna/%d",id);
     }
 
-
-    //수정필요
-    @PostMapping("/{id}")
-    public String deleteQuestion(@PathVariable Long id, Model model) throws Exception {
-        Question currentQuestion = questionRepostory.findById(id).orElseThrow(() -> new Exception("데이터 검색에 실패하였습니다"));
-        model.addAttribute("question", currentQuestion);
-        logger.info("update Question : " + currentQuestion.toString());
-        return "/qna/show";
+    @DeleteMapping("/{id}")
+    public String deleteQuestion(@PathVariable Long id) {
+        questionRepostory.delete(questionRepostory.getOne(id));
+        return "redirect:/";
     }
 
     @GetMapping("/{id}/form")
