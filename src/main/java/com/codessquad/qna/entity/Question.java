@@ -1,5 +1,7 @@
 package com.codessquad.qna.entity;
 
+import org.hibernate.annotations.Where;
+
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -26,7 +28,11 @@ public class Question {
     private LocalDateTime writeDateTime;
 
     @OneToMany(mappedBy = "question")
+    @Where(clause = "deleted = false")
     private List<Answer> answers;
+
+    @Column(nullable = false, columnDefinition = "boolean default false")
+    private boolean deleted;
 
     protected Question() {
     }
@@ -64,6 +70,15 @@ public class Question {
 
     public List<Answer> getAnswers() {
         return answers;
+    }
+
+    public boolean isDeleted() {
+        return this.deleted;
+    }
+
+    public void delete() {
+        answers.stream().forEach(x -> x.delete());
+        this.deleted = true;
     }
 
     public void update(String title, String contents) {

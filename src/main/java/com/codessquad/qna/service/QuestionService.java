@@ -36,14 +36,15 @@ public class QuestionService {
     public void deleteQuestion(long questionId, User tryToDelete) {
         Question question = getQuestion(questionId);
         if (question.isWriter(tryToDelete)) {
-            questionRepository.delete(question);
+            question.delete();
+            questionRepository.save(question);
             return;
         }
         throw new NotAuthorizedException();
     }
 
     public List<Question> getQuestions() {
-        return questionRepository.findAll();
+        return questionRepository.findAllByAndDeletedFalse();
     }
 
     public Question getQuestion(long id) {
