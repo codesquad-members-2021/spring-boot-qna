@@ -2,11 +2,9 @@ package com.codessquad.qna.web.controller;
 
 import com.codessquad.qna.web.HttpSessionUtils;
 import com.codessquad.qna.web.domain.Answer;
-import com.codessquad.qna.web.domain.Question;
 import com.codessquad.qna.web.exception.IllegalAccessException;
 import com.codessquad.qna.web.exception.NotLoginException;
 import com.codessquad.qna.web.service.AnswerService;
-import com.codessquad.qna.web.service.QuestionService;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -29,7 +27,7 @@ public class AnswerController {
         checkLogin(session);
         answerService.postAnswer(HttpSessionUtils.getSessionedUser(session), questionId, contents);
         return String.format("redirect:/questions/%d", questionId);
-    };
+    }
 
     @DeleteMapping("/{id}")
     public String deleteAnswer(@PathVariable("questionId") long questionId, @PathVariable("id") long id, HttpSession session) {
@@ -46,7 +44,7 @@ public class AnswerController {
 
     private Answer validateAndGetAnswer(long id, HttpSession session) {
         Answer answer = answerService.findAnswer(id);
-        if(!answer.isSameWriter(HttpSessionUtils.getSessionedUser(session))) {
+        if (!answer.isSameWriter(HttpSessionUtils.getSessionedUser(session))) {
             throw new IllegalAccessException();
         }
         return answer;

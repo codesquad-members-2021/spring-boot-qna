@@ -72,7 +72,7 @@ public class UserController {
         checkLogin(session);
 
         User loginUser = validateAndGetUser(id, session);
-        if(!userService.isMatchingPassword(loginUser, testPassword)) {
+        if (!userService.isMatchingPassword(loginUser, testPassword)) {
             model.addAttribute("errorMessage", "비밀번호가 틀렸습니다");
             return "/user/formWithError";
         }
