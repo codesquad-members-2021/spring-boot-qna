@@ -32,14 +32,15 @@ public class QuestionController {
     }
 
 
-    @GetMapping("/qna/form")
-    public String questionList(HttpSession session) {
+    @GetMapping("/form")
+    public String questionForm(HttpSession session,Model model) {
 
         if(!isLoginUser(session)) {
             return "redirect:/user/login";
         }
         User user = getLoginUser(session);
         logger.info("askQuestion");
+        model.addAttribute("user",user);
         return "qna/form";
     }
 
