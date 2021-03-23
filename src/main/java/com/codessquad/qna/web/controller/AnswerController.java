@@ -3,12 +3,10 @@ package com.codessquad.qna.web.controller;
 import com.codessquad.qna.web.HttpSessionUtils;
 import com.codessquad.qna.web.domain.Answer;
 import com.codessquad.qna.web.domain.Question;
-import com.codessquad.qna.web.domain.User;
 import com.codessquad.qna.web.exception.IllegalAccessException;
 import com.codessquad.qna.web.exception.NotLoginException;
 import com.codessquad.qna.web.service.AnswerService;
 import com.codessquad.qna.web.service.QuestionService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -31,8 +29,7 @@ public class AnswerController {
     @PostMapping
     public String createAnswer(@PathVariable long questionId, String contents, HttpSession session) {
         checkLogin(session);
-        Question question = questionService.findQuestion(questionId);
-        answerService.postAnswer(HttpSessionUtils.getSessionedUser(session), question, contents);
+        answerService.postAnswer(HttpSessionUtils.getSessionedUser(session), questionService.findQuestion(questionId), contents);
         return String.format("redirect:/questions/%d", questionId);
     };
 

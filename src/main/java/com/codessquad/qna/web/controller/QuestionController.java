@@ -29,7 +29,6 @@ public class QuestionController {
     @PostMapping
     public String createQuestion(Question question, HttpSession session) {
         checkLogin(session);
-
         questionService.postQuestion(question, HttpSessionUtils.getSessionedUser(session));
         return "redirect:/questions";
     }
