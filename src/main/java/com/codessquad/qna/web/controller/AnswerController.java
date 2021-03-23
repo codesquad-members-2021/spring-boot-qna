@@ -4,11 +4,13 @@ import com.codessquad.qna.web.HttpSessionUtils;
 import com.codessquad.qna.web.domain.Answer;
 import com.codessquad.qna.web.domain.Question;
 import com.codessquad.qna.web.domain.User;
+import com.codessquad.qna.web.exception.IllegalAccessException;
 import com.codessquad.qna.web.exception.NotLoginException;
 import com.codessquad.qna.web.service.AnswerService;
 import com.codessquad.qna.web.service.QuestionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -34,5 +36,20 @@ public class AnswerController {
         answerService.postAnswer(HttpSessionUtils.getSessionedUser(session), question, contents);
         return String.format("redirect:/questions/%d", questionId);
     };
+
+    @DeleteMapping("/{id}")
+    public String deleteAnswer(@PathVariable("questionId") long questionId, @PathVariable("id") long id, HttpSession session) {
+        if(!HttpSessionUtils.isLoginUser(session)) {
+            throw new NotLoginException();
+        }
+
+        Answer answer = answerService.findAnswer(id);
+        if(!answer.isSameWriter(HttpSessionUtils.getSessionedUser(session))) {
+            throw new IllegalAccessException();
+        }
+        
+        answerService.deleteAnswer(answer);
+        return "redirect:/questions/{questionId}";
+    }
 
 }

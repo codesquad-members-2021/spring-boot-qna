@@ -34,6 +34,10 @@ public class Answer {
         this.createdDateTime = LocalDateTime.now();
     }
 
+    public long getId() {
+        return this.id;
+    }
+
     public User getWriter() {
         return this.writer;
     }
@@ -49,5 +53,7 @@ public class Answer {
         return createdDateTime.format(DATE_TIME_FORMATTER);
     }
 
-
+    public boolean isSameWriter(User writer) {
+        return this.writer.equals(writer);
+    }
 }
