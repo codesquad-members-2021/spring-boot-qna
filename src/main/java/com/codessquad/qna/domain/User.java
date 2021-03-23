@@ -54,8 +54,8 @@ public class User {
         return this.id.equals(id);
     }
 
-    public boolean isMatchingUserId(String userId){
-        return this.userId.equals(userId);
+    public boolean isMatchingUserId(User user){
+        return this.userId.equals(user.userId);
     }
 
     public void update(User updateUser) {
