@@ -1,6 +1,5 @@
 package com.codessquad.qna.domain;
 
-import org.graalvm.compiler.lir.LIRInstruction;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
