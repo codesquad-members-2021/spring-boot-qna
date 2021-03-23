@@ -8,10 +8,7 @@ import com.codessquad.qna.service.QuestionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
 
@@ -26,8 +23,8 @@ public class QuestionController {
     }
 
     @GetMapping("/questions/form")
-    public String viewQuestionForm(HttpSession session){
-        if(!HttpSessionUtils.isLoginUser(session))
+    public String viewQuestionForm(HttpSession session) {
+        if (!HttpSessionUtils.isLoginUser(session))
             return "redirect:/users/loginForm";
         return "qna/form";
     }
@@ -51,12 +48,12 @@ public class QuestionController {
     }
 
     @GetMapping("/questions/{id}/form")
-    public String viewUpdateQuestionForm(@PathVariable long id, Model model, HttpSession session){
+    public String viewUpdateQuestionForm(@PathVariable long id, Model model, HttpSession session) {
         if (!HttpSessionUtils.isLoginUser(session))
             return "redirect:/users/loginForm";
         Question question = questionService.findQuestionById(id);
         User sessionedUser = HttpSessionUtils.getUserFromSession(session);
-        if(!questionService.verifyQuestion(question,sessionedUser)){
+        if (!questionService.verifyQuestion(question, sessionedUser)) {
             throw new IllegalStateException("자신의 질문만 수정할 수 있습니다.");
         }
         model.addAttribute("question", question);
@@ -64,17 +61,30 @@ public class QuestionController {
     }
 
     @PutMapping("/questions/{id}")
-    public String updateQuestion(@PathVariable long id, QuestionDto updateQuestionDto, HttpSession session){
+    public String updateQuestion(@PathVariable long id, QuestionDto updateQuestionDto, HttpSession session) {
         if (!HttpSessionUtils.isLoginUser(session))
             return "redirect:/users/loginForm";
         User sessionedUser = HttpSessionUtils.getUserFromSession(session);
         Question updateQuestion = new Question(updateQuestionDto);
-        if(!questionService.verifyQuestion(updateQuestion,sessionedUser)){
+        if (!questionService.verifyQuestion(updateQuestion, sessionedUser)) {
             throw new IllegalStateException("자신의 질문만 수정할 수 있습니다.");
         }
         Question question = questionService.findQuestionById(id);
         question.update(updateQuestion);
         questionService.save(question);
+        return "redirect:/";
+    }
+
+    @DeleteMapping("/questions/{id}")
+    public String delete(@PathVariable long id, HttpSession session) {
+        if (!HttpSessionUtils.isLoginUser(session))
+            return "redirect:/users/loginForm";
+        User sessionedUser = HttpSessionUtils.getUserFromSession(session);
+        Question question = questionService.findQuestionById(id);
+        if (!questionService.verifyQuestion(question, sessionedUser)) {
+            throw new IllegalStateException("자신의 질문만 수정할 수 있습니다.");
+        }
+        questionService.delete(question);
         return "redirect:/";
     }
 }

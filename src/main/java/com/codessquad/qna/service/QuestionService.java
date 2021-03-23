@@ -39,4 +39,9 @@ public class QuestionService {
         return sessionedUser.isMatchingUserId(question.getWriter());
     }
 
+    public void delete(Question question){
+        questionRepository.delete(question);
+    }
+
+
 }
