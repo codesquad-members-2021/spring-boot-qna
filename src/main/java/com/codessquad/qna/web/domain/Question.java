@@ -24,7 +24,7 @@ public class Question {
     private String contents;
 
     @Column(nullable = false, length = 20)
-    private LocalDateTime writtenDateTime;
+    private LocalDateTime writtenDateTime = LocalDateTime.now();
 
     protected Question() {
     }
@@ -33,7 +33,6 @@ public class Question {
         this.writer = writer;
         this.title = title;
         this.contents = contents;
-        this.writtenDateTime = LocalDateTime.now();
     }
 
     public User getWriter() {
