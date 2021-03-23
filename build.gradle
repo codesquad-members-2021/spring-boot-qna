@@ -19,7 +19,7 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
     implementation 'org.springframework.boot:spring-boot-starter-mustache'
     developmentOnly 'org.springframework.boot:spring-boot-devtools'
-    implementation 'org.springframework.boot:spring-boot-starter-test'
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
     implementation group: 'com.h2database', name: 'h2', version: '1.4.200'
     runtimeOnly 'com.h2database:h2'
     implementation group: 'ch.qos.logback', name: 'logback-classic', version: '1.2.3'
