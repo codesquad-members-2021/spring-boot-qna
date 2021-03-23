@@ -30,8 +30,12 @@ public class QuestionController {
     }
 
     @PostMapping("/questions")
-    public String createQuestion(QuestionDto questionDto) {
-        questionService.create(questionDto);
+    public String createQuestion(QuestionDto questionDto, HttpSession session) {
+        if (!HttpSessionUtils.isLoginUser(session)){
+            return "redirect:/users/loginForm";
+        }
+        User sessionedUser = HttpSessionUtils.getUserFromSession(session);
+        questionService.create(questionDto, sessionedUser);
         return "redirect:/";
     }
 
@@ -65,7 +69,7 @@ public class QuestionController {
         if (!HttpSessionUtils.isLoginUser(session))
             return "redirect:/users/loginForm";
         User sessionedUser = HttpSessionUtils.getUserFromSession(session);
-        Question updateQuestion = new Question(updateQuestionDto);
+        Question updateQuestion = updateQuestionDto.toEntity(sessionedUser);
         if (!questionService.verifyQuestion(updateQuestion, sessionedUser)) {
             throw new IllegalStateException("자신의 질문만 수정할 수 있습니다.");
         }

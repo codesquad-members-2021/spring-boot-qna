@@ -18,8 +18,8 @@ public class QuestionService {
         this.questionRepository = questionRepository;
     }
 
-    public void create(QuestionDto questionDto) {
-        Question question = new Question(questionDto);
+    public void create(QuestionDto questionDto, User user) {
+        Question question = questionDto.toEntity(user);
         questionRepository.save(question);
     }
 
