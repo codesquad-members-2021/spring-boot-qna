@@ -65,6 +65,13 @@ public class UserController {
         return "/user/list";
     }
 
+    @GetMapping("/profile/{id}")
+    public String showProfile(@PathVariable Long id, Model model) {
+        model.addAttribute("user", userRepository.findById(id).get());
+        return "/user/profile";
+    }
+
+
     @GetMapping("/{id}")
     public String showUpdateForm(@PathVariable Long id, Model model) {
         model.addAttribute("user", userRepository.findById(id).get());
