@@ -49,6 +49,7 @@ public class UserService {
     }
 
     public User getById(Long primaryKey) {
+        ValidUtils.checkIllegalArgumentOf(primaryKey);
         return userRepository.findById(primaryKey).orElseThrow(NotFoundException::new);
     }
 
@@ -74,15 +75,20 @@ public class UserService {
     }
 
     public void checkValidOfLogin(String userId, String password) {
+        ValidUtils.checkIllegalArgumentOf(userId, password);
         User findUser = getById(userId);
         if (!Objects.equals(password, findUser.getPassword())) {
             throw new IncorrectAccountException("loginFail");
         }
     }
 
-    public void update(User originUserData, User updateUserData) {
+    public void update(Long primaryKey,User updateUserData) {
+        ValidUtils.checkIllegalArgumentOf(primaryKey);
+
+        User originUserData = getById(primaryKey);
         originUserData = Optional.ofNullable(originUserData).orElseThrow(IllegalArgumentException::new);
 
+        updateUserData.setPrimaryKey(primaryKey);
         authenticateOfId(originUserData, updateUserData);
         authenticateOfPw(originUserData, updateUserData);
 
