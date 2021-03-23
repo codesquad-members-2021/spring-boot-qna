@@ -10,6 +10,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,10 +18,36 @@ import java.util.List;
 @RequestMapping("/users")
 public class UserController {
 
-   private UserRepository userRepository;
+    private static final Logger logger = LoggerFactory.getLogger(UserController.class);
+
+    private UserRepository userRepository;
 
     public UserController(UserRepository userRepository) {
         this.userRepository = userRepository;
+    }
+
+    @GetMapping("/loginForm")
+    public String loginForm() {
+        return "/user/login";
+    }
+
+    @GetMapping("/loginAgain")
+    public String loginAgain() {
+        return "/user/login_failed";
+    }
+
+    @PostMapping("/login")
+    public String login(String userId, String password, HttpSession session) {
+        User user = userRepository.findByUserId(userId);
+        if(user == null) {
+            return "redirect:/users/loginAgain";
+        }
+        if(!password.equals(user.getPassword())) {
+            return "redirect:/users/loginAgain";
+        }
+        session.setAttribute("user", user);
+
+        return "redirect:/";
     }
 
     @PostMapping
