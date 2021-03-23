@@ -16,8 +16,9 @@ public class AnswerService {
     private AnswerRepository answerRepository;
     private QuestionService questionService;
 
-    private AnswerService(AnswerRepository answerRepository) {
+    private AnswerService(AnswerRepository answerRepository, QuestionService questionService) {
         this.answerRepository = answerRepository;
+        this.questionService = questionService;
     }
 
     public List<Answer> findByQuestionId(Long questionId) {
