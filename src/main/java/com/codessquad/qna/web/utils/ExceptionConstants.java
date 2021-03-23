@@ -8,7 +8,6 @@ public class ExceptionConstants {
     public static final String CANNOT_MODIFY_ANOTHER_USERS_ANSWER = "자신의 답변만 삭제할 수 있습니다";
     public static final String ONLY_FOR_LOGGED_IN_USER = "로그인된 사용자만 이용할 수 있는 기능입니다";
 
-
     private ExceptionConstants() {
 
     }
