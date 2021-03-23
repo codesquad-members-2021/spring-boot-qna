@@ -15,6 +15,7 @@ public class HttpSessionUtils {
     private static final String SESSION_KEY = "sessionedUser";
 
     public static User getLoginUserOf(HttpSession session){
+        HttpSessionUtils.checkValidOf(session);
         checkValidOf(session);
         return (User)session.getAttribute(SESSION_KEY);
     }
