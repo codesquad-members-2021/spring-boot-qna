@@ -75,7 +75,7 @@ public class UserController {
         return "user/updateForm";
     }
 
-    @PostMapping("/{id}/form")
+    @PostMapping("/{id}")
     public String update(@PathVariable long id, User updateUser, String newPassword) {
         User user = userRepository.findById(id).orElseThrow(NoUserException::new);
         if (!user.checkPassword(updateUser.getPassword())) {
