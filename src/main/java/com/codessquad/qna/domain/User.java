@@ -75,7 +75,7 @@ public class User {
         if (object == null || getClass() != object.getClass()) return false;
         User user = (User) object;
         return Objects.equals(getUserId(), user.getUserId());
-    }// 해당 이퀄즈 오버라이딩은 id가 동일한지만을 검사함
+    }// 해당 equals 오버라이딩은 id가 동일한지만을 검사함
 
     @Override
     public String toString() {

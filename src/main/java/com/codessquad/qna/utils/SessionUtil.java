@@ -28,6 +28,10 @@ public class SessionUtil {
 
     }
 
+    public static boolean isValidUser(HttpSession session, User OwnerUser) {
+        return OwnerUser.equals((User)session.getAttribute(SESSION_KEY_LOGIN_USER));
+    }
+
     public static boolean isLoginUser(HttpSession session) {
         return session.getAttribute(SESSION_KEY_LOGIN_USER) != null;
     }
@@ -41,13 +45,13 @@ public class SessionUtil {
     }
 
     public static void setLoginUser(HttpSession session, User user) {
-        try {
-            SESSION_KEY_LOGIN_USER = generateSessionKey(user);
+        //try {
+            SESSION_KEY_LOGIN_USER = "loginUser";
             session.setAttribute(SESSION_KEY_LOGIN_USER, user);
-        }
-        catch (Exception e) {
+        //}
+        //catch (Exception e) {
 
-        }
+        //}
     }
 
     public static void removeLoginUser(HttpSession session) {

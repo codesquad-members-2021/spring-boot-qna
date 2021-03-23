@@ -12,8 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
 
-import static com.codessquad.qna.utils.SessionUtil.getLoginUser;
-import static com.codessquad.qna.utils.SessionUtil.isLoginUser;
+import static com.codessquad.qna.utils.SessionUtil.*;
 
 @Controller
 
@@ -78,15 +77,28 @@ public class QuestionController {
     }
 
     @DeleteMapping("/{id}")
-    public String deleteQuestion(@PathVariable Long id) {
+    public String deleteQuestion(@PathVariable Long id,User ownerUser,HttpSession session) {
+
+        Question question =  questionRepostory.findById(id).get();// 옵셔녈
+
+        if(! isValidUser(session,question.getWriter())) {
+            logger.info("질문글 삭제 - 실패, 권한없는 사용자의 삭제시도");
+            return String.format("redirect:/qna/%d",id);
+        }
         questionRepostory.delete(questionRepostory.getOne(id));
+        logger.info("질문글 삭제 - 성공");
         return "redirect:/";
     }
 
     @GetMapping("/{id}/form")
-    public String updateForm(@PathVariable Long id, Model model) {
-        Question question =  questionRepostory.findById(id).get();
-        logger.info(question.toString());
+    public String updateForm(@PathVariable Long id, Model model,HttpSession session) {
+
+        Question question =  questionRepostory.findById(id).get();//옵셔녈 겟 수정
+        if(! isValidUser(session,question.getWriter())) {
+            logger.info("질문글 수정 - 실패, 권한없는 사용자의 수정시도");
+            return String.format("redirect:/qna/%d",id);
+        }
+        logger.info("글 수정 : {}",question.getTitle());
         model.addAttribute("question", question);
         return "/qna/updateForm";
     }
