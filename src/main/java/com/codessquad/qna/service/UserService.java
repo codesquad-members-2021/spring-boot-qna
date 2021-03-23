@@ -49,7 +49,7 @@ public class UserService {
     }
 
     private void checkPassword(User originalUser, User updateUser) {
-        if (!originalUser.checkPassword(updateUser.getPassword())) {
+        if (!originalUser.isMatchingPassword(updateUser.getPassword())) {
             throw new IllegalArgumentException("비밀번호가 맞지않습니다. 비밀번호를 확인해 주세요");
         }
     }
