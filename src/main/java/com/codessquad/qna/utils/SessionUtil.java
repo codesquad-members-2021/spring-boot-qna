@@ -28,7 +28,7 @@ public class SessionUtil {
     public static void setLoginUser(HttpSession session ,User user) {
         session.setAttribute(SESSION_KEY_LOGIN_USER,user);
     }
-    public static void removeLoginUser(HttpSession session ,User user) {
+    public static void removeLoginUser(HttpSession session) {
         session.removeAttribute(SESSION_KEY_LOGIN_USER);
     }
 

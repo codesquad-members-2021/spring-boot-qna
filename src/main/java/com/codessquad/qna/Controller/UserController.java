@@ -114,8 +114,8 @@ public class UserController {
 
     @GetMapping("/logout")
     public String logout(HttpSession session) {
-        logger.info("Logout Out ???? 왜 이러는기야!");
-        session.removeAttribute("SESSION_KEY_LOGIN_USER");
+        logger.info("Logout Out Success");
+        removeLoginUser(session);
         return "redirect:/";
     }
 
