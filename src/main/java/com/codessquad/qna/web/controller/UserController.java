@@ -42,7 +42,7 @@ public class UserController {
     public String createUser(User user, Model model) {
         if (userService.checkDuplicateID(user)) {
             model.addAttribute("errorMessage", "이미 존재하는 아이디입니다");
-            return "/user/updateFormWithError";
+            return "/user/formWithError";
         }
         userService.signUp(user);
         return "redirect:/users";
@@ -74,7 +74,8 @@ public class UserController {
         User loginUser = validateAndGetUser(id, session);
         if (!userService.isMatchingPassword(loginUser, testPassword)) {
             model.addAttribute("errorMessage", "비밀번호가 틀렸습니다");
-            return "/user/formWithError";
+            model.addAttribute("user", loginUser);
+            return "/user/updateFormWithError";
         }
 
         userService.updateUser(testPassword, loginUser, user);
