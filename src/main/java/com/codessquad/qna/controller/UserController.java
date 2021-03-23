@@ -26,30 +26,6 @@ public class UserController {
         this.userRepository = userRepository;
     }
 
-    @GetMapping("/loginForm")
-    public String loginForm() {
-        return "/user/login";
-    }
-
-    @GetMapping("/loginAgain")
-    public String loginAgain() {
-        return "/user/login_failed";
-    }
-
-    @PostMapping("/login")
-    public String login(String userId, String password, HttpSession session) {
-        User user = userRepository.findByUserId(userId);
-        if(user == null) {
-            return "redirect:/users/loginAgain";
-        }
-        if(!password.equals(user.getPassword())) {
-            return "redirect:/users/loginAgain";
-        }
-        session.setAttribute("user", user);
-
-        return "redirect:/";
-    }
-
     @PostMapping
     public String createUserAccount(User user) {
         if (user == null) {
@@ -85,5 +61,31 @@ public class UserController {
         userRepository.save(user);
         return "redirect:/users";
     }
+
+    @GetMapping("/loginForm")
+    public String loginForm() {
+        return "/user/login";
+    }
+
+    @GetMapping("/loginAgain")
+    public String loginAgain() {
+        return "/user/login_failed";
+    }
+
+    @PostMapping("/login")
+    public String login(String userId, String password, HttpSession session) {
+        User user = userRepository.findByUserId(userId);
+        if(user == null) {
+            return "redirect:/users/loginAgain";
+        }
+        if(!password.equals(user.getPassword())) {
+            return "redirect:/users/loginAgain";
+        }
+        session.setAttribute("user", user);
+
+        return "redirect:/";
+    }
+
+
 
 }
