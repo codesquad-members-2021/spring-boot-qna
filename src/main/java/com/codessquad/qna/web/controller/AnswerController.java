@@ -19,7 +19,7 @@ public class AnswerController {
         this.answerService = answerService;
     }
 
-    @PostMapping()
+    @PostMapping
     public String create(@PathVariable long questionId, String contents, HttpSession session) {
         answerService.create(questionId, contents, session);
         return "redirect:/questions/" + questionId;

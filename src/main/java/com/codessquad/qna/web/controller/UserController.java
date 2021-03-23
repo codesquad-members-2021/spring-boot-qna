@@ -33,13 +33,13 @@ public class UserController {
         return "redirect:/";
     }
 
-    @PostMapping()
+    @PostMapping
     public String create(CreateUserRequest request) {
         userService.create(request);
         return "redirect:/users";
     }
 
-    @GetMapping()
+    @GetMapping
     public String list(Model model) {
         model.addAttribute("users", userService.list());
         return "user/list";

@@ -20,7 +20,7 @@ public class QuestionController {
         this.questionService = questionService;
     }
 
-    @PostMapping()
+    @PostMapping
     public String create(HttpSession session, QuestionRequest request) {
         questionService.create(session, request);
         return "redirect:/";
