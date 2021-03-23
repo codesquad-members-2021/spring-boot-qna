@@ -1,10 +1,9 @@
 package com.codessquad.qna.web.domain;
 
-import com.codessquad.qna.web.utility.QuestionUtility;
+import com.codessquad.qna.web.utility.TimeConstant;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
-import java.util.List;
 
 @Entity
 public class Question {
@@ -52,7 +51,7 @@ public class Question {
     }
 
     public String getFormattedWrittenDateTime() {
-        return writtenDateTime.format(QuestionUtility.DATE_PATTERN);
+        return writtenDateTime.format(TimeConstant.DATE_PATTERN);
     }
 
     public void update(String title, String contents) {
