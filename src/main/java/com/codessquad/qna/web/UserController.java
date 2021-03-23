@@ -5,10 +5,7 @@ import com.codessquad.qna.service.UserService;
 import com.codessquad.qna.domain.User;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
 
@@ -68,7 +65,7 @@ public class UserController {
         return "user/updateForm";
     }
 
-    @PostMapping("/{id}")
+    @PutMapping("/{id}")
     public String updateUser(@PathVariable long id, User updateUser, String newPassword) {
         userService.updateUser(id, updateUser, newPassword);
         return "redirect:/users";
