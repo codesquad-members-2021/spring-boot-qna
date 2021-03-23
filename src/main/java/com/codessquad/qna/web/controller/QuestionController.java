@@ -26,10 +26,10 @@ public class QuestionController {
         return "redirect:/";
     }
 
-    @PutMapping("/{id}")
-    public String update(@PathVariable long id, HttpSession session, QuestionRequest request) {
-        questionService.update(id, session, request);
-        return "redirect:/questions/" + id;
+    @PutMapping("/{questionId}")
+    public String update(@PathVariable long questionId, HttpSession session, QuestionRequest request) {
+        questionService.update(questionId, session, request);
+        return "redirect:/questions/" + questionId;
     }
 
     @GetMapping("/form")
@@ -40,23 +40,23 @@ public class QuestionController {
         return "qna/form";
     }
 
-    @GetMapping("/{id}/form")
-    public String updateForm(@PathVariable long id, HttpSession session, Model model) {
-        Question question = questionService.authenticate(id, session);
+    @GetMapping("/{questionId}/form")
+    public String updateForm(@PathVariable long questionId, HttpSession session, Model model) {
+        Question question = questionService.authenticate(questionId, session);
         model.addAttribute("question", question);
         return "qna/updateForm";
     }
 
-    @DeleteMapping("/{id}")
-    public String delete(@PathVariable long id, HttpSession session) {
-        questionService.delete(id, session);
+    @DeleteMapping("/{questionId}")
+    public String delete(@PathVariable long questionId, HttpSession session) {
+        questionService.delete(questionId, session);
         return "redirect:/";
     }
 
-    @GetMapping("/{id}")
-    public String show(@PathVariable long id, Model model) {
-        model.addAttribute("question", questionService.getQuestionById(id));
-        model.addAttribute("answers", questionService.list(id));
+    @GetMapping("/{questionId}")
+    public String show(@PathVariable long questionId, Model model) {
+        model.addAttribute("question", questionService.getQuestionById(questionId));
+        model.addAttribute("answers", questionService.list(questionId));
         return "/qna/show";
     }
 }

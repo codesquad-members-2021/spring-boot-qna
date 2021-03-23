@@ -37,10 +37,10 @@ public class AnswerService {
         answerRepository.save(answer);
     }
 
-    public void delete(long questionId, long id, HttpSession session){
+    public void delete(long questionId, long answerId, HttpSession session){
         User loginUser = SessionUtils.getLoginUser(session);
-        Answer answer = answerRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Cannot found answer number " + id));
+        Answer answer = answerRepository.findById(answerId)
+                .orElseThrow(() -> new EntityNotFoundException("Cannot found answer number " + answerId));
 
         if (!answer.isMatchingWriter(loginUser)) {
             throw new CrudNotAllowedException("Only writer can delete this answer post!");
@@ -48,8 +48,8 @@ public class AnswerService {
         answerRepository.delete(answer);
     }
 
-    private Question getQuestionById(Long id) {
-        return questionRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Cannot found question number " + id));
+    private Question getQuestionById(long questionId) {
+        return questionRepository.findById(questionId)
+                .orElseThrow(() -> new EntityNotFoundException("Cannot found question number " + questionId));
     }
 }

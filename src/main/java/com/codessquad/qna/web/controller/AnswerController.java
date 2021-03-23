@@ -25,9 +25,9 @@ public class AnswerController {
         return "redirect:/questions/" + questionId;
     }
 
-    @DeleteMapping("/{id}")
-    public String delete(@PathVariable long questionId, @PathVariable long id, HttpSession session) {
-        answerService.delete(questionId, id, session);
+    @DeleteMapping("/{answerId}")
+    public String delete(@PathVariable long questionId, @PathVariable long answerId, HttpSession session) {
+        answerService.delete(questionId, answerId, session);
         return "redirect:/questions/" + questionId;
     }
 }

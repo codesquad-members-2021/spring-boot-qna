@@ -63,7 +63,7 @@ public class UserService {
         return user;
     }
 
-    public User findUserById(Long id) {
+    public User findUserById(long id) {
         return userRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("No user with id number " + id));
     }
 

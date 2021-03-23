@@ -30,20 +30,20 @@ public class QuestionService {
         questionRepository.save(question);
     }
 
-    public void update(long id, HttpSession session, QuestionRequest request){
-        Question question = authenticate(id, session);
+    public void update(long questionId, HttpSession session, QuestionRequest request){
+        Question question = authenticate(questionId, session);
         question.update(request.getTitle(), request.getContents());
         questionRepository.save(question);
     }
 
 
-    public void delete(long id, HttpSession session){
-        Question question = authenticate(id, session);
+    public void delete(long questionId, HttpSession session){
+        Question question = authenticate(questionId, session);
         questionRepository.delete(question);
     }
 
-    public Question authenticate(long id, HttpSession session){
-        Question question = getQuestionById(id);
+    public Question authenticate(long questionId, HttpSession session){
+        Question question = getQuestionById(questionId);
         User writer = question.getWriter();
         User loginUser = SessionUtils.getLoginUser(session);
 
@@ -56,8 +56,8 @@ public class QuestionService {
         return answerRepository.findByQuestionId(questionId);
     }
 
-    public Question getQuestionById(long id) {
-        return questionRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Cannot found question number " + id));
+    public Question getQuestionById(long questionId) {
+        return questionRepository.findById(questionId)
+                .orElseThrow(() -> new EntityNotFoundException("Cannot found question number " + questionId));
     }
 }
