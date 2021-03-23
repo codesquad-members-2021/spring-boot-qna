@@ -1,12 +1,6 @@
 package com.codessquad.qna.domain;
 
-
-import jdk.vm.ci.meta.Local;
-import org.joda.time.DateTime;
-
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
@@ -14,11 +8,12 @@ import java.time.format.DateTimeFormatter;
 public class Question {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     private String writer;
     private String title;
+    @Column(length = 20000)
     private String contents;
     private LocalDateTime writeTime;
 
