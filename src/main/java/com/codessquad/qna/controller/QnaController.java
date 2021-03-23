@@ -25,9 +25,6 @@ public class QnaController {
 
     private static final Logger logger = LoggerFactory.getLogger(QnaController.class);
 
-    private List<Question> questions = new ArrayList<>();
-
-    @Autowired
     private QuestionRepository questionRepository;
 
     @PostMapping
