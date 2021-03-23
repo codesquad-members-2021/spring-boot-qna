@@ -2,6 +2,7 @@ package com.codessquad.qna.web.domain.question;
 
 import com.codessquad.qna.web.domain.answer.Answer;
 import com.codessquad.qna.web.domain.user.User;
+import com.codessquad.qna.web.utils.DateTimeUtils;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -11,7 +12,6 @@ import java.util.List;
 
 @Entity
 public class Question {
-    private static final DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -63,7 +63,7 @@ public class Question {
     }
 
     public String getCreatedAt() {
-        return createdAt.format(DATE_TIME_FORMATTER);
+        return DateTimeUtils.stringOf(createdAt);
     }
 
     public List<Answer> getAnswers() {

@@ -2,21 +2,20 @@ package com.codessquad.qna.web.domain.answer;
 
 import com.codessquad.qna.web.domain.question.Question;
 import com.codessquad.qna.web.domain.user.User;
+import com.codessquad.qna.web.utils.DateTimeUtils;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 
 @Entity
 public class Answer {
-    private static final DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @ManyToOne
-    @JoinColumn(foreignKey = @ForeignKey(name = "fk_answer_writer"))
+    @JoinColumn(foreignKey = @ForeignKey(name = "fk_answer_to_writer"))
     private User writer;
 
     @ManyToOne
@@ -26,7 +25,7 @@ public class Answer {
     @Column(nullable = false)
     private String contents;
 
-    @Column(name="is_active")
+    @Column(name = "is_active")
     private boolean isActive = true;
 
     private LocalDateTime createdAt;
@@ -60,7 +59,7 @@ public class Answer {
     }
 
     public String getCreatedAt() {
-        return createdAt.format(DATE_TIME_FORMATTER);
+        return DateTimeUtils.stringOf(createdAt);
     }
 
     public void setQuestion(Question question) {
@@ -81,10 +80,6 @@ public class Answer {
         return writer.isMatchingWriter(user);
     }
 
-//    public static Answer toEntity(User writer, Question question, String contents) {
-//        return new Answer(writer, question, contents);
-//    }
-
     static public class Builder {
         private User writer;
         private Question question;
@@ -100,20 +95,24 @@ public class Answer {
             this.contents = answer.contents;
         }
 
-        public Builder writer(User writer){
+        public Builder writer(User writer) {
             this.writer = writer;
             return this;
         }
-        public Builder question(Question question){
+
+        public Builder question(Question question) {
             this.question = question;
             return this;
         }
-        public Builder contents(String contents){
+
+        public Builder contents(String contents) {
             this.contents = contents;
             return this;
         }
 
-        public Answer build() {return new Answer(writer, question, contents);}
+        public Answer build() {
+            return new Answer(writer, question, contents);
+        }
 
     }
 }
