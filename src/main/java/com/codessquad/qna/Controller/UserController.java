@@ -47,6 +47,13 @@ public class UserController {
         return "user/list";
     }
 
+    @GetMapping("/{id}")
+    public String showProfile(@PathVariable Long id,Model model) throws Exception{
+        User user = userRepository.findById(id).orElseThrow(() -> new Exception("데이터 검색에 실패하였습니다"));
+        model.addAttribute("user",user);
+        return "user/profile";
+    }
+
     @PutMapping("/{id}")
     public String updateUser(@PathVariable Long id,String pastPassword,User updatedUser,HttpSession session) throws Exception {
         User sessionUser = (User)session.getAttribute(SESSION_KEY_LOGIN_USER);
@@ -111,4 +118,6 @@ public class UserController {
         session.removeAttribute("SESSION_KEY_LOGIN_USER");
         return "redirect:/";
     }
+
+
 }
