@@ -8,6 +8,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpSession;
+
 @Controller
 @RequestMapping("/users")
 public class UserController {
@@ -30,6 +32,26 @@ public class UserController {
     public String signup(User user) {
         userRepository.save(user);
         return "redirect:/users";
+    }
+
+    @GetMapping("/loginForm")
+    public String loginForm() {
+        return "loginForm";
+    }
+
+    @PostMapping("/login")
+    public String login(String userId, String password, HttpSession session) {
+        User user = userRepository.findByUserId(userId);
+        if (user == null) {
+            return "redirect:/user/loginForm";
+        }
+        if (!password.equals(user.getPassword())) {
+            return "redirect:/user/loginForm";
+        }
+        System.out.println("Login Success!");
+        session.setAttribute("user", user);
+
+        return "redirect:/";
     }
 
     @GetMapping("/{id}")
