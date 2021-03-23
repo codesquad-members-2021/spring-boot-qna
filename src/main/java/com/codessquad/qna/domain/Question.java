@@ -14,8 +14,12 @@ public class Question {
     private Long id;
 
     private String title;
+
+    @Lob
     private String content;
+
     private int index;
+
     @CreationTimestamp
     private LocalDate nowDate;
 
