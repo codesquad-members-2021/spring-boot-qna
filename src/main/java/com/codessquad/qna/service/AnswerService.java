@@ -5,11 +5,14 @@ import com.codessquad.qna.domain.Question;
 import com.codessquad.qna.domain.User;
 import com.codessquad.qna.exception.type.NotFoundException;
 import com.codessquad.qna.repository.AnswerRepository;
+import com.codessquad.qna.utils.HttpSessionUtils;
 import com.codessquad.qna.utils.ValidUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.servlet.http.HttpSession;
 import java.util.Objects;
+import java.util.Optional;
 
 /**
  * Created by 68936@naver.com on 2021-03-20 오후 2:36
@@ -25,25 +28,38 @@ public class AnswerService {
         this.answerRepository = answerRepository;
     }
 
-    public void save(User findUser, Answer answer){
+    public void save(HttpSession session, Answer answer) {
+        HttpSessionUtils.checkValidOf(session);
+        answer = Optional.ofNullable(answer).orElseThrow(IllegalArgumentException::new);
+
+        User findUser = HttpSessionUtils.getLoginUserOf(session);
         answer.setReplyId(findUser.getUserId());
         answer.setReplyAuthor(findUser.getName());
         answerRepository.save(answer);
     }
 
-    public Answer findById(Long id){
+    public Answer findById(Long id) {
         return answerRepository.findById(id).orElseThrow(NotFoundException::new);
     }
 
-    public void delete(User loginUser, Answer selectedAnswer){
+    public void delete(HttpSession session, Long answerId) {
+        ValidUtils.checkIllegalArgumentOf(answerId);
+        HttpSessionUtils.checkValidOf(session);
+
+        User loginUser = HttpSessionUtils.getLoginUserOf(session);
+        Answer selectedAnswer = findById(answerId);
+
         ValidUtils.authenticateOfId(loginUser.getUserId(), selectedAnswer.getReplyId());
-        if(!selectedAnswer.isDeleted()){   // soft delete
+        if (!selectedAnswer.isDeleted()) {   // soft delete
             selectedAnswer.setAnswerDeleted(true);
         }
-        save(loginUser,selectedAnswer); // soft delete
+        save(session, selectedAnswer); // soft delete
     }
 
-    public Answer getSelectedAnswers(Question questionData, Long answerId){
+    public Answer getSelectedAnswers(Question questionData, Long answerId) {
+        questionData = Optional.ofNullable(questionData).orElseThrow(IllegalArgumentException::new);
+        ValidUtils.checkIllegalArgumentOf(answerId);
+
         for (Answer answer : questionData.getAnswers()) {
             if (Objects.equals(answer.getAnswerId(), answerId)) {
                 return answer;
@@ -52,9 +68,11 @@ public class AnswerService {
         throw new NotFoundException();
     }
 
-    public void update(User loginUser, Answer selectedAnswer, String replyContents){
+    public void update(HttpSession session, Long id, String replyContents) {
+        User loginUser = HttpSessionUtils.getLoginUserOf(session);
+        Answer selectedAnswer = findById(id);
         ValidUtils.authenticateOfId(loginUser.getUserId(), selectedAnswer.getReplyId());
         selectedAnswer.setReplyContents(replyContents);
-        save(loginUser, selectedAnswer);
+        save(session, selectedAnswer);
     }
 }
