@@ -2,7 +2,7 @@ package com.codessquad.qna.web.utility;
 
 import com.codessquad.qna.web.domain.User;
 import com.codessquad.qna.web.exception.LoginException;
-import com.codessquad.qna.web.exception.UserException;
+import com.codessquad.qna.web.exception.InvalidUserException;
 
 import javax.servlet.http.HttpSession;
 
@@ -19,7 +19,7 @@ public class SessionUtility {
 
     public static void verifySessionUser(User sessionedUser, User user, String errorMessage) {
         if (sessionedUser.getId() != user.getId()) {
-            throw new UserException(errorMessage);
+            throw new InvalidUserException(errorMessage);
         }
     }
 }

@@ -5,11 +5,10 @@ import com.codessquad.qna.web.domain.Question;
 import com.codessquad.qna.web.domain.User;
 import com.codessquad.qna.web.domain.repository.QuestionRepository;
 import com.codessquad.qna.web.exception.QuestionNotFoundException;
-import com.codessquad.qna.web.exception.UserException;
+import com.codessquad.qna.web.exception.InvalidUserException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class QuestionService {
@@ -44,7 +43,7 @@ public class QuestionService {
 
     public void verifyQuestionWriter(Question question, User user) {
         if (!question.isWriter(user)) {
-            throw new UserException("글 작성자가 아닙니다.");
+            throw new InvalidUserException("글 작성자가 아닙니다.");
         }
     }
 }

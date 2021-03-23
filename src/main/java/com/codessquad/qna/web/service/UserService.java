@@ -2,11 +2,10 @@ package com.codessquad.qna.web.service;
 
 import com.codessquad.qna.web.domain.User;
 import com.codessquad.qna.web.domain.repository.UserRepository;
-import com.codessquad.qna.web.exception.UserException;
+import com.codessquad.qna.web.exception.InvalidUserException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.NoSuchElementException;
 
 @Service
 public class UserService {
@@ -19,7 +18,7 @@ public class UserService {
 
     public User findById(Long id) {
         User user = userRepository.findById(id)
-                .orElseThrow(() -> new UserException("해당 id의 사용자가 존재하지 않습니다."));
+                .orElseThrow(() -> new InvalidUserException("해당 id의 사용자가 존재하지 않습니다."));
         return user;
     }
 

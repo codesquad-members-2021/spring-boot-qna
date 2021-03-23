@@ -2,7 +2,7 @@ package com.codessquad.qna.web.controllers;
 
 import com.codessquad.qna.web.domain.User;
 import com.codessquad.qna.web.exception.LoginException;
-import com.codessquad.qna.web.exception.UserException;
+import com.codessquad.qna.web.exception.InvalidUserException;
 import com.codessquad.qna.web.service.UserService;
 import com.codessquad.qna.web.utility.SessionUtility;
 import org.springframework.stereotype.Controller;
@@ -59,7 +59,7 @@ public class UserController {
     public String updateUser(@PathVariable Long id, User newInfoUser) {
         User user = userService.findById(id);
         if (!userService.isCorrectPassword(user, newInfoUser)) {
-            throw new UserException("비밀번호가 틀렸습니다.");
+            throw new InvalidUserException("비밀번호가 틀렸습니다.");
         }
         user.update(newInfoUser);
         userService.save(user);
