@@ -12,7 +12,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class UserService {
@@ -53,10 +52,6 @@ public class UserService {
 
         presentUser.updateUserInfo(referenceUser, newPassword);
         userRepository.save(presentUser);
-    }
-
-    public Optional<User> getOneByUserId(String userId) {
-        return userRepository.findByUserId(userId);
     }
 
     public List<User> getAllUsers() {

@@ -11,7 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpSession;
-import java.util.List;
 
 import static com.codessquad.qna.util.HttpSessionUtils.checkAccessibleSessionUser;
 
@@ -46,9 +45,5 @@ public class AnswerService {
 
         answer.deleted();
         answerRepository.save(answer);
-    }
-
-    public List<Answer> findAll() {
-        return answerRepository.findAllByAndDeletedFalse();
     }
 }

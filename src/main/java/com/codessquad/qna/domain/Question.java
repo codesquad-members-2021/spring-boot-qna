@@ -1,6 +1,7 @@
 package com.codessquad.qna.domain;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -32,7 +33,7 @@ public class Question {
     private boolean deleted;
 
     @OneToMany(mappedBy = "question")
-//    @Where(clause = "deleted=false")
+    @Where(clause = "deleted=false")
     private List<Answer> answers;
 
     public Question() {

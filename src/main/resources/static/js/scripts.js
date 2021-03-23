@@ -2,9 +2,13 @@ $(".answer-write input[type=submit]").click(addAnswer);
 
 function addAnswer(e) {
     e.preventDefault();
+
     var queryString = $(".answer-write").serialize();
+    console.log("queryString : " + queryString);
+
     var url = $(".answer-write").attr("action");
     var fullURL = "http://localhost:8080/" + url;
+    console.log("fullURL : " + fullURL);
 
     $.ajax({
         type: 'post',
@@ -21,7 +25,7 @@ function onError(){
 }
 
 function onSuccess(data, status){
-    console.log(data);
+    console.log(status, data);
     var answerTemplate = $("#answerTemplate").html();
     var template = answerTemplate.format(data.writer.userId, data.formattedCreatedDate, data.contents);
     $(".qna-comment-slipp-articles").prepend(template);
