@@ -23,9 +23,11 @@ import java.util.List;
 @RequestMapping("/questions")
 public class QnaController {
 
-    private static final Logger logger = LoggerFactory.getLogger(QnaController.class);
-
     private QuestionRepository questionRepository;
+
+    public QnaController (QuestionRepository questionRepository) {
+        this.questionRepository = questionRepository;
+    }
 
     @PostMapping
     public String createQuestion(String writer, String title, String contents) {
