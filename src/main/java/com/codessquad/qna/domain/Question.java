@@ -1,5 +1,6 @@
 package com.codessquad.qna.domain;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.hibernate.annotations.Where;
 
@@ -34,6 +35,7 @@ public class Question {
 
     @OneToMany(mappedBy = "question")
     @Where(clause = "deleted=false")
+    @JsonBackReference
     private List<Answer> answers;
 
     public Question() {
