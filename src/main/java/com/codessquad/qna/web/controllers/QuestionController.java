@@ -2,7 +2,6 @@ package com.codessquad.qna.web.controllers;
 
 import com.codessquad.qna.web.domain.Question;
 import com.codessquad.qna.web.domain.User;
-import com.codessquad.qna.web.service.AnswerService;
 import com.codessquad.qna.web.service.QuestionService;
 import com.codessquad.qna.web.utility.SessionUtility;
 import org.springframework.stereotype.Controller;
@@ -42,7 +41,7 @@ public class QuestionController {
     }
 
     @GetMapping("/{id}")
-    public String showQuestion(@PathVariable("id") Long id, Model model) {
+    public String showQuestion(@PathVariable Long id, Model model) {
         Question question = questionService.findById(id);
         model.addAttribute("question", question);
         model.addAttribute("answers", questionService.findAnswersByQuestionId(id));
@@ -52,10 +51,8 @@ public class QuestionController {
     @GetMapping("{id}/update")
     public String showUpdateForm(@PathVariable Long id, Model model, HttpSession session) {
         Question question = questionService.findById(id);
-        User writer = question.getWriter();
         User sessionedUser = SessionUtility.findSessionedUser(session);
-        SessionUtility.verifySessionUser(sessionedUser, writer, "본인이 작성한 글만 수정할 수 있습니다.");
-
+        questionService.verifyQuestionWriter(question, sessionedUser);
         model.addAttribute("question", question);
         return "qna/updateForm";
     }
@@ -71,11 +68,8 @@ public class QuestionController {
     @DeleteMapping("{id}")
     public String deleteQuestion(@PathVariable Long id, HttpSession session) {
         Question question = questionService.findById(id);
-        User writer = question.getWriter();
-
         User sessionedUser = SessionUtility.findSessionedUser(session);
-        SessionUtility.verifySessionUser(sessionedUser, writer, "본인이 작성한 글만 삭제할 수 있습니다.");
-
+        questionService.verifyQuestionWriter(question, sessionedUser);
         questionService.delete(question);
         return "redirect:/";
     }
