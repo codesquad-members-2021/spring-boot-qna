@@ -20,7 +20,7 @@ public class SessionUtility {
     }
 
     public static void verifySessionUser(User sessionedUser, User user, String errorMessage) {
-        if (sessionedUser.getId() != user.getId()) {
+        if (!sessionedUser.equals(user)) {
             throw new InvalidUserException(errorMessage);
         }
     }
