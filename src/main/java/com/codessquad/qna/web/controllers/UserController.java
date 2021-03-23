@@ -1,7 +1,6 @@
 package com.codessquad.qna.web.controllers;
 
 import com.codessquad.qna.web.domain.User;
-import com.codessquad.qna.web.exception.LoginException;
 import com.codessquad.qna.web.exception.InvalidUserException;
 import com.codessquad.qna.web.service.UserService;
 import com.codessquad.qna.web.utility.SessionUtility;

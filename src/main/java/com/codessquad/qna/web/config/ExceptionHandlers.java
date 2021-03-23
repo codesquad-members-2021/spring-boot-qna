@@ -1,6 +1,6 @@
 package com.codessquad.qna.web.config;
 
-import com.codessquad.qna.web.exception.LoginException;
+import com.codessquad.qna.web.exception.UnAuthenticatedLoginException;
 import com.codessquad.qna.web.exception.QuestionNotFoundException;
 import com.codessquad.qna.web.exception.InvalidUserException;
 import org.springframework.ui.Model;
@@ -16,8 +16,8 @@ public class ExceptionHandlers {
         return "user/error";
     }
 
-    @ExceptionHandler(LoginException.class)
-    public String handleLoginFailure(LoginException e, Model model) {
+    @ExceptionHandler(UnAuthenticatedLoginException.class)
+    public String handleLoginFailure(UnAuthenticatedLoginException e, Model model) {
         model.addAttribute("exceptionMessage", e.getMessage());
         return "user/login_failed";
     }

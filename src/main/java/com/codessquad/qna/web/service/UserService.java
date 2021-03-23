@@ -3,7 +3,7 @@ package com.codessquad.qna.web.service;
 import com.codessquad.qna.web.domain.User;
 import com.codessquad.qna.web.domain.repository.UserRepository;
 import com.codessquad.qna.web.exception.InvalidUserException;
-import com.codessquad.qna.web.exception.LoginException;
+import com.codessquad.qna.web.exception.UnAuthenticatedLoginException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -42,7 +42,7 @@ public class UserService {
     public User verifyUser(String userId, String password) {
         User user = findByUserId(userId);
         if (!user.matchesPassword(password)) {
-            throw new LoginException();
+            throw new UnAuthenticatedLoginException();
         }
         return user;
     }
