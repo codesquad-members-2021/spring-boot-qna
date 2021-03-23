@@ -81,7 +81,7 @@ public class UserController {
     }
 
     @GetMapping("/{id}/validation")
-    public String userValidation(@PathVariable Long id, Model model, HttpSession session){
+    public String userValidation(@PathVariable Long id, HttpSession session){
 
         User sessionedUser = (User)session.getAttribute("sessionedUser");
 
@@ -95,13 +95,11 @@ public class UserController {
             return "redirect:/users/form";
         }
 
-        model.addAttribute("id", id);
-
-        return "/user/validationUser";
+        return "/user/confirmPasswordForm";
     }
 
-    @PostMapping("/validation")
-    public String validationUser(String password, Model model, HttpSession session) {
+    @PostMapping("/confirmPassword")
+    public String confirmPassword(String password, Model model, HttpSession session) {
 
         User sessionedUser = HttpSessionUtils.getUserFromSession(session);
 
