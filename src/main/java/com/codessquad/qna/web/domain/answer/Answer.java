@@ -25,8 +25,8 @@ public class Answer {
     @Column(nullable = false)
     private String contents;
 
-    @Column(name = "is_active")
-    private boolean isActive = true;
+    @Column(columnDefinition = "boolean default true")
+    private boolean isActive;
 
     private LocalDateTime createdAt;
 
