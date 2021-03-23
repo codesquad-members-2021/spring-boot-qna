@@ -86,4 +86,12 @@ public class UserController {
 
         return  "redirect:/";//로그인 끝나면 메인페이지로 이
     }
+
+
+    @GetMapping("/logout")
+    public String logout(HttpSession session) {
+        logger.info("Logout Out ???? 왜 이러는기야!");
+        session.removeAttribute("SESSION_KEY_LOGIN_USER");
+        return "redirect:/";
+    }
 }
