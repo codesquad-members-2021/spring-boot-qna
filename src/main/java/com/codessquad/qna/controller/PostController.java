@@ -3,10 +3,13 @@ package com.codessquad.qna.controller;
 import com.codessquad.qna.dto.PostDto;
 import com.codessquad.qna.entity.Post;
 import com.codessquad.qna.entity.User;
+import com.codessquad.qna.module.PageFormatter;
 import com.codessquad.qna.service.PostService;
 import com.codessquad.qna.util.HttpSessionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -45,15 +48,19 @@ public class PostController {
 
     /**
      * Repository 에 있는 모든 게시물을 불러옵니다.
+     * 현재 페이지 기준으로 계속해서 더해서 옆쪽으로 가도록 페이징 했습니다.
      *
      * @param model
      * @return
      */
     @GetMapping("")
-    public String getAllPosts(Model model) {
-        model.addAttribute("posts", postService.getPosts());
+    public String getAllPosts(Model model, @PageableDefault(size = PageFormatter.POSTS_PER_PAGE, sort = "postId") Pageable pageable) {
+        PageFormatter pages = new PageFormatter(pageable, postService.findAllPostByPage(pageable), postService.getPosts().size());
+        model.addAttribute("posts", postService.findAllPostByPage(pageable));
+        model.addAttribute("pages", pages);
         return "index";
     }
+
 
     /**
      * 매개변수로 오는 id 값을 기반으로 해당 포스트를 불러옵니다.
@@ -62,7 +69,7 @@ public class PostController {
      * @param id    Post Id
      * @param model
      * @return
-     * @throws NotFoundException
+     * @throws
      */
     @GetMapping("/{id}")
     public String getPost(@PathVariable Long id, Model model) {

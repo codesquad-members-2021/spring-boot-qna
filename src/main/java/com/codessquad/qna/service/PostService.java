@@ -8,6 +8,8 @@ import com.codessquad.qna.exception.NotFoundException;
 import com.codessquad.qna.repository.CommentRepository;
 import com.codessquad.qna.repository.PostRepository;
 import com.codessquad.qna.util.Mapper;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -62,6 +64,10 @@ public class PostService {
         }
         post.delete();
         postRepository.save(post);
+    }
+
+    public Page<Post> findAllPostByPage(Pageable pageable) {
+        return postRepository.findAll(pageable);
     }
 
 }
