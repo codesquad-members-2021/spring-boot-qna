@@ -1,5 +1,6 @@
 package com.codessquad.qna.Controller;
 
+import static com.codessquad.qna.utils.SessionUtil.*;
 import com.codessquad.qna.domain.Question;
 import com.codessquad.qna.domain.QuestionRepostory;
 import com.codessquad.qna.domain.User;
@@ -29,7 +30,12 @@ public class QuestionController {
 
 
     @GetMapping("/qna/form")
-    public String questionList() {
+    public String questionList(HttpSession session) {
+
+        if(!isLoginUser(session)) {
+            return "redirect:/user/login";
+        }
+        User user = getLoginUser(session);
         logger.info("askQuestion");
         return "qna/form";
     }
