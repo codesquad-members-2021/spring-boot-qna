@@ -75,8 +75,8 @@ public class User {
         return this.id.equals(id);
     }
 
-    public boolean isMatchedUserId(User user) {
-        return this.userId.equals(user.getUserId());
+    public boolean isMatchedUserId(String userId) {
+        return this.userId.equals(userId);
     }
 
     public boolean isMatchedPassword(User user) {

@@ -1,12 +1,14 @@
 package com.codesquad.qna.domain;
 
 import com.codesquad.qna.util.DateTimeUtils;
+import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.Objects;
 
 @Entity
+@Where(clause = "deleted = false")
 public class Answer {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -22,6 +24,8 @@ public class Answer {
 
     @Lob
     private String contents;
+
+    private boolean deleted;
 
     private LocalDateTime createdDateTime;
 
@@ -59,6 +63,10 @@ public class Answer {
         return DateTimeUtils.formatByPattern(createdDateTime);
     }
 
+    public void delete() {
+        deleted = true;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -70,5 +78,9 @@ public class Answer {
     @Override
     public int hashCode() {
         return Objects.hash(id, writer);
+    }
+
+    public String getUserId() {
+        return this.writer.getUserId();
     }
 }

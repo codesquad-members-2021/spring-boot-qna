@@ -66,10 +66,10 @@
                                     <ul class="article-util-list">
                                         <li>
                                             <a class="link-modify-article"
-                                               href="/questions/{id}/answers/{id}">수정</a>
+                                               href="/questions/{{question.id}}/answers/{{id}}">수정</a>
                                         </li>
                                         <li>
-                                            <form class="delete-answer-form" action="/questions/{id}/answers/{id}"
+                                            <form class="delete-answer-form" action="/questions/{{question.id}}/answers/{{id}}"
                                                   method="POST">
                                                 <input type="hidden" name="_method" value="DELETE">
                                                 <button type="submit" class="delete-answer-button">삭제</button>
@@ -80,7 +80,7 @@
                             </article>
                             {{/ question.answers}}
 
-                            <form class="submit-write" method="POST" action="/questions/{{id}}/answers">
+                            <form class="submit-write" method="POST" action="/questions/{{question.id}}/answers">
                                 <div class="form-group" style="padding:14px;">
                                     <textarea class="form-control" id="contents" name="contents"
                                               placeholder="Write down your answer"></textarea>
