@@ -4,6 +4,7 @@ import com.codessquad.qna.HttpSessionUtils;
 import com.codessquad.qna.domain.Question;
 import com.codessquad.qna.domain.User;
 import com.codessquad.qna.dto.QuestionDto;
+import com.codessquad.qna.service.AnswerService;
 import com.codessquad.qna.service.QuestionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -16,10 +17,11 @@ import javax.servlet.http.HttpSession;
 public class QuestionController {
 
     private final QuestionService questionService;
+    private final AnswerService answerService;
 
-    @Autowired
-    public QuestionController(QuestionService questionService) {
+    public QuestionController(QuestionService questionService, AnswerService answerService) {
         this.questionService = questionService;
+        this.answerService = answerService;
     }
 
     @GetMapping("/questions/form")
@@ -48,6 +50,7 @@ public class QuestionController {
     @GetMapping("/questions/{id}")
     public String viewQuestion(@PathVariable long id, Model model) {
         model.addAttribute("question", questionService.findQuestionById(id));
+        model.addAttribute("answers", answerService.findAnswersByQuestionId(id));
         return "qna/show";
     }
 
