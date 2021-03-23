@@ -86,10 +86,12 @@ public class UserController {
         User sessionedUser = (User)session.getAttribute("sessionedUser");
 
         if(!HttpSessionUtils.isLoginUser(session)) {
+
             return "redirect:/users/form";
         }
 
         if(!sessionedUser.matchId(id)) {
+
             return "redirect:/users/form";
         }
 
@@ -101,12 +103,12 @@ public class UserController {
     @PostMapping("/validation")
     public String validationUser(String password, Model model, HttpSession session) {
 
-        if(!HttpSessionUtils.isLoginUser(session)) {//로그인 체
+        User sessionedUser = HttpSessionUtils.getUserFromSession(session);
+
+        if(!HttpSessionUtils.isLoginUser(session)) {
 
             return "redirect:/users/form";
         }
-
-        User sessionedUser = HttpSessionUtils.getUserFromSession(session);
 
         if(sessionedUser.matchPassword(password)) {
 
@@ -119,7 +121,7 @@ public class UserController {
     }
 
     @PostMapping("/{id}")
-    public String update(@PathVariable Long id, User newUser, HttpSession session){
+    public String update(@PathVariable Long id, User newUser, HttpSession session) throws Exception {
 
         User sessionedUser = (User)session.getAttribute("sessionedUser");
 
@@ -131,7 +133,7 @@ public class UserController {
             return "redirect:/users/form";
         }
 
-        User user = userService.findUser(id).get();
+        User user = userService.findUser(id).orElseThrow(()->new Exception("There're no users registered in that ID."));
 
         user.update(newUser);
 
