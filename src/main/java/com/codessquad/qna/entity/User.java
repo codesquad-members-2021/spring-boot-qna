@@ -63,6 +63,6 @@ public class User {
     }
 
     public boolean isSameId(User user) {
-        return this.userId == user.userId;
+        return this.id.equals(user.id);
     }
 }
