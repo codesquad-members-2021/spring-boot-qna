@@ -45,13 +45,8 @@ public class SessionUtil {
     }
 
     public static void setLoginUser(HttpSession session, User user) {
-        //try {
-            SESSION_KEY_LOGIN_USER = "loginUser";
-            session.setAttribute(SESSION_KEY_LOGIN_USER, user);
-        //}
-        //catch (Exception e) {
-
-        //}
+        SESSION_KEY_LOGIN_USER = "loginUser";
+        session.setAttribute(SESSION_KEY_LOGIN_USER, user);
     }
 
     public static void removeLoginUser(HttpSession session) {
