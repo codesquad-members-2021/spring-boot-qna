@@ -81,11 +81,6 @@ public class UserController {
 
     @PostMapping("/login")
     public String login(String userId, String password, Model model, HttpSession session) {
-        Result result = valid(session);
-        if (!result.isValid()) {
-            model.addAttribute("errorMessage", result.getErrorMessage());
-            return "user/login";
-        }
         User user = userService.getUserByUserId(userId);
 
         if (!user.checkPassword(password)) {

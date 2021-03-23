@@ -7,6 +7,7 @@ import java.util.Objects;
 
 @Entity
 public class Answer {
+    private static final DateTimeFormatter DATE_TIME_FORMAT = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
     @Id
     @GeneratedValue
     private Long id;
@@ -69,7 +70,7 @@ public class Answer {
     }
 
     public String getFormattedDateTime() {
-        return createdDateTime.format(DateTimeFormatter.ISO_LOCAL_DATE_TIME);
+        return createdDateTime.format(DATE_TIME_FORMAT);
     }
 
     @Override
