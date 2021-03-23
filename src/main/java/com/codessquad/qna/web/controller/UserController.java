@@ -86,7 +86,7 @@ public class UserController {
             throw new IllegalAccessException();
         }
 
-        if (!loginUser.isMatchingPassword(testPassword)) {
+        if(!userService.isMatchingPassword(user, testPassword)) {
             model.addAttribute("errorMessage", "비밀번호가 틀렸습니다");
             return "/user/formWithError";
         }

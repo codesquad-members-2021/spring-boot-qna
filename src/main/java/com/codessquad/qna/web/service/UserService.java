@@ -51,9 +51,14 @@ public class UserService {
         userRepository.save(loginUser);
     }
 
+    public boolean isMatchingPassword(User user, String testPassword) {
+        return user.isMatchingPassword(testPassword);
+    }
+
     private void validatePassword(User user, String testPassword) {
         if (!user.isMatchingPassword(testPassword)) {
             throw new LoginFailException("잘못된 비밀번호 입니다");
         }
     }
+
 }
