@@ -48,18 +48,29 @@ public class UserController {
     }
 
     @PutMapping("/{id}")
-    public String updateUser(@PathVariable Long id,User newUser) throws Exception {
-        User currentUser = userRepository.findById(id).orElseThrow(() -> new Exception("데이터 검색에 실패하였습니다"));
-        currentUser.update(newUser);
-        userRepository.save(currentUser);
-        logger.info("update User : " + currentUser.toString());
+    public String updateUser(@PathVariable Long id,User updatedUser,HttpSession session) throws Exception {
+        User sessionUser = (User)session.getAttribute(SESSION_KEY_LOGIN_USER);
+        //User currentUser = userRepository.findById(id).orElseThrow(() -> new Exception("데이터 검색에 실패하였습니다"));
+        if(sessionUser == null) {
+            return "redirect:/user/loginForm";
+        }
+
+        if(sessionUser.equals(updatedUser)) {
+            sessionUser.update(updatedUser);
+        }
+
+        userRepository.save(sessionUser);
+        logger.info("update User {}",sessionUser.getUserId());
+
         return "redirect:/user";
     }
 
     @GetMapping("/{id}/form")
-    public String getUserupdateForm(@PathVariable Long id , Model model) throws Exception{
-        User user = userRepository.findById(id).orElseThrow(() -> new Exception());
-        model.addAttribute("user",user);
+    public String getUserupdateForm(@PathVariable Long id , Model model,HttpSession session) throws Exception{
+
+        User loginUser = (User)session.getAttribute(SESSION_KEY_LOGIN_USER);
+        model.addAttribute("user",loginUser);
+
         return "user/updateForm";
     }
 
