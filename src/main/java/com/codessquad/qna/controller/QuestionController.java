@@ -2,7 +2,6 @@ package com.codessquad.qna.controller;
 
 import com.codessquad.qna.domain.Answer;
 import com.codessquad.qna.domain.Question;
-import com.codessquad.qna.domain.Result;
 import com.codessquad.qna.domain.User;
 import com.codessquad.qna.exception.NotLoggedInException;
 import com.codessquad.qna.service.QuestionService;
