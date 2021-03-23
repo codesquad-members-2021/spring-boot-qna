@@ -99,21 +99,23 @@ public class UserController {
     }
 
     @PostMapping("/validation")
-    public String validationUser(User user, Model model, HttpSession session) {
-        System.out.println("0");
-        if(!HttpSessionUtils.isLoginUser(session)) {
-            System.out.println("1");
+    public String validationUser(String password, Model model, HttpSession session) {
+
+        if(!HttpSessionUtils.isLoginUser(session)) {//로그인 체
+
             return "redirect:/users/form";
         }
 
-        if(userService.validationUserInfo(user, session)){//세션값이랑 입력받은 값 같으면 업데이트
-            System.out.println("2");
-            model.addAttribute("user", user);
+        User sessionedUser = HttpSessionUtils.getUserFromSession(session);
+
+        if(sessionedUser.matchPassword(password)) {
+
+            model.addAttribute("user", sessionedUser);
 
             return "/user/updateForm";
         }
-        System.out.println("3");
-        return "/user/validationUser";
+
+        return "/user/validationFail";
     }
 
     @PostMapping("/{id}")

@@ -32,15 +32,6 @@ public class UserService {
         return repository.findById(id);
     }
 
-    public boolean validationUserInfo(User user, HttpSession session) {
-
-        User sessionedUser = HttpSessionUtils.getUserFromSession(session);
-
-        User newUser = repository.findById(user.getId()).get();
-
-        return sessionedUser.matchPassword(newUser.getPassword());
-    }
-
     public User findById(String userId){
 
         User user = repository.findByUserId(userId);
