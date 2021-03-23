@@ -24,6 +24,11 @@ public class UserService {
         return userRepository.findAll();
     }
 
+    public User findById(Long id) {
+        return userRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException("해당 유저가 존재하지 않습니다."));
+    }
+
     public User findUserByUserId(String userId) {
         return userRepository.findByUserId(userId)
                 .orElseThrow(() -> new NotFoundException("해당 유저가 존재하지 않습니다."));

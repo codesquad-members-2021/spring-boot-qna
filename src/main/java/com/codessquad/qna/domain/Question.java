@@ -1,10 +1,13 @@
 package com.codessquad.qna.domain;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -15,15 +18,19 @@ public class Question {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @JsonProperty
     private Long id;
 
     @ManyToOne
     @JoinColumn(foreignKey = @ForeignKey(name = "fk_question_writer"))
+    @JsonProperty
     private User writer;
 
+    @JsonProperty
     private String title;
 
     @Lob
+    @JsonProperty
     private String contents;
 
     private LocalDateTime postTime;
@@ -31,9 +38,10 @@ public class Question {
     private boolean deleted;
 
     @OneToMany(mappedBy = "question")
-    @OrderBy("id asc")
+    @OrderBy("id DESC")
     @Where(clause = "deleted = false")
-    private List<Answer> answers;
+    @JsonManagedReference
+    private List<Answer> answers = new ArrayList<>();
 
     protected Question() {
     }

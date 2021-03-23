@@ -77,7 +77,7 @@
                                 </div>
                             </article>
                             {{/answers}}
-                            <form name="answer" method="POST" action="/questions/{{id}}/answers">
+                            <form class="answer-write" name="answer" method="POST" action="/api/questions/{{id}}/answers">
                                 <div class="form-group" style="padding:14px;">
                                     <textarea class="form-control" placeholder="Update your status" name="contents"></textarea>
                                 </div>

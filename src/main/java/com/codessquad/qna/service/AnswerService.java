@@ -20,8 +20,8 @@ public class AnswerService {
                 .orElseThrow(() -> new NotFoundException("해당 답변이 존재하지 않습니다."));
     }
 
-    public void save(Answer answer) {
-        answerRepository.save(answer);
+    public Answer save(Answer answer) {
+        return answerRepository.save(answer);
     }
 
     public void delete(User user, Answer answer) {
