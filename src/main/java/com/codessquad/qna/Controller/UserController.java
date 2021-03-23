@@ -96,17 +96,13 @@ public class UserController {
 
     @PostMapping("/login")
     public String loginProcess(String userId, String password, HttpSession session) {
-        User foundUser = userRepository.findByUserId(userId);
-
-        if (foundUser == null) {
-            logger.info("Login Failure");
-            return "redirect:/user/form";
-        }
+        User foundUser = (User)userRepository.findByUserId(userId).get(); //get 안티패턴 수정해야함@@@@@@@@@@@@
 
         if (!foundUser.isMatchingPassword(password)) {
-            logger.info("Login Failure");
+            logger.info("Login Failure : wrong password");
             return "redirect:/user/form";
         }
+
         logger.info("Login Success");
         setLoginUser(session, foundUser);
 
