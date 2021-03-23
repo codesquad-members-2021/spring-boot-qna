@@ -23,24 +23,20 @@ public class QuestionController {
     }
 
     @GetMapping("/form")
-    public String form(HttpSession session) {
+    public String form(HttpSession session, Model model) {
         try {
             hasPermission(session);
             return "qna/form";
-        } catch (AccessDeniedException e) {
-            return "redirect:/users/login";
+        } catch (IllegalStateException e) {
+            model.addAttribute("errorMessage", e.getMessage());
+            return "/user/login";
         }
     }
 
     @PostMapping
     public String createNewQuestion(Question question, HttpSession session) {
-        try {
-            hasPermission(session);
-            questionService.save(HttpSessionUtils.getUserFromSession(session), question);
-            return "redirect:/";
-        } catch (AccessDeniedException e) {
-            return "redirect:/users/login";
-        }
+        questionService.save(HttpSessionUtils.getUserFromSession(session), question);
+        return "redirect:/";
     }
 
     @GetMapping
@@ -62,8 +58,9 @@ public class QuestionController {
             hasPermission(question, session);
             model.addAttribute("question", question);
             return "qna/updateForm";
-        } catch (AccessDeniedException e) {
-            return "redirect:/users/login";
+        } catch (IllegalStateException | AccessDeniedException e) {
+            model.addAttribute("errorMessage", e.getMessage());
+            return "/user/login";
         }
     }
 
@@ -74,21 +71,22 @@ public class QuestionController {
     }
 
     @DeleteMapping("{id}")
-    public String delete(@PathVariable long id, HttpSession session) {
+    public String delete(@PathVariable long id, Model model, HttpSession session) {
         try {
             Question question = questionService.getQuestionById(id);
             hasPermission(question, session);
             questionService.delete(question);
 
             return "redirect:/";
-        } catch (AccessDeniedException e) {
-            return "redirect:/users/login";
+        } catch (IllegalStateException | AccessDeniedException e) {
+            model.addAttribute("errorMessage", e.getMessage());
+            return "/user/login";
         }
     }
 
     private void hasPermission(Question question, HttpSession session) {
         if (!HttpSessionUtils.isLoginUser(session)) {
-            throw new AccessDeniedException();
+            throw new IllegalStateException("로그인을 먼저 진행해주세요.");
         }
 
         User sessionUser = HttpSessionUtils.getUserFromSession(session);
@@ -100,7 +98,7 @@ public class QuestionController {
 
     private void hasPermission(HttpSession session) {
         if (!HttpSessionUtils.isLoginUser(session)) {
-            throw new AccessDeniedException();
+            throw new IllegalStateException("로그인을 먼저 진행해주세요.");
         }
     }
 }
