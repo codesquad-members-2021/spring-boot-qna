@@ -1,9 +1,8 @@
 package com.codessquad.qna.web.controller;
 
 import com.codessquad.qna.web.domain.User;
-import com.codessquad.qna.web.domain.UserRepository;
 import com.codessquad.qna.web.exceptions.auth.UnauthorizedAccessException;
-import com.codessquad.qna.web.exceptions.users.UserNotFoundException;
+import com.codessquad.qna.web.service.UserService;
 import com.codessquad.qna.web.utils.SessionUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,35 +12,34 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
 
-import static com.codessquad.qna.web.utils.ExceptionConstants.CANNOT_MODIFY_ANOTHER_USER;
 import static com.codessquad.qna.web.utils.ExceptionConstants.PASSWORD_NOT_MATCHING;
 
 @Controller
 @RequestMapping("/users")
 public class UsersController {
     private static final Logger LOGGER = LoggerFactory.getLogger(UsersController.class);
-    private final UserRepository userRepository;
+    private final UserService userService;
 
-    public UsersController(UserRepository userRepository) {
-        this.userRepository = userRepository;
+    public UsersController(UserService userService) {
+        this.userService = userService;
     }
 
     @PostMapping
-    public String createUser(User createdUser) {
-        userRepository.save(createdUser);
-        LOGGER.info("user created : {}", createdUser.getUserId());
+    public String createUser(User user) {
+        userService.createUser(user);
+        LOGGER.info("user created : {}", user.getUserId());
         return "redirect:/users";
     }
 
     @GetMapping
-    public String userList(Model model) {
-        model.addAttribute("users", userRepository.findAll());
+    public String users(Model model) {
+        model.addAttribute("users", userService.users());
         return "user/list";
     }
 
     @GetMapping("/{userId}")
     public String userDetail(@PathVariable("userId") long id, Model model) {
-        User foundUser = userRepository.findById(id).orElseThrow(UserNotFoundException::new);
+        User foundUser = userService.userDetail(id);
         model.addAttribute("foundUser", foundUser);
         return "user/profile";
     }
@@ -52,30 +50,16 @@ public class UsersController {
     }
 
     @PutMapping("/{id}")
-    public String modifyUser(@PathVariable long id, String prevPassword, String newPassword,
-                             String name, String email, HttpSession session) {
+    public String modifyUser(@PathVariable long id, String prevPassword, User newUserInfo, HttpSession session) {
         User loginUser = SessionUtil.getLoginUser(session);
-        User foundUser = userRepository.findById(id).orElseThrow(UserNotFoundException::new);
-        if (!loginUser.isMatchingId(foundUser)) {
-            throw new UnauthorizedAccessException(CANNOT_MODIFY_ANOTHER_USER);
-        }
-        verifyAuthorizedAccess(loginUser, prevPassword);
-        loginUser.update(newPassword, name, email);
-        userRepository.save(loginUser);
+        userService.modifyUser(id, prevPassword, newUserInfo, loginUser);
         return "redirect:/users/" + loginUser.getId();
     }
 
     @PostMapping("/login")
     public String doLogin(String userId, String password, HttpSession session) {
-        User foundUser = null;
-        try {
-            foundUser = userRepository.findByUserId(userId).orElseThrow(UserNotFoundException::new);
-            verifyAuthorizedAccess(foundUser, password);
-        } catch (UnauthorizedAccessException | UserNotFoundException exception) {
-            return "redirect:/users/login-form";
-        }
-        SessionUtil.setLoginUser(session, foundUser);
-        LOGGER.info("user login : {}", foundUser.getUserId());
+        User loggedInUser = userService.doLogin(userId, password);
+        SessionUtil.setLoginUser(session, loggedInUser);
         return "redirect:/";
     }
 
@@ -85,11 +69,5 @@ public class UsersController {
         LOGGER.info("user logout : {}", sessionUser.getUserId());
         SessionUtil.removeLoginUser(session);
         return "redirect:/";
-    }
-
-    private void verifyAuthorizedAccess(User user, String password) {
-        if (!user.isMatchingPassword(password)) {
-            throw new UnauthorizedAccessException(PASSWORD_NOT_MATCHING);
-        }
     }
 }

@@ -31,6 +31,12 @@ public class User extends BaseTimeEntity {
 
     }
 
+    public void update(User newUserInfo) {
+        password = newUserInfo.password;
+        name = newUserInfo.name;
+        email = newUserInfo.email;
+    }
+
     public void update(String newPassword, String newName, String newEmail) {
         password = newPassword;
         name = newName;
@@ -82,7 +88,7 @@ public class User extends BaseTimeEntity {
     }
 
     public boolean isMatchingId(User anotherUser) {
-        return id.equals(anotherUser.getId());
+        return id.equals(anotherUser.id);
     }
 
     @Override
