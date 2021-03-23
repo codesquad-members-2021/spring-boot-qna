@@ -62,7 +62,7 @@ public class QuestionController {
     public String showDetailQuestion(@PathVariable Long id, Model model) throws Exception {
         Question currentQuestion = questionRepostory.findById(id).orElseThrow(() -> new Exception("데이터 검색에 실패하였습니다"));
         model.addAttribute("question", currentQuestion);
-        logger.info("update Question : " + currentQuestion.toString());
+        logger.info("update Question : {}" + currentQuestion.getTitle());
         return "/qna/show";
     }
 
