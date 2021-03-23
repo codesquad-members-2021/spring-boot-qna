@@ -25,8 +25,7 @@ public class Question {
     @Column(nullable = false, length = 20)
     private LocalDateTime writtenDateTime = LocalDateTime.now();
 
-    protected Question() {
-    }
+    protected Question() { }
 
     public Question(User writer, String title, String contents) {
         this.writer = writer;

@@ -4,11 +4,12 @@ import com.codessquad.qna.web.domain.User;
 import org.springframework.data.repository.CrudRepository;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface UserRepository extends CrudRepository<User, Long> {
 
     @Override
     List<User> findAll();
 
-    User findByUserId(String userId);
+    Optional<User> findByUserId(String userId);
 }

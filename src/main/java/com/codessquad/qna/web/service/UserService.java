@@ -36,7 +36,7 @@ public class UserService {
     }
 
     public User findByUserId(String userId) {
-        return userRepository.findByUserId(userId);
+        return userRepository.findByUserId(userId).orElseThrow(() ->new InvalidUserException("사용자가 존재하지 않습니다."));
     }
 
     public void verifyUser(User user, String password) {
