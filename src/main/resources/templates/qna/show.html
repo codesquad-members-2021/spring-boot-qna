@@ -70,7 +70,7 @@
                               <div class="article-util">
                                   <ul class="article-util-list">
                                       <li>
-                                          <a class="link-modify-article" href="/questions/413/answers/1405/form">수정</a>
+                                          <a class="link-modify-article" href="modify-article">수정</a>
                                       </li>
                                       <li>
                                           <form class="delete-answer-form" action="/questions/413/answers/1405" method="POST">
@@ -124,40 +124,7 @@
         </div>
     </div>
 </div>
+{{> include/footer}}
 
-<script type="text/template" id="answerTemplate">
-	<article class="article">
-		<div class="article-header">
-			<div class="article-header-thumb">
-				<img src="https://graph.facebook.com/v2.3/1324855987/picture" class="article-author-thumb" alt="">
-			</div>
-			<div class="article-header-text">
-				<a href="#" class="article-author-name">{0}</a>
-				<div class="article-header-time">{1}</div>
-			</div>
-		</div>
-		<div class="article-doc comment-doc">
-			{2}
-		</div>
-		<div class="article-util">
-		<ul class="article-util-list">
-			<li>
-				<a class="link-modify-article" href="/api/qna/updateAnswer/{3}">수정</a>
-			</li>
-			<li>
-				<form class="delete-answer-form" action="/api/questions/{3}/answers/{4}" method="POST">
-					<input type="hidden" name="_method" value="DELETE">
-                     <button type="submit" class="delete-answer-button">삭제</button>
-				</form>
-			</li>
-		</ul>
-		</div>
-	</article>
-</script>
-
-<!-- script references -->
-<script src="/js/jquery-2.2.0.min.js"></script>
-<script src="/js/bootstrap.min.js"></script>
-<script src="/js/scripts.js"></script>
 	</body>
 </html>
