@@ -68,14 +68,22 @@ public class UserController {
     }
 
     @GetMapping("/{id}/password")
-    public String passwordCheckPage(@PathVariable("id") Long id, Model model) {
+    public String passwordCheckPage(@PathVariable("id") Long id, Model model, HttpSession session) {
+        User sessionedUser = (User) session.getAttribute("sessionedUser");
+        if (sessionedUser == null) {
+            return "loginForm";
+        }
         User user = userRepository.findById(id).orElseThrow(UserNotFoundException::new);
         model.addAttribute("user", user);
         return "user/passwordCheckForm";
     }
 
     @PostMapping("/{id}/password")
-    public String checkPassword(@PathVariable("id") Long id, User targetUser, Model model) {
+    public String checkPassword(@PathVariable("id") Long id, User targetUser, Model model, HttpSession session) {
+        User sessionedUser = (User) session.getAttribute("sessionedUser");
+        if (sessionedUser == null) {
+            return "loginForm";
+        }
         User user = userRepository.findById(id).orElseThrow(UserNotFoundException::new);
         String passwordBefore = user.getPassword();
         if (passwordBefore.equals(targetUser.getPassword())) {
