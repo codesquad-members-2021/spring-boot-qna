@@ -58,4 +58,8 @@ public class Answer {
     public String getFormattedWriteDateTime() {
         return writeDateTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"));
     }
+
+    public boolean isWriter(User user) {
+        return writer.isSameId(user);
+    }
 }

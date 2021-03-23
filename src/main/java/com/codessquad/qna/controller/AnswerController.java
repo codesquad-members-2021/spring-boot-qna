@@ -7,6 +7,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -29,6 +30,14 @@ public class AnswerController {
         logger.debug("{}번 질문에 답변 생성 요청", questionId);
         User user = HttpSessionUtil.getUser(session);
         answerService.addAnswer(questionId, user, contents);
+        return "redirect:/questions/" + questionId;
+    }
+
+    @DeleteMapping("/{answerId}")
+    public String delete(@PathVariable long questionId, @PathVariable long answerId, HttpSession session) {
+        logger.debug("{}번 질문의 {}번 답변 삭제 요청", questionId, answerId);
+        User user = HttpSessionUtil.getUser(session);
+        answerService.deleteAnswer(answerId, user);
         return "redirect:/questions/" + questionId;
     }
 }

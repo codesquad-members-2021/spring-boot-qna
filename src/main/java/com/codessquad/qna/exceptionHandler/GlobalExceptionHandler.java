@@ -1,9 +1,6 @@
 package com.codessquad.qna.exceptionHandler;
 
-import com.codessquad.qna.exception.NotAuthorizedException;
-import com.codessquad.qna.exception.QuestionNotFoundException;
-import com.codessquad.qna.exception.UserNotFoundException;
-import com.codessquad.qna.exception.UserNotFoundInSessionException;
+import com.codessquad.qna.exception.*;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -14,7 +11,8 @@ import javax.servlet.http.HttpServletResponse;
 public class GlobalExceptionHandler {
     @ExceptionHandler({
             UserNotFoundException.class,
-            QuestionNotFoundException.class
+            QuestionNotFoundException.class,
+            AnswerNotFoundException.class
     })
     public String exceptionPage(RuntimeException ex, Model model) {
         model.addAttribute("errorMessage", ex.getMessage());
