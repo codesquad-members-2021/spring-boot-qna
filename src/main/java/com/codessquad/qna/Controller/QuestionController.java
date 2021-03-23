@@ -58,10 +58,26 @@ public class QuestionController {
     }
 
     @GetMapping("/{id}")
-    public String showProfile(@PathVariable Long id, Model model) throws Exception {
+    public String showDetailQuestion(@PathVariable Long id, Model model) throws Exception {
         Question currentQuestion = questionRepostory.findById(id).orElseThrow(() -> new Exception("데이터 검색에 실패하였습니다"));
         model.addAttribute("question", currentQuestion);
         logger.info("update Question : " + currentQuestion.toString());
         return "/qna/show";
+    }
+
+    //수정필요
+    @PostMapping("/{id}")
+    public String deleteQuestion(@PathVariable Long id, Model model) throws Exception {
+        Question currentQuestion = questionRepostory.findById(id).orElseThrow(() -> new Exception("데이터 검색에 실패하였습니다"));
+        model.addAttribute("question", currentQuestion);
+        logger.info("update Question : " + currentQuestion.toString());
+        return "/qna/show";
+    }
+
+    @GetMapping("/{id}/form")
+    public String updateForm(@PathVariable Long id, Model model) {
+        model.addAttribute("question",questionRepostory.findById(id));
+        logger.info(questionRepostory.findById(id).toString());
+        return "/qna/updateForm";
     }
 }
