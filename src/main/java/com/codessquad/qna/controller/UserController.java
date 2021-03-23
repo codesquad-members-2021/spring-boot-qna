@@ -4,7 +4,7 @@ import com.codessquad.qna.entity.User;
 import com.codessquad.qna.exception.NotAuthorizedException;
 import com.codessquad.qna.exception.UserNotFoundException;
 import com.codessquad.qna.service.UserService;
-import com.codessquad.qna.util.HttpSessionUtil;
+import com.codessquad.qna.util.HttpSessionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,8 +46,8 @@ public class UserController {
 
     @GetMapping("/{id}/form")
     public String updateForm(@PathVariable long id, Model model, HttpSession session) {
-        if (HttpSessionUtil.isAuthorized(id, session)) {
-            User user = HttpSessionUtil.getUser(session);
+        if (HttpSessionUtils.isAuthorized(id, session)) {
+            User user = HttpSessionUtils.getUser(session);
             model.addAttribute("user", user);
             return "user/updateForm";
         }
@@ -56,7 +56,7 @@ public class UserController {
 
     @PutMapping("/{id}/update")
     public String update(@PathVariable long id, User user, HttpSession session) {
-        if (HttpSessionUtil.isAuthorized(id, session)) {
+        if (HttpSessionUtils.isAuthorized(id, session)) {
             userService.updateUser(user);
             return "redirect:/users";
         }
@@ -80,7 +80,7 @@ public class UserController {
         try {
             User toLogin = userService.getUser(user.getUserId());
             if (toLogin.verify(user)) {
-                session.setAttribute(HttpSessionUtil.USER_KEY, toLogin);
+                session.setAttribute(HttpSessionUtils.USER_KEY, toLogin);
                 return "redirect:/";
             }
             return "redirect:/users/login/failed";
@@ -92,7 +92,7 @@ public class UserController {
     @GetMapping("/logout")
     public String logout(HttpSession session) {
         logger.debug("logout 요청");
-        session.removeAttribute(HttpSessionUtil.USER_KEY);
+        session.removeAttribute(HttpSessionUtils.USER_KEY);
         return "redirect:/";
     }
 }
