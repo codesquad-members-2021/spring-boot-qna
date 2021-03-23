@@ -62,15 +62,15 @@ public class UserController {
         if(! currentUser.isMatchingPassword(pastPassword)) {
             logger.info("password is not Matching, please re-try ");
             return "redirect:/user/login";
-        }// 이전 비밀번호 맞는지 확인하는 부분, 이전 비밀번호가 틀었다면
+        }
 
         if(sessionUser == null) {
             return "redirect:/user/login";
-        }// 로그인 하지 않았다면
+        }
 
         if(sessionUser.equals(updatedUser)) {
             sessionUser.update(updatedUser);
-        }//업데이트
+        }
 
         userRepository.save(sessionUser);
         logger.info("update User {}",sessionUser.getUserId());
@@ -96,7 +96,7 @@ public class UserController {
     public String loginProcess(String userId, String password, HttpSession session) {
         User foundUser = userRepository.findByUserId(userId);
 
-        if(foundUser == null) {//중복 코드가 심해진다.
+        if(foundUser == null) {
             logger.info("Login Failure");
             return "redirect:/user/form";
         }
@@ -108,7 +108,7 @@ public class UserController {
         logger.info("Login Success");
         session.setAttribute(SESSION_KEY_LOGIN_USER,foundUser);
 
-        return  "redirect:/";//로그인 끝나면 메인페이지로 이
+        return  "redirect:/";
     }
 
 
