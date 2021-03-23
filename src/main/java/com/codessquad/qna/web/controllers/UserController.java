@@ -74,11 +74,8 @@ public class UserController {
     @PostMapping("/login")
     public String loginUser(String userId, String password, HttpSession session) {
         User user = userService.findByUserId(userId);
-        if(user == null) {
-            throw new LoginException("해당 userId의 사용자가 존재하지 않습니다.");
-        }
-        if(!user.matchesPassword(password)) {
-            throw new LoginException("비밀번호가 틀렸습니다.");
+        if (user == null || !user.matchesPassword(password)) {
+            throw new LoginException();
         }
         session.setAttribute("sessionedUser", user);
         return "redirect:/";
