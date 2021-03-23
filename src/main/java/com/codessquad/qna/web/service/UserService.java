@@ -2,13 +2,13 @@ package com.codessquad.qna.web.service;
 
 import com.codessquad.qna.web.domain.User;
 import com.codessquad.qna.web.domain.UserRepository;
+import com.codessquad.qna.web.exceptions.InvalidEntityException;
 import com.codessquad.qna.web.exceptions.auth.LoginFailedException;
 import com.codessquad.qna.web.exceptions.auth.UnauthorizedAccessException;
 import com.codessquad.qna.web.exceptions.users.UserNotFoundException;
 import org.springframework.stereotype.Service;
 
-import static com.codessquad.qna.web.utils.ExceptionConstants.CANNOT_MODIFY_ANOTHER_USER;
-import static com.codessquad.qna.web.utils.ExceptionConstants.PASSWORD_NOT_MATCHING;
+import static com.codessquad.qna.web.utils.ExceptionConstants.*;
 
 @Service
 public class UserService {
@@ -20,6 +20,7 @@ public class UserService {
     }
 
     public void createUser(User user) {
+        verifyUserEntity(user);
         userRepository.save(user);
     }
 
@@ -33,10 +34,10 @@ public class UserService {
 
     public void modifyUser(long id, String prevPassword, User newUserInfo, User loginUser) {
         User foundUser = userRepository.findById(id).orElseThrow(UserNotFoundException::new);
-        if (!loginUser.isMatchingId(foundUser)) {
-            throw new UnauthorizedAccessException(CANNOT_MODIFY_ANOTHER_USER);
-        }
+        verifyUserEntity(newUserInfo);
         verifyAuthorizedAccess(loginUser, prevPassword);
+        verifyAuthorizedModification(loginUser, foundUser);
+
         loginUser.update(newUserInfo);
         userRepository.save(loginUser);
     }
@@ -52,9 +53,21 @@ public class UserService {
         return foundUser;
     }
 
+    private void verifyAuthorizedModification(User user, User anotherUser) {
+        if (!user.isMatchingId(anotherUser)) {
+            throw new UnauthorizedAccessException(CANNOT_MODIFY_ANOTHER_USER);
+        }
+    }
+
     private void verifyAuthorizedAccess(User user, String password) {
         if (!user.isMatchingPassword(password)) {
             throw new UnauthorizedAccessException(PASSWORD_NOT_MATCHING);
+        }
+    }
+
+    private void verifyUserEntity(User user) {
+        if (!user.isValid()) {
+            throw new InvalidEntityException(EMPTY_FIELD_IN_USER_ENTITY);
         }
     }
 }

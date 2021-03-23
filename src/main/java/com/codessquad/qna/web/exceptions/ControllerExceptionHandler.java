@@ -1,6 +1,7 @@
 package com.codessquad.qna.web.exceptions;
 
 import com.codessquad.qna.web.exceptions.answers.AnswerNotFoundException;
+import com.codessquad.qna.web.exceptions.auth.LoginFailedException;
 import com.codessquad.qna.web.exceptions.auth.UnauthorizedAccessException;
 import com.codessquad.qna.web.exceptions.questions.QuestionNotFoundException;
 import com.codessquad.qna.web.exceptions.users.NoLoginUserException;
@@ -45,10 +46,26 @@ public class ControllerExceptionHandler {
         return "/error/global-error";
     }
 
+    @ExceptionHandler(LoginFailedException.class)
+    public String handleLoginFailedException(LoginFailedException exception, Model model) {
+        logException("로그인에 실패했습니다", exception);
+        return "redirect:/users/login-form";
+    }
+
+    @ExceptionHandler(InvalidEntityException.class)
+    public String handleInvalidEntityException(InvalidEntityException exception, Model model) {
+        initializeModel("비어있는 항목이 있습니다!", exception, model);
+        return "/error/global-error";
+    }
+
     private void initializeModel(String errorMessage, Exception exception, Model model) {
-        LOGGER.warn(errorMessage);
-        exception.printStackTrace();
+        logException(errorMessage, exception);
         model.addAttribute("errorMessage", errorMessage);
         model.addAttribute("extraErrorMessage", exception.getMessage());
+    }
+
+    private void logException(String errorMessage, Exception exception) {
+        LOGGER.warn(errorMessage);
+        exception.printStackTrace();
     }
 }

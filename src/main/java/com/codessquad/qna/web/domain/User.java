@@ -37,10 +37,14 @@ public class User extends BaseTimeEntity {
         email = newUserInfo.email;
     }
 
-    public void update(String newPassword, String newName, String newEmail) {
-        password = newPassword;
-        name = newName;
-        email = newEmail;
+    public boolean isValid() {
+        if (password == null || name == null || email == null) {
+            return false;
+        }
+        if (password.isEmpty() || name.isEmpty() || email.isEmpty()) {
+            return false;
+        }
+        return true;
     }
 
     public Long getId() {
