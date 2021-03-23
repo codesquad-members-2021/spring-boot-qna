@@ -1,9 +1,8 @@
-package com.codessquad.qna;
+package com.codessquad.qna.utils;
 
 import com.codessquad.qna.domain.User;
 
 import javax.servlet.http.HttpSession;
-import javax.websocket.Session;
 
 public class HttpSessionUtils {
 
