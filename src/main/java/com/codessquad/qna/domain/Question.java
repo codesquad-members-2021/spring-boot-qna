@@ -23,6 +23,8 @@ public class Question {
 
     private LocalDateTime createDate;
 
+    private final String PATTERN_FORMAT = "yyyy.MM.dd HH:mm:ss";
+
     public Question() {
     }
 
@@ -36,7 +38,7 @@ public class Question {
         if (createDate == null) {
             return "";
         }
-        return createDate.format(DateTimeFormatter.ofPattern("yyyy.MM.dd HH:mm:ss"));
+        return createDate.format(DateTimeFormatter.ofPattern(PATTERN_FORMAT));
     }
 
     public Long getId() {
