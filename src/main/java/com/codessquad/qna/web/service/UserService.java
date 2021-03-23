@@ -40,7 +40,7 @@ public class UserService {
         userRepository.save(request.toEntity());
     }
 
-    public List<User> list(){
+    public List<User> findAllUser(){
         return userRepository.findAll();
     }
 

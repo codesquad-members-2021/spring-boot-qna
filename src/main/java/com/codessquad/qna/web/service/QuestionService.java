@@ -31,18 +31,18 @@ public class QuestionService {
     }
 
     public void update(long questionId, HttpSession session, QuestionRequest request){
-        Question question = authenticate(questionId, session);
+        Question question = verifiedQuestion(questionId, session);
         question.update(request.getTitle(), request.getContents());
         questionRepository.save(question);
     }
 
 
     public void delete(long questionId, HttpSession session){
-        Question question = authenticate(questionId, session);
+        Question question = verifiedQuestion(questionId, session);
         questionRepository.delete(question);
     }
 
-    public Question authenticate(long questionId, HttpSession session){
+    public Question verifiedQuestion(long questionId, HttpSession session){
         Question question = getQuestionById(questionId);
         User writer = question.getWriter();
         User loginUser = SessionUtils.getLoginUser(session);
@@ -52,7 +52,7 @@ public class QuestionService {
         }
         return question;
     }
-    public List<Answer> list(long questionId){
+    public List<Answer> findAllAnswer(long questionId){
         return answerRepository.findByQuestionId(questionId);
     }
 

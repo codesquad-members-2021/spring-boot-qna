@@ -40,8 +40,8 @@ public class UserController {
     }
 
     @GetMapping
-    public String list(Model model) {
-        model.addAttribute("users", userService.list());
+    public String showAll(Model model) {
+        model.addAttribute("users", userService.findAllUser());
         return "user/list";
     }
 
@@ -52,7 +52,7 @@ public class UserController {
     }
 
     @GetMapping("/{id}/form")
-    public String updateForm(@PathVariable long id, HttpSession session, Model model) {
+    public String getUpdateForm(@PathVariable long id, HttpSession session, Model model) {
         model.addAttribute("user", userService.verifiedUser(id, session));
         return "user/updateForm";
     }

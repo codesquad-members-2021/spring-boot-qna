@@ -33,7 +33,7 @@ public class QuestionController {
     }
 
     @GetMapping("/form")
-    public String questionForm(HttpSession session) {
+    public String getForm(HttpSession session) {
         if (!SessionUtils.isLoginUser(session)) {
             return "/users/login-form";
         }
@@ -41,8 +41,8 @@ public class QuestionController {
     }
 
     @GetMapping("/{questionId}/form")
-    public String updateForm(@PathVariable long questionId, HttpSession session, Model model) {
-        Question question = questionService.authenticate(questionId, session);
+    public String getUpdateForm(@PathVariable long questionId, HttpSession session, Model model) {
+        Question question = questionService.verifiedQuestion(questionId, session);
         model.addAttribute("question", question);
         return "qna/updateForm";
     }
@@ -56,7 +56,7 @@ public class QuestionController {
     @GetMapping("/{questionId}")
     public String show(@PathVariable long questionId, Model model) {
         model.addAttribute("question", questionService.getQuestionById(questionId));
-        model.addAttribute("answers", questionService.list(questionId));
+        model.addAttribute("answers", questionService.findAllAnswer(questionId));
         return "/qna/show";
     }
 }
