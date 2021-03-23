@@ -15,16 +15,16 @@
                   <div class="wrap">
                       <div class="main">
                           <strong class="subject">
-                              <a href="/qna/show">{{title}}</a>
+                              <a href="/qna/{{id}}">{{title}}</a>
                           </strong>
                           <div class="auth-info">
                               <i class="icon-add-comment"></i>
                               <span class="time">{{createDate}}</span>
-                              <a href="/user/profile.html" class="author">{{writer}}</a>
+                              <a href="/user/profile.html" class="author">{{writer.name}}</a>
                           </div>
                           <div class="reply" title="댓글">
                               <i class="icon-reply"></i>
-                              <span class="point">1234</span>
+                              <span class="point">{{id}}</span>
                           </div>
                       </div>
                   </div>
