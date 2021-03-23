@@ -1,6 +1,5 @@
 package com.codessquad.qna.Controller;
 
-import static com.codessquad.qna.utils.SessionUtil.*;
 import com.codessquad.qna.domain.Question;
 import com.codessquad.qna.domain.QuestionRepostory;
 import com.codessquad.qna.domain.User;
@@ -14,8 +13,10 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-
 import javax.servlet.http.HttpSession;
+
+import static com.codessquad.qna.utils.SessionUtil.getLoginUser;
+import static com.codessquad.qna.utils.SessionUtil.isLoginUser;
 
 @Controller
 
@@ -26,21 +27,19 @@ public class QuestionController {
 
     private final QuestionRepostory questionRepostory;
 
-
     public QuestionController(QuestionRepostory questionRepostory) {
         this.questionRepostory = questionRepostory;
     }
 
-
     @GetMapping("/form")
-    public String questionForm(HttpSession session,Model model) {
+    public String questionForm(HttpSession session, Model model) {
 
-        if(!isLoginUser(session)) {
+        if (!isLoginUser(session)) {
             return "redirect:/user/login";
         }
         User user = getLoginUser(session);
         logger.info("askQuestion");
-        model.addAttribute("user",user);
+        model.addAttribute("user", user);
         return "qna/form";
     }
 

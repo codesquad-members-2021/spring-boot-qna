@@ -16,7 +16,8 @@ public class User {
     private String name;
     private String email;
 
-    public User() { }
+    public User() {
+    }
 
     public User(User copyUser) {
         this.userId = copyUser.userId;
@@ -79,7 +80,7 @@ public class User {
     public int hashCode() {
         return Objects.hash(getUserId());
     }
-    
+
     @Override
     public String toString() {
         return "User{" +
@@ -93,6 +94,5 @@ public class User {
     public boolean isMatchingPassword(String password) {
         return this.password.equals(password);
     }
-
 
 }

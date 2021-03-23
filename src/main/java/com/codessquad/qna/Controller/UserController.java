@@ -1,15 +1,17 @@
 package com.codessquad.qna.Controller;
-import static com.codessquad.qna.utils.SessionUtil.*;
+
 import com.codessquad.qna.domain.User;
 import com.codessquad.qna.domain.UserRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+
 import javax.servlet.http.HttpSession;
 
+import static com.codessquad.qna.utils.SessionUtil.SESSION_KEY_LOGIN_USER;
+import static com.codessquad.qna.utils.SessionUtil.removeLoginUser;
 
 @Controller
 @RequestMapping("/user")
@@ -43,46 +45,46 @@ public class UserController {
 
     @GetMapping("/list")
     public String list(Model model, HttpSession session) {
-        model.addAttribute("userlist",userRepository.findAll());
+        model.addAttribute("userlist", userRepository.findAll());
         return "user/list";
     }
 
     @GetMapping("/{id}")
-    public String showProfile(@PathVariable Long id,Model model) throws Exception{
+    public String showProfile(@PathVariable Long id, Model model) throws Exception {
         User user = userRepository.findById(id).orElseThrow(() -> new Exception("데이터 검색에 실패하였습니다"));
-        model.addAttribute("user",user);
+        model.addAttribute("user", user);
         return "user/profile";
     }
 
     @PutMapping("/{id}")
-    public String updateUser(@PathVariable Long id,String pastPassword,User updatedUser,HttpSession session) throws Exception {
-        User sessionUser = (User)session.getAttribute(SESSION_KEY_LOGIN_USER);
+    public String updateUser(@PathVariable Long id, String pastPassword, User updatedUser, HttpSession session) throws Exception {
+        User sessionUser = (User) session.getAttribute(SESSION_KEY_LOGIN_USER);
         User currentUser = userRepository.findById(id).orElseThrow(() -> new Exception("데이터 검색에 실패하였습니다"));
 
-        if(! currentUser.isMatchingPassword(pastPassword)) {
+        if (!currentUser.isMatchingPassword(pastPassword)) {
             logger.info("password is not Matching, please re-try ");
             return "redirect:/user/login";
         }
 
-        if(sessionUser == null) {
+        if (sessionUser == null) {
             return "redirect:/user/login";
         }
 
-        if(sessionUser.equals(updatedUser)) {
+        if (sessionUser.equals(updatedUser)) {
             sessionUser.update(updatedUser);
         }
 
         userRepository.save(sessionUser);
-        logger.info("update User {}",sessionUser.getUserId());
+        logger.info("update User {}", sessionUser.getUserId());
 
         return "redirect:/user";
     }
 
     @GetMapping("/{id}/form")
-    public String getUserUpdateForm(@PathVariable Long id , Model model,HttpSession session) throws Exception {
+    public String getUserUpdateForm(@PathVariable Long id, Model model, HttpSession session) throws Exception {
 
-        User loginUser = (User)session.getAttribute(SESSION_KEY_LOGIN_USER);
-        model.addAttribute("user",loginUser);
+        User loginUser = (User) session.getAttribute(SESSION_KEY_LOGIN_USER);
+        model.addAttribute("user", loginUser);
 
         return "user/updateForm";
     }
@@ -96,21 +98,20 @@ public class UserController {
     public String loginProcess(String userId, String password, HttpSession session) {
         User foundUser = userRepository.findByUserId(userId);
 
-        if(foundUser == null) {
+        if (foundUser == null) {
             logger.info("Login Failure");
             return "redirect:/user/form";
         }
 
-        if(!foundUser.isMatchingPassword(password)) {
+        if (!foundUser.isMatchingPassword(password)) {
             logger.info("Login Failure");
             return "redirect:/user/form";
         }
         logger.info("Login Success");
-        session.setAttribute(SESSION_KEY_LOGIN_USER,foundUser);
+        session.setAttribute(SESSION_KEY_LOGIN_USER, foundUser);
 
-        return  "redirect:/";
+        return "redirect:/";
     }
-
 
     @GetMapping("/logout")
     public String logout(HttpSession session) {
@@ -118,6 +119,5 @@ public class UserController {
         removeLoginUser(session);
         return "redirect:/";
     }
-
 
 }

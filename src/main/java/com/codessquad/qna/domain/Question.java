@@ -12,7 +12,7 @@ public class Question {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(foreignKey = @ForeignKey(name= "fk_question_writer"))
+    @JoinColumn(foreignKey = @ForeignKey(name = "fk_question_writer"))
     private User writer;
 
     @Column(nullable = false, length = 100)
@@ -29,11 +29,11 @@ public class Question {
     public Question(String writer, String title, String contents) {
         this.title = title;
         this.contents = contents;
-        this.createDate =  LocalDateTime.now();
+        this.createDate = LocalDateTime.now();
     }
 
     public String getFormattedCreatedDate() {
-        if(createDate == null) {
+        if (createDate == null) {
             return "";
         }
         return createDate.format(DateTimeFormatter.ofPattern("yyyy.MM.dd HH:mm:ss"));
