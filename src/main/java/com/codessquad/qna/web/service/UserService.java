@@ -3,7 +3,7 @@ package com.codessquad.qna.web.service;
 import com.codessquad.qna.web.domain.user.User;
 import com.codessquad.qna.web.domain.user.UserRepository;
 import com.codessquad.qna.web.dto.user.CreateUserRequest;
-import com.codessquad.qna.web.exception.CRUDAuthenticationException;
+import com.codessquad.qna.web.exception.CrudNotAllowedException;
 import com.codessquad.qna.web.exception.EntityNotFoundException;
 import com.codessquad.qna.web.exception.FailedLoginException;
 import com.codessquad.qna.web.utils.SessionUtils;
@@ -49,7 +49,7 @@ public class UserService {
         User loginUser = SessionUtils.getLoginUser(session);
 
         if (!loginUser.isMatchingWriter(user)) {
-            throw new CRUDAuthenticationException("You don't have auth");
+            throw new CrudNotAllowedException("You don't have auth");
         }
         return user;
     }

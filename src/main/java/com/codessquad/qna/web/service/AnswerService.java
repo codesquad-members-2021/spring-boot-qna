@@ -5,7 +5,7 @@ import com.codessquad.qna.web.domain.answer.AnswerRepository;
 import com.codessquad.qna.web.domain.question.Question;
 import com.codessquad.qna.web.domain.question.QuestionRepository;
 import com.codessquad.qna.web.domain.user.User;
-import com.codessquad.qna.web.exception.CRUDAuthenticationException;
+import com.codessquad.qna.web.exception.CrudNotAllowedException;
 import com.codessquad.qna.web.exception.EntityNotFoundException;
 import com.codessquad.qna.web.utils.SessionUtils;
 import org.springframework.stereotype.Service;
@@ -43,7 +43,7 @@ public class AnswerService {
                 .orElseThrow(() -> new EntityNotFoundException("Cannot found answer number " + id));
 
         if (!answer.isMatchingWriter(loginUser)) {
-            throw new CRUDAuthenticationException("Only writer can delete this answer post!");
+            throw new CrudNotAllowedException("Only writer can delete this answer post!");
         }
         answerRepository.delete(answer);
     }

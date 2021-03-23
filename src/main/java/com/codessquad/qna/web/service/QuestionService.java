@@ -6,7 +6,7 @@ import com.codessquad.qna.web.domain.question.Question;
 import com.codessquad.qna.web.domain.question.QuestionRepository;
 import com.codessquad.qna.web.domain.user.User;
 import com.codessquad.qna.web.dto.question.QuestionRequest;
-import com.codessquad.qna.web.exception.CRUDAuthenticationException;
+import com.codessquad.qna.web.exception.CrudNotAllowedException;
 import com.codessquad.qna.web.exception.EntityNotFoundException;
 import com.codessquad.qna.web.utils.SessionUtils;
 import org.springframework.stereotype.Service;
@@ -48,7 +48,7 @@ public class QuestionService {
         User loginUser = SessionUtils.getLoginUser(session);
 
         if (!loginUser.isMatchingWriter(writer)) {
-            throw new CRUDAuthenticationException("Cannot edit other user's posts");
+            throw new CrudNotAllowedException("Cannot edit other user's posts");
         }
         return question;
     }
