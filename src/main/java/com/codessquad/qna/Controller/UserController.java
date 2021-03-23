@@ -48,16 +48,22 @@ public class UserController {
     }
 
     @PutMapping("/{id}")
-    public String updateUser(@PathVariable Long id,User updatedUser,HttpSession session) throws Exception {
+    public String updateUser(@PathVariable Long id,String pastPassword,User updatedUser,HttpSession session) throws Exception {
         User sessionUser = (User)session.getAttribute(SESSION_KEY_LOGIN_USER);
-        //User currentUser = userRepository.findById(id).orElseThrow(() -> new Exception("데이터 검색에 실패하였습니다"));
+        User currentUser = userRepository.findById(id).orElseThrow(() -> new Exception("데이터 검색에 실패하였습니다"));
+
+        if(! currentUser.isMatchingPassword(pastPassword)) {
+            logger.info("password is not Matching, please re-try ");
+            return "redirect:/user/login";
+        }// 이전 비밀번호 맞는지 확인하는 부분, 이전 비밀번호가 틀었다면
+
         if(sessionUser == null) {
-            return "redirect:/user/loginForm";
-        }
+            return "redirect:/user/login";
+        }// 로그인 하지 않았다면
 
         if(sessionUser.equals(updatedUser)) {
             sessionUser.update(updatedUser);
-        }
+        }//업데이트
 
         userRepository.save(sessionUser);
         logger.info("update User {}",sessionUser.getUserId());
@@ -66,7 +72,7 @@ public class UserController {
     }
 
     @GetMapping("/{id}/form")
-    public String getUserupdateForm(@PathVariable Long id , Model model,HttpSession session) throws Exception{
+    public String getUserUpdateForm(@PathVariable Long id , Model model,HttpSession session) throws Exception {
 
         User loginUser = (User)session.getAttribute(SESSION_KEY_LOGIN_USER);
         model.addAttribute("user",loginUser);
