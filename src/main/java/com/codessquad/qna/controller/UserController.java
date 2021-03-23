@@ -71,15 +71,23 @@ public class UserController {
     }
 
     @GetMapping("/{id}/password-check")
-    public String passwordCheckPage(@PathVariable("id") Long id, Model model) {
-        User user = userRepository.findById(id).orElseGet(User::new);
+    public String passwordCheckPage(Model model, HttpSession session) {
+        User sessionedUser = (User) session.getAttribute("sessionedUser");
+        if (sessionedUser == null) {
+            return "loginForm";
+        }
+        User user = userRepository.findById(sessionedUser.getId()).orElseGet(User::new);
         model.addAttribute("user", user);
         return "passwordCheckForm";
     }
 
     @PostMapping("/{id}/password-check")
-    public String checkPassword(@PathVariable("id") Long id, User targetUser, Model model) {
-        User user = userRepository.findById(id).orElseGet(User::new);
+    public String checkPassword(User targetUser, Model model, HttpSession session) {
+        User sessionedUser = (User) session.getAttribute("sessionedUser");
+        if (sessionedUser == null) {
+            return "loginForm";
+        }
+        User user = userRepository.findById(sessionedUser.getId()).orElseGet(User::new);
         String passwordBefore = user.getPassword();
         if (passwordBefore.equals(targetUser.getPassword())) {
             model.addAttribute("user", user);
