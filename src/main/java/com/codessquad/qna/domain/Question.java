@@ -1,6 +1,6 @@
 package com.codessquad.qna.domain;
 
-import org.hibernate.annotations.Where;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -12,15 +12,18 @@ public class Question {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @JsonProperty
     private Long questionId;
 
     @ManyToOne
     @JoinColumn(foreignKey = @ForeignKey(name = "fk_question_writer"))
     private User writer;
 
+    @JsonProperty
     private String title;
 
     @Lob
+    @JsonProperty
     private String contents;
 
     private LocalDateTime createdDate;
@@ -29,8 +32,7 @@ public class Question {
     private boolean deleted;
 
     @OneToMany(mappedBy = "question")
-    @OrderBy("id ASC")
-    @Where(clause = "deleted=false")
+//    @Where(clause = "deleted=false")
     private List<Answer> answers;
 
     public Question() {

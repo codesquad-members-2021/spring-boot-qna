@@ -31,13 +31,13 @@ public class AnswerService {
                 .orElseThrow(() -> new NotFoundException("존재하지 않는 답변입니다."));
     }
 
-    public void create(Long id, String contents, HttpSession session) {
+    public Answer create(Long id, String contents, HttpSession session) {
         User loginUser = HttpSessionUtils.getUserFromSession(session);
 
         Question question = questionRepository.findByQuestionIdAndDeletedFalse(id)
                 .orElseThrow(() -> new NotFoundException("존재하지 않는 질문입니다."));
 
-        answerRepository.save(new Answer(question, contents, loginUser));
+        return answerRepository.save(new Answer(question, contents, loginUser));
     }
 
     public void remove(User sessionUser, Answer answer) {
