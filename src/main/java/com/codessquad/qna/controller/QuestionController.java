@@ -47,15 +47,15 @@ public class QuestionController {
 
     @GetMapping("/{questionId}")
     public String showQuestionInDetail(@PathVariable long questionId, Model model) {
-        Question question = questionService.getOneById(questionId).orElse(null);
-        model.addAttribute("question", question);
+        model.addAttribute("question", questionService.getOneById(questionId));
 
         return "question/show";
     }
 
     @GetMapping("/{questionId}/form")
     public String moveToUpdateForm(@PathVariable long questionId, Model model, HttpSession session) {
-        Question question = questionService.getOneById(questionId).orElse(null);
+        Question question = questionService.getOneById(questionId);
+
         checkSession(session, question);
 
         model.addAttribute("question", question);
@@ -64,7 +64,8 @@ public class QuestionController {
 
     @PutMapping("/{questionId}")
     public String updateQuestion(@PathVariable long questionId, Question referenceQuestion, HttpSession session, Model model) {
-        Question question = questionService.getOneById(questionId).orElse(null);
+        Question question = questionService.getOneById(questionId);
+
         checkSession(session, question);
 
         questionService.updateInfo(question, referenceQuestion);
@@ -73,7 +74,8 @@ public class QuestionController {
 
     @DeleteMapping("/{questionId}")
     public String deleteQuestion(@PathVariable long questionId, HttpSession session, Model model) {
-        Question question = questionService.getOneById(questionId).orElse(null);
+        Question question = questionService.getOneById(questionId);
+
         checkSession(session, question);
 
         questionService.remove(question);

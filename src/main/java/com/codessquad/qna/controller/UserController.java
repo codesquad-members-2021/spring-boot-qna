@@ -49,17 +49,16 @@ public class UserController {
     }
 
     @GetMapping("/{id}")
-    public String showUserInDetail(@PathVariable long id, Model model, HttpSession session) {
-        User user = userService.getOneById(id).orElse(null);
-        checkSession(session, user);
+    public String showUserInDetail(@PathVariable long id, Model model) {
+        model.addAttribute("user", userService.getOneById(id));
 
-        model.addAttribute("user", user);
         return "user/profile";
     }
 
     @GetMapping("/{id}/form")
     public String moveToUpdateForm(@PathVariable long id, Model model, HttpSession session) {
-        User user = userService.getOneById(id).orElse(null);
+        User user = userService.getOneById(id);
+
         checkSession(session, user);
 
         model.addAttribute("id", user.getId());
@@ -70,14 +69,10 @@ public class UserController {
 
     @PutMapping("/{id}")
     public String updateUser(@PathVariable long id, User referenceUser, String newPassword, HttpSession session, Model model) {
-        User user = userService.getOneById(id).orElse(null);
+        User user = userService.getOneById(id);
+
         checkSession(session, user);
 
-        if (user == null) {
-            model.addAttribute("errorMessage", "존재하지 않는 회원입니다.");
-            model.addAttribute("userId", user.getUserId());
-            return "user/update";
-        }
         if (referenceUser.isEmpty()) {
             model.addAttribute("errorMessage", "비어있는 필드가 있습니다.");
             model.addAttribute("userId", user.getUserId());

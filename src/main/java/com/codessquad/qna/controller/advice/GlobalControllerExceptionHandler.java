@@ -4,6 +4,7 @@ import com.codessquad.qna.exception.JoinFailedException;
 import com.codessquad.qna.exception.LoginFailedException;
 import com.codessquad.qna.exception.NotLoggedInException;
 import com.codessquad.qna.exception.UnauthorizedAccessException;
+import com.codessquad.qna.exception.NotFoundException;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -20,7 +21,7 @@ public class GlobalControllerExceptionHandler {
     @ExceptionHandler(NotLoggedInException.class)
     public String handleNotLoggedIn(NotLoggedInException notLoggedInException, Model model) {
         model.addAttribute("errorMessage", notLoggedInException.getMessage());
-        return "/user/login";
+        return "user/login";
     }
 
     @ExceptionHandler(JoinFailedException.class)
@@ -33,5 +34,11 @@ public class GlobalControllerExceptionHandler {
     public String handleUnauthorizedAccess(UnauthorizedAccessException unauthorizedAccessException, Model model) {
         model.addAttribute("errorMessage", unauthorizedAccessException.getMessage());
         return "user/update";
+    }
+
+    @ExceptionHandler(NotFoundException.class)
+    public String handleNotFound(NotFoundException notFoundException, Model model) {
+        model.addAttribute("errorMessage", notFoundException.getMessage());
+        return "error/404";
     }
 }

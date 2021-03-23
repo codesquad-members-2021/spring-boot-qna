@@ -35,7 +35,7 @@ public class AnswerController {
 
     @DeleteMapping("/{answerId}")
     public String deleteAnswer(@PathVariable long answerId, HttpSession session, Model model) {
-        Answer answer = answerService.getOneById(answerId).orElse(null);
+        Answer answer = answerService.getOneById(answerId);
         checkSession(session, answer);
 
         answerService.remove(answer);

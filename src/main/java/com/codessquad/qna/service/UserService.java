@@ -3,6 +3,7 @@ package com.codessquad.qna.service;
 import com.codessquad.qna.domain.User;
 import com.codessquad.qna.exception.JoinFailedException;
 import com.codessquad.qna.exception.LoginFailedException;
+import com.codessquad.qna.exception.NotFoundException;
 import com.codessquad.qna.exception.UnauthorizedAccessException;
 import com.codessquad.qna.repository.UserRepository;
 import org.slf4j.Logger;
@@ -62,8 +63,9 @@ public class UserService {
         return userRepository.findAll();
     }
 
-    public Optional<User> getOneById(Long id) {
-        return userRepository.findById(id);
+    public User getOneById(Long id) {
+        return userRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException("존재하지 않는 회원입니다."));
     }
 
     private boolean isRedundantUser(User user) {
