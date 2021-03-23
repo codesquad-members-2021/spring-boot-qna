@@ -1,10 +1,8 @@
 package com.codessquad.qna.web.controller;
 
 import com.codessquad.qna.web.domain.Question;
-import com.codessquad.qna.web.domain.QuestionRepository;
 import com.codessquad.qna.web.domain.User;
-import com.codessquad.qna.web.exceptions.auth.UnauthorizedAccessException;
-import com.codessquad.qna.web.exceptions.questions.QuestionNotFoundException;
+import com.codessquad.qna.web.service.QuestionService;
 import com.codessquad.qna.web.utils.SessionUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -14,79 +12,59 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
 
-import static com.codessquad.qna.web.utils.ExceptionConstants.CANNOT_MODIFY_ANOTHER_USERS_QUESTION;
-
 @Controller
 @RequestMapping("/questions")
 public class QuestionsController {
     private static final Logger LOGGER = LoggerFactory.getLogger(QuestionsController.class);
-    private final QuestionRepository questionRepository;
+    private final QuestionService questionService;
 
-    public QuestionsController(QuestionRepository questionRepository) {
-        this.questionRepository = questionRepository;
+    public QuestionsController(QuestionService questionService) {
+        this.questionService = questionService;
     }
 
     @PostMapping
     public String createQuestion(Question newQuestion, HttpSession session) {
         User sessionUser = SessionUtil.getLoginUser(session);
-        newQuestion.setWriter(sessionUser);
-        questionRepository.save(newQuestion);
+        questionService.createQuestion(newQuestion, sessionUser);
         LOGGER.info("question created {}", newQuestion);
         return "redirect:/";
     }
 
     @GetMapping
     public String questionList(Model model) {
-        model.addAttribute("questions", questionRepository.findAllByDeletedFalse());
+        model.addAttribute("questions", questionService.questions());
         return "index";
     }
 
     @GetMapping("/{questionId}")
     public String questionDetail(@PathVariable("questionId") long questionId, Model model) {
-        Question foundQuestion = questionRepository.findByIdAndDeletedFalse(questionId)
-                .orElseThrow(QuestionNotFoundException::new);
+        Question foundQuestion = questionService.questionDetail(questionId);
         model.addAttribute("question", foundQuestion);
         return "qna/show";
     }
 
     @GetMapping("/{questionId}/modify-form")
-    public String modifyForm(@PathVariable("questionId") long questionId,
-                             Model model, HttpSession session) {
-        Question currentQuestion = verifyQuestionAndGet(session, questionId);
-        model.addAttribute("currentQuestion", currentQuestion);
+    public String modifyForm(@PathVariable("questionId") long questionId, Model model, HttpSession session) {
+        User sessionUser = SessionUtil.getLoginUser(session);
+        Question modifiedQuestion = questionService.verifyQuestionAndGet(sessionUser, questionId);
+        model.addAttribute("currentQuestion", modifiedQuestion);
         return "qna/modify-form";
     }
 
     @PutMapping("/{questionId}")
     public String modifyQuestion(@PathVariable("questionId") long questionId,
                                  String newTitle, String newContents, HttpSession session) {
-        Question currentQuestion = verifyQuestionAndGet(session, questionId);
-        currentQuestion.update(newTitle, newContents);
-        questionRepository.save(currentQuestion);
-        LOGGER.info("question modified {}", currentQuestion);
-        return "redirect:/questions/" + currentQuestion.getId();
+        User sessionUser = SessionUtil.getLoginUser(session);
+        Question modifiedQuestion = questionService.modifyQuestion(sessionUser, questionId, newTitle, newContents);
+        LOGGER.info("question modified {}", modifiedQuestion);
+        return "redirect:/questions/" + modifiedQuestion.getId();
     }
 
     @DeleteMapping("/{questionId}")
     public String deleteQuestion(@PathVariable("questionId") long questionId, HttpSession session) {
-        Question currentQuestion = verifyQuestionAndGet(session, questionId);
-        questionRepository.delete(currentQuestion);
-        LOGGER.info("question deleted {}", currentQuestion);
-        return "redirect:/";
-    }
-
-    private Question verifyQuestionAndGet(HttpSession session, Long questionId) {
         User sessionUser = SessionUtil.getLoginUser(session);
-        Question currentQuestion = questionRepository.findByIdAndDeletedFalse(questionId)
-                .orElseThrow(QuestionNotFoundException::new);
-        verifyAuthorizedAccess(currentQuestion, sessionUser);
-        return currentQuestion;
-    }
-
-    private void verifyAuthorizedAccess(Question question, User loginUser) {
-        if (!question.isMatchingWriter(loginUser)) {
-            throw new UnauthorizedAccessException(CANNOT_MODIFY_ANOTHER_USERS_QUESTION);
-        }
+        questionService.deleteQuestion(sessionUser, questionId);
+        return "redirect:/";
     }
 }
 
