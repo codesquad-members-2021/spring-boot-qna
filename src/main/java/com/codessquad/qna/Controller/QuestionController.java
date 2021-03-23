@@ -8,10 +8,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
 
@@ -29,6 +26,11 @@ public class QuestionController {
 
     public QuestionController(QuestionRepostory questionRepostory) {
         this.questionRepostory = questionRepostory;
+    }
+
+    @GetMapping("/")
+    public String qnapage() {
+        return "redirect:/qna/list";
     }
 
     @GetMapping("/form")
@@ -65,6 +67,17 @@ public class QuestionController {
         return "/qna/show";
     }
 
+    //질문수정
+    @PutMapping("/{id}")
+    public String updateQuestion(@PathVariable Long id, String title, String contents) throws Exception {
+        Question question = questionRepostory.findById(id).orElseThrow(() -> new Exception("데이터 검색에 실패하였습니다"));
+        question.update(title,contents);
+        questionRepostory.save(question);
+        logger.info("update Question : {id}",id);
+        return String.format("redirect:/qna/%d",id);
+    }
+
+
     //수정필요
     @PostMapping("/{id}")
     public String deleteQuestion(@PathVariable Long id, Model model) throws Exception {
@@ -76,8 +89,9 @@ public class QuestionController {
 
     @GetMapping("/{id}/form")
     public String updateForm(@PathVariable Long id, Model model) {
-        model.addAttribute("question",questionRepostory.findById(id));
-        logger.info(questionRepostory.findById(id).toString());
+        Question question =  questionRepostory.findById(id).get();
+        logger.info(question.toString());
+        model.addAttribute("question", question);
         return "/qna/updateForm";
     }
 }
