@@ -4,11 +4,10 @@ import com.codessquad.qna.domain.User;
 import com.codessquad.qna.exception.NotFoundException;
 
 import javax.servlet.http.HttpSession;
-import java.util.logging.Handler;
 
 public class SessionUtil {
 
-    private static final String SESSION_KEY_LOGIN_USER = "loginUser";
+    public static final String SESSION_KEY_LOGIN_USER = "loginUser";
 
     private SessionUtil() {
 
