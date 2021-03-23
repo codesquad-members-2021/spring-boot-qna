@@ -55,11 +55,11 @@ public class User {
         this.email = email;
     }
 
-    public boolean checkPassword(String password) {
+    public boolean isMatchingPassword(String password) {
         return this.password.equals(password);
     }
 
-    public boolean userIdConfirmation(long id) {
+    public boolean isMatchingId(long id) {
         return this.id == id;
     }
 

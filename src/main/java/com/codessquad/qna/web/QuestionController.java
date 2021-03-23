@@ -2,11 +2,7 @@ package com.codessquad.qna.web;
 
 import com.codessquad.qna.domain.Question;
 import com.codessquad.qna.domain.Result;
-import com.codessquad.qna.repository.QuestionRepository;
 import com.codessquad.qna.domain.User;
-import com.codessquad.qna.exception.AccessDeniedException;
-import com.codessquad.qna.exception.NoQuestionException;
-import com.codessquad.qna.exception.NoUserException;
 import com.codessquad.qna.service.QuestionService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -40,13 +36,13 @@ public class QuestionController {
     }
 
     @GetMapping
-    public String showQuestionList(Model model) {
+    public String questionList(Model model) {
         model.addAttribute("question", questionService.getQuestionList());
         return "index";
     }
 
     @GetMapping("/{id}")
-    public String showOneQuestion(@PathVariable long id, Model model) {
+    public String question(@PathVariable long id, Model model) {
         model.addAttribute("question", questionService.getQuestionById(id));
         return "qna/show";
     }
@@ -64,14 +60,14 @@ public class QuestionController {
         return "qna/updateForm";
     }
 
-    @PostMapping("{id}")
-    public String update(@PathVariable long id, Question updateQuestion) {
+    @PutMapping("{id}")
+    public String updateQuestion(@PathVariable long id, Question updateQuestion) {
         questionService.updateQuestion(id, updateQuestion);
         return "redirect:/";
     }
 
     @DeleteMapping("{id}")
-    public String delete(@PathVariable long id, Model model, HttpSession session) {
+    public String deleteQuestion(@PathVariable long id, Model model, HttpSession session) {
         Question question = questionService.getQuestionById(id);
 
         Result result = valid(question, session);
@@ -92,7 +88,7 @@ public class QuestionController {
 
         User sessionUser = HttpSessionUtils.getUserFromSession(session);
 
-        if (!question.userConfirmation(sessionUser)) {
+        if (!question.isMatchingWriter(sessionUser)) {
             return Result.fail("수정할 수 있는 권한이 없습니다.");
         }
 

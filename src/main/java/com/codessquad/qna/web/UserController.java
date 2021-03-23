@@ -3,7 +3,6 @@ package com.codessquad.qna.web;
 import com.codessquad.qna.domain.Result;
 import com.codessquad.qna.service.UserService;
 import com.codessquad.qna.domain.User;
-import com.codessquad.qna.exception.AccessDeniedException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -32,7 +31,7 @@ public class UserController {
     }
 
     @GetMapping
-    public String getUserList(Model model) {
+    public String userList(Model model) {
         model.addAttribute("users", userService.getUserList());
         return "user/list";
     }
@@ -50,7 +49,7 @@ public class UserController {
     }
 
     @GetMapping("/{id}/form")
-    public String editUserInfo(@PathVariable long id, Model model, HttpSession session) {
+    public String editUser(@PathVariable long id, Model model, HttpSession session) {
         Result result = valid(session);
         if (!result.isValid()) {
             model.addAttribute("errorMessage", result.getErrorMessage());
@@ -59,8 +58,9 @@ public class UserController {
 
         User sessionUser = HttpSessionUtils.getUserFromSession(session);
 
-        if (!sessionUser.userIdConfirmation(id)) {
-            throw new AccessDeniedException();
+        if (!sessionUser.isMatchingId(id)) {
+            model.addAttribute("errorMessage", "수정할 수 있는 권한이 없습니다.");
+            return "user/login";
         }
 
         model.addAttribute("user", sessionUser);
@@ -69,7 +69,7 @@ public class UserController {
     }
 
     @PostMapping("/{id}")
-    public String update(@PathVariable long id, User updateUser, String newPassword) {
+    public String updateUser(@PathVariable long id, User updateUser, String newPassword) {
         userService.updateUser(id, updateUser, newPassword);
         return "redirect:/users";
     }
@@ -83,7 +83,7 @@ public class UserController {
     public String login(String userId, String password, Model model, HttpSession session) {
         User user = userService.getUserByUserId(userId);
 
-        if (!user.checkPassword(password)) {
+        if (!user.isMatchingPassword(password)) {
             model.addAttribute("errorMessage", "비밀번호를 확인하여 주세요");
             return "user/login";
         }

@@ -70,7 +70,7 @@ public class Question {
         this.answers = answers;
     }
 
-    public boolean userConfirmation(User loginUser) {
+    public boolean isMatchingWriter(User loginUser) {
         return this.writer.equals(loginUser);
     }
 
