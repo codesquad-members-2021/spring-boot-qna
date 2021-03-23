@@ -60,7 +60,7 @@ public class QuestionController {
     @PutMapping("{id}")
     public String updateQuestion(@PathVariable Long id, String title, String contents) {
         Question question = questionService.findById(id);
-        question.updateQuestion(title, contents);
+        question.update(title, contents);
         questionService.save(question);
         return "redirect:/";
     }
