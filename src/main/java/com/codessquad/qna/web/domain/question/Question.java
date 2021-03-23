@@ -2,6 +2,7 @@ package com.codessquad.qna.web.domain.question;
 
 import com.codessquad.qna.web.domain.answer.Answer;
 import com.codessquad.qna.web.domain.user.User;
+import com.codessquad.qna.web.dto.question.QuestionRequest;
 import com.codessquad.qna.web.utils.DateTimeUtils;
 
 import javax.persistence.*;
@@ -77,9 +78,9 @@ public class Question {
         }
     }
 
-    public void update(String title, String contents) {
-        this.title = title;
-        this.contents = contents;
+    public void update(QuestionRequest request) {
+        this.title = request.getTitle();
+        this.contents = request.getContents();
     }
 
     public boolean isMatchingWriter(User user) {

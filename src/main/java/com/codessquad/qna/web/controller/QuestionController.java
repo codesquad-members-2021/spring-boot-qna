@@ -1,7 +1,9 @@
 package com.codessquad.qna.web.controller;
 
 import com.codessquad.qna.web.domain.question.Question;
+import com.codessquad.qna.web.domain.user.User;
 import com.codessquad.qna.web.dto.question.QuestionRequest;
+import com.codessquad.qna.web.exception.CrudNotAllowedException;
 import com.codessquad.qna.web.service.QuestionService;
 import com.codessquad.qna.web.utils.SessionUtils;
 import org.springframework.stereotype.Controller;
@@ -22,13 +24,15 @@ public class QuestionController {
 
     @PostMapping
     public String create(HttpSession session, QuestionRequest request) {
-        questionService.create(session, request);
+        User loginUser = SessionUtils.getLoginUser(session);
+        questionService.create(loginUser, request);
         return "redirect:/";
     }
 
     @PutMapping("/{questionId}")
     public String update(@PathVariable long questionId, HttpSession session, QuestionRequest request) {
-        questionService.update(questionId, session, request);
+        User loginUser = SessionUtils.getLoginUser(session);
+        questionService.update(questionId, loginUser, request);
         return "redirect:/questions/" + questionId;
     }
 
@@ -42,14 +46,17 @@ public class QuestionController {
 
     @GetMapping("/{questionId}/form")
     public String getUpdateForm(@PathVariable long questionId, HttpSession session, Model model) {
-        Question question = questionService.verifiedQuestion(questionId, session);
+        User loginUser = SessionUtils.getLoginUser(session);
+
+        Question question = questionService.verifiedQuestion(questionId, loginUser);
         model.addAttribute("question", question);
         return "qna/updateForm";
     }
 
     @DeleteMapping("/{questionId}")
     public String delete(@PathVariable long questionId, HttpSession session) {
-        questionService.delete(questionId, session);
+        User loginUser = SessionUtils.getLoginUser(session);
+        questionService.delete(questionId, loginUser);
         return "redirect:/";
     }
 

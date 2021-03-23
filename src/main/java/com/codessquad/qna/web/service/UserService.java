@@ -22,7 +22,6 @@ public class UserService {
     }
 
     public User login(String userId, String password, HttpSession session) {
-
         if(SessionUtils.isLoginUser(session)){
             return SessionUtils.getLoginUser(session);
         }
@@ -44,9 +43,8 @@ public class UserService {
         return userRepository.findAll();
     }
 
-    public User verifiedUser(long id, HttpSession session){
+    public User verifiedUser(long id, User loginUser){
         User user = findUserById(id);
-        User loginUser = SessionUtils.getLoginUser(session);
 
         if (!loginUser.isMatchingWriter(user)) {
             throw new CrudNotAllowedException("You don't have auth");
@@ -54,8 +52,8 @@ public class UserService {
         return user;
     }
 
-    public User updateProfile(long id, User updatedUser, String oldPassword, HttpSession session){
-        User user = verifiedUser(id, session);
+    public User updateProfile(long id, String oldPassword, User updatedUser, User loginUser){
+        User user = verifiedUser(id, loginUser);
         if (user.isMatchingPassword(oldPassword)) {
             user.update(updatedUser);
             userRepository.save(user);
@@ -66,7 +64,6 @@ public class UserService {
     public User findUserById(long id) {
         return userRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("No user with id number " + id));
     }
-
 }
 
 

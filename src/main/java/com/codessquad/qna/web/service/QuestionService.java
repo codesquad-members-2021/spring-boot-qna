@@ -8,10 +8,8 @@ import com.codessquad.qna.web.domain.user.User;
 import com.codessquad.qna.web.dto.question.QuestionRequest;
 import com.codessquad.qna.web.exception.CrudNotAllowedException;
 import com.codessquad.qna.web.exception.EntityNotFoundException;
-import com.codessquad.qna.web.utils.SessionUtils;
 import org.springframework.stereotype.Service;
 
-import javax.servlet.http.HttpSession;
 import java.util.List;
 
 @Service
@@ -24,35 +22,34 @@ public class QuestionService {
         this.answerRepository = answerRepository;
     }
 
-    public void create(HttpSession session, QuestionRequest request){
-        User loginUser = SessionUtils.getLoginUser(session);
+    public void create(User loginUser, QuestionRequest request) {
         Question question = request.toEntity(loginUser);
         questionRepository.save(question);
     }
 
-    public void update(long questionId, HttpSession session, QuestionRequest request){
-        Question question = verifiedQuestion(questionId, session);
-        question.update(request.getTitle(), request.getContents());
+    public void update(long questionId, User loginUser, QuestionRequest request) {
+        Question question = verifiedQuestion(questionId, loginUser);
+        question.update(request);
         questionRepository.save(question);
     }
 
 
-    public void delete(long questionId, HttpSession session){
-        Question question = verifiedQuestion(questionId, session);
+    public void delete(long questionId, User loginUser) {
+        Question question = verifiedQuestion(questionId, loginUser);
         questionRepository.delete(question);
     }
 
-    public Question verifiedQuestion(long questionId, HttpSession session){
+    public Question verifiedQuestion(long questionId, User loginUser) {
         Question question = getQuestionById(questionId);
         User writer = question.getWriter();
-        User loginUser = SessionUtils.getLoginUser(session);
 
         if (!loginUser.isMatchingWriter(writer)) {
             throw new CrudNotAllowedException("Cannot edit other user's posts");
         }
         return question;
     }
-    public List<Answer> findAllAnswer(long questionId){
+
+    public List<Answer> findAllAnswer(long questionId) {
         return answerRepository.findByQuestionId(questionId);
     }
 

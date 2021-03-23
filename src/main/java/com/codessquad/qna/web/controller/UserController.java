@@ -4,6 +4,7 @@ import com.codessquad.qna.web.domain.user.User;
 
 import com.codessquad.qna.web.dto.user.CreateUserRequest;
 import com.codessquad.qna.web.service.UserService;
+import com.codessquad.qna.web.utils.SessionUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -53,13 +54,15 @@ public class UserController {
 
     @GetMapping("/{id}/form")
     public String getUpdateForm(@PathVariable long id, HttpSession session, Model model) {
-        model.addAttribute("user", userService.verifiedUser(id, session));
+        User loginUser = SessionUtils.getLoginUser(session);
+        model.addAttribute("user", userService.verifiedUser(id, loginUser));
         return "user/updateForm";
     }
 
     @PutMapping("/{id}")
     public String updateProfile(@PathVariable long id, User updatedUser, String oldPassword, HttpSession session) {
-        userService.updateProfile(id, updatedUser, oldPassword, session);
+        User loginUser = SessionUtils.getLoginUser(session);
+        userService.updateProfile(id, oldPassword, updatedUser, loginUser);
         return "redirect:/users";
     }
 }

@@ -7,10 +7,7 @@ import com.codessquad.qna.web.domain.question.QuestionRepository;
 import com.codessquad.qna.web.domain.user.User;
 import com.codessquad.qna.web.exception.CrudNotAllowedException;
 import com.codessquad.qna.web.exception.EntityNotFoundException;
-import com.codessquad.qna.web.utils.SessionUtils;
 import org.springframework.stereotype.Service;
-
-import javax.servlet.http.HttpSession;
 
 @Service
 public class AnswerService {
@@ -23,9 +20,7 @@ public class AnswerService {
         this.questionRepository = questionRepository;
     }
 
-    public void create(long questionId, String contents, HttpSession session){
-        User loginUser = SessionUtils.getLoginUser(session);
-
+    public void create(long questionId, String contents, User loginUser) {
         Question question = getQuestionById(questionId);
 
         Answer answer = new Answer.Builder()
@@ -37,8 +32,7 @@ public class AnswerService {
         answerRepository.save(answer);
     }
 
-    public void delete(long questionId, long answerId, HttpSession session){
-        User loginUser = SessionUtils.getLoginUser(session);
+    public void delete(long questionId, long answerId, User loginUser) {
         Answer answer = answerRepository.findById(answerId)
                 .orElseThrow(() -> new EntityNotFoundException("Cannot found answer number " + answerId));
 
