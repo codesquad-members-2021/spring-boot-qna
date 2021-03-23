@@ -128,7 +128,7 @@ public class UserController {
             return "redirect:/users/form";
         }
 
-        User user = userService.findUser(id).orElseThrow(()->new Exception("There're no users registered in that ID."));
+        User user = userService.findUser(id).orElseThrow(() -> new Exception("There're no users registered in that ID."));
 
         user.update(newUser);
 
