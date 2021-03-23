@@ -2,6 +2,7 @@ package com.codessquad.qna.service;
 
 import com.codessquad.qna.entity.Question;
 import com.codessquad.qna.entity.User;
+import com.codessquad.qna.exception.CannotDeleteQuestionException;
 import com.codessquad.qna.exception.NotAuthorizedException;
 import com.codessquad.qna.exception.QuestionNotFoundException;
 import com.codessquad.qna.repository.QuestionRepository;
@@ -35,12 +36,17 @@ public class QuestionService {
 
     public void deleteQuestion(long questionId, User tryToDelete) {
         Question question = getQuestion(questionId);
-        if (question.isWriter(tryToDelete)) {
-            question.delete();
-            questionRepository.save(question);
-            return;
+        if (!question.isWriter(tryToDelete)) {
+            throw new NotAuthorizedException();
         }
-        throw new NotAuthorizedException();
+        if (!question.canDeleted()) {
+            throw new CannotDeleteQuestionException();
+        }
+
+        question.delete();
+        questionRepository.save(question);
+        return;
+
     }
 
     public List<Question> getQuestions() {

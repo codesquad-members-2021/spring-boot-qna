@@ -77,7 +77,7 @@ public class Question {
     }
 
     public void delete() {
-        answers.stream().forEach(x -> x.delete());
+        answers.stream().forEach(answer -> answer.delete());
         this.deleted = true;
     }
 
@@ -88,5 +88,9 @@ public class Question {
 
     public boolean isWriter(User user) {
         return writer.isSameId(user);
+    }
+
+    public boolean canDeleted() {
+        return answers.stream().filter(answer -> !answer.isWriter(this.writer)).count() == 0;
     }
 }

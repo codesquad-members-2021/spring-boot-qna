@@ -12,7 +12,8 @@ public class GlobalExceptionHandler {
     @ExceptionHandler({
             UserNotFoundException.class,
             QuestionNotFoundException.class,
-            AnswerNotFoundException.class
+            AnswerNotFoundException.class,
+            CannotDeleteQuestionException.class
     })
     public String exceptionPage(RuntimeException ex, Model model) {
         model.addAttribute("errorMessage", ex.getMessage());
