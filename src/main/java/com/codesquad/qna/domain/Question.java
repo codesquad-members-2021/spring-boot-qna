@@ -5,6 +5,7 @@ import com.codesquad.qna.util.DateTimeUtils;
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 public class Question {
@@ -22,7 +23,12 @@ public class Question {
 
     @Lob
     private String contents;
+
     private LocalDateTime createdDateTime;
+
+    @OneToMany(mappedBy = "question")
+    @OrderBy("id ASC")
+    private List<Answer> answers;
 
     public Question(User writer, String title, String contents) {
         this.writer = writer;
@@ -54,8 +60,16 @@ public class Question {
         return createdDateTime;
     }
 
+    public List<Answer> getAnswers() {
+        return answers;
+    }
+
     public String getCreatedTime() {
         return DateTimeUtils.formatByPattern(createdDateTime);
+    }
+
+    public int getAnswerCount() {
+        return answers.size();
     }
 
     public void update(Question updatedQuestion) {

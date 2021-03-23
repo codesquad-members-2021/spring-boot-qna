@@ -1,5 +1,7 @@
 package com.codesquad.qna.domain;
 
+import com.codesquad.qna.util.DateTimeUtils;
+
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.Objects;
@@ -8,7 +10,7 @@ import java.util.Objects;
 public class Answer {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long Id;
+    private Long id;
 
     @ManyToOne
     @JoinColumn(foreignKey = @ForeignKey(name = "fk_answer_writer"))
@@ -33,16 +35,40 @@ public class Answer {
         this.createdDateTime = LocalDateTime.now();
     }
 
+    public Long getId() {
+        return id;
+    }
+
+    public User getWriter() {
+        return writer;
+    }
+
+    public Question getQuestion() {
+        return question;
+    }
+
+    public String getContents() {
+        return contents;
+    }
+
+    public LocalDateTime getCreatedDateTime() {
+        return createdDateTime;
+    }
+
+    public String getCreatedTime() {
+        return DateTimeUtils.formatByPattern(createdDateTime);
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof Answer)) return false;
         Answer answer = (Answer) o;
-        return Id.equals(answer.Id) && writer.equals(answer.writer);
+        return id.equals(answer.id) && writer.equals(answer.writer);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(Id, writer);
+        return Objects.hash(id, writer);
     }
 }
