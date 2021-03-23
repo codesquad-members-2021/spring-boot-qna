@@ -1,5 +1,6 @@
 package com.codessquad.qna.controller;
 
+import com.codessquad.qna.domain.Answer;
 import com.codessquad.qna.domain.Question;
 import com.codessquad.qna.domain.Result;
 import com.codessquad.qna.domain.User;
@@ -38,9 +39,7 @@ public class QuestionController {
 
     @GetMapping("/form")
     public String moveToQuestionForm(Question newQuestion, HttpSession session) {
-        if (!HttpSessionUtils.isLoginUser(session)) {
-            return "user/login";
-        }
+        checkSessionUser(session);
 
         return "question/form";
     }
@@ -54,9 +53,11 @@ public class QuestionController {
 
     @GetMapping("/{questionId}/form")
     public String moveToUpdateForm(@PathVariable long questionId, Model model, HttpSession session) {
+        checkSessionUser(session);
+
         Question question = questionService.getOneById(questionId);
 
-        checkSession(session, question);
+        checkAccessibleSessionUser(session, question);
 
         model.addAttribute("question", question);
         return "question/update";
@@ -64,9 +65,11 @@ public class QuestionController {
 
     @PutMapping("/{questionId}")
     public String updateQuestion(@PathVariable long questionId, Question referenceQuestion, HttpSession session, Model model) {
+        checkSessionUser(session);
+
         Question question = questionService.getOneById(questionId);
 
-        checkSession(session, question);
+        checkAccessibleSessionUser(session, question);
 
         questionService.updateInfo(question, referenceQuestion);
         return "redirect:/";
@@ -74,19 +77,23 @@ public class QuestionController {
 
     @DeleteMapping("/{questionId}")
     public String deleteQuestion(@PathVariable long questionId, HttpSession session, Model model) {
+        checkSessionUser(session);
+
         Question question = questionService.getOneById(questionId);
 
-        checkSession(session, question);
+        checkAccessibleSessionUser(session, question);
 
         questionService.remove(question);
         return "redirect:/";
     }
 
-    private void checkSession(HttpSession session, Question question) {
+    private void checkSessionUser(HttpSession session) {
         if (!HttpSessionUtils.isLoginUser(session)) {
             throw new NotLoggedInException();
         }
+    }
 
+    private void checkAccessibleSessionUser(HttpSession session, Question question) {
         User sessionUser = HttpSessionUtils.getUserFromSession(session);
         if (!question.isEqualWriter(sessionUser)) {
             throw new NotLoggedInException("자신의 글만 수정 및 삭제가 가능합니다.");

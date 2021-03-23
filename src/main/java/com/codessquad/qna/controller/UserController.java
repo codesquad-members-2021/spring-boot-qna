@@ -57,9 +57,11 @@ public class UserController {
 
     @GetMapping("/{id}/form")
     public String moveToUpdateForm(@PathVariable long id, Model model, HttpSession session) {
+        checkSessionUser(session);
+
         User user = userService.getOneById(id);
 
-        checkSession(session, user);
+        checkAccessibleSessionUser(session, user);
 
         model.addAttribute("id", user.getId());
         model.addAttribute("userId", user.getUserId());
@@ -69,9 +71,11 @@ public class UserController {
 
     @PutMapping("/{id}")
     public String updateUser(@PathVariable long id, User referenceUser, String newPassword, HttpSession session, Model model) {
+        checkSessionUser(session);
+
         User user = userService.getOneById(id);
 
-        checkSession(session, user);
+        checkAccessibleSessionUser(session, user);
 
         if (referenceUser.isEmpty()) {
             model.addAttribute("errorMessage", "비어있는 필드가 있습니다.");
@@ -96,14 +100,16 @@ public class UserController {
         return "redirect:/";
     }
 
-    private void checkSession(HttpSession session, User user) {
+    private void checkSessionUser(HttpSession session) {
         if (!HttpSessionUtils.isLoginUser(session)) {
             throw new NotLoggedInException();
         }
+    }
 
+    private void checkAccessibleSessionUser(HttpSession session, User user) {
         User sessionUser = HttpSessionUtils.getUserFromSession(session);
         if (!user.equals(sessionUser)) {
-            throw new NotLoggedInException("자신의 글만 수정 및 삭제가 가능합니다.");
+            throw new NotLoggedInException("자신의 정보만 수정 및 삭제가 가능합니다.");
         }
     }
 }

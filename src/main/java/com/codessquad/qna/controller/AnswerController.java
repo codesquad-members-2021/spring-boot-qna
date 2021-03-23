@@ -25,9 +25,7 @@ public class AnswerController {
 
     @PostMapping
     public String create(@PathVariable Long questionId, String contents, HttpSession session) {
-        if (!HttpSessionUtils.isLoginUser(session)) {
-            return "users/login";
-        }
+        checkSessionUser(session);
 
         answerService.create(questionId, contents, session);
         return "redirect:/questions/" + questionId;
@@ -35,18 +33,23 @@ public class AnswerController {
 
     @DeleteMapping("/{answerId}")
     public String deleteAnswer(@PathVariable long answerId, HttpSession session, Model model) {
+        checkSessionUser(session);
+
         Answer answer = answerService.getOneById(answerId);
-        checkSession(session, answer);
+
+        checkAccessibleSessionUser(session, answer);
 
         answerService.remove(answer);
         return "redirect:/questions/{questionId}";
     }
 
-    private void checkSession(HttpSession session, Answer answer) {
+    private void checkSessionUser(HttpSession session) {
         if (!HttpSessionUtils.isLoginUser(session)) {
             throw new NotLoggedInException();
         }
+    }
 
+    private void checkAccessibleSessionUser(HttpSession session, Answer answer) {
         User sessionUser = HttpSessionUtils.getUserFromSession(session);
         if (!answer.isEqualWriter(sessionUser)) {
             throw new NotLoggedInException("자신의 글만 수정 및 삭제가 가능합니다.");
