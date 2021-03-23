@@ -25,6 +25,9 @@ public class Answer {
     @Column(nullable = false)
     private LocalDateTime writeDateTime;
 
+    @Column(nullable = false, columnDefinition = "boolean default false")
+    private boolean deleted;
+
     protected Answer() {
     }
 
@@ -57,6 +60,14 @@ public class Answer {
 
     public String getFormattedWriteDateTime() {
         return writeDateTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"));
+    }
+
+    public boolean isDeleted() {
+        return this.deleted;
+    }
+
+    public void delete() {
+        this.deleted = true;
     }
 
     public boolean isWriter(User user) {

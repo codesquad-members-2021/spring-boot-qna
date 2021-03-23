@@ -28,7 +28,8 @@ public class AnswerService {
     public void deleteAnswer(long answerId, User tryToDelete) {
         Answer answer = getAnswer(answerId);
         if (answer.isWriter(tryToDelete)) {
-            answerRepository.delete(answer);
+            answer.delete();
+            answerRepository.save(answer);
             return;
         }
         throw new NotAuthorizedException();
