@@ -17,12 +17,11 @@ import java.util.List;
 @RequestMapping("/users")
 public class UserController {
 
-    private static final Logger logger = LoggerFactory.getLogger(UserController.class);
+   private UserRepository userRepository;
 
-    private List<User> users = new ArrayList<>();
-
-    @Autowired
-    private UserRepository userRepository;
+    public UserController(UserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
 
     @PostMapping
     public String createUserAccount(User user) {
