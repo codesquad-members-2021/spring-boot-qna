@@ -79,7 +79,7 @@ public class UserController {
     public String update(@PathVariable long id, User updateUser, String newPassword) {
         User user = userRepository.findById(id).orElseThrow(NoUserException::new);
         if (!user.checkPassword(updateUser.getPassword())) {
-            logger.info("Error: 올바르지 않은 패스워드입니다.정보가 유지됩니다.");
+            throw new IllegalStateException("비밀번호가 올바르지 않습니다.");
         }
         user.update(updateUser, newPassword);
 
