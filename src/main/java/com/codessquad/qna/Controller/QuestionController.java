@@ -38,9 +38,7 @@ public class QuestionController {
         if (!isLoginUser(session)) {
             return "redirect:/user/login";
         }
-        User user = getLoginUser(session);
-        logger.info("askQuestion");
-        model.addAttribute("user", user);
+        logger.info("questionForm");
         return "qna/form";
     }
 
