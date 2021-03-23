@@ -1,6 +1,5 @@
 package com.codessquad.qna.domain;
 
-
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -9,15 +8,12 @@ import java.time.format.DateTimeFormatter;
 public class Question {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @ManyToOne
     @JoinColumn(foreignKey = @ForeignKey(name= "fk_question_writer"))
-    private User user;
-
-    @Column(nullable = false, length = 20)
-    private String writer;
+    private User writer;
 
     @Column(nullable = false, length = 100)
     private String title;
@@ -31,7 +27,6 @@ public class Question {
     }
 
     public Question(String writer, String title, String contents) {
-        this.writer = writer;
         this.title = title;
         this.contents = contents;
         this.createDate =  LocalDateTime.now();
@@ -48,16 +43,12 @@ public class Question {
         return id;
     }
 
-    public String getWriter() {
+    public User getWriter() {
         return writer;
     }
 
-    public void setWriter(String writer) {
-        this.writer = writer;
-    }
-
     public void setWriter(User writer) {
-        this.writer = writer.getName();
+        this.writer = writer;
     }
 
     public String getTitle() {
@@ -76,19 +67,11 @@ public class Question {
         this.contents = contents;
     }
 
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
-    }
-
     @Override
     public String toString() {
         return "Question{" +
                 "id=" + id +
-                ", writer='" + writer + '\'' +
+                ", writer='" + writer.getName() + '\'' +
                 ", title='" + title + '\'' +
                 ", contents='" + contents + '\'' +
                 '}';
