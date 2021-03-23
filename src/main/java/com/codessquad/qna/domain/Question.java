@@ -57,10 +57,6 @@ public class Question {
         return createdDateTime;
     }
 
-    public void setCreatedDateTime(LocalDateTime createdDateTime) {
-        this.createdDateTime = createdDateTime;
-    }
-
     public String getFormattedDateTime() {
         return createdDateTime.format(DateTimeFormatter.ISO_LOCAL_DATE_TIME);
     }
@@ -77,9 +73,9 @@ public class Question {
         return this.writer.equals(loginUser);
     }
 
-    public void update(Question updateQna) {
-        this.title = updateQna.title;
-        this.contents = updateQna.contents;
+    public void update(Question updateQuestion) {
+        this.title = updateQuestion.title;
+        this.contents = updateQuestion.contents;
     }
 
     @Override
