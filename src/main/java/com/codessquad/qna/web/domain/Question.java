@@ -60,4 +60,8 @@ public class Question {
         this.title = title;
         this.contents = contents;
     }
+
+    public boolean isWriter(User inputUser) {
+        return this.writer.equals(inputUser);
+    }
 }
