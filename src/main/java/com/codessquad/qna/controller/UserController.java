@@ -75,7 +75,7 @@ public class UserController {
     @GetMapping("/logout")
     public String logout(HttpSession session) {
 
-        session.removeAttribute("sessionedUser");
+        HttpSessionUtils.removeSession(session);
 
         return "redirect:/";
     }
@@ -117,7 +117,7 @@ public class UserController {
     }
 
     @PostMapping("/{id}")
-    public String userUpdate(@PathVariable Long id, User newUser, HttpSession session){
+    public String update(@PathVariable Long id, User newUser, HttpSession session){
 
         User sessionedUser = (User)session.getAttribute("sessionedUser");
 

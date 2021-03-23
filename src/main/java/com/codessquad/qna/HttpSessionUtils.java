@@ -3,6 +3,7 @@ package com.codessquad.qna;
 import com.codessquad.qna.domain.User;
 
 import javax.servlet.http.HttpSession;
+import javax.websocket.Session;
 
 public class HttpSessionUtils {
 
@@ -28,5 +29,10 @@ public class HttpSessionUtils {
     public static void setUserSessionKey(HttpSession session, User user) {
 
         session.setAttribute(USER_SESSION_KEY, user);
+    }
+
+    public static void removeSession(HttpSession session) {
+
+        session.removeAttribute(USER_SESSION_KEY);
     }
 }
