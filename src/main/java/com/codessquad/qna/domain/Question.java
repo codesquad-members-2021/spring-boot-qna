@@ -6,6 +6,7 @@ import java.time.format.DateTimeFormatter;
 
 @Entity
 public class Question {
+    private static final DateTimeFormatter DATE_TIME_FORMAT = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -54,7 +55,7 @@ public class Question {
     }
 
     public String getFormattedDateTime() {
-        return createdDateTime.format(DateTimeFormatter.ISO_LOCAL_DATE_TIME);
+        return createdDateTime.format(DATE_TIME_FORMAT);
     }
 
     public boolean userConfirmation(User loginUser) {
