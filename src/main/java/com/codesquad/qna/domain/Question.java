@@ -1,6 +1,7 @@
 package com.codesquad.qna.domain;
 
 import com.codesquad.qna.util.DateTimeUtils;
+import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
@@ -8,6 +9,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
+@Where(clause = "deleted = false")
 public class Question {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -26,8 +28,11 @@ public class Question {
 
     private LocalDateTime createdDateTime;
 
+    private boolean deleted;
+
     @OneToMany(mappedBy = "question")
     @OrderBy("id ASC")
+    @Where(clause = "deleted = false")
     private List<Answer> answers;
 
     public Question(User writer, String title, String contents) {
@@ -79,5 +84,9 @@ public class Question {
 
     public boolean isSameWriter(User sessionedUser) {
         return this.writer.equals(sessionedUser);
+    }
+
+    public void delete() {
+        deleted = true;
     }
 }
