@@ -1,6 +1,7 @@
 package com.codessquad.qna.domain;
 
 import javax.persistence.*;
+import java.security.MessageDigest;
 import java.util.Objects;
 
 @Entity
@@ -75,11 +76,6 @@ public class User {
         User user = (User) object;
         return Objects.equals(getUserId(), user.getUserId());
     }// 해당 이퀄즈 오버라이딩은 id가 동일한지만을 검사함
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(getUserId());
-    }
 
     @Override
     public String toString() {

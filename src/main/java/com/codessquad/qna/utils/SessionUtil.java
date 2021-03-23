@@ -4,10 +4,25 @@ import com.codessquad.qna.domain.User;
 import com.codessquad.qna.exception.NotFoundException;
 
 import javax.servlet.http.HttpSession;
+import java.security.MessageDigest;
 
 public class SessionUtil {
 
-    private static final String SESSION_KEY_LOGIN_USER = "loginUser";
+    private static String SESSION_KEY_LOGIN_USER;
+
+    private static String generateSessionKey(User user) throws Exception {
+        StringBuffer stringBuffer = new StringBuffer();
+        MessageDigest mDigest = MessageDigest.getInstance("MD5");
+
+        mDigest.update((user.getUserId() + Long.toString(user.getId())).getBytes());
+        byte[] msgStr = mDigest.digest() ;
+
+        for(int i=0; i < msgStr.length; i++){
+            String tmpEncTxt = Integer.toHexString((int)msgStr[i] & 0x00ff) ;
+            stringBuffer.append(tmpEncTxt) ;
+        }
+        return stringBuffer.toString() ;
+    }
 
     private SessionUtil() {
 
@@ -26,7 +41,13 @@ public class SessionUtil {
     }
 
     public static void setLoginUser(HttpSession session, User user) {
-        session.setAttribute(SESSION_KEY_LOGIN_USER, user);
+        try {
+            SESSION_KEY_LOGIN_USER = generateSessionKey(user);
+            session.setAttribute(SESSION_KEY_LOGIN_USER, user);
+        }
+        catch (Exception e) {
+
+        }
     }
 
     public static void removeLoginUser(HttpSession session) {
