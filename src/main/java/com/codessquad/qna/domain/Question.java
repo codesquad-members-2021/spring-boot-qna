@@ -21,7 +21,7 @@ public class Question {
     @Column(nullable = false, length = 5000)
     private String contents;
 
-    private LocalDateTime createdDate;
+    private LocalDateTime creationDate;
 
     private final String PATTERN_FORMAT = "yyyy.MM.dd HH:mm:ss";
 
@@ -31,14 +31,14 @@ public class Question {
     public Question(String writer, String title, String contents) {
         this.title = title;
         this.contents = contents;
-        this.createdDate = LocalDateTime.now();
+        this.creationDate = LocalDateTime.now();
     }
 
     public String getFormattedCreatedDate() {
-        if (createdDate == null) {
+        if (creationDate == null) {
             return "";
         }
-        return createdDate.format(DateTimeFormatter.ofPattern(PATTERN_FORMAT));
+        return creationDate.format(DateTimeFormatter.ofPattern(PATTERN_FORMAT));
     }
 
     public Long getId() {
