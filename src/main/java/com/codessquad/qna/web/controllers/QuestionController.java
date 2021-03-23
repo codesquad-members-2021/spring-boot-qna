@@ -10,18 +10,15 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
-import java.util.*;
 
 @Controller
 @RequestMapping("/questions")
 public class QuestionController {
 
     private final QuestionService questionService;
-    private final AnswerService answerService;
 
-    private QuestionController(QuestionService questionService, AnswerService answerService) {
+    private QuestionController(QuestionService questionService) {
         this.questionService = questionService;
-        this.answerService = answerService;
     }
 
     @GetMapping("/form")
@@ -48,7 +45,7 @@ public class QuestionController {
     public String showQuestion(@PathVariable("id") Long id, Model model) {
         Question question = questionService.findById(id);
         model.addAttribute("question", question);
-        model.addAttribute("answers", answerService.findByQuestionId(id));
+        model.addAttribute("answers", questionService.findAnswersByQuestionId(id));
         return "qna/show";
     }
 
@@ -56,7 +53,6 @@ public class QuestionController {
     public String showUpdateForm(@PathVariable Long id, Model model, HttpSession session) {
         Question question = questionService.findById(id);
         User writer = question.getWriter();
-
         User sessionedUser = SessionUtility.findSessionedUser(session);
         SessionUtility.verifySessionUser(sessionedUser, writer, "본인이 작성한 글만 수정할 수 있습니다.");
 
