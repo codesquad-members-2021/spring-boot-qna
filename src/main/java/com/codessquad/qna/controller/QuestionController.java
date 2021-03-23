@@ -2,6 +2,7 @@ package com.codessquad.qna.controller;
 
 import com.codessquad.qna.entity.Question;
 import com.codessquad.qna.entity.User;
+import com.codessquad.qna.exception.NotAuthorizedException;
 import com.codessquad.qna.exception.UserNotFoundInSessionException;
 import com.codessquad.qna.service.QuestionService;
 import com.codessquad.qna.util.HttpSessionUtil;
@@ -70,8 +71,8 @@ public class QuestionController {
     @GetMapping("/{id}/form")
     public String updateForm(@PathVariable int id, Model model, HttpSession session) {
         Question question = questionService.getQuestion(id);
-        if (HttpSessionUtil.isAuthorized(question.getWriter().getId(), session)) {
-            throw new IllegalStateException("자신의 글만 수정할 수 있습니다.");
+        if (!HttpSessionUtil.isAuthorized(question.getWriter().getId(), session)) {
+            throw new NotAuthorizedException();
         }
         model.addAttribute("question", question);
         return "/qna/updateForm";
