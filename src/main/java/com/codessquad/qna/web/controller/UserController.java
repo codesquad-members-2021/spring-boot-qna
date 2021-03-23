@@ -1,6 +1,7 @@
 package com.codessquad.qna.web.controller;
 
 import com.codessquad.qna.web.HttpSessionUtils;
+import com.codessquad.qna.web.domain.Question;
 import com.codessquad.qna.web.domain.User;
 import com.codessquad.qna.web.exception.IllegalAccessException;
 import com.codessquad.qna.web.exception.NotLoginException;
@@ -62,30 +63,16 @@ public class UserController {
 
     @GetMapping("/{id}/form")
     public String getUpdateForm(@PathVariable long id, Model model, HttpSession session) {
-        if (!HttpSessionUtils.isLoginUser(session)) {
-            throw new NotLoginException();
-        }
-
-        User loginUser = HttpSessionUtils.getSessionedUser(session);
-        if (!loginUser.isSameId(id)) {
-            throw new IllegalAccessException();
-        }
-
-        model.addAttribute("user", loginUser);
+        checkLogin(session);
+        model.addAttribute("user", validateAndGetUser(id, session));
         return "/user/updateForm";
     }
 
     @PutMapping("/{id}")
     public String updateUser(@PathVariable long id, String testPassword, User user, HttpSession session, Model model) {
-        if (!HttpSessionUtils.isLoginUser(session)) {
-            throw new NotLoginException();
-        }
+        checkLogin(session);
 
-        User loginUser = HttpSessionUtils.getSessionedUser(session);
-        if (!loginUser.isSameId(id)) {
-            throw new IllegalAccessException();
-        }
-
+        User loginUser = validateAndGetUser(id, session);
         if(!userService.isMatchingPassword(user, testPassword)) {
             model.addAttribute("errorMessage", "비밀번호가 틀렸습니다");
             return "/user/formWithError";
@@ -93,5 +80,19 @@ public class UserController {
 
         userService.updateUser(testPassword, loginUser, user);
         return "redirect:/users";
+    }
+
+    private void checkLogin(HttpSession session) {
+        if (!HttpSessionUtils.isLoginUser(session)) {
+            throw new NotLoginException();
+        }
+    }
+
+    private User validateAndGetUser(long id, HttpSession session) {
+        User loginUser = HttpSessionUtils.getSessionedUser(session);
+        if (!loginUser.isSameId(id)) {
+            throw new IllegalAccessException();
+        }
+        return loginUser;
     }
 }

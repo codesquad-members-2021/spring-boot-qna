@@ -27,11 +27,10 @@ public class AnswerController {
         this.answerService = answerService;
         this.questionService = questionService;
     }
+
     @PostMapping
     public String createAnswer(@PathVariable long questionId, String contents, HttpSession session) {
-        if(!HttpSessionUtils.isLoginUser(session)) {
-            throw new NotLoginException();
-        }
+        checkLogin(session);
         Question question = questionService.findQuestion(questionId);
         answerService.postAnswer(HttpSessionUtils.getSessionedUser(session), question, contents);
         return String.format("redirect:/questions/%d", questionId);
@@ -39,17 +38,22 @@ public class AnswerController {
 
     @DeleteMapping("/{id}")
     public String deleteAnswer(@PathVariable("questionId") long questionId, @PathVariable("id") long id, HttpSession session) {
-        if(!HttpSessionUtils.isLoginUser(session)) {
+        checkLogin(session);
+        answerService.deleteAnswer(validateAndGetAnswer(id, session));
+        return "redirect:/questions/{questionId}";
+    }
+
+    private void checkLogin(HttpSession session) {
+        if (!HttpSessionUtils.isLoginUser(session)) {
             throw new NotLoginException();
         }
+    }
 
+    private Answer validateAndGetAnswer(long id, HttpSession session) {
         Answer answer = answerService.findAnswer(id);
         if(!answer.isSameWriter(HttpSessionUtils.getSessionedUser(session))) {
             throw new IllegalAccessException();
         }
-
-        answerService.deleteAnswer(answer);
-        return "redirect:/questions/{questionId}";
+        return answer;
     }
-
 }

@@ -22,17 +22,13 @@ public class QuestionController {
 
     @GetMapping("/form")
     public String getQuestionForm(HttpSession session) {
-        if (!HttpSessionUtils.isLoginUser(session)) {
-            throw new NotLoginException();
-        }
+        checkLogin(session);
         return "/qna/form";
     }
 
     @PostMapping
     public String createQuestion(Question question, HttpSession session) {
-        if (!HttpSessionUtils.isLoginUser(session)) {
-            throw new NotLoginException();
-        }
+        checkLogin(session);
 
         questionService.postQuestion(question, HttpSessionUtils.getSessionedUser(session));
         return "redirect:/questions";
@@ -52,46 +48,36 @@ public class QuestionController {
 
     @GetMapping("/{id}/form")
     public String getUpdateForm(@PathVariable long id, HttpSession session, Model model) {
-        if (!HttpSessionUtils.isLoginUser(session)) {
-            throw new NotLoginException();
-        }
-
-        Question originQuestion = questionService.findQuestion(id);
-        if (!originQuestion.isSameWriter(HttpSessionUtils.getSessionedUser(session))) {
-            throw new IllegalAccessException();
-        }
-
-        model.addAttribute("question", originQuestion);
+        checkLogin(session);
+        model.addAttribute("question", validateAndGetQuestion(id, session));
         return "/qna/updateForm";
     }
 
     @PutMapping("/{id}")
     public String updateQuestion(@PathVariable long id, Question question, HttpSession session) {
-        if (!HttpSessionUtils.isLoginUser(session)) {
-            throw new NotLoginException();
-        }
-
-        Question originQuestion = questionService.findQuestion(id);
-        if (!originQuestion.isSameWriter(HttpSessionUtils.getSessionedUser(session))) {
-            throw new IllegalAccessException();
-        }
-
-        questionService.updateQuestion(originQuestion, question);
+        checkLogin(session);
+        questionService.updateQuestion(validateAndGetQuestion(id, session), question);
         return "redirect:/questions/";
     }
 
     @DeleteMapping("/{id}")
     public String deleteQuestion(@PathVariable long id, HttpSession session) {
+        checkLogin(session);
+        questionService.deleteQuestion(validateAndGetQuestion(id, session));
+        return "redirect:/questions";
+    }
+
+    private void checkLogin(HttpSession session) {
         if (!HttpSessionUtils.isLoginUser(session)) {
             throw new NotLoginException();
         }
+    }
 
+    private Question validateAndGetQuestion(long id, HttpSession session) {
         Question originQuestion = questionService.findQuestion(id);
         if (!originQuestion.isSameWriter(HttpSessionUtils.getSessionedUser(session))) {
             throw new IllegalAccessException();
         }
-
-        questionService.deleteQuestion(originQuestion);
-        return "redirect:/questions";
+        return originQuestion;
     }
 }
