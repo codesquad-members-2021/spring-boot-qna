@@ -7,7 +7,7 @@ import javax.servlet.http.HttpSession;
 
 public class SessionUtil {
 
-    public static final String SESSION_KEY_LOGIN_USER = "loginUser";
+    private static final String SESSION_KEY_LOGIN_USER = "loginUser";
 
     private SessionUtil() {
 

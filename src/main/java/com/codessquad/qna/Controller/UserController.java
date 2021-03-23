@@ -1,5 +1,6 @@
 package com.codessquad.qna.Controller;
 
+import javax.servlet.http.HttpSession;
 import com.codessquad.qna.domain.User;
 import com.codessquad.qna.domain.UserRepository;
 import org.slf4j.Logger;
@@ -7,11 +8,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-
-import javax.servlet.http.HttpSession;
-
-import static com.codessquad.qna.utils.SessionUtil.SESSION_KEY_LOGIN_USER;
+import static com.codessquad.qna.utils.SessionUtil.getLoginUser;
 import static com.codessquad.qna.utils.SessionUtil.removeLoginUser;
+import static com.codessquad.qna.utils.SessionUtil.setLoginUser;
 
 @Controller
 @RequestMapping("/user")
@@ -58,7 +57,8 @@ public class UserController {
 
     @PutMapping("/{id}")
     public String updateUser(@PathVariable Long id, String pastPassword, User updatedUser, HttpSession session) throws Exception {
-        User sessionUser = (User) session.getAttribute(SESSION_KEY_LOGIN_USER);
+
+        User sessionUser = getLoginUser(session);
         User currentUser = userRepository.findById(id).orElseThrow(() -> new Exception("데이터 검색에 실패하였습니다"));
 
         if (!currentUser.isMatchingPassword(pastPassword)) {
@@ -83,7 +83,7 @@ public class UserController {
     @GetMapping("/{id}/form")
     public String getUserUpdateForm(@PathVariable Long id, Model model, HttpSession session) throws Exception {
 
-        User loginUser = (User) session.getAttribute(SESSION_KEY_LOGIN_USER);
+        User loginUser = getLoginUser(session);
         model.addAttribute("user", loginUser);
 
         return "user/updateForm";
@@ -108,7 +108,7 @@ public class UserController {
             return "redirect:/user/form";
         }
         logger.info("Login Success");
-        session.setAttribute(SESSION_KEY_LOGIN_USER, foundUser);
+        setLoginUser(session, foundUser);
 
         return "redirect:/";
     }
