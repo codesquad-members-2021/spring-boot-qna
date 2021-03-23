@@ -27,16 +27,20 @@ public class UserService {
         this.userRepository = userRepository;
     }
 
-    public void save(User user, boolean update) {
+    public void save(User user) {
+        user = Optional.ofNullable(user).orElseThrow(IllegalArgumentException::new);
+        duplicateCheck(user);
+        userRepository.save(user);
+    }
+
+    public void duplicateCheck(User user) {
         AtomicBoolean duplicateCheck = new AtomicBoolean(false); //m 멀티스레드 환경에서 경쟁상태가 발생할 수 있으므로, 람다식 내부에서 지역변수(boolean)는 수정이 불가능하다.
         userRepository.findByUserId(user.getUserId())
                 .ifPresent(u -> {
                     duplicateCheck.set(true); // ID 중복 발생
                 });
-        if (duplicateCheck.get() && !update) {  // 중복이면서, 업데이트가 아닐때 예외발생, AtomicBoolean을 처음써봐서 이런식으로 해도 되는건지 잘 모르겠다.
+        if (duplicateCheck.get()) {  // 중복일때 예외발생, AtomicBoolean을 처음써봐서 이런식으로 해도 되는건지 잘 모르겠다.
             throw new DuplicateException();
-        } else {
-            userRepository.save(user);
         }
     }
 
@@ -59,6 +63,7 @@ public class UserService {
             throw new IncorrectAccountException("타인의 정보는 열람할 수 없습니다.");
         }
     }
+
     public void authenticateOfPw(User selectedUser, User loginUser) {
         selectedUser = Optional.ofNullable(selectedUser).orElseThrow(IllegalArgumentException::new);
         loginUser = Optional.ofNullable(loginUser).orElseThrow(IllegalArgumentException::new);
@@ -75,7 +80,7 @@ public class UserService {
         }
     }
 
-    public User update(User originUserData, User updateUserData) {
+    public void update(User originUserData, User updateUserData) {
         originUserData = Optional.ofNullable(originUserData).orElseThrow(IllegalArgumentException::new);
 
         authenticateOfId(originUserData, updateUserData);
@@ -84,6 +89,7 @@ public class UserService {
         originUserData.setName(updateUserData.getName());
         originUserData.setPassword(updateUserData.getNewPassword());
         originUserData.setEmail(updateUserData.getEmail());
-        return originUserData;
+
+        userRepository.save(originUserData);
     }
 }

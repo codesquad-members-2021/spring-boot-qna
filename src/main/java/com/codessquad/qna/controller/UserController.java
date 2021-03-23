@@ -18,8 +18,6 @@ import java.util.Optional;
 public class UserController {
 
     private final UserService userService;
-    public final static boolean UPDATE_FALSE = false;
-    public final static boolean UPDATE_TRUE = true;
 
     public UserController(UserService userService) {
         this.userService = userService;
@@ -27,8 +25,7 @@ public class UserController {
 
     @PostMapping("/user/create")
     private String save(User user) {
-        user = Optional.ofNullable(user).orElseThrow(IllegalArgumentException::new);
-        userService.save(user, UPDATE_FALSE);
+        userService.save(user);
         return "redirect:/users";
     }
 
@@ -60,7 +57,7 @@ public class UserController {
         updateUserData = Optional.ofNullable(updateUserData).orElseThrow(IllegalArgumentException::new);
         updateUserData.setPrimaryKey(primaryKey);
 
-        userService.save(userService.update(originUserData, updateUserData), UPDATE_TRUE);
+        userService.update(originUserData, updateUserData);
         model.addAttribute("users", userService.getList());
         return "redirect:/users";
     }
