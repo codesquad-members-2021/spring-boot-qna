@@ -55,7 +55,7 @@ public class QuestionController {
     @GetMapping("/list")
     public String showQuestionList(Model model) {
         model.addAttribute("questionList", questionRepostory.findAll());
-        return "qna/list";
+        return "/qna/list";
     }
 
     @GetMapping("/{id}")
