@@ -1,18 +1,17 @@
 package com.codessquad.qna.controller;
 
+import com.codessquad.qna.exception.UserNotFoundException;
 import com.codessquad.qna.repository.User;
 import com.codessquad.qna.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpSession;
-import java.util.Optional;
 
 @Controller
-@RequestMapping("/user")
+@RequestMapping("/users")
 public class UserController {
 
     @Autowired
@@ -20,35 +19,34 @@ public class UserController {
 
     @GetMapping
     public String userList(Model model) {
-        Iterable<User> users = userRepository.findAll();
-        model.addAttribute("users", users);
-        return "userList";
+        model.addAttribute("users", userRepository.findAll());
+        return "user/userList";
     }
 
-    @GetMapping("/new")
+    @GetMapping("/signup")
     public String signupPage() {
-        return "userSignup";
+        return "user/userSignup";
     }
 
-    @PostMapping
+    @PostMapping("/signup")
     public String signup(User user) {
         userRepository.save(user);
-        return "redirect:/user";
+        return "redirect:/users";
     }
 
-    @GetMapping("/loginForm")
+    @GetMapping("/login")
     public String loginForm() {
-        return "loginForm";
+        return "user/loginForm";
     }
 
     @PostMapping("/login")
     public String login(String userId, String password, HttpSession session) {
         User user = userRepository.findByUserId(userId);
         if (user == null) {
-            return "redirect:/user/loginForm";
+            return "redirect:/users/login";
         }
         if (!password.equals(user.getPassword())) {
-            return "redirect:/user/loginForm";
+            return "redirect:/users/login";
         }
         System.out.println("Login Success!");
         session.setAttribute("sessionedUser", user);
@@ -64,46 +62,43 @@ public class UserController {
     }
 
     @GetMapping("/{id}")
-    public ModelAndView userProfile(@PathVariable Long id) {
-        ModelAndView modelAndView = new ModelAndView("userProfile");
-        modelAndView.addObject("user", userRepository.findById(id).get());
-        return modelAndView;
+    public String userProfile(@PathVariable Long id, Model model) {
+        model.addAttribute("user", userRepository.findById(id).orElseThrow(UserNotFoundException::new));
+        return "user/userProfile";
     }
 
-    @GetMapping("/{id}/password-check")
+    @GetMapping("/password")
     public String passwordCheckPage(Model model, HttpSession session) {
         User sessionedUser = (User) session.getAttribute("sessionedUser");
         if (sessionedUser == null) {
             return "loginForm";
         }
-        User user = userRepository.findById(sessionedUser.getId()).orElseGet(User::new);
+        User user = userRepository.findById(sessionedUser.getId()).orElseThrow(UserNotFoundException::new);
         model.addAttribute("user", user);
-        return "passwordCheckForm";
+        return "user/passwordCheckForm";
     }
 
-    @PostMapping("/{id}/password-check")
+    @PostMapping("/password")
     public String checkPassword(User targetUser, Model model, HttpSession session) {
         User sessionedUser = (User) session.getAttribute("sessionedUser");
         if (sessionedUser == null) {
             return "loginForm";
         }
-        User user = userRepository.findById(sessionedUser.getId()).orElseGet(User::new);
+        User user = userRepository.findById(sessionedUser.getId()).orElseThrow(UserNotFoundException::new);
         String passwordBefore = user.getPassword();
         if (passwordBefore.equals(targetUser.getPassword())) {
             model.addAttribute("user", user);
-            return "userUpdateForm";
+            return "user/userUpdateForm";
         }
         return "redirect:/";
     }
 
     @PutMapping("/{id}")
     public String updateUser(@PathVariable("id") Long id, User targetUser) {
-        User user = userRepository.findById(id).orElseGet(User::new);
-        user.setPassword(targetUser.getPassword());
-        user.setName(targetUser.getName());
-        user.setEmail(targetUser.getEmail());
+        User user = userRepository.findById(id).orElseThrow(UserNotFoundException::new);
+        user.update(targetUser);
         userRepository.save(user);
-        return "redirect:/user";
+        return "redirect:/users";
     }
 }
 

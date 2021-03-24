@@ -1,11 +1,11 @@
 <!DOCTYPE html>
 <html lang="kr">
 <head>
-    {{> header}}
+    {{> partial/header}}
 </head>
 <body>
-{{> navbarMain}}
-{{> navbarSub}}
+{{> partial/navbarMain}}
+{{> partial/navbarSub}}
 <div class="container" id="main">
     <div class="col-md-12 col-sm-12 col-lg-10 col-lg-offset-1">
         <div class="panel panel-default qna-list">
@@ -20,7 +20,7 @@
                             <div class="auth-info">
                                 <i class="icon-add-comment"></i>
                                 <span class="time">{{dateTime}}</span>
-                                <a href="../static/user/profile.html" class="author">{{writer}}</a>
+                                <a href="/users/{{id}}" class="author">{{writer}}</a>
                             </div>
                             <div class="reply" title="댓글">
                                 <i class="icon-reply"></i>
@@ -45,7 +45,7 @@
                     </ul>
                 </div>
                 <div class="col-md-3 qna-write">
-                    <a href="/questions/new" class="btn btn-primary pull-right" role="button">질문하기</a>
+                    <a href="/questions/form" class="btn btn-primary pull-right" role="button">질문하기</a>
                 </div>
             </div>
         </div>
@@ -129,6 +129,6 @@
 </div>
 -->
 
-{{> footer}}
+{{> partial/footer}}
 </body>
 </html>

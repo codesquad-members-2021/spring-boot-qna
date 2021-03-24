@@ -17,6 +17,12 @@ public class User {
     @Column(nullable = false)
     private String email;
 
+    public void update(User user) {
+        this.password = user.getPassword();
+        this.name = user.getName();
+        this.email = user.getEmail();
+    }
+
     public Long getId() {
         return id;
     }
