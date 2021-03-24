@@ -59,8 +59,8 @@ public class QuestionController {
     }
 
     @GetMapping("/{id}")
-    public String showDetailQuestion(@PathVariable Long id, Model model) throws Exception {
-        Question currentQuestion = questionRepostory.findById(id).orElseThrow(() -> new Exception("데이터 검색에 실패하였습니다"));
+    public String showDetailQuestion(@PathVariable Long id, Model model) {
+        Question currentQuestion = questionRepostory.findById(id).orElseThrow(NotFoundException::new);
         List<Answer> answerList = answerRepository.findByQuestionId(id);
         model.addAttribute("question", currentQuestion);
         model.addAttribute("answerList", answerList);
@@ -69,8 +69,8 @@ public class QuestionController {
     }
 
     @PutMapping("/{id}")
-    public String updateQuestion(@PathVariable Long id, String title, String contents) throws Exception {
-        Question question = questionRepostory.findById(id).orElseThrow(() -> new Exception("데이터 검색에 실패하였습니다"));
+    public String updateQuestion(@PathVariable Long id, String title, String contents) {
+        Question question = questionRepostory.findById(id).orElseThrow(NotFoundException::new);
         question.update(title, contents);
         questionRepostory.save(question);
         logger.info("update Question : {id}", id);
