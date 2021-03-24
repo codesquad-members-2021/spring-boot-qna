@@ -27,9 +27,8 @@ public class AnswerService {
     public void create(long questionId, String contents, User loginUser) {
         Question question = getQuestionById(questionId);
 
-        Answer answer = new Answer.Builder()
-                .writer(loginUser)
-                .question(question)
+        Answer answer = new Answer
+                .Builder(loginUser, question)
                 .contents(contents)
                 .build();
 

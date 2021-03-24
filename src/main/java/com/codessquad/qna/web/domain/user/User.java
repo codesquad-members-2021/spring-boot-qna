@@ -113,11 +113,12 @@ public class User {
     static public class Builder {
         private String userId;
         private String password;
-        private String name;
-        private String email;
+        private String name = "unknown";
+        private String email = "unknown";
 
-        public Builder() {
-
+        public Builder(String userId, String password) {
+            this.userId = userId;
+            this.password = password;
         }
 
         public Builder(User user) {
@@ -125,16 +126,6 @@ public class User {
             this.password = user.password;
             this.name = user.name;
             this.email = user.email;
-        }
-
-        public Builder userId(String userId) {
-            this.userId = userId;
-            return this;
-        }
-
-        public Builder password(String password) {
-            this.password = password;
-            return this;
         }
 
         public Builder name(String name) {

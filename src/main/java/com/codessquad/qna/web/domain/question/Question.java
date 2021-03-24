@@ -101,11 +101,11 @@ public class Question {
 
     static public class Builder {
         private User writer;
-        private String title;
-        private String contents;
+        private String title = "";
+        private String contents = "";
 
-        public Builder() {
-
+        public Builder(User writer) {
+            this.writer = writer;
         }
 
         public Builder(Question question) {
@@ -114,10 +114,6 @@ public class Question {
             this.contents = question.contents;
         }
 
-        public Builder writer(User writer){
-            this.writer = writer;
-            return this;
-        }
         public Builder title(String title){
             this.title = title;
             return this;

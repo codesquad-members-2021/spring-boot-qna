@@ -19,8 +19,7 @@ public class QuestionRequest {
 
 
     public Question toEntity(User writer) {
-        return new Question.Builder()
-                .writer(writer)
+        return new Question.Builder(writer)
                 .title(title)
                 .contents(contents)
                 .build();

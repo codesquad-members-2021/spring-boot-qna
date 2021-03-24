@@ -1,6 +1,7 @@
 package com.codessquad.qna.web.controller;
 
 import com.codessquad.qna.web.domain.user.User;
+import com.codessquad.qna.web.dto.user.CreateUserRequest;
 import com.codessquad.qna.web.service.AnswerService;
 import com.codessquad.qna.web.utils.SessionUtils;
 import org.springframework.stereotype.Controller;

@@ -83,26 +83,17 @@ public class Answer {
     static public class Builder {
         private User writer;
         private Question question;
-        private String contents;
+        private String contents = "";
 
-        public Builder() {
-
+        public Builder(User writer, Question question) {
+            this.writer = writer;
+            this.question = question;
         }
 
         public Builder(Answer answer) {
             this.writer = answer.writer;
             this.question = answer.question;
             this.contents = answer.contents;
-        }
-
-        public Builder writer(User writer) {
-            this.writer = writer;
-            return this;
-        }
-
-        public Builder question(Question question) {
-            this.question = question;
-            return this;
         }
 
         public Builder contents(String contents) {
