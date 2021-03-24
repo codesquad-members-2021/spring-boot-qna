@@ -7,10 +7,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.ModelAndView;
 
 @Controller
-@RequestMapping("/user")
+@RequestMapping("/users")
 public class UserController {
 
     @Autowired
@@ -19,41 +18,40 @@ public class UserController {
     @GetMapping
     public String userList(Model model) {
         model.addAttribute("users", userRepository.findAll());
-        return "userList";
+        return "user/userList";
     }
 
-    @GetMapping("/new")
+    @GetMapping("/signup")
     public String signupPage() {
-        return "userSignup";
+        return "user/userSignup";
     }
 
-    @PostMapping
+    @PostMapping("/signup")
     public String signup(User user) {
         userRepository.save(user);
-        return "redirect:/user";
+        return "redirect:/users";
     }
 
     @GetMapping("/{id}")
-    public ModelAndView userProfile(@PathVariable Long id) {
-        ModelAndView modelAndView = new ModelAndView("userProfile");
-        modelAndView.addObject("user", userRepository.findById(id).orElseThrow(UserNotFoundException::new));
-        return modelAndView;
+    public String userProfile(@PathVariable Long id, Model model) {
+        model.addAttribute("user", userRepository.findById(id).orElseThrow(UserNotFoundException::new));
+        return "user/userProfile";
     }
 
-    @GetMapping("/{id}/password-check")
+    @GetMapping("/{id}/password")
     public String passwordCheckPage(@PathVariable("id") Long id, Model model) {
         User user = userRepository.findById(id).orElseThrow(UserNotFoundException::new);
         model.addAttribute("user", user);
-        return "passwordCheckForm";
+        return "user/passwordCheckForm";
     }
 
-    @PostMapping("/{id}/password-check")
+    @PostMapping("/{id}/password")
     public String checkPassword(@PathVariable("id") Long id, User targetUser, Model model) {
         User user = userRepository.findById(id).orElseThrow(UserNotFoundException::new);
         String passwordBefore = user.getPassword();
         if (passwordBefore.equals(targetUser.getPassword())) {
             model.addAttribute("user", user);
-            return "userUpdateForm";
+            return "user/userUpdateForm";
         }
         return "redirect:/";
     }
@@ -63,7 +61,7 @@ public class UserController {
         User user = userRepository.findById(id).orElseThrow(UserNotFoundException::new);
         user.update(targetUser);
         userRepository.save(user);
-        return "redirect:/user";
+        return "redirect:/users";
     }
 }
 

@@ -1,11 +1,11 @@
 <!DOCTYPE html>
 <html lang="kr">
 <head>
-    {{> header}}
+    {{> partial/header}}
 </head>
 <body>
-{{> navbarMain}}
-{{> navbarSub}}
+{{> partial/navbarMain}}
+{{> partial/navbarSub}}
 <div class="container" id="main">
     <div class="col-md-6 col-md-offset-3">
         <div class="panel panel-default">
@@ -14,7 +14,7 @@
                 <div class="well well-sm">
                     <div class="media">
                         <a class="thumbnail pull-left" href="#">
-                            <img class="media-object" src="../static/images/80-text.png">
+                            <img class="media-object" src="../../static/images/80-text.png">
                         </a>
                         <div class="media-body">
                             <h4 class="media-heading">{{user.name}}</h4>
@@ -30,6 +30,6 @@
     </div>
 </div>
 
-{{> footer}}
+{{> partial/footer}}
 </body>
 </html>
