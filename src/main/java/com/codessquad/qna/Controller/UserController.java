@@ -99,7 +99,7 @@ public class UserController {
 
     @PostMapping("/login")
     public String loginProcess(String userId, String password, HttpSession session) {
-        User foundUser = (User)userRepository.findByUserId(userId).get(); //get 안티패턴 수정해야함@@@@@@@@@@@@
+        User foundUser = (User)userRepository.findByUserId(userId); //get 안티패턴 수정해야함@@@@@@@@@@@@
 
         if (!foundUser.isMatchingPassword(password)) {
             logger.info("Login Failure : wrong password");
