@@ -1,7 +1,7 @@
 package com.codessquad.qna.service;
 
 import com.codessquad.qna.entity.User;
-import com.codessquad.qna.exception.UserNotFoundException;
+import com.codessquad.qna.exception.NotFoundException;
 import com.codessquad.qna.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -31,7 +31,7 @@ public class UserService {
     }
 
     public void updateUser(User user) {
-        User toUpdate = userRepository.findByUserId(user.getUserId()).orElseThrow(UserNotFoundException::new);
+        User toUpdate = userRepository.findByUserId(user.getUserId()).orElseThrow(() -> new NotFoundException("사용자를 찾을 수 없습니다"));
         if (toUpdate.verify(user)) {
             toUpdate.update(user);
             userRepository.save(toUpdate);
@@ -39,10 +39,10 @@ public class UserService {
     }
 
     public User getUser(long id) {
-        return userRepository.findById(id).orElseThrow(UserNotFoundException::new);
+        return userRepository.findById(id).orElseThrow(() -> new NotFoundException(id + " 사용자를 찾을 수 없습니다"));
     }
 
     public User getUser(String userId) {
-        return userRepository.findByUserId(userId).orElseThrow(UserNotFoundException::new);
+        return userRepository.findByUserId(userId).orElseThrow(() -> new NotFoundException("사용자를 찾을 수 없습니다"));
     }
 }

@@ -4,7 +4,7 @@ import com.codessquad.qna.entity.Question;
 import com.codessquad.qna.entity.User;
 import com.codessquad.qna.exception.CannotDeleteQuestionException;
 import com.codessquad.qna.exception.NotAuthorizedException;
-import com.codessquad.qna.exception.QuestionNotFoundException;
+import com.codessquad.qna.exception.NotFoundException;
 import com.codessquad.qna.repository.QuestionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -54,6 +54,6 @@ public class QuestionService {
     }
 
     public Question getQuestion(long id) {
-        return questionRepository.findById(id).orElseThrow(QuestionNotFoundException::new);
+        return questionRepository.findById(id).orElseThrow(() -> new NotFoundException(id + " 질문을 찾을 수 없습니다."));
     }
 }

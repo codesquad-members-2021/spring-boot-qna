@@ -2,7 +2,7 @@ package com.codessquad.qna.controller;
 
 import com.codessquad.qna.entity.User;
 import com.codessquad.qna.exception.NotAuthorizedException;
-import com.codessquad.qna.exception.UserNotFoundException;
+import com.codessquad.qna.exception.NotFoundException;
 import com.codessquad.qna.service.UserService;
 import com.codessquad.qna.util.HttpSessionUtils;
 import org.slf4j.Logger;
@@ -84,7 +84,7 @@ public class UserController {
                 return "redirect:/";
             }
             return "redirect:/users/login/failed";
-        } catch (UserNotFoundException ex) {
+        } catch (NotFoundException ex) {
             return "redirect:/users/login/failed";
         }
     }
