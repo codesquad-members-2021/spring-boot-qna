@@ -73,20 +73,25 @@ public class Answer {
         return writer.isMatchingWriter(user);
     }
 
+    public static Builder build() {
+        return new Builder();
+    }
+
+    public static Builder build(User writer, Question question) {
+        return new Builder(writer, question);
+    }
+
     static public class Builder {
         private User writer;
         private Question question;
         private String contents = "";
 
-        public Builder(User writer, Question question) {
-            this.writer = writer;
-            this.question = question;
+        private Builder() {
         }
 
-        public Builder(Answer answer) {
-            this.writer = answer.writer;
-            this.question = answer.question;
-            this.contents = answer.contents;
+        private Builder(User writer, Question question) {
+            this.writer = writer;
+            this.question = question;
         }
 
         public Builder contents(String contents) {

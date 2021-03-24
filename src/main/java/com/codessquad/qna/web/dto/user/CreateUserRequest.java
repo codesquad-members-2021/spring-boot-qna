@@ -20,7 +20,7 @@ public class CreateUserRequest {
     }
 
     public User toEntity(){
-        return new User.Builder(userId, password)
+        return User.build(userId, password)
                 .name(name)
                 .email(email)
                 .build();

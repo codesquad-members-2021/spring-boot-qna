@@ -107,22 +107,27 @@ public class User {
                 '}';
     }
 
+    public static Builder build() {
+        return new Builder();
+    }
+
+    public static Builder build(String userId, String password) {
+        return new Builder(userId, password);
+    }
+
+
     static public class Builder {
         private String userId;
         private String password;
         private String name = "unknown";
         private String email = "unknown";
 
-        public Builder(String userId, String password) {
-            this.userId = userId;
-            this.password = password;
+        private Builder(){
         }
 
-        public Builder(User user) {
-            this.userId = user.userId;
-            this.password = user.password;
-            this.name = user.name;
-            this.email = user.email;
+        private Builder(String userId, String password) {
+            this.userId = userId;
+            this.password = password;
         }
 
         public Builder name(String name) {

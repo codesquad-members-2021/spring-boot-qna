@@ -94,17 +94,28 @@ public class Question {
                 '}';
     }
 
+    public static Builder build() {
+        return new Builder();
+    }
+
+    public static Builder build(User writer) {
+        return new Builder(writer);
+    }
+
 
     static public class Builder {
         private User writer;
         private String title = "";
         private String contents = "";
 
-        public Builder(User writer) {
+        private Builder() {
+        }
+
+        private Builder(User writer) {
             this.writer = writer;
         }
 
-        public Builder(Question question) {
+        private Builder(Question question) {
             this.writer = question.writer;
             this.title = question.title;
             this.contents = question.contents;
