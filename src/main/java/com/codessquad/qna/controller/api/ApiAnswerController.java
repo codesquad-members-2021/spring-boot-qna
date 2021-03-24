@@ -2,7 +2,6 @@ package com.codessquad.qna.controller.api;
 
 import com.codessquad.qna.domain.Answer;
 import com.codessquad.qna.service.AnswerService;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
@@ -27,10 +26,9 @@ public class ApiAnswerController {
     }
 
     @DeleteMapping("/{answerId}")
-    public String deleteAnswer(@PathVariable long answerId, HttpSession session, Model model) {
+    public Answer deleteAnswer(@PathVariable long answerId, HttpSession session) {
         checkSessionUser(session);
 
-        answerService.remove(getSessionUser(session), answerService.getOneById(answerId));
-        return "redirect:/questions/{questionId}";
+        return answerService.remove(getSessionUser(session), answerService.getOneById(answerId));
     }
 }

@@ -75,15 +75,11 @@
                                     <ul class="article-util-list">
                                         <li>
                                             <a class="link-modify-article"
-                                               href="/questions/413/answers/1405/form">수정</a>
+                                               href="/api/questions/{{questionId}}/answers/{{answerId}}">수정</a>
                                         </li>
                                         <li>
-                                            <form class="delete-answer-form"
-                                                  action="/questions/{{questionId}}/answers/{{answerId}}"
-                                                  method="POST">
-                                                <input type="hidden" name="_method" value="DELETE">
-                                                <button type="submit" class="delete-answer-button">삭제</button>
-                                            </form>
+                                            <a class="link-delete-answer"
+                                               href="/api/questions/{{questionId}}/answers/{{answerId}}">삭제</a>
                                         </li>
                                     </ul>
                                 </div>
@@ -122,14 +118,11 @@
         </div>
         <div class="article-util">
             <ul class="article-util-list">
-                <!--                <li>-->
-                <!--                    <a class="link-modify-article" href="/api/qna/updateAnswer/{3}">수정</a>-->
-                <!--                </li>-->
                 <li>
-                    <!--                    <form class="delete-answer-form" action="/api/questions/{3}/answers/{4}" method="POST">-->
-                    <input type="hidden" name="_method" value="DELETE">
-                    <button type="submit" class="delete-answer-button">삭제</button>
-                    </form>
+                    <a class="link-modify-article" href="/api/questions/{3}/answers/{4}">수정</a>
+                </li>
+                <li>
+                    <a class="link-delete-answer" href="/api/questions/{3}/answers/{4}">삭제</a>
                 </li>
             </ul>
         </div>

@@ -27,10 +27,42 @@ function onError(){
 function onSuccess(data, status){
     console.log(status, data);
     var answerTemplate = $("#answerTemplate").html();
-    var template = answerTemplate.format(data.writer.userId, data.formattedCreatedDate, data.contents);
+    var template = answerTemplate.format(data.writer.userId, data.formattedCreatedDate,
+                                        data.contents, data.question.questionId, data.answerId);
     $(".qna-comment-slipp-articles").prepend(template);
     $("textarea[name=contents]").val("");
 }
+
+//$(".link-delete-answer").click(deleteAnswer);
+$(".qna-comment-slipp-articles").on("click", "a.link-delete-answer", deleteAnswer);
+
+function deleteAnswer(e){
+    e.preventDefault();
+
+    console.log("click event");
+
+    var deleteBtn = $(this);
+    var url = $(this).attr("href");
+    console.log("url: " + url);
+
+    $.ajax({
+        type: 'delete',
+        url: url,
+        dataType: 'json',
+        error: function(xhr, status){
+            console.log("error");
+        },
+        success: function(data, status){
+             console.log("data : " + data);
+//             if(!data.valid){
+//             console.log("not valid");
+//             }
+//               deleteBtn.closest("article").remove();
+         },
+    })
+}
+
+
 
 String.prototype.format = function() {
   var args = arguments;

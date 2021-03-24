@@ -39,10 +39,10 @@ public class AnswerService {
         return answerRepository.save(new Answer(question, contents, loginUser));
     }
 
-    public void remove(User sessionUser, Answer answer) {
+    public Answer remove(User sessionUser, Answer answer) {
         checkAccessibleSessionUser(sessionUser, answer);
 
         answer.deleted();
-        answerRepository.save(answer);
+        return answerRepository.save(answer);
     }
 }

@@ -35,6 +35,7 @@ public class Question {
 
     @OneToMany(mappedBy = "question")
     @Where(clause = "deleted=false")
+    @OrderBy("answerId DESC")
     @JsonBackReference
     private List<Answer> answers;
 
