@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="kr">
+<head>
+    {{> common/head}}
+</head>
+<body>
+<div class="container" id="main">
+    <div class="col-md-6 col-md-offset-3">
+        <div class="panel panel-default content-main">
+            {{#errorMessage}}
+            <p>404 NOT FOUND</p>
+            <div class="alert alert-danger" role="alert">{{this}}</div>
+            {{/errorMessage}}
+        </div>
+    </div>
+</div>
+</body>
+</html>

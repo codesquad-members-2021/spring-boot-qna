@@ -12,8 +12,11 @@ public class User {
 
     @Column(nullable = false, length = 20)
     private String userId;
+
     private String password;
+
     private String name;
+
     private String email;
 
     public User() {
@@ -63,6 +66,10 @@ public class User {
         return this.password.equals(expected);
     }
 
+    public boolean isEqualUserId(String expected) {
+        return this.userId.equals(expected);
+    }
+
     public boolean isEmpty() {
         if ("".equals(this.userId) || this.userId == null) {
             return true;
@@ -78,6 +85,13 @@ public class User {
         }
 
         return false;
+    }
+
+    public void updateUserInfo(User referenceUser, String newPassword) {
+        this.userId = referenceUser.getUserId();
+        this.password = newPassword;
+        this.name = referenceUser.getName();
+        this.email = referenceUser.getEmail();
     }
 
     @Override
