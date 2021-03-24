@@ -1,5 +1,6 @@
 package com.codessquad.qna.web.service;
 
+import com.codessquad.qna.web.domain.Answer;
 import com.codessquad.qna.web.domain.Question;
 import com.codessquad.qna.web.domain.User;
 import com.codessquad.qna.web.domain.repository.QuestionRepository;
@@ -12,10 +13,12 @@ import java.util.List;
 @Service
 public class QuestionService {
 
-    private final QuestionRepository questionRepository;
+    private QuestionRepository questionRepository;
+    private final AnswerService answerService;
 
-    private QuestionService(QuestionRepository questionRepository) {
+    private QuestionService(QuestionRepository questionRepository, AnswerService answerService) {
         this.questionRepository = questionRepository;
+        this.answerService = answerService;
     }
 
     public void save(Question question) {
@@ -52,5 +55,9 @@ public class QuestionService {
             throw new UnauthorizedUserException(UnauthorizedUserException.UNAUTHORIZED_USER_TO_QUESTION);
         }
         return question;
+    }
+
+    public List<Answer> findAnswersByQuestionId(Long questionId) {
+        return answerService.findByQuestionId(questionId);
     }
 }

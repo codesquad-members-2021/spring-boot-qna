@@ -1,7 +1,11 @@
 package com.codessquad.qna.web.controllers;
 
+import com.codessquad.qna.web.domain.Answer;
+import com.codessquad.qna.web.domain.Question;
+import com.codessquad.qna.web.domain.User;
 import com.codessquad.qna.web.service.AnswerService;
 import com.codessquad.qna.web.service.QuestionService;
+import com.codessquad.qna.web.utility.SessionUtility;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -23,7 +27,9 @@ public class AnswerController {
 
     @PostMapping
     public String addAnswer(@PathVariable Long questionId, HttpSession session, String contents) {
-        answerService.saveAnswerToQuestion(questionId, session, contents);
+        Question question = questionService.findById(questionId);
+        User writer = SessionUtility.findSessionedUser(session);
+        answerService.save(new Answer(question, writer, contents)); //TODO 서비스에 추출하기
         return "redirect:/questions/" + questionId;
     }
 }

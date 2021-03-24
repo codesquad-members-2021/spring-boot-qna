@@ -4,6 +4,7 @@ import com.codessquad.qna.web.utility.TimeConstant;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 public class Question {
@@ -25,6 +26,9 @@ public class Question {
 
     @Column(nullable = false, length = 20)
     private LocalDateTime writtenDateTime = LocalDateTime.now();
+
+    @OneToMany(mappedBy="question")
+    private List<Answer> answers;
 
     protected Question() {}
 
@@ -61,5 +65,9 @@ public class Question {
 
     public boolean isWriter(User inputUser) {
         return this.writer.equals(inputUser);
+    }
+
+    public Long getAnswersSize() {
+        return (long) answers.size();
     }
 }

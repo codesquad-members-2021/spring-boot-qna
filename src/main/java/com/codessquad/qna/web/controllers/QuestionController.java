@@ -44,6 +44,7 @@ public class QuestionController {
     public String showQuestion(@PathVariable Long id, Model model) {
         Question question = questionService.findById(id);
         model.addAttribute("question", question);
+        model.addAttribute("answers", questionService.findAnswersByQuestionId(id));
         return "qna/show";
     }
 

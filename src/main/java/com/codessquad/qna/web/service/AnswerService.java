@@ -8,25 +8,23 @@ import com.codessquad.qna.web.utility.SessionUtility;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpSession;
+import java.util.List;
 
 @Service
 public class AnswerService {
 
-    private final QuestionService questionService;
     private AnswerRepository answerRepository;
 
-    private AnswerService(AnswerRepository answerRepository, QuestionService questionService) {
+    private AnswerService(AnswerRepository answerRepository) {
         this.answerRepository = answerRepository;
-        this.questionService = questionService;
     }
 
     public void save(Answer answer) {
         answerRepository.save(answer);
     }
 
-    public void saveAnswerToQuestion(Long questionId, HttpSession session, String contents) {
-        Question question = questionService.findById(questionId);
-        User writer = SessionUtility.findSessionedUser(session);
-        save(new Answer(question, writer, contents));
+    public List<Answer> findByQuestionId(Long questionId) {
+        return answerRepository.findByQuestionId(questionId);
     }
+
 }

@@ -53,4 +53,5 @@ public class Answer {
     public String getFormattedWrittenDateTime() {
         return writtenDateTime.format(TimeConstant.DATE_PATTERN);
     }
+
 }

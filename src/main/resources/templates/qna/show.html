@@ -44,7 +44,7 @@
 
               <div class="qna-comment">
                   <div class="qna-comment-slipp">
-                      <p class="qna-comment-count"><strong>0</strong>개의 의견</p>
+                      <p class="qna-comment-count"><strong>{{question.answersSize}}</strong>개의 의견</p>
                       <div class="qna-comment-slipp-articles">
 
                           {{#answers}}
@@ -54,9 +54,9 @@
                                       <img src="https://graph.facebook.com/v2.3/1324855987/picture" class="article-author-thumb" alt="">
                                   </div>
                                   <div class="article-header-text">
-                                      <a href="/users/1/자바지기" class="article-author-name">{{writer}}</a>
+                                      <a href="/users/1/자바지기" class="article-author-name">{{writer.userId}}</a>
                                       <a href="#answer-1434" class="article-header-time" title="퍼머링크">
-                                          {{writtenDateTime}}
+                                          {{formattedWrittenDateTime}}
                                       </a>
                                   </div>
                               </div>
@@ -84,7 +84,8 @@
                               <div class="form-group" style="padding:14px;">
                                   <textarea class="form-control" name= "contents" id="contents" placeholder="답변 내용"></textarea>
                               </div>
-                              <button class="btn btn-success pull-right" type="button">답변하기</button>
+                              <input type="submit" class="btn btn-success pull-right" value="답변하기"/>
+
                               <div class="clearfix" />
                           </form>
 
