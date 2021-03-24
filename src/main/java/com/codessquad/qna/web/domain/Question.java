@@ -1,13 +1,11 @@
 package com.codessquad.qna.web.domain;
 
-import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
 import java.util.List;
 
 @Entity
-@SQLDelete(sql = "UPDATE QUESTION SET DELETED = TRUE WHERE ID = ?")
 public class Question extends BaseTimeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -45,6 +43,11 @@ public class Question extends BaseTimeEntity {
     public void update(Question newQuestion) {
         title = newQuestion.title;
         contents = newQuestion.contents;
+    }
+
+    public void delete() {
+        deleted = true;
+        answers.forEach(Answer::delete);
     }
 
     public boolean isValid() {

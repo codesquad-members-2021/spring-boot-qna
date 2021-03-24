@@ -5,7 +5,6 @@ import org.hibernate.annotations.SQLDelete;
 import javax.persistence.*;
 
 @Entity
-@SQLDelete(sql = "UPDATE ANSWER SET DELETED = TRUE WHERE ID = ?")
 public class Answer extends BaseTimeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -37,6 +36,10 @@ public class Answer extends BaseTimeEntity {
             return false;
         }
         return !contents.isEmpty();
+    }
+
+    public void delete(){
+        deleted = true;
     }
 
     public boolean isMatchingWriter(User anotherWriter) {

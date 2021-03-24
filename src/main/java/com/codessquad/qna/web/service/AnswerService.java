@@ -29,13 +29,14 @@ public class AnswerService {
     }
 
     public Question deleteAnswer(User loginUser, long answerId) {
-        Answer targetAnswer = answersRepository.findByIdAndDeletedFalse(answerId)
+        Answer answer = answersRepository.findByIdAndDeletedFalse(answerId)
                 .orElseThrow(AnswerNotFoundException::new);
-        if (!targetAnswer.isMatchingWriter(loginUser)) {
+        if (!answer.isMatchingWriter(loginUser)) {
             throw new UnauthorizedAccessException(CANNOT_MODIFY_ANOTHER_USERS_ANSWER);
         }
-        this.answersRepository.delete(targetAnswer);
-        return targetAnswer.getQuestion();
+        answer.delete();
+        answersRepository.save(answer);
+        return answer.getQuestion();
     }
 
     private void verifyAnswerEntityIsValid(Answer answer) {

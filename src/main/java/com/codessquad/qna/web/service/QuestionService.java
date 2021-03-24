@@ -7,6 +7,7 @@ import com.codessquad.qna.web.exceptions.InvalidEntityException;
 import com.codessquad.qna.web.exceptions.auth.UnauthorizedAccessException;
 import com.codessquad.qna.web.exceptions.questions.QuestionNotFoundException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import static com.codessquad.qna.web.utils.ExceptionConstants.CANNOT_MODIFY_OR_DELETE_ANOTHER_USERS_QUESTION;
 import static com.codessquad.qna.web.utils.ExceptionConstants.EMPTY_FIELD_IN_QUESTION_ENTITY;
@@ -35,25 +36,26 @@ public class QuestionService {
 
     public Question verifyIsOwnerAndGetQuestionDetail(long questionId, User loginUser) {
         Question question = questionRepository.findByIdAndDeletedFalse(questionId).orElseThrow(QuestionNotFoundException::new);
-        verifyIsQuestionOwner(question, loginUser);
+        verifyWriterIsQuestionOwner(question, loginUser);
         return question;
     }
 
     public Question modifyQuestion(User loginUser, long questionId, Question newQuestion) {
         Question question = questionRepository.findByIdAndDeletedFalse(questionId)
                 .orElseThrow(QuestionNotFoundException::new);
-        verifyIsQuestionOwner(question, loginUser);
+        verifyWriterIsQuestionOwner(question, loginUser);
         verifyQuestionEntityIsValid(newQuestion);
         question.update(newQuestion);
         questionRepository.save(question);
         return question;
     }
 
+    @Transactional
     public void deleteQuestion(User loginUser, long questionId) {
         Question question = questionRepository.findByIdAndDeletedFalse(questionId)
                 .orElseThrow(QuestionNotFoundException::new);
-        verifyIsQuestionOwner(question, loginUser);
-        questionRepository.delete(question);
+        verifyWriterIsQuestionOwner(question, loginUser);
+        question.delete();
     }
 
     private void verifyQuestionEntityIsValid(Question question) {
@@ -62,8 +64,8 @@ public class QuestionService {
         }
     }
 
-    private void verifyIsQuestionOwner(Question question, User loginUser) {
-        if (!question.isMatchingWriter(loginUser)) {
+    private void verifyWriterIsQuestionOwner(Question question, User writer) {
+        if (!question.isMatchingWriter(writer)) {
             throw new UnauthorizedAccessException(CANNOT_MODIFY_OR_DELETE_ANOTHER_USERS_QUESTION);
         }
     }
