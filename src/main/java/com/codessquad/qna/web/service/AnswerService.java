@@ -14,7 +14,7 @@ import java.util.List;
 public class AnswerService {
 
     private AnswerRepository answerRepository;
-    private QuestionService questionService;
+    private final QuestionService questionService;
 
     private AnswerService(AnswerRepository answerRepository, QuestionService questionService) {
         this.answerRepository = answerRepository;
