@@ -44,7 +44,7 @@ public class Question {
         this.writeDateTime = LocalDateTime.now();
     }
 
-    public long getId() {
+    public Long getId() {
         return id;
     }
 
