@@ -14,7 +14,7 @@
                     <div class="article-header-text">
                         <a class="article-author-name" href="/users/{{question.writer.id}}">{{question.writer.name}}</a>
                         <a class="article-header-time" href="javascript:;" title="퍼머링크">
-                            {{date question.reportingDateTime}}
+                            {{date question.createdDateTime}}
                             <i class="icon-link"></i>
                         </a>
                     </div>
@@ -44,20 +44,21 @@
 
             <div class="qna-comment">
                 <div class="qna-comment-slipp">
-                    <p class="qna-comment-count"><strong>{{numberOfAnswers}}</strong>개의 의견</p>
+                    <p class="qna-comment-count"><strong>{{question.answers.length}}</strong>개의 의견</p>
                     <div class="qna-comment-slipp-articles">
 
                         {{#each question.answers}}
-                        <article class="article" id="answer-1405">
+                        <article class="article" id="{{id}}">
                             <div class="article-header">
                                 <div class="article-header-thumb">
                                     <img alt="" class="article-author-thumb"
                                          src="https://graph.facebook.com/v2.3/1324855987/picture">
                                 </div>
                                 <div class="article-header-text">
-                                    <a class="article-author-name" href="/users/{{this.writer.id}}">{{this.writer.name}}</a>
+                                    <a class="article-author-name"
+                                       href="/users/{{this.writer.id}}">{{this.writer.name}}</a>
                                     <a class="article-header-time" href="javascript:;" title="퍼머링크">
-                                        {{date reportingDateTime}}
+                                        {{date this.createdDateTime}}
                                     </a>
                                 </div>
                             </div>
@@ -71,7 +72,8 @@
                                            href="javascript:;">수정</a>
                                     </li>
                                     <li>
-                                        <form action="/answers/{{this.id}}" class="delete-answer-form"
+                                        <form action="/questions/{{this.question.id}}/answers/{{this.id}}"
+                                              class="delete-answer-form"
                                               method="POST">
                                             <input name="_method" type="hidden" value="DELETE">
                                             <button class="delete-answer-button" type="submit">삭제</button>
@@ -84,7 +86,8 @@
 
                         <form class="submit-write" action="/questions/{{question.id}}/answers" method="post">
                             <div class="form-group" style="padding:14px;">
-                                <textarea type="text" id="answerContents" name="answerContents" class="form-control" placeholder="Update your status"></textarea>
+                                <textarea type="text" id="answerContents" name="answerContents" class="form-control"
+                                          placeholder="Update your status"></textarea>
                             </div>
                             <button type="submit" class="btn btn-success pull-right" type="button">답변하기</button>
                             <div class="clearfix"/>

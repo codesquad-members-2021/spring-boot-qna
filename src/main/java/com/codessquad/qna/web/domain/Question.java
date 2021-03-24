@@ -1,14 +1,15 @@
-package com.codessquad.qna.web.questions;
+package com.codessquad.qna.web.domain;
 
-import com.codessquad.qna.web.answers.Answer;
-import com.codessquad.qna.web.users.User;
+import com.codessquad.qna.web.exceptions.auth.UnauthorizedAccessException;
+import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
 import java.util.List;
 
+import static com.codessquad.qna.web.utils.ExceptionConstants.CAN_NOT_DELETE_BECAUSE_ANOTHER_USERS_ANSWER_IS_EXISTS;
+
 @Entity
-public class Question {
+public class Question extends BaseTimeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -18,39 +19,49 @@ public class Question {
     private User writer;
 
     @OneToMany(mappedBy = "question", cascade = CascadeType.REMOVE)
+    @Where(clause = "deleted=false")
     private List<Answer> answers;
 
+    @Column(nullable = false)
     private String title;
 
+    @Column(nullable = false)
     private String contents;
 
-    private LocalDateTime reportingDateTime;
+    @Column(nullable = false, columnDefinition = "BOOLEAN DEFAULT FALSE")
+    private boolean deleted = false;
 
     public Question(String title, String contents) {
         this.title = title;
         this.contents = contents;
-        this.reportingDateTime = LocalDateTime.now();
     }
 
-    public Question() {
-        this.reportingDateTime = LocalDateTime.now();
+    protected Question() {
     }
 
     public boolean isMatchingWriter(User anotherWriter) {
-        return writer.getId() == anotherWriter.getId();
+        return writer.isMatchingId(anotherWriter);
     }
 
-    public void update(String newTitle, String newContents) {
-        if (!title.equals(newTitle)) {
-            title = newTitle;
-        }
-        if (!contents.equals(newContents)) {
-            contents = newContents;
-        }
+    public void update(Question newQuestion) {
+        title = newQuestion.title;
+        contents = newQuestion.contents;
     }
 
-    public int getSizeOfAnswers() {
-        return answers.size();
+    public void delete() {
+        deleted = true;
+        answers.forEach((answer) -> {
+            if (!writer.isMatchingId(answer.getWriter())) {
+                throw new UnauthorizedAccessException(CAN_NOT_DELETE_BECAUSE_ANOTHER_USERS_ANSWER_IS_EXISTS);
+            }
+        });
+    }
+
+    public boolean isValid() {
+        if (title == null || contents == null) {
+            return false;
+        }
+        return !title.isEmpty() && !contents.isEmpty();
     }
 
     public Long getId() {
@@ -85,20 +96,20 @@ public class Question {
         this.contents = contents;
     }
 
-    public LocalDateTime getReportingDateTime() {
-        return reportingDateTime;
-    }
-
-    public void setReportingDateTime(LocalDateTime reportingDateTime) {
-        this.reportingDateTime = reportingDateTime;
-    }
-
     public List<Answer> getAnswers() {
         return answers;
     }
 
     public void setAnswers(List<Answer> answers) {
         this.answers = answers;
+    }
+
+    public boolean isDeleted() {
+        return deleted;
+    }
+
+    public void setDeleted(boolean deleted) {
+        this.deleted = deleted;
     }
 
     @Override
@@ -108,7 +119,6 @@ public class Question {
                 ", writer=" + writer.getId() +
                 ", title='" + title + '\'' +
                 ", contents='" + contents + '\'' +
-                ", reportingDateTime=" + reportingDateTime +
                 '}';
     }
 }

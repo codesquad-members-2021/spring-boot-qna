@@ -1,9 +1,11 @@
 package com.codessquad.qna.web.utils;
 
+import com.codessquad.qna.web.domain.User;
 import com.codessquad.qna.web.exceptions.users.NoLoginUserException;
-import com.codessquad.qna.web.users.User;
 
 import javax.servlet.http.HttpSession;
+
+import static com.codessquad.qna.web.utils.ExceptionConstants.ONLY_FOR_LOGGED_IN_USER;
 
 public class SessionUtil {
     private final static String SESSION_KEY_LOGIN_USER = "loginUser";
@@ -18,7 +20,7 @@ public class SessionUtil {
     public static User getLoginUser(HttpSession session) {
         User loginUser = (User) session.getAttribute(SESSION_KEY_LOGIN_USER);
         if (loginUser == null) {
-            throw new NoLoginUserException();
+            throw new NoLoginUserException(ONLY_FOR_LOGGED_IN_USER);
         }
         return loginUser;
     }

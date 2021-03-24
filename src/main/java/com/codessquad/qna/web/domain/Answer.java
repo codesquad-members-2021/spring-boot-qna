@@ -1,13 +1,9 @@
-package com.codessquad.qna.web.answers;
-
-import com.codessquad.qna.web.questions.Question;
-import com.codessquad.qna.web.users.User;
+package com.codessquad.qna.web.domain;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
 
 @Entity
-public class Answer {
+public class Answer extends BaseTimeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -22,27 +18,34 @@ public class Answer {
 
     @Column(nullable = false, length = 400)
     private String contents;
-
-    private LocalDateTime reportingDateTime;
-
-    public boolean isMatchingWriter(User anotherWriter) {
-        return writer.isMatchingId(anotherWriter);
-    }
-
-    public Answer(String contents) {
-        this.contents = contents;
-        reportingDateTime = LocalDateTime.now();
-    }
+    private boolean deleted = false;
 
     public Answer(String contents, Question question, User writer) {
         this.contents = contents;
         this.question = question;
         this.writer = writer;
-        reportingDateTime = LocalDateTime.now();
     }
 
-    public Answer() {
-        reportingDateTime = LocalDateTime.now();
+    protected Answer() {
+    }
+
+    public boolean isValid() {
+        if (contents == null) {
+            return false;
+        }
+        return !contents.isEmpty();
+    }
+
+    public boolean isSameWriter(User writer) {
+        return writer.isMatchingId(writer);
+    }
+
+    public void delete() {
+        deleted = true;
+    }
+
+    public boolean isMatchingWriter(User anotherWriter) {
+        return writer.isMatchingId(anotherWriter);
     }
 
     public Long getId() {
@@ -77,12 +80,12 @@ public class Answer {
         this.question = question;
     }
 
-    public LocalDateTime getReportingDateTime() {
-        return reportingDateTime;
+    public boolean isDeleted() {
+        return deleted;
     }
 
-    public void setReportingDateTime(LocalDateTime reportingDateTime) {
-        this.reportingDateTime = reportingDateTime;
+    public void setDeleted(boolean deleted) {
+        this.deleted = deleted;
     }
 
     @Override
@@ -92,7 +95,6 @@ public class Answer {
                 ", writerId=" + writer.getId() +
                 ", questionId=" + question.getId() +
                 ", contents='" + contents + '\'' +
-                ", reportingDateTime=" + reportingDateTime +
                 '}';
     }
 }

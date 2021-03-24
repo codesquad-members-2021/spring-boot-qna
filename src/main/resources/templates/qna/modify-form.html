@@ -3,12 +3,12 @@
     <div class="panel panel-default content-main">
         <form action="/questions/{{currentQuestion.id}}" method="post" name="question">
             <div class="form-group">
-                <label for="newTitle">제목</label>
-                <input type="text" class="form-control" id="newTitle" name="newTitle" placeholder="제목" value="{{currentQuestion.title}}"/>
+                <label for="title">제목</label>
+                <input type="text" class="form-control" id="title" name="title" placeholder="제목" value="{{currentQuestion.title}}"/>
             </div>
             <div class="form-group">
-                <label for="newContents">내용</label>
-                <textarea name="newContents" id="newContents" rows="5" class="form-control">{{currentQuestion.contents}}</textarea>
+                <label for="contents">내용</label>
+                <textarea name="contents" id="contents" rows="5" class="form-control">{{currentQuestion.contents}}</textarea>
             </div>
             <button type="submit" class="btn btn-success clearfix pull-right">수정하기</button>
             <div class="clearfix" />

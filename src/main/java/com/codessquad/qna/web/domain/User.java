@@ -1,9 +1,9 @@
-package com.codessquad.qna.web.users;
+package com.codessquad.qna.web.domain;
 
 import javax.persistence.*;
 
 @Entity
-public class User {
+public class User extends BaseTimeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -11,10 +11,13 @@ public class User {
     @Column(nullable = false, length = 20, unique = true)
     private String userId;
 
+    @Column(nullable = false)
     private String password;
 
+    @Column(nullable = false)
     private String name;
 
+    @Column(nullable = false)
     private String email;
 
     public User(String userId, String password, String name, String email) {
@@ -24,20 +27,21 @@ public class User {
         this.email = email;
     }
 
-    public User() {
+    protected User() {
 
     }
 
-    public void update(String newPassword, String newName, String newEmail) {
-        if (!password.equals(newPassword)) {
-            password = newPassword;
+    public void update(User newUserInfo) {
+        password = newUserInfo.password;
+        name = newUserInfo.name;
+        email = newUserInfo.email;
+    }
+
+    public boolean isValid() {
+        if (password == null || name == null || email == null) {
+            return false;
         }
-        if (!name.equals(newName)) {
-            name = newName;
-        }
-        if (!email.equals(newEmail)) {
-            email = newEmail;
-        }
+        return !password.isEmpty() && !name.isEmpty() && !email.isEmpty();
     }
 
     public Long getId() {
@@ -85,7 +89,7 @@ public class User {
     }
 
     public boolean isMatchingId(User anotherUser) {
-        return id == anotherUser.getId();
+        return id.equals(anotherUser.id);
     }
 
     @Override
