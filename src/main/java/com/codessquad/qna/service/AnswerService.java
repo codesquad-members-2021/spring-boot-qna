@@ -25,14 +25,14 @@ public class AnswerService {
     }
 
     public void delete(User user, Answer answer) {
-        checkValid(user, answer);
         answer.delete();
         answerRepository.save(answer);
     }
 
-    private void checkValid(User user, Answer answer) {
-        if (!answer.isAnswerWriter(user)) {
-            throw new IllegalStateException("자신의 댓글에만 접근 가능합니다.");
+    public boolean checkValid(User user, Answer answer) {
+        if (answer.isAnswerWriter(user)) {
+            return true;
         }
+        return false;
     }
 }

@@ -2,6 +2,7 @@ package com.codessquad.qna.web;
 
 import com.codessquad.qna.domain.Answer;
 import com.codessquad.qna.domain.Question;
+import com.codessquad.qna.domain.Result;
 import com.codessquad.qna.domain.User;
 import com.codessquad.qna.service.AnswerService;
 import com.codessquad.qna.service.QuestionService;
@@ -31,11 +32,14 @@ public class ApiAnswerController {
         return answerService.save(answer);
     }
 
-    @DeleteMapping("/{answerId}")
-    public String delete(@PathVariable("questionId") Long questionId, @PathVariable("answerId") Long answerId, HttpSession session) {
+    @DeleteMapping("/{id}")
+    public Result delete(@PathVariable Long questionId, @PathVariable Long id, HttpSession session) {
         User loggedinUser = getUserFromSession(session);
-        Answer answer = answerService.findAnswer(answerId);
+        Answer answer = answerService.findAnswer(id);
+        if (!answerService.checkValid(loggedinUser, answer)) {
+            return Result.fail("자신의 댓글만 삭제할 수 있습니다.");
+        }
         answerService.delete(loggedinUser, answer);
-        return "redirect:/questions/{questionId}";
+        return Result.ok();
     }
 }

@@ -1,5 +1,6 @@
 package com.codessquad.qna;
 
+import com.codessquad.qna.domain.Result;
 import com.codessquad.qna.exception.NoSessionedUserException;
 import com.codessquad.qna.exception.NotFoundException;
 import org.springframework.ui.Model;
