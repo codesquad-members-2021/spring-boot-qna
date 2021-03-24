@@ -54,10 +54,12 @@ function deleteAnswer(e){
         },
         success: function(data, status){
              console.log("data : " + data);
-//             if(!data.valid){
-//             console.log("not valid");
-//             }
-//               deleteBtn.closest("article").remove();
+
+             if(!data.valid) {
+                console.log("not valid");
+             }
+
+               deleteBtn.closest("article").remove();
          },
     })
 }
