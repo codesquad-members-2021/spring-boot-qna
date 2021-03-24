@@ -34,6 +34,10 @@ public class BaseEntity {
         return modifiedDateTime;
     }
 
+    public boolean matchId(Long id) {
+        return id.equals(getId());
+    }
+
     public void delete() {
         this.deleted = true;
     }

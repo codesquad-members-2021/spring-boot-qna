@@ -23,7 +23,7 @@ public class UserController {
     }
 
     @PostMapping
-    public String createUser(@Valid UserRequest userRequest) {
+    public String create(@Valid UserRequest userRequest) {
         userService.save(userRequest);
         return "redirect:/users";
     }
@@ -43,13 +43,13 @@ public class UserController {
 
 
     @GetMapping
-    public String getUsers(Model model) {
+    public String getList(Model model) {
         model.addAttribute("users", userService.getList());
         return "user/list";
     }
 
     @GetMapping("{id}")
-    public String getProfile(@PathVariable Long id, Model model) {
+    public String get(@PathVariable Long id, Model model) {
         model.addAttribute("user", userService.get(id));
         return "user/profile";
     }
@@ -62,7 +62,7 @@ public class UserController {
     }
 
     @PutMapping("{id}")
-    public String updateUser(@PathVariable Long id, @Valid UserRequest userRequest, HttpSession session) {
+    public String update(@PathVariable Long id, @Valid UserRequest userRequest, HttpSession session) {
         checkAuthorization(id, session);
         userService.update(id, userRequest);
         return "redirect:/users";

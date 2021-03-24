@@ -50,10 +50,6 @@ public class User extends BaseEntity {
         this.email = user.email;
     }
 
-    public boolean matchId(Long id) {
-        return id.equals(getId());
-    }
-
     public boolean matchPassword(String password) {
         return this.password.equals(password);
     }
