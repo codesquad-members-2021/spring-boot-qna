@@ -19,7 +19,7 @@ import static com.codessquad.qna.utils.SessionUtil.*;
 @RequestMapping("/qna")
 public class QuestionController {
 
-    private static final Logger logger = LoggerFactory.getLogger(UserController.class);
+    private static final Logger logger = LoggerFactory.getLogger(QuestionController.class);
 
     private final QuestionRepostory questionRepostory;
 
