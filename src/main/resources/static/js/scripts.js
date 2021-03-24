@@ -33,7 +33,6 @@ function onSuccess(data, status){
     $("textarea[name=contents]").val("");
 }
 
-//$(".link-delete-answer").click(deleteAnswer);
 $(".qna-comment-slipp-articles").on("click", "a.link-delete-answer", deleteAnswer);
 
 function deleteAnswer(e){
@@ -63,8 +62,6 @@ function deleteAnswer(e){
          },
     })
 }
-
-
 
 String.prototype.format = function() {
   var args = arguments;

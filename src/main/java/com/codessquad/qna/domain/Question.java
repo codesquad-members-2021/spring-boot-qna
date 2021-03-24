@@ -39,6 +39,9 @@ public class Question {
     @JsonBackReference
     private List<Answer> answers;
 
+    @JsonProperty
+    private Integer countOfAnswers;
+
     public Question() {
         this.createdDate = LocalDateTime.now();
     }
@@ -132,5 +135,17 @@ public class Question {
                 ", title='" + title + '\'' +
                 ", contents='" + contents + '\'' +
                 '}';
+    }
+
+    public void increaseCountOfAnswers() {
+        countOfAnswers += 1;
+    }
+
+    public void decreaseCountOfAnswers() {
+        countOfAnswers -= 1;
+    }
+
+    public Integer getCountOfAnswers() {
+        return countOfAnswers;
     }
 }

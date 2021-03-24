@@ -36,11 +36,15 @@ public class AnswerService {
         Question question = questionRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("존재하지 않는 질문입니다."));
 
+        question.increaseCountOfAnswers();
+
         return answerRepository.save(new Answer(question, contents, loginUser));
     }
 
     public Answer remove(User sessionUser, Answer answer) {
         checkAccessibleSessionUser(sessionUser, answer);
+
+        answer.getQuestion().decreaseCountOfAnswers();
 
         answer.deleted();
         return answerRepository.save(answer);
