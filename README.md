@@ -13,33 +13,33 @@
 
 회원 목록 조회
 
-- GET `/user`
-  - userList
+- GET `/users`
+  - user/userList
   
 회원가입
 
-- GET `/user/new`
-    - userSignup
-- POST `/user/new`
-    - redirect:/user
+- GET `/users/signup`
+    - user/userSignup
+- POST `/users/signup`
+    - redirect:/users
   
 회원 프로필 조회
 
-- GET `/user/{userId}`
-    - userProfile
+- GET `/users/{id}`
+    - user/userProfile
 
 비밀번호 확인
 
-- GET `/user/{userId}/password-check`
+- GET `/users/{id}/password`
     - passwordCheckForm
-- POST `/user/{userId}/password-check`
-    - if 비밀번호 일치) userUpdateForm
+- POST `/users/{id}/password`
+    - if 비밀번호 일치) user/userUpdateForm
     - if 비밀번호 불일치) redirect:/
 
 회원정보 수정
 
-- POST `/user/{userId}/edit`
-    - redirect:/user
+- PUT `/users/{id}`
+    - redirect:/users
   
 ### QuestionController
 
@@ -50,12 +50,12 @@
   
 질문하기
 
-- GET `/questions/new`
-    - questionInputForm
-- POST `/questions`
+- GET `/questions/form`
+    - qna/questionInputForm
+- POST `/questions/form`
     - redirect:/
 
 질문 조회 (상세보기)
 
-- GET `/questions/{index}`
+- GET `/questions/{id}`
     - questionDetail

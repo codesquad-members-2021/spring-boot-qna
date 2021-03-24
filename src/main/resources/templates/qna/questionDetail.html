@@ -1,11 +1,11 @@
 <!DOCTYPE html>
 <html lang="kr">
 <head>
-    {{> header}}
+    {{> partial/header}}
 </head>
 <body>
-{{> navbarMain}}
-{{> navbarSub}}
+{{> partial/navbarMain}}
+{{> partial/navbarSub}}
 
 <div class="container" id="main">
     <div class="col-md-12 col-sm-12 col-lg-12">
@@ -20,7 +20,7 @@
                           <img src="https://graph.facebook.com/v2.3/100000059371774/picture" class="article-author-thumb" alt="">
                       </div>
                       <div class="article-header-text">
-                          <a href="/users/92/kimmunsu" class="article-author-name">{{question.writer}}</a>
+                          <a href="/users/id" class="article-author-name">{{question.writer}}</a>
                           <a href="/questions/413" class="article-header-time" title="퍼머링크">
                               {{question.dateTime}}
                               <i class="icon-link"></i>
@@ -42,7 +42,7 @@
                               </form>
                           </li>
                           <li>
-                              <a class="link-modify-article" href="/index.html">목록</a>
+                              <a class="link-modify-article" href="/">목록</a>
                           </li>
                       </ul>
                   </div>
@@ -156,6 +156,6 @@
 	</article>
 </script>
 
-{{> footer}}
+{{> partial/footer}}
 	</body>
 </html>
