@@ -38,6 +38,10 @@ public class Answer extends BaseTimeEntity {
         return !contents.isEmpty();
     }
 
+    public boolean isSameWriter(User writer){
+        return writer.isMatchingId(writer);
+    }
+
     public void delete(){
         deleted = true;
     }

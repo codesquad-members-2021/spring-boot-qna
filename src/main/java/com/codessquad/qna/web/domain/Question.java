@@ -1,9 +1,12 @@
 package com.codessquad.qna.web.domain;
 
+import com.codessquad.qna.web.exceptions.auth.UnauthorizedAccessException;
 import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
 import java.util.List;
+
+import static com.codessquad.qna.web.utils.ExceptionConstants.CAN_NOT_DELETE_BECAUSE_ANOTHER_USERS_ANSWER_IS_EXISTS;
 
 @Entity
 public class Question extends BaseTimeEntity {
@@ -47,7 +50,11 @@ public class Question extends BaseTimeEntity {
 
     public void delete() {
         deleted = true;
-        answers.forEach(Answer::delete);
+        answers.forEach((answer) -> {
+            if (!writer.isMatchingId(answer.getWriter())) {
+                throw new UnauthorizedAccessException(CAN_NOT_DELETE_BECAUSE_ANOTHER_USERS_ANSWER_IS_EXISTS);
+            }
+        });
     }
 
     public boolean isValid() {

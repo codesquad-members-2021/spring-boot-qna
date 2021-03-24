@@ -10,6 +10,7 @@ public class ExceptionConstants {
     public static final String EMPTY_FIELD_IN_USER_ENTITY = "비어있는 항목이 있어서 회원가입에 실패했습니다";
     public static final String EMPTY_FIELD_IN_QUESTION_ENTITY = "비어있는 항목이 있어서 질문 작성에 실패했습니다";
     public static final String EMPTY_FIELD_IN_ANSWER_ENTITY = "비어있는 항목이 있어서 답변 작성에 실패했습니다";
+    public static final String CAN_NOT_DELETE_BECAUSE_ANOTHER_USERS_ANSWER_IS_EXISTS = "다른사람의 답변이 존재하므로 질문을 삭제할 수 없습니다";
 
     private ExceptionConstants() {
 
