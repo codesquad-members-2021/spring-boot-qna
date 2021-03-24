@@ -34,6 +34,12 @@ public class UserController {
         return "redirect:/users";
     }
 
+    @GetMapping("/{id}")
+    public String userProfile(@PathVariable Long id, Model model) {
+        model.addAttribute("user", userRepository.findById(id).orElseThrow(UserNotFoundException::new));
+        return "user/userProfile";
+    }
+
     @GetMapping("/login")
     public String loginForm() {
         return "user/loginForm";
@@ -48,9 +54,7 @@ public class UserController {
         if (!password.equals(user.getPassword())) {
             return "redirect:/users/login";
         }
-        System.out.println("Login Success!");
         session.setAttribute("sessionedUser", user);
-
         return "redirect:/";
     }
 
@@ -59,12 +63,6 @@ public class UserController {
         session.removeAttribute("sessionedUser");
         System.out.println("Logout Success");
         return "redirect:/";
-    }
-
-    @GetMapping("/{id}")
-    public String userProfile(@PathVariable Long id, Model model) {
-        model.addAttribute("user", userRepository.findById(id).orElseThrow(UserNotFoundException::new));
-        return "user/userProfile";
     }
 
     @GetMapping("/{id}/updateForm")
