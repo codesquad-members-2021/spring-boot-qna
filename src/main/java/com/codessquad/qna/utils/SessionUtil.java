@@ -10,26 +10,26 @@ public class SessionUtil {
 
     private static String SESSION_KEY_LOGIN_USER;
 
-    private static String generateSessionKey(User user) throws Exception {
-        StringBuffer stringBuffer = new StringBuffer();
-        MessageDigest mDigest = MessageDigest.getInstance("MD5");
-
-        mDigest.update((user.getUserId() + Long.toString(user.getId())).getBytes());
-        byte[] msgStr = mDigest.digest() ;
-
-        for(int i=0; i < msgStr.length; i++){
-            String tmpEncTxt = Integer.toHexString((int)msgStr[i] & 0x00ff) ;
-            stringBuffer.append(tmpEncTxt) ;
-        }
-        return stringBuffer.toString() ;
-    }
-
     private SessionUtil() {
 
     }
 
+    private static String generateSessionKey(User user) throws Exception {
+        StringBuffer stringBuffer = new StringBuffer();
+        MessageDigest mDigest = MessageDigest.getInstance("MD5");
+
+        mDigest.update((user.getUserId() + user.getId()).getBytes());
+        byte[] msgStr = mDigest.digest();
+
+        for (int i = 0; i < msgStr.length; i++) {
+            String tmpEncTxt = Integer.toHexString((int) msgStr[i] & 0x00ff);
+            stringBuffer.append(tmpEncTxt);
+        }
+        return stringBuffer.toString();
+    }
+
     public static boolean isValidUser(HttpSession session, User OwnerUser) {
-        return OwnerUser.equals((User)session.getAttribute(SESSION_KEY_LOGIN_USER));
+        return OwnerUser.equals(session.getAttribute(SESSION_KEY_LOGIN_USER));
     }
 
     public static boolean isLoginUser(HttpSession session) {

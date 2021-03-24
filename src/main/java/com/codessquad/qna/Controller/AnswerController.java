@@ -7,12 +7,10 @@ import com.codessquad.qna.domain.User;
 import com.codessquad.qna.exception.NotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.servlet.http.HttpSession;
 
@@ -33,7 +31,7 @@ public class AnswerController {
 
     @PostMapping("/qna/{questionId}/answers")
     public String createAnswer(@PathVariable Long questionId, String contents, HttpSession session) {
-        if(!isLoginUser(session)) {
+        if (!isLoginUser(session)) {
             logger.info("답변달기 - 실패 : 권한(로그인)되지 않은 사용자의 답변달기 시도가 실패함");
             return "redirect:/user/login";
         }
@@ -41,18 +39,18 @@ public class AnswerController {
         Answer answer = new Answer(loginUser, questionRepostory.getOne(questionId), contents);
         answerRepository.save(answer);
         logger.info("답변달기 - 성공 : 답변이 정상적으로 추가됨");
-        return String.format("redirect:/qna/%d",questionId);
+        return String.format("redirect:/qna/%d", questionId);
     }
 
     @DeleteMapping("/qna/{questionId}/answers/{answerId}")
-    public String removeAnswer(@PathVariable Long questionId, @PathVariable Long answerId,HttpSession session) {
+    public String removeAnswer(@PathVariable Long questionId, @PathVariable Long answerId, HttpSession session) {
         User ownerUser = questionRepostory.findById(questionId).orElseThrow(NotFoundException::new).getWriter();
-        if(! isValidUser(session,ownerUser)) {
+        if (!isValidUser(session, ownerUser)) {
             logger.info("답변달기 - 실패 : 권한(로그인)되지 않은 사용자의 답변달기 시도가 실패함");
-            return String.format("redirect:/qna/%d",questionId);
+            return String.format("redirect:/qna/%d", questionId);
         }
         answerRepository.delete(answerRepository.findById(answerId).orElseThrow(NotFoundException::new));
-        return String.format("redirect:/qna/%d",questionId);
+        return String.format("redirect:/qna/%d", questionId);
     }
 
 }

@@ -1,7 +1,6 @@
 package com.codessquad.qna.domain;
 
 import javax.persistence.*;
-import java.security.MessageDigest;
 import java.util.Objects;
 
 @Entity

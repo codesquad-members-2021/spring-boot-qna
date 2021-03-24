@@ -31,8 +31,6 @@ public class Question {
     // 20분 4초 시점
 
 
-
-
     public Question() {
     }
 

@@ -1,6 +1,5 @@
 package com.codessquad.qna.Controller;
 
-import javax.servlet.http.HttpSession;
 import com.codessquad.qna.domain.User;
 import com.codessquad.qna.domain.UserRepository;
 import com.codessquad.qna.exception.NotFoundException;
@@ -9,6 +8,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+
+import javax.servlet.http.HttpSession;
 
 import static com.codessquad.qna.utils.SessionUtil.*;
 
@@ -82,7 +83,7 @@ public class UserController {
 
     @GetMapping("/{id}/form")
     public String getUserUpdateForm(@PathVariable Long id, Model model, HttpSession session) {
-        User foundUser = (User)userRepository.findById(id).orElseThrow(NotFoundException::new);
+        User foundUser = userRepository.findById(id).orElseThrow(NotFoundException::new);
         if (!isValidUser(session, foundUser)) {
             logger.info("Login Failure : wrong password");
             return "redirect:/user/form";
@@ -100,7 +101,7 @@ public class UserController {
 
     @PostMapping("/login")
     public String loginProcess(String userId, String password, HttpSession session) {
-        User foundUser = (User)userRepository.findByUserId(userId); //get 안티패턴 수정해야함@@@@@@@@@@@@
+        User foundUser = userRepository.findByUserId(userId); //get 안티패턴 수정해야함@@@@@@@@@@@@
 
         if (!foundUser.isMatchingPassword(password)) {
             logger.info("Login Failure : wrong password");
