@@ -6,12 +6,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import javax.persistence.*;
 
 @Entity
-public class User {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @JsonProperty
-    private Long id;
+public class User extends AbstractEntity {
 
     @Column(nullable = false, length = 20, unique = true)
     @JsonProperty
@@ -25,10 +20,6 @@ public class User {
 
     @JsonProperty
     private String email;
-
-    public Long getId() {
-        return id;
-    }
 
     public String getUserId() {
         return userId;
@@ -69,21 +60,21 @@ public class User {
     }
 
     public boolean isIdMatching(Long newId) {
-        return newId.equals(id);
+        return newId.equals(getId());
+    }
+
+    public boolean isUserMatching(User user) {
+        return user.getId().equals(getId());
     }
 
     public boolean isPasswordMatching(String newPassword) {
         return newPassword.equals(password);
     }
 
-    public boolean isUserMatching(User user) {
-        return user.getId().equals(id);
-    }
-
     @Override
     public String toString() {
         return "User{" +
-                "id=" + id +
+                super.toString() +
                 ", userId='" + userId + '\'' +
                 ", password='" + password + '\'' +
                 ", name='" + name + '\'' +

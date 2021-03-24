@@ -5,21 +5,12 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity
 @Where(clause = "deleted = false")
-public class Question {
-
-    private static final DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @JsonProperty
-    private Long id;
+public class Question extends AbstractEntity {
 
     @ManyToOne
     @JoinColumn(foreignKey = @ForeignKey(name = "fk_question_writer"))
@@ -36,8 +27,6 @@ public class Question {
     @JsonProperty
     private Integer countOfAnswer = 0;
 
-    private LocalDateTime postTime;
-    private LocalDateTime updatedPostTime;
     private boolean deleted;
 
     @OneToMany(mappedBy = "question")
@@ -53,11 +42,6 @@ public class Question {
         this.writer = writer;
         this.title = title;
         this.contents = contents;
-        this.postTime = LocalDateTime.now();
-    }
-
-    public Long getId() {
-        return id;
     }
 
     public String getWriterUserId() {
@@ -70,13 +54,6 @@ public class Question {
 
     public String getContents() {
         return contents;
-    }
-
-    public String getFormattedPostTime() {
-        if (updatedPostTime == null) {
-            return postTime.format(DATE_TIME_FORMATTER);
-        }
-        return updatedPostTime.format(DATE_TIME_FORMATTER);
     }
 
     public List<Answer> getAnswers() {
@@ -115,7 +92,6 @@ public class Question {
     public void update(Question updatedQuestion) {
         this.title = updatedQuestion.title;
         this.contents = updatedQuestion.contents;
-        this.updatedPostTime = LocalDateTime.now();
     }
 
     public void delete() {
@@ -137,10 +113,9 @@ public class Question {
     @Override
     public String toString() {
         return "Question{" +
-                "id=" + id +
+                super.toString() +
                 ", title='" + title + '\'' +
                 ", contents='" + contents + '\'' +
-                ", postTime=" + postTime +
                 '}';
     }
 }
