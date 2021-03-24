@@ -1,6 +1,6 @@
 package com.codessquad.qna.web.exception;
 
-public class UserNotFoundException extends RuntimeException{
+public class UserNotFoundException extends QnaException {
     public static final String USER_NOT_FOUND = "사용자가 존재하지 않습니다.";
 
     public UserNotFoundException() {
