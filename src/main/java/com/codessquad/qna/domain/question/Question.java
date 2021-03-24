@@ -3,6 +3,8 @@ package com.codessquad.qna.domain.question;
 import com.codessquad.qna.domain.BaseTimeEntity;
 import com.codessquad.qna.domain.answer.Answer;
 import com.codessquad.qna.domain.user.User;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 
@@ -20,6 +22,7 @@ public class Question extends BaseTimeEntity {
 
     @ManyToOne
     @JoinColumn(foreignKey = @ForeignKey(name = "fk_question_writer"))
+    @JsonManagedReference
     private User writer;
 
     private String title;
@@ -31,6 +34,7 @@ public class Question extends BaseTimeEntity {
 
     @OneToMany(mappedBy = "question", cascade = CascadeType.PERSIST)
     @Where(clause = "deleted = false")
+    @JsonBackReference
     private final List<Answer> answers = new ArrayList<>();
 
 

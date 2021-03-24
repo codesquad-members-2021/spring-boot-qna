@@ -8,6 +8,6 @@ import java.util.Optional;
 
 
 public interface AnswerRepository extends CrudRepository<Answer, Long> {
-    List<Answer> findByQuestion(Question question);
+    List<Answer> findByQuestionAndDeletedFalse(Question question);
     Optional<Answer> findByIdAndDeletedFalse(Long id);
 }

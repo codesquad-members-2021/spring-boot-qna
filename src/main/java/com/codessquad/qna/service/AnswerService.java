@@ -35,7 +35,7 @@ public class AnswerService {
      * 답변 리스트 조회
      */
     public List<Answer> findAnswerListByQuestion(Question question) {
-        return answerRepository.findByQuestion(question);
+        return answerRepository.findByQuestionAndDeletedFalse(question);
     }
 
     /**

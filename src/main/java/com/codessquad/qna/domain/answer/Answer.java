@@ -3,6 +3,8 @@ package com.codessquad.qna.domain.answer;
 import com.codessquad.qna.domain.BaseTimeEntity;
 import com.codessquad.qna.domain.question.Question;
 import com.codessquad.qna.domain.user.User;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import org.hibernate.annotations.SQLDelete;
 
 import javax.persistence.*;
@@ -22,6 +24,7 @@ public class Answer extends BaseTimeEntity {
 
     @ManyToOne
     @JoinColumn(foreignKey = @ForeignKey(name = "fk_answer_to_user"))
+    @JsonManagedReference
     private User writer;
 
     @Column(length = 20000)

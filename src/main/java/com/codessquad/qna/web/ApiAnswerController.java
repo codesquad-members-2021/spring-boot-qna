@@ -9,42 +9,39 @@ import com.codessquad.qna.service.AnswerService;
 import com.codessquad.qna.service.QuestionService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
 
 import static com.codessquad.qna.domain.user.HttpSessionUtils.getUserFromSession;
 
-@Controller
-@RequestMapping("/questions/{questionId}/answers")
-public class AnswerController {
-    private static Logger logger = LoggerFactory.getLogger(AnswerController.class);
+@RestController
+@RequestMapping("/api/questions/{questionId}/answers")
+public class ApiAnswerController {
+    private static Logger logger = LoggerFactory.getLogger(ApiAnswerController.class);
 
     private QuestionService questionService;
     private AnswerService answerService;
 
-    public AnswerController(QuestionService questionService,
-                            AnswerService answerService) {
+    public ApiAnswerController(QuestionService questionService,
+                               AnswerService answerService) {
         this.questionService = questionService;
         this.answerService = answerService;
     }
 
     @PostMapping("/")
-    public String createAnswer(@PathVariable Long questionId, String comment,
+    public Answer createAnswer(@PathVariable Long questionId, String comment,
                                HttpSession session) {
         User writer = getUserFromSession(session);
         Question question = questionService.findById(questionId);
         Answer answer = new Answer(writer, question, comment);
-
-        answerService.createAnswer(answer);
         logger.debug("answer : {}", answer);
 
-        return "redirect:/questions/" + questionId;
+        return answerService.createAnswer(answer);
     }
 
     @DeleteMapping("/{id}")
-    public String delete(@PathVariable Long questionId,
+    public boolean delete(@PathVariable Long questionId,
                         @PathVariable Long id,
                          HttpSession session) {
         User loggedInUser = getUserFromSession(session);
@@ -56,7 +53,7 @@ public class AnswerController {
 
         answerService.delete(answer);
 
-        return String.format("redirect:/questions/%d", questionId);
+        return true;
     }
 
     @ExceptionHandler(AnswerNotFoundException.class)
