@@ -1,7 +1,7 @@
 package com.codessquad.qna.web.controllers;
 
 import com.codessquad.qna.web.domain.User;
-import com.codessquad.qna.web.exception.InvalidUserException;
+import com.codessquad.qna.web.exception.UnauthorizedUserException;
 import com.codessquad.qna.web.service.UserService;
 import com.codessquad.qna.web.utility.SessionUtility;
 import org.springframework.stereotype.Controller;
@@ -49,7 +49,7 @@ public class UserController {
         User user = userService.findById(id);
         User sessionedUser = SessionUtility.findSessionedUser(session);
 
-        SessionUtility.verifySessionUser(sessionedUser, user, "본인의 회원정보만 수정할수있습니다.");
+        SessionUtility.verifySessionUser(sessionedUser, user, "본인의 회원정보만 수정할 수 있습니다.");
         model.addAttribute("user", user);
         return "user/updateForm";
     }
@@ -58,7 +58,7 @@ public class UserController {
     public String updateUser(@PathVariable Long id, User newInfoUser) {
         User user = userService.findById(id);
         if (!userService.isCorrectPassword(user, newInfoUser)) {
-            throw new InvalidUserException("비밀번호가 틀렸습니다.");
+            throw new UnauthorizedUserException(UnauthorizedUserException.WRONG_PASSWORD);
         }
         user.update(newInfoUser);
         userService.save(user);

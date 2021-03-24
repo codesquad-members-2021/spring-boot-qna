@@ -2,8 +2,9 @@ package com.codessquad.qna.web.service;
 
 import com.codessquad.qna.web.domain.User;
 import com.codessquad.qna.web.domain.repository.UserRepository;
-import com.codessquad.qna.web.exception.InvalidUserException;
+import com.codessquad.qna.web.exception.UnauthorizedUserException;
 import com.codessquad.qna.web.exception.UnAuthenticatedLoginException;
+import com.codessquad.qna.web.exception.UserNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -19,7 +20,7 @@ public class UserService {
 
     public User findById(Long id) {
         User user = userRepository.findById(id)
-                .orElseThrow(() -> new InvalidUserException("해당 id의 사용자가 존재하지 않습니다."));
+                .orElseThrow(() -> new UnauthorizedUserException(UserNotFoundException.USER_NOT_FOUND));
         return user;
     }
 
@@ -36,7 +37,7 @@ public class UserService {
     }
 
     public User findByUserId(String userId) {
-        return userRepository.findByUserId(userId).orElseThrow(() ->new InvalidUserException("사용자가 존재하지 않습니다."));
+        return userRepository.findByUserId(userId).orElseThrow(() ->new UnauthorizedUserException(UserNotFoundException.USER_NOT_FOUND));
     }
 
     public User verifyUser(String userId, String password) {

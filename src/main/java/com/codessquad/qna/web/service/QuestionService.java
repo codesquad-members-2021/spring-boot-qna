@@ -1,11 +1,10 @@
 package com.codessquad.qna.web.service;
 
-import com.codessquad.qna.web.domain.Answer;
 import com.codessquad.qna.web.domain.Question;
 import com.codessquad.qna.web.domain.User;
 import com.codessquad.qna.web.domain.repository.QuestionRepository;
 import com.codessquad.qna.web.exception.QuestionNotFoundException;
-import com.codessquad.qna.web.exception.InvalidUserException;
+import com.codessquad.qna.web.exception.UnauthorizedUserException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -36,13 +35,13 @@ public class QuestionService {
 
     public Question findById(Long id) {
         Question question = questionRepository.findById(id)
-                .orElseThrow(() -> new QuestionNotFoundException("찾으시는 질문이 존재하지 않습니다."));
+                .orElseThrow(() -> new QuestionNotFoundException());
         return question;
     }
 
     public void verifyQuestionWriter(Question question, User user) {
         if (!question.isWriter(user)) {
-            throw new InvalidUserException("글 작성자가 아닙니다.");
+            throw new UnauthorizedUserException(UnauthorizedUserException.UNAUTHORIZED_USER_TO_QUESTION);
         }
     }
 }
