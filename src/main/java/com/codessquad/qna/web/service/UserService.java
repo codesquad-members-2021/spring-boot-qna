@@ -46,10 +46,19 @@ public class UserService {
         return userRepository.findByUserId(userId).orElseThrow(() -> new UnauthorizedUserException(UserNotFoundException.USER_NOT_FOUND));
     }
 
-    public User verifyUser(String userId, String password) {
-        User user = findByUserId(userId);
+    public void verifyPassword(User user, String password) {
         if (!user.matchesPassword(password)) {
             throw new UnAuthenticatedLoginException();
+        }
+    }
+
+    public User verifyUser(String userId, String password) {
+        User user;
+        try {
+            user = findByUserId(userId);
+            verifyPassword(user, password);
+        }catch(RuntimeException e) {
+            throw new UnAuthenticatedLoginException(UnAuthenticatedLoginException.WRONG_ID_OR_PASSWORD);
         }
         return user;
     }
