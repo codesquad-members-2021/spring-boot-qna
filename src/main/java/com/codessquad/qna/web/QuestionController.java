@@ -24,7 +24,7 @@ public class QuestionController {
         Result result = valid(session);
         if (!HttpSessionUtils.isLoginUser(session)) {
             model.addAttribute("errorMessage", result.getErrorMessage());
-            return "/user/login";
+            return "user/login";
         }
         return "qna/form";
     }
@@ -54,7 +54,7 @@ public class QuestionController {
         Result result = valid(question, session);
         if (!result.isValid()) {
             model.addAttribute("errorMessage", result.getErrorMessage());
-            return "/user/login";
+            return "user/login";
         }
         model.addAttribute("question", question);
         return "qna/updateForm";
@@ -73,7 +73,7 @@ public class QuestionController {
         Result result = valid(question, session);
         if (!result.isValid()) {
             model.addAttribute("errorMessage", result.getErrorMessage());
-            return "/user/login";
+            return "user/login";
         }
         questionService.delete(question);
 
