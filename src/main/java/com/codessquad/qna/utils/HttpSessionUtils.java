@@ -1,6 +1,7 @@
 package com.codessquad.qna.utils;
 
 import com.codessquad.qna.domain.User;
+import com.codessquad.qna.exception.UserNotFoundException;
 
 import javax.servlet.http.HttpSession;
 
@@ -11,12 +12,16 @@ public class HttpSessionUtils {
     public static boolean isLoginUser(HttpSession session) {
         User user = (User)session.getAttribute(USER_SESSION_KEY);
 
+        if(user == null) {
+            throw new UserNotFoundException();
+        }
+
         return user != null;
     }
 
     public static User getUserFromSession (HttpSession session) {
         if(!isLoginUser(session)) {
-            return null;
+            throw new UserNotFoundException();
         }
 
         User sessionedUser = (User)session.getAttribute(USER_SESSION_KEY);

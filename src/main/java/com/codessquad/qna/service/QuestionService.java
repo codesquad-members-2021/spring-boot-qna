@@ -38,7 +38,7 @@ public class QuestionService {
         questionRepository.deleteById(id);
     }
 
-    public void  hasPermission(HttpSession session, Question question) {
+    public void hasPermission(HttpSession session, Question question) {
 
         if(!HttpSessionUtils.isLoginUser(session)) {
             throw new IllegalStateException("로그인 필요함");
