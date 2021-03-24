@@ -9,8 +9,9 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false, length=20)
+    @Column(nullable = false, length=20, unique = true)
     private String userId;
+
     private String password;
     private String name;
     private String email;
@@ -55,10 +56,20 @@ public class User {
         this.email = email;
     }
 
-
     public void update(User updateUser) {
         this.password = updateUser.password;
         this.name = updateUser.name;
         this.email = updateUser.email;
     }
+    
+    public boolean matchId(Long newId) {
+        return this.id.equals(newId);
+    }
+
+    public boolean matchPassword(String newPassword) {
+        return this.password.equals(newPassword);
+    }
+
+
+    
 }

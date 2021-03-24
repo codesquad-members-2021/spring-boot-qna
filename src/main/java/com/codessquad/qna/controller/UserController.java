@@ -26,6 +26,7 @@ public class UserController {
         this.userRepository = userRepository;
     }
 
+
     @PostMapping
     public String createUserAccount(User user) {
         if (user == null) {
@@ -43,20 +44,36 @@ public class UserController {
 
     @GetMapping("/profile/{id}")
     public String showProfile(@PathVariable Long id, Model model) {
-        model.addAttribute("user", userRepository.findById(id).get());
+        model.addAttribute("user", userRepository.findById(id).orElse(null));
         return "/user/profile";
     }
 
 
-    @GetMapping("/{id}")
-    public String showUpdateForm(@PathVariable Long id, Model model) {
-        model.addAttribute("user", userRepository.findById(id).get());
+    @GetMapping("/{id}/updateForm")
+    public String showUpdateForm(@PathVariable Long id, Model model, HttpSession session) {
+        User sessionedUser = (User) session.getAttribute("sessionedUser");
+        logger.info("id : {}.", id);
+        logger.info("sessionedUser.getId() : {}.", sessionedUser.getId());
+        if (sessionedUser == null) {
+            return "redirect:/user/login";
+        }
+        if (! sessionedUser.matchId(id)) {
+            throw new IllegalArgumentException("자신의 정보만 수정할 수 있습니다.");
+        }
+        model.addAttribute("user", sessionedUser);
         return "/user/update";
     }
 
-   @PutMapping("/{id}/update")
-    public String updateUserInfo(@PathVariable Long id, User updateUser) {
-        User user = userRepository.findById(id).get();
+    @PutMapping("/{id}/update")
+    public String updateUserInfo(@PathVariable Long id, User updateUser, HttpSession session) {
+        User sessionedUser = (User) session.getAttribute("sessionedUser");
+        if (sessionedUser == null) {
+            return "redirect:/users/loginForm";
+        }
+        if (!sessionedUser.matchId(id)) {
+            throw new IllegalArgumentException("자신의 정보만 수정할 수 있습니다.");
+        }
+        User user = userRepository.findById(id).orElse(null);
         user.update(updateUser);
         userRepository.save(user);
         return "redirect:/users";
@@ -81,14 +98,13 @@ public class UserController {
         if(!password.equals(user.getPassword())) {
             return "redirect:/users/loginAgain";
         }
-        session.setAttribute("user", user);
-
+        session.setAttribute("sessionedUser", user);
         return "redirect:/";
     }
 
     @GetMapping("/logout")
     public String logout(HttpSession session) {
-        session.removeAttribute("user");
+        session.removeAttribute("sessionedUser");
         return "redirect:/";
     }
 
