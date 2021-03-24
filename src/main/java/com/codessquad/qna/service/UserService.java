@@ -11,7 +11,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.Objects;
 import java.util.Optional;
-import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
  * Created by 68936@naver.com on 2021-03-17 오후 4:24
@@ -29,19 +28,10 @@ public class UserService {
 
     public void save(User user) {
         user = Optional.ofNullable(user).orElseThrow(IllegalArgumentException::new);
-        duplicateCheck(user);
-        userRepository.save(user);
-    }
-
-    public void duplicateCheck(User user) {
-        AtomicBoolean duplicateCheck = new AtomicBoolean(false); //m 멀티스레드 환경에서 경쟁상태가 발생할 수 있으므로, 람다식 내부에서 지역변수(boolean)는 수정이 불가능하다.
-        userRepository.findByUserId(user.getUserId())
-                .ifPresent(u -> {
-                    duplicateCheck.set(true); // ID 중복 발생
-                });
-        if (duplicateCheck.get()) {  // 중복일때 예외발생, AtomicBoolean을 처음써봐서 이런식으로 해도 되는건지 잘 모르겠다.
+        if(userRepository.findByUserId(user.getUserId()).isPresent()){
             throw new DuplicateException();
         }
+        userRepository.save(user);
     }
 
     public Iterable<User> getList() { // ? k는 오버라이드해서 Optional로 바꿔줬던데.. 예외처리 쉽게 하려면 해야할 것 같기도
