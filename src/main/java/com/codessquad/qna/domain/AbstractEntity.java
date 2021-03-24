@@ -32,7 +32,7 @@ public class AbstractEntity {
     }
 
     public String getFormattedPostTime() {
-        return updatedPostTime.format(DATE_TIME_FORMATTER);
+        return postTime.format(DATE_TIME_FORMATTER);
     }
 
     @Override
