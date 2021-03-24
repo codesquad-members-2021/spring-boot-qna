@@ -22,8 +22,8 @@ public class QuestionController {
     }
 
     @PostMapping
-    public String create(Question question, HttpSession session) {
-        question.setWriter(SessionUtils.getSessionUser(session).toEntity());
+    public String create(QuestionDTO question, HttpSession session) {
+        question.setWriter(SessionUtils.getSessionUser(session));
 
         questionService.create(question);
 
@@ -37,14 +37,14 @@ public class QuestionController {
 
     @GetMapping("/{id}/form")
     public ModelAndView viewUpdateForm(@PathVariable Long id, HttpSession session) {
-        Question result = questionService.readVerifiedQuestion(id, SessionUtils.getSessionUser(session));
+        QuestionDTO result = questionService.readVerifiedQuestion(id, SessionUtils.getSessionUser(session));
 
         return new ModelAndView("/qna/updateForm", "question", result);
     }
 
     @PutMapping("/{id}")
-    public String update(@PathVariable Long id, Question newQuestion, HttpSession session) {
-        newQuestion.setWriter(SessionUtils.getSessionUser(session).toEntity());
+    public String update(@PathVariable Long id, QuestionDTO newQuestion, HttpSession session) {
+        newQuestion.setWriter(SessionUtils.getSessionUser(session));
 
         questionService.update(id, newQuestion);
 

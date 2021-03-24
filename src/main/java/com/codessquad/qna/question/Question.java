@@ -1,6 +1,8 @@
 package com.codessquad.qna.question;
 
 import com.codessquad.qna.answer.Answer;
+import com.codessquad.qna.common.BaseEntity;
+import com.codessquad.qna.exception.InsufficientAuthenticationException;
 import com.codessquad.qna.user.User;
 
 import javax.persistence.*;
@@ -8,19 +10,14 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
-public class Question {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
+public class Question extends BaseEntity {
     @Column(nullable = false, length = 100)
     private String title;
 
     @Column(nullable = false, length = 5000)
     private String contents;
 
-    private LocalDateTime createDateTime;
-    private LocalDateTime updateDateTime;
+    private boolean deleted;
 
     @ManyToOne
     @JoinColumn(foreignKey = @ForeignKey(name = "fk_question_writer"))
@@ -33,11 +30,10 @@ public class Question {
     }
 
     public Question(Long id, String title, String contents, LocalDateTime createDateTime, LocalDateTime updateDateTime, User writer, List<Answer> answers) {
-        this.id = id;
+        super(id, createDateTime, updateDateTime);
+
         this.title = title;
         this.contents = contents;
-        this.createDateTime = createDateTime == null ? LocalDateTime.now() : createDateTime;
-        this.updateDateTime = updateDateTime;
         this.writer = writer;
         this.answers = answers;
     }
@@ -95,10 +91,6 @@ public class Question {
         }
     }
 
-    public Long getId() {
-        return id;
-    }
-
     public String getTitle() {
         return title;
     }
@@ -107,32 +99,33 @@ public class Question {
         return contents;
     }
 
-    public LocalDateTime getCreateDateTime() {
-        return createDateTime;
-    }
-
-    public LocalDateTime getUpdateDateTime() {
-        return updateDateTime;
+    public void delete() {
+        deleted = true;
     }
 
     public User getWriter() {
         return writer;
     }
 
-    public void setWriter(User writer) {
-        this.writer = writer;
-    }
-
     public List<Answer> getAnswers() {
         return answers;
     }
 
-    public void setAnswers(List<Answer> answers) {
-        this.answers = answers;
-    }
-
     public void verifyWriter(User target) {
         writer.verifyWith(target);
+    }
+
+    public boolean isWriterDifferentFrom(Answer answer) {
+        return !answer.isWriterSameAs(writer);
+    }
+
+    public void checkDeletable(User writer) {
+        verifyWriter(writer);
+
+        boolean differentWriterExists = answers.stream().anyMatch(this::isWriterDifferentFrom);
+        if (differentWriterExists) {
+            throw new InsufficientAuthenticationException("다른 작성자가 작성한 답변이 있으면 삭제할 수 없습니다.");
+        }
     }
 
     public void update(Question newQuestion) {
@@ -140,17 +133,16 @@ public class Question {
 
         this.title = newQuestion.title;
         this.contents = newQuestion.contents;
-        this.updateDateTime = LocalDateTime.now();
     }
 
     @Override
     public String toString() {
         return "Question{" +
-                "id=" + id +
+                "id=" + getId() +
                 ", title='" + title + '\'' +
                 ", contents='" + contents + '\'' +
-                ", createDateTime=" + createDateTime +
-                ", updateDateTime=" + updateDateTime +
+                ", createDateTime=" + getCreateDateTime() +
+                ", updateDateTime=" + getUpdateDateTime() +
                 ", writer=" + writer +
                 ", answers=" + answers +
                 '}';

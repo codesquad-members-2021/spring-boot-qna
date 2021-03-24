@@ -44,22 +44,36 @@ public class DummyDataFactory {
 
     public static List<Answer> createAnswers() {
         return Arrays.asList(
-                new Answer("국내에서 Ruby on Rails와 Play가 활성화되기 힘든 이유는 뭘까",
-                        LocalDateTime.of(2016, 1, 15, 18, 47),
-                        Question.builder().setId(1L).build(),
-                        User.builder().setId(1L).build()),
-                new Answer("국내에서 Ruby on Rails와 Play가 활성화되기 힘든 이유는 뭘까",
-                        LocalDateTime.of(2016, 1, 15, 18, 47),
-                        Question.builder().setId(2L).build(),
-                        User.builder().setId(2L).build()),
-                new Answer("국내에서 Ruby on Rails와 Play가 활성화되기 힘든 이유는 뭘까",
-                        LocalDateTime.of(2016, 1, 15, 18, 47),
-                        Question.builder().setId(3L).build(),
-                        User.builder().setId(4L).build()),
-                new Answer("국내에서 Ruby on Rails와 Play가 활성화되기 힘든 이유는 뭘까",
-                        LocalDateTime.of(2016, 1, 15, 18, 47),
-                        Question.builder().setId(1L).build(),
-                        User.builder().setId(1L).build())
+                Answer.builder()
+                        .setComment("국내에서 Ruby on Rails와 Play가 활성화되기 힘든 이유는 뭘까")
+                        .setCreateDateTime(LocalDateTime.of(2016, 1, 15, 18, 47))
+                        .setQuestion(Question.builder().setId(1L).build())
+                        .setWriter(User.builder().setId(1L).build())
+                        .build(),
+                Answer.builder()
+                        .setComment("국내에서 Ruby on Rails와 Play가 활성화되기 힘든 이유는 뭘까")
+                        .setCreateDateTime(LocalDateTime.of(2016, 1, 15, 18, 47))
+                        .setQuestion(Question.builder().setId(2L).build())
+                        .setWriter(User.builder().setId(2L).build())
+                        .build(),
+                Answer.builder()
+                        .setComment("국내에서 Ruby on Rails와 Play가 활성화되기 힘든 이유는 뭘까")
+                        .setCreateDateTime(LocalDateTime.of(2016, 1, 15, 18, 47))
+                        .setQuestion(Question.builder().setId(3L).build())
+                        .setWriter(User.builder().setId(4L).build())
+                        .build(),
+                Answer.builder()
+                        .setComment("국내에서 Ruby on Rails와 Play가 활성화되기 힘든 이유는 뭘까")
+                        .setCreateDateTime(LocalDateTime.of(2016, 1, 15, 18, 47))
+                        .setQuestion(Question.builder().setId(1L).build())
+                        .setWriter(User.builder().setId(1L).build())
+                        .build(),
+                Answer.builder()
+                        .setComment("국내에서 Ruby on Rails와 Play가 활성화되기 힘든 이유는 뭘까")
+                        .setCreateDateTime(LocalDateTime.of(2016, 1, 15, 18, 47))
+                        .setQuestion(Question.builder().setId(5L).build())
+                        .setWriter(User.builder().setId(1L).build())
+                        .build()
         );
     }
 

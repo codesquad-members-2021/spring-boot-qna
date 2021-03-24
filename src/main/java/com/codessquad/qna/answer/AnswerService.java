@@ -1,10 +1,12 @@
 package com.codessquad.qna.answer;
 
 import com.codessquad.qna.exception.ResourceNotFoundException;
+import com.codessquad.qna.question.Question;
 import com.codessquad.qna.user.UserDTO;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class AnswerService {
@@ -14,37 +16,60 @@ public class AnswerService {
         this.answerRepository = answerRepository;
     }
 
-    private Answer read(Long id) {
+    public List<AnswerDTO> readAll(Long questionId) {
+        return answerRepository.findAllByQuestionIdAndDeletedFalse(questionId).stream()
+                .map(AnswerDTO::from)
+                .collect(Collectors.toList());
+    }
+
+    private Answer readExistedAnswer(Long id) {
         return answerRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("존재하지 않는 답변입니다. id : " + id));
     }
 
-    public Answer readVerifiedAnswer(Long id, UserDTO user) {
-        Answer answer = read(id);
+    public AnswerDTO readVerifiedAnswer(Long id, UserDTO user) {
+        Answer answer = readExistedAnswer(id);
 
         answer.verifyWriter(user.toEntity());
 
-        return answer;
+        return AnswerDTO.from(answer);
     }
 
-    public void create(Answer answer) {
-        answerRepository.save(answer);
+    public AnswerDTO create(AnswerDTO answer) {
+        Answer savedAnswer = answerRepository.save(answer.toEntity());
+
+        int answersCount = countBy(savedAnswer.getQuestion());
+        AnswerDTO result = AnswerDTO.of(savedAnswer, answersCount);
+
+        return result;
     }
 
-    public void update(Long id, Answer newAnswer) {
-        Answer existedAnswer = read(id);
+    public void update(Long id, AnswerDTO newAnswer) {
+        Answer existedAnswer = readExistedAnswer(id);
 
-        existedAnswer.update(newAnswer);
+        existedAnswer.update(newAnswer.toEntity());
         answerRepository.save(existedAnswer);
     }
 
-    public void delete(List<Answer> answers) {
-        answerRepository.deleteAll(answers);
+    public void deleteAll(List<Answer> answers) {
+        for (Answer answer : answers) {
+            answer.delete();
+        }
+
+        answerRepository.saveAll(answers);
     }
 
-    public void delete(Long id, UserDTO currentSessionUser) {
-        Answer answer = readVerifiedAnswer(id, currentSessionUser);
+    public AnswerDTO delete(Long id, UserDTO currentSessionUser) {
+        Answer answer = readExistedAnswer(id);
 
-        answerRepository.delete(answer);
+        answer.verifyWriter(currentSessionUser.toEntity());
+        answer.delete();
+        Answer deletedAnswer = answerRepository.save(answer);
+
+        return AnswerDTO.of(deletedAnswer, countBy(deletedAnswer.getQuestion()));
+    }
+
+    public int countBy(Question question) {
+        return answerRepository.countByQuestionAndDeletedFalse(question);
     }
 }
