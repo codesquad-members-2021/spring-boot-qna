@@ -6,6 +6,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 import static com.codessquad.qna.utils.SessionUtil.getLoginUser;
+import static com.codessquad.qna.utils.StringUtil.PATTERN_FORMAT;
 
 @Entity
 public class Question {
@@ -30,7 +31,7 @@ public class Question {
     // 20분 4초 시점
 
 
-    private final String PATTERN_FORMAT = "yyyy.MM.dd HH:mm:ss";
+
 
     public Question() {
     }

@@ -1,8 +1,6 @@
 package com.codessquad.qna.Controller;
 
-import com.codessquad.qna.domain.Question;
-import com.codessquad.qna.domain.QuestionRepostory;
-import com.codessquad.qna.domain.User;
+import com.codessquad.qna.domain.*;
 import com.codessquad.qna.utils.SessionUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -11,6 +9,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
+
+import java.util.List;
 
 import static com.codessquad.qna.utils.SessionUtil.*;
 
@@ -23,8 +23,11 @@ public class QuestionController {
 
     private final QuestionRepostory questionRepostory;
 
-    public QuestionController(QuestionRepostory questionRepostory) {
+    private final AnswerRepository answerRepository;
+
+    public QuestionController(QuestionRepostory questionRepostory, AnswerRepository answerRepository) {
         this.questionRepostory = questionRepostory;
+        this.answerRepository = answerRepository;
     }
 
     @GetMapping("/")
@@ -58,7 +61,9 @@ public class QuestionController {
     @GetMapping("/{id}")
     public String showDetailQuestion(@PathVariable Long id, Model model) throws Exception {
         Question currentQuestion = questionRepostory.findById(id).orElseThrow(() -> new Exception("데이터 검색에 실패하였습니다"));
+        List<Answer> answerList = answerRepository.findByQuestionId(id);
         model.addAttribute("question", currentQuestion);
+        model.addAttribute("answerList", answerList);
         logger.info("update Question : {}" + currentQuestion.getTitle());
         return "/qna/show";
     }
