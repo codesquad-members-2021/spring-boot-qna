@@ -92,10 +92,10 @@ public class UserController {
     @PostMapping("/login")
     public String login(String userId, String password, HttpSession session) {
         User user = userRepository.findByUserId(userId);
-        if(user == null) {
+        if (user == null) {
             return "redirect:/users/loginAgain";
         }
-        if(!password.equals(user.getPassword())) {
+        if (! user.matchPassword(password)) {
             return "redirect:/users/loginAgain";
         }
         session.setAttribute("sessionedUser", user);

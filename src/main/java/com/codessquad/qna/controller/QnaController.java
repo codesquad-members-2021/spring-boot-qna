@@ -15,7 +15,7 @@ public class QnaController {
 
     private QuestionRepository questionRepository;
 
-    public QnaController (QuestionRepository questionRepository) {
+    public QnaController(QuestionRepository questionRepository) {
         this.questionRepository = questionRepository;
     }
 

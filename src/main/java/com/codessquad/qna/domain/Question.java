@@ -33,6 +33,11 @@ public class Question {
         this.id = id;
     }
 
+    public void update(Question question) {
+        this.title = question.title;
+        this.contents = question.contents;
+    }
+
     public String getWriter() {
         return writer;
     }
