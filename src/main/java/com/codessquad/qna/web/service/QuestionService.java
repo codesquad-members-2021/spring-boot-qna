@@ -23,6 +23,11 @@ public class QuestionService {
         questionRepository.save(question);
     }
 
+    public void update(Question question, String title, String contents) {
+        question.update(title, contents);
+        save(question);
+    }
+
     public void delete(Question question) { questionRepository.delete(question); }
 
     public List<Question> findAll() {
