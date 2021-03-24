@@ -3,6 +3,7 @@ package com.codessquad.qna.Controller;
 import javax.servlet.http.HttpSession;
 import com.codessquad.qna.domain.User;
 import com.codessquad.qna.domain.UserRepository;
+import com.codessquad.qna.exception.NotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
@@ -80,8 +81,8 @@ public class UserController {
     }
 
     @GetMapping("/{id}/form")
-    public String getUserUpdateForm(@PathVariable Long id, Model model, HttpSession session) throws Exception {
-        User foundUser = (User)userRepository.findById(id).get(); //get 안티패턴 수정해야함@@@@@@@@@@@@
+    public String getUserUpdateForm(@PathVariable Long id, Model model, HttpSession session) {
+        User foundUser = (User)userRepository.findById(id).orElseThrow(NotFoundException::new);
         if (!isValidUser(session, foundUser)) {
             logger.info("Login Failure : wrong password");
             return "redirect:/user/form";

@@ -1,7 +1,7 @@
 package com.codessquad.qna.Controller;
 
 import com.codessquad.qna.domain.*;
-import com.codessquad.qna.utils.SessionUtil;
+import com.codessquad.qna.exception.NotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
@@ -9,10 +9,10 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
-
 import java.util.List;
 
-import static com.codessquad.qna.utils.SessionUtil.*;
+import static com.codessquad.qna.utils.SessionUtil.isLoginUser;
+import static com.codessquad.qna.utils.SessionUtil.isValidUser;
 
 @Controller
 
@@ -47,7 +47,7 @@ public class QuestionController {
 
     @PostMapping("/questions")
     public String createQuestion(Question question, HttpSession session) {
-        Question addNewQuestion = new Question(question,session);
+        Question addNewQuestion = new Question(question, session);
         questionRepostory.save(addNewQuestion);
         return "redirect:/qna/list";
     }
@@ -68,24 +68,23 @@ public class QuestionController {
         return "/qna/show";
     }
 
-    //질문수정
     @PutMapping("/{id}")
     public String updateQuestion(@PathVariable Long id, String title, String contents) throws Exception {
         Question question = questionRepostory.findById(id).orElseThrow(() -> new Exception("데이터 검색에 실패하였습니다"));
-        question.update(title,contents);
+        question.update(title, contents);
         questionRepostory.save(question);
-        logger.info("update Question : {id}",id);
-        return String.format("redirect:/qna/%d",id);
+        logger.info("update Question : {id}", id);
+        return String.format("redirect:/qna/%d", id);
     }
 
     @DeleteMapping("/{id}")
-    public String deleteQuestion(@PathVariable Long id,User ownerUser,HttpSession session) {
+    public String deleteQuestion(@PathVariable Long id, User ownerUser, HttpSession session) {
 
-        Question question =  questionRepostory.findById(id).get();// 옵셔녈
+        Question question = questionRepostory.findById(id).orElseThrow(NotFoundException::new);
 
-        if(! isValidUser(session,question.getWriter())) {
+        if (!isValidUser(session, question.getWriter())) {
             logger.info("질문글 삭제 - 실패, 권한없는 사용자의 삭제시도");
-            return String.format("redirect:/qna/%d",id);
+            return String.format("redirect:/qna/%d", id);
         }
         questionRepostory.delete(questionRepostory.getOne(id));
         logger.info("질문글 삭제 - 성공");
@@ -93,14 +92,14 @@ public class QuestionController {
     }
 
     @GetMapping("/{id}/form")
-    public String updateForm(@PathVariable Long id, Model model,HttpSession session) {
+    public String updateForm(@PathVariable Long id, Model model, HttpSession session) {
 
-        Question question =  questionRepostory.findById(id).get();//옵셔녈 겟 수정
-        if(! isValidUser(session,question.getWriter())) {
+        Question question = questionRepostory.findById(id).orElseThrow(NotFoundException::new);
+        if (!isValidUser(session, question.getWriter())) {
             logger.info("질문글 수정 - 실패, 권한없는 사용자의 수정시도");
-            return String.format("redirect:/qna/%d",id);
+            return String.format("redirect:/qna/%d", id);
         }
-        logger.info("글 수정 : {}",question.getTitle());
+        logger.info("글 수정 : {}", question.getTitle());
         model.addAttribute("question", question);
         return "/qna/updateForm";
     }
