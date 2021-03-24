@@ -30,7 +30,8 @@ public class AnswersController {
     }
 
     @DeleteMapping("/{questionId}/answers/{answerId}")
-    public String deleteAnswer(@PathVariable("answerId") long answerId, HttpSession session) {
+    public String deleteAnswer(@PathVariable("questionId") long questionId,
+                               @PathVariable("answerId") long answerId, HttpSession session) {
         User loginUser = SessionUtil.getLoginUser(session);
         Question targetQuestion = answerService.deleteAnswer(loginUser, answerId);
         return "redirect:/questions/" + targetQuestion.getId();
