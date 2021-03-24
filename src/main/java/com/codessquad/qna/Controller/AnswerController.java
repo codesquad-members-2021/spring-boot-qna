@@ -19,17 +19,19 @@ import javax.servlet.http.HttpSession;
 import static com.codessquad.qna.utils.SessionUtil.*;
 
 @Controller
-//@RequestMapping("/questions/{questionId}/answers") //대표 url을 이렇게 설정한 이유는 >> 앤서는 퀘스천에 종속적이기 때문
 public class AnswerController {
-    private static final Logger logger = LoggerFactory.getLogger(AnswerController.class); //@@@@@@@@@@@@@@ AnswerController.class 이거 문제인지 검색
 
-    @Autowired
-    private QuestionRepostory questionRepostory;
+    private static final Logger logger = LoggerFactory.getLogger(AnswerController.class);
 
-    @Autowired
-    private AnswerRepository answerRepository; //@@안티패턴
+    private final QuestionRepostory questionRepostory;
+    private final AnswerRepository answerRepository;
 
-    @PostMapping("/qna/{questionId}/answers") // 500에러 발생 :
+    public AnswerController(QuestionRepostory questionRepostory, AnswerRepository answerRepository) {
+        this.questionRepostory = questionRepostory;
+        this.answerRepository = answerRepository;
+    }
+
+    @PostMapping("/qna/{questionId}/answers")
     public String createAnswer(@PathVariable Long questionId, String contents, HttpSession session) {
         if(!isLoginUser(session)) {
             logger.info("답변달기 - 실패 : 권한(로그인)되지 않은 사용자의 답변달기 시도가 실패함");
