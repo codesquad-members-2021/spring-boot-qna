@@ -1,26 +1,33 @@
 package com.codessquad.qna;
 
-import com.codessquad.qna.exception.NoQuestionException;
 import com.codessquad.qna.exception.NoSessionedUserException;
-import com.codessquad.qna.exception.NoUserException;
+import com.codessquad.qna.exception.NotFoundException;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
 @ControllerAdvice
 public class GlobalExceptionHandler {
 
-    @ExceptionHandler({NoUserException.class, NoQuestionException.class})
-    public String handleNotExistException() {
-        return "/exception/notExistHandle";
+    @ExceptionHandler(NotFoundException.class)
+    public String handleNotFoundException() {
+        return "/exception/notFoundHandle";
     }
 
     @ExceptionHandler(IllegalStateException.class)
-    public String handleIllegalStateException() {
-        return "/exception/unableToAccessToOthers";
+    public String handleIllegalStateException(Model model, IllegalStateException e) {
+        model.addAttribute("errorMessage", e.getMessage());
+        return "/user/login";
     }
 
     @ExceptionHandler(NoSessionedUserException.class)
-    public String handleNoSessionedUserException() {
-        return "redirect:/users/loginForm";
+    public String handleNoSessionedUserException(Model model, NoSessionedUserException e) {
+        model.addAttribute("errorMessage", e.getMessage());
+        return "/user/login";
+    }
+
+    @ExceptionHandler(IllegalAccessException.class)
+    public String handleIllegalAccessException() {
+        return "/exception/illegalAccessHandle";
     }
 }

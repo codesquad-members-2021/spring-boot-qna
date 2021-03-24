@@ -2,8 +2,7 @@ package com.codessquad.qna.web;
 
 import com.codessquad.qna.domain.Question;
 import com.codessquad.qna.domain.User;
-import com.codessquad.qna.exception.NoQuestionException;
-import com.codessquad.qna.repository.QuestionRepository;
+import com.codessquad.qna.service.QuestionService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -16,66 +15,54 @@ import static com.codessquad.qna.web.HttpSessionUtils.*;
 @RequestMapping("/questions")
 public class QuestionController {
 
-    private final QuestionRepository questionRepository;
+    private final QuestionService questionService;
 
-    public QuestionController(QuestionRepository questionRepository) {
-        this.questionRepository = questionRepository;
+    public QuestionController(QuestionService questionService) {
+        this.questionService = questionService;
     }
 
     @GetMapping
     public String list(Model model) {
-        model.addAttribute("questions", questionRepository.findAll());
+        model.addAttribute("questions", questionService.getQuestionList());
         return "index";
     }
 
     @PostMapping("/create")
-    public String create(Question question, HttpSession session) {
-        question.setWriter(getUserFromSession(session));
-        questionRepository.save(question);
+    public String create(String title, String contents, HttpSession session) {
+        User loggedinUser = getUserFromSession(session);
+        Question question = new Question(loggedinUser, title, contents);
+        questionService.save(question);
         return "redirect:/questions";
     }
 
     @GetMapping("/{id}")
     public String show(@PathVariable Long id, Model model) {
-        model.addAttribute("question", getQuestionById(id));
+        model.addAttribute("question", questionService.findQuestion(id));
         return "qna/show";
     }
 
     @GetMapping("/{id}/form")
     public String update(@PathVariable Long id, Model model, HttpSession session) {
-        User sessionedUser = getUserFromSession(session);
-        Question question = getQuestionById(id);
-        if (!question.isPostWriter(sessionedUser)) {
-            throw new IllegalStateException("자신의 질문만 수정할 수 있습니다.");
-        }
+        User loggedinUser = getUserFromSession(session);
+        Question question = questionService.findQuestion(id);
+        questionService.checkValid(question, loggedinUser);
         model.addAttribute("question", question);
         return "/qna/updateForm";
     }
 
     @PutMapping("/{id}")
     public String updateForm(@PathVariable Long id, Question updatedQuestion, HttpSession session) {
-        User sessionedUser = getUserFromSession(session);
-        Question question = getQuestionById(id);
-        if (!question.isPostWriter(sessionedUser)) {
-            throw new IllegalStateException("자신의 질문만 수정할 수 있습니다.");
-        }
-        question.update(updatedQuestion);
-        questionRepository.save(question);
+        User loggedinUser = getUserFromSession(session);
+        Question question = questionService.findQuestion(id);
+        questionService.update(question, updatedQuestion, loggedinUser);
         return "redirect:/questions/{id}";
     }
 
     @DeleteMapping("/{id}/delete")
-    public String delete(@PathVariable Long id, HttpSession session) {
-        User sessionedUser = getUserFromSession(session);
-        Question question = getQuestionById(id);
-        if (!question.isPostWriter(sessionedUser)) {
-            throw new IllegalStateException("자신의 질문만 수정할 수 있습니다.");
-        }
-        questionRepository.delete(question);
+    public String delete(@PathVariable Long id, HttpSession session) throws IllegalAccessException {
+        User loggedinUser = getUserFromSession(session);
+        Question question = questionService.findQuestion(id);
+        questionService.delete(question, loggedinUser);
         return "redirect:/";
-    }
-
-    private Question getQuestionById(Long id) {
-        return questionRepository.findById(id).orElseThrow(NoQuestionException::new);
     }
 }

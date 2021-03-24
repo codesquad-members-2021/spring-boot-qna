@@ -7,7 +7,7 @@
                 <input type="hidden" name="_method" value="put" />
                 <div class="form-group">
                     <label for="writer">글쓴이</label>
-                    <input class="form-control" id="writer" name="userId" placeholder="글쓴이" value="{{writer}}"
+                    <input class="form-control" id="writer" name="userId" placeholder="글쓴이" value="{{writerUserId}}"
                            readonly/>
                 </div>
                 <div class="form-group">
@@ -16,9 +16,9 @@
                 </div>
                 <div class="form-group">
                     <label for="contents">내용</label>
-                    <textarea name="contents" id="contents" rows="5" class="form-control"></textarea>
+                    <textarea name="contents" id="contents" rows="5" class="form-control">{{contents}}</textarea>
                 </div>
-                <button type="submit" class="btn btn-success clearfix pull-right">질문하기</button>
+                <button type="submit" class="btn btn-success clearfix pull-right">수정하기</button>
                 <div class="clearfix"/>
             </form>
             {{/question}}

@@ -1,8 +1,7 @@
 package com.codessquad.qna.web;
 
 import com.codessquad.qna.domain.User;
-import com.codessquad.qna.exception.NoUserException;
-import com.codessquad.qna.repository.UserRepository;
+import com.codessquad.qna.service.UserService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -15,29 +14,29 @@ import static com.codessquad.qna.web.HttpSessionUtils.*;
 @RequestMapping("/users")
 public class UserController {
 
-    private final UserRepository userRepository;
+    private final UserService userService;
 
-    public UserController(UserRepository userRepository) {
-        this.userRepository = userRepository;
+    public UserController(UserService userService) {
+        this.userService = userService;
     }
 
     @PostMapping
     public String create(User user) {
-        userRepository.save(user);
+        userService.save(user);
         return "redirect:/users";
     }
 
     @GetMapping
     public String list(Model model) {
-        model.addAttribute("users", userRepository.findAll());
+        model.addAttribute("users", userService.getUserList());
         return "user/list";
     }
 
     @PostMapping("/login")
     public String login(String userId, String password, HttpSession session) {
-        User user = userRepository.findByUserId(userId).orElseThrow(NoUserException::new);
-        if (!user.isPasswordMatching(password)) {
-            return "redirect:/users/loginForm";
+        User user = userService.findUserByUserId(userId);
+        if (!userService.checkValidByPassword(user, password)) {
+            throw new IllegalStateException("아이디 혹은 비밀번호가 일치하지 않습니다.");
         }
         session.setAttribute(USER_SESSION_KEY, user);
         return "redirect:/";
@@ -51,36 +50,29 @@ public class UserController {
 
     @GetMapping("/{id}")
     public String show(@PathVariable Long id, Model model, HttpSession session) {
-        User sessionedUser = getUserFromSession(session);
-        if (!sessionedUser.isIdMatching(id)) {
-            throw new IllegalStateException("자신의 정보만 확인할 수 있습니다.");
-        }
-        model.addAttribute("user", sessionedUser);
+        User loggedinUser = getUserFromSession(session);
+        userService.checkValidById(loggedinUser, id);
+        model.addAttribute("user", loggedinUser);
         return "/user/profile";
     }
 
     @GetMapping("/{id}/form")
     public String update(@PathVariable Long id, Model model, HttpSession session) {
-        User sessionedUser = getUserFromSession(session);
-        if (!sessionedUser.isIdMatching(id)) {
-            throw new IllegalStateException("자신의 정보만 수정할 수 있습니다.");
-        }
-        model.addAttribute("user", sessionedUser);
+        User loggedinUser = getUserFromSession(session);
+        userService.checkValidById(loggedinUser, id);
+        model.addAttribute("user", loggedinUser);
         return "/user/updateForm";
     }
 
     @PutMapping("/{id}")
-    public String updateForm(@PathVariable Long id, String inputPassword, User updatedUser, HttpSession session) {
-        User sessionedUser = getUserFromSession(session);
-        if (!sessionedUser.isIdMatching(id)) {
-            throw new IllegalStateException("자신의 정보만 수정할 수 있습니다.");
+    public String updateForm(@PathVariable Long id, String inputPassword, User updatedUser, Model model, HttpSession session) {
+        User loggedinUser = getUserFromSession(session);
+        userService.checkValidById(loggedinUser, id);
+        if (!userService.checkValidByPassword(loggedinUser, inputPassword)) {
+            model.addAttribute("errorMessage", "비밀번호가 일치하지 않습니다.");
+            return "/user/updateForm";
         }
-        User user = sessionedUser;
-        if (!user.isPasswordMatching(inputPassword)) {
-            return "redirect:/users/{id}/form";
-        }
-        user.update(updatedUser);
-        userRepository.save(user);
+        userService.update(loggedinUser, updatedUser);
         return "redirect:/users";
     }
 }
