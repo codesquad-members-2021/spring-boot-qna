@@ -64,8 +64,8 @@ public class QuestionService {
 
     private class PageNumber {
         private int pageId;
-        private boolean active;
         private int pageNumber;
+        private boolean active;
 
         private PageNumber(int pageId, boolean active, int pageNumber) {
             this.pageId = pageId;
@@ -111,4 +111,3 @@ public class QuestionService {
         model.addAttribute("pages", pages);
     }
 }
-
