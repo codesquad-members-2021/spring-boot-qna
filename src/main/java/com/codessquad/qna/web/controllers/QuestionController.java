@@ -68,6 +68,7 @@ public class QuestionController {
     public String deleteQuestion(@PathVariable Long id, HttpSession session) {
         Question question = questionService.findById(id);
         User sessionedUser = SessionUtility.findSessionedUser(session);
+
         questionService.verifyQuestionWriter(question, sessionedUser);
         questionService.delete(question);
         return "redirect:/";

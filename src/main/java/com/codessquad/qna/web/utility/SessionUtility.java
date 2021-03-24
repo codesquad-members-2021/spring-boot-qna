@@ -28,4 +28,9 @@ public class SessionUtility {
     public static void setUser(User user, HttpSession session) {
         session.setAttribute(SESSIONED_USER, user);
     }
+
+    public static void deleteUser(HttpSession session) {
+        session.removeAttribute(SESSIONED_USER);
+    }
+
 }
