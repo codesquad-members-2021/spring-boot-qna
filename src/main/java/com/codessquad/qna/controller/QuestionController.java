@@ -1,5 +1,6 @@
 package com.codessquad.qna.controller;
 
+import com.codessquad.qna.exception.QuestionNotFoundException;
 import com.codessquad.qna.repository.Question;
 import com.codessquad.qna.repository.QuestionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,7 +48,7 @@ public class QuestionController {
     @GetMapping("/{id}")
     public ModelAndView question(@PathVariable("id") Long id) {
         ModelAndView modelAndView = new ModelAndView("questionDetail");
-        modelAndView.addObject("question", questionRepository.findById(id).get());
+        modelAndView.addObject("question", questionRepository.findById(id).orElseThrow(QuestionNotFoundException::new));
         return modelAndView;
     }
 }
