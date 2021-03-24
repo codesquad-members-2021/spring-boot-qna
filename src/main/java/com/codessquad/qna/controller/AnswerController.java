@@ -1,4 +1,4 @@
-package com.codessquad.qna.Controller;
+package com.codessquad.qna.controller;
 
 import com.codessquad.qna.domain.Answer;
 import com.codessquad.qna.domain.AnswerRepository;
