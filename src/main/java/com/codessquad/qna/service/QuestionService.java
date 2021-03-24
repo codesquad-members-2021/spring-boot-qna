@@ -26,7 +26,7 @@ public class QuestionService {
 
     public List<Question> findQuestions(){
 
-        return (List)questionRepository.findAll();
+        return questionRepository.findAll();
     }
 
     public Question findQuestion(Long id){
