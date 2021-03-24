@@ -26,7 +26,7 @@ public class AnswerService {
 
     public void delete(User user, Answer answer) {
         checkValid(user, answer);
-        answer.setDeletedTrue();
+        answer.delete();
         answerRepository.save(answer);
     }
 

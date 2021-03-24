@@ -71,7 +71,7 @@ public class Answer {
         return user.isUserMatching(writer);
     }
 
-    public void setDeletedTrue() {
+    public void delete() {
         deleted = true;
     }
 
