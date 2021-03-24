@@ -1,6 +1,5 @@
 package com.codessquad.qna.controller;
 
-import com.codessquad.qna.domain.Answer;
 import com.codessquad.qna.domain.User;
 import com.codessquad.qna.exception.NotLoggedInException;
 import com.codessquad.qna.service.AnswerService;
@@ -35,11 +34,7 @@ public class AnswerController {
     public String deleteAnswer(@PathVariable long answerId, HttpSession session, Model model) {
         checkSessionUser(session);
 
-        Answer answer = answerService.getOneById(answerId);
-
-        checkAccessibleSessionUser(session, answer);
-
-        answerService.remove(answer);
+        answerService.remove(getSessionUser(session), answerService.getOneById(answerId));
         return "redirect:/questions/{questionId}";
     }
 
@@ -49,11 +44,7 @@ public class AnswerController {
         }
     }
 
-    private void checkAccessibleSessionUser(HttpSession session, Answer answer) {
-        User sessionUser = HttpSessionUtils.getUserFromSession(session);
-        if (!answer.isEqualWriter(sessionUser)) {
-            throw new NotLoggedInException("자신의 글만 수정 및 삭제가 가능합니다.");
-        }
+    private User getSessionUser(HttpSession session){
+        return HttpSessionUtils.getUserFromSession(session);
     }
-
 }

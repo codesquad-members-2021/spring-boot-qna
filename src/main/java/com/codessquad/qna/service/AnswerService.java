@@ -4,11 +4,10 @@ import com.codessquad.qna.domain.Answer;
 import com.codessquad.qna.domain.Question;
 import com.codessquad.qna.domain.User;
 import com.codessquad.qna.exception.NotFoundException;
+import com.codessquad.qna.exception.NotLoggedInException;
 import com.codessquad.qna.repository.AnswerRepository;
 import com.codessquad.qna.repository.QuestionRepository;
 import com.codessquad.qna.util.HttpSessionUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -17,7 +16,6 @@ import java.util.List;
 
 @Service
 public class AnswerService {
-    Logger logger = LoggerFactory.getLogger(AnswerService.class);
     private final AnswerRepository answerRepository;
     private final QuestionRepository questionRepository;
 
@@ -40,10 +38,14 @@ public class AnswerService {
         answerRepository.save(new Answer(question, contents, loginUser));
     }
 
-    public void remove(Answer answer) {
+    public void remove(User user, Answer answer) {
+
+        if (!answer.isEqualWriter(user)) {
+            throw new NotLoggedInException("자신의 글만 수정 및 삭제가 가능합니다.");
+        }
+
         answer.deleted();
-        Answer testAnswer = answerRepository.save(answer);
-        logger.info("testAnswer: " + testAnswer.toString());
+        answerRepository.save(answer);
     }
 
     public List<Answer> findAll() {
