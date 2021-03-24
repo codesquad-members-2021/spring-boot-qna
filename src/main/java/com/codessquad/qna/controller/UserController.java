@@ -18,8 +18,7 @@ public class UserController {
 
     @GetMapping
     public String userList(Model model) {
-        Iterable<User> users = userRepository.findAll();
-        model.addAttribute("users", users);
+        model.addAttribute("users", userRepository.findAll());
         return "userList";
     }
 
@@ -61,10 +60,8 @@ public class UserController {
 
     @PutMapping("/{id}")
     public String updateUser(@PathVariable("id") Long id, User targetUser) {
-        User user = userRepository.findById(id).orElseGet(User::new);
-        user.setPassword(targetUser.getPassword());
-        user.setName(targetUser.getName());
-        user.setEmail(targetUser.getEmail());
+        User user = userRepository.findById(id).orElseThrow(UserNotFoundException::new);
+        user.update(targetUser);
         userRepository.save(user);
         return "redirect:/user";
     }
