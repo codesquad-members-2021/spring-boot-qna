@@ -21,10 +21,14 @@ public class Question {
     @Column(nullable = false, length = 100)
     private String title;
 
-    @Column(nullable = false, length = 5000)
+    @Lob
     private String contents;
 
-    private LocalDateTime creationDate;
+    private LocalDateTime createdDateTime;
+
+    //@OneToMany(mappedBy = ) :: https://www.youtube.com/watch?v=GvVFQom_SGs&list=PLqaSEyuwXkSppQAjwjXZgKkjWbFoUdNXC&index=46
+    // 20분 4초 시점
+
 
     private final String PATTERN_FORMAT = "yyyy.MM.dd HH:mm:ss";
 
@@ -35,21 +39,21 @@ public class Question {
         this.writer = getLoginUser(session);
         this.title = question.title;
         this.contents = question.contents;
-        this.creationDate = question.creationDate;
+        this.createdDateTime = question.createdDateTime;
 
     }
 
     public Question(String writer, String title, String contents) {
         this.title = title;
         this.contents = contents;
-        this.creationDate = LocalDateTime.now();
+        this.createdDateTime = LocalDateTime.now();
     }
 
     public String getFormattedCreatedDate() {
-        if (creationDate == null) {
+        if (createdDateTime == null) {
             return "";
         }
-        return creationDate.format(DateTimeFormatter.ofPattern(PATTERN_FORMAT));
+        return createdDateTime.format(DateTimeFormatter.ofPattern(PATTERN_FORMAT));
     }
 
     public Long getId() {

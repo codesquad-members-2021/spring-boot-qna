@@ -27,20 +27,22 @@ public class Answer {
     @Lob
     private String contents;
 
-    private LocalDateTime createDate;
+    private LocalDateTime createdDateTime;
 
     public Answer() {
 
     }
 
-    public Answer(User writer, String contents) {
+    public Answer(User writer, Question question, String contents) {
         this.writer = writer;
         this.contents = contents;
+        this.question = question;
+        this.createdDateTime = LocalDateTime.now();
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, writer, contents, createDate);
+        return Objects.hash(id, writer, contents, createdDateTime);
     }
 
     @Override
@@ -48,8 +50,39 @@ public class Answer {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Answer answer = (Answer) o;
-        return Objects.equals(id, answer.id) && Objects.equals(writer, answer.writer) && Objects.equals(contents, answer.contents) && Objects.equals(createDate, answer.createDate);
+        return Objects.equals(id, answer.id) && Objects.equals(writer, answer.writer) && Objects.equals(contents, answer.contents) && Objects.equals(createdDateTime, answer.createdDateTime);
     }
 
 
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public User getWriter() {
+        return writer;
+    }
+
+    public void setWriter(User writer) {
+        this.writer = writer;
+    }
+
+    public Question getQuestion() {
+        return question;
+    }
+
+    public void setQuestion(Question question) {
+        this.question = question;
+    }
+
+    public String getContents() {
+        return contents;
+    }
+
+    public void setContents(String contents) {
+        this.contents = contents;
+    }
 }
