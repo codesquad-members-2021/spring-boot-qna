@@ -8,11 +8,13 @@ import com.codessquad.qna.web.exception.EntityNotFoundException;
 import com.codessquad.qna.web.exception.FailedLoginException;
 import com.codessquad.qna.web.utils.SessionUtils;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.http.HttpSession;
 import java.util.List;
 
 @Service
+@Transactional(readOnly = true)
 public class UserService {
 
     private final UserRepository userRepository;
@@ -35,6 +37,7 @@ public class UserService {
         return user;
     }
 
+    @Transactional
     public void create(CreateUserRequest request){
         userRepository.save(request.toEntity());
     }
@@ -52,6 +55,7 @@ public class UserService {
         return user;
     }
 
+    @Transactional
     public User updateProfile(long id, String oldPassword, User updatedUser, User loginUser){
         User user = verifiedUser(id, loginUser);
         if (user.isMatchingPassword(oldPassword)) {

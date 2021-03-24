@@ -9,10 +9,12 @@ import com.codessquad.qna.web.dto.question.QuestionRequest;
 import com.codessquad.qna.web.exception.CrudNotAllowedException;
 import com.codessquad.qna.web.exception.EntityNotFoundException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
 @Service
+@Transactional(readOnly = true)
 public class QuestionService {
     private final QuestionRepository questionRepository;
     private final AnswerRepository answerRepository;
@@ -22,18 +24,20 @@ public class QuestionService {
         this.answerRepository = answerRepository;
     }
 
+    @Transactional
     public void create(User loginUser, QuestionRequest request) {
         Question question = request.toEntity(loginUser);
         questionRepository.save(question);
     }
 
+    @Transactional
     public void update(long questionId, User loginUser, QuestionRequest request) {
         Question question = verifiedQuestion(questionId, loginUser);
         question.update(request);
         questionRepository.save(question);
     }
 
-
+    @Transactional
     public void delete(long questionId, User loginUser) {
         Question question = verifiedQuestion(questionId, loginUser);
         questionRepository.delete(question);

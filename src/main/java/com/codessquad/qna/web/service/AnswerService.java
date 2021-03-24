@@ -8,8 +8,11 @@ import com.codessquad.qna.web.domain.user.User;
 import com.codessquad.qna.web.exception.CrudNotAllowedException;
 import com.codessquad.qna.web.exception.EntityNotFoundException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 
 @Service
+@Transactional(readOnly = true)
 public class AnswerService {
 
     private final AnswerRepository answerRepository;
@@ -20,6 +23,7 @@ public class AnswerService {
         this.questionRepository = questionRepository;
     }
 
+    @Transactional
     public void create(long questionId, String contents, User loginUser) {
         Question question = getQuestionById(questionId);
 
@@ -32,6 +36,7 @@ public class AnswerService {
         answerRepository.save(answer);
     }
 
+    @Transactional
     public void delete(long questionId, long answerId, User loginUser) {
         Answer answer = answerRepository.findById(answerId)
                 .orElseThrow(() -> new EntityNotFoundException("Cannot found answer number " + answerId));
