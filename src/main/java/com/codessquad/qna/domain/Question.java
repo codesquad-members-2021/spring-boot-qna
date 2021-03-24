@@ -20,7 +20,7 @@ public class Question {
     private int index;
 
     @CreationTimestamp
-    private LocalDate nowDate;
+    private LocalDate time;
 
     @ManyToOne
     @JoinColumn(foreignKey = @ForeignKey(name = "fk_question_writer"))
@@ -39,16 +39,12 @@ public class Question {
         return id;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public LocalDate getTime() {
+        return time;
     }
 
-    public LocalDate getNowDate() {
-        return nowDate;
-    }
-
-    public void setNowDate(LocalDate nowDate) {
-        this.nowDate = nowDate;
+    public void setTime(LocalDate nowDate) {
+        this.time = nowDate;
     }
 
     public int getIndex() {
@@ -84,7 +80,7 @@ public class Question {
         this.content = content;
     }
 
-    public void updqte(String title, String content) {
+    public void update(String title, String content) {
         this.title = title;
         this.content = content;
     }

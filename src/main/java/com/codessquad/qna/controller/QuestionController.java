@@ -1,5 +1,6 @@
 package com.codessquad.qna.controller;
 
+import com.codessquad.qna.exception.NotFoundException;
 import com.codessquad.qna.utils.HttpSessionUtils;
 import com.codessquad.qna.domain.Question;
 import com.codessquad.qna.domain.User;
@@ -22,7 +23,6 @@ public class QuestionController {
 
     @PostMapping("")
     public String questionRegister(String title, String content, HttpSession session) {
-
         if(!HttpSessionUtils.isLoginUser(session)) {
             return "redirect:/users/loginForm";
         }
@@ -38,15 +38,13 @@ public class QuestionController {
 
     @GetMapping("/{id}")
     public String showQuestionDetail(@PathVariable Long id, Model model) {
-
-        model.addAttribute("question", questionService.findQuestion(id).get());
+        model.addAttribute("question", questionService.findQuestion(id));
 
         return "/qna/show";
     }
 
     @GetMapping("/qna/form")
     public String qnaForm(HttpSession session) {
-
         if(HttpSessionUtils.isLoginUser(session)) {
 
             return "/qna/form";
@@ -57,25 +55,22 @@ public class QuestionController {
 
     @GetMapping("/{id}/form")
     public String updateForm(@PathVariable Long id, Model model, HttpSession session) {
+        Question question = questionService.findQuestion(id);
 
-        Question question = questionService.findQuestion(id).get();
+        hasPermission(session, question);
 
-        questionService.hasPermission(session, question);
-
-        model.addAttribute("question", questionService.findQuestion(id).get());
+        model.addAttribute("question", questionService.findQuestion(id));
 
         return "/qna/updateForm";
     }
 
     @PutMapping("/{id}")
     public String update(@PathVariable Long id, String title, String content, HttpSession session) {
+        Question question = questionService.findQuestion(id);
 
+        hasPermission(session, question);
 
-        Question question = questionService.findQuestion(id).get();
-
-        questionService.hasPermission(session, question);
-
-        question.updqte(title, content);
+        question.update(title, content);
 
         questionService.registerQuestion(question);
 
@@ -84,14 +79,23 @@ public class QuestionController {
 
     @DeleteMapping("/{id}")
     public String delete(@PathVariable Long id, HttpSession session) {
+        Question question = questionService.findQuestion(id);
 
-        Question question = questionService.findQuestion(id).get();
-
-        questionService.hasPermission(session, question);
+        hasPermission(session, question);
 
         questionService.delete(id);
 
         return "redirect:/";
     }
+
+    public void hasPermission(HttpSession session, Question question) {
+
+        User loginUser = HttpSessionUtils.getUserFromSession(session);
+
+        if(!question.isSameWriter(loginUser)) {
+            throw new NotFoundException();
+        }
+    }
+
 
 }

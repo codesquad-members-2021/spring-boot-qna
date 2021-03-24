@@ -7,15 +7,28 @@ import org.springframework.web.servlet.ModelAndView;
 @ControllerAdvice
 public class ControllerExceptionHandler {
 
-    @ExceptionHandler(QuestionNotFoundException.class)
-    public String handleQuestionNotFoundException() {
-        return null;
+    @ExceptionHandler(LoginFailedException.class)
+    public ModelAndView handleLoginFailed() {
+
+        return new ModelAndView("user/login", "loginFailed", true);
     }
 
-    @ExceptionHandler(UserNotFoundException.class)
-    public ModelAndView handleUserNotFoundException(Exception e) {
-        ModelAndView modelAndView = new ModelAndView("redirect:/user/login");
-        modelAndView.addObject("errorMessage", e.getMessage());
-        return modelAndView;//"redirect:/user/login";
+    @ExceptionHandler(NotFoundException.class)
+    public String handleNotFound() {
+
+        return "error/404";
     }
+
+    @ExceptionHandler(NotLoggedInException.class)
+    public String handleNotLoggedIn() {
+        return "";
+    }
+
+
+    @ExceptionHandler(SessionException.class)
+    public String handleSessionOut() {
+
+        return "error/404";
+    }
+
 }

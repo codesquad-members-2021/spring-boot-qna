@@ -1,5 +1,6 @@
 package com.codessquad.qna.controller;
 
+import com.codessquad.qna.exception.LoginFailedException;
 import com.codessquad.qna.utils.HttpSessionUtils;
 import com.codessquad.qna.domain.User;
 import com.codessquad.qna.service.UserService;
@@ -21,7 +22,6 @@ public class UserController {
 
     @PostMapping ("/create")
     public String create(User user) {
-
         userService.create(user);
 
         return "redirect:/users/list";
@@ -29,7 +29,6 @@ public class UserController {
 
     @GetMapping("/list")
     public String list(Model model){
-
         model.addAttribute("users", userService.findUsers());
 
         return "/user/list";
@@ -37,7 +36,6 @@ public class UserController {
 
     @GetMapping("/{id}")
     public String profile(@PathVariable("userId") Long id, Model model) {
-
         model.addAttribute("user", userService.findUser(id));
 
         return "/user/profile";
@@ -51,17 +49,11 @@ public class UserController {
 
     @PostMapping("/login")
     public String login(String userId, String password, HttpSession session){
-
         User user = userService.findById(userId);
 
-        if(user == null){
+        if(!user.matchPassword(password)) {
 
-            return "redirect:/users/loginForm";
-        }
-
-        if(!user.matchPassword(password)){
-
-            return "redirect:/users/loginForm";
+            throw new LoginFailedException();
         }
 
         HttpSessionUtils.setUserSessionKey(session, user);
@@ -71,7 +63,6 @@ public class UserController {
 
     @GetMapping("/logout")
     public String logout(HttpSession session) {
-
         HttpSessionUtils.removeSession(session);
 
         return "redirect:/";
@@ -79,8 +70,7 @@ public class UserController {
 
     @GetMapping("/{id}/validation")
     public String userValidation(@PathVariable Long id, HttpSession session){
-
-        User sessionedUser = (User)session.getAttribute("sessionedUser");
+        User sessionedUser = HttpSessionUtils.getUserSessionKey(session);
 
         if(!HttpSessionUtils.isLoginUser(session)) {
 
@@ -97,7 +87,6 @@ public class UserController {
 
     @PostMapping("/confirmPassword")
     public String confirmPassword(String password, Model model, HttpSession session) {
-
         User sessionedUser = HttpSessionUtils.getUserFromSession(session);
 
         if(!HttpSessionUtils.isLoginUser(session)) {
@@ -116,9 +105,8 @@ public class UserController {
     }
 
     @PutMapping("/{id}")
-    public String update(@PathVariable Long id, User newUser, HttpSession session) throws Exception {
-
-        User sessionedUser = (User)session.getAttribute("sessionedUser");
+    public String update(@PathVariable Long id, User newUser, HttpSession session) {
+        User sessionedUser = HttpSessionUtils.getUserSessionKey(session);
 
         if(!HttpSessionUtils.isLoginUser(session)) {
             return "redirect:/users/form";
@@ -128,7 +116,7 @@ public class UserController {
             return "redirect:/users/form";
         }
 
-        User user = userService.findUser(id).orElseThrow(() -> new Exception("There're no users registered in that ID."));
+        User user = userService.findUser(id);
 
         user.update(newUser);
 

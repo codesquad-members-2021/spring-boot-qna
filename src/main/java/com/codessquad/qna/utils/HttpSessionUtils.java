@@ -1,7 +1,8 @@
 package com.codessquad.qna.utils;
 
 import com.codessquad.qna.domain.User;
-import com.codessquad.qna.exception.UserNotFoundException;
+import com.codessquad.qna.exception.NotLoggedInException;
+import com.codessquad.qna.exception.SessionException;
 
 import javax.servlet.http.HttpSession;
 
@@ -10,18 +11,14 @@ public class HttpSessionUtils {
     public static final String USER_SESSION_KEY = "sessionedUser";
 
     public static boolean isLoginUser(HttpSession session) {
-        User user = (User)session.getAttribute(USER_SESSION_KEY);
-
-        if(user == null) {
-            throw new UserNotFoundException();
-        }
+        User user = getUserSessionKey(session);
 
         return user != null;
     }
 
-    public static User getUserFromSession (HttpSession session) {
+    public static User getUserFromSession(HttpSession session) {
         if(!isLoginUser(session)) {
-            throw new UserNotFoundException();
+            throw new SessionException();
         }
 
         User sessionedUser = (User)session.getAttribute(USER_SESSION_KEY);
@@ -35,5 +32,14 @@ public class HttpSessionUtils {
 
     public static void removeSession(HttpSession session) {
         session.removeAttribute(USER_SESSION_KEY);
+    }
+
+    public static User getUserSessionKey(HttpSession session) {
+//        if(session.getAttribute(USER_SESSION_KEY) == null) {
+//
+//            throw new SessionException();
+//        }
+
+        return (User)session.getAttribute(USER_SESSION_KEY);
     }
 }
