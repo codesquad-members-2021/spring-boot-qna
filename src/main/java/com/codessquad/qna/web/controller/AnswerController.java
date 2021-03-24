@@ -1,11 +1,9 @@
 package com.codessquad.qna.web.controller;
 
 import com.codessquad.qna.web.domain.user.User;
-import com.codessquad.qna.web.dto.user.CreateUserRequest;
 import com.codessquad.qna.web.service.AnswerService;
 import com.codessquad.qna.web.utils.SessionUtils;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;

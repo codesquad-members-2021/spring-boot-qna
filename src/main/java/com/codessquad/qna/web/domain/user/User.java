@@ -1,7 +1,6 @@
 package com.codessquad.qna.web.domain.user;
 
 import com.codessquad.qna.web.domain.answer.Answer;
-import com.codessquad.qna.web.domain.question.Question;
 
 import javax.persistence.*;
 import java.util.ArrayList;

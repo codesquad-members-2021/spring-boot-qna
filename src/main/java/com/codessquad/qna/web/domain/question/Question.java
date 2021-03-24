@@ -7,7 +7,6 @@ import com.codessquad.qna.web.utils.DateTimeUtils;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
