@@ -6,7 +6,6 @@ import com.codessquad.qna.exception.UserNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class UserService {
@@ -32,8 +31,11 @@ public class UserService {
         return userRepository.findById(id).orElseThrow(UserNotFoundException::new);
     }
 
-    public Optional<User> findByUserId(String userId){
-        return userRepository.findByUserId(userId);
+    public User findByUserId(String userId) {
+        return userRepository.findByUserId(userId).orElseThrow(UserNotFoundException::new);
     }
 
+    public boolean isUserIdPresent(String userId) {
+        return userRepository.findByUserId(userId).isPresent();
+    }
 }

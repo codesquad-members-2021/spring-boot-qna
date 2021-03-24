@@ -2,7 +2,6 @@ package com.codessquad.qna.controller;
 
 import com.codessquad.qna.domain.User;
 import com.codessquad.qna.exception.IllegalUserAccessException;
-import com.codessquad.qna.exception.UserNotFoundException;
 import com.codessquad.qna.service.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -11,8 +10,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
-
-import java.util.Optional;
 
 import static com.codessquad.qna.HttpSessionUtils.*;
 
@@ -30,16 +27,16 @@ public class UserController {
 
     @PostMapping("/login")
     public String login(String userId, String password, HttpSession session, Model model) {
-        Optional<User> tempUser = userService.findByUserId(userId);
-
-        if (!tempUser.isPresent()) {
-            model.addAttribute("errorMessage", "errorMessage");
+        if (!userService.isUserIdPresent(userId)) {
+            model.addAttribute("loginFailedMessage", "아이디 또는 비밀번호가 틀립니다. 다시 로그인 해주세요.");
             return "user/login";
         }
 
-        User user = tempUser.get();
+        /* 여기서 예외가 발생할 경우를 대비해 위, 아래의 if문을 하나로 합치지 않았다. */
+        User user = userService.findByUserId(userId);
+
         if (!user.matchPassword(password)) {
-            model.addAttribute("errorMessage", "errorMessage");
+            model.addAttribute("loginFailedMessage", "아이디 또는 비밀번호가 틀립니다. 다시 로그인 해주세요.");
             return "user/login";
         }
 
@@ -91,7 +88,7 @@ public class UserController {
             return "redirect:/users/login";
         }
         User user = validateUser(id, session);
-        model.addAttribute("errorMessage", "errorMessage");
+        model.addAttribute("wrongPasswordMessage", "잘못된 비밀번호입니다.");
         model.addAttribute("user", user);
         return "user/updateForm";
     }
