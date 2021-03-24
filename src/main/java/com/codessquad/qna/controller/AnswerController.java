@@ -55,14 +55,4 @@ public class AnswerController {
         return String.format("redirect:/qna/%d", questionId);
     }
 
-    @GetMapping("/qna/{questionId}/answers/{answerId}/modify-page")
-    public String modifyAnswer(@PathVariable Long questionId, @PathVariable Long answerId, Model model, HttpSession session) {
-        User ownerUser = questionRepostory.findById(questionId).orElseThrow(NotFoundException::new).getWriter();
-        if (!isValidUser(session, ownerUser)) {
-            logger.info("답변수 - 실패 : 권한(로그인)되지 않은 사용자의 답변수정 시도가 실패함");
-            return String.format("redirect:/qna/%d", questionId);
-        }
-        return "";
-    }
-
 }
