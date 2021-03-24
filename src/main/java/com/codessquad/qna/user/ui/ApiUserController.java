@@ -3,10 +3,12 @@ package com.codessquad.qna.user.ui;
 import com.codessquad.qna.user.application.UserService;
 import com.codessquad.qna.user.dto.UserRequest;
 import com.codessquad.qna.user.dto.UserResponse;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
+import java.net.URI;
 import java.util.List;
 
 import static com.codessquad.qna.common.HttpSessionUtils.checkAuthorization;
@@ -21,23 +23,26 @@ public class ApiUserController {
     }
 
     @PostMapping
-    public UserResponse createUser(@Valid UserRequest userRequest) {
-        return userService.save(userRequest);
+    public ResponseEntity<UserResponse> createUser(@Valid UserRequest userRequest) {
+        UserResponse userResponse = userService.save(userRequest);
+        return ResponseEntity.created(
+                URI.create("/api/users" + userResponse.getId())
+        ).body(userResponse);
     }
-    
+
     @GetMapping
-    public List<UserResponse> getUsers() {
-        return userService.getList();
+    public ResponseEntity<List<UserResponse>> getUsers() {
+        return ResponseEntity.ok().body(userService.getList());
     }
 
     @GetMapping("{id}")
-    public UserResponse get(@PathVariable Long id) {
-        return userService.get(id);
+    public ResponseEntity<UserResponse> get(@PathVariable Long id) {
+        return ResponseEntity.ok().body(userService.get(id));
     }
 
     @PutMapping("{id}")
-    public UserResponse update(@PathVariable Long id, @Valid UserRequest userRequest, HttpSession session) {
+    public ResponseEntity<UserResponse> update(@PathVariable Long id, @Valid UserRequest userRequest, HttpSession session) {
         checkAuthorization(id, session);
-        return userService.update(id, userRequest);
+        return ResponseEntity.ok().body(userService.update(id, userRequest));
     }
 }

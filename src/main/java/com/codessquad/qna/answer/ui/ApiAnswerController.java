@@ -4,10 +4,12 @@ import com.codessquad.qna.answer.dto.AnswerRequest;
 import com.codessquad.qna.answer.dto.AnswerResponse;
 import com.codessquad.qna.question.application.QuestionService;
 import com.codessquad.qna.user.domain.User;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
+import java.net.URI;
 
 import static com.codessquad.qna.common.HttpSessionUtils.checkAuthorization;
 import static com.codessquad.qna.common.HttpSessionUtils.getUserAttribute;
@@ -22,15 +24,19 @@ public class ApiAnswerController {
     }
 
     @PostMapping
-    public AnswerResponse createAnswer(@PathVariable Long questionId, @Valid AnswerRequest answerRequest, HttpSession session) {
+    public ResponseEntity<AnswerResponse> createAnswer(@PathVariable Long questionId, @Valid AnswerRequest answerRequest, HttpSession session) {
         User writer = getUserAttribute(session);
-        return questionService.addAnswer(questionId, answerRequest, writer);
+        AnswerResponse answerResponse = questionService.addAnswer(questionId, answerRequest, writer);
+        return ResponseEntity.created(URI.create(
+                String.format("/api/questions/%d/answers/%d", questionId, answerResponse.getQuestionId())
+        )).body(answerResponse);
     }
 
     @DeleteMapping("{id}")
-    public AnswerResponse deleteAnswer(@PathVariable Long questionId, @PathVariable Long id, HttpSession session) {
+    public ResponseEntity<Void> deleteAnswer(@PathVariable Long questionId, @PathVariable Long id, HttpSession session) {
         checkAnswerAuthorization(id, session);
-        return questionService.deleteAnswer(id);
+        questionService.deleteAnswer(id);
+        return ResponseEntity.noContent().build();
     }
 
     private void checkAnswerAuthorization(Long id, HttpSession session) {
