@@ -21,13 +21,12 @@ public class UserController {
     private static final Logger logger = LoggerFactory.getLogger(UserController.class);
 
     private final UserService userService;
+    private final UserRepository userRepository;
 
-    public UserController(UserService userService,UserRepository userRepository) {
+    public UserController(UserService userService, UserRepository userRepository) {
         this.userService = userService;
-        //삭제예정
         this.userRepository = userRepository;
     }
-    private final UserRepository userRepository;
 
     @GetMapping
     public String userListShow() {
