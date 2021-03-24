@@ -29,6 +29,7 @@ public class ApiAnswerController {
         User loggedinUser = getUserFromSession(session);
         Question question = questionService.findQuestion(questionId);
         Answer answer = new Answer(loggedinUser, question, contents);
+        question.addAnswer();
         return answerService.save(answer);
     }
 
@@ -39,7 +40,12 @@ public class ApiAnswerController {
         if (!answerService.checkValid(loggedinUser, answer)) {
             return Result.fail("자신의 댓글만 삭제할 수 있습니다.");
         }
+
         answerService.delete(loggedinUser, answer);
+
+        Question question = questionService.findQuestion(questionId);
+        question.deleteAnswer();
+        questionService.save(question);
         return Result.ok();
     }
 }

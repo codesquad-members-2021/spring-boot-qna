@@ -33,6 +33,9 @@ public class Question {
     @JsonProperty
     private String contents;
 
+    @JsonProperty
+    private Integer countOfAnswer = 0;
+
     private LocalDateTime postTime;
     private LocalDateTime updatedPostTime;
     private boolean deleted;
@@ -41,7 +44,7 @@ public class Question {
     @OrderBy("id DESC")
     @Where(clause = "deleted = false")
     @JsonManagedReference
-    private List<Answer> answers = new ArrayList<>();
+    private final List<Answer> answers = new ArrayList<>();
 
     protected Question() {
     }
@@ -88,6 +91,10 @@ public class Question {
         return answers.size();
     }
 
+    public Integer getCountOfAnswer() {
+        return this.countOfAnswer;
+    }
+
     public boolean isAnswerEmpty() {
         return answers.isEmpty();
     }
@@ -112,11 +119,19 @@ public class Question {
     }
 
     public void delete() {
-        deleted = true;
+        this.deleted = true;
     }
 
     public void deleteAnswers() {
-        answers.clear();
+        this.answers.clear();
+    }
+
+    public void addAnswer() {
+        this.countOfAnswer++;
+    }
+
+    public void deleteAnswer() {
+        this.countOfAnswer--;
     }
 
     @Override
