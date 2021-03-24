@@ -49,7 +49,7 @@ public class UserController {
         User user = userService.findById(id);
         User sessionedUser = SessionUtility.findSessionedUser(session);
 
-        SessionUtility.verifySessionUser(sessionedUser, user, "본인의 회원정보만 수정할 수 있습니다.");
+        UserService.verifySessionUser(sessionedUser, user, "본인의 회원정보만 수정할 수 있습니다.");
         model.addAttribute("user", user);
         return "user/updateForm";
     }

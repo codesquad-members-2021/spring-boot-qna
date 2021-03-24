@@ -2,8 +2,8 @@ package com.codessquad.qna.web.service;
 
 import com.codessquad.qna.web.domain.User;
 import com.codessquad.qna.web.domain.repository.UserRepository;
-import com.codessquad.qna.web.exception.UnauthorizedUserException;
 import com.codessquad.qna.web.exception.UnAuthenticatedLoginException;
+import com.codessquad.qna.web.exception.UnauthorizedUserException;
 import com.codessquad.qna.web.exception.UserNotFoundException;
 import org.springframework.stereotype.Service;
 
@@ -16,6 +16,12 @@ public class UserService {
 
     private UserService(UserRepository userRepository) {
         this.userRepository = userRepository;
+    }
+
+    public static void verifySessionUser(User sessionedUser, User user, String errorMessage) {
+        if (!sessionedUser.equals(user)) {
+            throw new UnauthorizedUserException(errorMessage);
+        }
     }
 
     public User findById(Long id) {
@@ -37,7 +43,7 @@ public class UserService {
     }
 
     public User findByUserId(String userId) {
-        return userRepository.findByUserId(userId).orElseThrow(() ->new UnauthorizedUserException(UserNotFoundException.USER_NOT_FOUND));
+        return userRepository.findByUserId(userId).orElseThrow(() -> new UnauthorizedUserException(UserNotFoundException.USER_NOT_FOUND));
     }
 
     public User verifyUser(String userId, String password) {

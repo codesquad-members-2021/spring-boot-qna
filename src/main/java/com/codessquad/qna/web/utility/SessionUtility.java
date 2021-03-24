@@ -19,12 +19,6 @@ public class SessionUtility {
         return (User) value;
     }
 
-    public static void verifySessionUser(User sessionedUser, User user, String errorMessage) {
-        if (!sessionedUser.equals(user)) {
-            throw new UnauthorizedUserException(errorMessage);
-        }
-    }
-
     public static void setUser(User user, HttpSession session) {
         session.setAttribute(SESSIONED_USER, user);
     }

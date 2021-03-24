@@ -8,13 +8,12 @@ import com.codessquad.qna.web.utility.SessionUtility;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpSession;
-import java.util.List;
 
 @Service
 public class AnswerService {
 
-    private AnswerRepository answerRepository;
     private final QuestionService questionService;
+    private AnswerRepository answerRepository;
 
     private AnswerService(AnswerRepository answerRepository, QuestionService questionService) {
         this.answerRepository = answerRepository;

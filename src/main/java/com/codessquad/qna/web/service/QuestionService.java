@@ -12,7 +12,7 @@ import java.util.List;
 @Service
 public class QuestionService {
 
-    private QuestionRepository questionRepository;
+    private final QuestionRepository questionRepository;
 
     private QuestionService(QuestionRepository questionRepository) {
         this.questionRepository = questionRepository;
@@ -27,7 +27,9 @@ public class QuestionService {
         save(question);
     }
 
-    public void delete(Question question) { questionRepository.delete(question); }
+    public void delete(Question question) {
+        questionRepository.delete(question);
+    }
 
     public List<Question> findAll() {
         return questionRepository.findAll();
