@@ -1,8 +1,8 @@
 package com.codessquad.qna.controller;
 
 import com.codessquad.qna.domain.User;
-import com.codessquad.qna.repository.UserRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.codessquad.qna.service.UserService;
+import com.codessquad.qna.utils.HttpSessionUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -10,67 +10,60 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 
-import java.util.NoSuchElementException;
-import java.util.Objects;
-import java.util.Optional;
+import javax.servlet.http.HttpSession;
 
 @Controller
 public class UserController {
-    private final UserRepository userRepository;
 
-    @Autowired // 생성자나 세터 등을 사용하여 의존성 주입을 하려고 할 때, 해당 빈을 찾아서 주입?? 나중에 공부하자
-    public UserController(UserRepository userRepository) {
-        this.userRepository = userRepository;
+    private final UserService userService;
+
+    public UserController(UserService userService) {
+        this.userService = userService;
     }
 
     @PostMapping("/user/create")
-    private String register(User user) {
-        userRepository.save(user);
+    private String save(User user) {
+        userService.save(user);
         return "redirect:/users";
     }
 
     @GetMapping("/users")
     private String getMemberList(Model model) {
-        model.addAttribute("users", userRepository.findAll());
+        model.addAttribute("users", userService.getList());
         return "user/list";
     }
 
     @GetMapping("/users/{primaryKey}")
     private String displayProfile(@PathVariable("primaryKey") Long targetKey, Model model) {
-        Objects.requireNonNull(targetKey, "Exception: targetKey가 NULL 값입니다.");
-
-        Optional<User> userOptional = userRepository.findById(targetKey);
-        User findUserData = userOptional.orElseThrow(NoSuchElementException::new);
-
-        model.addAttribute("users", findUserData);
-
+        model.addAttribute("users", userService.getById(targetKey));
         return "user/profile";
     }
 
-    @GetMapping("users/{primaryKey}/form")
-    private String changeMemberInfo(@PathVariable("primaryKey") Long targetKey, Model model) {
-        Objects.requireNonNull(targetKey, "Exception: targetKey가 NULL 값입니다.");
-
-        Optional<User> userOptional = userRepository.findById(targetKey);
-        User originUserData = userOptional.orElseThrow(NoSuchElementException::new); // () -> new NoSuchElementException()
-
-        model.addAttribute("users", originUserData);
-
+    @GetMapping("users/{primaryKey}/form") //m 개인정보 수정
+    private String changeMemberInfo(@PathVariable("primaryKey") Long targetKey, Model model, HttpSession session) {
+        userService.authenticateOfId(userService.getById(targetKey), HttpSessionUtils.getLoginUserOf(session));
+        model.addAttribute("users", HttpSessionUtils.getLoginUserOf(session));
         return "user/updateForm";
     }
 
-
     @PutMapping("/users/{primaryKey}/update")
     private String updateMemberList(@PathVariable Long primaryKey, User updateUserData, Model model) {
-
-        updateUserData.setPrimaryKey(primaryKey); //m 테이블이 생성될 때, PK가 생기므로. 임의 지정
-        Optional<User> userOptional = userRepository.findById(primaryKey);
-        User originUserData = userOptional.orElseThrow(NoSuchElementException::new); // () -> new NoSuchElementException()
-        userRepository.save(originUserData.update(updateUserData));
-
-        model.addAttribute("users", userRepository.findAll());
-
+        userService.update(primaryKey, updateUserData);
+        model.addAttribute("users", userService.getList());
         return "redirect:/users";
+    }
+
+    @PostMapping("/user/login")
+    public String login(String userId, String password, HttpSession session) {
+        userService.checkValidOfLogin(userId, password); //m null 일 경우 내부에서 예외처리됨.
+        HttpSessionUtils.setAttribute(session, userService.getById(userId));
+        return "redirect:/";
+    }
+
+    @GetMapping("/logout") // 로그아웃은 주로 포스트맵핑을 사용한다고 하는데, 아직 잘 모르겠어서 변경하지 않음.
+    private String logout(HttpSession session) {
+        HttpSessionUtils.removeAttribute(session);
+        return "redirect:/";
     }
 
 }

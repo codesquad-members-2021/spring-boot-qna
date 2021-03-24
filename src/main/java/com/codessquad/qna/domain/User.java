@@ -1,7 +1,8 @@
 package com.codessquad.qna.domain;
 
+import com.codessquad.qna.utils.ValidUtils;
+
 import javax.persistence.*;
-import java.util.Objects;
 
 @Entity //m 데이타베이스의 테이블과 일대일로 매칭되는 객체 단위
 public class User {
@@ -12,11 +13,15 @@ public class User {
 
     @Column(nullable = false, length = 20)
     private String userId;
+
     @Column(nullable = false, length = 20)
     private String password;
+
     private String newPassword;
+
     @Column(nullable = false, length = 20)
     private String name;
+
     @Column(nullable = false, length = 20)
     private String email;
 
@@ -49,6 +54,7 @@ public class User {
     }
 
     public void setUserId(String userId) {
+        ValidUtils.checkIllegalArgumentOf(userId);
         this.userId = userId;
     }
 
@@ -68,21 +74,4 @@ public class User {
         this.newPassword = newPassword;
     }
 
-    private boolean checkId(String updatedId) {
-        return Objects.equals(updatedId, this.getUserId());
-    }
-
-    private boolean checkPassword(String updatedPassword) {
-        return Objects.equals(updatedPassword, this.getPassword());
-    }
-
-    public User update(User updateUserData) {
-        if (!this.checkId(updateUserData.getUserId()) || !this.checkPassword(updateUserData.getPassword())) {
-            return this;
-        }
-        this.setName(updateUserData.getName());
-        this.setPassword(updateUserData.getNewPassword());
-        this.setEmail(updateUserData.getEmail());
-        return this;
-    }
 }

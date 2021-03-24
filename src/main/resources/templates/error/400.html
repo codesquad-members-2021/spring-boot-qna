@@ -1,0 +1,30 @@
+{{#partial "content" }}
+<div id="main">
+    <!-- https://goddaehee.tistory.com/214 참고 -->
+
+    <br>
+    <h1 style="text-align: center">⛔ Bad Request</h1>
+    <h3 style="text-align: center">- 잘못된 문법으로 인하여 서버가 요청을 이해할 수 없음</h3>
+    <br>
+    <br>
+    <div style="text-align: center">
+        <img src="https://i.imgur.com/F2G9idn.png" width="150" height="150"/>
+    </div>
+    <br>
+    <h3 style="text-align: center">🎁 상세내용: {{serverError}}</h3>
+    <br>
+    <br>
+    <br>
+    <br>
+    <div class="col-md-12 text-center">
+        <button type="button" class="btn btn-light btn-lg" onclick="goBack()">뒤로가기</button>
+    </div>
+    <script>
+        function goBack(){
+            window.history.back(-1);
+        }
+
+    </script>
+</div>
+{{/partial}}
+{{> common/base}}

@@ -5,7 +5,7 @@
             <table class="table table-hover">
                 <thead>
                 <tr>
-                    <th>#</th>
+                    <th>번호</th>
                     <th>사용자 아이디</th>
                     <th>이름</th>
                     <th>이메일</th>
@@ -15,7 +15,7 @@
                 <tbody>
                 {{#users}}
                 <tr>
-                    <th scope="row">1</th>
+                    <th scope="row">{{primaryKey}}</th>
                     <td><a href="/users/{{primaryKey}}">{{userId}}</a></td>
                     <td>{{name}}</td>
                     <td>{{email}}</td>

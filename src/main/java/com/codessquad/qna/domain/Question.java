@@ -1,9 +1,13 @@
 package com.codessquad.qna.domain;
 
+import com.codessquad.qna.utils.ValidUtils;
+
 import javax.persistence.*;
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 
 @Entity
 public class Question {
@@ -12,18 +16,26 @@ public class Question {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false, length = 20)
-    private String writer;
+    @ManyToOne
+    @JoinColumn(foreignKey = @ForeignKey(name = "fk_question_writer"))
+    private User writer;
+
+    @OneToMany(mappedBy = "question", cascade = CascadeType.ALL) // JPA 에노테이션: Q-A관계 맵핑, question은 Answer 클래스가 ManyToOne으로 맺은 칼럼의 이름
+    private List<Answer> answers;
+
     @Column(nullable = false, length = 20)
     private String title;
-    @Column(nullable = false, length = 20)
-    private String contents;
-    @Column(nullable = false, length = 20)
-    // ZonedDateTime 타임존 또는 시차 개념이 필요한 날짜와 시간 정보를 나타낼 때 사용: https://www.daleseo.com/java8-zoned-date-time/
-    // 배포서버가 미국에 있기 때문에 타임존을 사용하였습니다.
-    private final ZonedDateTime time = ZonedDateTime.now(ZoneId.of("Asia/Seoul"));
 
-    public String getWriter() {
+    @Column(nullable = false, length = 500)
+    private String contents;
+
+    @Column(nullable = false, length = 20)
+    private final LocalDateTime time = LocalDateTime.now();
+
+    @Column(nullable = false)
+    private boolean questionDeleted = false;
+
+    public User getWriter() {
         return writer;
     }
 
@@ -42,18 +54,46 @@ public class Question {
         return time.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
     }
 
-    public void setWriter(String writer) {
+    public List<Answer> getAnswers() {
+        List<Answer> enableAnswers = new ArrayList<>();
+
+        for(Answer answer : answers){
+            if(!answer.isDeleted()){
+                enableAnswers.add(answer);
+            }
+        }
+
+        return enableAnswers;
+    }
+
+    public boolean isDeleted() {
+        return questionDeleted;
+    }
+
+    public void setWriter(User writer) {
         this.writer = writer;
     }
 
     public void setTitle(String title) {
+        ValidUtils.checkIllegalArgumentOf(title);
         this.title = title;
     }
 
     public void setContents(String contents) {
+        ValidUtils.checkIllegalArgumentOf(contents);
         this.contents = contents;
     }
     public void setId(Long id) {
+        ValidUtils.checkIllegalArgumentOf(id);
         this.id = id;
+    }
+
+    public void setDeleted(boolean deleted) {
+        this.questionDeleted = deleted;
+    }
+
+    public void setAnswers(List<Answer> answers) { // 순환참조 문제점?? 우디 PR 내용중에 있었는데 나중에 확인.
+        answers = Optional.ofNullable(answers).orElseThrow(IllegalArgumentException::new);
+        this.answers = answers;
     }
 }

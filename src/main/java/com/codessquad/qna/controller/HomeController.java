@@ -1,7 +1,6 @@
 package com.codessquad.qna.controller;
 
-import com.codessquad.qna.repository.QuestionRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.codessquad.qna.service.QuestionService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -9,16 +8,15 @@ import org.springframework.web.bind.annotation.GetMapping;
 @Controller
 public class HomeController {
 
-    private final QuestionRepository questionRepository;
+    private final QuestionService questionService;
 
-    @Autowired
-    public HomeController(QuestionRepository questionRepository) {
-        this.questionRepository = questionRepository;
+    public HomeController(QuestionService questionService) {
+        this.questionService = questionService;
     }
 
     @GetMapping("/")
-    private String questionsList(Model model) {
-        model.addAttribute("questions", questionRepository.findAll());
+    private String getQuestionsList(Model model) {
+        model.addAttribute("questions", questionService.findAll());
         return "index";
     }
 }

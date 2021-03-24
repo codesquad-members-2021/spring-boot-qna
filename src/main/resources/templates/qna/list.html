@@ -12,7 +12,7 @@
                             <div class="auth-info">
                                 <i class="icon-add-comment"></i>
                                 <span class="time">{{time}}</span>
-                                <a href="/user/profile.html" class="author">{{writer}}</a>
+                                <a href="/user/profile.html" class="author">{{writer.name}}</a>
                             </div>
                             <div class="reply" title="댓글">
                                 <i class="icon-reply"></i>
@@ -36,9 +36,16 @@
                         <li><a href="#">»</a></li>
                     </ul>
                 </div>
+                {{^sessionedUser}}
+                <div class="col-md-3 qna-write">
+                    <a href="/qna/form" class="btn btn-primary pull-right" role="button" disabled>🚫 로그인후 작성가능합니다.</a>
+                </div>
+                {{/sessionedUser}}
+                {{#sessionedUser}}
                 <div class="col-md-3 qna-write">
                     <a href="/qna/form" class="btn btn-primary pull-right" role="button">질문하기</a>
                 </div>
+                {{/sessionedUser}}
             </div>
         </div>
     </div>
