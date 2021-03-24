@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 public class GlobalControllerExceptionHandler {
 
     @ExceptionHandler(LoginFailedException.class)
-    public String handleLoginFailed(LoginFailedException loginFailedException, Model model){
+    public String handleLoginFailed(LoginFailedException loginFailedException, Model model) {
         model.addAttribute("errorMessage", loginFailedException.getMessage());
         return "user/login";
     }
