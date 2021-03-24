@@ -21,7 +21,7 @@ public class QuestionController {
     }
 
     @GetMapping("/form")
-    public String askQuestion(HttpSession session) {
+    public String showForm(HttpSession session) {
         User writer = SessionUtility.findSessionedUser(session);
         return "qna/form";
     }
@@ -44,7 +44,6 @@ public class QuestionController {
     public String showQuestion(@PathVariable Long id, Model model) {
         Question question = questionService.findById(id);
         model.addAttribute("question", question);
-        model.addAttribute("answers", questionService.findAnswersByQuestionId(id));
         return "qna/show";
     }
 
@@ -52,6 +51,7 @@ public class QuestionController {
     public String showUpdateForm(@PathVariable Long id, Model model, HttpSession session) {
         Question question = questionService.findById(id);
         User sessionedUser = SessionUtility.findSessionedUser(session);
+
         questionService.verifyQuestionWriter(question, sessionedUser);
         model.addAttribute("question", question);
         return "qna/updateForm";

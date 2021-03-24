@@ -21,10 +21,6 @@ public class AnswerService {
         this.questionService = questionService;
     }
 
-    public List<Answer> findByQuestionId(Long questionId) {
-        return answerRepository.findByQuestionId(questionId);
-    }
-
     public void save(Answer answer) {
         answerRepository.save(answer);
     }
