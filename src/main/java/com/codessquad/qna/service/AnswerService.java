@@ -5,6 +5,7 @@ import com.codessquad.qna.entity.Question;
 import com.codessquad.qna.entity.User;
 import com.codessquad.qna.exception.NotAuthorizedException;
 import com.codessquad.qna.exception.NotFoundException;
+import com.codessquad.qna.exception.SaveFailedException;
 import com.codessquad.qna.repository.AnswerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -20,19 +21,26 @@ public class AnswerService {
         this.questionService = questionService;
     }
 
-    public void addAnswer(long questionId, User writer, String contents) {
+    public Answer addAnswer(long questionId, User writer, String contents) {
         Question question = questionService.getQuestion(questionId);
-        answerRepository.save(new Answer(question, writer, contents));
+        Answer added = answerRepository.save(new Answer(question, writer, contents));
+        if (added == null) {
+            throw new SaveFailedException(Answer.class);
+        }
+        return added;
     }
 
-    public void deleteAnswer(long answerId, User tryToDelete) {
+    public Answer deleteAnswer(long answerId, User tryToDelete) {
         Answer answer = getAnswer(answerId);
-        if (answer.isWriter(tryToDelete)) {
-            answer.delete();
-            answerRepository.save(answer);
-            return;
+        if (!answer.isWriter(tryToDelete)) {
+            throw new NotAuthorizedException();
         }
-        throw new NotAuthorizedException();
+        answer.delete();
+        Answer deleted = answerRepository.save(answer);
+        if (deleted == null) {
+            throw new SaveFailedException(Answer.class);
+        }
+        return deleted;
     }
 
     public Answer getAnswer(long id) {

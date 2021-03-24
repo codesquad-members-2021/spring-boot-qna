@@ -5,6 +5,7 @@ import com.codessquad.qna.entity.User;
 import com.codessquad.qna.exception.CannotDeleteQuestionException;
 import com.codessquad.qna.exception.NotAuthorizedException;
 import com.codessquad.qna.exception.NotFoundException;
+import com.codessquad.qna.exception.SaveFailedException;
 import com.codessquad.qna.repository.QuestionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -20,21 +21,29 @@ public class QuestionService {
         this.questionRepository = questionRepository;
     }
 
-    public void addQuestion(User user, String title, String contents) {
-        questionRepository.save(new Question(user, title, contents));
-    }
-
-    public void updateQuestion(long questionId, String title, String contents, User tryToUpdate) {
-        Question question = getQuestion(questionId);
-        if (question.isWriter(tryToUpdate)) {
-            question.update(title, contents);
-            questionRepository.save(question);
-            return;
+    public Question addQuestion(User user, String title, String contents) {
+        Question added = questionRepository.save(new Question(user, title, contents));
+        if (added == null) {
+            throw new SaveFailedException(Question.class);
         }
-        throw new NotAuthorizedException();
+        return added;
     }
 
-    public void deleteQuestion(long questionId, User tryToDelete) {
+    public Question updateQuestion(long questionId, String title, String contents, User tryToUpdate) {
+        Question question = getQuestion(questionId);
+        if (!question.isWriter(tryToUpdate)) {
+            throw new NotAuthorizedException();
+        }
+
+        question.update(title, contents);
+        Question updated = questionRepository.save(question);
+        if (updated == null) {
+            throw new SaveFailedException(Question.class);
+        }
+        return updated;
+    }
+
+    public Question deleteQuestion(long questionId, User tryToDelete) {
         Question question = getQuestion(questionId);
         if (!question.isWriter(tryToDelete)) {
             throw new NotAuthorizedException();
@@ -44,9 +53,11 @@ public class QuestionService {
         }
 
         question.delete();
-        questionRepository.save(question);
-        return;
-
+        Question deleted = questionRepository.save(question);
+        if (deleted == null) {
+            throw new SaveFailedException(Question.class);
+        }
+        return deleted;
     }
 
     public List<Question> getQuestions() {
