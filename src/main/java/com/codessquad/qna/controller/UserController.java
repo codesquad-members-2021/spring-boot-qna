@@ -70,10 +70,6 @@ public class UserController {
             return "redirect:/user/login";
         }
 
-        if (sessionUser == null) {
-            return "redirect:/user/login";
-        }
-
         if (sessionUser.equals(updatedUser)) {
             sessionUser.update(updatedUser);
         }
