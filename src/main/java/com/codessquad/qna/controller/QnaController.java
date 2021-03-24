@@ -88,9 +88,4 @@ public class QnaController {
         }
         return question;
     }
-
-    @ExceptionHandler(QuestionNotFoundException.class)
-    public String handleException() {
-        return "redirect:/";
-    }
 }

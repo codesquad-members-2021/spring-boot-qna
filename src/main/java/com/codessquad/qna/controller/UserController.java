@@ -121,9 +121,4 @@ public class UserController {
         }
         return userService.findById(id);
     }
-
-    @ExceptionHandler(UserNotFoundException.class)
-    public String handleException() {
-        return "redirect:/";
-    }
 }
