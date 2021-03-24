@@ -26,21 +26,20 @@ public class AnswerService {
     }
 
     public Answer getOneById(long answerId) {
-        return answerRepository.findByAnswerIdAndDeletedFalse(answerId)
+        return answerRepository.findById(answerId)
                 .orElseThrow(() -> new NotFoundException("존재하지 않는 답변입니다."));
     }
 
     public Answer create(Long id, String contents, HttpSession session) {
         User loginUser = HttpSessionUtils.getUserFromSession(session);
 
-        Question question = questionRepository.findByQuestionIdAndDeletedFalse(id)
+        Question question = questionRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("존재하지 않는 질문입니다."));
 
         return answerRepository.save(new Answer(question, contents, loginUser));
     }
 
     public void remove(User sessionUser, Answer answer) {
-
         checkAccessibleSessionUser(sessionUser, answer);
 
         answer.deleted();
