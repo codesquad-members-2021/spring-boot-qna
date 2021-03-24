@@ -8,12 +8,16 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     @Column(nullable = false, length = 20, unique = true)
     private String userId;
+
     @Column(nullable = false, length = 20)
     private String password;
+
     @Column(nullable = false, length = 20)
     private String name;
+
     @Column(nullable = false, length = 50)
     private String email;
 
@@ -56,5 +60,9 @@ public class User {
 
     public boolean verify(User toVerify) {
         return this.userId.equals(toVerify.userId) && this.password.equals(toVerify.password);
+    }
+
+    public boolean isSameId(User user) {
+        return this.id.equals(user.id);
     }
 }

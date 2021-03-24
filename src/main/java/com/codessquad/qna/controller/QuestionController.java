@@ -2,9 +2,10 @@ package com.codessquad.qna.controller;
 
 import com.codessquad.qna.entity.Question;
 import com.codessquad.qna.entity.User;
+import com.codessquad.qna.exception.NotAuthorizedException;
 import com.codessquad.qna.exception.UserNotFoundInSessionException;
 import com.codessquad.qna.service.QuestionService;
-import com.codessquad.qna.util.HttpSessionUtil;
+import com.codessquad.qna.util.HttpSessionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,35 +34,28 @@ public class QuestionController {
 
     @PostMapping
     public String create(String title, String contents, HttpSession session) {
-        User user = HttpSessionUtil.getUser(session);
-        Question toCreate = new Question(user, title, contents);
-        questionService.addQuestion(toCreate);
+        User user = HttpSessionUtils.getUser(session);
+        questionService.addQuestion(user, title, contents);
         return "redirect:/";
     }
 
     @PutMapping("/{id}")
     public String update(@PathVariable long id, String contents, String title, HttpSession session) {
-        Question question = questionService.getQuestion(id);
-        if (HttpSessionUtil.isAuthorized(question.getWriter().getId(), session)) {
-            questionService.updateQuestion(id, title, contents);
-            return "redirect:/questions/" + id;
-        }
-        throw new IllegalStateException("자신의 글만 수정할 수 있습니다.");
+        User tryToUpdate = HttpSessionUtils.getUser(session);
+        questionService.updateQuestion(id, title, contents, tryToUpdate);
+        return "redirect:/questions/" + id;
     }
 
     @DeleteMapping("/{id}")
     public String delete(@PathVariable long id, HttpSession session) {
-        Question question = questionService.getQuestion(id);
-        if (HttpSessionUtil.isAuthorized(question.getWriter().getId(), session)) {
-            questionService.deleteQuestion(id);
-            return "redirect:/";
-        }
-        throw new IllegalStateException("자신의 글만 삭제할 수 있습니다.");
+        User tryToDelete = HttpSessionUtils.getUser(session);
+        questionService.deleteQuestion(id, tryToDelete);
+        return "redirect:/";
     }
 
     @GetMapping("/form")
     public String form(HttpSession session) {
-        if (!HttpSessionUtil.hasUser(session)) {
+        if (!HttpSessionUtils.hasUser(session)) {
             throw new UserNotFoundInSessionException();
         }
         return "qna/form";
@@ -76,10 +70,9 @@ public class QuestionController {
 
     @GetMapping("/{id}/form")
     public String updateForm(@PathVariable int id, Model model, HttpSession session) {
-        User user = HttpSessionUtil.getUser(session);
         Question question = questionService.getQuestion(id);
-        if (!question.getWriter().verify(user)) {
-            throw new IllegalStateException("자신의 글만 수정할 수 있습니다.");
+        if (!HttpSessionUtils.isAuthorized(question.getWriter().getId(), session)) {
+            throw new NotAuthorizedException();
         }
         model.addAttribute("question", question);
         return "/qna/updateForm";

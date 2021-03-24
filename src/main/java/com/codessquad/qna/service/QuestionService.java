@@ -1,7 +1,10 @@
 package com.codessquad.qna.service;
 
 import com.codessquad.qna.entity.Question;
-import com.codessquad.qna.exception.QuestionNotFoundException;
+import com.codessquad.qna.entity.User;
+import com.codessquad.qna.exception.CannotDeleteQuestionException;
+import com.codessquad.qna.exception.NotAuthorizedException;
+import com.codessquad.qna.exception.NotFoundException;
 import com.codessquad.qna.repository.QuestionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -17,26 +20,40 @@ public class QuestionService {
         this.questionRepository = questionRepository;
     }
 
-    public void addQuestion(Question question) {
-        questionRepository.save(question);
+    public void addQuestion(User user, String title, String contents) {
+        questionRepository.save(new Question(user, title, contents));
     }
 
-    public void updateQuestion(long questionId, String title, String contents) {
+    public void updateQuestion(long questionId, String title, String contents, User tryToUpdate) {
         Question question = getQuestion(questionId);
-        question.update(title, contents);
-        questionRepository.save(question);
+        if (question.isWriter(tryToUpdate)) {
+            question.update(title, contents);
+            questionRepository.save(question);
+            return;
+        }
+        throw new NotAuthorizedException();
     }
 
-    public void deleteQuestion(long questionId) {
+    public void deleteQuestion(long questionId, User tryToDelete) {
         Question question = getQuestion(questionId);
-        questionRepository.delete(question);
+        if (!question.isWriter(tryToDelete)) {
+            throw new NotAuthorizedException();
+        }
+        if (!question.canDeleted()) {
+            throw new CannotDeleteQuestionException();
+        }
+
+        question.delete();
+        questionRepository.save(question);
+        return;
+
     }
 
     public List<Question> getQuestions() {
-        return questionRepository.findAll();
+        return questionRepository.findAllByAndDeletedFalse();
     }
 
     public Question getQuestion(long id) {
-        return questionRepository.findById(id).orElseThrow(QuestionNotFoundException::new);
+        return questionRepository.findById(id).orElseThrow(() -> new NotFoundException(id + " 질문을 찾을 수 없습니다."));
     }
 }
