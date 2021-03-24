@@ -21,7 +21,7 @@ public class QuestionController {
     @Autowired
     private QuestionRepository questionRepository;
 
-    private static String dateTimeFormat = "yyyy-MM-dd HH:mm";
+    DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
 
     @GetMapping
     public String questionList(Model model) {
@@ -33,7 +33,6 @@ public class QuestionController {
     @PostMapping
     public String newQuestion(Question question) {
         LocalDateTime dateTime = LocalDateTime.now();
-        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern(dateTimeFormat);
         String dateTimeString = dateTime.format(dateTimeFormatter);
         question.setDateTime(dateTimeString);
         questionRepository.save(question);
