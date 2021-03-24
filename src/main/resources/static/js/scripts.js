@@ -1,8 +1,13 @@
 $(".answer-write button[type=submit]" ).click(addAnswer);
 $(document).on('click', '.link-delete-ATag-article', deleteAnswer);
+var addFlag = false;
+var deleteFlag =false;
 
 function addAnswer(e){
     e.preventDefault();
+
+    if(addFlag == true) { return;}addFlag = true;
+
     var queryString = $(".answer-write").serialize();
     var url = $(".answer-write").attr("action");
 
@@ -19,6 +24,8 @@ function addAnswer(e){
 function deleteAnswer(e){
     e.preventDefault();
 
+    if(deleteFlag == true) { return;}deleteFlag = true;
+
     var deleteBtn = $(this);
     var url = deleteBtn.attr("href");
     console.log("url" + url);
@@ -32,6 +39,7 @@ function deleteAnswer(e){
             if(data == "true"){
                 console.log("success");
                 deleteBtn.closest("article").remove();
+                deleteFlag  = false;
             }
         }
     });
@@ -50,7 +58,7 @@ function onSuccess(data, status){
      $(".qna-comment-slipp-articles").prepend(template);
 
      $(".answer-write textarea").val("");
-
+    addFlag  = false;
 }
 
 
