@@ -21,9 +21,8 @@ public class QuestionController {
 
     @GetMapping("/form")
     public String form(HttpSession session, Model model) {
-        Result result = valid(session);
-        if (!result.isValid()) {
-            model.addAttribute("errorMessage", result.getErrorMessage());
+        if (!HttpSessionUtils.isLoginUser(session)) {
+            model.addAttribute("errorMessage", "로그인을 먼저 진행해주세요.");
             return "/user/login";
         }
         return "qna/form";
@@ -90,14 +89,6 @@ public class QuestionController {
 
         if (!question.isMatchingWriter(sessionUser)) {
             return Result.fail("수정할 수 있는 권한이 없습니다.");
-        }
-
-        return Result.ok();
-    }
-
-    private Result valid(HttpSession session) {
-        if (!HttpSessionUtils.isLoginUser(session)) {
-            return Result.fail("로그인을 먼저 진행해주세요.");
         }
 
         return Result.ok();

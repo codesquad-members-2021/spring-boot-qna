@@ -35,12 +35,6 @@ public class UserController {
 
     @GetMapping("/{id}")
     public String userProfile(@PathVariable long id, Model model, HttpSession session) {
-        Result result = valid(session);
-        if (!result.isValid()) {
-            model.addAttribute("errorMessage", result.getErrorMessage());
-            return "user/login";
-        }
-
         model.addAttribute("user", userService.getUserById(id));
         return "user/profile";
     }
@@ -98,7 +92,6 @@ public class UserController {
         if (!HttpSessionUtils.isLoginUser(session)) {
             return Result.fail("로그인을 먼저 진행해주세요.");
         }
-
         return Result.ok();
     }
 
