@@ -67,35 +67,27 @@ public class UserController {
         return "user/userProfile";
     }
 
-    @GetMapping("/{id}/password")
-    public String passwordCheckPage(@PathVariable("id") Long id, Model model, HttpSession session) {
+    @GetMapping("/{id}/updateForm")
+    public String updateFormPage(@PathVariable("id") Long id, Model model, HttpSession session) {
         User sessionedUser = (User) session.getAttribute("sessionedUser");
-        if (sessionedUser == null) {
-            return "loginForm";
+        if (sessionedUser == null || !sessionedUser.matchId(id)) {
+            return "redirect:/users/login";
         }
         User user = userRepository.findById(id).orElseThrow(UserNotFoundException::new);
         model.addAttribute("user", user);
-        return "user/passwordCheckForm";
+        return "user/userUpdateForm";
     }
 
-    @PostMapping("/{id}/password")
-    public String checkPassword(@PathVariable("id") Long id, User targetUser, Model model, HttpSession session) {
+    @PutMapping("/{id}/updateForm")
+    public String updateUser(@PathVariable("id") Long id, User targetUser, String currentPassword, HttpSession session) {
         User sessionedUser = (User) session.getAttribute("sessionedUser");
-        if (sessionedUser == null) {
-            return "loginForm";
+        if (sessionedUser == null || !sessionedUser.matchId(id)) {
+            return "redirect:/users/login";
         }
         User user = userRepository.findById(id).orElseThrow(UserNotFoundException::new);
-        String passwordBefore = user.getPassword();
-        if (passwordBefore.equals(targetUser.getPassword())) {
-            model.addAttribute("user", user);
-            return "user/userUpdateForm";
+        if (!user.matchPassword(currentPassword)) {
+            return "redirect:/users/" + id + "/updateForm";
         }
-        return "redirect:/";
-    }
-
-    @PutMapping("/{id}")
-    public String updateUser(@PathVariable("id") Long id, User targetUser) {
-        User user = userRepository.findById(id).orElseThrow(UserNotFoundException::new);
         user.update(targetUser);
         userRepository.save(user);
         return "redirect:/users";

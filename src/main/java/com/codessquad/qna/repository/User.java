@@ -23,6 +23,14 @@ public class User {
         this.email = user.getEmail();
     }
 
+    public boolean matchId(Long id) {
+        return this.id.equals(id);
+    }
+
+    public boolean matchPassword(String password) {
+        return this.password.equals(password);
+    }
+
     public Long getId() {
         return id;
     }
@@ -61,10 +69,6 @@ public class User {
 
     public void setEmail(String email) {
         this.email = email;
-    }
-
-    public boolean isSameId(String userId) {
-        return this.getUserId().equals(userId);
     }
 
     @Override
