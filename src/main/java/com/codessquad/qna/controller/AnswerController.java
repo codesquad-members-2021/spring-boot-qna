@@ -1,9 +1,6 @@
 package com.codessquad.qna.controller;
 
-import com.codessquad.qna.domain.User;
-import com.codessquad.qna.exception.NotLoggedInException;
 import com.codessquad.qna.service.AnswerService;
-import com.codessquad.qna.util.HttpSessionUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -12,6 +9,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.servlet.http.HttpSession;
+
+import static com.codessquad.qna.util.HttpSessionUtils.checkSessionUser;
+import static com.codessquad.qna.util.HttpSessionUtils.getSessionUser;
 
 @Controller
 @RequestMapping("/questions/{questionId}/answers")
@@ -36,15 +36,5 @@ public class AnswerController {
 
         answerService.remove(getSessionUser(session), answerService.getOneById(answerId));
         return "redirect:/questions/{questionId}";
-    }
-
-    private void checkSessionUser(HttpSession session) {
-        if (!HttpSessionUtils.isLoginUser(session)) {
-            throw new NotLoggedInException();
-        }
-    }
-
-    private User getSessionUser(HttpSession session){
-        return HttpSessionUtils.getUserFromSession(session);
     }
 }

@@ -16,6 +16,8 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
 
+import static com.codessquad.qna.util.HttpSessionUtils.*;
+
 @Controller
 @RequestMapping("/questions")
 public class QuestionController {
@@ -57,21 +59,18 @@ public class QuestionController {
 
         Question question = questionService.getOneById(questionId);
 
-        checkAccessibleSessionUser(session, question);
+        checkAccessibleSessionUser(getSessionUser(session), question);
 
         model.addAttribute("question", question);
         return "question/update";
     }
 
     @PutMapping("/{questionId}")
-    public String updateQuestion(@PathVariable long questionId, Question referenceQuestion, HttpSession session, Model model) {
+    public String updateQuestion(@PathVariable long questionId, Question newQuestionInfo, HttpSession session, Model model) {
         checkSessionUser(session);
 
-        Question question = questionService.getOneById(questionId);
+        questionService.updateInfo(questionService.getOneById(questionId), newQuestionInfo, getSessionUser(session));
 
-        checkAccessibleSessionUser(session, question);
-
-        questionService.updateInfo(question, referenceQuestion);
         return "redirect:/";
     }
 
@@ -79,24 +78,7 @@ public class QuestionController {
     public String deleteQuestion(@PathVariable long questionId, HttpSession session, Model model) {
         checkSessionUser(session);
 
-        Question question = questionService.getOneById(questionId);
-
-        checkAccessibleSessionUser(session, question);
-
-        questionService.remove(question);
+        questionService.remove(getSessionUser(session), questionService.getOneById(questionId));
         return "redirect:/";
-    }
-
-    private void checkSessionUser(HttpSession session) {
-        if (!HttpSessionUtils.isLoginUser(session)) {
-            throw new NotLoggedInException();
-        }
-    }
-
-    private void checkAccessibleSessionUser(HttpSession session, Question question) {
-        User sessionUser = HttpSessionUtils.getUserFromSession(session);
-        if (!question.isEqualWriter(sessionUser)) {
-            throw new NotLoggedInException("자신의 글만 수정 및 삭제가 가능합니다.");
-        }
     }
 }

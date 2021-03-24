@@ -12,6 +12,8 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+import static com.codessquad.qna.util.HttpSessionUtils.checkAccessibleSessionUser;
+
 @Service
 public class QuestionService {
     private final Logger logger = LoggerFactory.getLogger(QuestionService.class);
@@ -36,12 +38,18 @@ public class QuestionService {
                 .orElseThrow(() -> new NotFoundException("존재하지 않는 질문입니다."));
     }
 
-    public void updateInfo(Question presentQuestion, Question referenceQuestion) {
-        presentQuestion.updateQuestionInfo(referenceQuestion);
-        questionRepository.save(presentQuestion);
+    public void updateInfo(Question targetQuestion, Question newQuestionInfo, User sessionUser) {
+
+        checkAccessibleSessionUser(sessionUser, targetQuestion);
+
+        targetQuestion.updateQuestionInfo(newQuestionInfo);
+        questionRepository.save(targetQuestion);
     }
 
-    public void remove(Question question) {
+    public void remove(User sessionUser, Question question) {
+
+        checkAccessibleSessionUser(sessionUser, question);
+
         question.deleted();
         questionRepository.save(question);
     }

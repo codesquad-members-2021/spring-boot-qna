@@ -4,7 +4,6 @@ import com.codessquad.qna.domain.Answer;
 import com.codessquad.qna.domain.Question;
 import com.codessquad.qna.domain.User;
 import com.codessquad.qna.exception.NotFoundException;
-import com.codessquad.qna.exception.NotLoggedInException;
 import com.codessquad.qna.repository.AnswerRepository;
 import com.codessquad.qna.repository.QuestionRepository;
 import com.codessquad.qna.util.HttpSessionUtils;
@@ -13,6 +12,8 @@ import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpSession;
 import java.util.List;
+
+import static com.codessquad.qna.util.HttpSessionUtils.checkAccessibleSessionUser;
 
 @Service
 public class AnswerService {
@@ -32,17 +33,16 @@ public class AnswerService {
 
     public void create(Long id, String contents, HttpSession session) {
         User loginUser = HttpSessionUtils.getUserFromSession(session);
+
         Question question = questionRepository.findByQuestionIdAndDeletedFalse(id)
                 .orElseThrow(() -> new NotFoundException("존재하지 않는 질문입니다."));
 
         answerRepository.save(new Answer(question, contents, loginUser));
     }
 
-    public void remove(User user, Answer answer) {
+    public void remove(User sessionUser, Answer answer) {
 
-        if (!answer.isEqualWriter(user)) {
-            throw new NotLoggedInException("자신의 글만 수정 및 삭제가 가능합니다.");
-        }
+        checkAccessibleSessionUser(sessionUser, answer);
 
         answer.deleted();
         answerRepository.save(answer);
