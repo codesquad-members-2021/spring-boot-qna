@@ -69,6 +69,7 @@ public class QuestionController {
     public String update(@PathVariable Long id, @Valid Question updatedQuestion, Errors errors, Model model, HttpSession session) {
         Question question = questionService.findVerifiedQuestion(id, session);
         updatedQuestion.setId(id);
+        
         if (errors.hasErrors()) {
             model.addAttribute("question", updatedQuestion);
             model.addAttribute("errorMessage", Objects.requireNonNull(errors.getFieldError()).getDefaultMessage());
@@ -85,4 +86,3 @@ public class QuestionController {
         return "redirect:/";
     }
 }
-
