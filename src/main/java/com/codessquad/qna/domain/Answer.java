@@ -70,16 +70,17 @@ public class Answer {
         deleted = true;
     }
 
+
+    public boolean isEqualWriter(User sessionUser) {
+        return writer.equals(sessionUser);
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Answer answer = (Answer) o;
         return answerId.equals(answer.answerId);
-    }
-
-    public boolean isEqualWriter(User sessionUser) {
-        return writer.isEqualUserId(sessionUser.getUserId());
     }
 
     @Override
