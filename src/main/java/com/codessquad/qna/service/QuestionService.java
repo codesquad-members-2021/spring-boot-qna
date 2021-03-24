@@ -2,7 +2,8 @@ package com.codessquad.qna.service;
 
 import com.codessquad.qna.domain.Question;
 import com.codessquad.qna.domain.QuestionRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.codessquad.qna.domain.User;
+import com.codessquad.qna.exception.QuestionNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -11,14 +12,17 @@ import java.util.List;
 public class QuestionService {
     private final QuestionRepository questionRepository;
 
-    @Autowired
     public QuestionService(QuestionRepository questionRepository) {
         this.questionRepository = questionRepository;
     }
 
-    public void save(Question question) {
-        question.setTimeCreated();
-        questionRepository.save(question);
+    public void save(Question question, User user) {
+        Question newQuestion = new Question(user, question.getTitle(), question.getContents());
+        questionRepository.save(newQuestion);
+    }
+
+    public void modifyQuestion(Question question, Question modifiedQuestion) {
+        questionRepository.save(question.updateQuestion(modifiedQuestion));
     }
 
     public List<Question> listAllQuestions() {
@@ -26,6 +30,10 @@ public class QuestionService {
     }
 
     public Question findById(Long id) {
-        return questionRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Question Not Found"));
+        return questionRepository.findById(id).orElseThrow(QuestionNotFoundException::new);
+    }
+
+    public void deleteQuestion(Question question) {
+        questionRepository.delete(question);
     }
 }

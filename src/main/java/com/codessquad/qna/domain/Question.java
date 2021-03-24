@@ -12,40 +12,26 @@ public class Question {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @Column(nullable = false)
-    private String writer;
+    @ManyToOne
+    @JoinColumn(foreignKey = @ForeignKey(name = "fk_question_writer"))
+    private User writer;
+
     private String title;
 
     @Column(nullable = false, length = 2000)
     private String contents;
-    private LocalDateTime timeCreated;
 
-    public Question(String writer, String title, String contents) {
+    private LocalDateTime timeCreated = LocalDateTime.now();
+
+    public Question(User writer, String title, String contents) {
         this.writer = writer;
         this.title = title;
         this.contents = contents;
-        this.timeCreated = LocalDateTime.now();
     }
 
-    public Question() {}
+    protected Question() {}
 
-    public void setWriter(String writer) {
-        this.writer = writer;
-    }
-
-    public void setTimeCreated() {
-        this.timeCreated = LocalDateTime.now();
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    public void setContents(String contents) {
-        this.contents = contents;
-    }
-
-    public String getWriter() {
+    public User getWriter() {
         return writer;
     }
 
@@ -67,6 +53,16 @@ public class Question {
 
     public String getFormattedTimeCreated() {
         return timeCreated.format(DATE_TIME_FORMATTER);
+    }
+
+    public Question updateQuestion(Question modifiedQuestion) {
+        this.title = modifiedQuestion.getTitle();
+        this.contents = modifiedQuestion.getContents();
+        return this;
+    }
+
+    public boolean isSameUser(User user) {
+        return this.writer.equals(user);
     }
 
     @Override
