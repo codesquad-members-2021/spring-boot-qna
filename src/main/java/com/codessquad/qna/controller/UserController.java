@@ -3,6 +3,7 @@ package com.codessquad.qna.controller;
 import com.codessquad.qna.domain.User;
 import com.codessquad.qna.domain.UserRepository;
 import com.codessquad.qna.exception.NotFoundException;
+import com.codessquad.qna.service.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
@@ -19,12 +20,14 @@ public class UserController {
 
     private static final Logger logger = LoggerFactory.getLogger(UserController.class);
 
-    private final UserRepository userRepository;
+    private final UserService userService;
 
-
-    public UserController(UserRepository userRepository) {
+    public UserController(UserService userService,UserRepository userRepository) {
+        this.userService = userService;
+        //삭제예정
         this.userRepository = userRepository;
     }
+    private final UserRepository userRepository;
 
     @GetMapping
     public String userListShow() {
@@ -40,6 +43,7 @@ public class UserController {
     @PostMapping("/create")
     public String userCreate(User user) {
         userRepository.save(user);
+        //userService.
         return "redirect:/user/list";
     }
 
