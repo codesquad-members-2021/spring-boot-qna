@@ -55,13 +55,13 @@ public class UserController {
     }
 
     @PutMapping("/{id}")
-    public String updateUser(@PathVariable Long id, User newInfoUser) {
+    public String updateUser(@PathVariable Long id, User newInfoUser, HttpSession session) {
         User user = userService.findById(id);
         if (!userService.isCorrectPassword(user, newInfoUser)) {
             throw new UnauthorizedUserException(UnauthorizedUserException.WRONG_PASSWORD);
         }
-        user.update(newInfoUser);
-        userService.save(user);
+        userService.update(user, newInfoUser);
+        SessionUtility.setUser(user, session);
         return "redirect:/users";
     }
 

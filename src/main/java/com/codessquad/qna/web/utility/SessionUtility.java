@@ -27,4 +27,8 @@ public class SessionUtility {
         session.removeAttribute(SESSIONED_USER);
     }
 
+//    public static void updateUser(HttpSession, User newInfoUser) {
+//        session.set
+//    }
+
 }

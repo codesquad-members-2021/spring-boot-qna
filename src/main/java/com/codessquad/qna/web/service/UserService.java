@@ -53,4 +53,9 @@ public class UserService {
         }
         return user;
     }
+
+    public void update(User user, User newInfoUser) {
+        user.update(newInfoUser);
+        save(user);
+    }
 }
