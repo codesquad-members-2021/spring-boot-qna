@@ -10,9 +10,9 @@ import javax.servlet.http.HttpServletResponse;
 @ControllerAdvice
 public class GlobalExceptionHandler {
     @ExceptionHandler({
-            UserNotFoundException.class,
-            QuestionNotFoundException.class,
-            AnswerNotFoundException.class,
+            NotFoundException.class,
+            AlreadyExistException.class,
+            SaveFailedException.class,
             CannotDeleteQuestionException.class
     })
     public String exceptionPage(RuntimeException ex, Model model) {
