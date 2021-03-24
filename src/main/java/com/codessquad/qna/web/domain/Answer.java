@@ -1,7 +1,5 @@
 package com.codessquad.qna.web.domain;
 
-import org.hibernate.annotations.SQLDelete;
-
 import javax.persistence.*;
 
 @Entity
@@ -38,11 +36,11 @@ public class Answer extends BaseTimeEntity {
         return !contents.isEmpty();
     }
 
-    public boolean isSameWriter(User writer){
+    public boolean isSameWriter(User writer) {
         return writer.isMatchingId(writer);
     }
 
-    public void delete(){
+    public void delete() {
         deleted = true;
     }
 
