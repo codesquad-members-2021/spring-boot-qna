@@ -4,6 +4,7 @@ import javax.persistence.*;
 import javax.servlet.http.HttpSession;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 
 import static com.codessquad.qna.utils.SessionUtil.getLoginUser;
 import static com.codessquad.qna.utils.StringUtil.PATTERN_FORMAT;
@@ -27,9 +28,9 @@ public class Question {
 
     private LocalDateTime createdDateTime;
 
-    //@OneToMany(mappedBy = ) :: https://www.youtube.com/watch?v=GvVFQom_SGs&list=PLqaSEyuwXkSppQAjwjXZgKkjWbFoUdNXC&index=46
-    // 20분 4초 시점
-
+    @OneToMany(mappedBy = "question")
+    @OrderBy("id ASC")
+    private List<Answer> answerList;
 
     public Question() {
     }
@@ -39,7 +40,6 @@ public class Question {
         this.title = question.title;
         this.contents = question.contents;
         this.createdDateTime = question.createdDateTime;
-
     }
 
     public Question(String writer, String title, String contents) {

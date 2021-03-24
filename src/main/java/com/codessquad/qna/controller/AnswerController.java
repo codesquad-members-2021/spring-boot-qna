@@ -8,7 +8,9 @@ import com.codessquad.qna.exception.NotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
@@ -51,6 +53,16 @@ public class AnswerController {
         }
         answerRepository.delete(answerRepository.findById(answerId).orElseThrow(NotFoundException::new));
         return String.format("redirect:/qna/%d", questionId);
+    }
+
+    @GetMapping("/qna/{questionId}/answers/{answerId}/modify-page")
+    public String modifyAnswer(@PathVariable Long questionId, @PathVariable Long answerId, Model model, HttpSession session) {
+        User ownerUser = questionRepostory.findById(questionId).orElseThrow(NotFoundException::new).getWriter();
+        if (!isValidUser(session, ownerUser)) {
+            logger.info("답변수 - 실패 : 권한(로그인)되지 않은 사용자의 답변수정 시도가 실패함");
+            return String.format("redirect:/qna/%d", questionId);
+        }
+        return "";
     }
 
 }
