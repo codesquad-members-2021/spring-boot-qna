@@ -32,7 +32,7 @@ public class Question {
 
     private LocalDateTime createdAt;
 
-    @OneToMany(mappedBy = "question", cascade = CascadeType.ALL)
+    @OneToMany(cascade = CascadeType.ALL)
     private List<Answer> answers = new ArrayList<>();
 
     public Question(User writer, String title, String contents) {
@@ -72,9 +72,6 @@ public class Question {
 
     public void addAnswer(Answer answer) {
         answers.add(answer);
-        if (answer.getQuestion() != this) {
-            answer.setQuestion(this);
-        }
     }
 
     public void update(QuestionRequest request) {

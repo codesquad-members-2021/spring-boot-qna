@@ -27,7 +27,7 @@ public class User {
     @Column(nullable = false)
     private String email;
 
-    @OneToMany(mappedBy = "writer", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Answer> answers = new ArrayList<>();
 
     public User(String userId, String password, String name, String email) {
@@ -67,9 +67,6 @@ public class User {
 
     public void addAnswer(Answer answer) {
         answers.add(answer);
-        if (answer.getWriter() != this) {
-            answer.setWriter(this);
-        }
     }
 
     public boolean isMatchingPassword(String password) {
