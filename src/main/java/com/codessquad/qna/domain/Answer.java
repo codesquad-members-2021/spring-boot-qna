@@ -25,6 +25,9 @@ public class Answer {
 
     private Question question;
 
+    @Column(nullable = false)
+    private boolean deleted;
+
     @Lob
     private String contents;
 

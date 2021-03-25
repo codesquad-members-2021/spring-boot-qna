@@ -48,7 +48,7 @@ public class QuestionService {
 
     public void showDetailQuestion(Long id, Model model) {
         Question currentQuestion = questionRepostory.findById(id).orElseThrow(NotFoundException::new);
-        List<Answer> answerList = answerRepository.findByQuestionId(id);
+        List<Answer> answerList = answerRepository.findByQuestionIdAndDeletedFalse(id);
         model.addAttribute("question", currentQuestion);
         model.addAttribute("answerList", answerList);
         logger.info("update Question : {}" + currentQuestion.getTitle());
