@@ -12,11 +12,11 @@ public class QuestionDto {
     private String contents;
     private String time;
 
-    protected QuestionDto(){
+    protected QuestionDto() {
 
     }
 
-    public QuestionDto(String title, String contents){
+    public QuestionDto(String title, String contents) {
         this.title = title;
         this.contents = contents;
         this.time = DateTimeUtils.stringOf(LocalDateTime.now());
@@ -54,7 +54,7 @@ public class QuestionDto {
         this.time = time;
     }
 
-    public Question toEntity(User user){
+    public Question toEntity(User user) {
         return new Question(user, this.title, this.contents, this.time);
     }
 }
