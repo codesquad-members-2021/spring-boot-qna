@@ -40,24 +40,19 @@ public class UserController {
     }
 
     @PostMapping("/login")
-    public String login(String userId, String password, HttpSession session) {
+    public String login(String userId, String password, Model model, HttpSession session) {
         User user = userRepository.findByUserId(userId);
-        if (user == null) {
-            return "redirect:/users/login";
+        if (user == null || !user.matchPassword(password)) {
+            model.addAttribute("errorMessage", "아이디 또는 비밀번호가 틀립니다. 다시 로그인 해주세요.");
+            return "user/loginForm";
         }
-        if (!password.equals(user.getPassword())) {
-            return "redirect:/users/login";
-        }
-        System.out.println("Login Success!");
         session.setAttribute("sessionedUser", user);
-
         return "redirect:/";
     }
 
     @GetMapping("/logout")
     public String logout(HttpSession session) {
         session.removeAttribute("sessionedUser");
-        System.out.println("Logout Success");
         return "redirect:/";
     }
 
