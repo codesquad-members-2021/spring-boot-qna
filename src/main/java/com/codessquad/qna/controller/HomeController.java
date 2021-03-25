@@ -1,7 +1,6 @@
 package com.codessquad.qna.controller;
 
 
-import com.codessquad.qna.repository.QuestionRepository;
 import com.codessquad.qna.service.QuestionService;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
@@ -12,11 +11,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 @Controller
 public class HomeController {
 
-    private final QuestionRepository questionRepository;
     private final QuestionService questionService;
 
-    public HomeController(QuestionRepository questionRepository, QuestionService questionService) {
-        this.questionRepository = questionRepository;
+    public HomeController(QuestionService questionService) {
         this.questionService = questionService;
     }
 
