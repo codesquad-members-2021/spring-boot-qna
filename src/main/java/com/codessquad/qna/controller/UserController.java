@@ -26,7 +26,7 @@ public class UserController {
     }
 
     @GetMapping
-    public String userListShow() {
+    public String listShow() {
         return "redirect:/user/list";
     }
 
@@ -37,7 +37,7 @@ public class UserController {
     }
 
     @PostMapping("/create")
-    public String userCreate(User user) {
+    public String create(User user) {
         userService.createUser(user);
         return "redirect:/user/list";
     }
@@ -56,13 +56,13 @@ public class UserController {
     }
 
     @PutMapping("/{id}")
-    public String updateUser(@PathVariable Long id, String pastPassword, User updatedUser, HttpSession session) {
+    public String update(@PathVariable Long id, String pastPassword, User updatedUser, HttpSession session) {
         userService.updateUser(id, pastPassword, updatedUser, session);
         return "redirect:/user";
     }
 
     @GetMapping("/{id}/form")
-    public String getUserUpdateForm(@PathVariable Long id, Model model, HttpSession session) {
+    public String updateForm(@PathVariable Long id, Model model, HttpSession session) {
         userService.validationCheck(id, session);
         User loginUser = getLoginUser(session);
         model.addAttribute("user", loginUser);

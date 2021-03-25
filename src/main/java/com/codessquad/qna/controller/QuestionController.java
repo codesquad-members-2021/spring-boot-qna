@@ -32,38 +32,38 @@ public class QuestionController {
     }
 
     @GetMapping("/form")
-    public String questionForm(HttpSession session) {
+    public String loginForm(HttpSession session) {
         questionService.isLogin(session);
         return "qna/form";
     }
 
     @PostMapping("/questions")
-    public String createQuestion(Question question, HttpSession session) {
+    public String create(Question question, HttpSession session) {
         questionService.createQuestion(question, getLoginUser(session));
         return "redirect:/qna/list";
     }
 
     @GetMapping("/list")
-    public String showQuestionList(Model model) {
+    public String showList(Model model) {
         model.addAttribute("questionList", questionService.findAll());
         return "/qna/list";
     }
 
     @GetMapping("/{id}")
-    public String showDetailQuestion(@PathVariable Long id, Model model) {
+    public String showDetail(@PathVariable Long id, Model model) {
         questionService.showDetailQuestion(id, model);
         //@Todo 모델에다가 데이터를 집어넣어주는건 컨트롤러 역할 같다. 개선할 수 있는 방법을 찾아보자
         return "/qna/show";
     }
 
     @PutMapping("/{id}")
-    public String updateQuestion(@PathVariable Long id, String title, String contents) {
+    public String update(@PathVariable Long id, String title, String contents) {
         questionService.updateQuestion(id, title, contents);
         return String.format("redirect:/qna/%d", id);
     }
 
     @DeleteMapping("/{id}")
-    public String deleteQuestion(@PathVariable Long id, HttpSession session) {
+    public String delete(@PathVariable Long id, HttpSession session) {
         questionService.deleteQuestion(id, session);
         return "redirect:/";
     }
