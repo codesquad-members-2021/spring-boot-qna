@@ -7,12 +7,10 @@ function addAnswer(e) {
     console.log("queryString : " + queryString);
 
     var url = $(".answer-write").attr("action");
-    var fullURL = "http://localhost:8080/" + url;
-    console.log("fullURL : " + fullURL);
 
     $.ajax({
         type: 'post',
-        url: fullURL,
+        url: url,
         data: queryString,
         dataType: 'json',
         error: onError,
