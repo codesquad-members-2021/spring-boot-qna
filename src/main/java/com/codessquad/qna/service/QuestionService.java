@@ -37,7 +37,7 @@ public class QuestionService {
     }
 
     public void updateQuestion(long id, Question updateQuestion) {
-        Question question = questionRepository.findById(id).orElseThrow(NoUserException::new);
+        Question question = questionRepository.findById(id).orElseThrow(NoQuestionException::new);
         question.update(updateQuestion);
         questionRepository.save(question);
     }
