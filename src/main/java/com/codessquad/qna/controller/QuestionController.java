@@ -45,9 +45,7 @@ public class QuestionController {
     @GetMapping("/{questionId}/updateForm")
     public String qnaUpdatePage(@PathVariable("questionId") Long questionId, Model model, HttpSession session) {
         Question question = findByQuestionId(questionId);
-        if (!question.matchWriter(getUserFromSession(session))) {
-            throw new InvalidSessionException();
-        }
+        checkSessionAndWriter(getUserFromSession(session), question);
         model.addAttribute("question", question);
         return "qna/questionUpdateForm";
     }
@@ -55,15 +53,27 @@ public class QuestionController {
     @PutMapping("/{questionId}/updateForm")
     public String updateQuestion(@PathVariable("questionId") Long questionId, Question updatedQuestion, HttpSession session) {
         Question question = findByQuestionId(questionId);
-        if (!question.matchWriter(getUserFromSession(session))) {
-            throw new InvalidSessionException();
-        }
+        checkSessionAndWriter(getUserFromSession(session), question);
         question.update(updatedQuestion);
         questionRepository.save(question);
         return "redirect:/questions/" + questionId;
     }
 
+    @DeleteMapping("/{questionId}")
+    public String deleteQuestion(@PathVariable("questionId") Long questionId, HttpSession session) {
+        Question question = findByQuestionId(questionId);
+        checkSessionAndWriter(getUserFromSession(session), question);
+        questionRepository.delete(question);
+        return "redirect:/";
+    }
+
     private Question findByQuestionId(Long questionId) {
         return questionRepository.findById(questionId).orElseThrow(() -> new EntryNotFoundException("질문"));
+    }
+
+    private void checkSessionAndWriter(User sessionedUser, Question question) {
+        if (!question.matchWriter(sessionedUser)) {
+            throw new InvalidSessionException();
+        }
     }
 }
