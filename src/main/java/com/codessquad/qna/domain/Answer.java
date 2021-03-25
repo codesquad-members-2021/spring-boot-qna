@@ -89,4 +89,8 @@ public class Answer {
     public void setContents(String contents) {
         this.contents = contents;
     }
+
+    public void deleteAnswer() {
+        this.deleted = true;
+    }
 }

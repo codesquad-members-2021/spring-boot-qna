@@ -110,8 +110,9 @@ public class Question {
         this.contents = contents;
     }
 
-    public void delete() {
+    public void deleteQuestion() {
         this.deleted = true;
+        this.answerList.forEach(Answer::deleteAnswer);
     }
 
 }

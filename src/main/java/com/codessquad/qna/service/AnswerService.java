@@ -49,7 +49,8 @@ public class AnswerService {
             logger.info("답변달기 - 실패 : 권한(로그인)되지 않은 사용자의 답변달기 시도가 실패함");
             throw new UnauthorizedException("답변달기 - 실패 : 권한(로그인)되지 않은 사용자의 답변달기 시도가 실패함");
         }
-        answerRepository.delete(answerRepository.findById(answerId).orElseThrow(NotFoundException::new));
-
+        Answer answer = answerRepository.findById(answerId).orElseThrow(NotFoundException::new);
+        answer.deleteAnswer();
+        answerRepository.save(answer);
     }
 }

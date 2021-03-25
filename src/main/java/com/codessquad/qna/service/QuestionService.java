@@ -73,7 +73,7 @@ public class QuestionService {
             logger.info("질문글 삭제 - 실패, 권한없는 사용자의 삭제시도");
             throw new UnauthorizedException("질문글 삭제 - 실패, 권한없는 사용자의 삭제시도");
         }
-        question.delete();
+        question.deleteQuestion();
         questionRepostory.save(question);
         logger.info("질문글 삭제 - 성공");
 
