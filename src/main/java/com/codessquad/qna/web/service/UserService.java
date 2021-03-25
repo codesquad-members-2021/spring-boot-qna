@@ -1,6 +1,7 @@
 package com.codessquad.qna.web.service;
 
 import com.codessquad.qna.web.domain.User;
+import com.codessquad.qna.web.exception.IllegalAccessException;
 import com.codessquad.qna.web.exception.IllegalEntityIdException;
 import com.codessquad.qna.web.exception.LoginFailException;
 import com.codessquad.qna.web.repository.UserRepository;
@@ -48,12 +49,23 @@ public class UserService {
                 .orElseThrow(() -> new LoginFailException("입력하신 아이디에 해당하는 회원이 없습니다"));
     }
 
-    public void updateUser(String testPassword, User loginUser, User user) {
+    public boolean isUpdatable(long id, String testPassword, User loginUser, User user) {
+        checkSameUser(id, loginUser);
+        if(!isMatchingPassword(loginUser, testPassword)) {
+            return false;
+        }
         loginUser.update(user);
         userRepository.save(loginUser);
+        return true;
     }
 
     public boolean isMatchingPassword(User user, String testPassword) {
         return user.isMatchingPassword(testPassword);
+    }
+
+    public void checkSameUser(long id, User user) {
+        if (!user.isSameId(id)) {
+            throw new IllegalAccessException();
+        }
     }
 }

@@ -1,7 +1,9 @@
 package com.codessquad.qna.web.service;
 
+import com.codessquad.qna.web.HttpSessionUtils;
 import com.codessquad.qna.web.domain.Answer;
 import com.codessquad.qna.web.domain.User;
+import com.codessquad.qna.web.exception.IllegalAccessException;
 import com.codessquad.qna.web.exception.IllegalEntityIdException;
 import com.codessquad.qna.web.repository.AnswerRepository;
 import org.springframework.stereotype.Service;
@@ -21,7 +23,9 @@ public class AnswerService {
         answerRepository.save(answer);
     }
 
-    public void deleteAnswer(Answer answer) {
+    public void deleteAnswer(long id, User user) {
+        Answer answer = findAnswer(id);
+        checkWriter(answer, user);
         answerRepository.delete(answer);
     }
 
@@ -29,5 +33,11 @@ public class AnswerService {
         return answerRepository
                 .findById(id)
                 .orElseThrow(() -> new IllegalEntityIdException("id(번호)에 해당하는 답변이 없습니다"));
+    }
+
+    private void checkWriter(Answer answer, User user) {
+        if (!answer.isSameWriter(user)) {
+            throw new IllegalAccessException();
+        }
     }
 }

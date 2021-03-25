@@ -2,7 +2,6 @@ package com.codessquad.qna.web.controller;
 
 import com.codessquad.qna.web.HttpSessionUtils;
 import com.codessquad.qna.web.domain.User;
-import com.codessquad.qna.web.exception.IllegalAccessException;
 import com.codessquad.qna.web.exception.NotLoginException;
 import com.codessquad.qna.web.service.UserService;
 import org.springframework.stereotype.Controller;
@@ -62,37 +61,20 @@ public class UserController {
 
     @GetMapping("/{id}/form")
     public String getUpdateForm(@PathVariable long id, Model model, HttpSession session) {
-        checkLogin(session);
-        model.addAttribute("user", validateAndGetUser(id, session));
+        User loginUser = HttpSessionUtils.getSessionedUser(session).orElseThrow(NotLoginException::new);
+        userService.checkSameUser(id, loginUser);
+        model.addAttribute("user", loginUser);
         return "/user/updateForm";
     }
 
     @PutMapping("/{id}")
     public String updateUser(@PathVariable long id, String testPassword, User user, HttpSession session, Model model) {
-        checkLogin(session);
-
-        User loginUser = validateAndGetUser(id, session);
-        if (!userService.isMatchingPassword(loginUser, testPassword)) {
+        User loginUser = HttpSessionUtils.getSessionedUser(session).orElseThrow(NotLoginException::new);
+        if (!userService.isUpdatable(id, testPassword, loginUser, user)) {
             model.addAttribute("errorMessage", "비밀번호가 틀렸습니다");
             model.addAttribute("user", loginUser);
             return "/user/updateFormWithError";
         }
-
-        userService.updateUser(testPassword, loginUser, user);
         return "redirect:/users";
-    }
-
-    private void checkLogin(HttpSession session) {
-        if (!HttpSessionUtils.isLoginUser(session)) {
-            throw new NotLoginException();
-        }
-    }
-
-    private User validateAndGetUser(long id, HttpSession session) {
-        User loginUser = HttpSessionUtils.getSessionedUser(session);
-        if (!loginUser.isSameId(id)) {
-            throw new IllegalAccessException();
-        }
-        return loginUser;
     }
 }
