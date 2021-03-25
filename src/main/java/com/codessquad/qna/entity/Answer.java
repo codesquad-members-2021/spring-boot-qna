@@ -1,5 +1,7 @@
 package com.codessquad.qna.entity;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -9,17 +11,21 @@ import java.time.format.DateTimeFormatter;
 public class Answer {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @JsonProperty
     private Long id;
 
     @ManyToOne
     @JoinColumn(foreignKey = @ForeignKey(name = "fk_answer_question"))
+    @JsonProperty
     private Question question;
 
     @ManyToOne
     @JoinColumn(foreignKey = @ForeignKey(name = "fk_answer_writer"))
+    @JsonProperty
     private User writer;
 
     @Column(nullable = false, length = 3000)
+    @JsonProperty
     private String contents;
 
     @Column(nullable = false)
@@ -52,10 +58,6 @@ public class Answer {
 
     public String getContents() {
         return contents;
-    }
-
-    public LocalDateTime getWriteDateTime() {
-        return writeDateTime;
     }
 
     public String getFormattedWriteDateTime() {

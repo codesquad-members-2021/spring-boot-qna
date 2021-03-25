@@ -1,5 +1,6 @@
 package com.codessquad.qna.entity;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
@@ -12,16 +13,20 @@ import java.util.List;
 public class Question {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @JsonProperty
     private Long id;
 
     @ManyToOne
     @JoinColumn(foreignKey = @ForeignKey(name = "fk_question_writer"))
+    @JsonProperty
     private User writer;
 
     @Column(nullable = false, length = 100)
+    @JsonProperty
     private String title;
 
     @Column(nullable = false, length = 3000)
+    @JsonProperty
     private String contents;
 
     @Column(nullable = false)
@@ -58,10 +63,6 @@ public class Question {
 
     public String getContents() {
         return contents;
-    }
-
-    public LocalDateTime getWriteDateTime() {
-        return writeDateTime;
     }
 
     public String getFormattedWriteDateTime() {

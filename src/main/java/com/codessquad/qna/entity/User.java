@@ -1,5 +1,8 @@
 package com.codessquad.qna.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import javax.persistence.*;
 
 @Entity
@@ -7,18 +10,23 @@ import javax.persistence.*;
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @JsonProperty
     private Long id;
 
     @Column(nullable = false, length = 20, unique = true)
+    @JsonProperty
     private String userId;
 
     @Column(nullable = false, length = 20)
+    @JsonIgnore
     private String password;
 
     @Column(nullable = false, length = 20)
+    @JsonProperty
     private String name;
 
     @Column(nullable = false, length = 50)
+    @JsonProperty
     private String email;
 
     protected User() {
