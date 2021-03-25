@@ -1,7 +1,6 @@
 package com.codessquad.qna.controller;
 
 import com.codessquad.qna.exception.EntryNotFoundException;
-import com.codessquad.qna.exception.InvalidSessionException;
 import com.codessquad.qna.repository.User;
 import com.codessquad.qna.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,8 +10,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
 
-import static com.codessquad.qna.controller.HttpSessionUtils.USER_SESSION_KEY;
-import static com.codessquad.qna.controller.HttpSessionUtils.getUserFromSession;
+import static com.codessquad.qna.controller.HttpSessionUtils.*;
 
 @Controller
 @RequestMapping("/users")
@@ -68,7 +66,7 @@ public class UserController {
 
     @GetMapping("/{id}/updateForm")
     public String updateFormPage(@PathVariable("id") Long id, Model model, HttpSession session) {
-        User sessionedUser = getUserFromSession(session);
+        checkSessionedUserId(session, id);
         User user = userRepository.findById(id).orElseThrow(() -> new EntryNotFoundException("유저"));
         model.addAttribute("user", user);
         return "user/userUpdateForm";
@@ -76,7 +74,7 @@ public class UserController {
 
     @PutMapping("/{id}/updateForm")
     public String updateUser(@PathVariable("id") Long id, User targetUser, String currentPassword, HttpSession session) {
-        User sessionedUser = getUserFromSession(session);
+        checkSessionedUserId(session, id);
         User user = userRepository.findById(id).orElseThrow(() -> new EntryNotFoundException("유저"));
         if (!user.matchPassword(currentPassword)) {
             return "redirect:/users/" + id + "/updateForm";
