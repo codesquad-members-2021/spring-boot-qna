@@ -26,11 +26,7 @@ public class HandlebarsHelpers {
         List<Integer> pages = new ArrayList<>();
         int count = 0;
         int pageNumber = page.getNumber();
-        if (pageNumber == 0) {
-            pageNumber = 1;
-        }
-
-        for (int i = pageNumber; i <= page.getTotalPages(); i++) {
+        for (int i = pageNumber; i < page.getTotalPages(); i++) {
             pages.add(i);
             count++;
             if (count == 5) {
@@ -38,6 +34,10 @@ public class HandlebarsHelpers {
             }
         }
         return pages;
+    }
+
+    public int plusOne(Object page) {
+        return (int) page + 1;
     }
 
 }

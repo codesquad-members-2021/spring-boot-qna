@@ -46,7 +46,7 @@
                         {{/if}}
 
                         {{#each (checkPageNum Questions) }}
-                        <li class="page-item"><a class="page-link" href="?page={{this}}">{{this}}</a></li>
+                        <li class="page-item"><a class="page-link" href="?page={{this}}">{{plusOne this}}</a></li>
                         {{/each}}
 
                         {{#if (checkPageLast Questions)}}
