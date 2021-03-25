@@ -21,11 +21,9 @@ public class UserController {
     private static final Logger logger = LoggerFactory.getLogger(UserController.class);
 
     private final UserService userService;
-    private final UserRepository userRepository;
 
-    public UserController(UserService userService, UserRepository userRepository) {
+    public UserController(UserService userService) {
         this.userService = userService;
-        this.userRepository = userRepository;
     }
 
     @GetMapping
@@ -41,55 +39,34 @@ public class UserController {
 
     @PostMapping("/create")
     public String userCreate(User user) {
-        userRepository.save(user);
-        //userService.
+        userService.createUser(user);
         return "redirect:/user/list";
     }
 
     @GetMapping("/list")
     public String list(Model model) {
-        model.addAttribute("userlist", userRepository.findAll());
+        model.addAttribute("userlist", userService.findAll());
         return "user/list";
     }
 
     @GetMapping("/{id}")
     public String showProfile(@PathVariable Long id, Model model) {
-        User user = userRepository.findById(id).orElseThrow(NotFoundException::new);
+        User user = userService.showProfile(id);
         model.addAttribute("user", user);
         return "user/profile";
     }
 
     @PutMapping("/{id}")
     public String updateUser(@PathVariable Long id, String pastPassword, User updatedUser, HttpSession session) {
-
-        User sessionUser = getLoginUser(session);
-        User currentUser = userRepository.findById(id).orElseThrow(NotFoundException::new);
-
-        if (!currentUser.isMatchingPassword(pastPassword)) {
-            logger.info("password is not Matching, please re-try ");
-            return "redirect:/user/login";
-        }
-
-        if (sessionUser.equals(updatedUser)) {
-            sessionUser.update(updatedUser);
-        }
-
-        userRepository.save(sessionUser);
-        logger.info("update User {}", sessionUser.getUserId());
-
+        userService.updateUser(id,pastPassword,updatedUser,session);
         return "redirect:/user";
     }
 
     @GetMapping("/{id}/form")
     public String getUserUpdateForm(@PathVariable Long id, Model model, HttpSession session) {
-        User foundUser = userRepository.findById(id).orElseThrow(NotFoundException::new);
-        if (!isValidUser(session, foundUser)) {
-            logger.info("Login Failure : wrong password");
-            return "redirect:/user/form";
-        }
+        userService.validationCheck(id,model,session);
         User loginUser = getLoginUser(session);
         model.addAttribute("user", loginUser);
-
         return "user/updateForm";
     }
 
@@ -100,16 +77,7 @@ public class UserController {
 
     @PostMapping("/login")
     public String loginProcess(String userId, String password, HttpSession session) {
-        User foundUser = userRepository.findByUserId(userId).orElseThrow(NotFoundException::new); //get 안티패턴 수정해야함@@@@@@@@@@@@
-
-        if (!foundUser.isMatchingPassword(password)) {
-            logger.info("Login Failure : wrong password");
-            return "redirect:/user/form";
-        }
-
-        logger.info("Login Success");
-        setLoginUser(session, foundUser);
-
+        userService.login(userId,password,session);
         return "redirect:/";
     }
 
