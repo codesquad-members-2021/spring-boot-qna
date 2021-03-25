@@ -23,8 +23,8 @@ public class AnswerService {
         answerRepository.save(answer);
     }
 
-    public List<Answer> findAnswersByQuestionId(long id) {
-        return answerRepository.findAnswersByQuestionId(id);
+    public List<Answer> findAnswersByQuestionId(long questionId) {
+        return answerRepository.findAnswersByQuestionId(questionId);
     }
 
     public void delete(long answerId, User user) {

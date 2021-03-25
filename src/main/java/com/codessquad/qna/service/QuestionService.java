@@ -31,8 +31,8 @@ public class QuestionService {
         return questionRepository.findAll();
     }
 
-    public Question findQuestionById(long id) {
-        return questionRepository.findById(id).orElseThrow(IllegalArgumentException::new);
+    public Question findQuestionById(long questionId) {
+        return questionRepository.findById(questionId).orElseThrow(IllegalArgumentException::new);
     }
 
     public boolean verifyQuestion(Question question, User sessionedUser) {
