@@ -34,6 +34,6 @@ public class AnswerController {
         Answer answer = new Answer(user, question, contents);
 
         answerService.save(answer);
-        return String.format("redirect:/question/%d", questionId);
+        return String.format("redirect:/question/" + questionId);
     }
 }
