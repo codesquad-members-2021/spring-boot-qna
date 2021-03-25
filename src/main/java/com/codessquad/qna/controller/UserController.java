@@ -60,14 +60,14 @@ public class UserController {
 
     @GetMapping("/{id}")
     public String userProfile(@PathVariable Long id, Model model) {
-        model.addAttribute("user", userRepository.findById(id).orElseThrow(() -> new EntryNotFoundException("유저")));
+        model.addAttribute("user", findById(id));
         return "user/userProfile";
     }
 
     @GetMapping("/{id}/updateForm")
     public String updateFormPage(@PathVariable("id") Long id, Model model, HttpSession session) {
         checkSessionedUserId(session, id);
-        User user = userRepository.findById(id).orElseThrow(() -> new EntryNotFoundException("유저"));
+        User user = findById(id);
         model.addAttribute("user", user);
         return "user/userUpdateForm";
     }
@@ -75,13 +75,17 @@ public class UserController {
     @PutMapping("/{id}/updateForm")
     public String updateUser(@PathVariable("id") Long id, User targetUser, String currentPassword, HttpSession session) {
         checkSessionedUserId(session, id);
-        User user = userRepository.findById(id).orElseThrow(() -> new EntryNotFoundException("유저"));
+        User user = findById(id);
         if (!user.matchPassword(currentPassword)) {
             return "redirect:/users/" + id + "/updateForm";
         }
         user.update(targetUser);
         userRepository.save(user);
         return "redirect:/users";
+    }
+
+    private User findById(Long id) {
+        return userRepository.findById(id).orElseThrow(() -> new EntryNotFoundException("유저"));
     }
 }
 

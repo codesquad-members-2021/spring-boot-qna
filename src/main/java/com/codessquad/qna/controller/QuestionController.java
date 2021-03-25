@@ -38,13 +38,13 @@ public class QuestionController {
 
     @GetMapping("/{questionId}")
     public String viewQuestion(@PathVariable("questionId") Long questionId, Model model) {
-        model.addAttribute("question", questionRepository.findById(questionId).orElseThrow(() -> new EntryNotFoundException("질문")));
+        model.addAttribute("question", findByQuestionId(questionId));
         return "qna/questionDetail";
     }
 
     @GetMapping("/{questionId}/updateForm")
     public String qnaUpdatePage(@PathVariable("questionId") Long questionId, Model model, HttpSession session) {
-        Question question = questionRepository.findById(questionId).orElseThrow(() -> new EntryNotFoundException("질문"));
+        Question question = findByQuestionId(questionId);
         if (!question.matchWriter(getUserFromSession(session))) {
             throw new InvalidSessionException();
         }
@@ -54,12 +54,16 @@ public class QuestionController {
 
     @PutMapping("/{questionId}/updateForm")
     public String updateQuestion(@PathVariable("questionId") Long questionId, Question updatedQuestion, HttpSession session) {
-        Question question = questionRepository.findById(questionId).orElseThrow(() -> new EntryNotFoundException("질문"));
+        Question question = findByQuestionId(questionId);
         if (!question.matchWriter(getUserFromSession(session))) {
             throw new InvalidSessionException();
         }
         question.update(updatedQuestion);
         questionRepository.save(question);
         return "redirect:/questions/" + questionId;
+    }
+
+    private Question findByQuestionId(Long questionId) {
+        return questionRepository.findById(questionId).orElseThrow(() -> new EntryNotFoundException("질문"));
     }
 }
