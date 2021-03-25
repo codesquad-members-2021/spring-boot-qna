@@ -14,7 +14,6 @@ import java.util.List;
 public class QuestionService {
     private final QuestionRepository questionRepository;
 
-    @Autowired
     public QuestionService(QuestionRepository questionRepository) {
         this.questionRepository = questionRepository;
     }
