@@ -1,5 +1,7 @@
 package com.codessquad.qna.domain;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -10,64 +12,41 @@ import java.util.List;
 public class Question {
     private static final DateTimeFormatter DATE_TIME_FORMAT = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
     @Id
+    @JsonProperty
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @ManyToOne
+    @JsonProperty
     @JoinColumn(foreignKey = @ForeignKey(name = "fk_question_writer"))
     private User writer;
+
+    @JsonProperty
     private String title;
 
     @OneToMany(mappedBy = "question")
     @OrderBy("id ASC")
+    @JsonProperty
     private List<Answer> answers;
 
     @Lob
+    @JsonProperty
     private String contents;
+
     private LocalDateTime createdDateTime = LocalDateTime.now();
 
-    public Long getId() {
-        return id;
+    public Question() {
+
     }
 
-    public User getWriter() {
-        return writer;
-    }
-
-    public void setWriter(User writer) {
+    public Question(User writer, String title, String contents) {
         this.writer = writer;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
         this.title = title;
-    }
-
-    public String getContents() {
-        return contents;
-    }
-
-    public void setContents(String contents) {
         this.contents = contents;
-    }
-
-    public LocalDateTime getCreatedDateTime() {
-        return createdDateTime;
     }
 
     public String getFormattedDateTime() {
         return createdDateTime.format(DATE_TIME_FORMAT);
-    }
-
-    public List<Answer> getAnswers() {
-        return answers;
-    }
-
-    public void setAnswers(List<Answer> answers) {
-        this.answers = answers;
     }
 
     public boolean isMatchingWriter(User loginUser) {
