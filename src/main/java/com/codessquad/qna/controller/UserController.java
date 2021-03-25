@@ -61,8 +61,6 @@ public class UserController {
 
     @GetMapping("{id}/form")
     public String viewUpdateUserForm(@PathVariable Long id, Model model, HttpSession session) {
-        if (!HttpSessionUtils.isLoginUser(session))
-            return "redirect:/users/loginForm";
         User sessionedUser = HttpSessionUtils.getUserFromSession(session);
         if(!sessionedUser.isMatchingId(id)){
             throw new IllegalStateException("자신의 정보만 수정할 수 있습니다.");

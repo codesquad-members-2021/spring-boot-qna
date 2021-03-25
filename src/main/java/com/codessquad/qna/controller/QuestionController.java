@@ -32,9 +32,6 @@ public class QuestionController {
 
     @PostMapping("/questions")
     public String createQuestion(QuestionDto questionDto, HttpSession session) {
-        if (!HttpSessionUtils.isLoginUser(session)){
-            return "redirect:/users/loginForm";
-        }
         User sessionedUser = HttpSessionUtils.getUserFromSession(session);
         questionService.create(questionDto, sessionedUser);
         return "redirect:/";
@@ -55,10 +52,8 @@ public class QuestionController {
 
     @GetMapping("/questions/{questionId}/form")
     public String viewUpdateQuestionForm(@PathVariable long questionId, Model model, HttpSession session) {
-        if (!HttpSessionUtils.isLoginUser(session))
-            return "redirect:/users/loginForm";
-        Question question = questionService.findQuestionById(questionId);
         User sessionedUser = HttpSessionUtils.getUserFromSession(session);
+        Question question = questionService.findQuestionById(questionId);
         if (!questionService.verifyQuestion(question, sessionedUser)) {
             throw new IllegalStateException("자신의 질문만 수정할 수 있습니다.");
         }
@@ -68,8 +63,6 @@ public class QuestionController {
 
     @PutMapping("/questions/{questionId}")
     public String updateQuestion(@PathVariable long questionId, QuestionDto updateQuestionDto, HttpSession session) {
-        if (!HttpSessionUtils.isLoginUser(session))
-            return "redirect:/users/loginForm";
         User sessionedUser = HttpSessionUtils.getUserFromSession(session);
         Question updateQuestion = updateQuestionDto.toEntity(sessionedUser);
         if (!questionService.verifyQuestion(updateQuestion, sessionedUser)) {
@@ -83,8 +76,6 @@ public class QuestionController {
 
     @DeleteMapping("/questions/{id}")
     public String delete(@PathVariable long id, HttpSession session) {
-        if (!HttpSessionUtils.isLoginUser(session))
-            return "redirect:/users/loginForm";
         User sessionedUser = HttpSessionUtils.getUserFromSession(session);
         Question question = questionService.findQuestionById(id);
         if (!questionService.verifyQuestion(question, sessionedUser)) {

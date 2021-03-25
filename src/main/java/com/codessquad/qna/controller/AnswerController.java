@@ -28,20 +28,14 @@ public class AnswerController {
 
     @PostMapping
     public String createAnswer(@PathVariable long questionId, AnswerDto answerDto, HttpSession session) {
-        if (!HttpSessionUtils.isLoginUser(session)) {
-            return "redirect:/users/loginForm";
-        }
-        Question question = questionService.findQuestionById(questionId);
         User sessionedUser = HttpSessionUtils.getUserFromSession(session);
+        Question question = questionService.findQuestionById(questionId);
         answerService.create(answerDto, question, sessionedUser);
         return "redirect:/questions/" + questionId;
     }
 
     @DeleteMapping("/{answerId}")
     public String deleteAnswer(@PathVariable long questionId, @PathVariable long answerId, HttpSession session) {
-        if (!HttpSessionUtils.isLoginUser(session)) {
-            return "redirect:/users/loginForm";
-        }
         User sessionedUser = HttpSessionUtils.getUserFromSession(session);
         answerService.delete(answerId, sessionedUser);
         return "redirect:/questions/" + questionId;
