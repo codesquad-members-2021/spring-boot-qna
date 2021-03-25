@@ -1,6 +1,7 @@
 package com.codessquad.qna.controller;
 
 import com.codessquad.qna.exception.EntryNotFoundException;
+import com.codessquad.qna.exception.InvalidSessionException;
 import com.codessquad.qna.repository.Question;
 import com.codessquad.qna.repository.QuestionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,34 +12,28 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
+import javax.servlet.http.HttpSession;
+
+import static com.codessquad.qna.controller.HttpSessionUtils.getUserFromSession;
+import static com.codessquad.qna.controller.HttpSessionUtils.isLoginUser;
 
 @Controller
 @RequestMapping("/questions")
 public class QuestionController {
-
     @Autowired
     private QuestionRepository questionRepository;
 
-    DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
-
-    @GetMapping
-    public String questionList(Model model) {
-        model.addAttribute("questions", questionRepository.findAll());
-        return "index";
-    }
-
     @GetMapping("/form")
-    public String qnaInputPage() {
+    public String qnaInputPage(HttpSession session) {
+        if (!isLoginUser(session)) {
+            throw new InvalidSessionException();
+        }
         return "qna/questionInputForm";
     }
 
     @PostMapping("/form")
-    public String newQuestion(Question question) {
-        LocalDateTime dateTime = LocalDateTime.now();
-        String dateTimeString = dateTime.format(dateTimeFormatter);
-        question.setDateTime(dateTimeString);
+    public String newQuestion(Question question, HttpSession session) {
+        question.save(getUserFromSession(session));
         questionRepository.save(question);
         return "redirect:/";
     }

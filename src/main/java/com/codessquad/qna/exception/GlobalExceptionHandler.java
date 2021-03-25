@@ -9,7 +9,7 @@ public class GlobalExceptionHandler{
 
     @ExceptionHandler(EntryNotFoundException.class)
     private String handleEntryNotFoundException() {
-        return "redirect:/questions";
+        return "redirect:/";
     }
 
     @ExceptionHandler(InvalidSessionException.class)
