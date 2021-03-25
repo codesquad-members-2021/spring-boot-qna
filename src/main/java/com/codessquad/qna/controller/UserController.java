@@ -1,8 +1,6 @@
 package com.codessquad.qna.controller;
 
 import com.codessquad.qna.domain.User;
-import com.codessquad.qna.domain.UserRepository;
-import com.codessquad.qna.exception.NotFoundException;
 import com.codessquad.qna.service.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -12,7 +10,8 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
 
-import static com.codessquad.qna.utils.SessionUtil.*;
+import static com.codessquad.qna.utils.SessionUtil.getLoginUser;
+import static com.codessquad.qna.utils.SessionUtil.removeLoginUser;
 
 @Controller
 @RequestMapping("/user")
@@ -58,13 +57,13 @@ public class UserController {
 
     @PutMapping("/{id}")
     public String updateUser(@PathVariable Long id, String pastPassword, User updatedUser, HttpSession session) {
-        userService.updateUser(id,pastPassword,updatedUser,session);
+        userService.updateUser(id, pastPassword, updatedUser, session);
         return "redirect:/user";
     }
 
     @GetMapping("/{id}/form")
     public String getUserUpdateForm(@PathVariable Long id, Model model, HttpSession session) {
-        userService.validationCheck(id,model,session);
+        userService.validationCheck(id, model, session);
         User loginUser = getLoginUser(session);
         model.addAttribute("user", loginUser);
         return "user/updateForm";
@@ -77,7 +76,7 @@ public class UserController {
 
     @PostMapping("/login")
     public String loginProcess(String userId, String password, HttpSession session) {
-        userService.login(userId,password,session);
+        userService.login(userId, password, session);
         return "redirect:/";
     }
 

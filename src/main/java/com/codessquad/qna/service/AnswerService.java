@@ -1,6 +1,5 @@
 package com.codessquad.qna.service;
 
-import com.codessquad.qna.controller.AnswerController;
 import com.codessquad.qna.domain.Answer;
 import com.codessquad.qna.domain.AnswerRepository;
 import com.codessquad.qna.domain.QuestionRepostory;

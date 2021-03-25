@@ -31,7 +31,7 @@ public class Question {
 
     private LocalDateTime createdDateTime;
 
-    @OneToMany(mappedBy = "question" , cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy = "question", cascade = CascadeType.REMOVE)
     @OrderBy("id ASC")
     private List<Answer> answerList;
 

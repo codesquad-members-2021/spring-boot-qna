@@ -1,7 +1,7 @@
 package com.codessquad.qna.controller;
 
-import com.codessquad.qna.domain.*;
-import com.codessquad.qna.exception.NotFoundException;
+import com.codessquad.qna.domain.Question;
+import com.codessquad.qna.domain.User;
 import com.codessquad.qna.service.QuestionService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -10,9 +10,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
-import java.util.List;
 
-import static com.codessquad.qna.utils.SessionUtil.*;
+import static com.codessquad.qna.utils.SessionUtil.getLoginUser;
 
 @Controller
 
@@ -40,7 +39,7 @@ public class QuestionController {
 
     @PostMapping("/questions")
     public String createQuestion(Question question, HttpSession session) {
-        questionService.createQuestion(question,getLoginUser(session));
+        questionService.createQuestion(question, getLoginUser(session));
         return "redirect:/qna/list";
     }
 
@@ -52,26 +51,26 @@ public class QuestionController {
 
     @GetMapping("/{id}")
     public String showDetailQuestion(@PathVariable Long id, Model model) {
-        questionService.showDetailQuestion(id,model);
+        questionService.showDetailQuestion(id, model);
         //@Todo 모델에다가 데이터를 집어넣어주는건 컨트롤러 역할 같다. 개선할 수 있는 방법을 찾
         return "/qna/show";
     }
 
     @PutMapping("/{id}")
     public String updateQuestion(@PathVariable Long id, String title, String contents) {
-        questionService.updateQuestion(id,title,contents);
+        questionService.updateQuestion(id, title, contents);
         return String.format("redirect:/qna/%d", id);
     }
 
     @DeleteMapping("/{id}")
     public String deleteQuestion(@PathVariable Long id, User ownerUser, HttpSession session) {
-        questionService.deleteQuestion(id,ownerUser,session);
+        questionService.deleteQuestion(id, ownerUser, session);
         return "redirect:/";
     }
 
     @GetMapping("/{id}/form")
     public String updateForm(@PathVariable Long id, Model model, HttpSession session) {
-        questionService.updateForm(id,model,session);
+        questionService.updateForm(id, model, session);
         return "/qna/updateForm";
     }
 }

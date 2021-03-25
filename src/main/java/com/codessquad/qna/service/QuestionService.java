@@ -1,6 +1,5 @@
 package com.codessquad.qna.service;
 
-import com.codessquad.qna.controller.QuestionController;
 import com.codessquad.qna.domain.*;
 import com.codessquad.qna.exception.LoginFailedException;
 import com.codessquad.qna.exception.NotFoundException;
@@ -11,7 +10,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
 
 import javax.servlet.http.HttpSession;
-
 import java.util.List;
 
 import static com.codessquad.qna.utils.SessionUtil.isLoginUser;
@@ -59,7 +57,7 @@ public class QuestionService {
         return questionRepostory.findAllByDeletedFalse();
     }
 
-    public void updateQuestion(Long id, String title,String contents) {
+    public void updateQuestion(Long id, String title, String contents) {
         Question question = questionRepostory.findById(id).orElseThrow(NotFoundException::new);
         question.update(title, contents);
         questionRepostory.save(question);
@@ -79,7 +77,7 @@ public class QuestionService {
 
     }
 
-    public void updateForm(Long id,Model model, HttpSession session) {
+    public void updateForm(Long id, Model model, HttpSession session) {
         Question question = questionRepostory.findById(id).orElseThrow(NotFoundException::new);
         if (!isValidUser(session, question.getWriter())) {
             logger.info("질문글 수정 - 실패, 권한없는 사용자의 수정시도");
