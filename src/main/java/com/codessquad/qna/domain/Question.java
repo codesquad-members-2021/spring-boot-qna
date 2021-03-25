@@ -36,7 +36,7 @@ public class Question extends AbstractEntity {
     private List<Answer> answers;
 
     @JsonProperty
-    private Integer countOfAnswers;
+    private Integer countOfAnswers = 0;
 
     public Question() {
     }
