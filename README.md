@@ -27,19 +27,28 @@
 
 - GET `/users/{id}`
     - user/userProfile
+  
+로그인
 
-비밀번호 확인
+- GET `/users/login`
+    - user/loginForm
+- POST `/users/login`
+    - if user가 없거나 password가 맞지 않을 때 : redirect:/users/login
+    - else : redirect:/
+  
+로그아웃
 
-- GET `/users/{id}/password`
-    - passwordCheckForm
-- POST `/users/{id}/password`
-    - if 비밀번호 일치) user/userUpdateForm
-    - if 비밀번호 불일치) redirect:/
+- GET `/users/logout`
+  - redirect:/
 
 회원정보 수정
-
-- PUT `/users/{id}`
-    - redirect:/users
+- GET `/users/{id}/updateForm`
+    - if 세션이 없거나 아이디가 맞지 않을 때 : redirect:/users/login
+    - else : user/userUpdateForm
+- PUT `/users/{id}/updateForm`
+    - if 세션이 없거나 아이디가 맞지 않을 때 : redirect:/users/login
+    - if 기존 비밀번호가 일치하지 않을 때 : redirect:/users/{id}/updateForm
+    - else : redirect:/users
   
 ### QuestionController
 
@@ -58,4 +67,4 @@
 질문 조회 (상세보기)
 
 - GET `/questions/{id}`
-    - questionDetail
+    - qna/questionDetail

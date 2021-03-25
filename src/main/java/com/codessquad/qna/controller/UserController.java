@@ -1,6 +1,6 @@
 package com.codessquad.qna.controller;
 
-import com.codessquad.qna.exception.UserNotFoundException;
+import com.codessquad.qna.exception.EntryNotFoundException;
 import com.codessquad.qna.repository.User;
 import com.codessquad.qna.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,6 +34,12 @@ public class UserController {
         return "redirect:/users";
     }
 
+    @GetMapping("/{id}")
+    public String userProfile(@PathVariable Long id, Model model) {
+        model.addAttribute("user", userRepository.findById(id).orElseThrow(() -> new EntryNotFoundException("유저")));
+        return "user/userProfile";
+    }
+
     @GetMapping("/login")
     public String loginForm() {
         return "user/loginForm";
@@ -61,19 +67,13 @@ public class UserController {
         return "redirect:/";
     }
 
-    @GetMapping("/{id}")
-    public String userProfile(@PathVariable Long id, Model model) {
-        model.addAttribute("user", userRepository.findById(id).orElseThrow(UserNotFoundException::new));
-        return "user/userProfile";
-    }
-
     @GetMapping("/{id}/updateForm")
     public String updateFormPage(@PathVariable("id") Long id, Model model, HttpSession session) {
         User sessionedUser = (User) session.getAttribute("sessionedUser");
         if (sessionedUser == null || !sessionedUser.matchId(id)) {
             return "redirect:/users/login";
         }
-        User user = userRepository.findById(id).orElseThrow(UserNotFoundException::new);
+        User user = userRepository.findById(id).orElseThrow(() -> new EntryNotFoundException("유저"));
         model.addAttribute("user", user);
         return "user/userUpdateForm";
     }
@@ -84,7 +84,7 @@ public class UserController {
         if (sessionedUser == null || !sessionedUser.matchId(id)) {
             return "redirect:/users/login";
         }
-        User user = userRepository.findById(id).orElseThrow(UserNotFoundException::new);
+        User user = userRepository.findById(id).orElseThrow(() -> new EntryNotFoundException("유저"));
         if (!user.matchPassword(currentPassword)) {
             return "redirect:/users/" + id + "/updateForm";
         }
