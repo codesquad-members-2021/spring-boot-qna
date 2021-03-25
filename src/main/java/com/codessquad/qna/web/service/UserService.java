@@ -25,11 +25,15 @@ public class UserService {
         return user;
     }
 
-    public void signUp(User user) {
+    public boolean checkAndSignUp(User user) {
+        if(sameUserIDExist(user)) {
+            return false;
+        }
         userRepository.save(user);
+        return true;
     }
 
-    public boolean checkDuplicateID(User user) {
+    public boolean sameUserIDExist(User user) {
         return userRepository.findByUserId(user.getUserId()).isPresent();
     }
 
