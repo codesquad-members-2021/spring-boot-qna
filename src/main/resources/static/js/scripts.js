@@ -33,7 +33,7 @@ function ok(data, status) {
     $("textarea[name=contents]").val("");
 }
 
-$(".qna-comment-slipp-articles").on('click', 'a.link-delete-article', deleteAnswer);
+$(".qna-comment-slipp-articles").on('click', '.link-delete-article', deleteAnswer);
 
 function deleteAnswer(e) {
     e.preventDefault();
