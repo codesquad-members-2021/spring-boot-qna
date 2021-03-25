@@ -71,6 +71,10 @@ public class Answer extends AbstractEntity{
         return writer.equals(sessionUser);
     }
 
+    public void updateQuestionInfo(Answer newAnswerInfo) {
+        this.contents = newAnswerInfo.getContents();
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

@@ -20,15 +20,18 @@ public class UserService {
         this.userRepository = userRepository;
     }
 
-    public void join(User newUser) {
+    public User join(User newUser) {
         if (isRedundantUser(newUser)) {
             throw new JoinFailedException("이미 존재하는 회원입니다.");
         }
 
         User savedUser = userRepository.save(newUser);
+
         if (!savedUser.equals(newUser)) {
             throw new JoinFailedException();
         }
+
+        return savedUser;
     }
 
     public User authenticateUser(String userId, String password) {
@@ -42,13 +45,13 @@ public class UserService {
         return user;
     }
 
-    public void updateInfo(User presentUser, User referenceUser, String newPassword) {
+    public User updateInfo(User presentUser, User referenceUser, String newPassword) {
         if (!referenceUser.isEqualPassword(referenceUser.getPassword())) {
             throw new UnauthorizedAccessException("비밀번호가 일치하지 않습니다.");
         }
 
         presentUser.updateUserInfo(referenceUser, newPassword);
-        userRepository.save(presentUser);
+        return userRepository.save(presentUser);
     }
 
     public List<User> getAllUsers() {

@@ -21,9 +21,9 @@ public class QuestionService {
         this.questionRepository = questionRepository;
     }
 
-    public void addQuestion(Question newQuestion, User user) {
+    public Question addQuestion(Question newQuestion, User user) {
         newQuestion.setWriter(user);
-        questionRepository.save(newQuestion);
+        return questionRepository.save(newQuestion);
     }
 
     public List<Question> getAllQuestions() {
@@ -35,17 +35,17 @@ public class QuestionService {
                 .orElseThrow(() -> new NotFoundException("존재하지 않는 질문입니다."));
     }
 
-    public void updateInfo(Question targetQuestion, Question newQuestionInfo, User sessionUser) {
+    public Question update(Question targetQuestion, Question newQuestionInfo, User sessionUser) {
         checkAccessibleSessionUser(sessionUser, targetQuestion);
 
         targetQuestion.updateQuestionInfo(newQuestionInfo);
-        questionRepository.save(targetQuestion);
+        return questionRepository.save(targetQuestion);
     }
 
-    public void remove(User sessionUser, Question question) {
+    public Question remove(User sessionUser, Question question) {
         checkAccessibleSessionUser(sessionUser, question);
 
         question.deleted();
-        questionRepository.save(question);
+        return questionRepository.save(question);
     }
 }

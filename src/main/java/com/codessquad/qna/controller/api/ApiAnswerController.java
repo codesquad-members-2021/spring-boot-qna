@@ -18,6 +18,11 @@ public class ApiAnswerController {
         this.answerService = answerService;
     }
 
+    @GetMapping("/{answerId}")
+    public Answer showInDetail(@PathVariable long answerId) {
+        return answerService.getOneById(answerId);
+    }
+
     @PostMapping
     public Answer create(@PathVariable Long questionId, String contents, HttpSession session) {
         checkSessionUser(session);
@@ -25,8 +30,15 @@ public class ApiAnswerController {
         return answerService.create(questionId, contents, session);
     }
 
+    @PutMapping("/{answerId}")
+    public Answer update(@PathVariable long answerId, Answer newAnswerInfo, HttpSession session) {
+        checkSessionUser(session);
+
+        return answerService.update(answerService.getOneById(answerId), newAnswerInfo, getSessionUser(session));
+    }
+
     @DeleteMapping("/{answerId}")
-    public Answer deleteAnswer(@PathVariable long answerId, HttpSession session) {
+    public Answer delete(@PathVariable long answerId, HttpSession session) {
         checkSessionUser(session);
 
         return answerService.remove(getSessionUser(session), answerService.getOneById(answerId));

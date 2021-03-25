@@ -63,6 +63,14 @@ function deleteAnswer(e){
     })
 }
 
+$(".qna-comment-slipp-articles").on("click", "a.link-modify-article", updateAnswer);
+
+function updateAnswer(e){
+    e.preventDefault();
+
+    console.log("update... later");
+}
+
 String.prototype.format = function() {
   var args = arguments;
   return this.replace(/{(\d+)}/g, function(match, number) {

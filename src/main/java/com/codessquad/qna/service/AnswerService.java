@@ -41,6 +41,13 @@ public class AnswerService {
         return answerRepository.save(new Answer(question, contents, loginUser));
     }
 
+    public Answer update(Answer targetAnswer, Answer newAnswerInfo, User sessionUser) {
+        checkAccessibleSessionUser(sessionUser, targetAnswer);
+
+        targetAnswer.updateQuestionInfo(newAnswerInfo);
+        return answerRepository.save(newAnswerInfo);
+    }
+
     public Answer remove(User sessionUser, Answer answer) {
         checkAccessibleSessionUser(sessionUser, answer);
 

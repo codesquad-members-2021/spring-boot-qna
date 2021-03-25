@@ -68,7 +68,7 @@ public class QuestionController {
     public String updateQuestion(@PathVariable long questionId, Question newQuestionInfo, HttpSession session, Model model) {
         checkSessionUser(session);
 
-        questionService.updateInfo(questionService.getOneById(questionId), newQuestionInfo, getSessionUser(session));
+        questionService.update(questionService.getOneById(questionId), newQuestionInfo, getSessionUser(session));
 
         return "redirect:/";
     }
