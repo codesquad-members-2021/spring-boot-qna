@@ -21,7 +21,7 @@ function addAnswer(e) {
             console.log("data: " + data);
             console.log("status: " + status);
             var answerTemplate = $("#answerTemplate").html();
-            var template = answerTemplate.format(data.writer.name, data.formattedWriteDateTime, data.contents, data.question.id, data.id);
+            var template = answerTemplate.format(data.writer.name, data.formattedCreatedDateTime, data.contents, data.question.id, data.id);
             $(".qna-comment-slipp-articles").append(template);
         }
     });

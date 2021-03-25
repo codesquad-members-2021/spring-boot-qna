@@ -3,17 +3,10 @@ package com.codessquad.qna.domain;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 
 @Entity
 @Table(name = "ANSWER")
-public class Answer {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @JsonProperty
-    private Long id;
-
+public class Answer extends AbstractEntity {
     @ManyToOne
     @JoinColumn(foreignKey = @ForeignKey(name = "fk_answer_question"))
     @JsonProperty
@@ -28,9 +21,6 @@ public class Answer {
     @JsonProperty
     private String contents;
 
-    @Column(nullable = false)
-    private LocalDateTime writeDateTime;
-
     @Column(nullable = false, columnDefinition = "boolean default false")
     private boolean deleted;
 
@@ -41,11 +31,6 @@ public class Answer {
         this.question = question;
         this.writer = writer;
         this.contents = contents;
-        this.writeDateTime = LocalDateTime.now();
-    }
-
-    public Long getId() {
-        return id;
     }
 
     public Question getQuestion() {
@@ -58,10 +43,6 @@ public class Answer {
 
     public String getContents() {
         return contents;
-    }
-
-    public String getFormattedWriteDateTime() {
-        return writeDateTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"));
     }
 
     public boolean isDeleted() {
