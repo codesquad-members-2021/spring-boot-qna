@@ -23,17 +23,21 @@ public class HandlebarsHelpers {
     }
 
     public List<Integer> checkPageNum(final Page<Question> page) {
-        List<Integer> pageNum = new ArrayList<>();
+        List<Integer> pages = new ArrayList<>();
         int count = 0;
-        int getPage = page.getNumber() == 0 ? 1 : page.getNumber();
-        for (int i = getPage; i <= page.getTotalPages(); i++) {
-            pageNum.add(i);
+        int pageNumber = page.getNumber();
+        if (pageNumber == 0) {
+            pageNumber = 1;
+        }
+
+        for (int i = pageNumber; i <= page.getTotalPages(); i++) {
+            pages.add(i);
             count++;
             if (count == 5) {
                 break;
             }
         }
-        return pageNum;
+        return pages;
     }
 
 }
