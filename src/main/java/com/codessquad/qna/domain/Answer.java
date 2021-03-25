@@ -4,12 +4,10 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.Objects;
 
 @Entity
-public class Answer {
+public class Answer extends AbstractEntity{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -31,8 +29,6 @@ public class Answer {
     @JsonProperty
     private String contents;
 
-    private LocalDateTime createdDate;
-
     @Column(columnDefinition = "boolean default false")
     private boolean deleted;
 
@@ -43,7 +39,6 @@ public class Answer {
         this.question = question;
         this.writer = loginUser;
         this.contents = contents;
-        createdDate = LocalDateTime.now();
         deleted = false;
     }
 
@@ -61,13 +56,6 @@ public class Answer {
 
     public String getContents() {
         return contents;
-    }
-
-    public String getFormattedCreatedDate(){
-        if (createdDate == null){
-            return "";
-        }
-        return createdDate.format(DateTimeFormatter.ofPattern("yyyy.MM.dd HH:mm"));
     }
 
     public boolean isDeleted() {
@@ -103,7 +91,6 @@ public class Answer {
                 ", writer=" + writer +
                 ", question=" + question +
                 ", contents='" + contents + '\'' +
-                ", createdDate=" + createdDate +
                 ", deleted=" + deleted +
                 '}';
     }

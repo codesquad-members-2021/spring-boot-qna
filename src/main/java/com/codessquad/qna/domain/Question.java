@@ -5,12 +5,10 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 @Entity
-public class Question {
+public class Question extends AbstractEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -28,8 +26,6 @@ public class Question {
     @JsonProperty
     private String contents;
 
-    private LocalDateTime createdDate;
-
     @Column(columnDefinition = "boolean default false")
     private boolean deleted;
 
@@ -43,7 +39,6 @@ public class Question {
     private Integer countOfAnswers;
 
     public Question() {
-        this.createdDate = LocalDateTime.now();
     }
 
     public Long getQuestionId() {
@@ -86,13 +81,6 @@ public class Question {
         this.answers = answers;
     }
 
-    public String getFormattedCreatedDate() {
-        if (createdDate == null) {
-            return "";
-        }
-        return createdDate.format(DateTimeFormatter.ofPattern("yyyy.MM.dd HH:mm"));
-    }
-
     public boolean isEmpty() {
         if ("".equals(this.title) || this.title == null) {
             return true;
@@ -127,16 +115,6 @@ public class Question {
         return writer.equals(sessionUser);
     }
 
-    @Override
-    public String toString() {
-        return "Question{" +
-                "id=" + questionId +
-                ", writer='" + writer + '\'' +
-                ", title='" + title + '\'' +
-                ", contents='" + contents + '\'' +
-                '}';
-    }
-
     public void increaseCountOfAnswers() {
         countOfAnswers += 1;
     }
@@ -147,5 +125,15 @@ public class Question {
 
     public Integer getCountOfAnswers() {
         return countOfAnswers;
+    }
+
+    @Override
+    public String toString() {
+        return "Question{" +
+                "id=" + questionId +
+                ", writer='" + writer + '\'' +
+                ", title='" + title + '\'' +
+                ", contents='" + contents + '\'' +
+                '}';
     }
 }
