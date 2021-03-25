@@ -1,34 +1,55 @@
 <!DOCTYPE html>
 <html lang="kr">
 <head>
-{{> include/header}}
+    {{> include/header}}
 </head>
 <body>
 {{> include/navigation}}
 <div class="container" id="main">
-   <div class="col-md-10 col-md-offset-1">
-      <div class="panel panel-default">
-          <table class="table table-hover">
-              <thead>
-                <tr>
-                    <th>#</th> <th>작성자(writer)</th> <th>제목</th> <th></th>
-                </tr>
-              </thead>
-              <tbody>
-                {{#questionList}}
-                <tr>
-                    <th scope="row"> </th>
-                    <td>{{writer}}</td>
-                    <td><a href="/qna/{{index}}"/>{{title}}</td>
-                    <td>{{article}}</td>
-                    <!--
-                    <td><a href="/qna/{{index}}" class="btn btn-success" role="button">수정</a></td>-->
+    <div class="col-md-12 col-sm-12 col-lg-10 col-lg-offset-1">
+        <div class="panel panel-default qna-list">
+            <ul class="list">
 
-                </tr>
+                {{#questionList}}
+                <li>
+                    <div class="wrap">
+                        <div class="main">
+                            <strong class="subject">
+                                <a href="/qna/{{id}}">{{title}}</a>
+                            </strong>
+                            <div class="auth-info">
+                                <i class="icon-add-comment"></i>
+                                <span class="time">{{createDate}}</span>
+                                <a href="/user/profile.html" class="author">{{writer.name}}</a>
+                            </div>
+                            <div class="reply" title="댓글">
+                                <i class="icon-reply"></i>
+                                <span class="point">{{id}}</span>
+                            </div>
+                        </div>
+                    </div>
+                </li>
                 {{/questionList}}
 
-              </tbody>
-          </table>
+
+            </ul>
+            <div class="row">
+                <div class="col-md-3"></div>
+                <div class="col-md-6 text-center">
+                    <ul class="pagination center-block" style="display:inline-block;">
+                        <li><a href="#">«</a></li>
+                        <li><a href="#">1</a></li>
+                        <li><a href="#">2</a></li>
+                        <li><a href="#">3</a></li>
+                        <li><a href="#">4</a></li>
+                        <li><a href="#">5</a></li>
+                        <li><a href="#">»</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-3 qna-write">
+                    <a href="/qna/form" class="btn btn-primary pull-right" role="button">질문하기</a>
+                </div>
+            </div>
         </div>
     </div>
 </div>
@@ -37,5 +58,5 @@
 <script src="/js/jquery-2.2.0.min.js"></script>
 <script src="/js/bootstrap.min.js"></script>
 <script src="/js/scripts.js"></script>
-	</body>
+</body>
 </html>

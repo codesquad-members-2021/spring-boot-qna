@@ -10,13 +10,14 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @Column(nullable = false, length = 20)
+    @Column(nullable = false, length = 20, unique=true)
     private String userId;
     private String password;
     private String name;
     private String email;
 
-    public User() { }
+    public User() {
+    }
 
     public User(User copyUser) {
         this.userId = copyUser.userId;
@@ -63,8 +64,8 @@ public class User {
 
     public void update(User newUser) {
         this.name = newUser.name;
-        this.userId = newUser.userId;
         this.email = newUser.email;
+        this.password = newUser.password;
     }
 
     @Override
@@ -73,13 +74,8 @@ public class User {
         if (object == null || getClass() != object.getClass()) return false;
         User user = (User) object;
         return Objects.equals(getUserId(), user.getUserId());
-    }
+    }// 해당 equals 오버라이딩은 id가 동일한지만을 검사함
 
-    @Override
-    public int hashCode() {
-        return Objects.hash(getUserId());
-    }
-    
     @Override
     public String toString() {
         return "User{" +
@@ -90,5 +86,8 @@ public class User {
                 '}';
     }
 
+    public boolean isMatchingPassword(String password) {
+        return this.password.equals(password);
+    }
 
 }

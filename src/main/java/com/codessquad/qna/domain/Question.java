@@ -1,36 +1,80 @@
 package com.codessquad.qna.domain;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
+import javax.servlet.http.HttpSession;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.List;
+
+import static com.codessquad.qna.utils.SessionUtil.getLoginUser;
+import static com.codessquad.qna.utils.StringUtil.PATTERN_FORMAT;
 
 @Entity
 public class Question {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false, length = 20)
-    private String writer;
+    @ManyToOne
+    @JoinColumn(foreignKey = @ForeignKey(name = "fk_question_writer"))
+    private User writer;
 
     @Column(nullable = false, length = 100)
     private String title;
 
-    @Column(nullable = false, length = 5000)
+    @Lob
     private String contents;
 
+    @Column(nullable = false)
+    private boolean deleted = false;
+
+    private LocalDateTime createdDateTime;
+
+    @OneToMany(mappedBy = "question" , cascade = CascadeType.REMOVE)
+    @OrderBy("id ASC")
+    private List<Answer> answerList;
+
+    public Question() {
+    }
+
+    public Question(Question question, HttpSession session) {
+        this.writer = getLoginUser(session);
+        this.title = question.title;
+        this.contents = question.contents;
+        this.createdDateTime = question.createdDateTime;
+    }
+
+    public Question(Question question, User user) {
+        this.writer = user;
+        this.title = question.title;
+        this.contents = question.contents;
+        this.createdDateTime = question.createdDateTime;
+    }
+
+
+    public Question(String writer, String title, String contents) {
+        this.title = title;
+        this.contents = contents;
+        this.createdDateTime = LocalDateTime.now();
+    }
+
+    public String getFormattedCreatedDate() {
+        if (createdDateTime == null) {
+            return "";
+        }
+        return createdDateTime.format(DateTimeFormatter.ofPattern(PATTERN_FORMAT));
+    }
 
     public Long getId() {
         return id;
     }
 
-    public String getWriter() {
+    public User getWriter() {
         return writer;
     }
 
-    public void setWriter(String writer) {
+    public void setWriter(User writer) {
         this.writer = writer;
     }
 
@@ -50,14 +94,25 @@ public class Question {
         this.contents = contents;
     }
 
-
     @Override
     public String toString() {
         return "Question{" +
                 "id=" + id +
-                ", writer='" + writer + '\'' +
+                ", writer='" + writer.getName() + '\'' +
                 ", title='" + title + '\'' +
                 ", contents='" + contents + '\'' +
                 '}';
     }
+
+
+    public void update(String title, String contents) {
+        this.title = title;
+        this.contents = contents;
+    }
+
+    public void deleteQuestion() {
+        this.deleted = true;
+        this.answerList.forEach(Answer::deleteAnswer);
+    }
+
 }
