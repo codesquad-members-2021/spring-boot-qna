@@ -1,6 +1,6 @@
 package com.codessquad.qna.controller;
 
-import com.codessquad.qna.exception.QuestionNotFoundException;
+import com.codessquad.qna.exception.EntryNotFoundException;
 import com.codessquad.qna.repository.Question;
 import com.codessquad.qna.repository.QuestionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,7 +45,7 @@ public class QuestionController {
 
     @GetMapping("/{id}")
     public String question(@PathVariable("id") Long id, Model model) {
-        model.addAttribute("question", questionRepository.findById(id).orElseThrow(QuestionNotFoundException::new));
+        model.addAttribute("question", questionRepository.findById(id).orElseThrow(() -> new EntryNotFoundException("질문")));
         return "qna/questionDetail";
     }
 }

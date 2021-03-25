@@ -6,8 +6,8 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 @ControllerAdvice
 public class GlobalExceptionHandler{
 
-    @ExceptionHandler({UserNotFoundException.class, QuestionNotFoundException.class})
-    private String handleQuestionNotFoundException() {
+    @ExceptionHandler(EntryNotFoundException.class)
+    private String handleEntryNotFoundException() {
         return "redirect:/questions";
     }
 }
