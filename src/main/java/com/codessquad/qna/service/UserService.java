@@ -8,6 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 @Service
+@Transactional(readOnly=true)
 public class UserService {
 
     private final UserRepository userRepository;
@@ -20,17 +21,17 @@ public class UserService {
         userRepository.save(user);
     }
 
-    @Transactional(readOnly = true)
+
     public List<User> findUsers() {
         return userRepository.findAll();
     }
 
-    @Transactional(readOnly = true)
+
     public User findUserById(long id) {
         return userRepository.findById(id).orElseThrow(IllegalArgumentException::new);
     }
 
-    @Transactional(readOnly = true)
+
     public User findUserByUserId(String userId){
         return userRepository.findUserByUserId(userId).orElseThrow(IllegalAccessError::new);
     }

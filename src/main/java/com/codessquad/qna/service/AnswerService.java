@@ -11,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 @Service
+@Transactional(readOnly=true)
 public class AnswerService {
 
     private final AnswerRepository answerRepository;
@@ -24,7 +25,7 @@ public class AnswerService {
         answerRepository.save(answer);
     }
 
-    @Transactional(readOnly=true)
+
     public List<Answer> findAnswersByQuestionId(long questionId) {
         return answerRepository.findAnswersByQuestionId(questionId);
     }
