@@ -2,6 +2,7 @@ package com.codessquad.qna.service;
 
 import com.codessquad.qna.domain.Question;
 import com.codessquad.qna.domain.User;
+import com.codessquad.qna.exception.NotFoundException;
 import com.codessquad.qna.repository.AnswerRepository;
 import com.codessquad.qna.repository.QuestionRepository;
 import org.slf4j.Logger;
@@ -10,7 +11,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
+
+import static com.codessquad.qna.util.HttpSessionUtils.checkAccessibleSessionUser;
 
 @Service
 public class QuestionService {
@@ -31,16 +33,23 @@ public class QuestionService {
         return questionRepository.findAllByAndDeletedFalse();
     }
 
-    public Optional<Question> getOneById(Long id) {
-        return questionRepository.findByQuestionIdAndDeletedFalse(id);
+    public Question getOneById(Long id) {
+        return questionRepository.findByQuestionIdAndDeletedFalse(id)
+                .orElseThrow(() -> new NotFoundException("존재하지 않는 질문입니다."));
     }
 
-    public void updateInfo(Question presentQuestion, Question referenceQuestion) {
-        presentQuestion.updateQuestionInfo(referenceQuestion);
-        questionRepository.save(presentQuestion);
+    public void updateInfo(Question targetQuestion, Question newQuestionInfo, User sessionUser) {
+
+        checkAccessibleSessionUser(sessionUser, targetQuestion);
+
+        targetQuestion.updateQuestionInfo(newQuestionInfo);
+        questionRepository.save(targetQuestion);
     }
 
-    public void remove(Question question) {
+    public void remove(User sessionUser, Question question) {
+
+        checkAccessibleSessionUser(sessionUser, question);
+
         question.deleted();
         questionRepository.save(question);
     }

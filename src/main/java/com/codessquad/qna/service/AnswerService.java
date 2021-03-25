@@ -3,21 +3,20 @@ package com.codessquad.qna.service;
 import com.codessquad.qna.domain.Answer;
 import com.codessquad.qna.domain.Question;
 import com.codessquad.qna.domain.User;
+import com.codessquad.qna.exception.NotFoundException;
 import com.codessquad.qna.repository.AnswerRepository;
 import com.codessquad.qna.repository.QuestionRepository;
 import com.codessquad.qna.util.HttpSessionUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpSession;
 import java.util.List;
-import java.util.Optional;
+
+import static com.codessquad.qna.util.HttpSessionUtils.checkAccessibleSessionUser;
 
 @Service
 public class AnswerService {
-    Logger logger = LoggerFactory.getLogger(AnswerService.class);
     private final AnswerRepository answerRepository;
     private final QuestionRepository questionRepository;
 
@@ -27,21 +26,26 @@ public class AnswerService {
         this.questionRepository = questionRepository;
     }
 
-    public Optional<Answer> getOneById(long answerId) {
-        return answerRepository.findByAnswerIdAndDeletedFalse(answerId);
+    public Answer getOneById(long answerId) {
+        return answerRepository.findByAnswerIdAndDeletedFalse(answerId)
+                .orElseThrow(() -> new NotFoundException("존재하지 않는 답변입니다."));
     }
 
     public void create(Long id, String contents, HttpSession session) {
         User loginUser = HttpSessionUtils.getUserFromSession(session);
-        Question question = questionRepository.findByQuestionIdAndDeletedFalse(id).orElse(null);
+
+        Question question = questionRepository.findByQuestionIdAndDeletedFalse(id)
+                .orElseThrow(() -> new NotFoundException("존재하지 않는 질문입니다."));
 
         answerRepository.save(new Answer(question, contents, loginUser));
     }
 
-    public void remove(Answer answer) {
+    public void remove(User sessionUser, Answer answer) {
+
+        checkAccessibleSessionUser(sessionUser, answer);
+
         answer.deleted();
-        Answer testAnswer = answerRepository.save(answer);
-        logger.info("testAnswer: " + testAnswer.toString());
+        answerRepository.save(answer);
     }
 
     public List<Answer> findAll() {

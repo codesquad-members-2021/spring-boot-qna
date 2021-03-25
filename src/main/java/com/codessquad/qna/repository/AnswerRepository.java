@@ -12,6 +12,4 @@ public interface AnswerRepository extends CrudRepository<Answer, Long> {
 
     Optional<Answer> findByAnswerIdAndDeletedFalse(Long id);
 
-    @Override
-    List<Answer> findAll();
 }

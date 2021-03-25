@@ -104,16 +104,6 @@ public class Question {
         answers.forEach(answer -> deleted());
     }
 
-    @Override
-    public String toString() {
-        return "Question{" +
-                "id=" + questionId +
-                ", writer='" + writer + '\'' +
-                ", title='" + title + '\'' +
-                ", contents='" + contents + '\'' +
-                '}';
-    }
-
     public void updateQuestionInfo(String title, String contents) {
         this.title = title;
         this.contents = contents;
@@ -125,6 +115,16 @@ public class Question {
     }
 
     public boolean isEqualWriter(User sessionUser) {
-        return writer.isEqualUserId(sessionUser.getUserId());
+        return writer.equals(sessionUser);
+    }
+
+    @Override
+    public String toString() {
+        return "Question{" +
+                "id=" + questionId +
+                ", writer='" + writer + '\'' +
+                ", title='" + title + '\'' +
+                ", contents='" + contents + '\'' +
+                '}';
     }
 }
