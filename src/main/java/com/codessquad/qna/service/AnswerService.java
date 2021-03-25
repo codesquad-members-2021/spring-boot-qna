@@ -18,12 +18,23 @@ public class AnswerService {
         this.answerRepository = answerRepository;
     }
 
-    public void create(AnswerDto answerDto, Question question, User user){
+    public void create(AnswerDto answerDto, Question question, User user) {
         Answer answer = answerDto.toEntity(question, user);
         answerRepository.save(answer);
     }
 
-    public List<Answer> findAnswersByQuestionId(long id){
+    public List<Answer> findAnswersByQuestionId(long id) {
         return answerRepository.findAnswersByQuestionId(id);
+    }
+
+    public void delete(long answerId, User user) {
+        Answer answer = answerRepository.findById(answerId).orElseThrow(IllegalArgumentException::new);
+        if (verifyAnswer(answer, user)) {
+            answerRepository.delete(answer);
+        }
+    }
+
+    public boolean verifyAnswer(Answer answer, User sessionedUser) {
+        return sessionedUser.isMatchingUserId(answer.getWriter());
     }
 }

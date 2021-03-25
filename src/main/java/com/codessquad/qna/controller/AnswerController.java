@@ -7,6 +7,7 @@ import com.codessquad.qna.dto.AnswerDto;
 import com.codessquad.qna.service.AnswerService;
 import com.codessquad.qna.service.QuestionService;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
@@ -31,6 +32,16 @@ public class AnswerController {
         Question question = questionService.findQuestionById(id);
         User sessionedUser = HttpSessionUtils.getUserFromSession(session);
         answerService.create(answerDto, question, sessionedUser);
+        return "redirect:/questions/" + id;
+    }
+
+    @DeleteMapping("/questions/{id}/answers/{answerId}")
+    public String deleteAnswer(@PathVariable long id, @PathVariable long answerId, HttpSession session) {
+        if (!HttpSessionUtils.isLoginUser(session)) {
+            return "redirect:/users/loginForm";
+        }
+        User sessionedUser = HttpSessionUtils.getUserFromSession(session);
+        answerService.delete(answerId, sessionedUser);
         return "redirect:/questions/" + id;
     }
 }
