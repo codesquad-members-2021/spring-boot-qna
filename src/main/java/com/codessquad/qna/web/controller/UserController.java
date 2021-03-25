@@ -2,7 +2,6 @@ package com.codessquad.qna.web.controller;
 
 import com.codessquad.qna.web.HttpSessionUtils;
 import com.codessquad.qna.web.domain.User;
-import com.codessquad.qna.web.exception.IllegalAccessException;
 import com.codessquad.qna.web.exception.NotLoginException;
 import com.codessquad.qna.web.service.UserService;
 import org.springframework.stereotype.Controller;
@@ -28,23 +27,23 @@ public class UserController {
     @PostMapping("/login")
     public String login(String userId, String password, HttpSession session) {
         User user = userService.login(userId, password);
-        session.setAttribute(HttpSessionUtils.USER_SESSION_KEY, user);
+        HttpSessionUtils.setUser(session, user);
         return "redirect:/";
     }
 
     @GetMapping("logout")
     public String logout(HttpSession session) {
-        session.removeAttribute(HttpSessionUtils.USER_SESSION_KEY);
+        HttpSessionUtils.removeUser(session);
         return "redirect:/";
     }
 
     @PostMapping
     public String createUser(User user, Model model) {
-        if (userService.checkDuplicateID(user)) {
+        if (!userService.checkAndSignUp(user)) {
             model.addAttribute("errorMessage", "이미 존재하는 아이디입니다");
-            return "/user/updateFormWithError";
+            return "/user/formWithError";
         }
-        userService.signUp(user);
+
         return "redirect:/users";
     }
 
@@ -62,36 +61,20 @@ public class UserController {
 
     @GetMapping("/{id}/form")
     public String getUpdateForm(@PathVariable long id, Model model, HttpSession session) {
-        if (!HttpSessionUtils.isLoginUser(session)) {
-            throw new NotLoginException();
-        }
-
-        User loginUser = HttpSessionUtils.getSessionedUser(session);
-        if (!loginUser.isSameId(id)) {
-            throw new IllegalAccessException();
-        }
-
+        User loginUser = HttpSessionUtils.getSessionedUser(session).orElseThrow(NotLoginException::new);
+        userService.checkSameUser(id, loginUser);
         model.addAttribute("user", loginUser);
         return "/user/updateForm";
     }
 
     @PutMapping("/{id}")
     public String updateUser(@PathVariable long id, String testPassword, User user, HttpSession session, Model model) {
-        if (!HttpSessionUtils.isLoginUser(session)) {
-            throw new NotLoginException();
-        }
-
-        User loginUser = HttpSessionUtils.getSessionedUser(session);
-        if (!loginUser.isSameId(id)) {
-            throw new IllegalAccessException();
-        }
-
-        if (!loginUser.isMatchingPassword(testPassword)) {
+        User loginUser = HttpSessionUtils.getSessionedUser(session).orElseThrow(NotLoginException::new);
+        if (!userService.isUpdatable(id, testPassword, loginUser, user)) {
             model.addAttribute("errorMessage", "비밀번호가 틀렸습니다");
-            return "/user/formWithError";
+            model.addAttribute("user", loginUser);
+            return "/user/updateFormWithError";
         }
-
-        userService.updateUser(testPassword, loginUser, user);
         return "redirect:/users";
     }
 }

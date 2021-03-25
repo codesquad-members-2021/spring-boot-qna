@@ -1,6 +1,7 @@
 package com.codessquad.qna.web.service;
 
 import com.codessquad.qna.web.domain.User;
+import com.codessquad.qna.web.exception.IllegalAccessException;
 import com.codessquad.qna.web.exception.IllegalEntityIdException;
 import com.codessquad.qna.web.exception.LoginFailException;
 import com.codessquad.qna.web.repository.UserRepository;
@@ -18,15 +19,21 @@ public class UserService {
 
     public User login(String userId, String password) {
         User user = findUser(userId);
-        validatePassword(user, password);
+        if (!isMatchingPassword(user, password)) {
+            throw new LoginFailException("잘못된 비밀번호 입니다");
+        }
         return user;
     }
 
-    public void signUp(User user) {
+    public boolean checkAndSignUp(User user) {
+        if(sameUserIDExist(user)) {
+            return false;
+        }
         userRepository.save(user);
+        return true;
     }
 
-    public boolean checkDuplicateID(User user) {
+    public boolean sameUserIDExist(User user) {
         return userRepository.findByUserId(user.getUserId()).isPresent();
     }
 
@@ -46,14 +53,23 @@ public class UserService {
                 .orElseThrow(() -> new LoginFailException("입력하신 아이디에 해당하는 회원이 없습니다"));
     }
 
-    public void updateUser(String testPassword, User loginUser, User user) {
+    public boolean isUpdatable(long id, String testPassword, User loginUser, User user) {
+        checkSameUser(id, loginUser);
+        if(!isMatchingPassword(loginUser, testPassword)) {
+            return false;
+        }
         loginUser.update(user);
         userRepository.save(loginUser);
+        return true;
     }
 
-    private void validatePassword(User user, String testPassword) {
-        if (!user.isMatchingPassword(testPassword)) {
-            throw new LoginFailException("잘못된 비밀번호 입니다");
+    public boolean isMatchingPassword(User user, String testPassword) {
+        return user.isMatchingPassword(testPassword);
+    }
+
+    public void checkSameUser(long id, User user) {
+        if (!user.isSameId(id)) {
+            throw new IllegalAccessException();
         }
     }
 }
