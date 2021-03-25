@@ -1,5 +1,6 @@
 package com.codessquad.qna.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.hibernate.annotations.Where;
 
@@ -34,6 +35,7 @@ public class Question {
 
     @OneToMany(mappedBy = "question")
     @Where(clause = "deleted = false")
+    @JsonIgnore
     private List<Answer> answers;
 
     @Column(nullable = false, columnDefinition = "boolean default false")
