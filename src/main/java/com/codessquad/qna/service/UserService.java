@@ -56,7 +56,7 @@ public class UserService {
         logger.info("update User {}", sessionUser.getUserId());
     }
 
-    public void validationCheck(Long id, Model model, HttpSession session) {
+    public void validationCheck(Long id, HttpSession session) {
         User foundUser = userRepository.findById(id).orElseThrow(NotFoundException::new);
         if (!isValidUser(session, foundUser)) {
             logger.info("Login Failure : wrong password");

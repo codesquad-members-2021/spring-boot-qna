@@ -63,7 +63,7 @@ public class UserController {
 
     @GetMapping("/{id}/form")
     public String getUserUpdateForm(@PathVariable Long id, Model model, HttpSession session) {
-        userService.validationCheck(id, model, session);
+        userService.validationCheck(id, session);
         User loginUser = getLoginUser(session);
         model.addAttribute("user", loginUser);
         return "user/updateForm";

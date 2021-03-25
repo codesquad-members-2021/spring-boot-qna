@@ -32,7 +32,7 @@ public class QuestionController {
     }
 
     @GetMapping("/form")
-    public String questionForm(HttpSession session, Model model) {
+    public String questionForm(HttpSession session) {
         questionService.isLogin(session);
         return "qna/form";
     }
@@ -52,7 +52,7 @@ public class QuestionController {
     @GetMapping("/{id}")
     public String showDetailQuestion(@PathVariable Long id, Model model) {
         questionService.showDetailQuestion(id, model);
-        //@Todo 모델에다가 데이터를 집어넣어주는건 컨트롤러 역할 같다. 개선할 수 있는 방법을 찾
+        //@Todo 모델에다가 데이터를 집어넣어주는건 컨트롤러 역할 같다. 개선할 수 있는 방법을 찾아보자
         return "/qna/show";
     }
 
@@ -63,8 +63,8 @@ public class QuestionController {
     }
 
     @DeleteMapping("/{id}")
-    public String deleteQuestion(@PathVariable Long id, User ownerUser, HttpSession session) {
-        questionService.deleteQuestion(id, ownerUser, session);
+    public String deleteQuestion(@PathVariable Long id, HttpSession session) {
+        questionService.deleteQuestion(id, session);
         return "redirect:/";
     }
 

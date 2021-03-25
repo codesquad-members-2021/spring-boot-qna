@@ -36,7 +36,6 @@ public class QuestionService {
         logger.info("questionForm");
     }
 
-
     public void createQuestion(Question question, User user) {
         Question addNewQuestion = new Question(question, user);
         questionRepostory.save(addNewQuestion);
@@ -52,7 +51,6 @@ public class QuestionService {
         logger.info("update Question : {}" + currentQuestion.getTitle());
     }
 
-
     public List<Question> findAll() {
         return questionRepostory.findAllByDeletedFalse();
     }
@@ -64,7 +62,7 @@ public class QuestionService {
         logger.info("update Question : {}", id);
     }
 
-    public void deleteQuestion(Long id, User ownerUser, HttpSession session) {
+    public void deleteQuestion(Long id, HttpSession session) {
         Question question = questionRepostory.findById(id).orElseThrow(NotFoundException::new);
 
         if (!isValidUser(session, question.getWriter())) {
