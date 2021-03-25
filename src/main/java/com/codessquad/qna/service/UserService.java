@@ -16,13 +16,6 @@ public class UserService {
         this.userRepository = userRepository;
     }
 
-    public boolean checkEmpty(User user) {
-        return user.getUserId().equals("")
-                || user.getPassword().equals("")
-                || user.getEmail().equals("")
-                || user.getName().equals("");
-    }
-
     public void save(User user) {
         userRepository.save(user);
     }

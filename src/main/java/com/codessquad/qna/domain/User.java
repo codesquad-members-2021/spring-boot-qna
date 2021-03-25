@@ -70,6 +70,13 @@ public class User {
         setPassword(newPassword);
     }
 
+    public boolean checkEmpty(User user) {
+        return user.getUserId().equals("")
+                || user.getPassword().equals("")
+                || user.getEmail().equals("")
+                || user.getName().equals("");
+    }
+    
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
