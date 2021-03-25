@@ -89,4 +89,8 @@ public class Answer {
     public void deleteAnswer() {
         this.deleted = true;
     }
+
+    public boolean isSameWriter(User questionWriter) {
+        return questionWriter.equals(this.writer);
+    }
 }

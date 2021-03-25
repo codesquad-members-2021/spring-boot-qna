@@ -62,17 +62,33 @@ public class QuestionService {
         logger.info("update Question : {}", id);
     }
 
-    public void deleteQuestion(Long id, HttpSession session) {
-        Question question = questionRepostory.findById(id).orElseThrow(NotFoundException::new);
+    public void deleteQuestion(Long questionId, HttpSession session) {
+        Question question = questionRepostory.findById(questionId).orElseThrow(NotFoundException::new);
 
         if (!isValidUser(session, question.getWriter())) {
             logger.info("질문글 삭제 - 실패, 권한없는 사용자의 삭제시도");
             throw new UnauthorizedException("질문글 삭제 - 실패, 권한없는 사용자의 삭제시도");
         }
+
+        if (!isDeleteAble(questionId)) {
+            throw new UnauthorizedException("질문글 삭제 - 실패, 다른사람의 답변이 달린 질문글은 삭제할 수 없습니다");
+        }
         question.deleteQuestion();
         questionRepostory.save(question);
         logger.info("질문글 삭제 - 성공");
 
+    }
+
+    private boolean isDeleteAble(Long questionId) {
+        List<Answer> answerList = answerRepository.findByQuestionIdAndDeletedFalse(questionId);
+        User questionWriter = questionRepostory.findById(questionId).orElseThrow(NotFoundException::new).getWriter();
+
+        for (Answer answer : answerList) {
+            if(!answer.isSameWriter(questionWriter)) {
+                return false;
+            }
+        }
+        return true;
     }
 
     public void updateForm(Long id, Model model, HttpSession session) {
