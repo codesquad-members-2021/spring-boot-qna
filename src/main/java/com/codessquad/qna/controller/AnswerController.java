@@ -10,10 +10,12 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.servlet.http.HttpSession;
 
 @Controller
+@RequestMapping("/questions/{id}/answers")
 public class AnswerController {
 
     private final AnswerService answerService;
@@ -24,7 +26,7 @@ public class AnswerController {
         this.questionService = questionService;
     }
 
-    @PostMapping("/questions/{id}/answers")
+    @PostMapping
     public String createAnswer(@PathVariable long id, AnswerDto answerDto, HttpSession session) {
         if (!HttpSessionUtils.isLoginUser(session)) {
             return "redirect:/users/loginForm";
@@ -35,7 +37,7 @@ public class AnswerController {
         return "redirect:/questions/" + id;
     }
 
-    @DeleteMapping("/questions/{id}/answers/{answerId}")
+    @DeleteMapping("/{answerId}")
     public String deleteAnswer(@PathVariable long id, @PathVariable long answerId, HttpSession session) {
         if (!HttpSessionUtils.isLoginUser(session)) {
             return "redirect:/users/loginForm";
