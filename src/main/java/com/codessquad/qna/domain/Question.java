@@ -26,6 +26,9 @@ public class Question {
     @Lob
     private String contents;
 
+    @Column(nullable = false)
+    private boolean deleted = false;
+
     private LocalDateTime createdDateTime;
 
     @OneToMany(mappedBy = "question" , cascade = CascadeType.REMOVE)
@@ -106,4 +109,9 @@ public class Question {
         this.title = title;
         this.contents = contents;
     }
+
+    public void delete() {
+        this.deleted = true;
+    }
+
 }

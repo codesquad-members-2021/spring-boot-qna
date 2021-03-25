@@ -56,14 +56,14 @@ public class QuestionService {
 
 
     public List<Question> findAll() {
-        return questionRepostory.findAll();
+        return questionRepostory.findAllByDeletedFalse();
     }
 
     public void updateQuestion(Long id, String title,String contents) {
         Question question = questionRepostory.findById(id).orElseThrow(NotFoundException::new);
         question.update(title, contents);
         questionRepostory.save(question);
-        logger.info("update Question : {id}", id);
+        logger.info("update Question : {}", id);
     }
 
     public void deleteQuestion(Long id, User ownerUser, HttpSession session) {
@@ -73,7 +73,8 @@ public class QuestionService {
             logger.info("질문글 삭제 - 실패, 권한없는 사용자의 삭제시도");
             throw new UnauthorizedException("질문글 삭제 - 실패, 권한없는 사용자의 삭제시도");
         }
-        questionRepostory.delete(questionRepostory.getOne(id));
+        question.delete();
+        questionRepostory.save(question);
         logger.info("질문글 삭제 - 성공");
 
     }
