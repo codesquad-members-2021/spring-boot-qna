@@ -1,6 +1,7 @@
 package com.codessquad.qna;
 
 import com.codessquad.qna.domain.User;
+import com.codessquad.qna.exception.NotLoginException;
 
 import javax.servlet.http.HttpSession;
 
@@ -14,7 +15,7 @@ public class HttpSessionUtils {
 
     public static User getUserFromSession(HttpSession session){
         if(!isLoginUser(session)){
-            return null;
+            throw new NotLoginException("로그인이 필요합니다.");
         }
         return (User)session.getAttribute(USER_SESSION_KEY);
     }

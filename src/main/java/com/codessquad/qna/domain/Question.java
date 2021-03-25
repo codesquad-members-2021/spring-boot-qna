@@ -1,10 +1,6 @@
 package com.codessquad.qna.domain;
 
-import com.codessquad.qna.dto.QuestionDto;
-
 import javax.persistence.*;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 
 @Entity
 public class Question {
@@ -28,18 +24,11 @@ public class Question {
 
     }
 
-    public Question(User writer, String title, String contents) {
+    public Question(User writer, String title, String contents, String time) {
         this.writer = writer;
         this.title = title;
         this.contents = contents;
-        this.time = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"));
-    }
-
-    public Question(QuestionDto questionDto){
-        this.writer = questionDto.getWriter();
-        this.title = questionDto.getTitle();
-        this.contents = questionDto.getContents();
-        this.time = questionDto.getTime();
+        this.time = time;
     }
 
     public String getTime() {
@@ -62,7 +51,7 @@ public class Question {
         return contents;
     }
 
-    public void update(Question question){
+    public void update(Question question) {
         this.writer = question.getWriter();
         this.contents = question.getContents();
         this.time = question.getTime();

@@ -1,10 +1,10 @@
 package com.codessquad.qna.dto;
 
+import com.codessquad.qna.DateTimeUtils;
 import com.codessquad.qna.domain.Question;
 import com.codessquad.qna.domain.User;
 
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 
 public class QuestionDto {
     private User writer;
@@ -19,7 +19,7 @@ public class QuestionDto {
     public QuestionDto(String title, String contents){
         this.title = title;
         this.contents = contents;
-        this.time = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"));
+        this.time = DateTimeUtils.stringOf(LocalDateTime.now());
     }
 
     public User getWriter() {
@@ -55,6 +55,6 @@ public class QuestionDto {
     }
 
     public Question toEntity(User user){
-        return new Question(user, this.title, this.contents);
+        return new Question(user, this.title, this.contents, this.time);
     }
 }

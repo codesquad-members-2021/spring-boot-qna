@@ -6,6 +6,7 @@ import com.codessquad.qna.domain.Question;
 import com.codessquad.qna.domain.User;
 import com.codessquad.qna.dto.AnswerDto;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -18,12 +19,25 @@ public class AnswerService {
         this.answerRepository = answerRepository;
     }
 
-    public void create(AnswerDto answerDto, Question question, User user){
+    public void create(AnswerDto answerDto, Question question, User user) {
         Answer answer = answerDto.toEntity(question, user);
         answerRepository.save(answer);
     }
 
-    public List<Answer> findAnswersByQuestionId(long id){
-        return answerRepository.findAnswersByQuestionId(id);
+    @Transactional(readOnly=true)
+    public List<Answer> findAnswersByQuestionId(long questionId) {
+        return answerRepository.findAnswersByQuestionId(questionId);
+    }
+
+    @Transactional
+    public void delete(long answerId, User user) {
+        Answer answer = answerRepository.findById(answerId).orElseThrow(IllegalArgumentException::new);
+        if (verifyAnswer(answer, user)) {
+            answerRepository.delete(answer);
+        }
+    }
+
+    public boolean verifyAnswer(Answer answer, User sessionedUser) {
+        return sessionedUser.isMatchingUserId(answer.getWriter());
     }
 }

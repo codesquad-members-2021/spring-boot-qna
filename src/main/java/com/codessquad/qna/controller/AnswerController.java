@@ -7,12 +7,15 @@ import com.codessquad.qna.dto.AnswerDto;
 import com.codessquad.qna.service.AnswerService;
 import com.codessquad.qna.service.QuestionService;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.servlet.http.HttpSession;
 
 @Controller
+@RequestMapping("/questions/{questionId}/answers")
 public class AnswerController {
 
     private final AnswerService answerService;
@@ -23,14 +26,18 @@ public class AnswerController {
         this.questionService = questionService;
     }
 
-    @PostMapping("/questions/{id}/answers")
-    public String createAnswer(@PathVariable long id, AnswerDto answerDto, HttpSession session) {
-        if (!HttpSessionUtils.isLoginUser(session)) {
-            return "redirect:/users/loginForm";
-        }
-        Question question = questionService.findQuestionById(id);
+    @PostMapping
+    public String createAnswer(@PathVariable long questionId, AnswerDto answerDto, HttpSession session) {
         User sessionedUser = HttpSessionUtils.getUserFromSession(session);
+        Question question = questionService.findQuestionById(questionId);
         answerService.create(answerDto, question, sessionedUser);
-        return "redirect:/questions/" + id;
+        return "redirect:/questions/" + questionId;
+    }
+
+    @DeleteMapping("/{answerId}")
+    public String deleteAnswer(@PathVariable long questionId, @PathVariable long answerId, HttpSession session) {
+        User sessionedUser = HttpSessionUtils.getUserFromSession(session);
+        answerService.delete(answerId, sessionedUser);
+        return "redirect:/questions/" + questionId;
     }
 }
