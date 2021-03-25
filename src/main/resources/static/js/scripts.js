@@ -15,12 +15,7 @@ function addAnswer(e) {
         url: url,
         data: queryString,
         dataType: 'json',
-        error: function (xhr, status) {
-            console.log("Error");
-            console.log("xhr: " + xhr);
-            console.log("status: " + status);
-            alert(xhr.message);
-        },
+        error: onError,
         success: function (data, status) {
             console.log("Success");
             console.log("data: " + data);
@@ -30,6 +25,13 @@ function addAnswer(e) {
             $(".qna-comment-slipp-articles").append(template);
         }
     })
+}
+
+function onError(xhr, status) {
+    console.log("Error");
+    console.log("xhr: " + xhr);
+    console.log("status: " + status);
+    alert(xhr.responseText);
 }
 
 String.prototype.format = function () {

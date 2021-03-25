@@ -81,14 +81,14 @@
                                 </div>
                             </article>
                             {{/question.answers}}
-                            <form class="answer-write" action="/api/questions/{{question.id}}/answers/" method="POST">
-                                <div class="form-group" style="padding:14px;">
-                                    <textarea name="contents" class="form-control" placeholder="답변 입력"></textarea>
-                                </div>
-                                <button class="btn btn-success pull-right" type="submit">답변하기</button>
-                                <div class="clearfix"/>
-                            </form>
                         </div>
+                        <form class="answer-write" action="/api/questions/{{question.id}}/answers/" method="POST">
+                            <div class="form-group" style="padding:14px;">
+                                <textarea name="contents" class="form-control" placeholder="답변 입력"></textarea>
+                            </div>
+                            <button class="btn btn-success pull-right" type="submit">답변하기</button>
+                            <div class="clearfix"/>
+                        </form>
                     </div>
                 </div>
             </div>
