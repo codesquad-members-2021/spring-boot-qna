@@ -44,7 +44,7 @@ public class QuestionController {
     }
 
     @GetMapping("/{id}")
-    public String question(@PathVariable("id") Long id, Model model) {
+    public String viewQuestion(@PathVariable("id") Long id, Model model) {
         model.addAttribute("question", questionRepository.findById(id).orElseThrow(() -> new EntryNotFoundException("질문")));
         return "qna/questionDetail";
     }

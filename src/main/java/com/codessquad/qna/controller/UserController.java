@@ -1,6 +1,7 @@
 package com.codessquad.qna.controller;
 
 import com.codessquad.qna.exception.EntryNotFoundException;
+import com.codessquad.qna.exception.InvalidSessionException;
 import com.codessquad.qna.repository.User;
 import com.codessquad.qna.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,6 +10,9 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
+
+import static com.codessquad.qna.controller.HttpSessionUtils.USER_SESSION_KEY;
+import static com.codessquad.qna.controller.HttpSessionUtils.getUserFromSession;
 
 @Controller
 @RequestMapping("/users")
@@ -46,13 +50,13 @@ public class UserController {
             model.addAttribute("errorMessage", "아이디 또는 비밀번호가 틀립니다. 다시 로그인 해주세요.");
             return "user/loginForm";
         }
-        session.setAttribute("sessionedUser", user);
+        session.setAttribute(USER_SESSION_KEY, user);
         return "redirect:/";
     }
 
     @GetMapping("/logout")
     public String logout(HttpSession session) {
-        session.removeAttribute("sessionedUser");
+        session.removeAttribute(USER_SESSION_KEY);
         return "redirect:/";
     }
 
@@ -64,10 +68,7 @@ public class UserController {
 
     @GetMapping("/{id}/updateForm")
     public String updateFormPage(@PathVariable("id") Long id, Model model, HttpSession session) {
-        User sessionedUser = (User) session.getAttribute("sessionedUser");
-        if (sessionedUser == null || !sessionedUser.matchId(id)) {
-            return "redirect:/users/login";
-        }
+        User sessionedUser = getUserFromSession(session);
         User user = userRepository.findById(id).orElseThrow(() -> new EntryNotFoundException("유저"));
         model.addAttribute("user", user);
         return "user/userUpdateForm";
@@ -75,10 +76,7 @@ public class UserController {
 
     @PutMapping("/{id}/updateForm")
     public String updateUser(@PathVariable("id") Long id, User targetUser, String currentPassword, HttpSession session) {
-        User sessionedUser = (User) session.getAttribute("sessionedUser");
-        if (sessionedUser == null || !sessionedUser.matchId(id)) {
-            return "redirect:/users/login";
-        }
+        User sessionedUser = getUserFromSession(session);
         User user = userRepository.findById(id).orElseThrow(() -> new EntryNotFoundException("유저"));
         if (!user.matchPassword(currentPassword)) {
             return "redirect:/users/" + id + "/updateForm";
