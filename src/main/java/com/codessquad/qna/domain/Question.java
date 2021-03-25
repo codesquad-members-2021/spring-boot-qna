@@ -7,7 +7,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 import static com.codessquad.qna.utils.SessionUtil.getLoginUser;
-import static com.codessquad.qna.utils.StringUtil.PATTERN_FORMAT;
+import static com.codessquad.qna.utils.StringUtil.DATE_AND_TIME_FORMAT;
 
 @Entity
 public class Question {
@@ -63,7 +63,7 @@ public class Question {
         if (createdDateTime == null) {
             return "";
         }
-        return createdDateTime.format(DateTimeFormatter.ofPattern(PATTERN_FORMAT));
+        return createdDateTime.format(DateTimeFormatter.ofPattern(DATE_AND_TIME_FORMAT));
     }
 
     public Long getId() {
