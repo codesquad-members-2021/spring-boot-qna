@@ -55,7 +55,8 @@ public class QuestionService {
     }
 
     public Page<Question> findQuestionList(Pageable pageable) {
-        pageable = PageRequest.of(pageable.getPageNumber() <= 0 ? 0 : pageable.getPageNumber() - 1, pageable.getPageSize(), Sort.by("id").descending());
+        int page = pageable.getPageNumber() <= 0 ? 0 : pageable.getPageNumber() - 1;
+        pageable = PageRequest.of(page, pageable.getPageSize(), Sort.by("createDateTime").descending());
         return questionRepository.findAll(pageable);
     }
 
