@@ -29,6 +29,7 @@ function onSuccess(data, status){
     var answerTemplate = $("#answerTemplate").html();
     var template = answerTemplate.format(data.writer.userId, data.formattedCreatedDate,
                                         data.contents, data.question.questionId, data.answerId);
+
     $(".qna-comment-slipp-articles").prepend(template);
     $("textarea[name=contents]").val("");
 }
