@@ -1,7 +1,5 @@
 package com.codessquad.qna.domain;
 
-import com.codessquad.qna.dto.QuestionDto;
-
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -35,13 +33,6 @@ public class Question {
         this.time = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"));
     }
 
-    public Question(QuestionDto questionDto){
-        this.writer = questionDto.getWriter();
-        this.title = questionDto.getTitle();
-        this.contents = questionDto.getContents();
-        this.time = questionDto.getTime();
-    }
-
     public String getTime() {
         return this.time;
     }
@@ -62,7 +53,7 @@ public class Question {
         return contents;
     }
 
-    public void update(Question question){
+    public void update(Question question) {
         this.writer = question.getWriter();
         this.contents = question.getContents();
         this.time = question.getTime();
