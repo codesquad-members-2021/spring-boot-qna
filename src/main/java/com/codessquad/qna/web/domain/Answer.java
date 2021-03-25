@@ -6,7 +6,7 @@ import java.time.format.DateTimeFormatter;
 
 @Entity
 public class Answer {
-    private static final DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+    private static final DateTimeFormatter ANSWER_DATETIME_FORMAT = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -50,7 +50,7 @@ public class Answer {
         if (createdDateTime == null) {
             return "";
         }
-        return createdDateTime.format(DATE_TIME_FORMATTER);
+        return createdDateTime.format(ANSWER_DATETIME_FORMAT);
     }
 
     public boolean isSameWriter(User writer) {

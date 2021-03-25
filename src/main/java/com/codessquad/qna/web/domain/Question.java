@@ -8,7 +8,7 @@ import java.util.List;
 
 @Entity
 public class Question {
-    private static final DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+    private static final DateTimeFormatter QUESTION_DATETIME_FORMAT = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -73,7 +73,7 @@ public class Question {
         if (createdDateTime == null) {
             return "";
         }
-        return createdDateTime.format(DATE_TIME_FORMATTER);
+        return createdDateTime.format(QUESTION_DATETIME_FORMAT);
     }
 
     public boolean isSameWriter(User writer) {
