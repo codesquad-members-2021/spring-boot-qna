@@ -1,8 +1,6 @@
 package com.codessquad.qna.domain;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 
 @Entity
 public class Answer {
@@ -28,11 +26,11 @@ public class Answer {
 
     }
 
-    public Answer(User writer, Question question, String contents) {
+    public Answer(User writer, Question question, String contents, String time) {
         this.writer = writer;
         this.question = question;
         this.contents = contents;
-        this.time = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"));
+        this.time = time;
     }
 
     public long getId() {
