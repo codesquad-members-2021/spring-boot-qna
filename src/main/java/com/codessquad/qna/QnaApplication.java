@@ -14,8 +14,6 @@ import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spring.web.plugins.Docket;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
-import java.util.stream.IntStream;
-
 @SpringBootApplication
 @EnableJpaAuditing
 @EnableSwagger2
@@ -45,7 +43,9 @@ public class QnaApplication {
     @Bean
     public CommandLineRunner runner(QuestionRepository questionRepository) throws Exception {
         return args -> {
-            IntStream.rangeClosed(2, 100).forEach(o -> questionRepository.save(new Question()));
+            for (int i = 0; i < 100; i++) {
+                questionRepository.save(new Question());
+            }
         };
     }
 }
