@@ -42,6 +42,14 @@ public class Question {
         this.createdDateTime = question.createdDateTime;
     }
 
+    public Question(Question question, User user) {
+        this.writer = user;
+        this.title = question.title;
+        this.contents = question.contents;
+        this.createdDateTime = question.createdDateTime;
+    }
+
+
     public Question(String writer, String title, String contents) {
         this.title = title;
         this.contents = contents;

@@ -2,6 +2,7 @@ package com.codessquad.qna.controller;
 
 import com.codessquad.qna.domain.*;
 import com.codessquad.qna.exception.NotFoundException;
+import com.codessquad.qna.service.QuestionService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
@@ -11,8 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpSession;
 import java.util.List;
 
-import static com.codessquad.qna.utils.SessionUtil.isLoginUser;
-import static com.codessquad.qna.utils.SessionUtil.isValidUser;
+import static com.codessquad.qna.utils.SessionUtil.*;
 
 @Controller
 
@@ -21,13 +21,10 @@ public class QuestionController {
 
     private static final Logger logger = LoggerFactory.getLogger(QuestionController.class);
 
-    private final QuestionRepostory questionRepostory;
+    private final QuestionService questionService;
 
-    private final AnswerRepository answerRepository;
-
-    public QuestionController(QuestionRepostory questionRepostory, AnswerRepository answerRepository) {
-        this.questionRepostory = questionRepostory;
-        this.answerRepository = answerRepository;
+    public QuestionController(QuestionService questionService) {
+        this.questionService = questionService;
     }
 
     @GetMapping("/")
@@ -37,70 +34,44 @@ public class QuestionController {
 
     @GetMapping("/form")
     public String questionForm(HttpSession session, Model model) {
-
-        if (!isLoginUser(session)) {
-            return "redirect:/user/login";
-        }
-        logger.info("questionForm");
+        questionService.isLogin(session);
         return "qna/form";
     }
 
     @PostMapping("/questions")
     public String createQuestion(Question question, HttpSession session) {
-        Question addNewQuestion = new Question(question, session);
-        questionRepostory.save(addNewQuestion);
+        questionService.createQuestion(question,getLoginUser(session));
         return "redirect:/qna/list";
     }
 
     @GetMapping("/list")
     public String showQuestionList(Model model) {
-        model.addAttribute("questionList", questionRepostory.findAll());
+        model.addAttribute("questionList", questionService.findAll());
         return "/qna/list";
     }
 
     @GetMapping("/{id}")
     public String showDetailQuestion(@PathVariable Long id, Model model) {
-        Question currentQuestion = questionRepostory.findById(id).orElseThrow(NotFoundException::new);
-        List<Answer> answerList = answerRepository.findByQuestionId(id);
-        model.addAttribute("question", currentQuestion);
-        model.addAttribute("answerList", answerList);
-        logger.info("update Question : {}" + currentQuestion.getTitle());
+        questionService.showDetailQuestion(id,model);
+        //@Todo 모델에다가 데이터를 집어넣어주는건 컨트롤러 역할 같다. 개선할 수 있는 방법을 찾
         return "/qna/show";
     }
 
     @PutMapping("/{id}")
     public String updateQuestion(@PathVariable Long id, String title, String contents) {
-        Question question = questionRepostory.findById(id).orElseThrow(NotFoundException::new);
-        question.update(title, contents);
-        questionRepostory.save(question);
-        logger.info("update Question : {id}", id);
+        questionService.updateQuestion(id,title,contents);
         return String.format("redirect:/qna/%d", id);
     }
 
     @DeleteMapping("/{id}")
     public String deleteQuestion(@PathVariable Long id, User ownerUser, HttpSession session) {
-
-        Question question = questionRepostory.findById(id).orElseThrow(NotFoundException::new);
-
-        if (!isValidUser(session, question.getWriter())) {
-            logger.info("질문글 삭제 - 실패, 권한없는 사용자의 삭제시도");
-            return String.format("redirect:/qna/%d", id);
-        }
-        questionRepostory.delete(questionRepostory.getOne(id));
-        logger.info("질문글 삭제 - 성공");
+        questionService.deleteQuestion(id,ownerUser,session);
         return "redirect:/";
     }
 
     @GetMapping("/{id}/form")
     public String updateForm(@PathVariable Long id, Model model, HttpSession session) {
-
-        Question question = questionRepostory.findById(id).orElseThrow(NotFoundException::new);
-        if (!isValidUser(session, question.getWriter())) {
-            logger.info("질문글 수정 - 실패, 권한없는 사용자의 수정시도");
-            return String.format("redirect:/qna/%d", id);
-        }
-        logger.info("글 수정 : {}", question.getTitle());
-        model.addAttribute("question", question);
+        questionService.updateForm(id,model,session);
         return "/qna/updateForm";
     }
 }
