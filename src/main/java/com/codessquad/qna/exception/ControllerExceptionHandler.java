@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 public class ControllerExceptionHandler {
 
     @ExceptionHandler(NotLoginException.class)
-    public String handleNotLoginException(){
+    public String handleNotLoginException() {
         return "redirect:/users/loginForm";
     }
 }

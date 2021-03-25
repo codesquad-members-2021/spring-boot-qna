@@ -4,6 +4,7 @@ import javax.persistence.*;
 
 @Entity
 public class User {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -54,7 +55,7 @@ public class User {
         return this.id.equals(id);
     }
 
-    public boolean isMatchingUserId(User user){
+    public boolean isMatchingUserId(User user) {
         return this.userId.equals(user.userId);
     }
 

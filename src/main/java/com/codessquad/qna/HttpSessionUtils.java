@@ -8,16 +8,16 @@ import javax.servlet.http.HttpSession;
 public class HttpSessionUtils {
     public static final String USER_SESSION_KEY = "sessionedUser";
 
-    public static boolean isLoginUser(HttpSession session){
+    public static boolean isLoginUser(HttpSession session) {
         Object sessionedUser = session.getAttribute(USER_SESSION_KEY);
         return sessionedUser != null;
     }
 
-    public static User getUserFromSession(HttpSession session){
-        if(!isLoginUser(session)){
+    public static User getUserFromSession(HttpSession session) {
+        if (!isLoginUser(session)) {
             throw new NotLoginException("로그인이 필요합니다.");
         }
-        return (User)session.getAttribute(USER_SESSION_KEY);
+        return (User) session.getAttribute(USER_SESSION_KEY);
     }
 
 }

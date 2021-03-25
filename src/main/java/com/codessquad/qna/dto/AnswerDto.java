@@ -54,7 +54,7 @@ public class AnswerDto {
         this.time = time;
     }
 
-    public Answer toEntity(Question question, User user){
+    public Answer toEntity(Question question, User user) {
         return new Answer(user, question, this.contents, this.time);
     }
 }
