@@ -10,6 +10,9 @@ import java.util.List;
 
 @HandlebarsHelper
 public class HandlebarsHelpers {
+
+    private static int maxPage = 5;
+
     public boolean checkStatus(final Object post) {
         return post == DisplayStatus.OPEN;
     }
@@ -29,7 +32,7 @@ public class HandlebarsHelpers {
         for (int i = pageNumber; i < page.getTotalPages(); i++) {
             pages.add(i);
             count++;
-            if (count == 5) {
+            if (count == maxPage) {
                 break;
             }
         }
