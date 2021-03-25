@@ -24,6 +24,32 @@ function addAnswer(e) {
             var template = answerTemplate.format(data.writer.name, data.formattedWriteDateTime, data.contents, data.question.id, data.id);
             $(".qna-comment-slipp-articles").append(template);
         }
+    });
+}
+
+$(document).on('click', '.delete-answer-form button[type=submit]', deleteAnswer);
+
+function deleteAnswer(e) {
+    e.preventDefault();
+
+    var deleteBtn = $(this);
+    var deleteAnswerForm = $(this).parent();
+    var url = deleteAnswerForm.attr('action');
+    console.log("url: " + url);
+
+    $.ajax({
+        type: 'delete',
+        url: url,
+        dataType: 'json',
+        error: onError,
+        success: function (data, status) {
+            if (data.valid) {
+                console.log("Success");
+                deleteBtn.closest('article').remove();
+            } else {
+                alert(data.message);
+            }
+        }
     })
 }
 

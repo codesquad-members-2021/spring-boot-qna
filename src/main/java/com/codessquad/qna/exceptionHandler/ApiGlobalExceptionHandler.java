@@ -1,5 +1,6 @@
 package com.codessquad.qna.exceptionHandler;
 
+import com.codessquad.qna.exception.NotAuthorizedException;
 import com.codessquad.qna.exception.SaveFailedException;
 import com.codessquad.qna.exception.UserNotFoundInSessionException;
 import org.springframework.http.HttpStatus;
@@ -19,5 +20,11 @@ public class ApiGlobalExceptionHandler {
     @ResponseStatus(value = HttpStatus.UNAUTHORIZED)
     public String userNotFoundInSessionException(UserNotFoundInSessionException ex) {
         return "로그인이 필요합니다.";
+    }
+
+    @ExceptionHandler(NotAuthorizedException.class)
+    @ResponseStatus(value = HttpStatus.UNAUTHORIZED)
+    public String NotAuthorizedException(NotAuthorizedException ex) {
+        return ex.getMessage();
     }
 }
