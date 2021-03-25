@@ -13,7 +13,7 @@ public class Answer {
     // 퀘스천은 유저(라이터)의 매니 투 원 : 여러개의 퀘스천은 하나의 유저가 작성할 수 있다.
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @ManyToOne
