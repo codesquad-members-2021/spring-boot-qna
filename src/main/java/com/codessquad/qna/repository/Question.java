@@ -26,6 +26,15 @@ public class Question {
         this.dateTime = LocalDateTime.now().format(dateTimeFormatter);
     }
 
+    public void update(Question question) {
+        this.title = question.title;
+        this.contents = question.contents;
+    }
+
+    public boolean matchWriter(User user) {
+        return this.writer.equals(user.getUserId());
+    }
+
     public Long getId() {
         return id;
     }
