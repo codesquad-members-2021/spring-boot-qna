@@ -18,8 +18,8 @@ public class QuestionService {
         this.questionRepository = questionRepository;
     }
 
-    public void save(User sessionUser, Question question) {
-        question.setWriter(sessionUser);
+    public void save(User sessionUser, String title, String contents) {
+        Question question = new Question(sessionUser, title, contents);
 
         questionRepository.save(question);
     }

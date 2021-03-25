@@ -6,6 +6,7 @@ import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -26,14 +27,16 @@ public class Question {
 
     @OneToMany(mappedBy = "question")
     @OrderBy("id ASC")
-    @JsonProperty
-    private List<Answer> answers;
+    private List<Answer> answers = new ArrayList<>();
 
     @Lob
     @JsonProperty
     private String contents;
 
     private LocalDateTime createdDateTime = LocalDateTime.now();
+
+    @JsonProperty
+    private int answerCount = 0;
 
     public Question() {
 
@@ -57,6 +60,20 @@ public class Question {
         this.title = updateQuestion.title;
         this.contents = updateQuestion.contents;
     }
+
+    public void addAnswer(Answer answer) {
+        answers.add(answer);
+        answerCount++;
+    }
+
+    public void deleteAnswer(Answer answer) {
+        if(answers.contains(answer)) {
+            answer.deleted();
+            answerCount--;
+        }
+    }
+
+
 
     @Override
     public String toString() {

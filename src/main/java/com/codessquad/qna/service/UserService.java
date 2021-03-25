@@ -16,13 +16,6 @@ public class UserService {
         this.userRepository = userRepository;
     }
 
-    public boolean checkEmpty(User user) {
-        return user.getUserId().equals("")
-                || user.getPassword().equals("")
-                || user.getEmail().equals("")
-                || user.getName().equals("");
-    }
-
     public void save(User user) {
         userRepository.save(user);
     }
@@ -49,7 +42,7 @@ public class UserService {
     }
 
     private void checkPassword(User originalUser, User updateUser) {
-        if (!originalUser.isMatchingPassword(updateUser.getPassword())) {
+        if (!originalUser.isMatchingPassword(updateUser)) {
             throw new IllegalArgumentException("비밀번호가 맞지않습니다. 비밀번호를 확인해 주세요");
         }
     }

@@ -1,62 +1,36 @@
 package com.codessquad.qna.domain;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import java.util.Objects;
 import javax.persistence.*;
 
 @Entity
 public class User {
     @Id
+    @JsonProperty
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @JsonProperty
     @Column(nullable = false, length = 20, unique = true)
     private String userId;
 
     @Column(nullable = false)
     private String password;
 
+    @JsonProperty
     private String name;
 
+    @JsonProperty
     private String email;
-
-    public Long getId() {
-        return id;
-    }
-
-    public String getUserId() {
-        return userId;
-    }
-
-    public void setUserId(String userId) {
-        this.userId = userId;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
 
     public boolean isMatchingPassword(String password) {
         return this.password.equals(password);
+    }
+
+    public boolean isMatchingPassword(User user) {
+        return this.password.equals(user.password);
     }
 
     public boolean isMatchingId(long id) {
@@ -64,10 +38,17 @@ public class User {
     }
 
     public void update(User updateUser, String newPassword) {
-        setUserId(updateUser.userId);
-        setEmail(updateUser.email);
-        setName(updateUser.name);
-        setPassword(newPassword);
+        this.userId = updateUser.userId;
+        this.email = updateUser.email;
+        this.name = updateUser.name;
+        this.password = newPassword;
+    }
+
+    public boolean checkEmpty(User user) {
+        return user.userId == null
+                || user.password == null
+                || user.email == null
+                || user.name == null;
     }
 
     @Override

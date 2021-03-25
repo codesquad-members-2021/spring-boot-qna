@@ -20,7 +20,7 @@ public class UserController {
 
     @PostMapping
     public String create(User user) {
-        if (userService.checkEmpty(user)) {
+        if (user.checkEmpty(user)) {
             return "user/form";
         }
         userService.save(user);
@@ -34,7 +34,7 @@ public class UserController {
     }
 
     @GetMapping("/{id}")
-    public String userProfile(@PathVariable long id, Model model, HttpSession session) {
+    public String userProfile(@PathVariable long id, Model model) {
         model.addAttribute("user", userService.getUserById(id));
         return "user/profile";
     }

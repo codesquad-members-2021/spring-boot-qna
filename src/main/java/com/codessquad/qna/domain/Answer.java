@@ -1,5 +1,8 @@
 package com.codessquad.qna.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -10,18 +13,25 @@ public class Answer {
     private static final DateTimeFormatter DATE_TIME_FORMAT = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
     @Id
     @GeneratedValue
+    @JsonProperty
     private Long id;
 
     @ManyToOne
+    @JsonProperty
     @JoinColumn(foreignKey = @ForeignKey(name = "fk_answer_writer"))
     private User writer;
 
     @ManyToOne
+    @JsonProperty
     @JoinColumn(foreignKey = @ForeignKey(name = "fk_answer_to_question"))
     private Question question;
 
     @Lob
+    @JsonProperty
     private String contents;
+
+    private boolean delete;
+
     private LocalDateTime createdDateTime = LocalDateTime.now();
 
     public Answer() {
@@ -33,44 +43,20 @@ public class Answer {
         this.contents = contents;
     }
 
-    public Long getId() {
-        return id;
+    public String getFormattedDateTime() {
+        return createdDateTime.format(DATE_TIME_FORMAT);
     }
 
-    public User getWriter() {
-        return writer;
+    public boolean isSameWriter(User loginUser) {
+        return loginUser.equals(this.writer);
     }
 
-    public void setWriter(User writer) {
-        this.writer = writer;
+    public void deleted() {
+        this.delete = true;
     }
 
     public Question getQuestion() {
         return question;
-    }
-
-    public void setQuestion(Question question) {
-        this.question = question;
-    }
-
-    public String getContents() {
-        return contents;
-    }
-
-    public void setContents(String contents) {
-        this.contents = contents;
-    }
-
-    public LocalDateTime getCreatedDateTime() {
-        return createdDateTime;
-    }
-
-    public void setCreatedDateTime(LocalDateTime createdDateTime) {
-        this.createdDateTime = createdDateTime;
-    }
-
-    public String getFormattedDateTime() {
-        return createdDateTime.format(DATE_TIME_FORMAT);
     }
 
     @Override
@@ -91,8 +77,6 @@ public class Answer {
         return "Answer{" +
                 "id=" + id +
                 ", writer=" + writer +
-                ", contents='" + contents + '\'' +
-                ", createdDateTime=" + createdDateTime +
-                '}';
+                ", contents='" + contents + '\'' ;
     }
 }
