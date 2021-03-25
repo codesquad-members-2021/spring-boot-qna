@@ -2,7 +2,9 @@ package com.codessquad.qna.service;
 
 import com.codessquad.qna.domain.User;
 import com.codessquad.qna.domain.UserRepository;
+import com.codessquad.qna.exception.LoginFailedException;
 import com.codessquad.qna.exception.NotFoundException;
+import com.codessquad.qna.exception.UnauthorizedException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -43,9 +45,7 @@ public class UserService {
 
         if (!currentUser.isMatchingPassword(pastPassword)) {
             logger.info("password is not Matching, please re-try ");
-            //return "redirect:/user/login";
-            //@Todo 예외발생시키
-
+            throw new UnauthorizedException("개인정보 수정 실패 - 이전 비밀번호가 틀리면 업데이트할 수 없습니다");
         }
 
         if (sessionUser.equals(updatedUser)) {
@@ -57,23 +57,19 @@ public class UserService {
     }
 
     public void validationCheck(Long id, Model model, HttpSession session) {
-        //id =>> user's Id
         User foundUser = userRepository.findById(id).orElseThrow(NotFoundException::new);
         if (!isValidUser(session, foundUser)) {
             logger.info("Login Failure : wrong password");
-            //return "redirect:/user/form";
-            //@Todo  에러발생, 권한없는 사용자의 시도
+            throw new UnauthorizedException("귄한없는 사용자의 잘못된 접근");
         }
     }
 
-
     public void login(String userId, String password, HttpSession session) {
-        User foundUser = userRepository.findByUserId(userId).orElseThrow(NotFoundException::new); //get 안티패턴 수정해야함@@@@@@@@@@@@
+        User foundUser = userRepository.findByUserId(userId).orElseThrow(NotFoundException::new);
 
         if (!foundUser.isMatchingPassword(password)) {
             logger.info("Login Failure : wrong password");
-            //return "redirect:/user/form";
-            //@Todo 예외발생, 매칭되지 않는 비번과 아이디
+            throw new LoginFailedException("비밀번호가 맞지 않습니다");
         }
 
         logger.info("Login Success");

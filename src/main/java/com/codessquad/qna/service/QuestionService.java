@@ -2,7 +2,9 @@ package com.codessquad.qna.service;
 
 import com.codessquad.qna.controller.QuestionController;
 import com.codessquad.qna.domain.*;
+import com.codessquad.qna.exception.LoginFailedException;
 import com.codessquad.qna.exception.NotFoundException;
+import com.codessquad.qna.exception.UnauthorizedException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -31,8 +33,7 @@ public class QuestionService {
 
     public void isLogin(HttpSession session) {
         if (!isLoginUser(session)) {
-            //return "redirect:/user/login";
-            //@Todo 예외처리, 로그인하지 않은 사용
+            throw new LoginFailedException();
         }
         logger.info("questionForm");
     }
@@ -70,19 +71,18 @@ public class QuestionService {
 
         if (!isValidUser(session, question.getWriter())) {
             logger.info("질문글 삭제 - 실패, 권한없는 사용자의 삭제시도");
-            //return String.format("redirect:/qna/%d", id);
-            //@Todo  권한없는 사용자의 삭제시도
+            throw new UnauthorizedException("질문글 삭제 - 실패, 권한없는 사용자의 삭제시도");
         }
         questionRepostory.delete(questionRepostory.getOne(id));
         logger.info("질문글 삭제 - 성공");
 
     }
 
-    public void updateForm(Long id,Model model, HttpSession session) {//@Todo 여기도 모델이 서비스에 넘어온다
+    public void updateForm(Long id,Model model, HttpSession session) {
         Question question = questionRepostory.findById(id).orElseThrow(NotFoundException::new);
         if (!isValidUser(session, question.getWriter())) {
             logger.info("질문글 수정 - 실패, 권한없는 사용자의 수정시도");
-            //return String.format("redirect:/qna/%d", id);
+            throw new UnauthorizedException("질문글 수정 - 실패, 권한없는 사용자의 수정시도");
         }
         logger.info("글 수정 : {}", question.getTitle());
         model.addAttribute("question", question);
