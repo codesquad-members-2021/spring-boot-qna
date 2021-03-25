@@ -1,7 +1,7 @@
 package com.codessquad.qna.controller.api;
 
-import com.codessquad.qna.entity.Answer;
-import com.codessquad.qna.entity.User;
+import com.codessquad.qna.domain.Answer;
+import com.codessquad.qna.domain.User;
 import com.codessquad.qna.service.AnswerService;
 import com.codessquad.qna.util.HttpSessionUtils;
 import org.slf4j.Logger;

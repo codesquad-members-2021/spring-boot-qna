@@ -1,8 +1,8 @@
 package com.codessquad.qna.service;
 
-import com.codessquad.qna.entity.Answer;
-import com.codessquad.qna.entity.Question;
-import com.codessquad.qna.entity.User;
+import com.codessquad.qna.domain.Answer;
+import com.codessquad.qna.domain.Question;
+import com.codessquad.qna.domain.User;
 import com.codessquad.qna.exception.NotAuthorizedException;
 import com.codessquad.qna.exception.NotFoundException;
 import com.codessquad.qna.exception.SaveFailedException;

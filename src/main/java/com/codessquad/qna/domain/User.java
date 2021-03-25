@@ -1,4 +1,4 @@
-package com.codessquad.qna.entity;
+package com.codessquad.qna.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
