@@ -6,6 +6,8 @@ import com.codessquad.qna.service.QuestionService;
 import com.codessquad.qna.util.HttpSessionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -23,6 +25,15 @@ public class QuestionController {
     public QuestionController(QuestionService questionService) {
         this.questionService = questionService;
     }
+
+    @GetMapping
+    public String questionList(@PageableDefault(size = 15) Pageable pageable, Model model) {
+        model.addAttribute("Questions", questionService.findQuestionList(pageable));
+        model.addAttribute("next", pageable.next().getPageNumber());
+        model.addAttribute("pre", pageable.next().getPageNumber() - 2);
+        return "index";
+    }
+
 
     @PostMapping
     public String createQuestion(Question question, HttpSession session) {

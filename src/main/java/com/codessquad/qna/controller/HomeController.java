@@ -11,18 +11,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 @Controller
 public class HomeController {
 
-    private final QuestionService questionService;
-
-    public HomeController(QuestionService questionService) {
-        this.questionService = questionService;
-    }
-
     @GetMapping("/")
-    public String welcome(@PageableDefault(size = 15) Pageable pageable, Model model) {
-        model.addAttribute("Questions", questionService.findQuestionList(pageable));
-        model.addAttribute("next", pageable.next().getPageNumber());
-        model.addAttribute("pre", pageable.next().getPageNumber() - 2);
-        return "index";
+    public String welcome() {
+        return "redirect:/questions";
     }
 
 }
