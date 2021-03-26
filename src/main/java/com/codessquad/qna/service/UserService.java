@@ -1,7 +1,9 @@
 package com.codessquad.qna.service;
 
+import com.codessquad.qna.exception.UserAccountException;
 import com.codessquad.qna.model.User;
 import com.codessquad.qna.repository.UserRepository;
+import com.codessquad.qna.utils.AccountError;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -11,11 +13,15 @@ public class UserService {
     @Autowired
     private UserRepository userRepository;
 
-    public boolean save(User user) {
+    public void save(User user) {
         if (userRepository.findByUserId(user.getUserId()).isPresent()) {
-            return false;
+            throw new UserAccountException(AccountError.DUPLICATED_ID);
         }
         userRepository.save(user);
-        return true;
+    }
+
+    public User login(String userId, String password) {
+        return userRepository.findByUserIdAndPassword(userId, password).orElseThrow(()
+                -> new UserAccountException(AccountError.LOGIN_FAILED));
     }
 }

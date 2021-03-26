@@ -1,5 +1,6 @@
 package com.codessquad.qna.exception;
 
+import com.codessquad.qna.utils.AccountError;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -16,5 +17,14 @@ public class GlobalExceptionHandler{
     private String handleInvalidSessionException(Model model, InvalidSessionException e) {
         model.addAttribute("errorMessage", e.getMessage());
         return "user/loginForm";
+    }
+
+    @ExceptionHandler(UserAccountException.class)
+    private String handleUserAccountException(Model model, UserAccountException e) {
+        model.addAttribute("errorMessage", e.getMessage());
+        if (e.getUserAccountError() == AccountError.LOGIN_FAILED) {
+            return "user/loginForm";
+        }
+        return "user/userSignup";
     }
 }
