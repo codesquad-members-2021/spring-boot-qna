@@ -4,6 +4,8 @@ import com.codessquad.qna.domain.User;
 import com.codessquad.qna.domain.Question;
 import com.codessquad.qna.service.AnswerService;
 import com.codessquad.qna.service.QuestionService;
+import com.codessquad.qna.util.HttpSessionUtils;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -23,8 +25,8 @@ public class QuestionController {
     }
 
     @GetMapping
-    public String showList(Model model) {
-        model.addAttribute("questions", questionService.findAllQuestion());
+    public String showList(Model model, Pageable pageable) {
+        questionService.searchPage(model, pageable);
         return "index";
     }
 

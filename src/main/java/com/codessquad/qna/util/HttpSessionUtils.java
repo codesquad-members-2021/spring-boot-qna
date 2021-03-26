@@ -1,4 +1,4 @@
-package com.codessquad.qna.controller;
+package com.codessquad.qna.util;
 
 import javax.servlet.http.HttpSession;
 
