@@ -49,7 +49,7 @@ public class UserController {
         User user = userService.findById(id);
         User sessionedUser = SessionUtility.findSessionedUser(session);
 
-        UserService.verifySessionUser(sessionedUser, user, "본인의 회원정보만 수정할 수 있습니다.");
+        user.verifySessionUser(sessionedUser, "본인의 회원정보만 수정할 수 있습니다.");
         model.addAttribute("user", user);
         return "user/updateForm";
     }
@@ -72,7 +72,7 @@ public class UserController {
 
     @PostMapping("/login")
     public String loginUser(String userId, String password, HttpSession session) {
-        User user = userService.verifyUser(userId, password);
+        User user = userService.verifyLogin(userId, password);
         SessionUtility.setUser(user, session);
         return "redirect:/";
     }

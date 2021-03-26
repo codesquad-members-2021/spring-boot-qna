@@ -10,6 +10,7 @@ public class Question {
 
     @Id
     @GeneratedValue
+
     private Long id;
 
     @ManyToOne

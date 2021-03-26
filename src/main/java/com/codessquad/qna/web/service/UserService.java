@@ -18,12 +18,6 @@ public class UserService {
         this.userRepository = userRepository;
     }
 
-    public static void verifySessionUser(User sessionedUser, User user, String errorMessage) {
-        if (!sessionedUser.equals(user)) {
-            throw new UnauthorizedUserException(errorMessage);
-        }
-    }
-
     public User findById(Long id) {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new UnauthorizedUserException(UserNotFoundException.USER_NOT_FOUND));
@@ -52,7 +46,7 @@ public class UserService {
         }
     }
 
-    public User verifyUser(String userId, String password) {
+    public User verifyLogin(String userId, String password) {
         User user;
         try {
             user = findByUserId(userId);

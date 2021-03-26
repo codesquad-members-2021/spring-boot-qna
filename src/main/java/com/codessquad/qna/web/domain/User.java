@@ -1,5 +1,7 @@
 package com.codessquad.qna.web.domain;
 
+import com.codessquad.qna.web.exception.UnauthorizedUserException;
+
 import javax.persistence.*;
 import java.util.Objects;
 
@@ -30,6 +32,7 @@ public class User {
         this.name = name;
         this.email = email;
     }
+
 
     public Long getId() {
         return id;
@@ -73,6 +76,12 @@ public class User {
 
     public boolean hasSamePassword(User user) {
         return this.password.equals(user.password);
+    }
+
+    public void verifySessionUser(User sessionedUser, String errorMessage) {
+        if (!this.equals(sessionedUser)) {
+            throw new UnauthorizedUserException(errorMessage);
+        }
     }
 
     @Override
