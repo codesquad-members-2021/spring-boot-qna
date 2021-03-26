@@ -18,9 +18,9 @@ public class AnswerService {
         this.questionService = questionService;
     }
 
-    public void postAnswer(User writer, long questionId, String contents) {
+    public Answer postAnswer(User writer, long questionId, String contents) {
         Answer answer = new Answer(writer, questionService.findQuestion(questionId), contents);
-        answerRepository.save(answer);
+        return answerRepository.save(answer);
     }
 
     public void deleteAnswer(long id, User user) {
