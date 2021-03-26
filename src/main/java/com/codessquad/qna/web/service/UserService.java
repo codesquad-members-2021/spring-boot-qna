@@ -43,16 +43,15 @@ public class UserService {
     }
 
     public User doLogin(String userId, String password) {
-        User foundUser = null;
         try {
-            foundUser = userRepository.findByUserId(userId).orElseThrow(UserNotFoundException::new);
+            User foundUser = userRepository.findByUserId(userId).orElseThrow(UserNotFoundException::new);
             verifyPassword(foundUser, password);
+            return foundUser;
         } catch (UserNotFoundException exception) {
             throw new LoginFailedException("존재하지 않는 계정입니다");
         } catch (UnauthorizedAccessException exception) {
             throw new LoginFailedException("패스워드가 일치하지 않습니다");
         }
-        return foundUser;
     }
 
     private void verifyIsSameUser(User user, User anotherUser) {
