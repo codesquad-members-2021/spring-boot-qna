@@ -41,9 +41,11 @@ public class QuestionService {
         return question;
     }
 
-    public void verifyQuestionWriter(Question question, User user) {
+    public Question verifyQuestionWriter(Long id, User user) {
+        Question question = findById(id);
         if (!question.isWriter(user)) {
             throw new UnauthorizedUserException(UnauthorizedUserException.UNAUTHORIZED_USER_TO_QUESTION);
         }
+        return question;
     }
 }
