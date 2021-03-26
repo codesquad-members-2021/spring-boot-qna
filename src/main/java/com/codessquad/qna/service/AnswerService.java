@@ -19,8 +19,4 @@ public class AnswerService {
     public void save(Answer answer) {
         answerRepository.save(answer);
     }
-
-    public Question getQuestionById(long questionId) {
-        return questionRepository.findById(questionId).orElseThrow(NoQuestionException::new);
-    }
 }

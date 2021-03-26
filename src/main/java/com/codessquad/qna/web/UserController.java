@@ -20,7 +20,7 @@ public class UserController {
 
     @PostMapping
     public String create(User user) {
-        if (userService.checkEmpty(user)) {
+        if (user.checkEmpty(user)) {
             return "user/form";
         }
         userService.save(user);

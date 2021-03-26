@@ -4,6 +4,7 @@ import com.codessquad.qna.domain.Answer;
 import com.codessquad.qna.domain.Question;
 import com.codessquad.qna.domain.User;
 import com.codessquad.qna.service.AnswerService;
+import com.codessquad.qna.service.QuestionService;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -16,6 +17,7 @@ import javax.servlet.http.HttpSession;
 public class AnswerController {
 
     private AnswerService answerService;
+    private QuestionService questionService;
 
     public AnswerController(AnswerService answerService) {
         this.answerService = answerService;
@@ -27,11 +29,11 @@ public class AnswerController {
             return "redirect:/users/login";
         }
         User user = HttpSessionUtils.getUserFromSession(session);
-        Question question = answerService.getQuestionById(questionId);
+        Question question = questionService.getQuestionById(questionId);
 
         Answer answer = new Answer(user, question, contents);
 
         answerService.save(answer);
-        return String.format("redirect:/question/%d", questionId);
+        return String.format("redirect:/question/" + questionId);
     }
 }
