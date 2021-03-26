@@ -26,8 +26,8 @@ public class AnswerService {
     /**
      * 답변 조회
      */
-    public Answer findById(Long id) {
-        return answerRepository.findById(id)
+    public Answer findByIdIfExist(Long id) {
+        return answerRepository.findByIdAndDeletedFalse(id)
                 .orElseThrow(AnswerNotFoundException::new);
     }
 
@@ -35,7 +35,7 @@ public class AnswerService {
      * 답변 리스트 조회
      */
     public List<Answer> findAnswerListByQuestion(Question question) {
-        return answerRepository.findByQuestion(question);
+        return answerRepository.findByQuestionAndDeletedFalse(question);
     }
 
     /**

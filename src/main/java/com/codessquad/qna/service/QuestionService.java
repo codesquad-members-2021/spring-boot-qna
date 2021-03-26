@@ -34,8 +34,8 @@ public class QuestionService {
     /**
      * 질문 리스트 조회
      */
-    public List<Question> findAll() {
-        return questionRepository.findAll();
+    public List<Question> findUnRemovedList() {
+        return questionRepository.findAllByDeletedFalse();
     }
 
     /**
@@ -49,7 +49,9 @@ public class QuestionService {
     /**
      * 질문 제거
      */
-    public void deleteBy(Long id) {
+    @Transactional
+    public void deleteBy(Long id, Question question) {
+        question.delete();
         questionRepository.deleteById(id);
     }
 }

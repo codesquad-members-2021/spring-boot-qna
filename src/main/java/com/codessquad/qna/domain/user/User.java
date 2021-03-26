@@ -1,5 +1,7 @@
 package com.codessquad.qna.domain.user;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import java.util.Objects;
 
@@ -13,6 +15,7 @@ public class User {
     @Column(nullable = false, length = 20)
     private String userId;
 
+    @JsonIgnore
     private String password;
     private String name;
     private String email;

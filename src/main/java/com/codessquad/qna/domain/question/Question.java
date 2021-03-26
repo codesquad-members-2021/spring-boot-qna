@@ -3,38 +3,52 @@ package com.codessquad.qna.domain.question;
 import com.codessquad.qna.domain.BaseTimeEntity;
 import com.codessquad.qna.domain.answer.Answer;
 import com.codessquad.qna.domain.user.User;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
+@SQLDelete(sql = "UPDATE QUESTION SET DELETED = TRUE WHERE ID = ?")
 public class Question extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private Long id;
 
     @ManyToOne
     @JoinColumn(foreignKey = @ForeignKey(name = "fk_question_writer"))
+    @JsonManagedReference
     private User writer;
-    private String title;
-    private String contents;
 
-    @OneToMany(mappedBy = "question")
-    @OrderBy("id DESC")
-    private List<Answer> answers;
+    private String title;
+
+    @Column(length = 20000)
+    private String content;
+
+    private boolean deleted = false;
+
+    @OneToMany(mappedBy = "question", cascade = CascadeType.PERSIST)
+    @Where(clause = "deleted = false")
+    @JsonBackReference
+    private final List<Answer> answers = new ArrayList<>();
+
 
     public Question() {
     }
 
-    public Question(User writer, String title, String contents) {
+    public Question(User writer, String title, String content) {
         super();
         this.writer = writer;
         this.title = title;
-        this.contents = contents;
+        this.content = content;
     }
 
-    public long getId() {
+    public Long getId() {
         return id;
     }
 
@@ -46,8 +60,18 @@ public class Question extends BaseTimeEntity {
         return title;
     }
 
-    public String getContents() {
-        return contents;
+    public String getContent() {
+        return content;
+    }
+
+    public void delete() {
+        deleteAllAnswers();
+        this.deleted = true;
+    }
+
+    private void deleteAllAnswers() {
+        answers.stream().filter(answer -> !answer.isDeleted())
+                .forEach(answer -> answer.delete());
     }
 
     public boolean isSameWriter(User user) {
@@ -56,8 +80,19 @@ public class Question extends BaseTimeEntity {
 
     public void update(Question updateQuestion) {
         this.title = updateQuestion.title;
-        this.contents = updateQuestion.contents;
+        this.content = updateQuestion.content;
     }
+
+    public void addAnswer(Answer answer) {
+        answers.add(answer);
+    }
+
+    public void deleteAnswer(Answer answer) {
+        if(answers.contains(answer)) {
+            answer.delete();
+        }
+    }
+
 
     @Override
     public String toString() {
@@ -65,7 +100,7 @@ public class Question extends BaseTimeEntity {
                 "id=" + id +
                 ", writer='" + writer + '\'' +
                 ", title='" + title + '\'' +
-                ", contents='" + contents + '\'' +
+                ", content='" + content + '\'' +
                 '}';
     }
 }
