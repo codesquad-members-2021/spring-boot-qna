@@ -55,7 +55,7 @@ public class UserController {
     @PostMapping
     public String create(User user) {
         userService.save(user);
-        logger.info("New User Created: {}", user);
+        logger.debug("New User Created: {}", user);
         return "redirect:/users";
     }
 
