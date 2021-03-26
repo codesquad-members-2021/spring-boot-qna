@@ -1,6 +1,7 @@
 package com.codessquad.qna.controller;
 
 import com.codessquad.qna.HttpSessionUtils;
+import com.codessquad.qna.domain.Answer;
 import com.codessquad.qna.domain.User;
 import com.codessquad.qna.service.AnswerService;
 import org.springframework.stereotype.Controller;
@@ -29,9 +30,9 @@ public class AnswerController {
     }
 
     @DeleteMapping("/{answerId}")
-    public String deleteAnswer(@PathVariable long questionId, @PathVariable long answerId, HttpSession session) {
+    public String deleteAnswer(@PathVariable long answerId, HttpSession session) {
         User sessionedUser = HttpSessionUtils.getUserFromSession(session);
-        answerService.delete(answerId, sessionedUser);
-        return "redirect:/questions/" + questionId;
+        Answer deletedAnswer = answerService.delete(answerId, sessionedUser);
+        return "redirect:/questions/" + deletedAnswer.getQuestionId();
     }
 }

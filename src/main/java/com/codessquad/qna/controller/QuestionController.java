@@ -68,9 +68,7 @@ public class QuestionController {
         if (!questionService.verifyQuestion(updateQuestion, sessionedUser)) {
             throw new IllegalStateException("자신의 질문만 수정할 수 있습니다.");
         }
-        Question question = questionService.findQuestionById(questionId);
-        question.update(updateQuestion);
-        questionService.save(question);
+        questionService.update(updateQuestion, questionId);
         return "redirect:/";
     }
 

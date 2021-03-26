@@ -23,11 +23,6 @@ public class QuestionService {
         questionRepository.save(question);
     }
 
-
-    public void save(Question updateQuestion) {
-        questionRepository.save(updateQuestion);
-    }
-
     public List<Question> findQuestions() {
         return questionRepository.findAll();
     }

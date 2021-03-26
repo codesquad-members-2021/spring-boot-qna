@@ -55,6 +55,10 @@ public class Answer {
         return time;
     }
 
+    public long getQuestionId(){
+        return question.getId();
+    }
+
     @Override
     public String toString() {
         return "Answer{" +

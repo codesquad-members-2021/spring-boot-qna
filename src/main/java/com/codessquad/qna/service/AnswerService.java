@@ -23,17 +23,17 @@ public class AnswerService {
         answerRepository.save(answer);
     }
 
-
     public List<Answer> findAnswersByQuestionId(long questionId) {
         return answerRepository.findAnswersByQuestionId(questionId);
     }
 
     @Transactional
-    public void delete(long answerId, User user) {
+    public Answer delete(long answerId, User user) {
         Answer answer = answerRepository.findById(answerId).orElseThrow(IllegalArgumentException::new);
         if (verifyAnswer(answer, user)) {
             answerRepository.delete(answer);
         }
+        return answer;
     }
 
     public boolean verifyAnswer(Answer answer, User sessionedUser) {
