@@ -1,5 +1,6 @@
 package com.codessquad.qna.web.domain;
 
+import com.codessquad.qna.web.exception.UnauthorizedUserException;
 import com.codessquad.qna.web.utility.TimeConstant;
 
 import javax.persistence.*;
@@ -52,6 +53,12 @@ public class Answer {
 
     public String getFormattedWrittenDateTime() {
         return writtenDateTime.format(TimeConstant.DATE_PATTERN);
+    }
+
+    public void verifyWriter(User user) {
+        if (!this.writer.equals(user)) {
+            throw new UnauthorizedUserException(UnauthorizedUserException.UNAUTHORIZED_USER_TO_ANSWER);
+        }
     }
 
 }

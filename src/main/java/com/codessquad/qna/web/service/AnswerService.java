@@ -4,6 +4,7 @@ import com.codessquad.qna.web.domain.Answer;
 import com.codessquad.qna.web.domain.Question;
 import com.codessquad.qna.web.domain.User;
 import com.codessquad.qna.web.domain.repository.AnswerRepository;
+import com.codessquad.qna.web.exception.AnswerNotFoundException;
 import com.codessquad.qna.web.utility.SessionUtility;
 import org.springframework.stereotype.Service;
 
@@ -27,4 +28,13 @@ public class AnswerService {
         return answerRepository.findByQuestionId(questionId);
     }
 
+    public Answer findById(Long id) {
+        return answerRepository.findById(id).orElseThrow(() -> new AnswerNotFoundException());
+    }
+
+    public void delete(Long id, User sessionedUser) {
+        Answer answer = findById(id);
+        answer.verifyWriter(sessionedUser);
+        answerRepository.delete(answer);
+    }
 }

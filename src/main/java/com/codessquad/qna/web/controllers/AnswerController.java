@@ -7,6 +7,7 @@ import com.codessquad.qna.web.service.AnswerService;
 import com.codessquad.qna.web.service.QuestionService;
 import com.codessquad.qna.web.utility.SessionUtility;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -30,6 +31,13 @@ public class AnswerController {
         Question question = questionService.findById(questionId);
         User writer = SessionUtility.findSessionedUser(session);
         answerService.save(new Answer(question, writer, contents)); //TODO 서비스에 추출하기
-        return "redirect:/questions/" + questionId;
+        return "redirect:/questions/{questionId}";
+    }
+
+    @DeleteMapping("/{id}")
+    public String deleteAnswer(@PathVariable Long questionId, @PathVariable Long id, HttpSession session) {
+        User writer = SessionUtility.findSessionedUser(session);
+        answerService.delete(id, writer);
+        return "redirect:/questions/{questionId}";
     }
 }
