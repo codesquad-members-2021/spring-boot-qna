@@ -3,7 +3,6 @@ package com.codessquad.qna.controller;
 import com.codessquad.qna.domain.Answer;
 import com.codessquad.qna.domain.Question;
 import com.codessquad.qna.domain.User;
-import com.codessquad.qna.exception.IllegalUserAccessException;
 import com.codessquad.qna.service.AnswerService;
 import com.codessquad.qna.service.QuestionService;
 import org.springframework.stereotype.Controller;
@@ -47,13 +46,8 @@ public class AnswerController {
         }
 
         User loginUser = getUserFromSession(session);
-
-        System.out.println("hi");
-
         Answer answer = answerService.findAnswerById(id);
-        if (!answer.isAnswerWriter(loginUser)) {
-            throw new IllegalUserAccessException();
-        }
+        answerService.verifyWriter(answer, loginUser);
 
         answerService.delete(answer);
         return "redirect:/questions/{questionId}";

@@ -4,6 +4,7 @@ import com.codessquad.qna.domain.Answer;
 import com.codessquad.qna.domain.AnswerRepository;
 import com.codessquad.qna.domain.Question;
 import com.codessquad.qna.domain.User;
+import com.codessquad.qna.exception.IllegalUserAccessException;
 import com.codessquad.qna.exception.UserNotFoundException;
 import org.springframework.stereotype.Service;
 
@@ -26,5 +27,11 @@ public class AnswerService {
 
     public void delete(Answer answer) {
         answerRepository.delete(answer);
+    }
+
+    public void verifyWriter(Answer answer, User user) {
+        if (!answer.isAnswerWriter(user)) {
+            throw new IllegalUserAccessException();
+        }
     }
 }
