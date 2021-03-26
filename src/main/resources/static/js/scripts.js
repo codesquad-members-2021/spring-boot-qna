@@ -1,7 +1,7 @@
 $(".answer-write button[type=submit]" ).click(addAnswer);
 $(document).on('click', '.link-delete-ATag-article', deleteAnswer);
-var addFlag = false;
-var deleteFlag = false;
+let addFlag = false;
+let deleteFlag = false;
 
 function addAnswer(e){
     e.preventDefault();
@@ -27,7 +27,10 @@ function addAnswer(e){
 function deleteAnswer(e){
     e.preventDefault();
 
-    if(deleteFlag == true) { return;}deleteFlag = true;
+    if(deleteFlag == true) {
+        return;
+    }
+    deleteFlag = true;
 
     var deleteBtn = $(this);
     var url = deleteBtn.attr("href");
