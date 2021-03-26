@@ -20,7 +20,8 @@ public class AnswerService {
         this.answerRepository = answerRepository;
     }
 
-    public void save(Answer answer) {
+    public void save(Question question, User sessionedUser, String contents) {
+        Answer answer = new Answer(question, sessionedUser, contents);
         answerRepository.save(answer);
     }
 

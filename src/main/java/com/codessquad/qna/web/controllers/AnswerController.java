@@ -29,15 +29,15 @@ public class AnswerController {
     @PostMapping
     public String addAnswer(@PathVariable Long questionId, HttpSession session, String contents) {
         Question question = questionService.findById(questionId);
-        User writer = SessionUtility.findSessionedUser(session);
-        answerService.save(new Answer(question, writer, contents)); //TODO 서비스에 추출하기
+        User sessionedUser = SessionUtility.findSessionedUser(session);
+        answerService.save(question, sessionedUser, contents);
         return "redirect:/questions/{questionId}";
     }
 
     @DeleteMapping("/{id}")
-    public String deleteAnswer(@PathVariable Long questionId, @PathVariable Long id, HttpSession session) {
-        User writer = SessionUtility.findSessionedUser(session);
-        answerService.delete(id, writer);
+    public String deleteAnswer(@PathVariable Long id, HttpSession session) {
+        User sessionedUser = SessionUtility.findSessionedUser(session);
+        answerService.delete(id, sessionedUser);
         return "redirect:/questions/{questionId}";
     }
 }
