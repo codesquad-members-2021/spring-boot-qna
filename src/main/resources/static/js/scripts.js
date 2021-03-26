@@ -1,12 +1,15 @@
 $(".answer-write button[type=submit]" ).click(addAnswer);
 $(document).on('click', '.link-delete-ATag-article', deleteAnswer);
 var addFlag = false;
-var deleteFlag =false;
+var deleteFlag = false;
 
 function addAnswer(e){
     e.preventDefault();
 
-    if(addFlag == true) { return;}addFlag = true;
+    if(addFlag == true) {
+        return;
+    }
+    addFlag = true;
 
     var queryString = $(".answer-write").serialize();
     var url = $(".answer-write").attr("action");
