@@ -3,6 +3,7 @@ package com.codessquad.qna.web.config;
 import com.codessquad.qna.web.exception.UnAuthenticatedLoginException;
 import com.codessquad.qna.web.exception.QuestionNotFoundException;
 import com.codessquad.qna.web.exception.UnauthorizedUserException;
+import com.codessquad.qna.web.exception.UserNotFoundException;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -24,6 +25,12 @@ public class ExceptionHandlers {
 
     @ExceptionHandler(QuestionNotFoundException.class)
     public String handleQuestionSearchFailure(QuestionNotFoundException e, Model model) {
+        model.addAttribute("exceptionMessage", e.getMessage());
+        return "user/error";
+    }
+
+    @ExceptionHandler(UserNotFoundException.class)
+    public String handleUserNotFoundException(UnauthorizedUserException e, Model model) {
         model.addAttribute("exceptionMessage", e.getMessage());
         return "user/error";
     }

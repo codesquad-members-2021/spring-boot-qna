@@ -20,7 +20,7 @@ public class UserService {
 
     public User findById(Long id) {
         User user = userRepository.findById(id)
-                .orElseThrow(() -> new UnauthorizedUserException(UserNotFoundException.USER_NOT_FOUND));
+                .orElseThrow(() -> new UserNotFoundException());
         return user;
     }
 
@@ -37,7 +37,7 @@ public class UserService {
     }
 
     public User findByUserId(String userId) {
-        return userRepository.findByUserId(userId).orElseThrow(() -> new UnauthorizedUserException(UserNotFoundException.USER_NOT_FOUND));
+        return userRepository.findByUserId(userId).orElseThrow(() -> new UserNotFoundException());
     }
 
     public void verifyPassword(User user, String password) {
