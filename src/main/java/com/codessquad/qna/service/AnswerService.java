@@ -1,27 +1,25 @@
 package com.codessquad.qna.service;
 
-import com.codessquad.qna.domain.Answer;
-import com.codessquad.qna.domain.AnswerRepository;
-import com.codessquad.qna.domain.Question;
-import com.codessquad.qna.domain.User;
-import com.codessquad.qna.dto.AnswerDto;
+import com.codessquad.qna.domain.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
 @Service
-@Transactional(readOnly = true)
 public class AnswerService {
 
     private final AnswerRepository answerRepository;
+    private final QuestionRepository questionRepository;
 
-    public AnswerService(AnswerRepository answerRepository) {
+    public AnswerService(AnswerRepository answerRepository, QuestionRepository questionRepository) {
         this.answerRepository = answerRepository;
+        this.questionRepository=questionRepository;
     }
 
-    public void create(AnswerDto answerDto, Question question, User user) {
-        Answer answer = answerDto.toEntity(question, user);
+    public void create(User user, Long questionId,  String contents) {
+        Question question = questionRepository.findById(questionId).orElseThrow(IllegalArgumentException::new);
+        Answer answer = new Answer(user,question,contents);
         answerRepository.save(answer);
     }
 
