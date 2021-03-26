@@ -7,8 +7,8 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 @ControllerAdvice
 public class GlobalExceptionHandler{
 
-    @ExceptionHandler(EntryNotFoundException.class)
-    private String handleEntryNotFoundException() {
+    @ExceptionHandler(EntityNotFoundException.class)
+    private String handleEntityNotFoundException() {
         return "redirect:/";
     }
 

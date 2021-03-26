@@ -1,6 +1,6 @@
 package com.codessquad.qna.controller;
 
-import com.codessquad.qna.exception.EntryNotFoundException;
+import com.codessquad.qna.exception.EntityNotFoundException;
 import com.codessquad.qna.exception.InvalidSessionException;
 import com.codessquad.qna.repository.Question;
 import com.codessquad.qna.repository.QuestionRepository;
@@ -65,7 +65,7 @@ public class QuestionController {
     }
 
     private Question findByQuestionId(Long questionId) {
-        return questionRepository.findById(questionId).orElseThrow(() -> new EntryNotFoundException("질문"));
+        return questionRepository.findById(questionId).orElseThrow(() -> new EntityNotFoundException("질문"));
     }
 
     private void checkSessionAndWriter(User sessionedUser, Question question) {

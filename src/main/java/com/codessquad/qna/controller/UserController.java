@@ -1,6 +1,6 @@
 package com.codessquad.qna.controller;
 
-import com.codessquad.qna.exception.EntryNotFoundException;
+import com.codessquad.qna.exception.EntityNotFoundException;
 import com.codessquad.qna.repository.User;
 import com.codessquad.qna.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -85,7 +85,7 @@ public class UserController {
     }
 
     private User findById(Long id) {
-        return userRepository.findById(id).orElseThrow(() -> new EntryNotFoundException("유저"));
+        return userRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("유저"));
     }
 }
 
