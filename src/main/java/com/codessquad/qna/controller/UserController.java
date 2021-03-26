@@ -1,14 +1,17 @@
 package com.codessquad.qna.controller;
 
 import com.codessquad.qna.exception.EntityNotFoundException;
-import com.codessquad.qna.repository.User;
+import com.codessquad.qna.model.User;
 import com.codessquad.qna.repository.UserRepository;
+import com.codessquad.qna.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
+
+import java.util.Optional;
 
 import static com.codessquad.qna.controller.HttpSessionUtils.*;
 
@@ -18,6 +21,9 @@ public class UserController {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private UserService userService;
 
     @GetMapping
     public String userList(Model model) {
@@ -31,8 +37,12 @@ public class UserController {
     }
 
     @PostMapping("/signup")
-    public String signup(User user) {
-        userRepository.save(user);
+    public String signup(User user, Model model) {
+        boolean result = userService.save(user);
+        if (!result) {
+            model.addAttribute("errorMessage", "이미 사용중인 아이디입니다.");
+            return "user/userSignup";
+        }
         return "redirect:/users";
     }
 
@@ -43,8 +53,8 @@ public class UserController {
 
     @PostMapping("/login")
     public String login(String userId, String password, Model model, HttpSession session) {
-        User user = userRepository.findByUserId(userId);
-        if (user == null || !user.matchPassword(password)) {
+        Optional<User> user = userRepository.findByUserId(userId);
+        if (!user.isPresent() || !user.get().matchPassword(password)) {
             model.addAttribute("errorMessage", "아이디 또는 비밀번호가 틀립니다. 다시 로그인 해주세요.");
             return "user/loginForm";
         }
