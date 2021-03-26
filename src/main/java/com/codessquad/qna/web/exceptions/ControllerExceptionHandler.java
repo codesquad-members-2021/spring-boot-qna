@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 
 @ControllerAdvice
 public class ControllerExceptionHandler {
-    private static final Logger LOGGER = LoggerFactory.getLogger(ControllerExceptionHandler.class);
+    private static final Logger logger = LoggerFactory.getLogger(ControllerExceptionHandler.class);
 
     @ExceptionHandler(UnauthorizedAccessException.class)
     public String handleUnauthorizedAccessException(UnauthorizedAccessException exception, Model model) {
@@ -65,7 +65,7 @@ public class ControllerExceptionHandler {
     }
 
     private void logException(String errorMessage, Exception exception) {
-        LOGGER.warn(errorMessage);
+        logger.warn(errorMessage);
         exception.printStackTrace();
     }
 }
