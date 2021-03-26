@@ -1,6 +1,7 @@
 package com.codessquad.qna.web.domain;
 
 import com.codessquad.qna.web.exceptions.auth.UnauthorizedAccessException;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
@@ -20,6 +21,7 @@ public class Question extends BaseTimeEntity {
 
     @OneToMany(mappedBy = "question", cascade = CascadeType.REMOVE)
     @Where(clause = "deleted=false")
+    @JsonManagedReference
     private List<Answer> answers;
 
     @Column(nullable = false)

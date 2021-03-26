@@ -20,12 +20,12 @@ public class AnswerService {
         this.answersRepository = answersRepository;
     }
 
-    public void createAnswer(User loginUser, long questionId, String answerContents) {
+    public Answer createAnswer(User loginUser, long questionId, String answerContents) {
         Question targetQuestion = questionRepository.findByIdAndDeletedFalse(questionId)
                 .orElseThrow(QuestionNotFoundException::new);
         Answer answer = new Answer(answerContents, targetQuestion, loginUser);
         verifyAnswerEntityIsValid(answer);
-        answersRepository.save(answer);
+        return answersRepository.save(answer);
     }
 
     public void deleteAnswer(User loginUser, long answerId) {

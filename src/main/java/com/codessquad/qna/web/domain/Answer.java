@@ -1,5 +1,8 @@
 package com.codessquad.qna.web.domain;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonGetter;
+
 import javax.persistence.*;
 
 @Entity
@@ -14,6 +17,7 @@ public class Answer extends BaseTimeEntity {
 
     @ManyToOne
     @JoinColumn(foreignKey = @ForeignKey(name = "fk_answer_to_question"))
+    @JsonBackReference
     private Question question;
 
     @Column(nullable = false, length = 400)
@@ -81,6 +85,11 @@ public class Answer extends BaseTimeEntity {
 
     public boolean isDeleted() {
         return deleted;
+    }
+
+    @JsonGetter("questionId")
+    public Long getTheQuestionId() {
+        return question.getId();
     }
 
     @Override
