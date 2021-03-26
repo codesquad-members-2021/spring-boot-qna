@@ -23,4 +23,8 @@ public class AnswerService {
     public Answer findAnswerById(Long id) {
         return answerRepository.findById(id).orElseThrow(UserNotFoundException::new); // TODO: AnswerNotFoundException 만들기
     }
+
+    public void delete(Answer answer) {
+        answerRepository.delete(answer);
+    }
 }

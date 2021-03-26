@@ -39,4 +39,23 @@ public class AnswerController {
         answerService.save(writer, question, contents);
         return "redirect:/questions/{questionId}";
     }
+    
+    @DeleteMapping("/{id}")
+    public String delete(@PathVariable Long questionId, @PathVariable Long id, HttpSession session) {
+        if (!isLoginUser(session)) {
+            return "redirect:/users/login";
+        }
+
+        User loginUser = getUserFromSession(session);
+
+        System.out.println("hi");
+
+        Answer answer = answerService.findAnswerById(id);
+        if (!answer.isAnswerWriter(loginUser)) {
+            throw new IllegalUserAccessException();
+        }
+
+        answerService.delete(answer);
+        return "redirect:/questions/{questionId}";
+    }
 }
