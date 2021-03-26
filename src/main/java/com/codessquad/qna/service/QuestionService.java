@@ -26,7 +26,7 @@ public class QuestionService {
     public void update(Question updateQuestion, long questionId) {
         Question question = findQuestionById(questionId);
         question.update(updateQuestion);
-        questionRepository.save(updateQuestion);
+        questionRepository.save(question);
     }
 
     public List<Question> findQuestions() {
