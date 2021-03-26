@@ -1,13 +1,11 @@
 package com.codessquad.qna.web.controller.api;
 
 import com.codessquad.qna.web.domain.Answer;
+import com.codessquad.qna.web.domain.Result;
 import com.codessquad.qna.web.domain.User;
 import com.codessquad.qna.web.service.AnswerService;
 import com.codessquad.qna.web.utils.SessionUtil;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
 
@@ -25,5 +23,13 @@ public class ApiAnswerController {
                                HttpSession session) {
         User loginUser = SessionUtil.getLoginUser(session);
         return answerService.createAnswer(loginUser, questionId, answerContents);
+    }
+
+    @DeleteMapping("/{questionId}/answers/{answerId}")
+    public Result deleteAnswer(@PathVariable("questionId") long questionId,
+                               @PathVariable("answerId") long answerId, HttpSession session) {
+        User loginUser = SessionUtil.getLoginUser(session);
+        answerService.deleteAnswer(loginUser, answerId);
+        return new Result(Result.STATUS_OK, answerId + "");
     }
 }
