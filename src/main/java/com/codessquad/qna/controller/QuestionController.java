@@ -2,9 +2,9 @@ package com.codessquad.qna.controller;
 
 import com.codessquad.qna.exception.EntityNotFoundException;
 import com.codessquad.qna.exception.InvalidSessionException;
-import com.codessquad.qna.repository.Question;
+import com.codessquad.qna.model.Question;
 import com.codessquad.qna.repository.QuestionRepository;
-import com.codessquad.qna.repository.User;
+import com.codessquad.qna.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;

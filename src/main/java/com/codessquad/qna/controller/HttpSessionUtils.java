@@ -1,7 +1,7 @@
 package com.codessquad.qna.controller;
 
 import com.codessquad.qna.exception.InvalidSessionException;
-import com.codessquad.qna.repository.User;
+import com.codessquad.qna.model.User;
 
 import javax.servlet.http.HttpSession;
 
