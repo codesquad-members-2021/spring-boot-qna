@@ -17,7 +17,6 @@ import javax.servlet.http.HttpSession;
 public class AnswerController {
 
     private AnswerService answerService;
-    private QuestionService questionService;
 
     public AnswerController(AnswerService answerService) {
         this.answerService = answerService;
@@ -29,11 +28,8 @@ public class AnswerController {
             return "redirect:/users/login";
         }
         User user = HttpSessionUtils.getUserFromSession(session);
-        Question question = questionService.getQuestionById(questionId);
 
-        Answer answer = new Answer(user, question, contents);
-
-        answerService.save(answer);
+        answerService.save(user, questionId, contents);
         return String.format("redirect:/question/" + questionId);
     }
 }

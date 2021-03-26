@@ -66,8 +66,8 @@ public class Question {
         return answers;
     }
 
-    public void setAnswers(List<Answer> answers) {
-        this.answers = answers;
+    public void addAnswer(Answer answer) {
+        answers.add(answer);
     }
 
     public boolean isMatchingWriter(User loginUser) {
