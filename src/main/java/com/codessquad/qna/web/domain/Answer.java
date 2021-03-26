@@ -4,6 +4,7 @@ import com.codessquad.qna.web.exception.UnauthorizedUserException;
 import com.codessquad.qna.web.utility.TimeConstant;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
 import java.time.LocalDateTime;
 
 @Entity
@@ -21,7 +22,8 @@ public class Answer {
     @JoinColumn(foreignKey = @ForeignKey(name = "fk_answer_writer"), nullable=false)
     private User writer;
 
-    @Column
+    @Column(nullable = false)
+    @NotBlank(message = "내용은 필수 입력값입니다.")
     private String contents;
 
     @Column

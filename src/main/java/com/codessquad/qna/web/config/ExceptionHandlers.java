@@ -8,6 +8,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
+import javax.validation.ConstraintViolationException;
+
 @ControllerAdvice
 public class ExceptionHandlers {
 
@@ -31,6 +33,12 @@ public class ExceptionHandlers {
 
     @ExceptionHandler(UserNotFoundException.class)
     public String handleUserNotFoundException(UnauthorizedUserException e, Model model) {
+        model.addAttribute("exceptionMessage", e.getLocalizedMessage());
+        return "user/error";
+    }
+
+    @ExceptionHandler(ConstraintViolationException.class)
+    public String blankNotAllowed(ConstraintViolationException e, Model model) {
         model.addAttribute("exceptionMessage", e.getMessage());
         return "user/error";
     }
