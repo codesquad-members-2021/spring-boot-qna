@@ -13,7 +13,6 @@ public class ExceptionConstants {
     public static final String CAN_NOT_DELETE_BECAUSE_ANOTHER_USERS_ANSWER_IS_EXISTS = "다른사람의 답변이 존재하므로 질문을 삭제할 수 없습니다";
 
     private ExceptionConstants() {
-
     }
 
 }
