@@ -11,6 +11,9 @@
         <div class="panel panel-default content-main">
             {{#user}}
             <form name="question" method="post" action="/users/{{id}}/updateForm">
+                {{#errorMessage}}
+                <div class="alert alert-danger" role="alert">{{errorMessage}}</div>
+                {{/errorMessage}}
                 <input type="hidden" name="_method" value="PUT" />
                 <div class="form-group">
                     <label for="userId">사용자 아이디</label>

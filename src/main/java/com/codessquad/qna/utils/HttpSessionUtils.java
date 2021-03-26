@@ -18,11 +18,4 @@ public class HttpSessionUtils {
         }
         return (User)session.getAttribute(USER_SESSION_KEY);
     }
-
-    public static void checkSessionedUserId(HttpSession session, Long id) {
-        User sessionedUser = getUserFromSession(session);
-        if (!sessionedUser.matchId(id)) {
-            throw new InvalidSessionException();
-        }
-    }
 }

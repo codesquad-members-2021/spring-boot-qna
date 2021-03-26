@@ -1,8 +1,6 @@
 package com.codessquad.qna.controller;
 
-import com.codessquad.qna.exception.EntityNotFoundException;
 import com.codessquad.qna.model.User;
-import com.codessquad.qna.repository.UserRepository;
 import com.codessquad.qna.service.UserService;
 import com.codessquad.qna.utils.ErrorMessage;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,14 +17,11 @@ import static com.codessquad.qna.utils.HttpSessionUtils.*;
 public class UserController {
 
     @Autowired
-    private UserRepository userRepository;
-
-    @Autowired
     private UserService userService;
 
     @GetMapping
     public String userList(Model model) {
-        model.addAttribute("users", userRepository.findAll());
+        model.addAttribute("users", userService.findAll());
         return "user/userList";
     }
 
@@ -60,32 +55,25 @@ public class UserController {
 
     @GetMapping("/{id}")
     public String userProfile(@PathVariable Long id, Model model) {
-        model.addAttribute("user", findById(id));
+        model.addAttribute("user", userService.findById(id));
         return "user/userProfile";
     }
 
     @GetMapping("/{id}/updateForm")
     public String updateFormPage(@PathVariable Long id, Model model, HttpSession session) {
-        checkSessionedUserId(session, id);
-        User user = findById(id);
-        model.addAttribute("user", user);
+        model.addAttribute("user", userService.verifyUser(id, getUserFromSession(session)));
         return "user/userUpdateForm";
     }
 
     @PutMapping("/{id}/updateForm")
-    public String updateUser(@PathVariable Long id, User targetUser, String currentPassword, HttpSession session) {
-        checkSessionedUserId(session, id);
-        User user = findById(id);
-        if (!user.matchPassword(currentPassword)) {
-            return "redirect:/users/" + id + "/updateForm";
+    public String updateUser(@PathVariable Long id, User targetUser, String currentPassword, Model model, HttpSession session) {
+        boolean result = userService.update(id, targetUser, currentPassword, getUserFromSession(session));
+        if (!result) {
+            model.addAttribute("errorMessage", ErrorMessage.WRONG_PASSWORD.getErrorMessage());
+            model.addAttribute("user", userService.findById(id));
+            return "user/userUpdateForm";
         }
-        user.update(targetUser);
-        userRepository.save(user);
         return "redirect:/users";
-    }
-
-    private User findById(Long id) {
-        return userRepository.findById(id).orElseThrow(() -> new EntityNotFoundException(ErrorMessage.USER_NOT_FOUND));
     }
 }
 
