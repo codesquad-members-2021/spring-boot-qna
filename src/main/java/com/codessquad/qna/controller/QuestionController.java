@@ -15,10 +15,10 @@ import static com.codessquad.qna.HttpSessionUtils.isLoginUser;
 
 @Controller
 @RequestMapping("/questions")
-public class QnaController {
+public class QuestionController {
     private final QuestionService questionService;
 
-    public QnaController(QuestionService questionService) {
+    public QuestionController(QuestionService questionService) {
         this.questionService = questionService;
     }
 
