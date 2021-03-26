@@ -65,7 +65,7 @@ public class UserController {
     }
 
     @GetMapping("/{id}/updateForm")
-    public String updateFormPage(@PathVariable("id") Long id, Model model, HttpSession session) {
+    public String updateFormPage(@PathVariable Long id, Model model, HttpSession session) {
         checkSessionedUserId(session, id);
         User user = findById(id);
         model.addAttribute("user", user);
@@ -73,7 +73,7 @@ public class UserController {
     }
 
     @PutMapping("/{id}/updateForm")
-    public String updateUser(@PathVariable("id") Long id, User targetUser, String currentPassword, HttpSession session) {
+    public String updateUser(@PathVariable Long id, User targetUser, String currentPassword, HttpSession session) {
         checkSessionedUserId(session, id);
         User user = findById(id);
         if (!user.matchPassword(currentPassword)) {

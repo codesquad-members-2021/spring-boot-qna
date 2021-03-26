@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpSession;
 
 import static com.codessquad.qna.controller.HttpSessionUtils.getUserFromSession;
-import static com.codessquad.qna.controller.HttpSessionUtils.isLoginUser;
 
 @Controller
 @RequestMapping("/questions")
@@ -23,9 +22,7 @@ public class QuestionController {
 
     @GetMapping("/form")
     public String qnaInputPage(HttpSession session) {
-        if (!isLoginUser(session)) {
-            throw new InvalidSessionException();
-        }
+        getUserFromSession(session);
         return "qna/questionInputForm";
     }
 
@@ -37,13 +34,13 @@ public class QuestionController {
     }
 
     @GetMapping("/{questionId}")
-    public String viewQuestion(@PathVariable("questionId") Long questionId, Model model) {
+    public String viewQuestion(@PathVariable Long questionId, Model model) {
         model.addAttribute("question", findByQuestionId(questionId));
         return "qna/questionDetail";
     }
 
     @GetMapping("/{questionId}/updateForm")
-    public String qnaUpdatePage(@PathVariable("questionId") Long questionId, Model model, HttpSession session) {
+    public String qnaUpdatePage(@PathVariable Long questionId, Model model, HttpSession session) {
         Question question = findByQuestionId(questionId);
         checkSessionAndWriter(getUserFromSession(session), question);
         model.addAttribute("question", question);
@@ -51,7 +48,7 @@ public class QuestionController {
     }
 
     @PutMapping("/{questionId}/updateForm")
-    public String updateQuestion(@PathVariable("questionId") Long questionId, Question updatedQuestion, HttpSession session) {
+    public String updateQuestion(@PathVariable Long questionId, Question updatedQuestion, HttpSession session) {
         Question question = findByQuestionId(questionId);
         checkSessionAndWriter(getUserFromSession(session), question);
         question.update(updatedQuestion);
@@ -60,7 +57,7 @@ public class QuestionController {
     }
 
     @DeleteMapping("/{questionId}")
-    public String deleteQuestion(@PathVariable("questionId") Long questionId, HttpSession session) {
+    public String deleteQuestion(@PathVariable Long questionId, HttpSession session) {
         Question question = findByQuestionId(questionId);
         checkSessionAndWriter(getUserFromSession(session), question);
         questionRepository.delete(question);
