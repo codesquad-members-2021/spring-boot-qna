@@ -1,6 +1,5 @@
 package com.codessquad.qna.web.controller;
 
-import com.codessquad.qna.web.domain.Question;
 import com.codessquad.qna.web.domain.User;
 import com.codessquad.qna.web.service.AnswerService;
 import com.codessquad.qna.web.utils.SessionUtil;
@@ -33,8 +32,8 @@ public class AnswersController {
     public String deleteAnswer(@PathVariable("questionId") long questionId,
                                @PathVariable("answerId") long answerId, HttpSession session) {
         User loginUser = SessionUtil.getLoginUser(session);
-        Question targetQuestion = answerService.deleteAnswer(loginUser, answerId);
-        return "redirect:/questions/" + targetQuestion.getId();
+        answerService.deleteAnswer(loginUser, answerId);
+        return "redirect:/questions/" + questionId;
     }
 
 }

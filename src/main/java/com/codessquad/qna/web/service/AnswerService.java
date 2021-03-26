@@ -28,7 +28,7 @@ public class AnswerService {
         answersRepository.save(answer);
     }
 
-    public Question deleteAnswer(User loginUser, long answerId) {
+    public void deleteAnswer(User loginUser, long answerId) {
         Answer answer = answersRepository.findByIdAndDeletedFalse(answerId)
                 .orElseThrow(AnswerNotFoundException::new);
         if (!answer.isMatchingWriter(loginUser)) {
@@ -36,7 +36,6 @@ public class AnswerService {
         }
         answer.delete();
         answersRepository.save(answer);
-        return answer.getQuestion();
     }
 
     private void verifyAnswerEntityIsValid(Answer answer) {
