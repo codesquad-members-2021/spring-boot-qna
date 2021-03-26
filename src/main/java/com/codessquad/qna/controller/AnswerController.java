@@ -39,7 +39,7 @@ public class AnswerController {
         answerService.save(writer, question, contents);
         return "redirect:/questions/{questionId}";
     }
-    
+
     @DeleteMapping("/{id}")
     public String delete(@PathVariable Long questionId, @PathVariable Long id, HttpSession session) {
         if (!isLoginUser(session)) {

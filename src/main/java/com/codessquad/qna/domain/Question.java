@@ -64,6 +64,13 @@ public class Question {
         return answers;
     }
 
+    public int getAnswerNumber() {
+        if (this.answers.size() == 0) {
+            return 0;
+        }
+        return this.answers.size();
+    }
+
     public Question updateQuestion(Question modifiedQuestion) {
         this.title = modifiedQuestion.getTitle();
         this.contents = modifiedQuestion.getContents();
