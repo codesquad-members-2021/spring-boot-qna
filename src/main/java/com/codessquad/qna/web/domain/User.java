@@ -28,7 +28,6 @@ public class User extends BaseTimeEntity {
     }
 
     protected User() {
-
     }
 
     public void update(User newUserInfo) {
@@ -38,10 +37,9 @@ public class User extends BaseTimeEntity {
     }
 
     public boolean isValid() {
-        if (password == null || name == null || email == null) {
-            return false;
-        }
-        return !password.isEmpty() && !name.isEmpty() && !email.isEmpty();
+        return (password != null && !password.isEmpty())
+                && (name != null && !name.isEmpty())
+                && (email != null && !email.isEmpty());
     }
 
     public Long getId() {

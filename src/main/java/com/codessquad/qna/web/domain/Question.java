@@ -62,10 +62,7 @@ public class Question extends BaseTimeEntity {
     }
 
     public boolean isValid() {
-        if (title == null || contents == null) {
-            return false;
-        }
-        return !title.isEmpty() && !contents.isEmpty();
+        return (title != null && !title.isEmpty()) && (contents != null && !contents.isEmpty());
     }
 
     public Long getId() {

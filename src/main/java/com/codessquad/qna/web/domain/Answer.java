@@ -32,10 +32,7 @@ public class Answer extends BaseTimeEntity {
     }
 
     public boolean isValid() {
-        if (contents == null) {
-            return false;
-        }
-        return !contents.isEmpty();
+        return contents != null && !contents.isEmpty();
     }
 
     public boolean isSameWriter(User writer) {
