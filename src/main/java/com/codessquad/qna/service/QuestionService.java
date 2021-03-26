@@ -38,8 +38,11 @@ public class QuestionService {
     }
 
     @Transactional
-    public void delete(Question question) {
-        questionRepository.delete(question);
+    public void delete(long questionId, User user) {
+        Question question = questionRepository.findById(questionId).orElseThrow(IllegalArgumentException::new);
+        if (verifyQuestion(question,user)) {
+            questionRepository.delete(question);
+        }
     }
 
     public boolean verifyQuestion(Question question, User sessionedUser) {
