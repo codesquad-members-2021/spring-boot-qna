@@ -46,14 +46,14 @@ public class QuestionController {
     }
 
     @GetMapping("/{id}")
-    public String getDetailedQuestion(@PathVariable long id, Model model) {
+    public String getDetailedQuestion(@PathVariable Long id, Model model) {
         Question question = questionService.findById(id);
         model.addAttribute("question", question);
         return "qna/show";
     }
 
     @GetMapping("/{id}/form")
-    public String updateForm(@PathVariable long id, HttpSession session, Model model) {
+    public String updateForm(@PathVariable Long id, HttpSession session, Model model) {
         if (!isLoginUser(session)) { return "redirect:/users/login"; }
 
         Question question = validateQuestionWriter(id, session);
@@ -62,7 +62,7 @@ public class QuestionController {
     }
 
     @PutMapping("/{id}/modify")
-    public String modifyQuestion(@PathVariable long id, HttpSession session, Question modifiedQuestion) {
+    public String modifyQuestion(@PathVariable Long id, HttpSession session, Question modifiedQuestion) {
         if (!isLoginUser(session)) { return "redirect:/users/login"; }
 
         Question originalQuestion = validateQuestionWriter(id, session);
@@ -71,7 +71,7 @@ public class QuestionController {
     }
 
     @DeleteMapping("/{id}")
-    public String deleteQuestion(@PathVariable long id, HttpSession session) {
+    public String deleteQuestion(@PathVariable Long id, HttpSession session) {
         if (!isLoginUser(session)) { return "redirect:/users/login"; }
 
         Question question = validateQuestionWriter(id, session);
@@ -79,7 +79,7 @@ public class QuestionController {
         return "redirect:/";
     }
 
-    private Question validateQuestionWriter(long id, HttpSession session) {
+    private Question validateQuestionWriter(Long id, HttpSession session) {
         Question question = questionService.findById(id);
         User user = getUserFromSession(session);
         if (!question.isSameUser(user)) {
