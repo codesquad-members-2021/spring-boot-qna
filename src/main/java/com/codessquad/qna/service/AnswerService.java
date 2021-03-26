@@ -28,12 +28,12 @@ public class AnswerService {
     }
 
     @Transactional
-    public Answer delete(long answerId, User user) {
+    public long delete(long answerId, User user) {
         Answer answer = answerRepository.findById(answerId).orElseThrow(IllegalArgumentException::new);
         if (verifyAnswer(answer, user)) {
             answerRepository.delete(answer);
         }
-        return answer;
+        return answer.getQuestion().getId();
     }
 
     public boolean verifyAnswer(Answer answer, User sessionedUser) {

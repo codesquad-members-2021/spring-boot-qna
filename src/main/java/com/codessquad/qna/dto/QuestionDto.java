@@ -55,6 +55,6 @@ public class QuestionDto {
     }
 
     public Question toEntity(User user) {
-        return new Question(user, this.title, this.contents, this.time);
+        return new Question(user, this.title, this.contents);
     }
 }
