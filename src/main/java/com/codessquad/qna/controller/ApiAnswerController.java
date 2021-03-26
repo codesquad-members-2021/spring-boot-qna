@@ -30,13 +30,8 @@ public class ApiAnswerController {
         if (!HttpSessionUtils.isLoginUser(session)) {
             return false;
         }
-        Answer answer = answerService.findById(answerId);
         User loginUser = HttpSessionUtils.getSessionUser(session);
-        if (answer.isMatch(loginUser)) {
-            answerService.delete(answer);
-            return true;
-        }
-        return false;
+        return answerService.delete(answerId, loginUser);
     }
 
 }

@@ -35,9 +35,14 @@ public class AnswerService {
         return answerRepository.save(answer);
     }
 
-    public void delete(Answer answer) {
-        answer.delete();
-        answerRepository.save(answer);
+    public boolean delete(Long id, User loginUser) {
+        Answer answer = findById(id);
+        if (answer.isMatch(loginUser)) {
+            answer.delete();
+            answerRepository.save(answer);
+            return true;
+        }
+        return false;
     }
 
     public Answer findById(Long id) {
