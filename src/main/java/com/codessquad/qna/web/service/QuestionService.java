@@ -34,12 +34,6 @@ public class QuestionService {
         return questionRepository.findByIdAndDeletedFalse(id).orElseThrow(QuestionNotFoundException::new);
     }
 
-    public Question verifyIsOwnerAndGetQuestionDetail(long questionId, User loginUser) {
-        Question question = questionRepository.findByIdAndDeletedFalse(questionId).orElseThrow(QuestionNotFoundException::new);
-        verifyWriterIsQuestionOwner(question, loginUser);
-        return question;
-    }
-
     public Question modifyQuestion(User loginUser, long questionId, Question newQuestion) {
         Question question = questionRepository.findByIdAndDeletedFalse(questionId)
                 .orElseThrow(QuestionNotFoundException::new);
@@ -64,7 +58,7 @@ public class QuestionService {
         }
     }
 
-    private void verifyWriterIsQuestionOwner(Question question, User writer) {
+    public void verifyWriterIsQuestionOwner(Question question, User writer) {
         if (!question.isMatchingWriter(writer)) {
             throw new UnauthorizedAccessException(CANNOT_MODIFY_OR_DELETE_ANOTHER_USERS_QUESTION);
         }

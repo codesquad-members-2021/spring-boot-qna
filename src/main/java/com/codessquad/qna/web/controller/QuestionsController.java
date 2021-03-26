@@ -46,8 +46,9 @@ public class QuestionsController {
     @GetMapping("/{questionId}/modify-form")
     public String modifyForm(@PathVariable("questionId") long questionId, Model model, HttpSession session) {
         User loginUser = SessionUtil.getLoginUser(session);
-        Question modifiedQuestion = questionService.verifyIsOwnerAndGetQuestionDetail(questionId, loginUser);
-        model.addAttribute("currentQuestion", modifiedQuestion);
+        Question question = questionService.questionDetail(questionId);
+        questionService.verifyWriterIsQuestionOwner(question, loginUser);
+        model.addAttribute("currentQuestion", question);
         return "qna/modify-form";
     }
 
