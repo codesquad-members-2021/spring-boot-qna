@@ -1,7 +1,9 @@
 package com.codessquad.qna.exception;
 
+import com.codessquad.qna.utils.ErrorMessage;
+
 public class EntityNotFoundException extends RuntimeException {
-    public EntityNotFoundException(String entry) {
-        super("해당 " + entry + "을(를) 찾을 수 없습니다.");
+    public EntityNotFoundException(ErrorMessage errorMessage) {
+        super(errorMessage.getErrorMessage());
     }
 }

@@ -4,6 +4,7 @@ import com.codessquad.qna.exception.EntityNotFoundException;
 import com.codessquad.qna.model.User;
 import com.codessquad.qna.repository.UserRepository;
 import com.codessquad.qna.service.UserService;
+import com.codessquad.qna.utils.ErrorMessage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -35,7 +36,7 @@ public class UserController {
     }
 
     @PostMapping("/signup")
-    public String signup(User user, Model model) {
+    public String signup(User user) {
         userService.save(user);
         return "redirect:/users";
     }
@@ -46,7 +47,7 @@ public class UserController {
     }
 
     @PostMapping("/login")
-    public String login(String userId, String password, Model model, HttpSession session) {
+    public String login(String userId, String password, HttpSession session) {
         session.setAttribute(USER_SESSION_KEY, userService.login(userId, password));
         return "redirect:/";
     }
@@ -84,7 +85,7 @@ public class UserController {
     }
 
     private User findById(Long id) {
-        return userRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("유저"));
+        return userRepository.findById(id).orElseThrow(() -> new EntityNotFoundException(ErrorMessage.USER_NOT_FOUND));
     }
 }
 

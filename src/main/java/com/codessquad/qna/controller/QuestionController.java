@@ -5,6 +5,7 @@ import com.codessquad.qna.exception.InvalidSessionException;
 import com.codessquad.qna.model.Question;
 import com.codessquad.qna.repository.QuestionRepository;
 import com.codessquad.qna.model.User;
+import com.codessquad.qna.utils.ErrorMessage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -65,7 +66,7 @@ public class QuestionController {
     }
 
     private Question findByQuestionId(Long questionId) {
-        return questionRepository.findById(questionId).orElseThrow(() -> new EntityNotFoundException("질문"));
+        return questionRepository.findById(questionId).orElseThrow(() -> new EntityNotFoundException(ErrorMessage.QUESTION_NOT_FOUND));
     }
 
     private void checkSessionAndWriter(User sessionedUser, Question question) {

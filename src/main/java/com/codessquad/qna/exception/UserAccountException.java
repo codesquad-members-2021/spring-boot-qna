@@ -1,17 +1,17 @@
 package com.codessquad.qna.exception;
 
-import com.codessquad.qna.utils.AccountError;
+import com.codessquad.qna.utils.ErrorMessage;
 
 public class UserAccountException extends RuntimeException {
 
-    private AccountError accountError;
+    private ErrorMessage errorMessage;
 
-    public UserAccountException(AccountError accountError) {
-        super(accountError.getErrorMessage());
-        this.accountError = accountError;
+    public UserAccountException(ErrorMessage errorMessage) {
+        super(errorMessage.getErrorMessage());
+        this.errorMessage = errorMessage;
     }
 
-    public AccountError getUserAccountError() {
-        return accountError;
+    public ErrorMessage getUserAccountError() {
+        return errorMessage;
     }
 }

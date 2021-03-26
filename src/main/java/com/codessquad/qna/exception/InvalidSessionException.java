@@ -1,7 +1,9 @@
 package com.codessquad.qna.exception;
 
+import com.codessquad.qna.utils.ErrorMessage;
+
 public class InvalidSessionException extends RuntimeException {
     public InvalidSessionException() {
-        super("접근 권한이 없는 유저입니다.");
+        super(ErrorMessage.INVALID_USER.getErrorMessage());
     }
 }
