@@ -69,9 +69,8 @@ public class QuestionService {
     public void searchPage(Model model, Pageable pageable) {
         int page = (pageable.getPageNumber() == 0) ? 0 : (pageable.getPageNumber() - 1);
         Page<Question> questions = questionRepository.findAllByIsDeleteFalse(PageRequest.of(page, 15, Sort.Direction.DESC, "id"));
-        int currentPage = questions.getNumber() +1 ;
+        int currentPage = questions.getNumber() + 1;
         int totalPages = questions.getTotalPages();
-
         model.addAttribute("questions", questions);
         model.addAttribute("pageUtil", new PageUtil(currentPage, totalPages));
     }
