@@ -11,9 +11,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
 
-import java.util.Optional;
-
-import static com.codessquad.qna.controller.HttpSessionUtils.*;
+import static com.codessquad.qna.utils.HttpSessionUtils.*;
 
 @Controller
 @RequestMapping("/users")
@@ -38,11 +36,7 @@ public class UserController {
 
     @PostMapping("/signup")
     public String signup(User user, Model model) {
-        boolean result = userService.save(user);
-        if (!result) {
-            model.addAttribute("errorMessage", "이미 사용중인 아이디입니다.");
-            return "user/userSignup";
-        }
+        userService.save(user);
         return "redirect:/users";
     }
 
@@ -53,12 +47,7 @@ public class UserController {
 
     @PostMapping("/login")
     public String login(String userId, String password, Model model, HttpSession session) {
-        Optional<User> user = userRepository.findByUserId(userId);
-        if (!user.isPresent() || !user.get().matchPassword(password)) {
-            model.addAttribute("errorMessage", "아이디 또는 비밀번호가 틀립니다. 다시 로그인 해주세요.");
-            return "user/loginForm";
-        }
-        session.setAttribute(USER_SESSION_KEY, user);
+        session.setAttribute(USER_SESSION_KEY, userService.login(userId, password));
         return "redirect:/";
     }
 

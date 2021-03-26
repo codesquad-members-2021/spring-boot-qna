@@ -1,4 +1,4 @@
-package com.codessquad.qna.controller;
+package com.codessquad.qna.utils;
 
 import com.codessquad.qna.exception.InvalidSessionException;
 import com.codessquad.qna.model.User;

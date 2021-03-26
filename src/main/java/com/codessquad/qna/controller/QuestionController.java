@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
 
-import static com.codessquad.qna.controller.HttpSessionUtils.getUserFromSession;
+import static com.codessquad.qna.utils.HttpSessionUtils.getUserFromSession;
 
 @Controller
 @RequestMapping("/questions")
