@@ -1,6 +1,6 @@
 package com.codessquad.qna.domain.answer;
 
-import com.codessquad.qna.domain.AbstractEntity;
+import com.codessquad.qna.domain.IdAndBaseTimeEntity;
 import com.codessquad.qna.domain.question.Question;
 import com.codessquad.qna.domain.user.User;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -8,7 +8,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import javax.persistence.*;
 
 @Entity
-public class Answer extends AbstractEntity {
+public class Answer extends IdAndBaseTimeEntity {
 
     @ManyToOne
     @JoinColumn(foreignKey = @ForeignKey(name = "fk_answer_to_question"))
@@ -72,7 +72,7 @@ public class Answer extends AbstractEntity {
                 ", question=" + question +
                 ", writer=" + writer +
                 ", contents='" + contents + '\'' +
-                ", date='" + getCreateDate() + '\'' +
+                ", date='" + getCreateDateTime() + '\'' +
                 '}';
     }
 }

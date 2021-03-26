@@ -28,12 +28,10 @@ function addAnswer(e) {
         var answerTemplate = $("#answerTemplate").html();
         var template = answerTemplate.format(data.writer.userId, data.formattedCreateDate, data.contents, data.question.id, data.id);
         $(".qna-comment-slipp-articles").append(template);
-
         $(".answer-write textarea").val("");
 
         var count = "<strong>" + data.question.countOfAnswer+ "</strong>개의 의견";
         document.getElementById("qna-comment-count").innerHTML = count;
-
     }
 }
 
@@ -50,18 +48,22 @@ function deleteAnswer(e) {
         type: 'delete',
         url: url,
         dataType: 'json',
-        error: function (xhr, status) {
-            console.log("error");
-            alert("로그인이 필요합니다.");
-        },
-        success: function (data, status) {
-            console.log("success");
-            deleteBtn.closest("article").remove();
-
-            var count = "<strong>" + (data.question.countOfAnswer)+ "</strong>개의 의견";
-            document.getElementById("qna-comment-count").innerHTML = count;
-        }
+        error: onError,
+        success: onSuccess
     });
+
+    function onError() {
+        console.log("error");
+        alert("로그인이 필요합니다.");
+    }
+
+    function onSuccess(data, status) {
+        console.log("success");
+        deleteBtn.closest("article").remove();
+
+        var count = "<strong>" + (data.question.countOfAnswer) + "</strong>개의 의견";
+        document.getElementById("qna-comment-count").innerHTML = count;
+    }
 }
 
 String.prototype.format = function () {

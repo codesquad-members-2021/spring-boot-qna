@@ -1,12 +1,12 @@
 package com.codessquad.qna.domain.user;
 
-import com.codessquad.qna.domain.AbstractEntity;
+import com.codessquad.qna.domain.IdAndBaseTimeEntity;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import javax.persistence.*;
 
 @Entity
-public class User extends AbstractEntity {
+public class User extends IdAndBaseTimeEntity {
 
     @Column(nullable = false, length = 20, unique = true)
     @JsonProperty

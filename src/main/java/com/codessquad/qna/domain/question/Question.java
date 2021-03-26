@@ -1,6 +1,6 @@
 package com.codessquad.qna.domain.question;
 
-import com.codessquad.qna.domain.AbstractEntity;
+import com.codessquad.qna.domain.IdAndBaseTimeEntity;
 import com.codessquad.qna.domain.answer.Answer;
 import com.codessquad.qna.domain.user.User;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-public class Question extends AbstractEntity {
+public class Question extends IdAndBaseTimeEntity {
 
     @ManyToOne
     @JoinColumn(foreignKey = @ForeignKey(name = "fk_question_writer"))
@@ -27,7 +27,7 @@ public class Question extends AbstractEntity {
     private final List<Answer> answers = new ArrayList<>();
 
     @JsonProperty
-    private Integer countOfAnswer = 0;
+    private int countOfAnswer;
 
     private boolean deleted;
 
@@ -97,7 +97,7 @@ public class Question extends AbstractEntity {
                 ", writer='" + writer + '\'' +
                 ", title='" + title + '\'' +
                 ", contents='" + contents + '\'' +
-                ", date='" + getCreateDate() + '\'' +
+                ", date='" + getCreateDateTime() + '\'' +
                 '}';
     }
 }

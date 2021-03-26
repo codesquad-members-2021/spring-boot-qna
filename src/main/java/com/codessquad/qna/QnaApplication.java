@@ -22,7 +22,6 @@ public class QnaApplication {
 	}
 
 	private ApiInfo apiInfo() {
-
 		return new ApiInfoBuilder()
 				.title("spring-boot-qna")
 				.description("spring-boot-qna")

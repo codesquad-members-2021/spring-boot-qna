@@ -12,7 +12,7 @@ import java.util.Objects;
 
 @EntityListeners(AuditingEntityListener.class)
 @MappedSuperclass
-public abstract class AbstractEntity {
+public abstract class IdAndBaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -20,35 +20,35 @@ public abstract class AbstractEntity {
     private Long id;
 
     @CreatedDate
-    private LocalDateTime createDate;
+    private LocalDateTime createDateTime;
 
     @LastModifiedDate
-    private LocalDateTime modifiedDate;
+    private LocalDateTime modifiedDateTime;
 
     public boolean isYourId(Long id) {
         return this.id.equals(id);
     }
 
     public String getFormattedCreateDate() {
-        if (createDate == null) {
+        if (createDateTime == null) {
             return "";
         }
-        return createDate.format(DateFormat.DEFAULT);
+        return createDateTime.format(DateFormat.DEFAULT);
     }
 
     public Long getId() {
         return id;
     }
 
-    public LocalDateTime getCreateDate() {
-        return createDate;
+    public LocalDateTime getCreateDateTime() {
+        return createDateTime;
     }
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        AbstractEntity that = (AbstractEntity) o;
+        IdAndBaseTimeEntity that = (IdAndBaseTimeEntity) o;
         return id.equals(that.id);
     }
 
