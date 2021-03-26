@@ -61,8 +61,8 @@ function deleteAnswer(e) {
         },
         success: function (data, status) {
             location.reload();
-            console.log("delete success")
             if (data) {
+                console.log("delete success")
                 deleteBtn.closest("article").remove();
             } else {
                 alert("작성자만 삭제 가능합니다.");

@@ -9,6 +9,10 @@ import com.codessquad.qna.repository.AnswerRepository;
 import com.codessquad.qna.repository.QuestionRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpSession;
@@ -56,8 +60,9 @@ public class QuestionService {
         return questionRepository.findById(id).orElseThrow(NotFoundException::new);
     }
 
-    public List<Question> findAllQuestion() {
-        return this.questionRepository.findAllByIsDeleteFalse();
+    public Page<Question> findAllQuestion() {
+        Pageable pageable = PageRequest.of(0, 5, Sort.Direction.DESC, "id");
+        return this.questionRepository.findAllByIsDeleteFalse(pageable);
     }
 
 }
