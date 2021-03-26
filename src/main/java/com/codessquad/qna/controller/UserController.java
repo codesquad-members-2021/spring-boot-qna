@@ -111,7 +111,7 @@ public class UserController {
         return "redirect:/users";
     }
 
-    private User validateUser(@PathVariable Long id, HttpSession session) {
+    private User validateUser(Long id, HttpSession session) {
         User sessionedUser = getUserFromSession(session);
         if (!sessionedUser.matchId(id)) {
             throw new IllegalUserAccessException();
