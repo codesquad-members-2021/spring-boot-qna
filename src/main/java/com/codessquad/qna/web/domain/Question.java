@@ -50,6 +50,10 @@ public class Question extends BaseTimeEntity {
 
     public void delete() {
         deleted = true;
+        deleteAllAnswers();
+    }
+
+    private void deleteAllAnswers() {
         answers.forEach((answer) -> {
             if (!writer.isMatchingId(answer.getWriter())) {
                 throw new UnauthorizedAccessException(CAN_NOT_DELETE_BECAUSE_ANOTHER_USERS_ANSWER_IS_EXISTS);
