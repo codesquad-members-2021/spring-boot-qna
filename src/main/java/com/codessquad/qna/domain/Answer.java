@@ -34,6 +34,8 @@ public class Answer {
         this.contents = contents;
     }
 
+    public Long getId() { return id; }
+
     public User getWriter() {
         return writer;
     }
