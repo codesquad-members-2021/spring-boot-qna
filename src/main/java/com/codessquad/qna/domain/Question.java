@@ -1,6 +1,7 @@
 package com.codessquad.qna.domain;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 
 @Entity
 public class Question {
@@ -19,20 +20,19 @@ public class Question {
     @Column(nullable = false)
     private String contents;
 
-    private String time;
+    private LocalDateTime time = LocalDateTime.now();
 
     protected Question() {
 
     }
 
-    public Question(User writer, String title, String contents, String time) {
+    public Question(User writer, String title, String contents) {
         this.writer = writer;
         this.title = title;
         this.contents = contents;
-        this.time = time;
     }
 
-    public String getTime() {
+    public LocalDateTime getTime() {
         return this.time;
     }
 

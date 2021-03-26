@@ -1,7 +1,5 @@
 package com.codessquad.qna.domain;
 
-import com.codessquad.qna.DateTimeUtils;
-
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
@@ -23,7 +21,7 @@ public class Answer {
     @Column(nullable = false)
     private String contents;
 
-    private final String time= DateTimeUtils.stringOf(LocalDateTime.now());
+    private LocalDateTime time= LocalDateTime.now();
 
     protected Answer() {
 
@@ -51,12 +49,8 @@ public class Answer {
         return contents;
     }
 
-    public String getTime() {
+    public LocalDateTime getTime() {
         return time;
-    }
-
-    public long getQuestionId(){
-        return question.getId();
     }
 
     @Override
