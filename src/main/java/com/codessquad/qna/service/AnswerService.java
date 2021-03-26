@@ -1,7 +1,7 @@
 package com.codessquad.qna.service;
 
 
-import com.codessquad.qna.controller.HttpSessionUtils;
+import com.codessquad.qna.util.HttpSessionUtils;
 import com.codessquad.qna.domain.Answer;
 import com.codessquad.qna.domain.Question;
 import com.codessquad.qna.domain.User;

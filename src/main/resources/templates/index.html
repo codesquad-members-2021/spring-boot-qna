@@ -37,15 +37,15 @@
                 <div class="col-md-6 text-center">
                     {{#pageUtil}}
                     <ul class="pagination center-block" style="display:inline-block;">
-                        {{#previous}}
+                        {{#previousPage}}
                         <li><a href="?page={{this}}">«</a></li>
-                        {{/previous}}
+                        {{/previousPage}}
                         {{#pages}}
                         <li><a href="?page={{this}}">{{this}}</a></li>
                         {{/pages}}
-                        {{#next}}
+                        {{#nextPage}}
                         <li><a href="?page={{this}}">»</a></li>
-                        {{/next}}
+                        {{/nextPage}}
                     </ul>
                     {{/pageUtil}}
                 </div>
