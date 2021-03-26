@@ -61,7 +61,7 @@ public class QuestionController {
         return "qna/updateForm";
     }
 
-    @PutMapping("/{id}/modify")
+    @PutMapping("/{id}")
     public String modifyQuestion(@PathVariable Long id, HttpSession session, Question modifiedQuestion) {
         if (!isLoginUser(session)) { return "redirect:/users/login"; }
 
