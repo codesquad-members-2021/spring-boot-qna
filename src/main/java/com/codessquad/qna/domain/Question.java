@@ -3,6 +3,7 @@ package com.codessquad.qna.domain;
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 
 @Entity
 public class Question {
@@ -10,7 +11,7 @@ public class Question {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private Long id;
 
     @ManyToOne
     @JoinColumn(foreignKey = @ForeignKey(name = "fk_question_writer"))
@@ -22,6 +23,10 @@ public class Question {
     private String contents;
 
     private LocalDateTime timeCreated = LocalDateTime.now();
+
+    @OneToMany(mappedBy = "question")
+    @OrderBy("id ASC")
+    private List<Answer> answers;
 
     public Question(User writer, String title, String contents) {
         this.writer = writer;
@@ -43,7 +48,7 @@ public class Question {
         return contents;
     }
 
-    public long getId() {
+    public Long getId() {
         return id;
     }
 
@@ -53,6 +58,10 @@ public class Question {
 
     public String getFormattedTimeCreated() {
         return timeCreated.format(DATE_TIME_FORMATTER);
+    }
+
+    public List<Answer> getAnswers() {
+        return answers;
     }
 
     public Question updateQuestion(Question modifiedQuestion) {
