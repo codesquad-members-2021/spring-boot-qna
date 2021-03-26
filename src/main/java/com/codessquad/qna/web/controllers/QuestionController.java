@@ -29,8 +29,8 @@ public class QuestionController {
     @PostMapping
     public String saveQuestionForm(String title, String contents, HttpSession session) {
         User writer = SessionUtility.findSessionedUser(session);
-        Question question = new Question(writer, title, contents);
-        questionService.save(question);
+
+        questionService.save(writer, title, contents);
         return "redirect:/";
     }
 

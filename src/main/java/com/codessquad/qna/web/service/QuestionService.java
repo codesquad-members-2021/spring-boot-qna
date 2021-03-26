@@ -22,6 +22,11 @@ public class QuestionService {
         questionRepository.save(question);
     }
 
+    public void save(User writer, String title, String contents) {
+        Question question = new Question(writer, title, contents);
+        save(question);
+    }
+
     public void update(Question question, String title, String contents) {
         question.update(title, contents);
         save(question);
