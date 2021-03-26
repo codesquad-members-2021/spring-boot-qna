@@ -21,8 +21,10 @@ public class QuestionController {
 
     @GetMapping("/form")
     public String form(HttpSession session, Model model) {
-        Result result = valid(session);
-        if (!HttpSessionUtils.isLoginUser(session)) {
+        boolean isLoginUser = HttpSessionUtils.isLoginUser(session);
+
+        Result result = questionService.valid(isLoginUser);
+        if (!result.isValid()) {
             model.addAttribute("errorMessage", result.getErrorMessage());
             return "user/login";
         }
@@ -50,12 +52,15 @@ public class QuestionController {
     @GetMapping("{id}/form")
     public String editQuestion(@PathVariable long id, Model model, HttpSession session) {
         Question question = questionService.getQuestionById(id);
+        boolean isLoginUser = HttpSessionUtils.isLoginUser(session);
+        User sessionUser = HttpSessionUtils.getUserFromSession(session);
 
-        Result result = valid(question, session);
+        Result result = questionService.valid(isLoginUser, sessionUser, question);
         if (!result.isValid()) {
             model.addAttribute("errorMessage", result.getErrorMessage());
             return "user/login";
         }
+
         model.addAttribute("question", question);
         return "qna/updateForm";
     }
@@ -68,38 +73,15 @@ public class QuestionController {
 
     @DeleteMapping("{id}")
     public String deleteQuestion(@PathVariable long id, Model model, HttpSession session) {
-        Question question = questionService.getQuestionById(id);
+        boolean isLoginUser = HttpSessionUtils.isLoginUser(session);
+        User sessionUser = HttpSessionUtils.getUserFromSession(session);
 
-        Result result = valid(question, session);
+        Result result = questionService.delete(id, isLoginUser, sessionUser);
         if (!result.isValid()) {
             model.addAttribute("errorMessage", result.getErrorMessage());
             return "user/login";
         }
-        questionService.delete(question);
-
         return "redirect:/";
-
     }
 
-    private Result valid(Question question, HttpSession session) {
-        if (!HttpSessionUtils.isLoginUser(session)) {
-            return Result.fail("로그인을 먼저 진행해주세요.");
-        }
-
-        User sessionUser = HttpSessionUtils.getUserFromSession(session);
-
-        if (!question.isMatchingWriter(sessionUser)) {
-            return Result.fail("수정할 수 있는 권한이 없습니다.");
-        }
-
-        return Result.ok();
-    }
-
-    private Result valid(HttpSession session) {
-        if (!HttpSessionUtils.isLoginUser(session)) {
-            return Result.fail("로그인을 먼저 진행해주세요.");
-        }
-
-        return Result.ok();
-    }
 }
