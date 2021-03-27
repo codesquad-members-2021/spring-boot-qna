@@ -6,10 +6,10 @@ public class Result {
     public static final int STATUS_OK = 200;
 
     @JsonProperty
-    private int status;
+    private final int status;
 
     @JsonProperty
-    private String message;
+    private final String message;
 
     public Result(int status, String message) {
         this.status = status;
