@@ -24,13 +24,13 @@ public class ApiAnswerController {
     }
 
     @PostMapping("/api/answer/{questionId}")
-    public Answer createAnswer(@PathVariable("questionId") Long questionId, Answer answer, HttpSession session) {
+    public Answer createAnswer(@PathVariable Long questionId, Answer answer, HttpSession session) {
         logger.info("댓글 등록 요청");
         return this.answerService.save(questionId, answer, getUserFromSession(session));
     }
 
     @DeleteMapping("/api/answer/{id}")
-    public Answer deleteAnswer(@PathVariable("id") Long id, HttpSession session) {
+    public Answer deleteAnswer(@PathVariable Long id, HttpSession session) {
         logger.info("댓글 삭제 요청");
         return this.answerService.delete(id, getUserFromSession(session));
     }

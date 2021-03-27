@@ -2,7 +2,6 @@ package com.codessquad.qna.controller;
 
 import com.codessquad.qna.model.User;
 import com.codessquad.qna.service.UserService;
-import org.omg.CORBA.Request;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
@@ -72,21 +71,21 @@ public class UserController {
     }
 
     @GetMapping("/user/{userId}/profile")
-    public String viewProfile(@PathVariable("userId") String userId, Model model) {
+    public String viewProfile(@PathVariable String userId, Model model) {
         model.addAttribute("user", this.userService.findByUserId(userId));
         logger.info("유저 프로필 페이지 요청");
         return "user/profile";
     }
 
     @GetMapping("/user/{id}/form")
-    public String viewUpdateProfile(@PathVariable("id") Long id, Model model, HttpSession session) {
+    public String viewUpdateProfile(@PathVariable Long id, Model model, HttpSession session) {
         model.addAttribute("user", this.userService.verifyUser(id, getUserFromSession(session)));
         logger.info("유저 정보 수정 페이지 요청");
         return "user/updateForm";
     }
 
     @PutMapping("/user/{id}/form")
-    public String updateProfile(@PathVariable("id") Long id, User user, String oldPassword, HttpServletRequest request, HttpSession session) {
+    public String updateProfile(@PathVariable Long id, User user, String oldPassword, HttpServletRequest request, HttpSession session) {
         request.setAttribute("path", "/user/updateForm");
         this.userService.update(id, user, oldPassword, getUserFromSession(session));
         logger.info("유저 정보 수정 요청");
