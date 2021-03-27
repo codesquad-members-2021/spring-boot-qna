@@ -22,6 +22,7 @@ public class Question extends AbstractEntity {
 
     private String title;
     private String contents;
+    @Column(columnDefinition = "INTEGER CHECK (COUNT_OF_ANSWER>=0)")
     private int countOfAnswer = 0;
 
     public void addAnswer(Answer answer) {

@@ -1,5 +1,8 @@
 package com.codessquad.qna;
 
+import com.codessquad.qna.domain.Question;
+import com.codessquad.qna.repository.QuestionRepository;
+import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
@@ -35,5 +38,14 @@ public class QnaApplication {
                 .title("mySpringApi")
                 .version("0.1")
                 .build();
+    }
+
+    @Bean
+    public CommandLineRunner runner(QuestionRepository questionRepository) throws Exception {
+        return args -> {
+            for (int i = 0; i < 100; i++) {
+                questionRepository.save(new Question());
+            }
+        };
     }
 }

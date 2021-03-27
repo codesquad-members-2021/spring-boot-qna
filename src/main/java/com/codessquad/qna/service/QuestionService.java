@@ -8,6 +8,10 @@ import com.codessquad.qna.repository.QuestionRepository;
 import com.codessquad.qna.valid.QuestionValidator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -48,6 +52,12 @@ public class QuestionService {
         question.checkSameUser(user.getId());
         question.checkSameUserFromOpenAnswer();
         question.changeStatus(DisplayStatus.CLOSE);
+    }
+
+    public Page<Question> findQuestionList(Pageable pageable) {
+        int page = pageable.getPageNumber() <= 0 ? 0 : pageable.getPageNumber();
+        pageable = PageRequest.of(page, pageable.getPageSize(), Sort.by("createDateTime").descending());
+        return questionRepository.findAll(pageable);
     }
 
 }
