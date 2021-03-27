@@ -10,6 +10,8 @@ import com.codessquad.qna.service.AnswerService;
 import com.codessquad.qna.service.QuestionService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -51,8 +53,10 @@ public class QuestionController {
     }
 
     @GetMapping("/")
-    public String getQuestionListPage(Model model) {
-        model.addAttribute("questionList", questionService.findUnRemovedList());
+    public String getQuestionListPage(Model model, Pageable pageable) {
+        Page<Question> questions = questionService.findUnRemovedList(pageable);
+        model.addAttribute("questionList", questions);
+        model.addAttribute("pageUtil", questionService.getPageUtil(questions));
         return "home";
     }
 
