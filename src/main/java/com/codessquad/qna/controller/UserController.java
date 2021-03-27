@@ -1,6 +1,7 @@
 package com.codessquad.qna.controller;
 
 import com.codessquad.qna.domain.user.User;
+import com.codessquad.qna.exception.NotAuthorizationException;
 import com.codessquad.qna.service.UserService;
 import com.codessquad.qna.utils.HttpSessionUtils;
 import org.springframework.stereotype.Controller;
@@ -45,7 +46,7 @@ public class UserController {
         }
         User sessionedUser = HttpSessionUtils.getUserFromSession(session);
         if (!sessionedUser.isYourId(id)) {
-            throw new IllegalStateException("자신의 정보만 수정할 수 있습니다.");
+            throw new NotAuthorizationException("자신의 정보만 수정할 수 있습니다.");
         }
         User user = userService.findById(id);
         model.addAttribute("user", user);

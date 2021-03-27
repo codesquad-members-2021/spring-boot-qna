@@ -1,29 +1,24 @@
 package com.codessquad.qna.domain.user;
 
+import com.codessquad.qna.domain.IdAndBaseTimeEntity;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import javax.persistence.*;
-import java.util.Objects;
 
 @Entity
-public class User {
+public class User extends IdAndBaseTimeEntity {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
-    @Column(nullable=false, length=20, unique = true)
+    @Column(nullable = false, length = 20, unique = true)
+    @JsonProperty
     private String userId;
 
     private String password;
+
+    @JsonProperty
     private String name;
+
+    @JsonProperty
     private String email;
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(long id) {
-        this.id = id;
-    }
 
     public String getUserId() {
         return userId;
@@ -61,37 +56,21 @@ public class User {
         return this.password.equals(password);
     }
 
-    public boolean isYourId(Long id) {
-        return this.id.equals(id);
-    }
 
     public void update(User user) {
         this.name = user.name;
-        this.password = user.password;;
+        this.password = user.password;
         this.email = user.email;
     }
 
     @Override
     public String toString() {
         return "User{" +
-                "id=" + id +
+                "id=" + getId() +
                 ", userId='" + userId + '\'' +
                 ", password='" + password + '\'' +
                 ", name='" + name + '\'' +
                 ", email='" + email + '\'' +
                 '}';
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        User user = (User) o;
-        return id == user.id && userId.equals(user.userId);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id, userId);
     }
 }

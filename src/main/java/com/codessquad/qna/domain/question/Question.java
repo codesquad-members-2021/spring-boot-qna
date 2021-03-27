@@ -1,20 +1,16 @@
 package com.codessquad.qna.domain.question;
 
+import com.codessquad.qna.domain.IdAndBaseTimeEntity;
 import com.codessquad.qna.domain.answer.Answer;
 import com.codessquad.qna.domain.user.User;
-import com.codessquad.qna.utils.DateFormat;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-public class Question {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+public class Question extends IdAndBaseTimeEntity {
 
     @ManyToOne
     @JoinColumn(foreignKey = @ForeignKey(name = "fk_question_writer"))
@@ -26,24 +22,14 @@ public class Question {
     @Column(nullable = false, columnDefinition = "TEXT")
     private String contents;
 
-    private String date;
-
     @OneToMany(mappedBy = "question")
+    @OrderBy("id ASC")
     private final List<Answer> answers = new ArrayList<>();
 
+    @JsonProperty
+    private int countOfAnswer;
+
     private boolean deleted;
-
-    public Question() {
-        this.date = LocalDateTime.now().format(DateFormat.DEFAULT);
-    }
-
-    public long getId() {
-        return id;
-    }
-
-    public void setId(long id) {
-        this.id = id;
-    }
 
     public User getWriter() {
         return writer;
@@ -69,12 +55,8 @@ public class Question {
         this.contents = contents;
     }
 
-    public String getDate() {
-        return date;
-    }
-
-    public long getNotDeletedAnswersCount() {
-        return answers.stream().filter(answer -> !answer.isDeleted()).count();
+    public Integer getCountOfAnswer() {
+        return countOfAnswer;
     }
 
     public void delete() {
@@ -84,11 +66,15 @@ public class Question {
     public void addAnswer(Answer answer) {
         answers.add(answer);
         answer.setQuestion(this);
+        upCountOfAnswer();
     }
 
-    public void removeAnswer(Answer answer) {
-        answers.remove(answer);
-        answer.setQuestion(null);
+    private void upCountOfAnswer() {
+        countOfAnswer++;
+    }
+
+    public void downCountOfAnswer() {
+        countOfAnswer--;
     }
 
     public boolean isWrittenBy(User user) {
@@ -107,11 +93,11 @@ public class Question {
     @Override
     public String toString() {
         return "Question{" +
-                "id=" + id +
+                "id=" + getId() +
                 ", writer='" + writer + '\'' +
                 ", title='" + title + '\'' +
                 ", contents='" + contents + '\'' +
-                ", date='" + date + '\'' +
+                ", date='" + getCreateDateTime() + '\'' +
                 '}';
     }
 }
