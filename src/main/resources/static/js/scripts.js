@@ -1,12 +1,10 @@
-$(".answer-write input[type=submit]").click(addAnswer);
+$(".answer-write button[type=submit]").click(addAnswer);
 
 function addAnswer(e) {
   e.preventDefault();
 
   var queryString = $(".answer-write").serialize();
-
   var url = $(".answer-write").attr("action");
-  console.log("url : " + url);
   $.ajax({
     type: 'post',
     url: url,
@@ -26,16 +24,6 @@ function onSuccess(data, status) {
   $(".qna-comment-slipp-articles").prepend(template);
   $("textarea[name=contents]").val("");
 }
-// alert("error");
-// },
-// success : function (data, status) {
-//   console.log(data);
-//   var answerTemplate = $("#answerTemplate").html();
-//   var template = answerTemplate.format(data.writer.userId, data.formattedCreateDate, data.contents, data.question.id, data.id);
-//   $(".qna-comment-slipp-articles").prepend(template);
-//   $("textarea[name=contents]").val("");
-// }
-// });
 
 String.prototype.format = function() {
   var args = arguments;
