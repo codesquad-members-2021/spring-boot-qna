@@ -49,6 +49,10 @@ public class Question {
         return writer;
     }
 
+    public List<Answer> getAnswers(){
+        return answers;
+    }
+
     public String getTitle() {
         return title;
     }
