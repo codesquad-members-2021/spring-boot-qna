@@ -1,11 +1,13 @@
 package com.codessquad.qna.web.service;
 
 import com.codessquad.qna.web.domain.User;
-import com.codessquad.qna.web.repository.UserRepository;
+import com.codessquad.qna.web.domain.repository.UserRepository;
+import com.codessquad.qna.web.exception.UnAuthenticatedLoginException;
+import com.codessquad.qna.web.exception.UnauthorizedUserException;
+import com.codessquad.qna.web.exception.UserNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.NoSuchElementException;
 
 @Service
 public class UserService {
@@ -16,9 +18,9 @@ public class UserService {
         this.userRepository = userRepository;
     }
 
-    public User findUserById(Long id) {
+    public User findById(Long id) {
         User user = userRepository.findById(id)
-                .orElseThrow(() -> new NoSuchElementException("해당 id의 사용자가 존재하지 않습니다."));
+                .orElseThrow(() -> new UserNotFoundException());
         return user;
     }
 
@@ -30,7 +32,33 @@ public class UserService {
         return userRepository.findAll();
     }
 
-    public boolean isCorrectPassword(User user, String inputPassword) {
-        return user.getPassword().equals(inputPassword);
+    public boolean isCorrectPassword(User user, User newInfoUser) {
+        return user.hasSamePassword(newInfoUser);
+    }
+
+    public User findByUserId(String userId) {
+        return userRepository.findByUserId(userId).orElseThrow(() -> new UserNotFoundException());
+    }
+
+    public void verifyPassword(User user, String password) {
+        if (!user.matchesPassword(password)) {
+            throw new UnAuthenticatedLoginException();
+        }
+    }
+
+    public User verifyLogin(String userId, String password) {
+        User user;
+        try {
+            user = findByUserId(userId);
+            verifyPassword(user, password);
+        }catch(RuntimeException e) {
+            throw new UnAuthenticatedLoginException(UnAuthenticatedLoginException.WRONG_ID_OR_PASSWORD);
+        }
+        return user;
+    }
+
+    public void update(User user, User newInfoUser) {
+        user.update(newInfoUser);
+        save(user);
     }
 }

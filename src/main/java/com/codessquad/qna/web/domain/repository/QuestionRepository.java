@@ -1,4 +1,4 @@
-package com.codessquad.qna.web.repository;
+package com.codessquad.qna.web.domain.repository;
 
 import com.codessquad.qna.web.domain.Question;
 import org.springframework.data.repository.CrudRepository;

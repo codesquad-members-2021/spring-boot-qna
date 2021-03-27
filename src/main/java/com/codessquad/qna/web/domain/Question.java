@@ -1,22 +1,21 @@
 package com.codessquad.qna.web.domain;
 
-import com.codessquad.qna.web.utility.QuestionUtility;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.codessquad.qna.web.utility.TimeConstant;
 
 import javax.persistence.*;
-import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
-import java.util.Calendar;
 
 @Entity
 public class Question {
 
     @Id
     @GeneratedValue
+
     private Long id;
 
-    @Column(nullable = false, length = 20)
-    private String writer;
+    @ManyToOne
+    @JoinColumn(foreignKey = @ForeignKey(name = "fk_question_writer"), nullable = false)
+    private User writer;
 
     @Column(nullable = false, length = 20)
     private String title;
@@ -25,19 +24,17 @@ public class Question {
     private String contents;
 
     @Column(nullable = false, length = 20)
-    private LocalDateTime writtenDateTime;
+    private LocalDateTime writtenDateTime = LocalDateTime.now();
 
-    protected Question() {
-    }
+    protected Question() {}
 
-    public Question(String writer, String title, String contents) {
+    public Question(User writer, String title, String contents) {
         this.writer = writer;
         this.title = title;
         this.contents = contents;
-        this.writtenDateTime = LocalDateTime.now();
     }
 
-    public String getWriter() {
+    public User getWriter() {
         return writer;
     }
 
@@ -54,7 +51,15 @@ public class Question {
     }
 
     public String getFormattedWrittenDateTime() {
-        return writtenDateTime.format(QuestionUtility.DATE_PATTERN);
+        return writtenDateTime.format(TimeConstant.DATE_PATTERN);
     }
 
+    public void update(String title, String contents) {
+        this.title = title;
+        this.contents = contents;
+    }
+
+    public boolean isWriter(User inputUser) {
+        return this.writer.equals(inputUser);
+    }
 }

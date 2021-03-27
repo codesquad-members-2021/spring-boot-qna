@@ -1,33 +1,30 @@
 package com.codessquad.qna.web.domain;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import com.codessquad.qna.web.exception.UnauthorizedUserException;
+
+import javax.persistence.*;
+import java.util.Objects;
 
 @Entity
 public class User {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
+    @Column
     private String userId;
 
-    @Column(nullable = false)
+    @Column
     private String password;
 
-    @Column(nullable = false)
+    @Column
     private String name;
 
-    @Column(nullable = false)
+    @Column
     private String email;
 
-    private String newPassword;
-
-    protected User() {
-    }
+    protected User() {}
 
     public User(String userId, String password, String name, String email) {
         this.userId = userId;
@@ -35,6 +32,7 @@ public class User {
         this.name = name;
         this.email = email;
     }
+
 
     public Long getId() {
         return id;
@@ -56,10 +54,6 @@ public class User {
         return email;
     }
 
-    public String getNewPassword() {
-        return newPassword;
-    }
-
     @Override
     public String toString() {
         return "User{" +
@@ -74,5 +68,32 @@ public class User {
         this.userId = newInfoUser.userId;
         this.name = newInfoUser.name;
         this.email = newInfoUser.email;
+    }
+
+    public boolean matchesPassword(String inputPassword) {
+        return password.equals(inputPassword);
+    }
+
+    public boolean hasSamePassword(User user) {
+        return this.password.equals(user.password);
+    }
+
+    public void verifySessionUser(User sessionedUser, String errorMessage) {
+        if (!this.equals(sessionedUser)) {
+            throw new UnauthorizedUserException(errorMessage);
+        }
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        User user = (User) o;
+        return userId.equals(user.userId);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(userId);
     }
 }

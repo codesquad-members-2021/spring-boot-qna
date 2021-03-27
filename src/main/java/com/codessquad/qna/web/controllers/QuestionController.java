@@ -1,32 +1,36 @@
 package com.codessquad.qna.web.controllers;
 
 import com.codessquad.qna.web.domain.Question;
-import com.codessquad.qna.web.repository.QuestionRepository;
+import com.codessquad.qna.web.domain.User;
 import com.codessquad.qna.web.service.QuestionService;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.codessquad.qna.web.utility.SessionUtility;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
-import java.text.SimpleDateFormat;
-import java.util.*;
+import javax.servlet.http.HttpSession;
 
 @Controller
 @RequestMapping("/questions")
 public class QuestionController {
 
-    private QuestionService questionService;
+    private final QuestionService questionService;
 
     private QuestionController(QuestionService questionService) {
         this.questionService = questionService;
     }
 
+    @GetMapping("/form")
+    public String showForm(HttpSession session) {
+        User writer = SessionUtility.findSessionedUser(session);
+        return "qna/form";
+    }
+
     @PostMapping
-    public String saveQuestionForm(Question question) {
-        questionService.save(question);
+    public String saveQuestionForm(String title, String contents, HttpSession session) {
+        User writer = SessionUtility.findSessionedUser(session);
+
+        questionService.save(writer, title, contents);
         return "redirect:/";
     }
 
@@ -37,11 +41,36 @@ public class QuestionController {
     }
 
     @GetMapping("/{id}")
-    public String showQuestion(@PathVariable("id") Long id, Model model) {
-        Question question = questionService.findById(id)
-                .orElseThrow(() -> new NoSuchElementException("해당 id의 질문이 존재하지 않습니다."));
+    public String showQuestion(@PathVariable Long id, Model model) {
+        Question question = questionService.findById(id);
         model.addAttribute("question", question);
         return "qna/show";
     }
 
+    @GetMapping("{id}/update")
+    public String showUpdateForm(@PathVariable Long id, Model model, HttpSession session) {
+        User sessionedUser = SessionUtility.findSessionedUser(session);
+        Question question = questionService.verifyQuestionWriter(id, sessionedUser);
+
+        model.addAttribute("question", question);
+        return "qna/updateForm";
+    }
+
+    @PutMapping("{id}")
+    public String updateQuestion(@PathVariable Long id, String title, String contents, HttpSession session) {
+        User sessionedUser = SessionUtility.findSessionedUser(session);
+        Question question = questionService.verifyQuestionWriter(id, sessionedUser);
+
+        questionService.update(question, title, contents);
+        return "redirect:/";
+    }
+
+    @DeleteMapping("{id}")
+    public String deleteQuestion(@PathVariable Long id, HttpSession session) {
+        User sessionedUser = SessionUtility.findSessionedUser(session);
+        Question question = questionService.verifyQuestionWriter(id, sessionedUser);
+
+        questionService.delete(question);
+        return "redirect:/";
+    }
 }
