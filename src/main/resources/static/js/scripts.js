@@ -51,12 +51,12 @@ function onSubmitAnswer() {
         type: 'post',
         url: url,
         data: queryString,
-        success: onSuccess,
-        error: onFailed
+        success: onCreateAnswerSuccess,
+        error: onCreateAnswerFailed
     });
 }
 
-function onSuccess(data, status) {
+function onCreateAnswerSuccess(data, status) {
     console.log("success");
     console.log(data);
     console.log(status);
@@ -71,9 +71,12 @@ function onSuccess(data, status) {
     );
     $('.qna-comment-slipp-articles').append(template);
     $('#answerContents').val('');
+
+    let value = $('#id-qna-comment-count').val();
+    console.log(value);
 }
 
-function onFailed(data, status) {
+function onCreateAnswerFailed(data, status) {
     alert("답변 생성에 실패했습니다!");
 }
 
