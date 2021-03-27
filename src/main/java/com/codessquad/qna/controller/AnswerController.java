@@ -34,8 +34,7 @@ public class AnswerController {
         }
 
         User writer = getUserFromSession(session);
-        Question question = questionService.findById(questionId);
-        answerService.save(writer, question, contents);
+        answerService.save(writer, contents, questionId);
         return "redirect:/questions/{questionId}";
     }
 

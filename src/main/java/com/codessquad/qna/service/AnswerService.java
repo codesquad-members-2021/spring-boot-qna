@@ -11,12 +11,15 @@ import org.springframework.stereotype.Service;
 @Service
 public class AnswerService {
     private final AnswerRepository answerRepository;
+    private final QuestionService questionService;
 
-    public AnswerService(AnswerRepository answerRepository) {
+    public AnswerService(AnswerRepository answerRepository, QuestionService questionService) {
         this.answerRepository = answerRepository;
+        this.questionService = questionService;
     }
 
-    public void save(User writer, Question question, String contents) {
+    public void save(User writer, String contents, Long questionId) {
+        Question question = questionService.findById(questionId);
         Answer answer = new Answer(writer, question, contents);
         answerRepository.save(answer);
     }
