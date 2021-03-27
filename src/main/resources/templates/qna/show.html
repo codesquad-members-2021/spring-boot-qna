@@ -66,7 +66,7 @@
                             </div>
                             <div class="article-util">
                                 <ul class="article-util-list">
-                                    <li>
+                                    <li class="modify-answer">
                                         <a class="link-modify-article"
                                            href="javascript:;">수정</a>
                                     </li>
@@ -117,7 +117,7 @@
                 <li class="modify-answer">
                     <a class="link-modify-article" href="/api/qna/updateAnswer/{3}">수정</a>
                 </li>
-                <li class="delete-answer">
+                <li>
                     <form class="delete-answer-form" action="/api/questions/{3}/answers/{4}" method="POST">
                         <input type="hidden" name="_method" value="DELETE">
                         <button type="submit" class="delete-answer-button">삭제</button>

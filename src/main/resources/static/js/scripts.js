@@ -18,7 +18,7 @@ $(document).ready(() => { // Powered By Pyro
     });
     //$(".delete-answer-form button[type='submit']").click(deleteAnswer);
     $('#id-button-submit-answer').on('click', createAnswer);
-    $(".delete-answer-form button[type='submit']").on('click', ".delete-answer-form button[type='submit']", deleteAnswer);
+    $(".delete-answer-form button[type='submit']").on('click', deleteAnswer);
 })
 
 function deleteAnswer(event) {
@@ -63,8 +63,8 @@ function onCreateAnswerSuccess(data, status) {
     let articlesListElement = $('.qna-comment-slipp-articles').append(template);
     $('#answerContents').val('');
     increaseAnswerCount();
-    let buttonWrapperElement = articlesListElement.children(':last').find('ul');
-    buttonWrapperElement.find('.delete-answer').on('click', deleteAnswer);
+    let deleteFormElement = articlesListElement.children(':last').find(".delete-answer-form button[type='submit']");
+    deleteFormElement.on('click', deleteAnswer);
 }
 
 function onCreateAnswerFailed(data, status) {
