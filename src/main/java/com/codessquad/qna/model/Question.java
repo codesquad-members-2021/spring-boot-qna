@@ -54,8 +54,8 @@ public class Question {
     }
 
     public void update(Question question) {
-        this.title = question.getTitle();
-        this.contents = question.getContents();
+        this.title = question.title;
+        this.contents = question.contents;
         this.date = new Date();
     }
 

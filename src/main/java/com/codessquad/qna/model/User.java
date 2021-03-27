@@ -36,9 +36,9 @@ public class User {
     }
 
     public void update(User user) {
-        this.password = user.getPassword();
-        this.name = user.getName();
-        this.email = user.getEmail();
+        this.password = user.password;
+        this.name = user.name;
+        this.email = user.email;
     }
 
     public Long getId() {

@@ -47,7 +47,7 @@ public class Answer {
     }
 
     public void update(Answer answer) {
-        this.contents = answer.getContents();
+        this.contents = answer.contents;
         this.date = new Date();
     }
 
