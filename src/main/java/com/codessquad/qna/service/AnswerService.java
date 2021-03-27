@@ -1,6 +1,7 @@
 package com.codessquad.qna.service;
 
-import com.codessquad.qna.exception.NotFoundException;
+import com.codessquad.qna.exception.EntityNotFoundException;
+import com.codessquad.qna.exception.ErrorMessage;
 import com.codessquad.qna.exception.UserSessionException;
 import com.codessquad.qna.model.Answer;
 import com.codessquad.qna.model.User;
@@ -38,13 +39,15 @@ public class AnswerService {
     public Answer verifyAnswer(Long id, User sessionUser) {
         Answer targetAnswer = findById(id);
         if (!targetAnswer.matchWriter(sessionUser)) {
-            throw new UserSessionException();
+            throw new UserSessionException(ErrorMessage.ILLEGAL_USER);
         }
         return targetAnswer;
     }
 
     public Answer findById(Long id) {
-        return this.answerRepository.findByIdAndDeletedFalse(id).orElseThrow(NotFoundException::new);
+        return this.answerRepository.findByIdAndDeletedFalse(id).orElseThrow(() ->
+                new EntityNotFoundException(ErrorMessage.ANSWER_NOT_FOUND)
+        );
     }
 
     public Long findQuestionId(Long answerId) {

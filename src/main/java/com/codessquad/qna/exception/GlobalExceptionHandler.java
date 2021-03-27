@@ -6,17 +6,15 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import static com.codessquad.qna.controller.HttpSessionUtils.getUserFromSession;
-import static com.codessquad.qna.controller.HttpSessionUtils.isLoginUser;
 
 @ControllerAdvice
 public class GlobalExceptionHandler {
 
-    @ExceptionHandler(NotFoundException.class)
-    private String handleNotFoundException() {
+    @ExceptionHandler(EntityNotFoundException.class)
+    private String handleEntityNotFoundException() {
         return "redirect:/";
     }
 
@@ -28,12 +26,19 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(UserAccountException.class)
-    private String handleUserAccountException(Model model, HttpSession session, HttpServletRequest request, UserAccountException e) {
+    private String handleUserAccountException(Model model, HttpSession session,  UserAccountException e) {
         model.addAttribute("errorMessage", e.getMessage());
-        if (isLoginUser(session)) {
-            model.addAttribute("user", getUserFromSession(session));
+        switch (e.getErrorMessage()) {
+            case DUPLICATED_ID:
+                return "/user/form";
+            case LOGIN_FAILED:
+                return "/user/login";
+            case WRONG_PASSWORD:
+                model.addAttribute("user", getUserFromSession(session));
+                return "/user/updateForm";
+            default:
+                return "/";
         }
-        return (String) request.getAttribute("path");
     }
 
 }

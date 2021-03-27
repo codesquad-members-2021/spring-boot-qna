@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import static com.codessquad.qna.controller.HttpSessionUtils.USER_SESSION_KEY;
@@ -35,8 +34,7 @@ public class UserController {
     }
 
     @PostMapping("/user/form")
-    public String signUp(User user, HttpServletRequest request) {
-        request.setAttribute("path", "/user/form");
+    public String signUp(User user) {
         this.userService.save(user);
         logger.info("회원가입 요청");
         return "redirect:/user/list";
@@ -49,8 +47,7 @@ public class UserController {
     }
 
     @PostMapping("/user/login")
-    public String login(String userId, String password, HttpServletRequest request, HttpSession session) {
-        request.setAttribute("path", "/user/login");
+    public String login(String userId, String password, HttpSession session) {
         session.setAttribute(USER_SESSION_KEY, this.userService.login(userId, password));
         logger.info("로그인 요청");
         return "redirect:/";
@@ -85,8 +82,7 @@ public class UserController {
     }
 
     @PutMapping("/user/{id}/form")
-    public String updateProfile(@PathVariable Long id, User user, String oldPassword, HttpServletRequest request, HttpSession session) {
-        request.setAttribute("path", "/user/updateForm");
+    public String updateProfile(@PathVariable Long id, User user, String oldPassword, HttpSession session) {
         this.userService.update(id, user, oldPassword, getUserFromSession(session));
         logger.info("유저 정보 수정 요청");
         return "redirect:/user/list";

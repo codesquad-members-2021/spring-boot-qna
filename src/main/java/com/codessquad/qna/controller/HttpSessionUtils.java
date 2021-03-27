@@ -1,5 +1,6 @@
 package com.codessquad.qna.controller;
 
+import com.codessquad.qna.exception.ErrorMessage;
 import com.codessquad.qna.exception.UserSessionException;
 import com.codessquad.qna.model.User;
 
@@ -15,7 +16,7 @@ public class HttpSessionUtils {
 
     public static User getUserFromSession(HttpSession session) {
         if (!isLoginUser(session)) {
-            throw new UserSessionException();
+            throw new UserSessionException(ErrorMessage.NEED_LOGIN);
         }
         return (User) session.getAttribute(USER_SESSION_KEY);
     }
