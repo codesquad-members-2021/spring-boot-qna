@@ -7,6 +7,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 @Service
+@Transactional(readOnly = true)
 public class AnswerService {
 
     private final AnswerRepository answerRepository;
@@ -14,13 +15,15 @@ public class AnswerService {
 
     public AnswerService(AnswerRepository answerRepository, QuestionRepository questionRepository) {
         this.answerRepository = answerRepository;
-        this.questionRepository=questionRepository;
+        this.questionRepository = questionRepository;
     }
 
-    public void create(User user, Long questionId,  String contents) {
+    @Transactional
+    public long create(User user, long questionId, String contents) {
         Question question = questionRepository.findById(questionId).orElseThrow(IllegalArgumentException::new);
-        Answer answer = new Answer(user,question,contents);
+        Answer answer = new Answer(user, question, contents);
         answerRepository.save(answer);
+        return question.getId();
     }
 
     public List<Answer> findAnswersByQuestionId(long questionId) {

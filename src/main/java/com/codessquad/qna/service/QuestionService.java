@@ -10,7 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 @Service
-
+@Transactional(readOnly = true)
 public class QuestionService {
     private final QuestionRepository questionRepository;
 
@@ -18,11 +18,13 @@ public class QuestionService {
         this.questionRepository = questionRepository;
     }
 
+    @Transactional
     public void create(QuestionDto questionDto, User user) {
         Question question = questionDto.toEntity(user);
         questionRepository.save(question);
     }
 
+    @Transactional
     public void update(Question updateQuestion, long questionId) {
         Question question = findQuestionById(questionId);
         question.update(updateQuestion);
