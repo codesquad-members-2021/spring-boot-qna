@@ -6,7 +6,7 @@ import com.fasterxml.jackson.annotation.JsonGetter;
 
 import javax.persistence.*;
 
-import static com.codessquad.qna.web.utils.ExceptionConstants.EMPTY_FIELD_IN_ANSWER_ENTITY;
+import static com.codessquad.qna.web.exceptions.InvalidEntityException.EMPTY_FIELD_IN_ANSWER_ENTITY;
 
 @Entity
 public class Answer extends BaseTimeEntity {

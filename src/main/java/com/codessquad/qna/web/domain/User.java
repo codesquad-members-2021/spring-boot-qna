@@ -5,7 +5,9 @@ import com.codessquad.qna.web.exceptions.auth.UnauthorizedAccessException;
 
 import javax.persistence.*;
 
-import static com.codessquad.qna.web.utils.ExceptionConstants.*;
+import static com.codessquad.qna.web.exceptions.InvalidEntityException.EMPTY_FIELD_IN_USER_ENTITY;
+import static com.codessquad.qna.web.exceptions.auth.UnauthorizedAccessException.CANNOT_MODIFY_ANOTHER_USER;
+import static com.codessquad.qna.web.exceptions.auth.UnauthorizedAccessException.PASSWORD_NOT_MATCHING;
 
 @Entity
 public class User extends BaseTimeEntity {
