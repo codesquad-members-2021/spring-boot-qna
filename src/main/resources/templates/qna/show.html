@@ -88,8 +88,7 @@
                                 <textarea type="text" id="answerContents" name="answerContents" class="form-control"
                                           placeholder="Update your status"></textarea>
                         </div>
-                        <button class="btn btn-success pull-right" type="button"
-                                onclick="onSubmitAnswer()">답변하기
+                        <button id="id-button-submit-answer" class="btn btn-success pull-right" type="button">답변하기
                         </button>
                         <div class="clearfix"/>
                     </form>
@@ -115,10 +114,10 @@
         </div>
         <div class="article-util">
             <ul class="article-util-list">
-                <li>
+                <li class="modify-answer">
                     <a class="link-modify-article" href="/api/qna/updateAnswer/{3}">수정</a>
                 </li>
-                <li>
+                <li class="delete-answer">
                     <form class="delete-answer-form" action="/api/questions/{3}/answers/{4}" method="POST">
                         <input type="hidden" name="_method" value="DELETE">
                         <button type="submit" class="delete-answer-button">삭제</button>

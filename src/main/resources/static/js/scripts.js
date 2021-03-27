@@ -16,7 +16,9 @@ $(document).ready(() => { // Powered By Pyro
             $(item).addClass("active");
         }
     });
-    $(".delete-answer-form button[type='submit']").click(deleteAnswer);
+    //$(".delete-answer-form button[type='submit']").click(deleteAnswer);
+    $('#id-button-submit-answer').on('click', createAnswer);
+    $(".delete-answer-form button[type='submit']").on('click', ".delete-answer-form button[type='submit']", deleteAnswer);
 })
 
 function deleteAnswer(event) {
@@ -33,11 +35,10 @@ function deleteAnswer(event) {
         error: () => {
             alert("답변 삭제에 실패했습니다!");
         }
-
     });
 }
 
-function onSubmitAnswer() {
+function createAnswer() {
     let formElement = $(".submit-write");
     let queryString = formElement.serialize(); //form data들을 자동으로 묶어준다.
     let url = formElement.attr("action");
@@ -59,9 +60,11 @@ function onCreateAnswerSuccess(data, status) {
         data.questionId,
         data.id
     );
-    $('.qna-comment-slipp-articles').append(template);
+    let articlesListElement = $('.qna-comment-slipp-articles').append(template);
     $('#answerContents').val('');
     increaseAnswerCount();
+    let buttonWrapperElement = articlesListElement.children(':last').find('ul');
+    buttonWrapperElement.find('.delete-answer').on('click', deleteAnswer);
 }
 
 function onCreateAnswerFailed(data, status) {
