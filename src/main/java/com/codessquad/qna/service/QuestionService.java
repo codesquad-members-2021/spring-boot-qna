@@ -25,8 +25,8 @@ public class QuestionService {
     }
 
     @Transactional
-    public void update(Question updateQuestion, long questionId) {
-        Question question = findQuestionById(questionId);
+    public void update(Question updateQuestion, long questionId, User sessionedUser) {
+        Question question = verifyQuestion(questionId, sessionedUser);
         question.update(updateQuestion);
         questionRepository.save(question);
     }
@@ -41,13 +41,15 @@ public class QuestionService {
 
     @Transactional
     public void delete(long questionId, User user) {
-        Question question = questionRepository.findById(questionId).orElseThrow(IllegalArgumentException::new);
-        if (verifyQuestion(question,user)) {
-            questionRepository.delete(question);
-        }
+        Question question = verifyQuestion(questionId, user);
+        questionRepository.delete(question);
     }
 
-    public boolean verifyQuestion(Question question, User sessionedUser) {
-        return sessionedUser.isMatchingUserId(question.getWriter());
+    public Question verifyQuestion(long questionId, User sessionedUser) {
+        Question question = findQuestionById(questionId);
+        if (!sessionedUser.isMatchingUserId(question.getWriter())) {
+            throw new IllegalStateException("자신의 질문만 수정할 수 있습니다.");
+        }
+        return question;
     }
 }

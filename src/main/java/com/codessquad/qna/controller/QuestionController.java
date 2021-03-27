@@ -53,10 +53,7 @@ public class QuestionController {
     @GetMapping("/questions/{questionId}/form")
     public String viewUpdateQuestionForm(@PathVariable long questionId, Model model, HttpSession session) {
         User sessionedUser = HttpSessionUtils.getUserFromSession(session);
-        Question question = questionService.findQuestionById(questionId);
-        if (!questionService.verifyQuestion(question, sessionedUser)) {
-            throw new IllegalStateException("자신의 질문만 수정할 수 있습니다.");
-        }
+        Question question = questionService.verifyQuestion(questionId, sessionedUser);
         model.addAttribute("question", question);
         return "qna/updateForm";
     }
@@ -65,10 +62,7 @@ public class QuestionController {
     public String updateQuestion(@PathVariable long questionId, QuestionDto updateQuestionDto, HttpSession session) {
         User sessionedUser = HttpSessionUtils.getUserFromSession(session);
         Question updateQuestion = updateQuestionDto.toEntity(sessionedUser);
-        if (!questionService.verifyQuestion(updateQuestion, sessionedUser)) {
-            throw new IllegalStateException("자신의 질문만 수정할 수 있습니다.");
-        }
-        questionService.update(updateQuestion, questionId);
+        questionService.update(updateQuestion, questionId, sessionedUser);
         return "redirect:/";
     }
 

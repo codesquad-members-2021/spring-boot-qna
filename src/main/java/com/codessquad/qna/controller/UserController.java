@@ -37,7 +37,6 @@ public class UserController {
             session.setAttribute(HttpSessionUtils.USER_SESSION_KEY, user);
             return "redirect:/";
         }
-
         return "redirect:/users/loginForm";
     }
 
