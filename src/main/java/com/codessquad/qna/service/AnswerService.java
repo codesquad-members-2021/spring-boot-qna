@@ -29,6 +29,12 @@ public class AnswerService {
         answerRepository.delete(answer);
     }
 
+    public void deleteById(Long id, User user) {
+        Answer answer = findAnswerById(id);
+        verifyWriter(answer, user);
+        delete(answer);
+    }
+
     public void verifyWriter(Answer answer, User user) {
         if (!answer.isAnswerWriter(user)) {
             throw new IllegalUserAccessException();

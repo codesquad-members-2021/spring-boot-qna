@@ -46,10 +46,8 @@ public class AnswerController {
         }
 
         User loginUser = getUserFromSession(session);
-        Answer answer = answerService.findAnswerById(id);
-        answerService.verifyWriter(answer, loginUser);
+        answerService.deleteById(id, loginUser);
 
-        answerService.delete(answer);
         return "redirect:/questions/{questionId}";
     }
 }
