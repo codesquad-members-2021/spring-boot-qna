@@ -4,15 +4,9 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
 
 @Entity
-public class User {
-
-    @Id
-    @GeneratedValue
-    private Long id;
+public class User extends AbstractEntity {
 
     @Column(nullable = false, unique = true)
     private String userId;
@@ -28,7 +22,7 @@ public class User {
     private String email;
 
     public boolean matchId(Long id) {
-        return this.id.equals(id);
+        return this.getId().equals(id);
     }
 
     public boolean matchPassword(String password) {
@@ -39,14 +33,6 @@ public class User {
         this.password = user.password;
         this.name = user.name;
         this.email = user.email;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
     }
 
     public String getUserId() {
@@ -83,7 +69,8 @@ public class User {
 
     @Override
     public String toString() {
-        return "userId: " + this.userId + ", " +
+        return super.toString() + ", " +
+                "userId: " + this.userId + ", " +
                 "password: " + this.password + ", " +
                 "name: " + this.name + ", " +
                 "email: " + this.email;

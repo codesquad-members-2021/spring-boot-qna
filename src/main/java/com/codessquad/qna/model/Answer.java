@@ -4,15 +4,9 @@ import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 
 @Entity
-public class Answer {
-
-    @Id
-    @GeneratedValue
-    private Long id;
+public class Answer extends AbstractEntity {
 
     @ManyToOne
     @JoinColumn(foreignKey = @ForeignKey(name = "fk_answer_to_user"), nullable = false)
@@ -20,9 +14,6 @@ public class Answer {
 
     @Column(nullable = false)
     private String contents;
-
-    @Column(nullable = false)
-    private Date date;
 
     @Column(columnDefinition = "boolean default false")
     private boolean deleted;
@@ -42,25 +33,15 @@ public class Answer {
 
     public void save(User writer, Question question) {
         this.writer = writer;
-        this.date = new Date();
         this.question = question;
     }
 
     public void update(Answer answer) {
         this.contents = answer.contents;
-        this.date = new Date();
     }
 
     public void delete() {
         this.deleted = true;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
     }
 
     public User getWriter() {
@@ -77,15 +58,6 @@ public class Answer {
 
     public void setContents(String contents) {
         this.contents = contents;
-    }
-
-    public String getDate() {
-        SimpleDateFormat simpleDate = new SimpleDateFormat( "yyyy-MM-dd HH:mm");
-        return simpleDate.format(this.date);
-    }
-
-    public void setDate(Date date) {
-        this.date = date;
     }
 
     public boolean isDeleted() {
@@ -106,9 +78,9 @@ public class Answer {
 
     @Override
     public String toString() {
-        return "writer: " + this.writer.getUserId() + ", " +
+        return super.toString() + ", " +
+                "writer: " + this.writer.getUserId() + ", " +
                 "contents: " + this.contents + ", " +
-                "date: " + this.date + ", " +
                 "question: " + this.question.getId() + ", ";
     }
 

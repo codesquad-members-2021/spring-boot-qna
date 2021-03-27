@@ -3,17 +3,11 @@ package com.codessquad.qna.model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Entity
-public class Question {
-
-    @Id
-    @GeneratedValue
-    private Long id;
+public class Question extends AbstractEntity {
 
     @ManyToOne
     @JoinColumn(foreignKey = @ForeignKey(name = "fk_question_to_user"), nullable = false)
@@ -24,9 +18,6 @@ public class Question {
 
     @Column(nullable = false)
     private String contents;
-
-    @Column(nullable = false)
-    private Date date;
 
     @Column(columnDefinition = "boolean default false")
     private boolean deleted;
@@ -50,26 +41,16 @@ public class Question {
 
     public void save(User writer) {
         this.writer = writer;
-        this.date = new Date();
     }
 
     public void update(Question question) {
         this.title = question.title;
         this.contents = question.contents;
-        this.date = new Date();
     }
 
     public void delete() {
         this.deleted = true;
         this.answers.forEach(Answer::delete);
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
     }
 
     public User getWriter() {
@@ -96,15 +77,6 @@ public class Question {
         this.contents = contents;
     }
 
-    public String getDate() {
-        SimpleDateFormat simpleDate = new SimpleDateFormat( "yyyy-MM-dd HH:mm");
-        return simpleDate.format(this.date);
-    }
-
-    public void setDate(Date date) {
-        this.date = date;
-    }
-
     public boolean isDeleted() {
         return deleted;
     }
@@ -125,10 +97,10 @@ public class Question {
 
     @Override
     public String toString() {
-        return "writer: " + this.writer.getUserId() + ", " +
+        return super.toString() + ", " +
+                "writer: " + this.writer.getUserId() + ", " +
                 "title: " + this.title + ", " +
-                "contents: " + this.contents + ", " +
-                "date: " + this.date;
+                "contents: " + this.contents + ", ";
     }
 
 }

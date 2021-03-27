@@ -68,7 +68,7 @@ function addAnswer(e) {
       .then(processResponse(errorMessage.NEEDLOGIN, redirectUrl.LOGINPAGE))
       .then(answer => {
         let answerTemplate = document.querySelector('#answerTemplate').innerHTML;
-        let template = answerTemplate.format(answer.writer.userId, answer.date, answer.contents, answer.id);
+        let template = answerTemplate.format(answer.writer.userId, answer.modifiedDate, answer.contents, answer.id);
         document.querySelector('.qna-comment-slipp-articles').insertAdjacentHTML('afterbegin', template);
         document.querySelector('form.answer-write textarea').value = '';
         addDeleteEventToAllAnswer();
