@@ -4,6 +4,8 @@ import com.codessquad.qna.domain.answer.Answer;
 import com.codessquad.qna.domain.answer.AnswerRepository;
 import com.codessquad.qna.domain.question.Question;
 import com.codessquad.qna.domain.question.QuestionRepository;
+import com.codessquad.qna.exception.AnotherAnswerException;
+import com.codessquad.qna.exception.NotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -28,7 +30,7 @@ public class QuestionService {
     @Transactional
     public Long update(Long id, Question questionWithUpdatedInfo) {
         Question question = questionRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("해당 질문이 없습니다. id = " + id));
+                .orElseThrow(() -> new NotFoundException("해당 질문이 없습니다. id = " + id));
         question.update(questionWithUpdatedInfo);
 
         return id;
@@ -37,7 +39,7 @@ public class QuestionService {
     @Transactional
     public Question findById(Long id) {
         return questionRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("해당 질문이 없습니다. id = " + id));
+                .orElseThrow(() -> new NotFoundException("해당 질문이 없습니다. id = " + id));
     }
 
     @Transactional
@@ -48,13 +50,13 @@ public class QuestionService {
     @Transactional
     public void deleteById(Long id) {
         Question question = questionRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("해당 질문이 없습니다. id = " + id));
+                .orElseThrow(() -> new NotFoundException("해당 질문이 없습니다. id = " + id));
         List<Answer> answers = answerRepository.findAllByQuestionIdAndDeletedIsFalse(id);
 
         boolean isQuestionAnsweredByOnlyItself = answers.stream()
                 .allMatch(question::isAnsweredYourself);
         if (!isQuestionAnsweredByOnlyItself) {
-            throw new IllegalArgumentException("다른 사용자의 답변이 있습니다.");
+            throw new AnotherAnswerException();
         }
         question.delete();
     }

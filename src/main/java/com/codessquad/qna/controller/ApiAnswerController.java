@@ -2,6 +2,7 @@ package com.codessquad.qna.controller;
 
 import com.codessquad.qna.domain.answer.Answer;
 import com.codessquad.qna.domain.user.User;
+import com.codessquad.qna.exception.NotAuthorizationException;
 import com.codessquad.qna.service.AnswerService;
 import com.codessquad.qna.utils.HttpSessionUtils;
 import org.springframework.web.bind.annotation.*;
@@ -38,7 +39,7 @@ public class ApiAnswerController {
         Answer answer = answerService.findById(id);
         User loginUser = HttpSessionUtils.getUserFromSession(session);
         if (!answer.isWrittenBy(loginUser)) {
-            throw new IllegalStateException("자신이 작성한 답변만 삭제할 수 있습니다.");
+            throw new NotAuthorizationException("자신이 작성한 답변만 수정할 수 있습니다.");
         }
 
         answerService.deleteById(id);

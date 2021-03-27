@@ -3,6 +3,7 @@ package com.codessquad.qna.controller;
 import com.codessquad.qna.domain.answer.Answer;
 import com.codessquad.qna.domain.question.Question;
 import com.codessquad.qna.domain.user.User;
+import com.codessquad.qna.exception.NotAuthorizationException;
 import com.codessquad.qna.service.AnswerService;
 import com.codessquad.qna.service.QuestionService;
 import com.codessquad.qna.utils.HttpSessionUtils;
@@ -60,7 +61,7 @@ public class QuestionController {
         Question question = questionService.findById(id);
         User sessionedUser = HttpSessionUtils.getUserFromSession(session);
         if (!question.isWrittenBy(sessionedUser)) {
-            throw new IllegalStateException("자신이 작성한 글만 수정할 수 있습니다.");
+            throw new NotAuthorizationException("자신의 글만 수정할 수 있습니다.");
         }
         model.addAttribute("question", question);
         return "/qna/update_form";
@@ -80,7 +81,7 @@ public class QuestionController {
         Question question = questionService.findById(id);
         User sessionedUser = HttpSessionUtils.getUserFromSession(session);
         if (!question.isWrittenBy(sessionedUser)) {
-            throw new IllegalStateException("자신이 작성한 글만 삭제할 수 있습니다.");
+            throw new NotAuthorizationException("자신의 글만 삭제할 수 있습니다.");
         }
         questionService.deleteById(id);
         return "redirect:/";
