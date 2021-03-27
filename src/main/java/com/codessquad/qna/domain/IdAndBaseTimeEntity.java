@@ -29,7 +29,7 @@ public abstract class IdAndBaseTimeEntity {
         return this.id.equals(id);
     }
 
-    public String getFormattedCreateDate() {
+    public String getFormattedCreateDateTime() {
         if (createDateTime == null) {
             return "";
         }
