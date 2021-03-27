@@ -4,10 +4,10 @@ function addAnswer(e) {
     e.preventDefault();
     console.log("click!!");
 
-    var queryString = $(".answer-write").serialize();
+    const queryString = $(".answer-write").serialize();
     console.log("query : " + queryString);
 
-    var url = $(".answer-write").attr("action");
+    const url = $(".answer-write").attr("action");
     console.log("url : " + url);
     $.ajax({
         type: 'post',
@@ -25,12 +25,12 @@ function addAnswer(e) {
 
     function onSuccess(data, status) {
         console.log(data);
-        var answerTemplate = $("#answerTemplate").html();
-        var template = answerTemplate.format(data.writer.userId, data.formattedCreateDate, data.contents, data.question.id, data.id);
+        const answerTemplate = $("#answerTemplate").html();
+        const template = answerTemplate.format(data.writer.userId, data.formattedCreateDate, data.contents, data.question.id, data.id);
         $(".qna-comment-slipp-articles").append(template);
         $(".answer-write textarea").val("");
 
-        var count = "<strong>" + data.question.countOfAnswer+ "</strong>개의 의견";
+        const count = "<strong>" + data.question.countOfAnswer+ "</strong>개의 의견";
         document.getElementById("qna-comment-count").innerHTML = count;
     }
 }
@@ -40,8 +40,8 @@ $(".qna-comment-slipp-articles").on("click", "a.link-delete-article", deleteAnsw
 function deleteAnswer(e) {
     e.preventDefault();
 
-    var deleteBtn = $(this);
-    var url = deleteBtn.attr("href");
+    const deleteBtn = $(this);
+    const url = deleteBtn.attr("href");
     console.log("url : " + url);
 
     $.ajax({
@@ -61,13 +61,13 @@ function deleteAnswer(e) {
         console.log("success");
         deleteBtn.closest("article").remove();
 
-        var count = "<strong>" + (data.question.countOfAnswer) + "</strong>개의 의견";
+        const count = "<strong>" + (data.question.countOfAnswer) + "</strong>개의 의견";
         document.getElementById("qna-comment-count").innerHTML = count;
     }
 }
 
 String.prototype.format = function () {
-    var args = arguments;
+    const args = arguments;
     return this.replace(/{(\d+)}/g, function (match, number) {
         return typeof args[number] != 'undefined'
             ? args[number]
