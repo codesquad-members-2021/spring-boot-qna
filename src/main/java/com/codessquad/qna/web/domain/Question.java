@@ -1,5 +1,6 @@
 package com.codessquad.qna.web.domain;
 
+import com.codessquad.qna.web.exceptions.InvalidEntityException;
 import com.codessquad.qna.web.exceptions.auth.UnauthorizedAccessException;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import org.hibernate.annotations.Where;
@@ -7,7 +8,7 @@ import org.hibernate.annotations.Where;
 import javax.persistence.*;
 import java.util.List;
 
-import static com.codessquad.qna.web.utils.ExceptionConstants.CAN_NOT_DELETE_BECAUSE_ANOTHER_USERS_ANSWER_IS_EXISTS;
+import static com.codessquad.qna.web.utils.ExceptionConstants.*;
 
 @Entity
 public class Question extends BaseTimeEntity {
@@ -41,10 +42,6 @@ public class Question extends BaseTimeEntity {
     protected Question() {
     }
 
-    public boolean isMatchingWriter(User anotherWriter) {
-        return writer.isMatchingId(anotherWriter);
-    }
-
     public void update(Question newQuestion) {
         title = newQuestion.title;
         contents = newQuestion.contents;
@@ -65,6 +62,22 @@ public class Question extends BaseTimeEntity {
 
     public boolean isValid() {
         return (title != null && !title.isEmpty()) && (contents != null && !contents.isEmpty());
+    }
+
+    public void verifyQuestionEntityIsValid() {
+        if (!isValid()) {
+            throw new InvalidEntityException(EMPTY_FIELD_IN_QUESTION_ENTITY);
+        }
+    }
+
+    public boolean isMatchingWriter(User anotherWriter) {
+        return writer.isMatchingId(anotherWriter);
+    }
+
+    public void verifyWriterIsQuestionOwner(User writer) {
+        if (!isMatchingWriter(writer)) {
+            throw new UnauthorizedAccessException(CANNOT_MODIFY_OR_DELETE_ANOTHER_USERS_QUESTION);
+        }
     }
 
     public Long getId() {

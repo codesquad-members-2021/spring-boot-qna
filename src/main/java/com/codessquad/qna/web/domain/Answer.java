@@ -1,9 +1,12 @@
 package com.codessquad.qna.web.domain;
 
+import com.codessquad.qna.web.exceptions.InvalidEntityException;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonGetter;
 
 import javax.persistence.*;
+
+import static com.codessquad.qna.web.utils.ExceptionConstants.EMPTY_FIELD_IN_ANSWER_ENTITY;
 
 @Entity
 public class Answer extends BaseTimeEntity {
@@ -33,6 +36,12 @@ public class Answer extends BaseTimeEntity {
     }
 
     protected Answer() {
+    }
+
+    public void verifyAnswerEntityIsValid() {
+        if (!isValid()) {
+            throw new InvalidEntityException(EMPTY_FIELD_IN_ANSWER_ENTITY);
+        }
     }
 
     public boolean isValid() {

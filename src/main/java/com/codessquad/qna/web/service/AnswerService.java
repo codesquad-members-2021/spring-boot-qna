@@ -1,14 +1,12 @@
 package com.codessquad.qna.web.service;
 
 import com.codessquad.qna.web.domain.*;
-import com.codessquad.qna.web.exceptions.InvalidEntityException;
 import com.codessquad.qna.web.exceptions.answers.AnswerNotFoundException;
 import com.codessquad.qna.web.exceptions.auth.UnauthorizedAccessException;
 import com.codessquad.qna.web.exceptions.questions.QuestionNotFoundException;
 import org.springframework.stereotype.Service;
 
 import static com.codessquad.qna.web.utils.ExceptionConstants.CANNOT_MODIFY_ANOTHER_USERS_ANSWER;
-import static com.codessquad.qna.web.utils.ExceptionConstants.EMPTY_FIELD_IN_ANSWER_ENTITY;
 
 @Service
 public class AnswerService {
@@ -24,7 +22,7 @@ public class AnswerService {
         Question targetQuestion = questionRepository.findByIdAndDeletedFalse(questionId)
                 .orElseThrow(QuestionNotFoundException::new);
         Answer answer = new Answer(answerContents, targetQuestion, loginUser);
-        verifyAnswerEntityIsValid(answer);
+        answer.verifyAnswerEntityIsValid();
         return answersRepository.save(answer);
     }
 
@@ -36,11 +34,5 @@ public class AnswerService {
         }
         answer.delete();
         answersRepository.save(answer);
-    }
-
-    private void verifyAnswerEntityIsValid(Answer answer) {
-        if (!answer.isValid()) {
-            throw new InvalidEntityException(EMPTY_FIELD_IN_ANSWER_ENTITY);
-        }
     }
 }

@@ -1,6 +1,11 @@
 package com.codessquad.qna.web.domain;
 
+import com.codessquad.qna.web.exceptions.InvalidEntityException;
+import com.codessquad.qna.web.exceptions.auth.UnauthorizedAccessException;
+
 import javax.persistence.*;
+
+import static com.codessquad.qna.web.utils.ExceptionConstants.*;
 
 @Entity
 public class User extends BaseTimeEntity {
@@ -42,6 +47,32 @@ public class User extends BaseTimeEntity {
                 && (email != null && !email.isEmpty());
     }
 
+    public void verifyUserEntityIsValid() {
+        if (!isValid()) {
+            throw new InvalidEntityException(EMPTY_FIELD_IN_USER_ENTITY);
+        }
+    }
+
+    public boolean isMatchingPassword(String anotherPassword) {
+        return password.equals(anotherPassword);
+    }
+
+    public void verifyPassword(String password) {
+        if (!isMatchingPassword(password)) {
+            throw new UnauthorizedAccessException(PASSWORD_NOT_MATCHING);
+        }
+    }
+
+    public boolean isMatchingId(User anotherUser) {
+        return id.equals(anotherUser.id);
+    }
+
+    public void verifyIsSameUser(User anotherUser) {
+        if (!isMatchingId(anotherUser)) {
+            throw new UnauthorizedAccessException(CANNOT_MODIFY_ANOTHER_USER);
+        }
+    }
+
     public Long getId() {
         return id;
     }
@@ -80,14 +111,6 @@ public class User extends BaseTimeEntity {
 
     public void setEmail(String email) {
         this.email = email;
-    }
-
-    public boolean isMatchingPassword(String anotherPassword) {
-        return password.equals(anotherPassword);
-    }
-
-    public boolean isMatchingId(User anotherUser) {
-        return id.equals(anotherUser.id);
     }
 
     @Override
