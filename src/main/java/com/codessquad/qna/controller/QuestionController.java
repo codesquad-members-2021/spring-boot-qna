@@ -68,20 +68,14 @@ public class QuestionController {
         if (!questionService.verifyQuestion(updateQuestion, sessionedUser)) {
             throw new IllegalStateException("자신의 질문만 수정할 수 있습니다.");
         }
-        Question question = questionService.findQuestionById(questionId);
-        question.update(updateQuestion);
-        questionService.save(question);
+        questionService.update(updateQuestion, questionId);
         return "redirect:/";
     }
 
-    @DeleteMapping("/questions/{id}")
-    public String delete(@PathVariable long id, HttpSession session) {
+    @DeleteMapping("/questions/{questionId}")
+    public String delete(@PathVariable long questionId, HttpSession session) {
         User sessionedUser = HttpSessionUtils.getUserFromSession(session);
-        Question question = questionService.findQuestionById(id);
-        if (!questionService.verifyQuestion(question, sessionedUser)) {
-            throw new IllegalStateException("자신의 질문만 수정할 수 있습니다.");
-        }
-        questionService.delete(question);
+        questionService.delete(questionId, sessionedUser);
         return "redirect:/";
     }
 }

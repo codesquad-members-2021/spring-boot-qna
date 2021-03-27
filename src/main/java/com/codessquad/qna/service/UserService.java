@@ -17,20 +17,18 @@ public class UserService {
         this.userRepository = userRepository;
     }
 
+    @Transactional
     public void create(User user) {
         userRepository.save(user);
     }
-
 
     public List<User> findUsers() {
         return userRepository.findAll();
     }
 
-
     public User findUserById(long id) {
         return userRepository.findById(id).orElseThrow(IllegalArgumentException::new);
     }
-
 
     public User findUserByUserId(String userId) {
         return userRepository.findUserByUserId(userId).orElseThrow(IllegalAccessError::new);

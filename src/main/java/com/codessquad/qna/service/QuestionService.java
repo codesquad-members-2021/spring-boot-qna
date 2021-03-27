@@ -18,14 +18,17 @@ public class QuestionService {
         this.questionRepository = questionRepository;
     }
 
+    @Transactional
     public void create(QuestionDto questionDto, User user) {
         Question question = questionDto.toEntity(user);
         questionRepository.save(question);
     }
 
-
-    public void save(Question updateQuestion) {
-        questionRepository.save(updateQuestion);
+    @Transactional
+    public void update(Question updateQuestion, long questionId) {
+        Question question = findQuestionById(questionId);
+        question.update(updateQuestion);
+        questionRepository.save(question);
     }
 
     public List<Question> findQuestions() {
@@ -37,8 +40,11 @@ public class QuestionService {
     }
 
     @Transactional
-    public void delete(Question question) {
-        questionRepository.delete(question);
+    public void delete(long questionId, User user) {
+        Question question = questionRepository.findById(questionId).orElseThrow(IllegalArgumentException::new);
+        if (verifyQuestion(question,user)) {
+            questionRepository.delete(question);
+        }
     }
 
     public boolean verifyQuestion(Question question, User sessionedUser) {

@@ -1,6 +1,9 @@
 package com.codessquad.qna.domain;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 public class Question {
@@ -13,26 +16,28 @@ public class Question {
     @JoinColumn(foreignKey = @ForeignKey(name = "fk_question_writer"))
     private User writer;
 
+    @OneToMany(mappedBy = "question", cascade = CascadeType.ALL)
+    private List<Answer> answers = new ArrayList<>();
+
     @Column(nullable = false, length = 20)
     private String title;
 
     @Column(nullable = false)
     private String contents;
 
-    private String time;
+    private LocalDateTime time = LocalDateTime.now();
 
     protected Question() {
 
     }
 
-    public Question(User writer, String title, String contents, String time) {
+    public Question(User writer, String title, String contents) {
         this.writer = writer;
         this.title = title;
         this.contents = contents;
-        this.time = time;
     }
 
-    public String getTime() {
+    public LocalDateTime getTime() {
         return this.time;
     }
 
@@ -42,6 +47,10 @@ public class Question {
 
     public User getWriter() {
         return writer;
+    }
+
+    public List<Answer> getAnswers(){
+        return answers;
     }
 
     public String getTitle() {
