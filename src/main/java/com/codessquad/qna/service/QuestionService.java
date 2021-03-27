@@ -62,13 +62,13 @@ public class QuestionService {
         question.delete();
     }
 
-    public Page<Question> pagingList(Criteria cri) {
-        PageRequest pageRequest = PageRequest.of(cri.getPageNum() - 1, cri.getSize(), Sort.by("id").descending());
+    public Page<Question> pagingList(Criteria criteria) {
+        PageRequest pageRequest = PageRequest.of(criteria.getPageNum() - 1, criteria.getSize(), Sort.by("id").descending());
         Page<Question> questions = questionRepository.findAllByDeletedIsFalse(pageRequest);
         return questions;
     }
 
     public int notDeletedSize() {
-        return questionRepository.findAllByDeletedIsFalse().size();
+        return questionRepository.countQuestionByDeletedFalse();
     }
 }

@@ -14,16 +14,16 @@ public class IndexController {
 
     private final QuestionService questionService;
 
-    public IndexController (QuestionService questionService) {
+    public IndexController(QuestionService questionService) {
         this.questionService = questionService;
     }
 
     @GetMapping("/")
     public String goMain(Optional<Integer> pageNum, Model model) { // 메인화면(Url 매핑 -> "/") 진입 시 1페이지로 설정
-        Criteria cri = new Criteria(pageNum.orElse(new Integer(1)));
+        Criteria criteria = new Criteria(pageNum.orElse(new Integer(1)));
         int notDeletedQuestionSize = questionService.notDeletedSize();
-        model.addAttribute("pageMaker", new PageDTO(cri, notDeletedQuestionSize));
-        model.addAttribute("questions", questionService.pagingList(cri));
+        model.addAttribute("pageMaker", new PageDTO(criteria, notDeletedQuestionSize));
+        model.addAttribute("questions", questionService.pagingList(criteria));
         return "index";
     }
 }

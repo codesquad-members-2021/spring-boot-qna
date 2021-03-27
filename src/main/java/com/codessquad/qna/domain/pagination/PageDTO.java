@@ -12,7 +12,7 @@ public class PageDTO {
     private int nextStartPage; // ">>" 버튼 클릭시 endPage 다음 페이지로 이동, [ 1 2 3 4 5 >> ] 일 경우 6으로 이동
 
     private int total;         // 화면에 출력할 수 있는(삭제되지 않은) 게시물의 총 개수
-    private Criteria cri;      // 현재 페이지(pageNum)과 한 페이지에서 보여줄 게시물 개수(size) 정보를 가짐
+    private Criteria criteria; // 현재 페이지(pageNum)과 한 페이지에서 보여줄 게시물 개수(size) 정보를 가짐
 
     /**
      * 현재 페이지가 포함된 페이지 목록.
@@ -21,14 +21,14 @@ public class PageDTO {
      */
     private List<PageNumber> numbers = new ArrayList<>();
 
-    public PageDTO(Criteria cri, int total) {
-        this.cri = cri;
+    public PageDTO(Criteria criteria, int total) {
+        this.criteria = criteria;
         this.total = total;
 
-        this.endPage = (int) (Math.ceil(cri.getPageNum() / 5.0)) * 5; // 5는 페이지 목록에서 출력할 페이지 개수 (n.0, n)
+        this.endPage = (int) (Math.ceil(criteria.getPageNum() / 5.0)) * 5; // 5는 페이지 목록에서 출력할 페이지 개수 (n.0, n)
         this.startPage = this.endPage - 4; // 시작페이지는 마지막 페이지에서 (페이지 목록에서 출력할 페이지 개수 - 1)를 뺸다.
 
-        int realEnd = (int) (Math.ceil((total * 1.0) / cri.getSize())); // 실제 데이터를 바탕으로 한 진짜 끝 페이지
+        int realEnd = (int) (Math.ceil((total * 1.0) / criteria.getSize())); // 실제 데이터를 바탕으로 한 진짜 끝 페이지
 
         if (realEnd < this.endPage) { // endPage는 5의 배수로 고정되어있다. 페이지 목록의 realEnd(실제)가 endPage(5의 배수)보다 작다면,
             this.endPage = realEnd;   // realEnd가 3이라면 endPage [ 1 2 3 4 5 ]로 표시되는 것을 [ 1 2 3 ]로 바꿔줘야한다.
@@ -39,7 +39,7 @@ public class PageDTO {
 
         int pageStartNumber = this.startPage;
         for (int i = 0; i <= this.endPage - this.startPage; i++) { // 페이지 목록에서 startPage부터 endPage까지 저장한다.
-            numbers.add(new PageNumber(pageStartNumber++, cri.getPageNum()));
+            numbers.add(new PageNumber(pageStartNumber++, criteria.getPageNum()));
         }
 
         prevEndPage = startPage - 1;
@@ -54,11 +54,11 @@ public class PageDTO {
         return endPage;
     }
 
-    public boolean isPrev() {
+    public boolean hasPrev() {
         return prev;
     }
 
-    public boolean isNext() {
+    public boolean hasNext() {
         return next;
     }
 
@@ -66,8 +66,8 @@ public class PageDTO {
         return total;
     }
 
-    public Criteria getCri() {
-        return cri;
+    public Criteria getCriteria() {
+        return criteria;
     }
 
     public List<PageNumber> getNumbers() {
