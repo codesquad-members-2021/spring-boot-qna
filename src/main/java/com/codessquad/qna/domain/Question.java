@@ -3,6 +3,7 @@ package com.codessquad.qna.domain;
 import com.fasterxml.jackson.annotation.*;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,9 +13,11 @@ public class Question extends AbstractEntity {
     @JoinColumn(foreignKey = @ForeignKey(name = "fk_question_author"))
     private User author;
 
+    @NotBlank(message = "제목을 입력해주세요.")
     private String title;
 
-    @Column(length = 2000)
+    @Lob
+    @NotBlank(message = "본문을 입력해주세요.")
     private String contents;
 
     @OneToMany(mappedBy = "question", cascade = CascadeType.ALL)
@@ -34,6 +37,11 @@ public class Question extends AbstractEntity {
     public void update(String title, String contents) {
         this.title = title;
         this.contents = contents;
+    }
+
+    public void update(Question updatedQuestion) {
+        this.title = updatedQuestion.title;
+        this.contents = updatedQuestion.contents;
     }
 
     public boolean isNotSameAuthor(User loginUser) {
@@ -66,6 +74,10 @@ public class Question extends AbstractEntity {
 
     public void setContents(String contents) {
         this.contents = contents;
+    }
+
+    public void setAuthor(User author) {
+        this.author = author;
     }
 }
 

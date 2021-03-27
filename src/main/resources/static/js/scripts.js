@@ -74,9 +74,27 @@ function checkEmptyFields() {
     for (let i = 0; i < data.length; i++) {
         if (data[i].value.trim() === "") {
             let name = data[i].getAttribute("name");
-            alert(name + " 필드가 비어있습니다.")
+            alert(name + "이(가) 비어있습니다.")
             return;
         }
     }
+
     document.question.submit();
 }
+
+function checkQuestionFields() {
+    let title = document.question.querySelector("#title");
+    if (title.value.trim() === "") {
+        alert(title.getAttribute("name") + "이(가) 비어있습니다.")
+        return;
+    }
+
+    let contents = document.question.querySelector("#contents");
+    if (contents.value.trim() === "") {
+        alert(contents.getAttribute("name") + "이(가) 비어있습니다.")
+        return;
+    }
+
+    document.question.submit();
+}
+

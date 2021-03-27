@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import java.util.List;
+import java.util.Objects;
 
 import static com.codessquad.qna.controller.HttpSessionUtils.*;
 
@@ -75,13 +76,14 @@ public class UserController {
     @PutMapping("/{id}")
     public String update(@PathVariable Long id, @Valid User updatedUser, Errors errors, @RequestParam String password, Model model, HttpSession session) {
         User user = userService.findVerifiedUser(id, session);
+        updatedUser.setId(id);
         if (errors.hasErrors()) {
-            model.addAttribute("user", user);
-            model.addAttribute("errorMessage", "비어있는 필드가 있습니다.");
+            model.addAttribute("user", updatedUser);
+            model.addAttribute("errorMessage", Objects.requireNonNull(errors.getFieldError()).getDefaultMessage());
             return "/user/updateForm";
         }
         if (!user.isValidPassword(password)) {
-            model.addAttribute("user", user);
+            model.addAttribute("user", updatedUser);
             model.addAttribute("errorMessage", "비밀번호가 일치하지 않습니다.");
             return "/user/updateForm";
         }
@@ -90,6 +92,4 @@ public class UserController {
         return "redirect:/users";
     }
 }
-
-
 

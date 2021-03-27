@@ -7,7 +7,7 @@
     <div class="col-md-12 col-sm-12 col-lg-10 col-lg-offset-1">
         <div class="panel panel-default qna-list">
             <ul class="list">
-                {{#questions}}
+                {{#page}}
                 <li>
                     <div class="wrap">
                         <div class="main">
@@ -17,7 +17,7 @@
                             <div class="auth-info">
                                 <i class="icon-add-comment"></i>
                                 <span class="time">{{formattedCreatedDate}}</span>
-                                <a href="user/{{writer.id}}" class="author">{{author.userId}}</a>
+                                <a href="users/{{author.id}}" class="author">{{author.userId}}</a>
                             </div>
                             <div class="reply" title="댓글">
                                 <i class="icon-reply"></i>
@@ -26,19 +26,21 @@
                         </div>
                     </div>
                 </li>
-                {{/questions}}
+                {{/page}}
             </ul>
             <div class="row">
                 <div class="col-md-3"></div>
                 <div class="col-md-6 text-center">
                     <ul class="pagination center-block" style="display:inline-block;">
-                        <li><a href="#">«</a></li>
-                        <li><a href="#">1</a></li>
-                        <li><a href="#">2</a></li>
-                        <li><a href="#">3</a></li>
-                        <li><a href="#">4</a></li>
-                        <li><a href="#">5</a></li>
-                        <li><a href="#">»</a></li>
+                        {{#hasPrevious}}
+                        <li><a href="?page={{previous}}">«</a></li>
+                        {{/hasPrevious}}
+                        {{#pages}}
+                        <li class="{{#active}} active {{/active}}"><a href="?page={{pageId}}">{{pageNumber}}</a></li>
+                        {{/pages}}
+                        {{#hasNext}}
+                        <li><a href="?page={{next}}">»</a></li>
+                        {{/hasNext}}
                     </ul>
                 </div>
                 <div class="col-md-3 qna-write">
@@ -52,3 +54,4 @@
 {{> footer}}
 </body>
 </html>
+
