@@ -56,4 +56,8 @@ public class Answer {
     public boolean isSameWriter(User writer) {
         return this.writer.equals(writer);
     }
+
+    public Question getQuestion() {
+        return this.question;
+    }
 }

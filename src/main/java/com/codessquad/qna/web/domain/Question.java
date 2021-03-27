@@ -1,5 +1,7 @@
 package com.codessquad.qna.web.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -26,6 +28,7 @@ public class Question {
     private LocalDateTime createdDateTime = LocalDateTime.now();
 
     @OneToMany(mappedBy = "question")
+    @JsonIgnore
     @OrderBy("id ASC")
     private List<Answer> answers = new ArrayList<>();
 

@@ -5,7 +5,6 @@ import com.codessquad.qna.web.domain.Answer;
 import com.codessquad.qna.web.domain.User;
 import com.codessquad.qna.web.exception.NotLoginException;
 import com.codessquad.qna.web.service.AnswerService;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
@@ -21,7 +20,7 @@ public class ApiAnswerController {
 
     @PostMapping
     public Answer createAnswer(@PathVariable long questionId, String contents, HttpSession session) {
-        //여기 예외처리 안되는 것 같음 
+        //여기 예외처리 안되는 것 같음
         User user = HttpSessionUtils.getSessionedUser(session).orElseThrow(NotLoginException::new);
         return answerService.postAnswer(user, questionId, contents);
     }

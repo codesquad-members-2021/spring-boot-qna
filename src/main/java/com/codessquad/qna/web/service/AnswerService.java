@@ -2,6 +2,7 @@ package com.codessquad.qna.web.service;
 
 import com.codessquad.qna.web.HttpSessionUtils;
 import com.codessquad.qna.web.domain.Answer;
+import com.codessquad.qna.web.domain.Question;
 import com.codessquad.qna.web.domain.User;
 import com.codessquad.qna.web.exception.IllegalAccessException;
 import com.codessquad.qna.web.exception.IllegalEntityIdException;
@@ -19,7 +20,8 @@ public class AnswerService {
     }
 
     public Answer postAnswer(User writer, long questionId, String contents) {
-        Answer answer = new Answer(writer, questionService.findQuestion(questionId), contents);
+        Question question = questionService.findQuestion(questionId);
+        Answer answer = new Answer(writer, question, contents);
         return answerRepository.save(answer);
     }
 
