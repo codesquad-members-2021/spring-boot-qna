@@ -55,7 +55,7 @@ function onCreateAnswerSuccess(data, status) {
     let answerTemplate = $("#answerTemplate").html();
     let template = answerTemplate.format(
         data.writer.name,
-        data.createdDateTime,
+        formatDateTime(data.createdDateTime),
         data.contents,
         data.questionId,
         data.id
@@ -83,3 +83,7 @@ function decreaseAnswerCount() {
     countElement.html(value);
 }
 
+function formatDateTime(dateTime) {
+    console.log(dateTime);
+    return dateTime;
+}
