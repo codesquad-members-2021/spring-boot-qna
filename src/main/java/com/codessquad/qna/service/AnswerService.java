@@ -1,6 +1,7 @@
 package com.codessquad.qna.service;
 
 import com.codessquad.qna.domain.Answer;
+import com.codessquad.qna.domain.Question;
 import com.codessquad.qna.domain.User;
 import com.codessquad.qna.exception.NotFoundException;
 import com.codessquad.qna.repository.AnswerRepository;
@@ -24,8 +25,9 @@ public class AnswerService {
         return answerRepository.save(answer);
     }
 
-    public void delete(User user, Answer answer) {
+    public void delete(Question question, Answer answer) {
         answer.delete();
+        question.decreaseAnswerCount();
         answerRepository.save(answer);
     }
 

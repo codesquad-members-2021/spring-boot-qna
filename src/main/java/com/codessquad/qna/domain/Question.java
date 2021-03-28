@@ -1,7 +1,6 @@
 package com.codessquad.qna.domain;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.hibernate.annotations.Where;
 
@@ -103,11 +102,11 @@ public class Question extends AbstractEntity {
         this.answers.clear();
     }
 
-    public void addAnswer() {
+    public void increaseAnswerCount() {
         this.countOfAnswer++;
     }
 
-    public void deleteAnswer() {
+    public void decreaseAnswerCount() {
         this.countOfAnswer--;
     }
 
