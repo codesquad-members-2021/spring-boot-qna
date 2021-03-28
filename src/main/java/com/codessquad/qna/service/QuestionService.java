@@ -43,12 +43,8 @@ public class QuestionService {
         //@Todo 비어있는 타이틀이나, 비어있는 컨텐츠가 들어오면 그냥 저장되는 문제..
     }
 
-    public void showDetailQuestion(Long id, Model model) {
-        Question currentQuestion = questionRepostory.findById(id).orElseThrow(NotFoundException::new);
-        List<Answer> answerList = answerRepository.findByQuestionIdAndDeletedFalse(id);
-        model.addAttribute("question", currentQuestion);
-        model.addAttribute("answerList", answerList);
-        logger.info("update Question : {}" + currentQuestion.getTitle());
+    public Question showDetailQuestion(Long id) {
+        return questionRepostory.findById(id).orElseThrow(NotFoundException::new);
     }
 
     public List<Question> findAll() {
@@ -88,4 +84,6 @@ public class QuestionService {
         logger.info("글 수정 : {}", question.getTitle());
         model.addAttribute("question", question);
     }
+
+
 }
