@@ -26,6 +26,8 @@ public class Question {
     private String contents;
     private LocalDateTime createdDateTime = LocalDateTime.now();
 
+    private boolean deleted;
+
     public Long getId() {
         return id;
     }
@@ -64,6 +66,10 @@ public class Question {
 
     public List<Answer> getAnswers() {
         return answers;
+    }
+
+    public void delete() {
+        this.deleted = true;
     }
 
     public void addAnswer(Answer answer) {

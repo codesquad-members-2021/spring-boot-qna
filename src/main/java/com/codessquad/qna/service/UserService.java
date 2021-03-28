@@ -5,6 +5,7 @@ import com.codessquad.qna.exception.NoUserException;
 import com.codessquad.qna.repository.UserRepository;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.List;
 
 @Service
@@ -16,10 +17,12 @@ public class UserService {
         this.userRepository = userRepository;
     }
 
+    @Transactional
     public void save(User user) {
         userRepository.save(user);
     }
 
+    @Transactional
     public List<User> getUserList() {
         return userRepository.findAll();
     }
@@ -32,13 +35,12 @@ public class UserService {
         return userRepository.findByUserId(userId);
     }
 
+    @Transactional
     public void updateUser(long id, User updateUser, String newPassword) {
         User user = getUserById(id);
         checkPassword(user, updateUser);
 
         user.update(updateUser, newPassword);
-
-        save(user);
     }
 
     private void checkPassword(User originalUser, User updateUser) {
