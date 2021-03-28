@@ -3,6 +3,7 @@ package com.codessquad.qna.web.domain.answer;
 import com.codessquad.qna.web.domain.question.Question;
 import com.codessquad.qna.web.domain.user.User;
 import com.codessquad.qna.web.utils.DateTimeUtils;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -12,21 +13,26 @@ public class Answer {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @JsonProperty
     private Long id;
 
     @ManyToOne
     @JoinColumn(foreignKey = @ForeignKey(name = "fk_answer_to_writer"))
+    @JsonProperty
     private User writer;
 
     @ManyToOne
     @JoinColumn(foreignKey = @ForeignKey(name = "fk_answer_to_question"))
+    @JsonProperty
     private Question question;
 
     @Column(nullable = false)
+    @JsonProperty
     private String contents;
 
     private boolean isActive = true;
 
+    @JsonProperty
     private LocalDateTime createdAt;
 
 

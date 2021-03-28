@@ -1,6 +1,8 @@
 package com.codessquad.qna.web.domain.user;
 
 import com.codessquad.qna.web.domain.answer.Answer;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -12,18 +14,23 @@ public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @JsonProperty
     private Long id;
 
     @Column(nullable = false, unique = true, length = 20)
+    @JsonProperty
     private String userId;
 
     @Column(nullable = false)
+    @JsonIgnore
     private String password;
 
     @Column(nullable = false)
+    @JsonProperty
     private String name;
 
     @Column(nullable = false)
+    @JsonProperty
     private String email;
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
@@ -121,7 +128,7 @@ public class User {
         private String name = "unknown";
         private String email = "unknown";
 
-        private Builder(){
+        private Builder() {
         }
 
         private Builder(String userId, String password) {

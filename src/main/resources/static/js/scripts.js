@@ -18,8 +18,9 @@ function addAnswer(e) {
 function onError(){
     console.log("failure");
 }
-function onSuccess(){
-    console.log("success");
+function onSuccess(data, status){
+    console.log(data);
+    console.log(status);
 }
 
 String.prototype.format = function () {
