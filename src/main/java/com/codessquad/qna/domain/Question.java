@@ -1,6 +1,7 @@
 package com.codessquad.qna.domain;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.hibernate.annotations.Where;
 
@@ -32,7 +33,7 @@ public class Question extends AbstractEntity {
     @OneToMany(mappedBy = "question")
     @OrderBy("id DESC")
     @Where(clause = "deleted = false")
-    @JsonManagedReference
+    @JsonBackReference
     private final List<Answer> answers = new ArrayList<>();
 
     protected Question() {

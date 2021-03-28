@@ -2,6 +2,8 @@ package com.codessquad.qna.web;
 
 import com.codessquad.qna.domain.User;
 import com.codessquad.qna.service.UserService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -14,6 +16,8 @@ import static com.codessquad.qna.web.HttpSessionUtils.*;
 @RequestMapping("/users")
 public class UserController {
 
+    private static final Logger logger = LoggerFactory.getLogger(UserController.class);
+
     private final UserService userService;
 
     public UserController(UserService userService) {
@@ -23,6 +27,7 @@ public class UserController {
     @PostMapping
     public String create(User user) {
         userService.save(user);
+        logger.info("user : {}", user);
         return "redirect:/users";
     }
 
