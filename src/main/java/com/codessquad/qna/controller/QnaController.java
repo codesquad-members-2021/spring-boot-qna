@@ -23,28 +23,28 @@ import java.util.List;
 @RequestMapping("/questions")
 public class QnaController {
 
-    private QuestionRepository questionRepository;
+    private final QuestionRepository questionRepository;
 
     public QnaController (QuestionRepository questionRepository) {
         this.questionRepository = questionRepository;
     }
 
     @PostMapping
-    public String createQuestion(String writer, String title, String contents) {
+    public String create(String writer, String title, String contents) {
         Question question = new Question(writer, title, contents);
         questionRepository.save(question);
         return "redirect:/questions";
     }
 
     @GetMapping
-    public String readQuestions(Model model) {
+    public String read(Model model) {
         model.addAttribute("questions", questionRepository.findAll());
         return "index";
     }
 
     @GetMapping("/{id}")
-    public String showQuestion(@PathVariable Long id, Model model) {
-        model.addAttribute("question", questionRepository.findById(id).get());
+    public String show(@PathVariable Long id, Model model) {
+        model.addAttribute("question", questionRepository.findById(id).orElse(null));
         return "/qna/show";
     }
 

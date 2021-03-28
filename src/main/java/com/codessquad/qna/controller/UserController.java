@@ -25,7 +25,10 @@ public class UserController {
 
     @PostMapping
     public String createUserAccount(User user) {
-        if (user == null) {
+        if (user.getUserId().equals("") || user.getUserId() == null ||
+            user.getName().equals("") || user.getName() == null ||
+            user.getEmail().equals("") || user.getEmail() == null ||
+            user.getPassword().equals("") || user.getPassword() == null) {
             return "redirect:/user/form";
         }
         userRepository.save(user);
@@ -40,19 +43,19 @@ public class UserController {
 
     @GetMapping("/profile/{id}")
     public String showProfile(@PathVariable Long id, Model model) {
-        model.addAttribute("user", userRepository.findById(id).get());
+        model.addAttribute("user", userRepository.findById(id).orElse(null));
         return "/user/profile";
     }
 
     @GetMapping("/{id}")
     public String showUpdateForm(@PathVariable Long id, Model model) {
-        model.addAttribute("user", userRepository.findById(id).get());
+        model.addAttribute("user", userRepository.findById(id).orElse(null));
         return "/user/update";
     }
 
    @PutMapping("/{id}/update")
     public String updateUserInfo(@PathVariable Long id, User updateUser) {
-        User user = userRepository.findById(id).get();
+        User user = userRepository.findById(id).orElse(null);
         user.update(updateUser);
         userRepository.save(user);
         return "redirect:/users";
