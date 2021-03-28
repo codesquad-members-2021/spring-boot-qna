@@ -13,7 +13,7 @@ import static com.codessquad.qna.utils.SessionUtil.getLoginUser;
 import static com.codessquad.qna.utils.SessionUtil.isLoginUser;
 
 @Controller
-@RequestMapping("/qna")
+@RequestMapping("/questions")
 public class QuestionController {
 
     private final QuestionService questionService;
@@ -22,9 +22,10 @@ public class QuestionController {
         this.questionService = questionService;
     }
 
-    @GetMapping("/")
-    public String qnaPage() {
-        return "redirect:/qna/list";
+    @GetMapping
+    public String showList(Model model) {
+        model.addAttribute("questionList", questionService.findAll());
+        return "/qna/list";
     }
 
     @GetMapping("/form")
@@ -32,20 +33,15 @@ public class QuestionController {
         if (!isLoginUser(session)) {
             throw new UnauthorizedException("질문글 작성을 위해서는 로그인이 필요합니다");
         }
-        return "qna/form";
+        return "/qna/form";
     }
 
-    @PostMapping("/questions")
+    @PostMapping
     public String create(Question question, HttpSession session) {
         questionService.createQuestion(question, getLoginUser(session));
         return "redirect:/qna/list";
     }
 
-    @GetMapping("/list")
-    public String showList(Model model) {
-        model.addAttribute("questionList", questionService.findAll());
-        return "/qna/list";
-    }
 
     @GetMapping("/{id}")
     public String showDetail(@PathVariable Long id, Model model) {
@@ -56,7 +52,7 @@ public class QuestionController {
     @PutMapping("/{id}")
     public String update(@PathVariable Long id, String title, String contents) {
         questionService.updateQuestion(id, title, contents);
-        return ("redirect:/qna/" + id);
+        return ("redirect:/questions/" + id);
     }
 
     @DeleteMapping("/{id}")

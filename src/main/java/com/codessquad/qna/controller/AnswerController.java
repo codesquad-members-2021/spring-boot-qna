@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import javax.servlet.http.HttpSession;
 
 @Controller
-@RequestMapping("/qna/{questionId}")
+@RequestMapping("/questions/{questionId}")
 public class AnswerController {
 
     private static final Logger logger = LoggerFactory.getLogger(AnswerController.class);
@@ -26,13 +26,13 @@ public class AnswerController {
     @PostMapping("/answers")
     public String create(@PathVariable Long questionId, String contents, HttpSession session) {
         answerService.createAnswer(questionId, contents, session);
-        return ("redirect:/qna/" + questionId);
+        return ("redirect:/questions/" + questionId);
     }
 
     @DeleteMapping("/answers/{answerId}")
     public String remove(@PathVariable Long questionId, @PathVariable Long answerId, HttpSession session) {
         answerService.removeAnswer(questionId, answerId, session);
-        return ("redirect:/qna/" + questionId);
+        return ("redirect:/questions/" + questionId);
     }
 
 }
