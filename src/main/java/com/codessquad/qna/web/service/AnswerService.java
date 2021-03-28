@@ -22,6 +22,7 @@ public class AnswerService {
     public Answer postAnswer(User writer, long questionId, String contents) {
         Question question = questionService.findQuestion(questionId);
         Answer answer = new Answer(writer, question, contents);
+        question.upCountOfAnswer();
         return answerRepository.save(answer);
     }
 
@@ -30,6 +31,7 @@ public class AnswerService {
         if(!checkWriter(answer, user)) {
             return false;
         }
+        answer.getQuestion().downCountOfAnswer();
         answerRepository.delete(answer);
         return true;
     }

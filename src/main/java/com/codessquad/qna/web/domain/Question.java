@@ -32,6 +32,8 @@ public class Question {
     @OrderBy("id DESC")
     private List<Answer> answers = new ArrayList<>();
 
+    private int countOfAnswers = 0;
+
     public void setWriter(User writer) {
         this.writer = writer;
     }
@@ -68,15 +70,15 @@ public class Question {
         return this.answers;
     }
 
-    public long getAnswersSize() {
-        return this.answers.size();
-    }
-
     public String getFormattedCreatedDate() {
         if (createdDateTime == null) {
             return "";
         }
         return createdDateTime.format(QUESTION_DATETIME_FORMAT);
+    }
+
+    public int getCountOfAnswers() {
+        return this.countOfAnswers;
     }
 
     public boolean isSameWriter(User writer) {
@@ -86,5 +88,13 @@ public class Question {
     public void update(Question question) {
         this.title = question.title;
         this.contents = question.contents;
+    }
+
+    public void upCountOfAnswer() {
+        this.countOfAnswers += 1;
+    }
+
+    public void downCountOfAnswer() {
+        this.countOfAnswers -= 1;
     }
 }
