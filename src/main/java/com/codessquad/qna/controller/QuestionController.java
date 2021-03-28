@@ -1,6 +1,7 @@
 package com.codessquad.qna.controller;
 
 import com.codessquad.qna.domain.Question;
+import com.codessquad.qna.exception.NotFoundException;
 import com.codessquad.qna.exception.NotLoggedInException;
 import com.codessquad.qna.service.QuestionService;
 import org.slf4j.Logger;
@@ -29,8 +30,12 @@ public class QuestionController {
         Page<Question> page = questionService.questionsPage(pageNumber);
         logger.debug("total : " + page.getTotalElements());
         logger.debug("total page : " + page.getTotalPages());
+        int totalPages = page.getTotalPages();
+        if (pageNumber < 1 || pageNumber > totalPages) {
+            throw new NotFoundException();
+        }
         model.addAttribute("questions", page);
-        model.addAttribute("pageNumber", pageNumber);
+        model.addAttribute("pagination", Pagination.of(pageNumber, totalPages));
         return "qna/list";
     }
 
