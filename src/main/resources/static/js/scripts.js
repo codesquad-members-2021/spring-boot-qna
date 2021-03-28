@@ -19,8 +19,11 @@ function onError(){
     console.log("failure");
 }
 function onSuccess(data, status){
-    console.log(data);
-    console.log(status);
+    console.log("success");
+    var answerTemplate = $("#answerTemplate").html();
+    var template = answerTemplate.format(data.writer.userId, data.createdAt, data.contents, data.question.id, data.id);
+    $(".qna-comment-slipp-articles").prepend(template);
+    $("textarea[name=contents]").val("");
 }
 
 String.prototype.format = function () {
