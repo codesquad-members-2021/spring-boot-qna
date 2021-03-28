@@ -24,14 +24,14 @@ public class AnswerService {
     }
 
     @Transactional
-    public void create(long questionId, String contents, User loginUser) {
+    public Answer create(long questionId, String contents, User loginUser) {
         Question question = getQuestionById(questionId);
 
         Answer answer = Answer.build(loginUser, question)
                 .contents(contents)
                 .build();
 
-        answerRepository.save(answer);
+        return answerRepository.save(answer);
     }
 
     @Transactional
