@@ -14,7 +14,7 @@ import static com.codessquad.qna.utils.SessionUtil.getLoginUser;
 import static com.codessquad.qna.utils.SessionUtil.removeLoginUser;
 
 @Controller
-@RequestMapping("/user")
+@RequestMapping("/users")
 public class UserController {
 
     private static final Logger logger = LoggerFactory.getLogger(UserController.class);
@@ -27,7 +27,7 @@ public class UserController {
 
     @GetMapping
     public String showUserList() {
-        return "redirect:/user/list";
+        return "redirect:/users/list";
     }
 
     @GetMapping("/form")
@@ -58,7 +58,7 @@ public class UserController {
     @PutMapping("/{id}")
     public String update(@PathVariable Long id, String pastPassword, User updatedUser, HttpSession session) {
         userService.updateUser(id, pastPassword, updatedUser, session);
-        return "redirect:/user";
+        return "redirect:/users";
     }
 
     @GetMapping("/{id}/form")
