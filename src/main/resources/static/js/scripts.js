@@ -11,10 +11,9 @@ function addAnswer(e) {
     data: queryString,
     dataType: 'json',
     error: function (xhr, status) {
-      alert("error")
+      alert(xhr.responseText);
     },
     success: function (data, status) {
-      console.log(data)
       var answerTemplate = $("#answerTemplate").html();
       var template = answerTemplate.format(data.writer.userId, data.formattedCreatedDate, data.contents, data.question.id, data.id);
       $(".qna-comment-slipp-articles").prepend(template);
@@ -35,11 +34,10 @@ function deleteAnswer(e) {
     type : 'delete',
     url : url,
     dataType: 'json',
-    error : function (xhr, status) {
-      console.log("error")
+    error: function (xhr, status) {
+      alert(xhr.responseText);
     },
     success : function (data, status) {
-      console.log(data);
       if(data.valid) {
         deleteBtn.closest("article").remove();
       } else {
