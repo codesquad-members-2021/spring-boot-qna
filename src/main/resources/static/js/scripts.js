@@ -11,7 +11,7 @@ function addAnswer(e) {
     data: queryString,
     dataType: 'json',
     error: function (xhr, status) {
-      console.log("fail")
+      alert("error")
     },
     success: function (data, status) {
       console.log(data)
@@ -23,7 +23,7 @@ function addAnswer(e) {
   });
 }
 
-$(".delete-answer-form button[type=submit]").click(deleteAnswer);
+$(".qna-comment-slipp-articles").on("click", ".delete-answer-form button[type='submit']", deleteAnswer);
 
 function deleteAnswer(e) {
   e.preventDefault();
