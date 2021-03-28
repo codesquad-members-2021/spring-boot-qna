@@ -1,7 +1,6 @@
 package com.codessquad.qna.controller;
 
 import com.codessquad.qna.domain.Question;
-import com.codessquad.qna.domain.User;
 import com.codessquad.qna.service.QuestionService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -14,7 +13,6 @@ import javax.servlet.http.HttpSession;
 import static com.codessquad.qna.utils.SessionUtil.getLoginUser;
 
 @Controller
-
 @RequestMapping("/qna")
 public class QuestionController {
 
