@@ -33,7 +33,7 @@ public class AnswerService {
     public void createAnswer(Long questionId, String contents, HttpSession session) {
         if (!isLoginUser(session)) {
             logger.info("답변달기 - 실패 : 권한(로그인)되지 않은 사용자의 답변달기 시도가 실패함");
-            throw new LoginFailedException();
+            throw new LoginFailedException("답변달기 - 실패 : 권한(로그인)되지 않은 사용자의 답변달기 시도가 실패함");
         }
         User loginUser = getLoginUser(session);
         Answer answer = new Answer(loginUser, questionRepostory.getOne(questionId), contents);
