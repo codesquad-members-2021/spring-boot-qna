@@ -26,7 +26,7 @@ public class UserController {
     }
 
     @GetMapping
-    public String listShow() {
+    public String showUserList() {
         return "redirect:/user/list";
     }
 
