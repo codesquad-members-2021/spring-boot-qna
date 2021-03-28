@@ -112,7 +112,7 @@ public class Question {
         this.answerList.forEach(Answer::deleteAnswer);
     }
 
-    public boolean isDeleteable() {
+    public boolean isDeletable() {
         for (Answer answer : this.answerList) {
             if (!answer.isSameWriter(this.writer)) {
                 return false;

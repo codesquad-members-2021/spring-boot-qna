@@ -91,6 +91,6 @@ public class Answer {
     }
 
     public boolean isSameWriter(User questionWriter) {
-        return questionWriter.equals(this.writer);
+        return this.writer.equals(questionWriter);
     }
 }

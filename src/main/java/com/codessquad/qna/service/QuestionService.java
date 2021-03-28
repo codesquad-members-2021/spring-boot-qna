@@ -1,7 +1,6 @@
 package com.codessquad.qna.service;
 
 import com.codessquad.qna.domain.*;
-import com.codessquad.qna.exception.LoginFailedException;
 import com.codessquad.qna.exception.NotFoundException;
 import com.codessquad.qna.exception.UnauthorizedException;
 import org.slf4j.Logger;
@@ -12,7 +11,6 @@ import org.springframework.ui.Model;
 import javax.servlet.http.HttpSession;
 import java.util.List;
 
-import static com.codessquad.qna.utils.SessionUtil.isLoginUser;
 import static com.codessquad.qna.utils.SessionUtil.isValidUser;
 
 @Service
@@ -22,11 +20,9 @@ public class QuestionService {
 
     private final QuestionRepostory questionRepostory;
 
-    private final AnswerRepository answerRepository;
 
-    public QuestionService(QuestionRepostory questionRepostory, AnswerRepository answerRepository) {
+    public QuestionService(QuestionRepostory questionRepostory) {
         this.questionRepostory = questionRepostory;
-        this.answerRepository = answerRepository;
     }
 
     public void createQuestion(Question question, User user) {
@@ -59,7 +55,7 @@ public class QuestionService {
             throw new UnauthorizedException("질문글 삭제 - 실패, 권한없는 사용자의 삭제시도");
         }
 
-        if (!question.isDeleteable()) {
+        if (!question.isDeletable()) {
             throw new UnauthorizedException("질문글 삭제 - 실패, 다른사람의 답변이 달린 질문글은 삭제할 수 없습니다");
         }
         question.deleteQuestion();
