@@ -33,10 +33,7 @@ public class AnswerController {
         }
 
         User sessionedUser = HttpSessionUtils.getUserFromSession(session);
-        Question question = answerService.findQuestionById(questionId);
-        Answer answer = new Answer(sessionedUser, question, contents);
-
-        answerService.save(answer);
+        answerService.save(questionId, contents, sessionedUser);
 
         return "redirect:/questions/{questionId}";
     }

@@ -2,6 +2,7 @@ package com.codesquad.qna.service;
 
 import com.codesquad.qna.domain.Answer;
 import com.codesquad.qna.domain.Question;
+import com.codesquad.qna.domain.User;
 import com.codesquad.qna.repository.AnswerRepository;
 import com.codesquad.qna.repository.QuestionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,7 +19,13 @@ public class AnswerService {
         this.questionRepository = questionRepository;
     }
 
-    public void save(Answer answer) {
+    public void save(Long questionId, String contents, User sessionedUser) {
+        Question question = findQuestionById(questionId);
+        Answer answer = new Answer(sessionedUser, question, contents);
+        save(answer);
+    }
+
+    private void save(Answer answer) {
         answerRepository.save(answer);
     }
 
