@@ -14,7 +14,7 @@ import java.util.Objects;
 @EntityListeners(AuditingEntityListener.class)
 public class AbstractEntity {
 
-    private static final DateTimeFormatter FORMAT_yyyy_MM_dd_HHmm = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+    private static final DateTimeFormatter DATE_TIME_FORMAT = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
 
     @Id
     @JsonProperty
@@ -49,7 +49,7 @@ public class AbstractEntity {
         if (localDateTime == null) {
             return "";
         }
-        return localDateTime.format(FORMAT_yyyy_MM_dd_HHmm);
+        return localDateTime.format(DATE_TIME_FORMAT);
     }
 
     public boolean matchesId(Long id) {

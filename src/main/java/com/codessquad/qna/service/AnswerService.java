@@ -19,9 +19,8 @@ public class AnswerService {
     public Answer create(Long questionId, Answer answer, User writer) {
         Question question = questionRepository.findById(questionId)
                 .orElseThrow(NotFoundException::new);
-        answer.setQuestion(question);
         answer.setWriter(writer);
-        question.addAnswer();
+        question.addAnswer(answer);
         return answerRepository.save(answer);
     }
 

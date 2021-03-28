@@ -27,15 +27,19 @@
       <div class="row">
         <div class="col-md-3"></div>
         <div class="col-md-6 text-center">
+          {{#pagination}}
           <ul class="pagination center-block" style="display:inline-block;">
-            <li><a href="#">«</a></li>
-            <li><a href="#">1</a></li>
-            <li><a href="#">2</a></li>
-            <li><a href="#">3</a></li>
-            <li><a href="#">4</a></li>
-            <li><a href="#">5</a></li>
-            <li><a href="#">»</a></li>
+            {{#if prev}}
+            <li><a href="/questions?page={{prev}}">«</a></li>
+            {{/if}}
+            {{#pages}}
+            <li><a href="/questions?page={{this}}">{{this}}</a></li>
+            {{/pages}}
+            {{#if next}}
+            <li><a href="/questions?page={{next}}">»</a></li>
+            {{/if}}
           </ul>
+          {{/pagination}}
         </div>
         <div class="col-md-3 qna-write">
           <a href="/questions/form" class="btn btn-primary pull-right" role="button">질문하기</a>

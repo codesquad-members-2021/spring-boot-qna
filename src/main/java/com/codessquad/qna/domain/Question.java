@@ -94,7 +94,9 @@ public class Question extends AbstractEntity {
         }
     }
 
-    public void addAnswer() {
+    public void addAnswer(Answer answer) {
+        answers.add(answer);
+        answer.setQuestion(this);
         this.countOfAnswers += 1;
     }
 

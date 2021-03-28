@@ -5,6 +5,9 @@ import com.codessquad.qna.domain.QuestionRepository;
 import com.codessquad.qna.domain.User;
 import com.codessquad.qna.exception.NotFoundException;
 import com.codessquad.qna.exception.UnauthorizedAccessException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -14,6 +17,7 @@ import java.util.List;
 public class QuestionService {
 
     private final QuestionRepository questionRepository;
+    private final int NUM_PER_PAGE = 15;
 
     public QuestionService(QuestionRepository questionRepository) {
         this.questionRepository = questionRepository;
@@ -51,5 +55,16 @@ public class QuestionService {
         Question question = questionWithAuthentication(id, loginUser);
         question.delete(loginUser);
     }
+
+    public Page<Question> questionsPage(int pageNumber) {
+        int pageIndex = pageNumber - 1;
+        Page<Question> page = questionRepository.findAllByDeletedFalse(
+                PageRequest.of(pageIndex, NUM_PER_PAGE, Sort.by("createdDateTime").descending()));
+        if (page.getTotalPages() < pageNumber) {
+            throw new NotFoundException();
+        }
+        return page;
+    }
+
 
 }
