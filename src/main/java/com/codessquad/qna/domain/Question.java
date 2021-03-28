@@ -5,8 +5,8 @@ import javax.servlet.http.HttpSession;
 import java.time.LocalDateTime;
 import java.util.List;
 
-import static com.codessquad.qna.utils.SessionUtil.getLoginUser;
 import static com.codessquad.qna.utils.DateUtil.DATE_AND_TIME_FORMAT;
+import static com.codessquad.qna.utils.SessionUtil.getLoginUser;
 
 @Entity
 public class Question {
@@ -110,6 +110,15 @@ public class Question {
     public void deleteQuestion() {
         this.deleted = true;
         this.answerList.forEach(Answer::deleteAnswer);
+    }
+
+    public boolean isDeleteable() {
+        for (Answer answer : this.answerList) {
+            if (!answer.isSameWriter(this.writer)) {
+                return false;
+            }
+        }
+        return true;
     }
 
 }
