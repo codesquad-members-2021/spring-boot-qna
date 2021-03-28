@@ -3,6 +3,7 @@ package com.codesquad.qna.service;
 import com.codesquad.qna.domain.Answer;
 import com.codesquad.qna.domain.Question;
 import com.codesquad.qna.domain.User;
+import com.codesquad.qna.exception.IllegalUserAccessException;
 import com.codesquad.qna.repository.AnswerRepository;
 import com.codesquad.qna.repository.QuestionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,7 +35,10 @@ public class AnswerService {
                 .orElseThrow(IllegalArgumentException::new);
     }
 
-    public void delete(Answer answer) {
+    public void delete(User user, Answer answer) {
+        if (!user.isMatchedAnswer(answer)) {
+            throw new IllegalUserAccessException();
+        }
         answer.delete();
         answerRepository.save(answer);
     }
@@ -43,4 +47,5 @@ public class AnswerService {
         return questionRepository.findById(questionId)
                 .orElseThrow(IllegalArgumentException::new);
     }
+
 }

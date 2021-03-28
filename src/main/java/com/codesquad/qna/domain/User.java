@@ -1,5 +1,7 @@
 package com.codesquad.qna.domain;
 
+import com.codesquad.qna.exception.IllegalUserAccessException;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import java.util.Objects;
@@ -85,6 +87,10 @@ public class User {
 
     public boolean isMatchedPassword(String password) {
         return this.password.equals(password);
+    }
+
+    public boolean isMatchedAnswer(Answer answer) {
+        return isMatchedUserId(answer.getUserId());
     }
 
     @Override

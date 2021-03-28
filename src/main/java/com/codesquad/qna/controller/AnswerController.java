@@ -47,11 +47,7 @@ public class AnswerController {
         User sessionedUser = HttpSessionUtils.getUserFromSession(session);
         Answer answer = answerService.findAnswerById(answerId);
 
-        if (!sessionedUser.isMatchedUserId(answer.getUserId())) {
-            throw new IllegalUserAccessException();
-        }
-
-        answerService.delete(answer);
+        answerService.delete(sessionedUser, answer);
 
         return "redirect:/questions/{questionId}";
     }

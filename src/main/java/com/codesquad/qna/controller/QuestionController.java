@@ -46,13 +46,13 @@ public class QuestionController {
         return "/qna/updateForm";
     }
 
-    @GetMapping()
+    @GetMapping
     public String list(Model model) {
         model.addAttribute("questions", questionService.findAll());
         return "/qna/list";
     }
 
-    @PostMapping()
+    @PostMapping
     public String question(Question question, HttpSession session) {
         if (!HttpSessionUtils.isLoginUser(session)) {
             return "redirect:/users/loginForm";
