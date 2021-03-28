@@ -3,6 +3,7 @@ package com.codessquad.qna.controller;
 import com.codessquad.qna.domain.Answer;
 import com.codessquad.qna.domain.User;
 import com.codessquad.qna.service.AnswerService;
+import com.codessquad.qna.util.HttpSessionUtils;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
@@ -30,13 +31,8 @@ public class ApiAnswerController {
         if (!HttpSessionUtils.isLoginUser(session)) {
             return false;
         }
-        Answer answer = answerService.findById(answerId);
         User loginUser = HttpSessionUtils.getSessionUser(session);
-        if (answer.isMatch(loginUser)) {
-            answerService.delete(answer);
-            return true;
-        }
-        return false;
+        return answerService.delete(answerId, loginUser);
     }
 
 }

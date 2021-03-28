@@ -1,7 +1,7 @@
 package com.codessquad.qna.service;
 
 
-import com.codessquad.qna.controller.HttpSessionUtils;
+import com.codessquad.qna.util.HttpSessionUtils;
 import com.codessquad.qna.domain.Answer;
 import com.codessquad.qna.domain.Question;
 import com.codessquad.qna.domain.User;
@@ -35,9 +35,14 @@ public class AnswerService {
         return answerRepository.save(answer);
     }
 
-    public void delete(Answer answer) {
-        answer.delete();
-        answerRepository.save(answer);
+    public boolean delete(Long id, User loginUser) {
+        Answer answer = findById(id);
+        if (answer.isMatch(loginUser)) {
+            answer.delete();
+            answerRepository.save(answer);
+            return true;
+        }
+        return false;
     }
 
     public Answer findById(Long id) {
