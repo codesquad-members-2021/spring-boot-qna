@@ -13,6 +13,8 @@ import org.springframework.ui.Model;
 import javax.servlet.http.HttpSession;
 import java.util.List;
 
+import static com.codessquad.qna.exception.ExceptionMessages.FAILED_LOGIN;
+import static com.codessquad.qna.exception.ExceptionMessages.PROFILE_MODIFICATION_FAIL;
 import static com.codessquad.qna.utils.SessionUtil.*;
 
 @Service
@@ -44,8 +46,8 @@ public class UserService {
         User currentUser = userRepository.findById(id).orElseThrow(NotFoundException::new);
 
         if (!currentUser.isMatchingPassword(pastPassword)) {
-            logger.info("password is not Matching, please re-try ");
-            throw new UnauthorizedException("개인정보 수정 실패 - 이전 비밀번호가 틀리면 업데이트할 수 없습니다");
+            logger.info(PROFILE_MODIFICATION_FAIL);
+            throw new UnauthorizedException(PROFILE_MODIFICATION_FAIL);
         }
 
         if (sessionUser.equals(updatedUser)) {
@@ -59,8 +61,8 @@ public class UserService {
     public void validationCheck(Long id, HttpSession session) {
         User foundUser = userRepository.findById(id).orElseThrow(NotFoundException::new);
         if (!isValidUser(session, foundUser)) {
-            logger.info("Login Failure : wrong password");
-            throw new UnauthorizedException("귄한없는 사용자의 잘못된 접근");
+            logger.info(PROFILE_MODIFICATION_FAIL);
+            throw new UnauthorizedException(PROFILE_MODIFICATION_FAIL);
         }
     }
 
@@ -68,8 +70,7 @@ public class UserService {
         User foundUser = userRepository.findByUserId(userId).orElseThrow(NotFoundException::new);
 
         if (!foundUser.isMatchingPassword(password)) {
-            logger.info("Login Failure : wrong password");
-            throw new LoginFailedException("비밀번호가 맞지 않습니다");
+            throw new LoginFailedException(FAILED_LOGIN);
         }
 
         logger.info("Login Success");

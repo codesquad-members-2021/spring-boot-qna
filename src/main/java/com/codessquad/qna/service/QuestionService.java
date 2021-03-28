@@ -1,6 +1,8 @@
 package com.codessquad.qna.service;
 
-import com.codessquad.qna.domain.*;
+import com.codessquad.qna.domain.Question;
+import com.codessquad.qna.domain.QuestionRepostory;
+import com.codessquad.qna.domain.User;
 import com.codessquad.qna.exception.NotFoundException;
 import com.codessquad.qna.exception.UnauthorizedException;
 import org.slf4j.Logger;
@@ -11,6 +13,8 @@ import org.springframework.ui.Model;
 import javax.servlet.http.HttpSession;
 import java.util.List;
 
+import static com.codessquad.qna.exception.ExceptionMessages.FREE2ASK_BUT_DELETE;
+import static com.codessquad.qna.exception.ExceptionMessages.UNAUTHORIZED_FAILED_QUESTION;
 import static com.codessquad.qna.utils.SessionUtil.isValidUser;
 
 @Service
@@ -19,7 +23,6 @@ public class QuestionService {
     private static final Logger logger = LoggerFactory.getLogger(QuestionService.class);
 
     private final QuestionRepostory questionRepostory;
-
 
     public QuestionService(QuestionRepostory questionRepostory) {
         this.questionRepostory = questionRepostory;
@@ -44,19 +47,19 @@ public class QuestionService {
         Question question = questionRepostory.findById(id).orElseThrow(NotFoundException::new);
         question.update(title, contents);
         questionRepostory.save(question);
-        logger.info("update Question : {}", id);
+        logger.info("질문글 업데이트됨, questionId : {}", id);
     }
 
     public void deleteQuestion(Long questionId, HttpSession session) {
         Question question = questionRepostory.findById(questionId).orElseThrow(NotFoundException::new);
 
         if (!isValidUser(session, question.getWriter())) {
-            logger.info("질문글 삭제 - 실패, 권한없는 사용자의 삭제시도");
-            throw new UnauthorizedException("질문글 삭제 - 실패, 권한없는 사용자의 삭제시도");
+            logger.info(UNAUTHORIZED_FAILED_QUESTION);
+            throw new UnauthorizedException(UNAUTHORIZED_FAILED_QUESTION);
         }
 
         if (!question.isDeletable()) {
-            throw new UnauthorizedException("질문글 삭제 - 실패, 다른사람의 답변이 달린 질문글은 삭제할 수 없습니다");
+            throw new UnauthorizedException(FREE2ASK_BUT_DELETE);
         }
         question.deleteQuestion();
         questionRepostory.save(question);
@@ -67,10 +70,10 @@ public class QuestionService {
     public void updateForm(Long id, Model model, HttpSession session) {
         Question question = questionRepostory.findById(id).orElseThrow(NotFoundException::new);
         if (!isValidUser(session, question.getWriter())) {
-            logger.info("질문글 수정 - 실패, 권한없는 사용자의 수정시도");
-            throw new UnauthorizedException("질문글 수정 - 실패, 권한없는 사용자의 수정시도");
+            logger.info(UNAUTHORIZED_FAILED_QUESTION);
+            throw new UnauthorizedException(UNAUTHORIZED_FAILED_QUESTION);
         }
-        logger.info("글 수정 : {}", question.getTitle());
+        logger.info("글을 수정하는 사람 : {}", question.getTitle());
         model.addAttribute("question", question);
     }
 

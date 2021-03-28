@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
 
+import static com.codessquad.qna.exception.ExceptionMessages.NEED_LOGIN;
 import static com.codessquad.qna.utils.SessionUtil.getLoginUser;
 import static com.codessquad.qna.utils.SessionUtil.isLoginUser;
 
@@ -31,7 +32,7 @@ public class QuestionController {
     @GetMapping("/form")
     public String questionForm(HttpSession session) {
         if (!isLoginUser(session)) {
-            throw new UnauthorizedException("질문글 작성을 위해서는 로그인이 필요합니다");
+            throw new UnauthorizedException(NEED_LOGIN);
         }
         return "/qna/form";
     }

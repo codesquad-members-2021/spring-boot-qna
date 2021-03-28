@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpSession;
 
+import static com.codessquad.qna.exception.ExceptionMessages.*;
 import static com.codessquad.qna.utils.SessionUtil.*;
 
 @Service
@@ -32,8 +33,8 @@ public class AnswerService {
 
     public void createAnswer(Long questionId, String contents, HttpSession session) {
         if (!isLoginUser(session)) {
-            logger.info("답변달기 - 실패 : 권한(로그인)되지 않은 사용자의 답변달기 시도가 실패함");
-            throw new LoginFailedException("답변달기 - 실패 : 권한(로그인)되지 않은 사용자의 답변달기 시도가 실패함");
+            logger.info(UNAUTHORIZED_FAILED_LOGIN);
+            throw new LoginFailedException(UNAUTHORIZED_FAILED_LOGIN);
         }
         User loginUser = getLoginUser(session);
         Answer answer = new Answer(loginUser, questionRepostory.getOne(questionId), contents);
@@ -45,8 +46,8 @@ public class AnswerService {
     public void removeAnswer(Long questionId, Long answerId, HttpSession session) {
         User ownerUser = questionRepostory.findById(questionId).orElseThrow(NotFoundException::new).getWriter();
         if (!isValidUser(session, ownerUser)) {
-            logger.info("답변달기 - 실패 : 권한(로그인)되지 않은 사용자의 답변달기 시도가 실패함");
-            throw new UnauthorizedException("답변달기 - 실패 : 권한(로그인)되지 않은 사용자의 답변달기 시도가 실패함");
+            logger.info(UNAUTHORIZED_FAILED_QUESTION);
+            throw new UnauthorizedException(UNAUTHORIZED_FAILED_QUESTION);
         }
         Answer answer = answerRepository.findById(answerId).orElseThrow(NotFoundException::new);
         answer.deleteAnswer();
