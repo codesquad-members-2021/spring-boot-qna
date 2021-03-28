@@ -24,13 +24,13 @@ public class AnswerController {
     @PostMapping("/qna/{questionId}/answers")
     public String create(@PathVariable Long questionId, String contents, HttpSession session) {
         answerService.createAnswer(questionId, contents, session);
-        return String.format("redirect:/qna/%d", questionId);
+        return ("redirect:/qna/" + questionId);
     }
 
     @DeleteMapping("/qna/{questionId}/answers/{answerId}")
     public String remove(@PathVariable Long questionId, @PathVariable Long answerId, HttpSession session) {
         answerService.removeAnswer(questionId, answerId, session);
-        return String.format("redirect:/qna/%d", questionId);
+        return ("redirect:/qna/" + questionId);
     }
 
 }

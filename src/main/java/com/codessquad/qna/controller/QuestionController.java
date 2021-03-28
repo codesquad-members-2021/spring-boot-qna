@@ -57,7 +57,7 @@ public class QuestionController {
     @PutMapping("/{id}")
     public String update(@PathVariable Long id, String title, String contents) {
         questionService.updateQuestion(id, title, contents);
-        return String.format("redirect:/qna/%d", id);
+        return ("redirect:/qna/" + id);
     }
 
     @DeleteMapping("/{id}")
