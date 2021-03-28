@@ -29,12 +29,13 @@ public class QuestionService {
         this.answerRepository = answerRepository;
     }
 
+    /*
     public void isLogin(HttpSession session) {
         if (!isLoginUser(session)) {
-            throw new LoginFailedException();
+            throw new LoginFailedException("");
         }
         logger.info("questionForm");
-    }
+    }*/
 
     public void createQuestion(Question question, User user) {
         Question addNewQuestion = new Question(question, user);
