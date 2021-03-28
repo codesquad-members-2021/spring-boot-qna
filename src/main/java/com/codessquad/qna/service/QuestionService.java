@@ -70,7 +70,7 @@ public class QuestionService {
             throw new UnauthorizedException("질문글 삭제 - 실패, 권한없는 사용자의 삭제시도");
         }
 
-        if (!isDeleteAble(questionId)) {
+        if (!isDeleteable(questionId)) {
             throw new UnauthorizedException("질문글 삭제 - 실패, 다른사람의 답변이 달린 질문글은 삭제할 수 없습니다");
         }
         question.deleteQuestion();
