@@ -1,9 +1,8 @@
 package com.codessquad.qna.controller;
 
 import com.codessquad.qna.domain.Question;
+import com.codessquad.qna.exception.UnauthorizedException;
 import com.codessquad.qna.service.QuestionService;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -11,12 +10,11 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpSession;
 
 import static com.codessquad.qna.utils.SessionUtil.getLoginUser;
+import static com.codessquad.qna.utils.SessionUtil.isLoginUser;
 
 @Controller
 @RequestMapping("/qna")
 public class QuestionController {
-
-    private static final Logger logger = LoggerFactory.getLogger(QuestionController.class);
 
     private final QuestionService questionService;
 
@@ -30,8 +28,10 @@ public class QuestionController {
     }
 
     @GetMapping("/form")
-    public String loginForm(HttpSession session) {
-        questionService.isLogin(session);
+    public String questionForm(HttpSession session) {
+        if (!isLoginUser(session)) {
+            throw new UnauthorizedException("질문글 작성을 위해서는 로그인이 필요합니다");
+        }
         return "qna/form";
     }
 
