@@ -1,17 +1,21 @@
 package com.codesquad.qna.service;
 
 import com.codesquad.qna.domain.Answer;
+import com.codesquad.qna.domain.Question;
 import com.codesquad.qna.repository.AnswerRepository;
+import com.codesquad.qna.repository.QuestionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
 public class AnswerService {
     private final AnswerRepository answerRepository;
+    private final QuestionRepository questionRepository;
 
     @Autowired
-    public AnswerService(AnswerRepository answerRepository) {
+    public AnswerService(AnswerRepository answerRepository, QuestionRepository questionRepository) {
         this.answerRepository = answerRepository;
+        this.questionRepository = questionRepository;
     }
 
     public void save(Answer answer) {
@@ -28,4 +32,8 @@ public class AnswerService {
         answerRepository.save(answer);
     }
 
+    public Question findQuestionById(Long questionId) {
+        return questionRepository.findById(questionId)
+                .orElseThrow(IllegalArgumentException::new);
+    }
 }

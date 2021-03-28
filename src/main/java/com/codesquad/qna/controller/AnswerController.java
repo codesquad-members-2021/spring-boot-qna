@@ -20,12 +20,10 @@ import javax.servlet.http.HttpSession;
 @RequestMapping("/questions/{questionId}/answers")
 public class AnswerController {
     private final AnswerService answerService;
-    private final QuestionService questionService;
 
     @Autowired
-    public AnswerController(AnswerService answerService, QuestionService questionService) {
+    public AnswerController(AnswerService answerService) {
         this.answerService = answerService;
-        this.questionService = questionService;
     }
 
     @PostMapping
@@ -35,7 +33,7 @@ public class AnswerController {
         }
 
         User sessionedUser = HttpSessionUtils.getUserFromSession(session);
-        Question question = questionService.findQuestionById(questionId);
+        Question question = answerService.findQuestionById(questionId);
         Answer answer = new Answer(sessionedUser, question, contents);
 
         answerService.save(answer);
