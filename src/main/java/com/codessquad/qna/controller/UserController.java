@@ -30,16 +30,16 @@ public class UserController {
         return "redirect:/users/list";
     }
 
-    @GetMapping("/form")
-    public String signUpForm() {
-        logger.info("signUpForm >> users/form.html: in");
+    @GetMapping("/signup")
+    public String signup() {
+        logger.info("signup >> users/form.html: in");
         return "user/form";
     }
 
-    @PostMapping("/create")
-    public String create(User user) {
+    @PostMapping("/signup")
+    public String signup(User user) {
         userService.createUser(user);
-        return "redirect:/user/list";
+        return "redirect:/users/list";
     }
 
     @GetMapping("/list")
