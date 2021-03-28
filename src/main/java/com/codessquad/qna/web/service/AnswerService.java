@@ -25,10 +25,13 @@ public class AnswerService {
         return answerRepository.save(answer);
     }
 
-    public void deleteAnswer(long id, User user) {
+    public boolean deleteAnswer(long id, User user) {
         Answer answer = findAnswer(id);
-        checkWriter(answer, user);
+        if(!checkWriter(answer, user)) {
+            return false;
+        }
         answerRepository.delete(answer);
+        return true;
     }
 
     public Answer findAnswer(long id) {
@@ -37,9 +40,11 @@ public class AnswerService {
                 .orElseThrow(() -> new IllegalEntityIdException("id(번호)에 해당하는 답변이 없습니다"));
     }
 
-    private void checkWriter(Answer answer, User user) {
+    private boolean checkWriter(Answer answer, User user) {
         if (!answer.isSameWriter(user)) {
-            throw new IllegalAccessException();
+//            throw new IllegalAccessException();
+            return false;
         }
+        return true;
     }
 }
