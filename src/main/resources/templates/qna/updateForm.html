@@ -7,7 +7,7 @@
                 <input class="form-control" id="writer" name="writer" value="{{question.writer.userId}}"
                        placeholder="글쓴이" readonly/>
             </div>
-            <form name="question" method="post" action="/questions/{{id}}/form">
+            <form name="question" method="post" action="/questions/{{id}}">
                 <input type="hidden" name="_method" value="PUT"/>
                 <div class="form-group">
                     <label for="title">제목</label>
