@@ -3,11 +3,10 @@ package com.codessquad.qna.domain;
 import javax.persistence.*;
 import javax.servlet.http.HttpSession;
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 import static com.codessquad.qna.utils.SessionUtil.getLoginUser;
-import static com.codessquad.qna.utils.StringUtil.DATE_AND_TIME_FORMAT;
+import static com.codessquad.qna.utils.DateUtil.DATE_AND_TIME_FORMAT;
 
 @Entity
 public class Question {
@@ -52,7 +51,6 @@ public class Question {
         this.createdDateTime = question.createdDateTime;
     }
 
-
     public Question(String writer, String title, String contents) {
         this.title = title;
         this.contents = contents;
@@ -63,7 +61,7 @@ public class Question {
         if (createdDateTime == null) {
             return "";
         }
-        return createdDateTime.format(DateTimeFormatter.ofPattern(DATE_AND_TIME_FORMAT));
+        return createdDateTime.format(DATE_AND_TIME_FORMAT);
     }
 
     public Long getId() {
@@ -103,7 +101,6 @@ public class Question {
                 ", contents='" + contents + '\'' +
                 '}';
     }
-
 
     public void update(String title, String contents) {
         this.title = title;
