@@ -25,9 +25,8 @@ public class Answer {
     @Lob
     private String contents;
 
-    private boolean deleted;
-
     private LocalDateTime createdDateTime;
+    private boolean deleted;
 
     protected Answer() {
     }
@@ -63,6 +62,10 @@ public class Answer {
         return DateTimeUtils.formatByPattern(createdDateTime);
     }
 
+    public String getUserId() {
+        return this.writer.getUserId();
+    }
+
     public void delete() {
         deleted = true;
     }
@@ -80,7 +83,4 @@ public class Answer {
         return Objects.hash(id, writer);
     }
 
-    public String getUserId() {
-        return this.writer.getUserId();
-    }
 }

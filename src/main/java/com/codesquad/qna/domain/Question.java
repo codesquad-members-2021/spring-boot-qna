@@ -27,7 +27,6 @@ public class Question {
     private String contents;
 
     private LocalDateTime createdDateTime;
-
     private boolean deleted;
 
     @OneToMany(mappedBy = "question")

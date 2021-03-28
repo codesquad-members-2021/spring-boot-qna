@@ -1,11 +1,8 @@
 package com.codesquad.qna.controller;
 
 import com.codesquad.qna.domain.Answer;
-import com.codesquad.qna.domain.Question;
 import com.codesquad.qna.domain.User;
-import com.codesquad.qna.exception.IllegalUserAccessException;
 import com.codesquad.qna.service.AnswerService;
-import com.codesquad.qna.service.QuestionService;
 import com.codesquad.qna.util.HttpSessionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
