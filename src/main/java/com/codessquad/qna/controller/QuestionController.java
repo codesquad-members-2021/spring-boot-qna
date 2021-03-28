@@ -50,7 +50,6 @@ public class QuestionController {
     @GetMapping("/{id}")
     public String showDetail(@PathVariable Long id, Model model) {
         model.addAttribute("question", questionService.showDetailQuestion(id));
-        //@Todo 모델에다가 데이터를 집어넣어주는건 컨트롤러 역할 같다. 개선할 수 있는 방법을 찾아보자
         return "/qna/show";
     }
 
