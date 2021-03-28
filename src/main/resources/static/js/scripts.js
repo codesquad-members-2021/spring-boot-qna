@@ -1,4 +1,5 @@
-$(".answer-write button[type=submit]").click(addAnswer);
+$(".answer-write button[type='submit']").on("click", addAnswer);
+$(".qna-comment-slipp-articles").on("click", "a.link-delete-article", deleteAnswer);
 
 function addAnswer(e) {
     e.preventDefault();
@@ -32,8 +33,6 @@ function onSuccess(data, status) {
 
     $(".answer-write textarea").val("");
 }
-
-$("a.link-delete-article").click(deleteAnswer);
 
 function deleteAnswer(e) {
     e.preventDefault();
