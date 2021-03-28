@@ -1,5 +1,7 @@
 package com.codessquad.qna.domain;
 
+import org.hibernate.annotations.Where;
+
 import javax.persistence.*;
 import javax.servlet.http.HttpSession;
 import java.time.LocalDateTime;
@@ -32,6 +34,7 @@ public class Question {
 
     @OneToMany(mappedBy = "question", cascade = CascadeType.REMOVE)
     @OrderBy("id ASC")
+    @Where(clause = "deleted=false")
     private List<Answer> answerList;
 
     public Question() {
@@ -90,6 +93,10 @@ public class Question {
 
     public void setContents(String contents) {
         this.contents = contents;
+    }
+
+    public List<Answer> getAnswerList() {
+        return answerList;
     }
 
     @Override
