@@ -9,11 +9,8 @@ import com.codessquad.qna.utils.ErrorMessage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
 import java.util.List;
-
-import static com.codessquad.qna.utils.HttpSessionUtils.getUserFromSession;
 
 @Service
 public class QuestionService {
@@ -21,23 +18,19 @@ public class QuestionService {
     @Autowired
     private QuestionRepository questionRepository;
 
-    public void save(Question question, HttpSession session) {
-        question.save(getUserFromSession(session));
+    public void save(Question question, User sessionedUser) {
+        question.save(sessionedUser);
         questionRepository.save(question);
     }
 
-    public void update(Question oldQuestion, Question newQuestion, HttpSession session) {
-        if (!getUserFromSession(session).getUserId().equals(newQuestion.getWriter())) {
-            throw new InvalidSessionException();
-        }
+    public void update(Long questionId, Question newQuestion, User sessionedUser) {
+        Question oldQuestion = verifyQuestion(questionId, sessionedUser);
         oldQuestion.update(newQuestion);
         questionRepository.save(oldQuestion);
     }
 
-    public void delete(Question question) {
-        if (!questionRepository.findById(question.getId()).isPresent()) {
-            throw new EntityNotFoundException(ErrorMessage.QUESTION_NOT_FOUND);
-        }
+    public void delete(Long questionId, User sessionedUser) {
+        Question question = verifyQuestion(questionId, sessionedUser);
         questionRepository.delete(question);
     }
 
@@ -51,9 +44,11 @@ public class QuestionService {
         return questionList;
     }
 
-    public void verifyWriter(User sessionedUser, Question question) {
+    public Question verifyQuestion(Long id, User sessionedUser) {
+        Question question = findById(id);
         if (!question.matchWriter(sessionedUser)) {
             throw new InvalidSessionException();
         }
+        return question;
     }
 }

@@ -26,7 +26,7 @@ public class QuestionController {
 
     @PostMapping("/form")
     public String newQuestion(Question question, HttpSession session) {
-        questionService.save(question, session);
+        questionService.save(question, getUserFromSession(session));
         return "redirect:/";
     }
 
@@ -38,25 +38,19 @@ public class QuestionController {
 
     @GetMapping("/{questionId}/updateForm")
     public String qnaUpdatePage(@PathVariable Long questionId, Model model, HttpSession session) {
-        Question question = questionService.findById(questionId);
-        questionService.verifyWriter(getUserFromSession(session), question);
-        model.addAttribute("question", question);
+        model.addAttribute("question", questionService.verifyQuestion(questionId, getUserFromSession(session)));
         return "qna/questionUpdateForm";
     }
 
     @PutMapping("/{questionId}/updateForm")
     public String updateQuestion(@PathVariable Long questionId, Question updatedQuestion, HttpSession session) {
-        Question question = questionService.findById(questionId);
-        questionService.verifyWriter(getUserFromSession(session), question);
-        questionService.update(question, updatedQuestion, session);
+        questionService.update(questionId, updatedQuestion, getUserFromSession(session));
         return "redirect:/questions/" + questionId;
     }
 
     @DeleteMapping("/{questionId}")
     public String deleteQuestion(@PathVariable Long questionId, HttpSession session) {
-        Question question = questionService.findById(questionId);
-        questionService.verifyWriter(getUserFromSession(session), question);
-        questionService.delete(question);
+        questionService.delete(questionId, getUserFromSession(session));
         return "redirect:/";
     }
 }
