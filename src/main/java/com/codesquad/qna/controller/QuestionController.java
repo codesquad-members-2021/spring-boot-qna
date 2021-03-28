@@ -69,13 +69,13 @@ public class QuestionController {
     }
 
     @PutMapping("/{id}")
-    public String update(@PathVariable("id") Long id, Question updatedQuestion, HttpSession session) {
+    public String update(@PathVariable("id") Long id, Question questionToUpdate, HttpSession session) {
         if (!HttpSessionUtils.isLoginUser(session)) {
             return "redirect:/users/loginForm";
         }
 
         Question question = findQuestionWithSession(id, session);
-        questionService.update(question, updatedQuestion);
+        questionService.update(question, questionToUpdate);
 
         return "redirect:/questions";
     }
