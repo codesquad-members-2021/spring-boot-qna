@@ -5,19 +5,18 @@ import com.codesquad.qna.domain.Question;
 import com.codesquad.qna.domain.User;
 import com.codesquad.qna.exception.IllegalUserAccessException;
 import com.codesquad.qna.repository.AnswerRepository;
-import com.codesquad.qna.repository.QuestionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
 public class AnswerService {
     private final AnswerRepository answerRepository;
-    private final QuestionRepository questionRepository;
+    private final QuestionService questionService;
 
     @Autowired
-    public AnswerService(AnswerRepository answerRepository, QuestionRepository questionRepository) {
+    public AnswerService(AnswerRepository answerRepository, QuestionService questionService) {
         this.answerRepository = answerRepository;
-        this.questionRepository = questionRepository;
+        this.questionService = questionService;
     }
 
     public void save(Long questionId, String contents, User sessionedUser) {
@@ -44,8 +43,7 @@ public class AnswerService {
     }
 
     public Question findQuestionById(Long questionId) {
-        return questionRepository.findById(questionId)
-                .orElseThrow(IllegalArgumentException::new);
+        return questionService.findQuestionById(questionId);
     }
 
 }
