@@ -10,7 +10,6 @@ import javax.persistence.Table;
 @Entity
 public class User extends CommonEntity {
     @Column(nullable = false, length = 20, unique = true)
-    @JsonProperty
     private String userId;
 
     @Column(nullable = false, length = 20)
@@ -18,11 +17,9 @@ public class User extends CommonEntity {
     private String password;
 
     @Column(nullable = false, length = 20)
-    @JsonProperty
     private String name;
 
     @Column(nullable = false, length = 50)
-    @JsonProperty
     private String email;
 
     protected User() {

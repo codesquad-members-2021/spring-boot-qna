@@ -11,15 +11,12 @@ import java.util.List;
 public class Question extends CommonEntity {
     @ManyToOne
     @JoinColumn(foreignKey = @ForeignKey(name = "fk_question_writer"))
-    @JsonProperty
     private User writer;
 
     @Column(nullable = false, length = 100)
-    @JsonProperty
     private String title;
 
     @Column(nullable = false, length = 3000)
-    @JsonProperty
     private String contents;
 
     @OneToMany(mappedBy = "question")

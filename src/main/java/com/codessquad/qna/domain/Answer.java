@@ -8,16 +8,13 @@ import javax.persistence.*;
 public class Answer extends CommonEntity {
     @ManyToOne
     @JoinColumn(foreignKey = @ForeignKey(name = "fk_answer_question"))
-    @JsonProperty
     private Question question;
 
     @ManyToOne
     @JoinColumn(foreignKey = @ForeignKey(name = "fk_answer_writer"))
-    @JsonProperty
     private User writer;
 
     @Column(nullable = false, length = 3000)
-    @JsonProperty
     private String contents;
 
     @Column(nullable = false, columnDefinition = "boolean default false")
