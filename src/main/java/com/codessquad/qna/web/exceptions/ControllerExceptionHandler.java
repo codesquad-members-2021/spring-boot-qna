@@ -69,7 +69,7 @@ public class ControllerExceptionHandler {
     private void initializeModel(Exception exception, Model model) {
         String exceptionMessage = exception.getMessage();
         logger.warn(exceptionMessage);
-        model.addAttribute("extraErrorMessage", exception.getMessage());
+        model.addAttribute("extraErrorMessage", exceptionMessage);
     }
 
 }
