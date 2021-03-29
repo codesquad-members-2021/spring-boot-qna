@@ -34,6 +34,10 @@ public class Answer {
         this.dateTime = LocalDateTime.now().format(dateTimeFormatter);
     }
 
+    public void update(Answer answer) {
+        this.contents = answer.contents;
+    }
+
     public boolean matchWriter(User user) {
         return this.writer.matchUserId(user);
     }

@@ -27,8 +27,10 @@ public class AnswerService {
         answerRepository.save(answer);
     }
 
-    public void update() {
-
+    public void update(Long answerId, Answer updatedAnswer) {
+        Answer answer = answerRepository.findById(answerId).orElseThrow(() -> new EntityNotFoundException(ErrorMessage.QUESTION_NOT_FOUND));
+        answer.update(updatedAnswer);
+        answerRepository.save(answer);
     }
 
     public Answer getAnswer(Long answerId, User sessionedUser) {
@@ -37,5 +39,10 @@ public class AnswerService {
             throw new InvalidSessionException();
         }
         return answer;
+    }
+
+    public Question getQuestionFromAnswer(Long answerId) {
+        Answer answer = answerRepository.findById(answerId).orElseThrow(() -> new EntityNotFoundException(ErrorMessage.QUESTION_NOT_FOUND));
+        return answer.getQuestion();
     }
 }
