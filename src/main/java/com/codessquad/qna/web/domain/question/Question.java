@@ -4,18 +4,16 @@ import com.codessquad.qna.web.domain.AbstractEntity;
 import com.codessquad.qna.web.domain.answer.Answer;
 import com.codessquad.qna.web.domain.user.User;
 import com.codessquad.qna.web.dto.question.QuestionRequest;
-import com.codessquad.qna.web.utils.DateTimeUtils;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@SQLDelete(sql = "UPDATE QUESTION SET is_active = '0' WHERE id = ?")
+@SQLDelete(sql = "UPDATE QUESTION SET is_active = 0 WHERE id = ?")
 @Where(clause = "is_active=1")
 public class Question extends AbstractEntity {
 

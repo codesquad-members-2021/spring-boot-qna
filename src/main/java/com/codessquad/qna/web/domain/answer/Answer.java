@@ -10,7 +10,7 @@ import org.hibernate.annotations.Where;
 import javax.persistence.*;
 
 @Entity
-@SQLDelete(sql = "UPDATE ANSWER SET is_active = '0' WHERE id = ?")
+@SQLDelete(sql = "UPDATE ANSWER SET is_active = 0 WHERE id = ?")
 @Where(clause = "is_active=1")
 public class Answer extends AbstractEntity {
 
