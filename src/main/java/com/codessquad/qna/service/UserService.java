@@ -8,13 +8,11 @@ import com.codessquad.qna.exception.UnauthorizedException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
-import org.springframework.ui.Model;
 
 import javax.servlet.http.HttpSession;
 import java.util.List;
 
-import static com.codessquad.qna.exception.ExceptionMessages.FAILED_LOGIN;
-import static com.codessquad.qna.exception.ExceptionMessages.PROFILE_MODIFICATION_FAIL;
+import static com.codessquad.qna.exception.ExceptionMessages.*;
 import static com.codessquad.qna.utils.SessionUtil.*;
 
 @Service
@@ -37,13 +35,13 @@ public class UserService {
     }
 
     public User showProfile(Long id) {
-        return userRepository.findById(id).orElseThrow(NotFoundException::new);
+        return userRepository.findById(id).orElseThrow(() -> new NotFoundException(NOT_FOUNDED_USER));
     }
 
 
     public void updateUser(Long id, String pastPassword, User updatedUser, HttpSession session) {
         User sessionUser = getLoginUser(session);
-        User currentUser = userRepository.findById(id).orElseThrow(NotFoundException::new);
+        User currentUser = userRepository.findById(id).orElseThrow(() -> new NotFoundException(NOT_FOUNDED_USER));
 
         if (!currentUser.isMatchingPassword(pastPassword)) {
             logger.info(PROFILE_MODIFICATION_FAIL);
@@ -59,7 +57,7 @@ public class UserService {
     }
 
     public void validationCheck(Long id, HttpSession session) {
-        User foundUser = userRepository.findById(id).orElseThrow(NotFoundException::new);
+        User foundUser = userRepository.findById(id).orElseThrow(() -> new NotFoundException(NOT_FOUNDED_USER));
         if (!isValidUser(session, foundUser)) {
             logger.info(PROFILE_MODIFICATION_FAIL);
             throw new UnauthorizedException(PROFILE_MODIFICATION_FAIL);
@@ -67,7 +65,7 @@ public class UserService {
     }
 
     public void login(String userId, String password, HttpSession session) {
-        User foundUser = userRepository.findByUserId(userId).orElseThrow(NotFoundException::new);
+        User foundUser = userRepository.findByUserId(userId).orElseThrow(() -> new LoginFailedException(FAILED_LOGIN));
 
         if (!foundUser.isMatchingPassword(password)) {
             throw new LoginFailedException(FAILED_LOGIN);

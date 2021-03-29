@@ -13,8 +13,7 @@ import org.springframework.ui.Model;
 import javax.servlet.http.HttpSession;
 import java.util.List;
 
-import static com.codessquad.qna.exception.ExceptionMessages.FREE2ASK_BUT_DELETE;
-import static com.codessquad.qna.exception.ExceptionMessages.UNAUTHORIZED_FAILED_QUESTION;
+import static com.codessquad.qna.exception.ExceptionMessages.*;
 import static com.codessquad.qna.utils.SessionUtil.isValidUser;
 
 @Service
@@ -36,7 +35,8 @@ public class QuestionService {
     }
 
     public Question showDetailQuestion(Long id) {
-        return questionRepostory.findById(id).orElseThrow(NotFoundException::new);
+        //return questionRepostory.findById(id).orElseThrow(() -> new NotFoundException(NOT_FOUNDED_QUESTION));
+        return questionRepostory.findByIdAndDeletedFalse(id).orElseThrow(() -> new NotFoundException(NOT_FOUNDED_QUESTION));
     }
 
     public List<Question> findAll() {
@@ -44,14 +44,14 @@ public class QuestionService {
     }
 
     public void updateQuestion(Long id, String title, String contents) {
-        Question question = questionRepostory.findById(id).orElseThrow(NotFoundException::new);
+        Question question = questionRepostory.findById(id).orElseThrow(() -> new NotFoundException(NOT_FOUNDED_QUESTION));
         question.update(title, contents);
         questionRepostory.save(question);
         logger.info("질문글 업데이트됨, questionId : {}", id);
     }
 
     public void deleteQuestion(Long questionId, HttpSession session) {
-        Question question = questionRepostory.findById(questionId).orElseThrow(NotFoundException::new);
+        Question question = questionRepostory.findById(questionId).orElseThrow(() -> new NotFoundException(NOT_FOUNDED_QUESTION));
 
         if (!isValidUser(session, question.getWriter())) {
             logger.info(UNAUTHORIZED_FAILED_QUESTION);
@@ -68,7 +68,7 @@ public class QuestionService {
     }
 
     public void updateForm(Long id, Model model, HttpSession session) {
-        Question question = questionRepostory.findById(id).orElseThrow(NotFoundException::new);
+        Question question = questionRepostory.findById(id).orElseThrow(() -> new NotFoundException(NOT_FOUNDED_QUESTION));
         if (!isValidUser(session, question.getWriter())) {
             logger.info(UNAUTHORIZED_FAILED_QUESTION);
             throw new UnauthorizedException(UNAUTHORIZED_FAILED_QUESTION);

@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="kr">
+<head>
+{{> include/header}}
+</head>
+<body>
+{{> include/navigation}}
+<div class="container" id="main">
+    <div class="col-md-6 col-md-offset-3">
+        <div class="panel panel-default content-main">
+            <h2 class="error-text">수행할 수 없는 명령입니다!</h2>
+            <h4>{{errorMessage}}</h4>
+            <div style="display: flex;">
+                <span style="flex: 1;"></span>
+                <a href="/">홈페이지로 이동하기</a>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<!-- script references -->
+<script src="/js/jquery-2.2.0.min.js"></script>
+<script src="/js/bootstrap.min.js"></script>
+<script src="/js/scripts.js"></script>
+</body>
+</html>
