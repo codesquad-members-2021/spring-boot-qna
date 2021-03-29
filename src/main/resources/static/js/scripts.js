@@ -11,9 +11,9 @@ String.prototype.format = function () {
 $(document).ready(() => { // Powered By Pyro
     let currHref = location.pathname
     $(".sub-nav-li").each((index, item) => {
-        let hrefOfItem = $(item).children().first().attr("href");
+        let hrefOfItem = $(item).children().first().attr('href');
         if (currHref === hrefOfItem) {
-            $(item).addClass("active");
+            $(item).addClass('active');
         }
     });
     $('#id-button-submit-answer').on('click', createAnswer);
@@ -22,17 +22,17 @@ $(document).ready(() => { // Powered By Pyro
 
 function deleteAnswer(event) {
     event.preventDefault();
-    let deleteForm = $(this).parents("form");
-    let url = deleteForm.attr("action");
+    let deleteForm = $(this).parents('form');
+    let url = deleteForm.attr('action');
     $.ajax({
         type: 'delete',
         url: url,
         success: (data, status) => {
-            $(this).closest("article").remove();
+            $(this).closest('article').remove();
             decreaseAnswerCount();
         },
         error: () => {
-            alert("답변 삭제에 실패했습니다!");
+            alert('답변 삭제에 실패했습니다!');
         }
     });
 }
@@ -40,7 +40,7 @@ function deleteAnswer(event) {
 function createAnswer() {
     let formElement = $(".submit-write");
     let queryString = formElement.serialize();
-    let url = formElement.attr("action");
+    let url = formElement.attr('action');
     $.ajax({
         type: 'post',
         url: url,
@@ -62,12 +62,12 @@ function onCreateAnswerSuccess(data, status) {
     let articlesListElement = $('.qna-comment-slipp-articles').append(template);
     $('#answerContents').val('');
     increaseAnswerCount();
-    let deleteFormElement = articlesListElement.children(':last').find(".delete-answer-form button[type='submit']");
+    let deleteFormElement = articlesListElement.children(':last').find('.delete-answer-form button[type="submit"]');
     deleteFormElement.on('click', deleteAnswer);
 }
 
 function onCreateAnswerFailed(data, status) {
-    alert("답변 생성에 실패했습니다!");
+    alert('답변 생성에 실패했습니다!');
 }
 
 function increaseAnswerCount() {
