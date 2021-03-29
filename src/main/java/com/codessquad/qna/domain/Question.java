@@ -68,7 +68,7 @@ public class Question {
     }
 
     public int getAnswerNumber() {
-        if (this.answers.size() == 0) {
+        if (this.answers.isEmpty()) {
             return 0;
         }
         return this.answers.size();

@@ -34,7 +34,6 @@ public class AnswerService {
 
     public void deleteById(Long id, User user) {
         Answer answer = findAnswerById(id);
-        System.out.println(answer);
         verifyWriter(answer, user);
         answer.delete();
         answerRepository.save(answer);
