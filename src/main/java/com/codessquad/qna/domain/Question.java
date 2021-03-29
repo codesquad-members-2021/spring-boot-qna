@@ -33,6 +33,8 @@ public class Question {
     @JsonProperty
     private String contents;
 
+    private LocalDateTime createdDateTime = LocalDateTime.now();
+
     private boolean deleted;
 
     @JsonProperty
@@ -48,6 +50,9 @@ public class Question {
         this.contents = contents;
     }
 
+    public String getFormattedDateTime() {
+        return createdDateTime.format(DATE_TIME_FORMAT);
+    }
 
     public void delete() {
         this.deleted = true;
