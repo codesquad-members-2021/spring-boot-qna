@@ -24,7 +24,7 @@ public class Answer {
     @Lob
     private String contents;
 
-    private LocalDateTime timeCreated = LocalDateTime.now();
+    private final LocalDateTime timeCreated = LocalDateTime.now();
 
     private boolean deleted = false;
 

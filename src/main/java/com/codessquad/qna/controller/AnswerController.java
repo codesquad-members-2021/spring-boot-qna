@@ -1,10 +1,7 @@
 package com.codessquad.qna.controller;
 
-import com.codessquad.qna.domain.Answer;
-import com.codessquad.qna.domain.Question;
 import com.codessquad.qna.domain.User;
 import com.codessquad.qna.service.AnswerService;
-import com.codessquad.qna.service.QuestionService;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -20,11 +17,9 @@ import static com.codessquad.qna.HttpSessionUtils.isLoginUser;
 @RequestMapping("/questions/{questionId}/answers")
 public class AnswerController {
     private final AnswerService answerService;
-    private final QuestionService questionService;
 
-    public AnswerController(AnswerService answerService, QuestionService questionService) {
+    public AnswerController(AnswerService answerService) {
         this.answerService = answerService;
-        this.questionService = questionService;
     }
 
     @PostMapping
