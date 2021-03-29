@@ -71,5 +71,4 @@ public class ControllerExceptionHandler {
         logger.warn(exceptionMessage);
         model.addAttribute("extraErrorMessage", exceptionMessage);
     }
-
 }
