@@ -26,7 +26,7 @@ public class ApiAnswerController {
 
     @DeleteMapping("/{questionId}/answers/{answerId}")
     public void deleteAnswer(@PathVariable("questionId") long questionId,
-                               @PathVariable("answerId") long answerId, HttpSession session) {
+                             @PathVariable("answerId") long answerId, HttpSession session) {
         User loginUser = SessionUtil.getLoginUser(session);
         answerService.deleteAnswer(loginUser, answerId);
     }
