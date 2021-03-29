@@ -1,7 +1,6 @@
 package com.codessquad.qna.domain;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
-import com.fasterxml.jackson.annotation.JsonProperty;
 
 import javax.persistence.*;
 import java.util.Objects;
@@ -11,22 +10,18 @@ public class Answer extends AbstractEntity{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @JsonProperty
     private Long answerId;
 
     @ManyToOne
     @JoinColumn(foreignKey = @ForeignKey(name = "fk_answer_writer"))
-    @JsonProperty
     private User writer;
 
     @ManyToOne
     @JoinColumn(foreignKey = @ForeignKey(name = "fk_answer_to_question"))
-    @JsonProperty
     @JsonManagedReference
     private Question question;
 
     @Lob
-    @JsonProperty
     private String contents;
 
     @Column(columnDefinition = "boolean default false")

@@ -1,7 +1,6 @@
 package com.codessquad.qna.domain;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
@@ -12,18 +11,15 @@ public class Question extends AbstractEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @JsonProperty
     private Long questionId;
 
     @ManyToOne
     @JoinColumn(foreignKey = @ForeignKey(name = "fk_question_writer"))
     private User writer;
 
-    @JsonProperty
     private String title;
 
     @Lob
-    @JsonProperty
     private String contents;
 
     @Column(columnDefinition = "boolean default false")
@@ -35,7 +31,6 @@ public class Question extends AbstractEntity {
     @JsonBackReference
     private List<Answer> answers;
 
-    @JsonProperty
     private Integer countOfAnswers = 0;
 
     public Question() {

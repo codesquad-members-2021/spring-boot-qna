@@ -1,7 +1,6 @@
 package com.codessquad.qna.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonProperty;
 
 import javax.persistence.*;
 import java.util.Objects;
@@ -11,20 +10,16 @@ public class User extends AbstractEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @JsonProperty
     private Long id;
 
     @Column(nullable = false, length = 20)
-    @JsonProperty
     private String userId;
 
     @JsonIgnore
     private String password;
 
-    @JsonProperty
     private String name;
 
-    @JsonProperty
     private String email;
 
     public User() {
