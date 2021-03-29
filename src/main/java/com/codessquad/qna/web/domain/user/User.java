@@ -1,5 +1,6 @@
 package com.codessquad.qna.web.domain.user;
 
+import com.codessquad.qna.web.domain.AbstractEntity;
 import com.codessquad.qna.web.domain.answer.Answer;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -10,12 +11,7 @@ import java.util.List;
 import java.util.Objects;
 
 @Entity
-public class User {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @JsonProperty
-    private Long id;
+public class User extends AbstractEntity {
 
     @Column(nullable = false, unique = true, length = 20)
     @JsonProperty
@@ -46,10 +42,6 @@ public class User {
 
     protected User() {
 
-    }
-
-    public Long getId() {
-        return id;
     }
 
     public String getUserId() {
@@ -98,18 +90,18 @@ public class User {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         User user = (User) o;
-        return Objects.equals(id, user.id) && Objects.equals(userId, user.userId);
+        return Objects.equals(getId(), user.getId()) && Objects.equals(userId, user.userId);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, userId);
+        return Objects.hash(getId(), userId);
     }
 
     @Override
     public String toString() {
         return "User{" +
-                "id=" + id +
+                "id=" + getId() +
                 ", userId='" + userId + '\'' +
                 ", password='" + password + '\'' +
                 ", name='" + name + '\'' +

@@ -1,5 +1,6 @@
 package com.codessquad.qna.web.domain.question;
 
+import com.codessquad.qna.web.domain.AbstractEntity;
 import com.codessquad.qna.web.domain.answer.Answer;
 import com.codessquad.qna.web.domain.user.User;
 import com.codessquad.qna.web.dto.question.QuestionRequest;
@@ -16,11 +17,7 @@ import java.util.List;
 @Entity
 @SQLDelete(sql = "UPDATE QUESTION SET is_active = '0' WHERE id = ?")
 @Where(clause = "is_active=1")
-public class Question {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+public class Question extends AbstractEntity {
 
     @ManyToOne
     @JoinColumn(foreignKey = @ForeignKey(name = "fk_question_writer"))
@@ -34,8 +31,6 @@ public class Question {
 
     private Boolean isActive = true;
 
-    private LocalDateTime createdAt;
-
     @OneToMany(mappedBy = "question", cascade = CascadeType.ALL)
     @OrderBy("id DESC")
     @JsonIgnore
@@ -45,15 +40,10 @@ public class Question {
         this.writer = writer;
         this.title = title;
         this.contents = contents;
-        this.createdAt = LocalDateTime.now();
     }
 
     protected Question() {
 
-    }
-
-    public Long getId() {
-        return id;
     }
 
     public User getWriter() {
@@ -66,10 +56,6 @@ public class Question {
 
     public String getContents() {
         return contents;
-    }
-
-    public String getCreatedAt() {
-        return DateTimeUtils.stringOf(createdAt);
     }
 
     public List<Answer> getAnswers() {
@@ -95,11 +81,11 @@ public class Question {
     @Override
     public String toString() {
         return "Question{" +
-                "id=" + id +
+                "id=" + getId() +
                 ", writer='" + writer + '\'' +
                 ", title='" + title + '\'' +
                 ", contents='" + contents + '\'' +
-                ", createdAt=" + createdAt +
+                ", createdAt=" + getCreatedAt() +
                 '}';
     }
 

@@ -1,24 +1,18 @@
 package com.codessquad.qna.web.domain.answer;
 
+import com.codessquad.qna.web.domain.AbstractEntity;
 import com.codessquad.qna.web.domain.question.Question;
 import com.codessquad.qna.web.domain.user.User;
-import com.codessquad.qna.web.utils.DateTimeUtils;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
 
 @Entity
 @SQLDelete(sql = "UPDATE ANSWER SET is_active = '0' WHERE id = ?")
 @Where(clause = "is_active=1")
-public class Answer {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @JsonProperty
-    private Long id;
+public class Answer extends AbstractEntity {
 
     @ManyToOne
     @JoinColumn(foreignKey = @ForeignKey(name = "fk_answer_to_writer"))
@@ -36,10 +30,6 @@ public class Answer {
 
     private Boolean isActive = true;
 
-    @JsonProperty
-    private LocalDateTime createdAt;
-
-
     protected Answer() {
 
     }
@@ -48,11 +38,6 @@ public class Answer {
         this.writer = writer;
         this.question = question;
         this.contents = contents;
-        this.createdAt = LocalDateTime.now();
-    }
-
-    public Long getId() {
-        return id;
     }
 
     public User getWriter() {
@@ -67,9 +52,6 @@ public class Answer {
         return contents;
     }
 
-    public String getCreatedAt() {
-        return DateTimeUtils.stringOf(createdAt);
-    }
 
     public void setQuestion(Question question) {
         this.question = question;
