@@ -31,6 +31,7 @@ public class Question {
     private LocalDateTime writtenDateTime = LocalDateTime.now();
 
     @OneToMany(mappedBy="question")
+    @OrderBy("id ASC")
     private List<Answer> answers;
 
     protected Question() {}
@@ -73,4 +74,7 @@ public class Question {
     public Long getAnswersSize() {
         return (long) answers.size();
     }
+
+    public List<Answer> getAnswers() { return answers; }
+
 }

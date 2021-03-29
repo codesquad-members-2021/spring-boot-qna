@@ -47,7 +47,7 @@
                       <p class="qna-comment-count"><strong>{{question.answersSize}}</strong>개의 의견</p>
                       <div class="qna-comment-slipp-articles">
 
-                          {{#answers}}
+                          {{#question.answers}}
                           <article class="article" id="answer-1405">
                               <div class="article-header">
                                   <div class="article-header-thumb">
@@ -77,8 +77,7 @@
                                   </ul>
                               </div>
                           </article>
-                          {{/answers}}
-
+                          {{/question.answers}}
 
                           <form class="submit-write" method="post" action="/questions/{{question.id}}/answers">
                               <div class="form-group" style="padding:14px;">
@@ -87,7 +86,6 @@
                               <button class="btn btn-success pull-right" type="submit">답변하기</button>
                               <div class="clearfix" />
                           </form>
-
 
                       </div>
                   </div>

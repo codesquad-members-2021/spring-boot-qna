@@ -2,6 +2,7 @@ package com.codessquad.qna.web.service;
 
 import com.codessquad.qna.web.domain.User;
 import com.codessquad.qna.web.domain.repository.UserRepository;
+import com.codessquad.qna.web.exception.QnaException;
 import com.codessquad.qna.web.exception.UnAuthenticatedLoginException;
 import com.codessquad.qna.web.exception.UnauthorizedUserException;
 import com.codessquad.qna.web.exception.UserNotFoundException;
