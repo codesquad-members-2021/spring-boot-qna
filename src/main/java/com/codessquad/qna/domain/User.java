@@ -19,26 +19,35 @@ public class User extends AbstractEntity{
     @JsonProperty
     private String email;
 
-    public String getPassword() {
-        return password;
+    public User(String userId, String password, String name, String email) {
+        this.userId = userId;
+        this.email = email;
+        this.name = name;
+        this.password = password;
+    }
+
+    public User() {
+
     }
 
     public boolean isMatchingPassword(String password) {
         return this.password.equals(password);
     }
 
-    public void update(User updateUser, String newPassword) {
-        this.userId = updateUser.userId;
-        this.email = updateUser.email;
-        this.name = updateUser.name;
-        this.password = newPassword;
+    public void update(String userId, String password, String name, String email, String newPassword) {
+        this.userId = userId;
+        this.email = email;
+        this.name = name;
+        if(! newPassword.equals("")){
+            this.password = newPassword;
+        }
     }
 
-    public boolean checkNull(User user) {
-        return user.userId == null
-                || user.password == null
-                || user.email == null
-                || user.name == null;
+    public boolean checkEmpty(User user) {
+        return user.userId.equals("")
+                || user.password.equals("")
+                || user.email.equals("")
+                || user.name.equals("");
     }
 
     public boolean isMatchingId(long id) {

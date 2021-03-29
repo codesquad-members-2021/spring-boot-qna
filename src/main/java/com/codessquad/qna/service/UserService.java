@@ -22,8 +22,13 @@ public class UserService {
     }
 
     @Transactional
-    public void save(User user) {
+    public boolean save(String userId, String password, String name, String email) {
+        User user = new User(userId, password, name, email);
+        if (user.checkEmpty(user)) {
+            return false;
+        }
         userRepository.save(user);
+        return true;
     }
 
     @Transactional
@@ -40,15 +45,15 @@ public class UserService {
     }
 
     @Transactional
-    public void updateUser(long id, User updateUser, String newPassword) {
+    public void updateUser(long id, String userId, String password, String name, String email, String newPassword) {
         User user = getUserById(id);
-        checkPassword(user, updateUser);
+        checkPassword(user, password);
 
-        user.update(updateUser, newPassword);
+        user.update(userId, password, name, email, newPassword);
     }
 
-    private void checkPassword(User originalUser, User updateUser) {
-        if (!originalUser.isMatchingPassword(updateUser.getPassword())) {
+    private void checkPassword(User originalUser, String password) {
+        if (!originalUser.isMatchingPassword(password)) {
             throw new IllegalArgumentException("비밀번호가 맞지않습니다. 비밀번호를 확인해 주세요");
         }
     }

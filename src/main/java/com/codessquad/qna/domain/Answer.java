@@ -24,8 +24,6 @@ public class Answer extends AbstractEntity{
     @JsonProperty
     private String contents;
 
-    private boolean deleted;
-
     public Answer() {
     }
 
@@ -37,10 +35,6 @@ public class Answer extends AbstractEntity{
 
     public boolean isSameWriter(User loginUser) {
         return loginUser.equals(this.writer);
-    }
-
-    public void deleted() {
-        this.deleted = true;
     }
 
     public Question getQuestion() {

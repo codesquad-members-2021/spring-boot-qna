@@ -19,11 +19,10 @@ public class UserController {
     }
 
     @PostMapping
-    public String create(User user) {
-        if (user.checkNull(user)) {
+    public String create(String userId, String password, String name, String email) {
+        if (!userService.save(userId, password, name, email)) {
             return "user/form";
         }
-        userService.save(user);
         return "redirect:/users";
     }
 
@@ -56,8 +55,8 @@ public class UserController {
     }
 
     @PutMapping("/{id}")
-    public String updateUser(@PathVariable long id, User updateUser, String newPassword) {
-        userService.updateUser(id, updateUser, newPassword);
+    public String updateUser(@PathVariable long id, String userId, String password, String name, String email, String newPassword) {
+        userService.updateUser(id, userId, password, name ,email, newPassword);
         return "redirect:/users";
     }
 

@@ -29,6 +29,8 @@ public class AbstractEntity {
     @LastModifiedDate
     private LocalDateTime modifiedDate;
 
+    private boolean deleted;
+
     public Long getId() {
         return id;
     }
@@ -47,6 +49,10 @@ public class AbstractEntity {
 
     public boolean isMatchingId(long id) {
         return this.id == id;
+    }
+
+    public void deleted() {
+        this.deleted = true;
     }
 
     @Override
