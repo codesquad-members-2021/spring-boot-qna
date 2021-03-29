@@ -6,24 +6,32 @@ function addAnswer(e) {
 
     var url = $(".submit-write").attr("action");
     $.ajax({
-        type : 'post',
-        url : url,
-        data : queryString,
-        dataType : 'json',
+        type: 'post',
+        url: url,
+        data: queryString,
+        dataType: 'json',
         error: onError,
-        success : onSuccess,
+        success: onSuccess,
     });
 }
 
-function onError(){
+function onError() {
     console.log("failure");
 }
-function onSuccess(data, status){
+
+function onSuccess(data, status) {
     console.log("success");
     var answerTemplate = $("#answerTemplate").html();
     var template = answerTemplate.format(data.writer.userId, data.createdAt, data.contents, data.question.id, data.id);
     $(".qna-comment-slipp-articles").prepend(template);
     $("textarea[name=contents]").val("");
+}
+
+$(document).on('click', "a.link-delete-article", deleteAnswer);
+
+function deleteAnswer(e) {
+    e.preventDefault();
+
 }
 
 String.prototype.format = function () {
