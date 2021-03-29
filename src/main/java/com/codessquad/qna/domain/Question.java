@@ -8,7 +8,6 @@ import javax.persistence.*;
 import java.util.List;
 
 @Entity
-@Table(name = "QUESTION")
 public class Question extends CommonEntity {
     @ManyToOne
     @JoinColumn(foreignKey = @ForeignKey(name = "fk_question_writer"))
