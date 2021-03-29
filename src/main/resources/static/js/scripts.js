@@ -23,6 +23,7 @@ function addAnswer(e) {
             var answerTemplate = $("#answerTemplate").html();
             var template = answerTemplate.format(data.writer.name, data.formattedCreatedDateTime, data.contents, data.question.id, data.id);
             $(".qna-comment-slipp-articles").append(template);
+            $(".answer-write textarea").val("");
         }
     });
 }
