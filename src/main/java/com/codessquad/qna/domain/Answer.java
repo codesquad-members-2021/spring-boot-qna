@@ -86,6 +86,10 @@ public class Answer {
         this.contents = contents;
     }
 
+    public LocalDateTime getCreatedDateTime() {
+        return createdDateTime;
+    }
+
     public void deleteAnswer() {
         this.deleted = true;
     }

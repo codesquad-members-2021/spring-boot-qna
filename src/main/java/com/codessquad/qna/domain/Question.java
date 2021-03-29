@@ -99,6 +99,10 @@ public class Question {
         return answerList;
     }
 
+    public LocalDateTime getCreatedDateTime() {
+        return createdDateTime;
+    }
+
     @Override
     public String toString() {
         return "Question{" +
