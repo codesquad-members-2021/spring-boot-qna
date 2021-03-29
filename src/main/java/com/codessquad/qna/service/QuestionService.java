@@ -26,7 +26,7 @@ public class QuestionService {
     }
 
     public List<Question> listAllQuestions() {
-        return questionRepository.findAllByOrderByIdDesc();
+        return questionRepository.findAllByDeletedFalseOrderByIdDesc();
     }
 
     public Question findById(Long id) {
@@ -34,6 +34,7 @@ public class QuestionService {
     }
 
     public void deleteQuestion(Question question) {
-        questionRepository.delete(question);
+        question.delete();
+        questionRepository.save(question);
     }
 }

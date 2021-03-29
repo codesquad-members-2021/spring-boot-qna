@@ -35,7 +35,8 @@ public class AnswerService {
     public void deleteById(Long id, User user) {
         Answer answer = findAnswerById(id);
         verifyWriter(answer, user);
-        delete(answer);
+        answer.delete();
+        answerRepository.save(answer);
     }
 
     public void verifyWriter(Answer answer, User user) {

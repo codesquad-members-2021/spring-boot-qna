@@ -26,6 +26,8 @@ public class Answer {
 
     private LocalDateTime timeCreated = LocalDateTime.now();
 
+    private boolean deleted = false;
+
     protected Answer() {};
 
     public Answer(User writer, Question question, String contents) {
@@ -50,8 +52,16 @@ public class Answer {
 
     public String getFormattedTimeCreated() { return timeCreated.format(DATE_TIME_FORMATTER); }
 
+    public boolean isDeleted() {
+        return deleted;
+    }
+
     public boolean isAnswerWriter(User writer) {
         return this.writer.equals(writer);
+    }
+
+    public void delete() {
+        this.deleted = true;
     }
 
     @Override
