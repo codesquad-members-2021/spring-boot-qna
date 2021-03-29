@@ -1,9 +1,14 @@
 package com.codessquad.qna.domain;
 
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
+
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
+@SQLDelete(sql = "UPDATE ANSWER SET is_active = '0' WHERE id = ?")
+@Where(clause = "is_active=1")
 public class Answer {
 
     @Id
@@ -21,7 +26,10 @@ public class Answer {
     @Column(nullable = false)
     private String contents;
 
-    private LocalDateTime time= LocalDateTime.now();
+    private LocalDateTime time = LocalDateTime.now();
+
+    @Column
+    private Boolean isActive = true;
 
     protected Answer() {
 
