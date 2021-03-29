@@ -5,7 +5,7 @@ public class NotAuthorizedException extends RuntimeException {
         super("권한이 없습니다.");
     }
 
-    public NotAuthorizedException(String msg) {
-        super(msg);
+    public NotAuthorizedException(String message) {
+        super(message);
     }
 }
