@@ -1,6 +1,7 @@
 package com.codessquad.qna.service;
 
 import com.codessquad.qna.exception.EntityNotFoundException;
+import com.codessquad.qna.exception.InvalidSessionException;
 import com.codessquad.qna.model.Answer;
 import com.codessquad.qna.model.Question;
 import com.codessquad.qna.model.User;
@@ -24,5 +25,17 @@ public class AnswerService {
                 new EntityNotFoundException(ErrorMessage.QUESTION_NOT_FOUND));
         answer.save(sessionedUser, question);
         answerRepository.save(answer);
+    }
+
+    public void update() {
+
+    }
+
+    public Answer getAnswer(Long answerId, User sessionedUser) {
+        Answer answer = answerRepository.findById(answerId).orElseThrow(() -> new EntityNotFoundException(ErrorMessage.QUESTION_NOT_FOUND));
+        if (!answer.matchWriter(sessionedUser)) {
+            throw new InvalidSessionException();
+        }
+        return answer;
     }
 }
