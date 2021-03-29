@@ -27,7 +27,7 @@ public class QuestionController {
     }
 
     @PostMapping
-    public String saveQuestionForm(String title, String contents, HttpSession session) {
+    public String saveQuestion(String title, String contents, HttpSession session) {
         User writer = SessionUtility.findSessionedUser(session);
 
         questionService.save(writer, title, contents);
@@ -47,7 +47,7 @@ public class QuestionController {
         return "qna/show";
     }
 
-    @GetMapping("{id}/update")
+    @GetMapping("{id}/form")
     public String showUpdateForm(@PathVariable Long id, Model model, HttpSession session) {
         User sessionedUser = SessionUtility.findSessionedUser(session);
         Question question = questionService.verifyQuestionWriter(id, sessionedUser);
