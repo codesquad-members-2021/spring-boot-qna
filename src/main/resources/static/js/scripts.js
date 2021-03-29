@@ -16,6 +16,7 @@ $(document).ready(() => { // Powered By Pyro
             $(item).addClass('active');
         }
     });
+
     $('#id-button-submit-answer').on('click', createAnswer);
     $(".delete-answer-form button[type='submit']").on('click', deleteAnswer);
 })
@@ -24,6 +25,7 @@ function deleteAnswer(event) {
     event.preventDefault();
     let deleteForm = $(this).parents('form');
     let url = deleteForm.attr('action');
+
     $.ajax({
         type: 'delete',
         url: url,
@@ -41,6 +43,7 @@ function createAnswer() {
     let formElement = $(".submit-write");
     let queryString = formElement.serialize();
     let url = formElement.attr('action');
+
     $.ajax({
         type: 'post',
         url: url,
@@ -54,11 +57,12 @@ function onCreateAnswerSuccess(data, status) {
     let answerTemplate = $("#answerTemplate").html();
     let template = answerTemplate.format(
         data.writer.name,
-        formatDateTime(data.createdDateTime),
+        data.createdDateTime,
         data.contents,
         data.questionId,
         data.id
     );
+
     let articlesListElement = $('.qna-comment-slipp-articles').append(template);
     $('#answerContents').val('');
     increaseAnswerCount();
@@ -80,9 +84,4 @@ function decreaseAnswerCount() {
     let countElement = $('#id-qna-comment-count');
     let value = parseInt(countElement.text()) - 1;
     countElement.html(value);
-}
-
-function formatDateTime(dateTime) {
-    console.log(dateTime);
-    return dateTime;
 }
