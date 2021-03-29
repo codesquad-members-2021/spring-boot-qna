@@ -37,7 +37,7 @@ function deleteAnswer(e) {
         type: 'delete',
         url: url,
         dataType: 'json',
-        error: function () {
+        error: function (xhr, status) {
             console.log('failure');
         },
         success: function (data, status) {

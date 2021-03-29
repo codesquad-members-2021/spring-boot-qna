@@ -2,7 +2,6 @@ package com.codessquad.qna.web.domain;
 
 public class ResponseResult {
     private boolean valid;
-
     private String errorMessage;
 
     private ResponseResult() {
@@ -20,5 +19,13 @@ public class ResponseResult {
 
     public static ResponseResult fail(String errorMessage) {
         return new ResponseResult(false, errorMessage);
+    }
+
+    public boolean isValid() {
+        return valid;
+    }
+
+    public String getErrorMessage() {
+        return errorMessage;
     }
 }
