@@ -1,7 +1,6 @@
 package com.codessquad.qna.web.controller.api;
 
 import com.codessquad.qna.web.domain.Answer;
-import com.codessquad.qna.web.domain.Result;
 import com.codessquad.qna.web.domain.User;
 import com.codessquad.qna.web.service.AnswerService;
 import com.codessquad.qna.web.utils.SessionUtil;
@@ -26,10 +25,9 @@ public class ApiAnswerController {
     }
 
     @DeleteMapping("/{questionId}/answers/{answerId}")
-    public Result deleteAnswer(@PathVariable("questionId") long questionId,
+    public void deleteAnswer(@PathVariable("questionId") long questionId,
                                @PathVariable("answerId") long answerId, HttpSession session) {
         User loginUser = SessionUtil.getLoginUser(session);
         answerService.deleteAnswer(loginUser, answerId);
-        return new Result(Result.STATUS_OK, answerId + "");
     }
 }
