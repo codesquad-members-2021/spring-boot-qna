@@ -114,8 +114,9 @@ public class Question extends AbstractEntity {
         countOfAnswers += 1;
     }
 
-    public void decreaseCountOfAnswers() {
+    public void deleteAnswer(Answer answer) {
         countOfAnswers -= 1;
+        answer.deleted();
     }
 
     public Integer getCountOfAnswers() {

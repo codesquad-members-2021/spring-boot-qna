@@ -51,9 +51,8 @@ public class AnswerService {
     public Answer remove(User sessionUser, Answer answer) {
         checkAccessibleSessionUser(sessionUser, answer);
 
-        answer.getQuestion().decreaseCountOfAnswers();
+        answer.getQuestion().deleteAnswer(answer);
 
-        answer.deleted();
         return answerRepository.save(answer);
     }
 }
