@@ -4,8 +4,8 @@ import com.codessquad.qna.domain.Answer;
 import com.codessquad.qna.domain.AnswerRepository;
 import com.codessquad.qna.domain.Question;
 import com.codessquad.qna.domain.User;
+import com.codessquad.qna.exception.AnswerNotFoundException;
 import com.codessquad.qna.exception.IllegalUserAccessException;
-import com.codessquad.qna.exception.UserNotFoundException;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -25,7 +25,7 @@ public class AnswerService {
     }
 
     public Answer findAnswerById(Long id) {
-        return answerRepository.findById(id).orElseThrow(UserNotFoundException::new); // TODO: AnswerNotFoundException 만들기
+        return answerRepository.findById(id).orElseThrow(AnswerNotFoundException::new);
     }
 
     public void delete(Answer answer) {
@@ -34,6 +34,7 @@ public class AnswerService {
 
     public void deleteById(Long id, User user) {
         Answer answer = findAnswerById(id);
+        System.out.println(answer);
         verifyWriter(answer, user);
         answer.delete();
         answerRepository.save(answer);
