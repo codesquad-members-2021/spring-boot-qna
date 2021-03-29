@@ -27,6 +27,10 @@ public class User {
         return this.id.equals(id);
     }
 
+    public boolean matchUserId(User user) {
+        return this.userId.equals(user.userId);
+    }
+
     public boolean matchPassword(String password) {
         return this.password.equals(password);
     }
