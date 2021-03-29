@@ -10,8 +10,10 @@ public class Question {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
-    private String writer;
+    @ManyToOne
+    @JoinColumn(foreignKey = @ForeignKey(name = "fk_question_writer"))
+    private User writer;
+
     @Column(nullable = false)
     private String dateTime;
     @Column(nullable = false)
@@ -22,7 +24,7 @@ public class Question {
     private static final DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
 
     public void save(User user) {
-        this.writer = user.getUserId();
+        this.writer = user;
         this.dateTime = LocalDateTime.now().format(dateTimeFormatter);
     }
 
@@ -32,7 +34,7 @@ public class Question {
     }
 
     public boolean matchWriter(User user) {
-        return this.writer.equals(user.getUserId());
+        return this.writer.matchUserId(user);
     }
 
     public Long getId() {
@@ -43,11 +45,11 @@ public class Question {
         this.id = id;
     }
 
-    public String getWriter() {
+    public User getWriter() {
         return writer;
     }
 
-    public void setWriter(String writer) {
+    public void setWriter(User writer) {
         this.writer = writer;
     }
 
