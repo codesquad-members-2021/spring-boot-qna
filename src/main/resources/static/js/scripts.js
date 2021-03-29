@@ -43,12 +43,8 @@ function deleteAnswer(e) {
         dataType: 'json',
         error: onError,
         success: function (data, status) {
-            if (data.valid) {
-                console.log("Success");
-                deleteBtn.closest('article').remove();
-            } else {
-                alert(data.message);
-            }
+            console.log("Success");
+            deleteBtn.closest('article').remove();
         }
     })
 }

@@ -1,7 +1,6 @@
 package com.codessquad.qna.controller.api;
 
 import com.codessquad.qna.domain.Answer;
-import com.codessquad.qna.domain.Result;
 import com.codessquad.qna.domain.User;
 import com.codessquad.qna.service.AnswerService;
 import com.codessquad.qna.util.HttpSessionUtils;
@@ -33,10 +32,10 @@ public class ApiAnswerController {
     }
 
     @DeleteMapping("/{answerId}")
-    public Result delete(@PathVariable long questionId, @PathVariable long answerId, HttpSession session) {
+    @ResponseStatus(value = HttpStatus.NO_CONTENT)
+    public void delete(@PathVariable long questionId, @PathVariable long answerId, HttpSession session) {
         logger.debug("{}번 질문의 {}번 답변 삭제 요청", questionId, answerId);
         User user = HttpSessionUtils.getUser(session);
         answerService.deleteAnswer(answerId, user);
-        return Result.OK();
     }
 }
