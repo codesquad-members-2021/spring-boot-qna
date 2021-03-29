@@ -46,7 +46,7 @@ public class AbstractEntity {
     }
 
     public String getFormattedCreatedDate() {
-       return getFormattedDate(createdDateTime);
+        return getFormattedDate(createdDateTime);
     }
 
     public String getFormattedModifiedDate() {

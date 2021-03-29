@@ -9,6 +9,7 @@ import javax.persistence.Entity;
 public class User extends AbstractEntity {
     @Column(nullable = false, length = 20, unique = true)
     private String userId;
+
     @JsonIgnore
     private String password;
     private String name;
