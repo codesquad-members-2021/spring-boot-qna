@@ -11,6 +11,7 @@ import java.util.List;
 import static com.codessquad.qna.web.exceptions.InvalidEntityException.EMPTY_FIELD_IN_QUESTION_ENTITY;
 import static com.codessquad.qna.web.exceptions.auth.UnauthorizedAccessException.CANNOT_MODIFY_OR_DELETE_ANOTHER_USERS_QUESTION;
 import static com.codessquad.qna.web.exceptions.auth.UnauthorizedAccessException.CAN_NOT_DELETE_BECAUSE_ANOTHER_USERS_ANSWER_IS_EXISTS;
+import static com.codessquad.qna.web.utils.EntityCheckUtils.isNotEmpty;
 
 @Entity
 public class Question extends BaseTimeEntity {
@@ -68,7 +69,7 @@ public class Question extends BaseTimeEntity {
     }
 
     public boolean isValid() {
-        return (title != null && !title.isEmpty()) && (contents != null && !contents.isEmpty());
+        return isNotEmpty(title) && isNotEmpty(contents);
     }
 
     public void verifyQuestionEntityIsValid() {

@@ -8,6 +8,7 @@ import javax.persistence.*;
 import static com.codessquad.qna.web.exceptions.InvalidEntityException.EMPTY_FIELD_IN_USER_ENTITY;
 import static com.codessquad.qna.web.exceptions.auth.UnauthorizedAccessException.CANNOT_MODIFY_ANOTHER_USER;
 import static com.codessquad.qna.web.exceptions.auth.UnauthorizedAccessException.PASSWORD_NOT_MATCHING;
+import static com.codessquad.qna.web.utils.EntityCheckUtils.isNotEmpty;
 
 @Entity
 public class User extends BaseTimeEntity {
@@ -44,9 +45,7 @@ public class User extends BaseTimeEntity {
     }
 
     public boolean isValid() {
-        return (password != null && !password.isEmpty())
-                && (name != null && !name.isEmpty())
-                && (email != null && !email.isEmpty());
+        return isNotEmpty(password) && isNotEmpty(name) && isNotEmpty(email);
     }
 
     public void verifyUserEntityIsValid() {

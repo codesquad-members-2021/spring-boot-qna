@@ -7,6 +7,7 @@ import com.fasterxml.jackson.annotation.JsonGetter;
 import javax.persistence.*;
 
 import static com.codessquad.qna.web.exceptions.InvalidEntityException.EMPTY_FIELD_IN_ANSWER_ENTITY;
+import static com.codessquad.qna.web.utils.EntityCheckUtils.isNotEmpty;
 
 @Entity
 public class Answer extends BaseTimeEntity {
@@ -45,7 +46,7 @@ public class Answer extends BaseTimeEntity {
     }
 
     public boolean isValid() {
-        return contents != null && !contents.isEmpty();
+        return isNotEmpty(contents);
     }
 
     public boolean isSameWriter(User writer) {
