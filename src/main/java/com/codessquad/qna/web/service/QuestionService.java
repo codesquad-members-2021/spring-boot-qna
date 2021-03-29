@@ -43,7 +43,7 @@ public class QuestionService {
 
     public Question findById(Long id) {
         Question question = questionRepository.findById(id)
-                .orElseThrow(() -> new QuestionNotFoundException());
+                .orElseThrow(QuestionNotFoundException::new);
         return question;
     }
 

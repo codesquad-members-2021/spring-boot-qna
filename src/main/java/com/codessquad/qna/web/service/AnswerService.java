@@ -30,7 +30,7 @@ public class AnswerService {
     }
 
     public Answer findById(Long id) {
-        return answerRepository.findById(id).orElseThrow(() -> new AnswerNotFoundException());
+        return answerRepository.findById(id).orElseThrow(AnswerNotFoundException::new);
     }
 
     public void delete(Long id, User sessionedUser) {
