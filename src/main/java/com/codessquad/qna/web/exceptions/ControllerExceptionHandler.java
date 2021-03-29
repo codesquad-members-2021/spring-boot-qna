@@ -55,7 +55,7 @@ public class ControllerExceptionHandler {
 
     @ExceptionHandler(LoginFailedException.class)
     public String handleLoginFailedException(LoginFailedException exception) {
-        logException("로그인에 실패했습니다", exception);
+        logger.warn("로그인에 실패했습니다");
         return "redirect:/users/login-form";
     }
 
@@ -67,13 +67,9 @@ public class ControllerExceptionHandler {
     }
 
     private void initializeModel(String errorMessage, Exception exception, Model model) {
-        logException(errorMessage, exception);
+        logger.warn(errorMessage);
         model.addAttribute("errorMessage", errorMessage);
         model.addAttribute("extraErrorMessage", exception.getMessage());
     }
 
-    private void logException(String errorMessage, Exception exception) {
-        logger.warn(errorMessage);
-        exception.printStackTrace();
-    }
 }
