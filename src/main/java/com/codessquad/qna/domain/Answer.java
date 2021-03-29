@@ -6,7 +6,7 @@ import javax.persistence.*;
 
 @Entity
 @Table(name = "ANSWER")
-public class Answer extends AbstractEntity {
+public class Answer extends CommonEntity {
     @ManyToOne
     @JoinColumn(foreignKey = @ForeignKey(name = "fk_answer_question"))
     @JsonProperty

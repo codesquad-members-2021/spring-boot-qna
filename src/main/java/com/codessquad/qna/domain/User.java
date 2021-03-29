@@ -9,7 +9,7 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name = "USER")
-public class User extends AbstractEntity {
+public class User extends CommonEntity {
     @Column(nullable = false, length = 20, unique = true)
     @JsonProperty
     private String userId;
