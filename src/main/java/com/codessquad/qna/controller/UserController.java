@@ -1,15 +1,14 @@
 package com.codessquad.qna.controller;
 
 import com.codessquad.qna.domain.User;
+import com.codessquad.qna.domain.UserRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,50 +17,48 @@ import java.util.List;
 @RequestMapping("/users")
 public class UserController {
 
-    Logger logger = LoggerFactory.getLogger(UserController.class);
+   private final UserRepository userRepository;
 
-    private List<User> users = new ArrayList<>();
+    public UserController(UserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
 
     @PostMapping
     public String createUserAccount(User user) {
-        if (user == null) {
+        if (user.getUserId().equals("") || user.getUserId() == null ||
+            user.getName().equals("") || user.getName() == null ||
+            user.getEmail().equals("") || user.getEmail() == null ||
+            user.getPassword().equals("") || user.getPassword() == null) {
             return "redirect:/user/form";
         }
-        users.add(user);
-        user.setId(users.size());
+        userRepository.save(user);
         return "redirect:/users";
     }
 
     @GetMapping
     public String showUserList(Model model) {
-        model.addAttribute("users", users);
+        model.addAttribute("users", userRepository.findAll());
         return "/user/list";
     }
 
-    @GetMapping("/{userId}")
-    public String showProfile(@PathVariable String userId, Model model) {
-        int index = 0;
-        for (User user : users) {
-            if(user.getUserId().equals(userId)) {
-                index = users.indexOf(user);
-                logger.info("tempUser = " + users.get(index));
-            }
-        }
-        model.addAttribute("user", users.get(index));
+    @GetMapping("/profile/{id}")
+    public String showProfile(@PathVariable Long id, Model model) {
+        model.addAttribute("user", userRepository.findById(id).orElse(null));
         return "/user/profile";
     }
 
-    @PostMapping("/{userId}/update")
-    public String updateUserInfo(@PathVariable String userId, User updateUser) {
-        for (User user : users) {
-            if(user.getUserId().equals(userId)) {
-                int index = users.indexOf(user);
-                users.set(index, updateUser);
-                logger.info("updateUser = " + updateUser);
-            }
-        }
-        return "redirect:/users";
+    @GetMapping("/{id}")
+    public String showUpdateForm(@PathVariable Long id, Model model) {
+        model.addAttribute("user", userRepository.findById(id).orElse(null));
+        return "/user/update";
+    }
 
+   @PutMapping("/{id}/update")
+    public String updateUserInfo(@PathVariable Long id, User updateUser) {
+        User user = userRepository.findById(id).orElse(null);
+        user.update(updateUser);
+        userRepository.save(user);
+        return "redirect:/users";
     }
 
 }

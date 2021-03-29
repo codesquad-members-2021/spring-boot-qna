@@ -1,19 +1,35 @@
 package com.codessquad.qna.domain;
 
+import javax.persistence.*;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
+@Entity
 public class Question {
 
-    private int id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
     private String writer;
     private String title;
+    @Column(length = 20000)
     private String contents;
-    private String writeTime;
+    private LocalDateTime writeTime;
 
-    public int getId() {
+    public Question() {  }
+    public Question(String writer, String title, String contents) {
+        this.writer = writer;
+        this.title = title;
+        this.contents = contents;
+        this.writeTime = LocalDateTime.now();
+    }
+
+    public Long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -42,20 +58,14 @@ public class Question {
     }
 
     public String getWriteTime() {
-        return writeTime;
+        if (writeTime == null) {
+            return "";
+        }
+        return writeTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"));
     }
 
-    public void setWriteTime(String writeTime) {
+    public void setWriteTime(LocalDateTime writeTime) {
         this.writeTime = writeTime;
     }
 
-    @Override
-    public String toString() {
-        return "Question{" +
-                "questionId=" + id +
-                ", writer='" + writer + '\'' +
-                ", subject='" + title + '\'' +
-                ", content='" + contents + '\'' +
-                '}';
-    }
 }
