@@ -7,7 +7,7 @@ import com.fasterxml.jackson.databind.ser.std.StdSerializer;
 import java.io.IOException;
 import java.time.LocalDateTime;
 
-import static com.codessquad.qna.web.utils.DateUtil.MY_DATE_FORMATTER;
+import static com.codessquad.qna.web.utils.DateConstants.MY_DATE_FORMATTER;
 
 public class CustomDateSerializer extends StdSerializer<LocalDateTime> {
     public CustomDateSerializer() {
