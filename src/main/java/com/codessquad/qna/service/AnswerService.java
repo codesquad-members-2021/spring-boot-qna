@@ -34,6 +34,9 @@ public class AnswerService {
         if (!answer.isWriter(tryToDelete)) {
             throw new NotAuthorizedException();
         }
+        if(answer.isDeleted()){
+            throw new NotFoundException(answerId+"번 Answer는 이미 삭제되었습니다.");
+        }
         answer.delete();
     }
 
