@@ -1,6 +1,13 @@
 package com.codessquad.qna.web.domain;
 
+import com.codessquad.qna.web.exceptions.InvalidEntityException;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonGetter;
+
 import javax.persistence.*;
+
+import static com.codessquad.qna.web.exceptions.InvalidEntityException.EMPTY_FIELD_IN_ANSWER_ENTITY;
+import static com.codessquad.qna.web.utils.EntityCheckUtils.isNotEmpty;
 
 @Entity
 public class Answer extends BaseTimeEntity {
@@ -14,10 +21,13 @@ public class Answer extends BaseTimeEntity {
 
     @ManyToOne
     @JoinColumn(foreignKey = @ForeignKey(name = "fk_answer_to_question"))
+    @JsonBackReference
     private Question question;
 
     @Column(nullable = false, length = 400)
     private String contents;
+
+    @Column(nullable = false)
     private boolean deleted = false;
 
     public Answer(String contents, Question question, User writer) {
@@ -29,11 +39,14 @@ public class Answer extends BaseTimeEntity {
     protected Answer() {
     }
 
-    public boolean isValid() {
-        if (contents == null) {
-            return false;
+    public void verifyAnswerEntityIsValid() {
+        if (!isValid()) {
+            throw new InvalidEntityException(EMPTY_FIELD_IN_ANSWER_ENTITY);
         }
-        return !contents.isEmpty();
+    }
+
+    public boolean isValid() {
+        return isNotEmpty(contents);
     }
 
     public boolean isSameWriter(User writer) {
@@ -84,8 +97,9 @@ public class Answer extends BaseTimeEntity {
         return deleted;
     }
 
-    public void setDeleted(boolean deleted) {
-        this.deleted = deleted;
+    @JsonGetter("questionId")
+    public Long getTheQuestionId() {
+        return question.getId();
     }
 
     @Override

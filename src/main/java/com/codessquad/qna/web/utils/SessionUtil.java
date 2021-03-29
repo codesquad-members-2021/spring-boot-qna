@@ -5,7 +5,7 @@ import com.codessquad.qna.web.exceptions.users.NoLoginUserException;
 
 import javax.servlet.http.HttpSession;
 
-import static com.codessquad.qna.web.utils.ExceptionConstants.ONLY_FOR_LOGGED_IN_USER;
+import static com.codessquad.qna.web.exceptions.users.NoLoginUserException.ONLY_FOR_LOGGED_IN_USER;
 
 public class SessionUtil {
     private final static String SESSION_KEY_LOGIN_USER = "loginUser";

@@ -1,6 +1,14 @@
 package com.codessquad.qna.web.domain;
 
+import com.codessquad.qna.web.exceptions.InvalidEntityException;
+import com.codessquad.qna.web.exceptions.auth.UnauthorizedAccessException;
+
 import javax.persistence.*;
+
+import static com.codessquad.qna.web.exceptions.InvalidEntityException.EMPTY_FIELD_IN_USER_ENTITY;
+import static com.codessquad.qna.web.exceptions.auth.UnauthorizedAccessException.CANNOT_MODIFY_ANOTHER_USER;
+import static com.codessquad.qna.web.exceptions.auth.UnauthorizedAccessException.PASSWORD_NOT_MATCHING;
+import static com.codessquad.qna.web.utils.EntityCheckUtils.isNotEmpty;
 
 @Entity
 public class User extends BaseTimeEntity {
@@ -28,7 +36,6 @@ public class User extends BaseTimeEntity {
     }
 
     protected User() {
-
     }
 
     public void update(User newUserInfo) {
@@ -38,10 +45,33 @@ public class User extends BaseTimeEntity {
     }
 
     public boolean isValid() {
-        if (password == null || name == null || email == null) {
-            return false;
+        return isNotEmpty(password) && isNotEmpty(name) && isNotEmpty(email);
+    }
+
+    public void verifyUserEntityIsValid() {
+        if (!isValid()) {
+            throw new InvalidEntityException(EMPTY_FIELD_IN_USER_ENTITY);
         }
-        return !password.isEmpty() && !name.isEmpty() && !email.isEmpty();
+    }
+
+    public boolean isMatchingPassword(String anotherPassword) {
+        return password.equals(anotherPassword);
+    }
+
+    public void verifyPassword(String password) {
+        if (!isMatchingPassword(password)) {
+            throw new UnauthorizedAccessException(PASSWORD_NOT_MATCHING);
+        }
+    }
+
+    public boolean isMatchingId(User anotherUser) {
+        return id.equals(anotherUser.id);
+    }
+
+    public void verifyIsSameUser(User anotherUser) {
+        if (!isMatchingId(anotherUser)) {
+            throw new UnauthorizedAccessException(CANNOT_MODIFY_ANOTHER_USER);
+        }
     }
 
     public Long getId() {
@@ -82,14 +112,6 @@ public class User extends BaseTimeEntity {
 
     public void setEmail(String email) {
         this.email = email;
-    }
-
-    public boolean isMatchingPassword(String anotherPassword) {
-        return password.equals(anotherPassword);
-    }
-
-    public boolean isMatchingId(User anotherUser) {
-        return id.equals(anotherUser.id);
     }
 
     @Override

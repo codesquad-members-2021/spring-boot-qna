@@ -14,7 +14,7 @@ import javax.servlet.http.HttpSession;
 @Controller
 @RequestMapping("/users")
 public class UsersController {
-    private static final Logger LOGGER = LoggerFactory.getLogger(UsersController.class);
+    private static final Logger logger = LoggerFactory.getLogger(UsersController.class);
     private final UserService userService;
 
     public UsersController(UserService userService) {
@@ -24,7 +24,7 @@ public class UsersController {
     @PostMapping
     public String createUser(User user) {
         userService.createUser(user);
-        LOGGER.info("user created : {}", user.getUserId());
+        logger.info("user created : {}", user.getUserId());
         return "redirect:/users";
     }
 
@@ -63,7 +63,7 @@ public class UsersController {
     @PostMapping("/logout")
     public String doLogout(HttpSession session) {
         User loginUser = SessionUtil.getLoginUser(session);
-        LOGGER.info("user logout : {}", loginUser.getUserId());
+        logger.info("user logout : {}", loginUser.getUserId());
         SessionUtil.removeLoginUser(session);
         return "redirect:/";
     }

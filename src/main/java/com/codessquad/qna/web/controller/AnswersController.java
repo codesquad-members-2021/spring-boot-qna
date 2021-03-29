@@ -1,6 +1,5 @@
 package com.codessquad.qna.web.controller;
 
-import com.codessquad.qna.web.domain.Question;
 import com.codessquad.qna.web.domain.User;
 import com.codessquad.qna.web.service.AnswerService;
 import com.codessquad.qna.web.utils.SessionUtil;
@@ -13,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import javax.servlet.http.HttpSession;
 
 @Controller
-@RequestMapping("/questions")
+@RequestMapping("/questions/{questionId}")
 public class AnswersController {
     private final AnswerService answerService;
 
@@ -21,7 +20,7 @@ public class AnswersController {
         this.answerService = answerService;
     }
 
-    @PostMapping("/{questionId}/answers")
+    @PostMapping("/answers")
     public String createAnswer(@PathVariable("questionId") long questionId, String answerContents,
                                HttpSession session) {
         User loginUser = SessionUtil.getLoginUser(session);
@@ -29,12 +28,12 @@ public class AnswersController {
         return "redirect:/questions/" + questionId;
     }
 
-    @DeleteMapping("/{questionId}/answers/{answerId}")
+    @DeleteMapping("/answers/{answerId}")
     public String deleteAnswer(@PathVariable("questionId") long questionId,
                                @PathVariable("answerId") long answerId, HttpSession session) {
         User loginUser = SessionUtil.getLoginUser(session);
-        Question targetQuestion = answerService.deleteAnswer(loginUser, answerId);
-        return "redirect:/questions/" + targetQuestion.getId();
+        answerService.deleteAnswer(loginUser, answerId);
+        return "redirect:/questions/" + questionId;
     }
 
 }

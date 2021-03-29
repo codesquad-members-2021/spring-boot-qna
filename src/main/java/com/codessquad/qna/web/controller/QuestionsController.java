@@ -15,7 +15,7 @@ import javax.servlet.http.HttpSession;
 @Controller
 @RequestMapping("/questions")
 public class QuestionsController {
-    private static final Logger LOGGER = LoggerFactory.getLogger(QuestionsController.class);
+    private static final Logger logger = LoggerFactory.getLogger(QuestionsController.class);
     private final QuestionService questionService;
 
     public QuestionsController(QuestionService questionService) {
@@ -26,7 +26,7 @@ public class QuestionsController {
     public String createQuestion(Question newQuestion, HttpSession session) {
         User loginUser = SessionUtil.getLoginUser(session);
         questionService.createQuestion(newQuestion, loginUser);
-        LOGGER.info("question created {}", newQuestion);
+        logger.info("question created {}", newQuestion);
         return "redirect:/";
     }
 
@@ -46,8 +46,9 @@ public class QuestionsController {
     @GetMapping("/{questionId}/modify-form")
     public String modifyForm(@PathVariable("questionId") long questionId, Model model, HttpSession session) {
         User loginUser = SessionUtil.getLoginUser(session);
-        Question modifiedQuestion = questionService.verifyIsOwnerAndGetQuestionDetail(questionId, loginUser);
-        model.addAttribute("currentQuestion", modifiedQuestion);
+        Question question = questionService.questionDetail(questionId);
+        question.verifyIsQuestionOwner(loginUser);
+        model.addAttribute("currentQuestion", question);
         return "qna/modify-form";
     }
 
@@ -56,7 +57,7 @@ public class QuestionsController {
                                  Question newQuestion, HttpSession session) {
         User loginUser = SessionUtil.getLoginUser(session);
         Question modifiedQuestion = questionService.modifyQuestion(loginUser, questionId, newQuestion);
-        LOGGER.info("question modified {}", modifiedQuestion);
+        logger.info("question modified {}", modifiedQuestion);
         return "redirect:/questions/" + modifiedQuestion.getId();
     }
 
