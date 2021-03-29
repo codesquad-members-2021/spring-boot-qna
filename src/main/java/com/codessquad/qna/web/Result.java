@@ -20,8 +20,4 @@ public class Result {
     public static Result fail(String errorMessage) {
         return new Result(false, errorMessage);
     }
-
-//    public boolean isValid() {
-//        return vaild;
-//    }
 }
