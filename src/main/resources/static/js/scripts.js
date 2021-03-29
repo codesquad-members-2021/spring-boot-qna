@@ -16,7 +16,6 @@ $(document).ready(() => { // Powered By Pyro
             $(item).addClass("active");
         }
     });
-    //$(".delete-answer-form button[type='submit']").click(deleteAnswer);
     $('#id-button-submit-answer').on('click', createAnswer);
     $(".delete-answer-form button[type='submit']").on('click', deleteAnswer);
 })
@@ -40,7 +39,7 @@ function deleteAnswer(event) {
 
 function createAnswer() {
     let formElement = $(".submit-write");
-    let queryString = formElement.serialize(); //form data들을 자동으로 묶어준다.
+    let queryString = formElement.serialize();
     let url = formElement.attr("action");
     $.ajax({
         type: 'post',
