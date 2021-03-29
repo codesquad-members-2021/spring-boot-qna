@@ -9,13 +9,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.Objects;
 
 @Entity
-public class Answer {
-    private static final DateTimeFormatter DATE_TIME_FORMAT = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
-    @Id
-    @GeneratedValue
-    @JsonProperty
-    private Long id;
-
+public class Answer extends AbstractEntity{
     @ManyToOne
     @JsonProperty
     @JoinColumn(foreignKey = @ForeignKey(name = "fk_answer_writer"))
@@ -32,8 +26,6 @@ public class Answer {
 
     private boolean delete;
 
-    private LocalDateTime createdDateTime = LocalDateTime.now();
-
     public Answer() {
     }
 
@@ -41,10 +33,6 @@ public class Answer {
         this.writer = writer;
         this.question = question;
         this.contents = contents;
-    }
-
-    public String getFormattedDateTime() {
-        return createdDateTime.format(DATE_TIME_FORMAT);
     }
 
     public boolean isSameWriter(User loginUser) {
@@ -60,22 +48,9 @@ public class Answer {
     }
 
     @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Answer answer = (Answer) o;
-        return Objects.equals(id, answer.id);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id);
-    }
-
-    @Override
     public String toString() {
         return "Answer{" +
-                "id=" + id +
+                super.toString() +
                 ", writer=" + writer +
                 ", contents='" + contents + '\'' ;
     }
