@@ -33,7 +33,7 @@ public class Question {
     @JsonProperty
     private String contents;
 
-    private LocalDateTime createdDateTime = LocalDateTime.now();
+    private boolean deleted;
 
     @JsonProperty
     private int answerCount = 0;
@@ -48,8 +48,9 @@ public class Question {
         this.contents = contents;
     }
 
-    public String getFormattedDateTime() {
-        return createdDateTime.format(DATE_TIME_FORMAT);
+
+    public void delete() {
+        this.deleted = true;
     }
 
     public boolean isMatchingWriter(User loginUser) {
@@ -67,12 +68,11 @@ public class Question {
     }
 
     public void deleteAnswer(Answer answer) {
-        if(answers.contains(answer)) {
+        if (answers.contains(answer)) {
             answer.deleted();
             answerCount--;
         }
     }
-
 
 
     @Override

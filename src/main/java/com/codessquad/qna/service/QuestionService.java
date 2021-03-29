@@ -10,6 +10,7 @@ import com.codessquad.qna.web.HttpSessionUtils;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpSession;
+import javax.transaction.Transactional;
 import java.util.List;
 
 @Service
@@ -21,34 +22,35 @@ public class QuestionService {
         this.questionRepository = questionRepository;
     }
 
+    @Transactional
     public void save(User sessionUser, String title, String contents) {
         Question question = new Question(sessionUser, title, contents);
-
         questionRepository.save(question);
     }
 
+    @Transactional
     public Result delete(Long id, boolean isLogin, User sessionUser) {
         Question question = getQuestionById(id);
         Result result = valid(isLogin, sessionUser, question);
         if (!result.isValid()) {
             return result;
         }
-        questionRepository.delete(question);
+        question.delete();
         return result;
     }
 
     public List<Question> getQuestionList() {
-        return questionRepository.findAll();
+        return questionRepository.findAllByDeletedIsFalse();
     }
 
     public Question getQuestionById(Long id) {
         return questionRepository.findById(id).orElseThrow(NoQuestionException::new);
     }
-
+    
+    @Transactional
     public void updateQuestion(Long id, Question updateQuestion) {
         Question question = getQuestionById(id);
         question.update(updateQuestion);
-        questionRepository.save(question);
     }
 
     public Result valid(boolean isLoginUser, User sessionUser, Question question) {

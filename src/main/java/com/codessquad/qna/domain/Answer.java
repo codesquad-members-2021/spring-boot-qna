@@ -24,7 +24,7 @@ public class Answer extends AbstractEntity{
     @JsonProperty
     private String contents;
 
-    private boolean delete;
+    private boolean deleted;
 
     public Answer() {
     }
@@ -40,7 +40,7 @@ public class Answer extends AbstractEntity{
     }
 
     public void deleted() {
-        this.delete = true;
+        this.deleted = true;
     }
 
     public Question getQuestion() {
