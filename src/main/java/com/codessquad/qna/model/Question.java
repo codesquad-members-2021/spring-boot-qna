@@ -3,6 +3,7 @@ package com.codessquad.qna.model;
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 
 @Entity
 public class Question {
@@ -18,8 +19,14 @@ public class Question {
     private String dateTime;
     @Column(nullable = false)
     private String title;
+
+    @Lob
     @Column(nullable = false)
     private String contents;
+
+    @OneToMany(mappedBy = "question")
+    @OrderBy("id ASC")
+    private List<Answer> answers;
 
     private static final DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
 
@@ -75,6 +82,14 @@ public class Question {
 
     public void setContents(String contents) {
         this.contents = contents;
+    }
+
+    public List<Answer> getAnswers() {
+        return answers;
+    }
+
+    public void setAnswers(List<Answer> answers) {
+        this.answers = answers;
     }
 
     @Override
