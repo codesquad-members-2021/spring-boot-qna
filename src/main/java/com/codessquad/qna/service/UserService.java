@@ -29,7 +29,7 @@ public class UserService {
 
     public void createUser(User user) {
 
-        if(userRepository.findByUserId(user.getUserId()).get() != null) {
+        if (userRepository.findByUserId(user.getUserId()).get() != null) {
             throw new UnacceptableDuplicationException(REDUNDANT_USERID);
         }
         userRepository.save(user);
