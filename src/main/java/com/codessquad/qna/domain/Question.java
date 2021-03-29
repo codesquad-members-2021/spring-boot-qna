@@ -10,12 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-public class Question {
-    private static final DateTimeFormatter DATE_TIME_FORMAT = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
-    @Id
-    @JsonProperty
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+public class Question extends AbstractEntity {
 
     @ManyToOne
     @JsonProperty
@@ -33,8 +28,6 @@ public class Question {
     @JsonProperty
     private String contents;
 
-    private LocalDateTime createdDateTime = LocalDateTime.now();
-
     @JsonProperty
     private int answerCount = 0;
 
@@ -46,10 +39,6 @@ public class Question {
         this.writer = writer;
         this.title = title;
         this.contents = contents;
-    }
-
-    public String getFormattedDateTime() {
-        return createdDateTime.format(DATE_TIME_FORMAT);
     }
 
     public boolean isMatchingWriter(User loginUser) {
@@ -71,16 +60,5 @@ public class Question {
             answer.deleted();
             answerCount--;
         }
-    }
-
-
-
-    @Override
-    public String toString() {
-        return "Qna{" +
-                "writer='" + writer + '\'' +
-                ", title='" + title + '\'' +
-                ", contents='" + contents + '\'' +
-                '}';
     }
 }
