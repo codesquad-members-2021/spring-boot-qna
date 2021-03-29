@@ -35,7 +35,7 @@ public class AnswerService {
     }
 
     @Transactional
-    public void delete(long questionId, long answerId, User loginUser) {
+    public boolean delete(long questionId, long answerId, User loginUser) {
         Answer answer = answerRepository.findById(answerId)
                 .orElseThrow(() -> new EntityNotFoundException("Cannot found answer number " + answerId));
 
@@ -43,6 +43,7 @@ public class AnswerService {
             throw new CrudNotAllowedException("Only writer can delete this answer post!");
         }
         answerRepository.delete(answer);
+        return true;
     }
 
     private Question getQuestionById(long questionId) {

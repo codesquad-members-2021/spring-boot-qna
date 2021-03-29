@@ -4,10 +4,7 @@ import com.codessquad.qna.web.domain.answer.Answer;
 import com.codessquad.qna.web.domain.user.User;
 import com.codessquad.qna.web.service.AnswerService;
 import com.codessquad.qna.web.utils.SessionUtils;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
 
@@ -25,5 +22,11 @@ public class ApiAnswerController {
     public Answer create(@PathVariable long questionId, String contents, HttpSession session) {
         User loginUser = SessionUtils.getLoginUser(session);
         return answerService.create(questionId, contents, loginUser);
+    }
+
+    @DeleteMapping("/{answerId}")
+    public boolean delete(@PathVariable long questionId, @PathVariable long answerId, HttpSession session) {
+        User loginUser = SessionUtils.getLoginUser(session);
+        return answerService.delete(questionId, answerId, loginUser);
     }
 }

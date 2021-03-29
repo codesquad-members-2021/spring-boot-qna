@@ -31,6 +31,20 @@ $(document).on('click', "a.link-delete-article", deleteAnswer);
 
 function deleteAnswer(e) {
     e.preventDefault();
+    var url = $(this).attr("href");
+
+    $.ajax({
+        type: 'delete',
+        url: url,
+        dataType: 'json',
+        error: function () {
+            console.log('failure');
+        },
+        success: function (data, status) {
+            console.log(data);
+        }
+    });
+
 
 }
 
