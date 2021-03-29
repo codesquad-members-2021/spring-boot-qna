@@ -4,11 +4,15 @@ import com.codessquad.qna.web.domain.question.Question;
 import com.codessquad.qna.web.domain.user.User;
 import com.codessquad.qna.web.utils.DateTimeUtils;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
+@SQLDelete(sql = "UPDATE ANSWER SET is_active = '0' WHERE id = ?")
+@Where(clause = "is_active=1")
 public class Answer {
 
     @Id
@@ -30,7 +34,7 @@ public class Answer {
     @JsonProperty
     private String contents;
 
-    private boolean isActive = true;
+    private Boolean isActive = true;
 
     @JsonProperty
     private LocalDateTime createdAt;
@@ -69,10 +73,16 @@ public class Answer {
 
     public void setQuestion(Question question) {
         this.question = question;
+        if (!question.getAnswers().contains(this)) {
+            question.getAnswers().add(this);
+        }
     }
 
     public void setWriter(User writer) {
         this.writer = writer;
+        if (!writer.getAnswers().contains(this)) {
+            writer.getAnswers().add(this);
+        }
     }
 
     public boolean isMatchingWriter(User user) {

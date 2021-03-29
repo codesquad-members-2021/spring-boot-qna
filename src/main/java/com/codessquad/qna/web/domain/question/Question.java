@@ -4,6 +4,9 @@ import com.codessquad.qna.web.domain.answer.Answer;
 import com.codessquad.qna.web.domain.user.User;
 import com.codessquad.qna.web.dto.question.QuestionRequest;
 import com.codessquad.qna.web.utils.DateTimeUtils;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -11,6 +14,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
+@SQLDelete(sql = "UPDATE QUESTION SET is_active = '0' WHERE id = ?")
+@Where(clause = "is_active=1")
 public class Question {
 
     @Id
@@ -27,11 +32,13 @@ public class Question {
     @Column(nullable = false)
     private String contents;
 
-    private boolean isActive = true;
+    private Boolean isActive = true;
 
     private LocalDateTime createdAt;
 
-    @OneToMany(cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "question", cascade = CascadeType.ALL)
+    @OrderBy("id DESC")
+    @JsonIgnore
     private List<Answer> answers = new ArrayList<>();
 
     public Question(User writer, String title, String contents) {
@@ -71,6 +78,9 @@ public class Question {
 
     public void addAnswer(Answer answer) {
         answers.add(answer);
+        if (answer.getQuestion() != this) {
+            answer.setQuestion(this);
+        }
     }
 
     public void update(QuestionRequest request) {
@@ -120,16 +130,19 @@ public class Question {
             this.contents = question.contents;
         }
 
-        public Builder title(String title){
+        public Builder title(String title) {
             this.title = title;
             return this;
         }
-        public Builder contents(String contents){
+
+        public Builder contents(String contents) {
             this.contents = contents;
             return this;
         }
 
-        public Question build() {return new Question(writer, title, contents);}
+        public Question build() {
+            return new Question(writer, title, contents);
+        }
 
     }
 }
