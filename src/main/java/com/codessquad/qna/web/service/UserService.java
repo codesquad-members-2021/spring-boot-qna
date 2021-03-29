@@ -33,10 +33,6 @@ public class UserService {
         return userRepository.findAll();
     }
 
-    public boolean isCorrectPassword(User user, User newInfoUser) {
-        return user.hasSamePassword(newInfoUser);
-    }
-
     public User findByUserId(String userId) {
         return userRepository.findByUserId(userId).orElseThrow(UserNotFoundException::new);
     }

@@ -57,7 +57,7 @@ public class UserController {
     @PutMapping("/{id}")
     public String updateUser(@PathVariable Long id, User newInfoUser, HttpSession session) {
         User user = userService.findById(id);
-        if (!userService.isCorrectPassword(user, newInfoUser)) {
+        if (!user.hasSamePassword(newInfoUser)) {
             throw new UnauthorizedUserException(UnauthorizedUserException.WRONG_PASSWORD);
         }
         userService.update(user, newInfoUser);
