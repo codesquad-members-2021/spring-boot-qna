@@ -4,6 +4,7 @@ import javax.persistence.*;
 
 @Entity
 public class User {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -46,8 +47,16 @@ public class User {
         return email;
     }
 
-    public boolean isMatchingPassword(String password){
+    public boolean isMatchingPassword(String password) {
         return this.password.equals(password);
+    }
+
+    public boolean isMatchingId(Long id) {
+        return this.id.equals(id);
+    }
+
+    public boolean isMatchingUserId(User user) {
+        return this.userId.equals(user.userId);
     }
 
     public void update(User updateUser) {

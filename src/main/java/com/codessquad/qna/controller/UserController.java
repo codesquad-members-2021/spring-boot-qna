@@ -1,5 +1,6 @@
 package com.codessquad.qna.controller;
 
+import com.codessquad.qna.HttpSessionUtils;
 import com.codessquad.qna.domain.User;
 import com.codessquad.qna.service.UserService;
 import org.slf4j.Logger;
@@ -8,6 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+
+import javax.servlet.http.HttpSession;
 
 @Controller
 @RequestMapping("/users")
@@ -27,6 +30,22 @@ public class UserController {
         return "redirect:/users";
     }
 
+    @PostMapping("/login")
+    public String login(String userId, String password, HttpSession session) {
+        User user = userService.findUserByUserId(userId);
+        if (user.isMatchingPassword(password)) {
+            session.setAttribute(HttpSessionUtils.USER_SESSION_KEY, user);
+            return "redirect:/";
+        }
+        return "redirect:/users/loginForm";
+    }
+
+    @GetMapping("/logout")
+    public String logout(HttpSession session) {
+        session.removeAttribute(HttpSessionUtils.USER_SESSION_KEY);
+        return "redirect:/";
+    }
+
     @GetMapping
     public String list(Model model) {
         model.addAttribute("users", userService.findUsers());
@@ -40,8 +59,12 @@ public class UserController {
     }
 
     @GetMapping("{id}/form")
-    public String viewUpdateUserForm(@PathVariable Long id, Model model) {
-        model.addAttribute("user", userService.findUserById(id));
+    public String viewUpdateUserForm(@PathVariable Long id, Model model, HttpSession session) {
+        User sessionedUser = HttpSessionUtils.getUserFromSession(session);
+        if (!sessionedUser.isMatchingId(id)) {
+            throw new IllegalStateException("자신의 정보만 수정할 수 있습니다.");
+        }
+        model.addAttribute("user", sessionedUser);
         return "user/updateForm";
     }
 

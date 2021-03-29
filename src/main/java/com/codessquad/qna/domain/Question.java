@@ -2,16 +2,22 @@ package com.codessquad.qna.domain;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 public class Question {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @Column(nullable = false, length = 20)
-    private String writer;
+    @ManyToOne
+    @JoinColumn(foreignKey = @ForeignKey(name = "fk_question_writer"))
+    private User writer;
+
+    @OneToMany(mappedBy = "question", cascade = CascadeType.ALL)
+    private List<Answer> answers = new ArrayList<>();
 
     @Column(nullable = false, length = 20)
     private String title;
@@ -19,20 +25,19 @@ public class Question {
     @Column(nullable = false)
     private String contents;
 
-    private String time;
+    private LocalDateTime time = LocalDateTime.now();
 
     protected Question() {
 
     }
 
-    public Question(String writer, String title, String contents) {
+    public Question(User writer, String title, String contents) {
         this.writer = writer;
         this.title = title;
         this.contents = contents;
-        this.time = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"));
     }
 
-    public String getTime() {
+    public LocalDateTime getTime() {
         return this.time;
     }
 
@@ -40,8 +45,12 @@ public class Question {
         return id;
     }
 
-    public String getWriter() {
+    public User getWriter() {
         return writer;
+    }
+
+    public List<Answer> getAnswers(){
+        return answers;
     }
 
     public String getTitle() {
@@ -50,6 +59,13 @@ public class Question {
 
     public String getContents() {
         return contents;
+    }
+
+    public void update(Question question) {
+        this.writer = question.getWriter();
+        this.contents = question.getContents();
+        this.time = question.getTime();
+        this.title = question.getTitle();
     }
 
     @Override
