@@ -20,7 +20,7 @@ public class ApiGlobalExceptionHandler {
     @ExceptionHandler(UserNotFoundInSessionException.class)
     @ResponseStatus(value = HttpStatus.UNAUTHORIZED)
     public String userNotFoundInSessionException(UserNotFoundInSessionException ex) {
-        return "로그인이 필요합니다.";
+        return ex.getMessage();
     }
 
     @ExceptionHandler(NotAuthorizedException.class)
