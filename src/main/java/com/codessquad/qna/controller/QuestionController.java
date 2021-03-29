@@ -29,18 +29,18 @@ public class QuestionController {
         return "/qna/list";
     }
 
+    @PostMapping
+    public String create(Question question, HttpSession session) {
+        questionService.createQuestion(question, getLoginUser(session));
+        return "redirect:/qna/list";
+    }
+
     @GetMapping("/form")
     public String questionForm(HttpSession session) {
         if (!isLoginUser(session)) {
             throw new UnauthorizedException(NEED_LOGIN);
         }
         return "/qna/form";
-    }
-
-    @PostMapping
-    public String create(Question question, HttpSession session) {
-        questionService.createQuestion(question, getLoginUser(session));
-        return "redirect:/qna/list";
     }
 
 
