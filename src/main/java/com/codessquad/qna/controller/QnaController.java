@@ -13,7 +13,7 @@ import javax.servlet.http.HttpSession;
 @RequestMapping("/questions")
 public class QnaController {
 
-    private QuestionRepository questionRepository;
+    private final QuestionRepository questionRepository;
 
     public QnaController(QuestionRepository questionRepository) {
         this.questionRepository = questionRepository;

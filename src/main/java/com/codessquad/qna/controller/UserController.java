@@ -20,7 +20,7 @@ public class UserController {
 
     private static final Logger logger = LoggerFactory.getLogger(UserController.class);
 
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
 
     public UserController(UserRepository userRepository) {
         this.userRepository = userRepository;
@@ -29,7 +29,10 @@ public class UserController {
 
     @PostMapping
     public String createUserAccount(User user) {
-        if (user == null) {
+        if (user.getUserId().equals("") || user.getUserId() == null ||
+                user.getName().equals("") || user.getName() == null ||
+                user.getEmail().equals("") || user.getEmail() == null ||
+                user.getPassword().equals("") || user.getPassword() == null) {
             return "redirect:/user/form";
         }
         userRepository.save(user);
