@@ -32,6 +32,12 @@ function onSuccess(data, status) {
     $(".qna-comment-slipp-articles").prepend(template);
 
     $(".answer-write textarea").val("");
+
+    var count = $(".qna-comment-count strong").text();
+    console.log(count);
+    var num = parseInt(count, 10);
+    num++;
+    $(".qna-comment-count strong").text(num);
 }
 
 function deleteAnswer(e) {
@@ -52,6 +58,12 @@ function deleteAnswer(e) {
             console.log(data);
             if (data.valid) {
                 deleteBtn.closest(".article").remove();
+
+                var count = $(".qna-comment-count strong").text();
+                console.log(count);
+                var num = parseInt(count, 10);
+                num--;
+                $(".qna-comment-count strong").text(num);
             } else {
                 alert(data.errorMessage);
             }
