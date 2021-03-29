@@ -17,6 +17,7 @@ public class AnswerService {
         this.questionService = questionService;
         this.answerRepository = answerRepository;
     }
+
     public Answer save(User user, Long questionId, String contents) {
         Question question = questionService.getQuestionById(questionId);
         Answer answer = new Answer(user, question, contents);

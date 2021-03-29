@@ -35,7 +35,7 @@ public class User extends AbstractEntity{
         this.password = newPassword;
     }
 
-    public boolean checkEmpty(User user) {
+    public boolean checkNull(User user) {
         return user.userId == null
                 || user.password == null
                 || user.email == null
