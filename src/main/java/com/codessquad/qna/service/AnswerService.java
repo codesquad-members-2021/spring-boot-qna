@@ -44,12 +44,15 @@ public class AnswerService {
 
 
     public void removeAnswer(Long questionId, Long answerId, HttpSession session) {
-        User ownerUser = questionRepostory.findById(questionId).orElseThrow(NotFoundException::new).getWriter();
-        if (!isValidUser(session, ownerUser)) {
+        //User ownerUser = questionRepostory.findById(questionId).orElseThrow(() -> new NotFoundException(NOT_FOUNDED_USER)).getWriter();
+        Answer answer = answerRepository.findById(answerId).orElseThrow(() -> new NotFoundException(NOT_FOUNDED_ANSWER));
+
+
+        if (!isValidUser(session, answer.getWriter())) {
             logger.info(UNAUTHORIZED_FAILED_QUESTION);
             throw new UnauthorizedException(UNAUTHORIZED_FAILED_QUESTION);
         }
-        Answer answer = answerRepository.findById(answerId).orElseThrow(NotFoundException::new);
+
         answer.deleteAnswer();
         answerRepository.save(answer);
     }
