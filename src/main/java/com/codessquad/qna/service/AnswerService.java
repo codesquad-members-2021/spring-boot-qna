@@ -25,13 +25,13 @@ public class AnswerService {
         return answerRepository.save(new Answer(question, writer, contents));
     }
 
-    public Answer deleteAnswer(long answerId, User tryToDelete) {
+    public void deleteAnswer(long answerId, User tryToDelete) {
         Answer answer = getAnswer(answerId);
         if (!answer.isWriter(tryToDelete)) {
             throw new NotAuthorizedException();
         }
         answer.delete();
-        return answerRepository.save(answer);
+        answerRepository.save(answer);
     }
 
     public Answer getAnswer(long id) {
