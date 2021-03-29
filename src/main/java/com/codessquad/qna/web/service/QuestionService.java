@@ -30,10 +30,10 @@ public class QuestionService {
     }
 
     public Question modifyQuestion(User loginUser, long questionId, Question newQuestion) {
+        newQuestion.verifyQuestionEntityIsValid();
         Question question = questionRepository.findByIdAndDeletedFalse(questionId)
                 .orElseThrow(QuestionNotFoundException::new);
         question.verifyIsQuestionOwner(loginUser);
-        newQuestion.verifyQuestionEntityIsValid();
         question.update(newQuestion);
         questionRepository.save(question);
         return question;

@@ -30,10 +30,10 @@ public class UserService {
     }
 
     public void modifyUser(long id, String prevPassword, User newUserInfo, User loginUser) {
+        newUserInfo.verifyUserEntityIsValid();
         User foundUser = userRepository.findById(id).orElseThrow(UserNotFoundException::new);
         loginUser.verifyIsSameUser(foundUser);
         loginUser.verifyPassword(prevPassword);
-        newUserInfo.verifyUserEntityIsValid();
 
         loginUser.update(newUserInfo);
         userRepository.save(loginUser);
