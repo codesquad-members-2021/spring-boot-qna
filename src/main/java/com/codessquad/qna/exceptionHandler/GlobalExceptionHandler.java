@@ -13,7 +13,6 @@ public class GlobalExceptionHandler {
     @ExceptionHandler({
             NotFoundException.class,
             UserAlreadyExistException.class,
-            SaveFailedException.class,
             CannotDeleteQuestionException.class
     })
     public String exceptionPage(RuntimeException ex, Model model) {

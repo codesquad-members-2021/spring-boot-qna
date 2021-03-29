@@ -5,7 +5,6 @@ import com.codessquad.qna.domain.Question;
 import com.codessquad.qna.domain.User;
 import com.codessquad.qna.exception.NotAuthorizedException;
 import com.codessquad.qna.exception.NotFoundException;
-import com.codessquad.qna.exception.SaveFailedException;
 import com.codessquad.qna.repository.AnswerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -23,11 +22,7 @@ public class AnswerService {
 
     public Answer addAnswer(long questionId, User writer, String contents) {
         Question question = questionService.getQuestion(questionId);
-        Answer added = answerRepository.save(new Answer(question, writer, contents));
-        if (added == null) {
-            throw new SaveFailedException(Answer.class);
-        }
-        return added;
+        return answerRepository.save(new Answer(question, writer, contents));
     }
 
     public Answer deleteAnswer(long answerId, User tryToDelete) {
@@ -36,11 +31,7 @@ public class AnswerService {
             throw new NotAuthorizedException();
         }
         answer.delete();
-        Answer deleted = answerRepository.save(answer);
-        if (deleted == null) {
-            throw new SaveFailedException(Answer.class);
-        }
-        return deleted;
+        return answerRepository.save(answer);
     }
 
     public Answer getAnswer(long id) {

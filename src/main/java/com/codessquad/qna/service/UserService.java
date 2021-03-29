@@ -4,7 +4,6 @@ import com.codessquad.qna.domain.User;
 import com.codessquad.qna.exception.UserAlreadyExistException;
 import com.codessquad.qna.exception.NotAuthorizedException;
 import com.codessquad.qna.exception.NotFoundException;
-import com.codessquad.qna.exception.SaveFailedException;
 import com.codessquad.qna.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -30,11 +29,7 @@ public class UserService {
         if (existUser.isPresent()) {
             throw new UserAlreadyExistException(newUser.getUserId());
         }
-        User added = userRepository.save(newUser);
-        if (added == null) {
-            throw new SaveFailedException(User.class);
-        }
-        return added;
+        return userRepository.save(newUser);
     }
 
     public User updateUser(User user) {
@@ -43,11 +38,7 @@ public class UserService {
             throw new NotAuthorizedException("비밀번호가 일치하지 않아 사용자 정보를 수정할 수 없습니다.");
         }
         toUpdate.update(user);
-        User updated = userRepository.save(toUpdate);
-        if (updated == null) {
-            throw new SaveFailedException(User.class);
-        }
-        return updated;
+        return userRepository.save(toUpdate);
     }
 
     public User getUser(long id) {
