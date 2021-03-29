@@ -1,7 +1,7 @@
 package com.codessquad.qna.web.service;
 
-import com.codessquad.qna.web.HttpSessionUtils;
 import com.codessquad.qna.web.domain.Answer;
+import com.codessquad.qna.web.domain.Question;
 import com.codessquad.qna.web.domain.User;
 import com.codessquad.qna.web.exception.IllegalAccessException;
 import com.codessquad.qna.web.exception.IllegalEntityIdException;
@@ -18,15 +18,19 @@ public class AnswerService {
         this.questionService = questionService;
     }
 
-    public void postAnswer(User writer, long questionId, String contents) {
-        Answer answer = new Answer(writer, questionService.findQuestion(questionId), contents);
-        answerRepository.save(answer);
+    public Answer postAnswer(User writer, long questionId, String contents) {
+        Question question = questionService.findQuestion(questionId);
+        Answer answer = new Answer(writer, question, contents);
+        question.upCountOfAnswer();
+        return answerRepository.save(answer);
     }
 
-    public void deleteAnswer(long id, User user) {
+    public boolean deleteAnswer(long id, User user) {
         Answer answer = findAnswer(id);
         checkWriter(answer, user);
+        answer.getQuestion().downCountOfAnswer();
         answerRepository.delete(answer);
+        return true;
     }
 
     public Answer findAnswer(long id) {
@@ -37,7 +41,7 @@ public class AnswerService {
 
     private void checkWriter(Answer answer, User user) {
         if (!answer.isSameWriter(user)) {
-            throw new IllegalAccessException();
+            throw new IllegalAccessException("자신의 답변만 수정/삭제할 수 있습니다");
         }
     }
 }

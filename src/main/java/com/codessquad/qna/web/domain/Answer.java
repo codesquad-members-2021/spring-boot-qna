@@ -1,17 +1,9 @@
 package com.codessquad.qna.web.domain;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 
 @Entity
-public class Answer {
-    private static final DateTimeFormatter ANSWER_DATETIME_FORMAT = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
-
+public class Answer extends AbstractEntity {
     @ManyToOne
     @JoinColumn(foreignKey = @ForeignKey(name = "fk_answer_writer"))
     private User writer;
@@ -22,7 +14,6 @@ public class Answer {
 
     @Column(length = 1000)
     private String contents;
-    private LocalDateTime createdDateTime;
 
     protected Answer() {
     }
@@ -31,11 +22,6 @@ public class Answer {
         this.writer = writer;
         this.question = question;
         this.contents = contents;
-        this.createdDateTime = LocalDateTime.now();
-    }
-
-    public long getId() {
-        return this.id;
     }
 
     public User getWriter() {
@@ -46,14 +32,11 @@ public class Answer {
         return this.contents;
     }
 
-    public String getFormattedCreatedDate() {
-        if (createdDateTime == null) {
-            return "";
-        }
-        return createdDateTime.format(ANSWER_DATETIME_FORMAT);
-    }
-
     public boolean isSameWriter(User writer) {
         return this.writer.equals(writer);
+    }
+
+    public Question getQuestion() {
+        return this.question;
     }
 }

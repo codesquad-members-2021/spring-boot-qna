@@ -1,16 +1,16 @@
 package com.codessquad.qna.web.domain;
 
-import javax.persistence.*;
-import java.util.Objects;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
 
 @Entity
-public class User {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
-
+public class User extends AbstractEntity {
     @Column(nullable = false, length = 20, unique = true)
     private String userId;
+
+    @JsonIgnore
     private String password;
     private String name;
     private String email;
@@ -29,10 +29,6 @@ public class User {
 
     public void setEmail(String email) {
         this.email = email;
-    }
-
-    public Long getId() {
-        return id;
     }
 
     public String getUserId() {
@@ -55,26 +51,9 @@ public class User {
         return this.password.equals(testPassword);
     }
 
-    public boolean isSameId(long id) {
-        return this.id == id;
-    }
-
     public void update(User user) {
         this.password = user.password;
         this.name = user.name;
         this.email = user.email;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof User)) return false;
-        User user = (User) o;
-        return Objects.equals(getId(), user.getId());
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(getId());
     }
 }
