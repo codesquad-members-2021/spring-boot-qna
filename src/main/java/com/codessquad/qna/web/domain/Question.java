@@ -50,16 +50,21 @@ public class Question extends BaseTimeEntity {
     }
 
     public void delete() {
+        verifyIsDeletable();
         deleted = true;
         deleteAllAnswers();
     }
 
-    private void deleteAllAnswers() {
+    private void verifyIsDeletable() {
         answers.forEach((answer) -> {
             if (!writer.isMatchingId(answer.getWriter())) {
                 throw new UnauthorizedAccessException(CAN_NOT_DELETE_BECAUSE_ANOTHER_USERS_ANSWER_IS_EXISTS);
             }
         });
+    }
+
+    private void deleteAllAnswers() {
+        answers.forEach(Answer::delete);
     }
 
     public boolean isValid() {
