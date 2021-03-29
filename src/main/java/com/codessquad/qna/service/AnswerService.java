@@ -9,6 +9,8 @@ import com.codessquad.qna.repository.AnswerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
+
 @Service
 public class AnswerService {
     private final AnswerRepository answerRepository;
@@ -20,18 +22,19 @@ public class AnswerService {
         this.questionService = questionService;
     }
 
+    @Transactional
     public Answer addAnswer(long questionId, User writer, String contents) {
         Question question = questionService.getQuestion(questionId);
         return answerRepository.save(new Answer(question, writer, contents));
     }
 
+    @Transactional
     public void deleteAnswer(long answerId, User tryToDelete) {
         Answer answer = getAnswer(answerId);
         if (!answer.isWriter(tryToDelete)) {
             throw new NotAuthorizedException();
         }
         answer.delete();
-        answerRepository.save(answer);
     }
 
     public Answer getAnswer(long id) {

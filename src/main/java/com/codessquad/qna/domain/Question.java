@@ -24,6 +24,10 @@ public class Question extends CommonEntity {
     @JsonIgnore
     private List<Answer> answers;
 
+    @JsonProperty
+    @Column(columnDefinition = "int default 0")
+    private Integer countOfAnswer;
+
     @Column(nullable = false, columnDefinition = "boolean default false")
     private boolean deleted;
 
@@ -52,6 +56,10 @@ public class Question extends CommonEntity {
         return answers;
     }
 
+    public Integer getCountOfAnswer() {
+        return countOfAnswer;
+    }
+
     public boolean isDeleted() {
         return this.deleted;
     }
@@ -72,5 +80,13 @@ public class Question extends CommonEntity {
 
     public boolean canDeleted() {
         return answers.stream().filter(answer -> !answer.isWriter(this.writer)).count() == 0;
+    }
+
+    public void increaseAnswerCount(){
+        this.countOfAnswer++;
+    }
+
+    public void decreaseAnswerCount(){
+        this.countOfAnswer--;
     }
 }

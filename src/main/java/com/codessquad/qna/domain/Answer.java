@@ -27,6 +27,8 @@ public class Answer extends CommonEntity {
         this.question = question;
         this.writer = writer;
         this.contents = contents;
+
+        this.question.increaseAnswerCount();
     }
 
     public Question getQuestion() {
@@ -47,6 +49,8 @@ public class Answer extends CommonEntity {
 
     public void delete() {
         this.deleted = true;
+
+        this.question.decreaseAnswerCount();
     }
 
     public boolean isWriter(User user) {
