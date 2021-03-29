@@ -32,7 +32,7 @@ public class QuestionService {
     public Question modifyQuestion(User loginUser, long questionId, Question newQuestion) {
         Question question = questionRepository.findByIdAndDeletedFalse(questionId)
                 .orElseThrow(QuestionNotFoundException::new);
-        question.verifyWriterIsQuestionOwner(loginUser);
+        question.verifyIsQuestionOwner(loginUser);
         newQuestion.verifyQuestionEntityIsValid();
         question.update(newQuestion);
         questionRepository.save(question);
@@ -43,7 +43,7 @@ public class QuestionService {
     public void deleteQuestion(User loginUser, long questionId) {
         Question question = questionRepository.findByIdAndDeletedFalse(questionId)
                 .orElseThrow(QuestionNotFoundException::new);
-        question.verifyWriterIsQuestionOwner(loginUser);
+        question.verifyIsQuestionOwner(loginUser);
         question.delete();
     }
 }

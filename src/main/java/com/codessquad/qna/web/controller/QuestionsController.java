@@ -47,7 +47,7 @@ public class QuestionsController {
     public String modifyForm(@PathVariable("questionId") long questionId, Model model, HttpSession session) {
         User loginUser = SessionUtil.getLoginUser(session);
         Question question = questionService.questionDetail(questionId);
-        question.verifyWriterIsQuestionOwner(loginUser);
+        question.verifyIsQuestionOwner(loginUser);
         model.addAttribute("currentQuestion", question);
         return "qna/modify-form";
     }

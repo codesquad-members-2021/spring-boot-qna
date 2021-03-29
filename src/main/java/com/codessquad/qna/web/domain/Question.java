@@ -76,7 +76,7 @@ public class Question extends BaseTimeEntity {
         return writer.isMatchingId(anotherWriter);
     }
 
-    public void verifyWriterIsQuestionOwner(User writer) {
+    public void verifyIsQuestionOwner(User writer) {
         if (!isMatchingWriter(writer)) {
             throw new UnauthorizedAccessException(CANNOT_MODIFY_OR_DELETE_ANOTHER_USERS_QUESTION);
         }
