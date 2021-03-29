@@ -8,6 +8,8 @@ import com.codessquad.qna.repository.AnswerRepository;
 import com.codessquad.qna.repository.QuestionRepository;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
+
 @Service
 public class AnswerService {
     private AnswerRepository answerRepository;
@@ -18,6 +20,7 @@ public class AnswerService {
         this.answerRepository = answerRepository;
     }
 
+    @Transactional
     public void save(User user, Long questionId, String contents) {
         Question question = questionService.getQuestionById(questionId);
         Answer answer = new Answer(user, question, contents);
