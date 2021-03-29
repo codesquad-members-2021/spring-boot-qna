@@ -31,17 +31,22 @@ $(document).on('click', "a.link-delete-article", deleteAnswer);
 
 function deleteAnswer(e) {
     e.preventDefault();
-    var url = $(this).attr("href");
+    var deleteBtn = $(this)
+    var url = deleteBtn.attr("href");
 
     $.ajax({
         type: 'delete',
         url: url,
         dataType: 'json',
         error: function (xhr, status) {
-            console.log('failure');
+            alert("Cannot delete this answer!");
         },
         success: function (data, status) {
-            console.log(data);
+            if(data.valid){
+                deleteBtn.closest("article").remove();
+            } else{
+                alert(data.errorMessage);
+            }
         }
     });
 
