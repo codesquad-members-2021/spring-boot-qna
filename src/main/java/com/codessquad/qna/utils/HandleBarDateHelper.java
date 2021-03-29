@@ -10,6 +10,5 @@ import static com.codessquad.qna.utils.DateUtil.DATE_AND_TIME_FORMAT;
 public class HandleBarDateHelper {
     public String date(LocalDateTime time) {
         return time.format(DATE_AND_TIME_FORMAT);
-        //{{#date createdatetime}}
     }
 }

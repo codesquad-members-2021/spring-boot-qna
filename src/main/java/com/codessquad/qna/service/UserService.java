@@ -4,6 +4,7 @@ import com.codessquad.qna.domain.User;
 import com.codessquad.qna.domain.UserRepository;
 import com.codessquad.qna.exception.LoginFailedException;
 import com.codessquad.qna.exception.NotFoundException;
+import com.codessquad.qna.exception.UnacceptableDuplicationException;
 import com.codessquad.qna.exception.UnauthorizedException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,6 +28,10 @@ public class UserService {
     }
 
     public void createUser(User user) {
+
+        if(userRepository.findByUserId(user.getUserId()).get() != null) {
+            throw new UnacceptableDuplicationException(REDUNDANT_USERID);
+        }
         userRepository.save(user);
     }
 

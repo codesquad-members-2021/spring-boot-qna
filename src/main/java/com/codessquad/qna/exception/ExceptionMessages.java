@@ -12,4 +12,5 @@ public class ExceptionMessages {
     public static final String NOT_FOUNDED_USER = "User 데이터가 존재하지 않습니다";
     public static final String NOT_FOUNDED_QUESTION = "Question 데이터가 존재하지 않습니다";
     public static final String NOT_FOUNDED_ANSWER = "Answer 데이터가 존재하지 않습니다";
+    public static final String REDUNDANT_USERID = "중복된 유저 아이디로 회원가입할 수 없습니다";
 }

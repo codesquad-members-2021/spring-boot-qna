@@ -1,6 +1,7 @@
 package com.codessquad.qna.exception;
 
 
+import com.sun.org.apache.xpath.internal.operations.Mod;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.ui.Model;
@@ -26,6 +27,12 @@ public class ControllerExceptionHandler {
 
     @ExceptionHandler(UnauthorizedException.class)
     public String unauthorizedException(UnauthorizedException exception, Model model) {
+        initializeModel(exception, model);
+        return "/error/error_page";
+    }
+
+    @ExceptionHandler(UnacceptableDuplicationException.class)
+    public String unacceptableDuplicationException(UnacceptableDuplicationException exception, Model model) {
         initializeModel(exception, model);
         return "/error/error_page";
     }
