@@ -83,7 +83,7 @@ public class Answer {
         return "Answer{" +
                 "id=" + id +
                 ", writer=" + writer +
-                ", question=" + question +
+                ", questionId=" + question.getId() +
                 ", contents='" + contents + '\'' +
                 '}';
     }
