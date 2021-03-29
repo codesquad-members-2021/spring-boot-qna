@@ -1,7 +1,7 @@
 package com.codessquad.qna.service;
 
 import com.codessquad.qna.domain.User;
-import com.codessquad.qna.exception.AlreadyExistException;
+import com.codessquad.qna.exception.UserAlreadyExistException;
 import com.codessquad.qna.exception.NotAuthorizedException;
 import com.codessquad.qna.exception.NotFoundException;
 import com.codessquad.qna.exception.SaveFailedException;
@@ -28,7 +28,7 @@ public class UserService {
     public User addUser(User newUser) {
         Optional<User> existUser = userRepository.findByUserId(newUser.getUserId());
         if (existUser.isPresent()) {
-            throw new AlreadyExistException(newUser.getUserId() + " 인 Id가 이미 존재합니다.");
+            throw new UserAlreadyExistException(newUser.getUserId());
         }
         User added = userRepository.save(newUser);
         if (added == null) {

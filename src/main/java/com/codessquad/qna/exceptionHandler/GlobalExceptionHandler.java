@@ -12,7 +12,7 @@ import javax.servlet.http.HttpServletResponse;
 public class GlobalExceptionHandler {
     @ExceptionHandler({
             NotFoundException.class,
-            AlreadyExistException.class,
+            UserAlreadyExistException.class,
             SaveFailedException.class,
             CannotDeleteQuestionException.class
     })
