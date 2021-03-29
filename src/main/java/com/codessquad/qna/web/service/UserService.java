@@ -38,8 +38,13 @@ public class UserService {
     }
 
     @Transactional
-    public void create(CreateUserRequest request){
-        userRepository.save(request.toEntity());
+    public void create(CreateUserRequest request) {
+        User user = request.toEntity();
+        if (isUserNotExist(user)) {
+            userRepository.save(user);
+        } else{
+            throw new CrudNotAllowedException("User Id already exists!");
+        }
     }
 
     public List<User> findAllUser(){
@@ -63,6 +68,10 @@ public class UserService {
             userRepository.save(user);
         }
         return user;
+    }
+
+    private boolean isUserNotExist(User user) {
+        return !userRepository.existsByUserId(user.getUserId());
     }
 
     public User findUserById(long id) {
