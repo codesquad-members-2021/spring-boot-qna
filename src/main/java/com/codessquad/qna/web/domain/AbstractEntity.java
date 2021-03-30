@@ -12,7 +12,7 @@ import java.util.Objects;
 @MappedSuperclass
 @EntityListeners(AuditingEntityListener.class)
 public class AbstractEntity {
-    private static final DateTimeFormatter QUESTION_DATETIME_FORMAT = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+    private static final DateTimeFormatter DATETIME_FORMAT = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -57,7 +57,7 @@ public class AbstractEntity {
         if (dateTime == null) {
             return "";
         }
-        return dateTime.format(QUESTION_DATETIME_FORMAT);
+        return dateTime.format(DATETIME_FORMAT);
     }
 }
 

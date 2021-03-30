@@ -1,12 +1,17 @@
 package com.codessquad.qna.web.service;
 
-import com.codessquad.qna.web.HttpSessionUtils;
+import com.codessquad.qna.web.QuestionPage;
 import com.codessquad.qna.web.domain.Question;
 import com.codessquad.qna.web.domain.User;
 import com.codessquad.qna.web.exception.IllegalAccessException;
 import com.codessquad.qna.web.exception.IllegalEntityIdException;
 import com.codessquad.qna.web.repository.QuestionRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 public class QuestionService {
@@ -19,10 +24,6 @@ public class QuestionService {
     public void postQuestion(Question question, User user) {
         question.setWriter(user);
         questionRepository.save(question);
-    }
-
-    public Iterable<Question> findQuestions() {
-        return questionRepository.findAll();
     }
 
     public Question findQuestion(long id) {
@@ -52,5 +53,13 @@ public class QuestionService {
         if (!question.isSameWriter(user)) {
             throw new IllegalAccessException();
         }
+    }
+
+    public Page<Question> getQuestionsByPage(Pageable pageable) {
+        return questionRepository.findAll(pageable);
+    }
+
+    public QuestionPage getQuestionPage(Pageable pageable) {
+        return new QuestionPage(pageable, getQuestionsByPage(pageable));
     }
 }
