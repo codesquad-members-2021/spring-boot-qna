@@ -62,4 +62,17 @@ class QuestionServiceTest {
         List<Long> pageList = questionService.pageList(currentPage);
         assertThat(pageList).isEqualTo(expectedPageList);
     }
+
+    @Test
+    @DisplayName("현재 페이지가 11번이면 10부터 11까지 나와야 합니다")
+    void testWhenCurrentPageIsEleven() {
+        long currentPage = 11;
+        List<Long> expectedPageList = new ArrayList<>();
+        for (long i = 10; i <= 11; i++) {
+            expectedPageList.add(i);
+        }
+        List<Long> pageList = questionService.pageList(currentPage);
+        assertThat(pageList).isEqualTo(expectedPageList);
+    }
+
 }
