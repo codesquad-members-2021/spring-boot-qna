@@ -17,63 +17,27 @@ class QuestionServiceTest {
     private QuestionService questionService;
 
     @Test
-    @DisplayName("현재 페이지가 0번이면 0부터 4까지 나와야 합니다")
-    void testWhenCurrentPageIsZero() {
-        long currentPage = 0;
-        List<Long> expectedPageList = new ArrayList<>();
-        for (long i = 0; i < 5; i++) {
-            expectedPageList.add(i);
-        }
+    @DisplayName("현재 페이지가 1번이면 1부터 5까지 나와야 합니다")
+    void testPageListIsOk() {
+        testPageList(1, 1, 5);
+        testPageList(3, 1, 5);
+        testPageList(5, 1, 5);
+
+        testPageList(6, 6, 8);
+        testPageList(8, 6, 8);
+    }
+
+    private void testPageList(long currentPage, long expectedStart, long expectedEnd) {
+        List<Long> expectedPageList = getExpectedValue(expectedStart, expectedEnd);
         PageList pageList = questionService.pageListByCurrentPage(currentPage);
         assertThat(pageList.getPages()).isEqualTo(expectedPageList);
     }
 
-    @Test
-    @DisplayName("현재 페이지가 3번이면 0부터 4까지 나와야 합니다")
-    void testWhenCurrentPageIsThree() {
-        long currentPage = 3;
+    private List<Long> getExpectedValue(long start, long end) {
         List<Long> expectedPageList = new ArrayList<>();
-        for (long i = 0; i < 5; i++) {
+        for (long i = start; i <= end; i++) {
             expectedPageList.add(i);
         }
-        PageList pageList = questionService.pageListByCurrentPage(currentPage);
-        assertThat(pageList.getPages()).isEqualTo(expectedPageList);
+        return expectedPageList;
     }
-
-    @Test
-    @DisplayName("현재 페이지가 4번이면 0부터 4까지 나와야 합니다")
-    void testWhenCurrentPageIsFour() {
-        long currentPage = 3;
-        List<Long> expectedPageList = new ArrayList<>();
-        for (long i = 0; i < 5; i++) {
-            expectedPageList.add(i);
-        }
-        PageList pageList = questionService.pageListByCurrentPage(currentPage);
-        assertThat(pageList.getPages()).isEqualTo(expectedPageList);
-    }
-
-    @Test
-    @DisplayName("현재 페이지가 5번이면 5부터 9까지 나와야 합니다")
-    void testWhenCurrentPageIsFive() {
-        long currentPage = 5;
-        List<Long> expectedPageList = new ArrayList<>();
-        for (long i = 5; i < 10; i++) {
-            expectedPageList.add(i);
-        }
-        PageList pageList = questionService.pageListByCurrentPage(currentPage);
-        assertThat(pageList.getPages()).isEqualTo(expectedPageList);
-    }
-
-    @Test
-    @DisplayName("현재 페이지가 11번이면 10부터 11까지 나와야 합니다")
-    void testWhenCurrentPageIsEleven() {
-        long currentPage = 11;
-        List<Long> expectedPageList = new ArrayList<>();
-        for (long i = 10; i <= 11; i++) {
-            expectedPageList.add(i);
-        }
-        PageList pageList = questionService.pageListByCurrentPage(currentPage);
-        assertThat(pageList.getPages()).isEqualTo(expectedPageList);
-    }
-
 }
