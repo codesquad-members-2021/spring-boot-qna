@@ -9,7 +9,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.Objects;
 
 @Entity
-public class Answer extends AbstractEntity{
+public class Answer extends AbstractEntity {
     @ManyToOne
     @JsonProperty
     @JoinColumn(foreignKey = @ForeignKey(name = "fk_answer_writer"))
@@ -46,6 +46,6 @@ public class Answer extends AbstractEntity{
         return "Answer{" +
                 super.toString() +
                 ", writer=" + writer +
-                ", contents='" + contents + '\'' ;
+                ", contents='" + contents + '\'';
     }
 }

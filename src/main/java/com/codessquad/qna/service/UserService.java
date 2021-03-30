@@ -1,14 +1,11 @@
 package com.codessquad.qna.service;
 
-import com.codessquad.qna.domain.Question;
 import com.codessquad.qna.domain.Result;
 import com.codessquad.qna.domain.User;
 import com.codessquad.qna.exception.NoUserException;
 import com.codessquad.qna.repository.UserRepository;
-import com.codessquad.qna.web.HttpSessionUtils;
 import org.springframework.stereotype.Service;
 
-import javax.servlet.http.HttpSession;
 import javax.transaction.Transactional;
 import java.util.List;
 

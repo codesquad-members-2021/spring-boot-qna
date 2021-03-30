@@ -5,7 +5,6 @@ import com.codessquad.qna.domain.Question;
 import com.codessquad.qna.domain.User;
 import com.codessquad.qna.exception.NoQuestionException;
 import com.codessquad.qna.repository.AnswerRepository;
-import com.codessquad.qna.web.HttpSessionUtils;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -33,10 +32,9 @@ public class AnswerService {
         return answerRepository.findById(answerId).orElseThrow(NoQuestionException::new);
     }
 
-
+    @Transactional
     public void delete(Answer answer, Long questionId) {
         Question question = questionService.getQuestionById(questionId);
         question.deleteAnswer(answer);
-        answerRepository.delete(answer);
     }
 }

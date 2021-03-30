@@ -46,7 +46,7 @@ public class QuestionService {
     public Question getQuestionById(Long id) {
         return questionRepository.findById(id).orElseThrow(NoQuestionException::new);
     }
-    
+
     @Transactional
     public void updateQuestion(Long id, Question updateQuestion) {
         Question question = getQuestionById(id);

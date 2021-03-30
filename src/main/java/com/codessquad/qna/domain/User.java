@@ -5,7 +5,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import javax.persistence.*;
 
 @Entity
-public class User extends AbstractEntity{
+public class User extends AbstractEntity {
     @JsonProperty
     @Column(nullable = false, length = 20, unique = true)
     private String userId;
@@ -38,7 +38,7 @@ public class User extends AbstractEntity{
         this.userId = userId;
         this.email = email;
         this.name = name;
-        if(! newPassword.equals("")){
+        if (!newPassword.equals("")) {
             this.password = newPassword;
         }
     }

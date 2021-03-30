@@ -3,8 +3,6 @@ package com.codessquad.qna.domain;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -65,6 +63,7 @@ public class Question extends AbstractEntity {
     @Override
     public String toString() {
         return "Qna{" +
+                super.toString() +
                 "writer='" + writer + '\'' +
                 ", title='" + title + '\'' +
                 ", contents='" + contents + '\'' +
