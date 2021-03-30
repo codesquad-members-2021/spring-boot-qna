@@ -30,7 +30,7 @@ public class QuestionService {
 
     public PageList pageListByCurrentPage(long currentPage) {
         long numberOfQuestions = questionRepository.countAllByDeletedFalse();
-        return new PageList(currentPage, numberOfQuestions);
+        return new PageList(currentPage - 1, numberOfQuestions);
     }
 
     public Question questionDetail(long id) {

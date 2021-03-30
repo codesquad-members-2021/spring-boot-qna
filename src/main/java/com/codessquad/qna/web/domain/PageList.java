@@ -13,7 +13,6 @@ public class PageList {
 
     public PageList(long currentPage, long numberOfQuestions) {
         pages = new ArrayList<>();
-        currentPage -= 1;
         long lastPage = calculateLastPage(numberOfQuestions);
         long startPageOfCurrentBlock = calculateStartPageOfCurrentBlock(currentPage);
         long endPageOfCurrentBlock = calculateEndPageOfCurrentBlock(startPageOfCurrentBlock, lastPage);
