@@ -29,7 +29,7 @@ public class QuestionPage {
     }
 
     private List<Integer> createPageNumbers() {
-        int countNumbersToShow = 3;
+        int countNumbersToShow = 5;
         List<Integer> pageNumbers = new ArrayList<>(countNumbersToShow);
         int currentPage = questions.getNumber();
         int totalPages = questions.getTotalPages();

@@ -39,7 +39,7 @@ public class QuestionController {
     }
 
     @GetMapping
-    public String getQuestions(@PageableDefault(size = 3) Pageable pageable, Model model) {
+    public String getQuestions(@PageableDefault(size = 15) Pageable pageable, Model model) {
         QuestionPage questionPage = questionService.getQuestionPage(pageable);
         model.addAttribute("pages",  questionPage);
         return "/index";
