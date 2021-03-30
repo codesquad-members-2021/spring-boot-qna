@@ -21,44 +21,23 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 public class ControllerExceptionHandler {
     private static final Logger logger = LoggerFactory.getLogger(ControllerExceptionHandler.class);
 
-    @ExceptionHandler(ForbiddenAccessException.class)
+    @ExceptionHandler({ForbiddenAccessException.class, AuthenticationFailedException.class})
     @ResponseStatus(HttpStatus.FORBIDDEN)
-    public String handleUnauthorizedAccessException(ForbiddenAccessException exception, Model model) {
+    public String handleUnauthorizedAccessException(RuntimeException exception, Model model) {
         initializeModel(exception, model);
         return "/error/global-error";
     }
 
-    @ExceptionHandler(NoLoginUserException.class)
+    @ExceptionHandler({NoLoginUserException.class, LoginFailedException.class})
     @ResponseStatus(HttpStatus.UNAUTHORIZED)
-    public String handleNoLoginUserException(NoLoginUserException exception, Model model) {
+    public String handleExceptionWithLoginFailedPage(RuntimeException exception, Model model) {
         initializeModel(exception, model);
         return "/error/login-failed";
     }
 
-    @ExceptionHandler(LoginFailedException.class)
-    @ResponseStatus(HttpStatus.UNAUTHORIZED)
-    public String handleLoginFailedException(LoginFailedException exception, Model model) {
-        initializeModel(exception, model);
-        return "/error/login-failed";
-    }
-
-    @ExceptionHandler(UserNotFoundException.class)
+    @ExceptionHandler({UserNotFoundException.class, QuestionNotFoundException.class, AnswerNotFoundException.class})
     @ResponseStatus(HttpStatus.NOT_FOUND)
-    public String handleUserNotFoundException(UserNotFoundException exception, Model model) {
-        initializeModel(exception, model);
-        return "/error/global-error";
-    }
-
-    @ExceptionHandler(QuestionNotFoundException.class)
-    @ResponseStatus(HttpStatus.NOT_FOUND)
-    public String handleQuestionNotFoundException(QuestionNotFoundException exception, Model model) {
-        initializeModel(exception, model);
-        return "/error/global-error";
-    }
-
-    @ExceptionHandler(AnswerNotFoundException.class)
-    @ResponseStatus(HttpStatus.NOT_FOUND)
-    public String handleAnswerNotFoundException(AnswerNotFoundException exception, Model model) {
+    public String handleNotFoundException(RuntimeException exception, Model model) {
         initializeModel(exception, model);
         return "/error/global-error";
     }
@@ -66,13 +45,6 @@ public class ControllerExceptionHandler {
     @ExceptionHandler(InvalidEntityException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public String handleInvalidEntityException(InvalidEntityException exception, Model model) {
-        initializeModel(exception, model);
-        return "/error/global-error";
-    }
-
-    @ExceptionHandler(AuthenticationFailedException.class)
-    @ResponseStatus(HttpStatus.FORBIDDEN)
-    public String handleAuthenticationFailedException(AuthenticationFailedException exception, Model model) {
         initializeModel(exception, model);
         return "/error/global-error";
     }
