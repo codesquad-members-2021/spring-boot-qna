@@ -13,8 +13,9 @@ public class GlobalControllerExceptionHandler {
     }
 
     @ExceptionHandler(IllegalUserAccessException.class)
-    private String handleIllegalUserAccessException(IllegalUserAccessException e) {
-        return "redirect:/users";
+    private String handleIllegalUserAccessException(Model model, IllegalUserAccessException e) {
+        model.addAttribute("errorMessage", e.getMessage());
+        return "/user/login";
     }
 
     @ExceptionHandler(UnauthorizedUserAccessException.class)

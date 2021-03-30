@@ -1,29 +1,40 @@
 package com.codesquad.qna.domain;
 
 import com.codesquad.qna.util.DateTimeUtils;
+import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
+@Where(clause = "deleted = false")
 public class Question {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private Long id;
 
-    @Column(nullable = false, length = 32)
-    private String writer;
+    @ManyToOne
+    @JoinColumn(foreignKey = @ForeignKey(name = "fk_question_writer"))
+    private User writer;
 
     @Column(nullable = false)
     @NotEmpty(message = "Title may not be empty")
     private String title;
 
-    @Column(length = 3000)
+    @Lob
     private String contents;
-    private LocalDateTime createdDateTime;
 
-    public Question(String writer, String title, String contents) {
+    private LocalDateTime createdDateTime;
+    private boolean deleted;
+
+    @OneToMany(mappedBy = "question")
+    @OrderBy("id ASC")
+    @Where(clause = "deleted = false")
+    private List<Answer> answers;
+
+    public Question(User writer, String title, String contents) {
         this.writer = writer;
         this.title = title;
         this.contents = contents;
@@ -33,15 +44,11 @@ public class Question {
     protected Question() {
     }
 
-    public void setId(long id) {
-        this.id = id;
-    }
-
-    public long getId() {
+    public Long getId() {
         return id;
     }
 
-    public String getWriter() {
+    public User getWriter() {
         return writer;
     }
 
@@ -57,8 +64,16 @@ public class Question {
         return createdDateTime;
     }
 
+    public List<Answer> getAnswers() {
+        return answers;
+    }
+
     public String getCreatedTime() {
         return DateTimeUtils.formatByPattern(createdDateTime);
+    }
+
+    public int getAnswerCount() {
+        return answers.size();
     }
 
     public void update(Question updatedQuestion) {
@@ -66,14 +81,11 @@ public class Question {
         this.contents = updatedQuestion.contents;
     }
 
-    @Override
-    public String toString() {
-        return "Question{" +
-                "id=" + id +
-                ", writer='" + writer + '\'' +
-                ", title='" + title + '\'' +
-                ", contents='" + contents + '\'' +
-                ", createdDateTime=" + createdDateTime +
-                '}';
+    public boolean isSameWriter(User sessionedUser) {
+        return this.writer.equals(sessionedUser);
+    }
+
+    public void delete() {
+        deleted = true;
     }
 }
