@@ -34,7 +34,7 @@ public class AnswerService {
     }
 
     public Answer getAnswer(Long answerId, User sessionedUser) {
-        Answer answer = answerRepository.findById(answerId).orElseThrow(() -> new EntityNotFoundException(ErrorMessage.QUESTION_NOT_FOUND));
+        Answer answer = answerRepository.findById(answerId).orElseThrow(() -> new EntityNotFoundException(ErrorMessage.ANSWER_NOT_FOUND));
         if (!answer.matchWriter(sessionedUser)) {
             throw new IllegalUserAccessException();
         }
