@@ -45,14 +45,14 @@ public class QuestionService {
         Question question = questionRepostory.findById(id).orElseThrow(() -> new NotFoundException(NOT_FOUNDED_QUESTION));
         question.update(title, contents);
         questionRepostory.save(question);
-        logger.info("질문글 업데이트됨, questionId : {}", id);
+        logger.debug("질문글 업데이트됨, questionId : {}", id);
     }
 
     public void deleteQuestion(Long questionId, HttpSession session) {
         Question question = questionRepostory.findById(questionId).orElseThrow(() -> new NotFoundException(NOT_FOUNDED_QUESTION));
 
         if (!question.getWriter().isSessionSameAsUser(session)) {
-            logger.info(UNAUTHORIZED_FAILED_QUESTION);
+            logger.debug(UNAUTHORIZED_FAILED_QUESTION);
             throw new UnauthorizedException(UNAUTHORIZED_FAILED_QUESTION);
         }
 
@@ -61,17 +61,17 @@ public class QuestionService {
         }
         question.deleteQuestion();
         questionRepostory.save(question);
-        logger.info("질문글 삭제 - 성공");
+        logger.debug("질문글 삭제 - 성공");
 
     }
 
     public void updateForm(Long id, Model model, HttpSession session) {
         Question question = questionRepostory.findById(id).orElseThrow(() -> new NotFoundException(NOT_FOUNDED_QUESTION));
         if (!question.getWriter().isSessionSameAsUser(session)) {
-            logger.info(UNAUTHORIZED_FAILED_QUESTION);
+            logger.debug(UNAUTHORIZED_FAILED_QUESTION);
             throw new UnauthorizedException(UNAUTHORIZED_FAILED_QUESTION);
         }
-        logger.info("글을 수정하는 사람 : {}", question.getTitle());
+        logger.debug("글을 수정하는 사람 : {}", question.getTitle());
         model.addAttribute("question", question);
     }
 

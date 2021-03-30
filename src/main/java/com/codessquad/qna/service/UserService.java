@@ -50,7 +50,7 @@ public class UserService {
         User currentUser = userRepository.findById(id).orElseThrow(() -> new NotFoundException(NOT_FOUNDED_USER));
 
         if (!currentUser.isMatchingPassword(pastPassword)) {
-            logger.info(PROFILE_MODIFICATION_FAIL);
+            logger.debug(PROFILE_MODIFICATION_FAIL);
             throw new UnauthorizedException(PROFILE_MODIFICATION_FAIL);
         }
 
@@ -59,13 +59,13 @@ public class UserService {
         }
 
         userRepository.save(sessionUser);
-        logger.info("update User {}", sessionUser.getUserId());
+        logger.debug("update User {}", sessionUser.getUserId());
     }
 
     public void validationCheck(Long id, HttpSession session) {
         User foundUser = userRepository.findById(id).orElseThrow(() -> new NotFoundException(NOT_FOUNDED_USER));
         if (!foundUser.isSessionSameAsUser(session)) {
-            logger.info(PROFILE_MODIFICATION_FAIL);
+            logger.debug(PROFILE_MODIFICATION_FAIL);
             throw new UnauthorizedException(PROFILE_MODIFICATION_FAIL);
         }
     }
@@ -77,7 +77,7 @@ public class UserService {
             throw new LoginFailedException(FAILED_LOGIN);
         }
 
-        logger.info("Login Success");
+        logger.debug("Login Success");
         setLoginUser(session, foundUser);
     }
 }

@@ -32,7 +32,7 @@ public class UserController {
 
     @GetMapping("/signup")
     public String signup() {
-        logger.info("signup >> users/form.html: in");
+        logger.debug("signup >> users/form.html: in");
         return "user/form";
     }
 

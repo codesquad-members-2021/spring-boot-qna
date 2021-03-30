@@ -43,7 +43,7 @@ public class AnswerService {
         Answer answer = answerRepository.findById(answerId).orElseThrow(() -> new NotFoundException(NOT_FOUNDED_ANSWER));
 
         if (!answer.getWriter().isSessionSameAsUser(session)) {
-            logger.info(UNAUTHORIZED_FAILED_QUESTION);
+            logger.debug(UNAUTHORIZED_FAILED_QUESTION);
             throw new UnauthorizedException(UNAUTHORIZED_FAILED_QUESTION);
         }
 
