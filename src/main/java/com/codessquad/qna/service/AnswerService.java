@@ -18,10 +18,10 @@ public class AnswerService {
         this.questionService = questionService;
     }
 
-    public void save(User writer, String contents, Long questionId) {
+    public Answer save(User writer, String contents, Long questionId) {
         Question question = questionService.findById(questionId);
         Answer answer = new Answer(writer, question, contents);
-        answerRepository.save(answer);
+        return answerRepository.save(answer);
     }
 
     public Answer findAnswerById(Long id) {

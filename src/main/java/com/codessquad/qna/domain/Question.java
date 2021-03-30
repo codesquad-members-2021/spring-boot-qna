@@ -1,5 +1,8 @@
 package com.codessquad.qna.domain;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -16,6 +19,7 @@ public class Question {
 
     @ManyToOne
     @JoinColumn(foreignKey = @ForeignKey(name = "fk_question_writer"))
+    @JsonManagedReference
     private User writer;
 
     private String title;
@@ -26,7 +30,8 @@ public class Question {
     private LocalDateTime timeCreated = LocalDateTime.now();
 
     @OneToMany(mappedBy = "question")
-    @OrderBy("id ASC")
+    @OrderBy("id DESC")
+    @JsonBackReference
     private List<Answer> answers;
 
     private boolean deleted = false;
