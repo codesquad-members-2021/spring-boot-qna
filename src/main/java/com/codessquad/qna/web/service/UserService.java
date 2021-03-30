@@ -24,7 +24,7 @@ public class UserService {
     }
 
     public User login(String userId, String password, HttpSession session) {
-        if(SessionUtils.isLoginUser(session)){
+        if (SessionUtils.isLoginUser(session)) {
             return SessionUtils.getLoginUser(session);
         }
 
@@ -42,16 +42,16 @@ public class UserService {
         User user = request.toEntity();
         if (isUserNotExist(user)) {
             userRepository.save(user);
-        } else{
+        } else {
             throw new CrudNotAllowedException("User Id already exists!");
         }
     }
 
-    public List<User> findAllUser(){
+    public List<User> findAllUser() {
         return userRepository.findAll();
     }
 
-    public User verifiedUser(long id, User loginUser){
+    public User verifiedUser(long id, User loginUser) {
         User user = findUserById(id);
 
         if (!loginUser.isMatchingWriter(user)) {
@@ -61,7 +61,7 @@ public class UserService {
     }
 
     @Transactional
-    public User updateProfile(long id, String oldPassword, User updatedUser, User loginUser){
+    public User updateProfile(long id, String oldPassword, User updatedUser, User loginUser) {
         User user = verifiedUser(id, loginUser);
         if (user.isMatchingPassword(oldPassword)) {
             user.update(updatedUser);

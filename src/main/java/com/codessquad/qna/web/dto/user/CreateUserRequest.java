@@ -30,7 +30,7 @@ public class CreateUserRequest {
         this.email = email;
     }
 
-    public User toEntity(){
+    public User toEntity() {
         return User.build(userId, password)
                 .name(name)
                 .email(email)
