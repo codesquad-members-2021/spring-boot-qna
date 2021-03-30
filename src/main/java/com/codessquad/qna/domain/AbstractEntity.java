@@ -31,6 +31,7 @@ public class AbstractEntity {
 
     private boolean deleted;
 
+
     public Long getId() {
         return id;
     }
@@ -46,6 +47,7 @@ public class AbstractEntity {
     public String getFormattedDate(LocalDateTime dateTime) {
         return dateTime.format(DATE_TIME_FORMAT);
     }
+
 
     public boolean isMatchingId(long id) {
         return this.id == id;
@@ -67,6 +69,7 @@ public class AbstractEntity {
     public int hashCode() {
         return Objects.hash(id);
     }
+}
 
     @Override
     public String toString() {
@@ -76,4 +79,4 @@ public class AbstractEntity {
                 ", modifiedDate=" + modifiedDate +
                 '}';
     }
-}
+
