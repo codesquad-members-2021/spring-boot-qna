@@ -35,12 +35,13 @@ public class AnswerService {
 
     public void delete(Long answerId, User sessionedUser) {
         Answer answer = getAnswer(answerId, sessionedUser);
-        answer.setDeleted(true);
+        answer.delete();
         answerRepository.save(answer);
     }
 
     public Answer getAnswer(Long answerId, User sessionedUser) {
-        Answer answer = answerRepository.findById(answerId).orElseThrow(() -> new EntityNotFoundException(ErrorMessage.ANSWER_NOT_FOUND));
+        Answer answer = answerRepository.findById(answerId).orElseThrow(() ->
+                new EntityNotFoundException(ErrorMessage.ANSWER_NOT_FOUND));
         if (!answer.matchWriter(sessionedUser)) {
             throw new IllegalUserAccessException();
         }

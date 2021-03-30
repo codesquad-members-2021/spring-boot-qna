@@ -41,6 +41,10 @@ public class Answer {
         this.contents = answer.contents;
     }
 
+    public void delete() {
+        this.deleted = true;
+    }
+
     public boolean matchWriter(User user) {
         return this.writer.matchUserId(user);
     }
