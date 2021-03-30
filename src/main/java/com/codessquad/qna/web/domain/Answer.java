@@ -98,7 +98,7 @@ public class Answer extends BaseTimeEntity {
     }
 
     @JsonGetter("questionId")
-    public Long getTheQuestionId() {
+    public Long getQuestionId() {
         return question.getId();
     }
 
