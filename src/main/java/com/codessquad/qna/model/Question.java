@@ -24,7 +24,7 @@ public class Question {
     @Column(nullable = false)
     private String contents;
 
-    @OneToMany(mappedBy = "question")
+    @OneToMany(mappedBy = "question", cascade = CascadeType.REMOVE)
     @OrderBy("id ASC")
     private List<Answer> answers;
 
