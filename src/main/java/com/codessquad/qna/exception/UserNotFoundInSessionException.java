@@ -5,7 +5,7 @@ public class UserNotFoundInSessionException extends RuntimeException {
         super("Session에 사용자 정보가 남아있지 않습니다.");
     }
 
-    public UserNotFoundInSessionException(String message){
+    public UserNotFoundInSessionException(String message) {
         super(message);
     }
 }

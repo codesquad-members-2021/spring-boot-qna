@@ -5,7 +5,7 @@ public class CannotDeleteQuestionException extends RuntimeException {
         super("Question 작성자가 아닌 사용자의 답변이 있어서 삭제할 수 없습니다.");
     }
 
-    public CannotDeleteQuestionException(String message){
+    public CannotDeleteQuestionException(String message) {
         super(message);
     }
 }
