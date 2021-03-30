@@ -24,29 +24,22 @@ public class AnswerService {
     private final QuestionRepostory questionRepostory;
     private final AnswerRepository answerRepository;
 
-
     public AnswerService(QuestionRepostory questionRepostory, AnswerRepository answerRepository) {
         this.questionRepostory = questionRepostory;
         this.answerRepository = answerRepository;
     }
 
-
     public void createAnswer(Long questionId, String contents, HttpSession session) {
         if (!isLoginUser(session)) {
-            logger.info(UNAUTHORIZED_FAILED_LOGIN);
             throw new LoginFailedException(UNAUTHORIZED_FAILED_LOGIN);
         }
         User loginUser = getLoginUser(session);
         Answer answer = new Answer(loginUser, questionRepostory.getOne(questionId), contents);
         answerRepository.save(answer);
-        logger.info("답변달기 - 성공 : 답변이 정상적으로 추가됨");
     }
 
-
     public void removeAnswer(Long questionId, Long answerId, HttpSession session) {
-        //User ownerUser = questionRepostory.findById(questionId).orElseThrow(() -> new NotFoundException(NOT_FOUNDED_USER)).getWriter();
         Answer answer = answerRepository.findById(answerId).orElseThrow(() -> new NotFoundException(NOT_FOUNDED_ANSWER));
-
 
         if (!isValidUser(session, answer.getWriter())) {
             logger.info(UNAUTHORIZED_FAILED_QUESTION);
