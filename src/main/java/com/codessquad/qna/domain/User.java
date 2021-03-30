@@ -6,7 +6,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 
 @Entity
-public class User extends CommonEntity {
+public class User extends BaseEntity {
     @Column(nullable = false, length = 20, unique = true)
     private String userId;
 

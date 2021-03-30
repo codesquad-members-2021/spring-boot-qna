@@ -3,7 +3,7 @@ package com.codessquad.qna.domain;
 import javax.persistence.*;
 
 @Entity
-public class Answer extends CommonEntity {
+public class Answer extends BaseEntity {
     @ManyToOne
     @JoinColumn(foreignKey = @ForeignKey(name = "fk_answer_question"))
     private Question question;

@@ -11,7 +11,7 @@ import java.time.format.DateTimeFormatter;
 
 @MappedSuperclass
 @EntityListeners(AuditingEntityListener.class)
-public class CommonEntity {
+public class BaseEntity {
     private static final DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
