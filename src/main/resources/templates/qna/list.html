@@ -25,11 +25,15 @@
         <div class="col-md-3"></div>
         <div class="col-md-6 text-center">
             <ul class="pagination center-block" style="display:inline-block;">
-                <li><a href="javascript:;">«</a></li>
+                {{#prevPage}}
+                <li><a href="/questions?pageNumber={{prevPage}}">«</a></li>
+                {{/prevPage}}
                 {{#each pageList}}
                 <li><a href="/questions?pageNumber={{this}}">{{this}}</a></li>
                 {{/each}}
-                <li><a href="javascript:;">»</a></li>
+                {{#nextPage}}
+                <li><a href="/questions?pageNumber={{nextPage}}">»</a></li>
+                {{/nextPage}}
             </ul>
         </div>
         {{#loginUser}}

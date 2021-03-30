@@ -1,5 +1,6 @@
 package com.codessquad.qna.web.service;
 
+import com.codessquad.qna.web.domain.PageList;
 import com.codessquad.qna.web.domain.Question;
 import com.codessquad.qna.web.domain.QuestionRepository;
 import com.codessquad.qna.web.domain.User;
@@ -31,18 +32,31 @@ public class QuestionService {
         return questionRepository.findAllByDeleted(false, PageRequest.of(pageNumber, PAGE_SIZE));
     }
 
-    public List<Long> pageList(long currentPage) {
+    public PageList pageListByCurrentPage(long currentPage) {
         List<Long> list = new ArrayList<>();
-        long startPage = currentPage - (currentPage % BLOCK_SIZE);
-        long endPage = startPage + BLOCK_SIZE - 1;
+        long startPageOfCurrentBlock = currentPage - (currentPage % BLOCK_SIZE);
+        long endPageOfCurrentBlock = startPageOfCurrentBlock + BLOCK_SIZE - 1;
         long numberOfQuestions = questionRepository.countAllByDeletedFalse();
-        if (numberOfQuestions / PAGE_SIZE < endPage) {
-            endPage = numberOfQuestions / PAGE_SIZE;
+        long lastPage = numberOfQuestions / PAGE_SIZE;
+
+        if (lastPage < endPageOfCurrentBlock) {
+            endPageOfCurrentBlock = numberOfQuestions / PAGE_SIZE;
         }
-        for (long i = startPage; i <= endPage; i++) {
+        for (long i = startPageOfCurrentBlock; i <= endPageOfCurrentBlock; i++) {
             list.add(i);
         }
-        return list;
+        long endPageOfPrevBlock = PageList.NO_PAGE;
+        long startPageOfNextBlock = PageList.NO_PAGE;
+
+        if (startPageOfCurrentBlock != 0) {
+            endPageOfPrevBlock = startPageOfCurrentBlock - 1;
+        }
+
+        if (endPageOfCurrentBlock < lastPage){
+            startPageOfNextBlock = endPageOfCurrentBlock + 1;
+        }
+
+        return new PageList(list, endPageOfPrevBlock, startPageOfNextBlock);
     }
 
     public Question questionDetail(long id) {

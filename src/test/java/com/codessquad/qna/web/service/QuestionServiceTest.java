@@ -1,5 +1,6 @@
 package com.codessquad.qna.web.service;
 
+import com.codessquad.qna.web.domain.PageList;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,8 +24,8 @@ class QuestionServiceTest {
         for (long i = 0; i < 5; i++) {
             expectedPageList.add(i);
         }
-        List<Long> pageList = questionService.pageList(currentPage);
-        assertThat(pageList).isEqualTo(expectedPageList);
+        PageList pageList = questionService.pageListByCurrentPage(currentPage);
+        assertThat(pageList.getPages()).isEqualTo(expectedPageList);
     }
 
     @Test
@@ -35,8 +36,8 @@ class QuestionServiceTest {
         for (long i = 0; i < 5; i++) {
             expectedPageList.add(i);
         }
-        List<Long> pageList = questionService.pageList(currentPage);
-        assertThat(pageList).isEqualTo(expectedPageList);
+        PageList pageList = questionService.pageListByCurrentPage(currentPage);
+        assertThat(pageList.getPages()).isEqualTo(expectedPageList);
     }
 
     @Test
@@ -47,8 +48,8 @@ class QuestionServiceTest {
         for (long i = 0; i < 5; i++) {
             expectedPageList.add(i);
         }
-        List<Long> pageList = questionService.pageList(currentPage);
-        assertThat(pageList).isEqualTo(expectedPageList);
+        PageList pageList = questionService.pageListByCurrentPage(currentPage);
+        assertThat(pageList.getPages()).isEqualTo(expectedPageList);
     }
 
     @Test
@@ -59,8 +60,8 @@ class QuestionServiceTest {
         for (long i = 5; i < 10; i++) {
             expectedPageList.add(i);
         }
-        List<Long> pageList = questionService.pageList(currentPage);
-        assertThat(pageList).isEqualTo(expectedPageList);
+        PageList pageList = questionService.pageListByCurrentPage(currentPage);
+        assertThat(pageList.getPages()).isEqualTo(expectedPageList);
     }
 
     @Test
@@ -71,8 +72,8 @@ class QuestionServiceTest {
         for (long i = 10; i <= 11; i++) {
             expectedPageList.add(i);
         }
-        List<Long> pageList = questionService.pageList(currentPage);
-        assertThat(pageList).isEqualTo(expectedPageList);
+        PageList pageList = questionService.pageListByCurrentPage(currentPage);
+        assertThat(pageList.getPages()).isEqualTo(expectedPageList);
     }
 
 }
