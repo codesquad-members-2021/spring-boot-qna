@@ -55,7 +55,7 @@ public class UserController {
     @PostMapping
     public String create(User user) {
         userService.save(user);
-        logger.info("New User Created: {}", user);
+        logger.debug("New User Created: {}", user);
         return "redirect:/users";
     }
 
@@ -66,14 +66,14 @@ public class UserController {
     }
 
     @GetMapping("/{id}")
-    public String profile(@PathVariable long id, Model model) {
+    public String profile(@PathVariable Long id, Model model) {
         User user = userService.findById(id);
         model.addAttribute("user", user);
         return "user/profile";
     }
 
     @GetMapping("/{id}/form")
-    public String showModifyProfile(@PathVariable long id, Model model, HttpSession session) {
+    public String showModifyProfile(@PathVariable Long id, Model model, HttpSession session) {
         if (!isLoginUser(session)) {
             return "redirect:/users/login";
         }
@@ -83,7 +83,7 @@ public class UserController {
     }
 
     @GetMapping("/{id}/wrongPassword")
-    public String modifyProfileWithErrMsg(@PathVariable long id, Model model, HttpSession session) {
+    public String modifyProfileWithErrMsg(@PathVariable Long id, Model model, HttpSession session) {
         if (!isLoginUser(session)) {
             return "redirect:/users/login";
         }
@@ -94,7 +94,7 @@ public class UserController {
     }
 
     @PutMapping("/{id}/update")
-    public String modifyProfile(@PathVariable long id, User updatedUser, String oldPassword,
+    public String modifyProfile(@PathVariable Long id, User updatedUser, String oldPassword,
                                 HttpSession session, Model model) {
         if (!isLoginUser(session)) {
             return "redirect:/users/login";
@@ -111,7 +111,7 @@ public class UserController {
         return "redirect:/users";
     }
 
-    private User validateUser(@PathVariable long id, HttpSession session) {
+    private User validateUser(Long id, HttpSession session) {
         User sessionedUser = getUserFromSession(session);
         if (!sessionedUser.matchId(id)) {
             throw new IllegalUserAccessException();

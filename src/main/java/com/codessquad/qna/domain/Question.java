@@ -3,6 +3,8 @@ package com.codessquad.qna.domain;
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Entity
 public class Question {
@@ -10,7 +12,7 @@ public class Question {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private Long id;
 
     @ManyToOne
     @JoinColumn(foreignKey = @ForeignKey(name = "fk_question_writer"))
@@ -22,6 +24,12 @@ public class Question {
     private String contents;
 
     private LocalDateTime timeCreated = LocalDateTime.now();
+
+    @OneToMany(mappedBy = "question")
+    @OrderBy("id ASC")
+    private List<Answer> answers;
+
+    private boolean deleted = false;
 
     public Question(User writer, String title, String contents) {
         this.writer = writer;
@@ -43,7 +51,7 @@ public class Question {
         return contents;
     }
 
-    public long getId() {
+    public Long getId() {
         return id;
     }
 
@@ -55,6 +63,17 @@ public class Question {
         return timeCreated.format(DATE_TIME_FORMATTER);
     }
 
+    public List<Answer> getAnswers() {
+        return answers.stream().filter(answer -> !answer.isDeleted()).collect(Collectors.toList());
+    }
+
+    public int getAnswerNumber() {
+        if (this.answers.isEmpty()) {
+            return 0;
+        }
+        return this.answers.size();
+    }
+
     public Question updateQuestion(Question modifiedQuestion) {
         this.title = modifiedQuestion.getTitle();
         this.contents = modifiedQuestion.getContents();
@@ -63,6 +82,13 @@ public class Question {
 
     public boolean isSameUser(User user) {
         return this.writer.equals(user);
+    }
+
+    public void delete() {
+        this.deleted = true;
+        for (Answer a : this.answers) {
+            a.delete();
+        }
     }
 
     @Override

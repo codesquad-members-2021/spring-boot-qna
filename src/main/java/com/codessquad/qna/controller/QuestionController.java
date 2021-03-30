@@ -15,10 +15,10 @@ import static com.codessquad.qna.HttpSessionUtils.isLoginUser;
 
 @Controller
 @RequestMapping("/questions")
-public class QnaController {
+public class QuestionController {
     private final QuestionService questionService;
 
-    public QnaController(QuestionService questionService) {
+    public QuestionController(QuestionService questionService) {
         this.questionService = questionService;
     }
 
@@ -46,40 +46,40 @@ public class QnaController {
     }
 
     @GetMapping("/{id}")
-    public String getDetailedQuestion(@PathVariable long id, Model model) {
+    public String getDetailedQuestion(@PathVariable Long id, Model model) {
         Question question = questionService.findById(id);
         model.addAttribute("question", question);
         return "qna/show";
     }
 
     @GetMapping("/{id}/form")
-    public String updateForm(@PathVariable long id, HttpSession session, Model model) {
+    public String updateForm(@PathVariable Long id, HttpSession session, Model model) {
         if (!isLoginUser(session)) { return "redirect:/users/login"; }
 
-        Question question = validateQuestionWriter(id, session);
+        Question question = validateWriter(id, session);
         model.addAttribute("question", question);
         return "qna/updateForm";
     }
 
-    @PutMapping("/{id}/modify")
-    public String modifyQuestion(@PathVariable long id, HttpSession session, Question modifiedQuestion) {
+    @PutMapping("/{id}")
+    public String modifyQuestion(@PathVariable Long id, HttpSession session, Question modifiedQuestion) {
         if (!isLoginUser(session)) { return "redirect:/users/login"; }
 
-        Question originalQuestion = validateQuestionWriter(id, session);
+        Question originalQuestion = validateWriter(id, session);
         questionService.modifyQuestion(originalQuestion, modifiedQuestion);
         return String.format("redirect:/questions/%d", id);
     }
 
     @DeleteMapping("/{id}")
-    public String deleteQuestion(@PathVariable long id, HttpSession session) {
+    public String deleteQuestion(@PathVariable Long id, HttpSession session) {
         if (!isLoginUser(session)) { return "redirect:/users/login"; }
 
-        Question question = validateQuestionWriter(id, session);
+        Question question = validateWriter(id, session);
         questionService.deleteQuestion(question);
         return "redirect:/";
     }
 
-    private Question validateQuestionWriter(long id, HttpSession session) {
+    private Question validateWriter(Long id, HttpSession session) {
         Question question = questionService.findById(id);
         User user = getUserFromSession(session);
         if (!question.isSameUser(user)) {
