@@ -26,6 +26,9 @@ public class Answer {
     @Column(nullable = false)
     private String dateTime;
 
+    @Column(columnDefinition = "boolean default false")
+    private boolean deleted;
+
     private static final DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
 
     public void save(User writer, Question question) {
@@ -82,6 +85,14 @@ public class Answer {
         this.dateTime = dateTime;
     }
 
+    public boolean isDeleted() {
+        return deleted;
+    }
+
+    public void setDeleted(boolean deleted) {
+        this.deleted = deleted;
+    }
+
     @Override
     public String toString() {
         return "Answer{" +
@@ -90,6 +101,7 @@ public class Answer {
                 ", writer=" + writer +
                 ", contents='" + contents + '\'' +
                 ", dateTime='" + dateTime + '\'' +
+                ", deleted=" + deleted +
                 '}';
     }
 }

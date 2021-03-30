@@ -28,6 +28,9 @@ public class Question {
     @OrderBy("id ASC")
     private List<Answer> answers;
 
+    @Column(columnDefinition = "boolean default false")
+    private boolean deleted;
+
     private static final DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
 
     public void save(User user) {
@@ -92,14 +95,24 @@ public class Question {
         this.answers = answers;
     }
 
+    public boolean isDeleted() {
+        return deleted;
+    }
+
+    public void setDeleted(boolean deleted) {
+        this.deleted = deleted;
+    }
+
     @Override
     public String toString() {
         return "Question{" +
                 "id=" + id +
-                ", writer='" + writer + '\'' +
+                ", writer=" + writer +
                 ", dateTime='" + dateTime + '\'' +
                 ", title='" + title + '\'' +
                 ", contents='" + contents + '\'' +
+                ", answers=" + answers +
+                ", deleted=" + deleted +
                 '}';
     }
 }
