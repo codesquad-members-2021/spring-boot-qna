@@ -31,7 +31,7 @@ public class AnswerController {
 
     @DeleteMapping("/answers/{answerId}")
     public String remove(@PathVariable Long questionId, @PathVariable Long answerId, HttpSession session) {
-        answerService.removeAnswer(questionId, answerId, session);
+        answerService.removeAnswer(answerId, session);
         return ("redirect:/questions/" + questionId);
     }
 
