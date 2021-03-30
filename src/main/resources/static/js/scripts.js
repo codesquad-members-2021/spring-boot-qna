@@ -17,7 +17,7 @@ $(document).ready(() => {
     $(".delete-answer-form button[type='submit']").on('click', deleteAnswer);
 })
 
-function focusCurrentNaviTab(){
+function focusCurrentNaviTab() {
     let currentHref = location.pathname;
     $(".sub-nav-li").each((index, item) => {
         let hrefOfItem = $(item).children().first().attr('href');
@@ -27,8 +27,12 @@ function focusCurrentNaviTab(){
     });
 }
 
-function focusCurrentPage(){
-    let currentPageNumber = location.href.match(regExToFindCurrentPage).toString();
+function focusCurrentPage() {
+    let matchResult = location.href.match(regExToFindCurrentPage);
+    if (!matchResult) {
+        return;
+    }
+    let currentPageNumber = matchResult.toString();
     if (currentPageNumber) {
         let wrapper = $('#id-question-pagination-wrapper');
         for (let el of wrapper.children()) {
