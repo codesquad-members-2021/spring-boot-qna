@@ -2,6 +2,7 @@ package com.codessquad.qna.service;
 
 import com.codessquad.qna.domain.Question;
 import com.codessquad.qna.domain.User;
+import com.codessquad.qna.exception.IllegalAccessToQuestionException;
 import com.codessquad.qna.exception.NotFoundException;
 import com.codessquad.qna.repository.QuestionRepository;
 import org.springframework.stereotype.Service;
@@ -32,7 +33,7 @@ public class QuestionService {
 
     public void checkValid(Question question, User user) {
         if (!question.isPostWriter(user)) {
-            throw new IllegalStateException("자신의 질문만 접근 가능합니다.");
+            throw new IllegalAccessToQuestionException("자신의 질문만 접근 가능합니다.");
         }
     }
 
@@ -42,10 +43,10 @@ public class QuestionService {
         questionRepository.save(question);
     }
 
-    public void delete(Question question, User user) throws IllegalAccessException {
+    public void delete(Question question, User user) {
         checkValid(question, user);
         if (!question.isAnswerWriterSame()) {
-            throw new IllegalAccessException("다른 사용자의 댓글이 포함되어있습니다.");
+            throw new IllegalAccessToQuestionException("다른 사용자의 댓글이 포함되어있습니다.");
         }
         question.delete();
         question.deleteAnswers();
