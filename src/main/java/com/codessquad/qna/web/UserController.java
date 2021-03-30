@@ -40,9 +40,7 @@ public class UserController {
     @PostMapping("/login")
     public String login(String userId, String password, HttpSession session) {
         User user = userService.findUserByUserId(userId);
-        if (!userService.checkValidByPassword(user, password)) {
-            throw new IllegalStateException("아이디 혹은 비밀번호가 일치하지 않습니다.");
-        }
+        userService.login(user, password);
         session.setAttribute(USER_SESSION_KEY, user);
         return "redirect:/";
     }
@@ -56,7 +54,7 @@ public class UserController {
     @GetMapping("/{id}")
     public String show(@PathVariable Long id, Model model, HttpSession session) {
         User loggedinUser = getUserFromSession(session);
-        userService.checkValidById(loggedinUser, id);
+        userService.checkValidForProfile(loggedinUser, id);
         model.addAttribute("user", loggedinUser);
         return "/user/profile";
     }
@@ -64,7 +62,7 @@ public class UserController {
     @GetMapping("/{id}/form")
     public String update(@PathVariable Long id, Model model, HttpSession session) {
         User loggedinUser = getUserFromSession(session);
-        userService.checkValidById(loggedinUser, id);
+        userService.checkValidForUpdate(loggedinUser, id);
         model.addAttribute("user", loggedinUser);
         return "/user/updateForm";
     }
@@ -72,11 +70,8 @@ public class UserController {
     @PutMapping("/{id}")
     public String updateForm(@PathVariable Long id, String inputPassword, User updatedUser, Model model, HttpSession session) {
         User loggedinUser = getUserFromSession(session);
-        userService.checkValidById(loggedinUser, id);
-        if (!userService.checkValidByPassword(loggedinUser, inputPassword)) {
-            model.addAttribute("errorMessage", "비밀번호가 일치하지 않습니다.");
-            return "/user/updateForm";
-        }
+        userService.checkValidForUpdate(loggedinUser, id);
+        userService.checkValidOnUpdateForm(loggedinUser, inputPassword);
         userService.update(loggedinUser, updatedUser);
         return "redirect:/users";
     }

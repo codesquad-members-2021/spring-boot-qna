@@ -2,6 +2,7 @@ package com.codessquad.qna;
 
 import com.codessquad.qna.domain.Result;
 import com.codessquad.qna.exception.IllegalAccessToQuestionException;
+import com.codessquad.qna.exception.IllegalAccessOnUpdate;
 import com.codessquad.qna.exception.NoSessionedUserException;
 import com.codessquad.qna.exception.NotFoundException;
 import org.springframework.ui.Model;
@@ -15,6 +16,12 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(NotFoundException.class)
     public String handleNotFoundException() {
         return "/exception/notFoundHandle";
+    }
+
+    @ExceptionHandler(IllegalAccessOnUpdate.class)
+    public String handleIllegalAccessToUpdate(Model model, IllegalAccessOnUpdate e) {
+        model.addAttribute("errorMessage", e.getMessage());
+        return "/user/updateForm";
     }
 
     @ExceptionHandler(IllegalStateException.class)
