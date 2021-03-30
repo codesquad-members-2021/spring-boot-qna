@@ -4,7 +4,7 @@ import pl.allegro.tech.boot.autoconfigure.handlebars.HandlebarsHelper;
 
 import java.time.LocalDateTime;
 
-import static com.codessquad.qna.utils.DateUtil.DATE_AND_TIME_PATTERN;
+import static com.codessquad.qna.utils.DateUtilConstans.DATE_AND_TIME_PATTERN;
 
 @HandlebarsHelper
 public class HandleBarDateHelper {

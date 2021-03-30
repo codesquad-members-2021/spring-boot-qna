@@ -7,7 +7,7 @@ import javax.servlet.http.HttpSession;
 import java.time.LocalDateTime;
 import java.util.List;
 
-import static com.codessquad.qna.utils.DateUtil.DATE_AND_TIME_PATTERN;
+import static com.codessquad.qna.utils.DateUtilConstans.DATE_AND_TIME_PATTERN;
 import static com.codessquad.qna.utils.SessionUtil.getLoginUser;
 
 @Entity
