@@ -9,7 +9,6 @@ import com.codessquad.qna.utils.ErrorMessage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -30,14 +29,13 @@ public class UserService {
                 () -> new UserAccountException(ErrorMessage.LOGIN_FAILED));
     }
 
-    public boolean update(Long id, User targetUser, String currentPassword, User sessionedUser) {
+    public void update(Long id, User targetUser, String currentPassword, User sessionedUser) {
         User user = verifyUser(id, sessionedUser);
         if (!user.matchPassword(currentPassword)) {
-            return false;
+            throw new UserAccountException(ErrorMessage.WRONG_PASSWORD);
         }
         user.update(targetUser);
         userRepository.save(user);
-        return true;
     }
 
     public User verifyUser(Long id, User sessionedUser) {

@@ -2,7 +2,6 @@ package com.codessquad.qna.controller;
 
 import com.codessquad.qna.model.User;
 import com.codessquad.qna.service.UserService;
-import com.codessquad.qna.utils.ErrorMessage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -66,13 +65,8 @@ public class UserController {
     }
 
     @PutMapping("/{id}/updateForm")
-    public String updateUser(@PathVariable Long id, User targetUser, String currentPassword, Model model, HttpSession session) {
-        boolean result = userService.update(id, targetUser, currentPassword, getUserFromSession(session));
-        if (!result) {
-            model.addAttribute("errorMessage", ErrorMessage.WRONG_PASSWORD.getErrorMessage());
-            model.addAttribute("user", userService.findById(id));
-            return "user/userUpdateForm";
-        }
+    public String updateUser(@PathVariable Long id, User targetUser, String currentPassword, HttpSession session) {
+        userService.update(id, targetUser, currentPassword, getUserFromSession(session));
         return "redirect:/users";
     }
 }
