@@ -12,7 +12,7 @@ import java.time.format.DateTimeFormatter;
 @MappedSuperclass
 @EntityListeners(AuditingEntityListener.class)
 public class BaseEntity {
-    private static final DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+    private static final DateTimeFormatter basicFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @JsonProperty
@@ -40,6 +40,6 @@ public class BaseEntity {
         if (dateTime == null) {
             return "";
         }
-        return dateTime.format(dateTimeFormatter);
+        return dateTime.format(basicFormat);
     }
 }
