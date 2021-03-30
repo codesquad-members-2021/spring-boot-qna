@@ -34,12 +34,12 @@ public class QuestionService {
     public List<Long> pageList(long currentPage) {
         List<Long> list = new ArrayList<>();
         long startPage = currentPage - (currentPage % BLOCK_SIZE);
-        long endPage = startPage + BLOCK_SIZE;
+        long endPage = startPage + BLOCK_SIZE - 1;
         long numberOfQuestions = questionRepository.countAllByDeletedFalse();
         if (numberOfQuestions / PAGE_SIZE < endPage) {
             endPage = numberOfQuestions / PAGE_SIZE;
         }
-        for (long i = startPage; i < endPage; i++) {
+        for (long i = startPage; i <= endPage; i++) {
             list.add(i);
         }
         return list;
