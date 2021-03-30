@@ -3,6 +3,7 @@ package com.codessquad.qna.controller;
 import com.codessquad.qna.domain.answer.Answer;
 import com.codessquad.qna.domain.question.Question;
 import com.codessquad.qna.domain.user.User;
+import com.codessquad.qna.exception.NotAuthorizationException;
 import com.codessquad.qna.service.AnswerService;
 import com.codessquad.qna.service.QuestionService;
 import com.codessquad.qna.utils.HttpSessionUtils;
@@ -26,9 +27,6 @@ public class AnswerController {
 
     @PostMapping("/")
     public String createAnswer(@PathVariable Long questionId, Answer answer, HttpSession session) {
-        if (!HttpSessionUtils.isLoginUser(session)) {
-            return "redirect:/users/login";
-        }
         User sessionedUser = HttpSessionUtils.getUserFromSession(session);
         answerService.create(questionId, answer, sessionedUser);
         return "redirect:/questions/" + questionId;
@@ -36,16 +34,10 @@ public class AnswerController {
 
     @GetMapping("/{id}/form")
     public String getUpdateForm(@PathVariable Long questionId, @PathVariable Long id, Model model, HttpSession session) {
-        if (!HttpSessionUtils.isLoginUser(session)) {
-            return "redirect:/users/login";
-        }
         Question question = questionService.findById(questionId);
         Answer answer = answerService.findById(id);
         User sessionedUser = HttpSessionUtils.getUserFromSession(session);
-        if (!answer.isWrittenBy(sessionedUser)) {
-            throw new NotAuthorizationException("자신이 작성한 답변만 수정할 수 있습니다.");
-        }
-
+        answer.isWrittenBy(sessionedUser);
         model.addAttribute("question", question);
         model.addAttribute("answer", answer);
 
@@ -61,9 +53,6 @@ public class AnswerController {
 
     @DeleteMapping("/{id}")
     public String deleteAnswer(@PathVariable Long questionId, @PathVariable Long id, HttpSession session) {
-        if (!HttpSessionUtils.isLoginUser(session)) {
-            return "redirect:/users/login";
-        }
         User sessionedUser = HttpSessionUtils.getUserFromSession(session);
         answerService.deleteById(id, sessionedUser);
 

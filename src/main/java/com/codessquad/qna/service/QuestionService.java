@@ -5,8 +5,10 @@ import com.codessquad.qna.domain.answer.Answer;
 import com.codessquad.qna.domain.answer.AnswerRepository;
 import com.codessquad.qna.domain.question.Question;
 import com.codessquad.qna.domain.question.QuestionRepository;
+import com.codessquad.qna.exception.QuestionNotFoundException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -31,16 +33,15 @@ public class QuestionService {
     @Transactional
     public Long update(Long id, Question questionWithUpdatedInfo) {
         Question question = questionRepository.findById(id)
-                .orElseThrow(() -> new NotFoundException("해당 질문이 없습니다. id = " + id));
+                .orElseThrow(() -> new QuestionNotFoundException(id));
         question.update(questionWithUpdatedInfo);
-
         return id;
     }
 
     @Transactional
     public Question findById(Long id) {
         return questionRepository.findById(id)
-                .orElseThrow(() -> new NotFoundException("해당 질문이 없습니다. id = " + id));
+                .orElseThrow(() -> new QuestionNotFoundException(id));
     }
 
     @Transactional
@@ -51,14 +52,10 @@ public class QuestionService {
     @Transactional
     public void deleteById(Long id) {
         Question question = questionRepository.findById(id)
-                .orElseThrow(() -> new NotFoundException("해당 질문이 없습니다. id = " + id));
+                .orElseThrow(() -> new QuestionNotFoundException(id));
         List<Answer> answers = answerRepository.findAllByQuestionIdAndDeletedIsFalse(id);
-
-        boolean isQuestionAnsweredByOnlyItself = answers.stream()
+        answers.stream()
                 .allMatch(question::isAnsweredYourself);
-        if (!isQuestionAnsweredByOnlyItself) {
-            throw new AnotherAnswerException();
-        }
         question.delete();
     }
 

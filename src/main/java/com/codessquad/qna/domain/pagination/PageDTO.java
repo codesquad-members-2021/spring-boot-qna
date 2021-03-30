@@ -54,11 +54,11 @@ public class PageDTO {
         return endPage;
     }
 
-    public boolean hasPrev() {
+    public boolean isPrev() {
         return prev;
     }
 
-    public boolean hasNext() {
+    public boolean isNext() {
         return next;
     }
 

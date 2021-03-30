@@ -1,8 +1,11 @@
 package com.codessquad.qna.domain.question;
 
-import com.codessquad.qna.domain.IdAndBaseTimeEntity;
+import com.codessquad.qna.domain.BaseTimeEntity;
 import com.codessquad.qna.domain.answer.Answer;
 import com.codessquad.qna.domain.user.User;
+import com.codessquad.qna.exception.AnotherAnswerException;
+import com.codessquad.qna.exception.NotAuthorizationException;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import javax.persistence.*;
@@ -10,7 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-public class Question extends IdAndBaseTimeEntity {
+public class Question extends BaseTimeEntity {
 
     @ManyToOne
     @JoinColumn(foreignKey = @ForeignKey(name = "fk_question_writer"))
@@ -26,9 +29,9 @@ public class Question extends IdAndBaseTimeEntity {
     @OrderBy("id ASC")
     private final List<Answer> answers = new ArrayList<>();
 
-    @JsonProperty
     private int countOfAnswer;
 
+    @JsonIgnore
     private boolean deleted;
 
     public User getWriter() {
@@ -78,11 +81,17 @@ public class Question extends IdAndBaseTimeEntity {
     }
 
     public boolean isWrittenBy(User user) {
-        return writer.equals(user);
+        if (!writer.equals(user)) {
+            throw new NotAuthorizationException();
+        }
+        return true;
     }
 
     public boolean isAnsweredYourself(Answer answer) {
-        return writer.equals(answer.getWriter());
+        if (!writer.equals(answer.getWriter())) {
+            throw new AnotherAnswerException();
+        }
+        return true;
     }
 
     public void update(Question questionWithUpdatedInfo) {

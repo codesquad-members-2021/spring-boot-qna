@@ -5,7 +5,8 @@ import com.codessquad.qna.domain.answer.AnswerRepository;
 import com.codessquad.qna.domain.question.Question;
 import com.codessquad.qna.domain.question.QuestionRepository;
 import com.codessquad.qna.domain.user.User;
-import com.codessquad.qna.exception.NotFoundException;
+import com.codessquad.qna.exception.AnswerNotFoundException;
+import com.codessquad.qna.exception.QuestionNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -24,7 +25,7 @@ public class AnswerService {
 
     public Answer create(Long questionId, Answer answer, User user) {
         Question question = questionRepository.findById(questionId)
-                .orElseThrow(() -> new IllegalStateException("해당 질문이 없습니다. id = " + questionId));
+                .orElseThrow(() -> new QuestionNotFoundException(questionId));
         answer.setWriter(user);
         answer.setQuestion(question);
         question.addAnswer(answer);
@@ -34,7 +35,7 @@ public class AnswerService {
     @Transactional
     public Answer findById(Long id) {
         return answerRepository.findById(id)
-                .orElseThrow(() -> new NotFoundException("해당 답변이 없습니다. id = " + id));
+                .orElseThrow(() -> new AnswerNotFoundException(id));
     }
 
     @Transactional
@@ -45,24 +46,19 @@ public class AnswerService {
     @Transactional
     public Long update(Long id, Answer answerWithUpdateInfo) {
         Answer answer = answerRepository.findById(id)
-                .orElseThrow(() -> new NotFoundException("해당 답변이 없습니다. id = " + id));
+                .orElseThrow(() -> new AnswerNotFoundException(id));
         answer.update(answerWithUpdateInfo);
-
         return id;
     }
 
     @Transactional
     public Long deleteById(Long id, User user) {
         Answer answer = answerRepository.findById(id)
-                .orElseThrow(() -> new IllegalStateException("해당 답변이 없습니다. id = " + id));
-        if (!answer.isWrittenBy(user)) {
-            throw new IllegalStateException("자신이 작성한 답변만 삭제할 수 있습니다.");
-        }
+                .orElseThrow(() -> new AnswerNotFoundException(id));
+        answer.isWrittenBy(user);
         Question question = answer.getQuestion();
-                .orElseThrow(() -> new NotFoundException("해당 답변이 없습니다. id = " + id));
         answer.delete();
         question.downCountOfAnswer();
-
         return id;
     }
 }

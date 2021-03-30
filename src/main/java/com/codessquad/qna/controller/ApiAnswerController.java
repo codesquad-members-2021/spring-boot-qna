@@ -20,19 +20,12 @@ public class ApiAnswerController {
 
     @PostMapping("/")
     public Answer createAnswer(@PathVariable Long questionId, Answer answer, HttpSession session) {
-        if (!HttpSessionUtils.isLoginUser(session)) {
-            return null;
-        }
         User sessionedUser = HttpSessionUtils.getUserFromSession(session);
         return answerService.create(questionId, answer, sessionedUser);
-
     }
 
     @DeleteMapping("/{id}")
     public Answer delete(@PathVariable Long id, HttpSession session) {
-        if (!HttpSessionUtils.isLoginUser(session)) {
-            return null;
-        }
         Answer answer = answerService.findById(id);
         User loginUser = HttpSessionUtils.getUserFromSession(session);
         answerService.deleteById(id, loginUser);

@@ -1,23 +1,22 @@
 package com.codessquad.qna.domain.user;
 
-import com.codessquad.qna.domain.IdAndBaseTimeEntity;
-import com.fasterxml.jackson.annotation.JsonProperty;
+import com.codessquad.qna.domain.BaseTimeEntity;
+import com.codessquad.qna.exception.WrongPasswordException;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
 
 @Entity
-public class User extends IdAndBaseTimeEntity {
+public class User extends BaseTimeEntity {
 
     @Column(nullable = false, length = 20, unique = true)
-    @JsonProperty
     private String userId;
 
+    @JsonIgnore
     private String password;
 
-    @JsonProperty
     private String name;
 
-    @JsonProperty
     private String email;
 
     public String getUserId() {
@@ -53,9 +52,11 @@ public class User extends IdAndBaseTimeEntity {
     }
 
     public boolean isCorrectPassword(String password) {
-        return this.password.equals(password);
+        if (!this.password.equals(password)) {
+            throw new WrongPasswordException();
+        }
+        return true;
     }
-
 
     public void update(User user) {
         this.name = user.name;

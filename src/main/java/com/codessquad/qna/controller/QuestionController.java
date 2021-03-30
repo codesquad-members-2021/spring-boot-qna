@@ -28,9 +28,7 @@ public class QuestionController {
 
     @GetMapping("/form")
     public String getQuestionForm(HttpSession session) {
-        if (!HttpSessionUtils.isLoginUser(session)) {
-            return "redirect:/users/login";
-        }
+        HttpSessionUtils.isLoginUser(session);
         return "/qna/form";
     }
 
@@ -46,23 +44,16 @@ public class QuestionController {
     public String getQuestion(@PathVariable Long id, Model model) {
         Question question = questionService.findById(id);
         List<Answer> answers = answerService.findAllByQuestionId(id);
-
         model.addAttribute("question", question);
         model.addAttribute("answers", answers);
-
         return "/qna/show";
     }
 
     @GetMapping("/{id}/form")
     public String getUpdateForm(@PathVariable Long id, HttpSession session, Model model) {
-        if (!HttpSessionUtils.isLoginUser(session)) {
-            return "redirect:/users/login";
-        }
         Question question = questionService.findById(id);
         User sessionedUser = HttpSessionUtils.getUserFromSession(session);
-        if (!question.isWrittenBy(sessionedUser)) {
-            throw new NotAuthorizationException("자신의 글만 수정할 수 있습니다.");
-        }
+        question.isWrittenBy(sessionedUser);
         model.addAttribute("question", question);
         return "/qna/update_form";
     }
@@ -75,14 +66,9 @@ public class QuestionController {
 
     @DeleteMapping("/{id}")
     public String deleteQuestion(@PathVariable Long id, HttpSession session) {
-        if (!HttpSessionUtils.isLoginUser(session)) {
-            return "redirect:/users/login";
-        }
         Question question = questionService.findById(id);
         User sessionedUser = HttpSessionUtils.getUserFromSession(session);
-        if (!question.isWrittenBy(sessionedUser)) {
-            throw new NotAuthorizationException("자신의 글만 삭제할 수 있습니다.");
-        }
+        question.isWrittenBy(sessionedUser);
         questionService.deleteById(id);
         return "redirect:/";
     }
