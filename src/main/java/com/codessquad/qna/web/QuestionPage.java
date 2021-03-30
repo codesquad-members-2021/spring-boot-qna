@@ -30,12 +30,12 @@ public class QuestionPage {
     }
 
     private List<Integer> createPageNumbers() {
-        int countNumbersToShow = 5;
-        List<Integer> pageNumbers = new ArrayList<>(countNumbersToShow);
+        final int COUNT_NUMBERS_TO_SHOW = 5;
+        List<Integer> pageNumbers = new ArrayList<>(COUNT_NUMBERS_TO_SHOW);
         int currentPage = questions.getNumber();
         int totalPages = questions.getTotalPages();
-        int startNumber = (currentPage / countNumbersToShow) * countNumbersToShow;
-        int endNumber = startNumber + countNumbersToShow - 1;
+        int startNumber = (currentPage / COUNT_NUMBERS_TO_SHOW) * COUNT_NUMBERS_TO_SHOW;
+        int endNumber = startNumber + COUNT_NUMBERS_TO_SHOW - 1;
         for (int i = startNumber; i <= endNumber; i++) {
             pageNumbers.add(i);
             if (i == totalPages - 1) {
