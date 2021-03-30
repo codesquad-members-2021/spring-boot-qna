@@ -7,7 +7,7 @@ import javax.servlet.http.HttpSession;
 import java.time.LocalDateTime;
 import java.util.List;
 
-import static com.codessquad.qna.utils.DateUtil.DATE_AND_TIME_FORMAT;
+import static com.codessquad.qna.utils.DateUtil.DATE_AND_TIME_PATTERN;
 import static com.codessquad.qna.utils.SessionUtil.getLoginUser;
 
 @Entity
@@ -64,7 +64,7 @@ public class Question {
         if (createdDateTime == null) {
             return "";
         }
-        return createdDateTime.format(DATE_AND_TIME_FORMAT);
+        return createdDateTime.format(DATE_AND_TIME_PATTERN);
     }
 
     public Long getId() {

@@ -82,7 +82,7 @@ public class UserController {
 
     @GetMapping("/logout")
     public String logout(HttpSession session) {
-        logger.info("Logout Out Success");
+        logger.debug("Logout Out Success");
         removeLoginUser(session);
         return "redirect:/";
     }
