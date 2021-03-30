@@ -32,7 +32,7 @@ public class AnswerService {
 
     public void createAnswer(Long questionId, String contents, HttpSession session) {
         if (!isLoginUser(session)) {
-            throw new LoginFailedException(UNAUTHORIZED_FAILED_LOGIN);
+            throw new LoginFailedException();
         }
         User loginUser = getLoginUser(session);
         Answer answer = new Answer(loginUser, questionRepostory.getOne(questionId), contents);

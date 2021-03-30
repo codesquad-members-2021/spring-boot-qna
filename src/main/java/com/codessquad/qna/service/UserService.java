@@ -70,10 +70,10 @@ public class UserService {
     }
 
     public void login(String userId, String password, HttpSession session) {
-        User foundUser = userRepository.findByUserId(userId).orElseThrow(() -> new LoginFailedException(FAILED_LOGIN));
+        User foundUser = userRepository.findByUserId(userId).orElseThrow(() -> new LoginFailedException());
 
         if (!foundUser.isMatchingPassword(password)) {
-            throw new LoginFailedException(FAILED_LOGIN);
+            throw new LoginFailedException();
         }
 
         logger.debug("Login Success");
