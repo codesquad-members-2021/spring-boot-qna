@@ -6,6 +6,7 @@ import com.codessquad.qna.web.exceptions.auth.LoginFailedException;
 import com.codessquad.qna.web.exceptions.auth.UnauthorizedAccessException;
 import com.codessquad.qna.web.exceptions.questions.QuestionNotFoundException;
 import com.codessquad.qna.web.exceptions.users.NoLoginUserException;
+import com.codessquad.qna.web.exceptions.users.RequestToCreateDuplicatedUserException;
 import com.codessquad.qna.web.exceptions.users.UserNotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -63,6 +64,13 @@ public class ControllerExceptionHandler {
     @ExceptionHandler(InvalidEntityException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public String handleInvalidEntityException(InvalidEntityException exception, Model model) {
+        initializeModel(exception, model);
+        return "/error/global-error";
+    }
+
+    @ExceptionHandler(RequestToCreateDuplicatedUserException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public String handleRequestToCreateDuplicatedUserException(RequestToCreateDuplicatedUserException exception, Model model) {
         initializeModel(exception, model);
         return "/error/global-error";
     }

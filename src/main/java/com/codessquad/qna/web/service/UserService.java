@@ -4,8 +4,12 @@ import com.codessquad.qna.web.domain.User;
 import com.codessquad.qna.web.domain.UserRepository;
 import com.codessquad.qna.web.exceptions.auth.LoginFailedException;
 import com.codessquad.qna.web.exceptions.auth.UnauthorizedAccessException;
+import com.codessquad.qna.web.exceptions.users.RequestToCreateDuplicatedUserException;
 import com.codessquad.qna.web.exceptions.users.UserNotFoundException;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
+
+import static com.codessquad.qna.web.exceptions.users.RequestToCreateDuplicatedUserException.DUPLICATED_ID;
 
 @Service
 public class UserService {
@@ -17,8 +21,12 @@ public class UserService {
     }
 
     public void createUser(User user) {
-        user.verifyUserEntityIsValid();
-        userRepository.save(user);
+        try {
+            user.verifyUserEntityIsValid();
+            userRepository.save(user);
+        } catch (DataIntegrityViolationException exception) {
+            throw new RequestToCreateDuplicatedUserException(DUPLICATED_ID);
+        }
     }
 
     public Iterable<User> users() {
