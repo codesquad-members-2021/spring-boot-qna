@@ -25,7 +25,7 @@ public class QuestionService {
     }
 
     public Iterable<Question> questions(int pageNumber) {
-        return questionRepository.findAllByDeleted(false, PageRequest.of(pageNumber - 1, PageList.PAGE_SIZE));
+        return questionRepository.findAllByDeletedOrderByIdDesc(false, PageRequest.of(pageNumber - 1, PageList.PAGE_SIZE));
     }
 
     public PageList pageListByCurrentPage(long currentPage) {

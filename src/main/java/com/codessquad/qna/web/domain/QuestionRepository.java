@@ -8,7 +8,7 @@ import java.util.Optional;
 
 public interface QuestionRepository extends PagingAndSortingRepository<Question, Integer> {
 
-    List<Question> findAllByDeleted(boolean deleted, Pageable pageable);
+    List<Question> findAllByDeletedOrderByIdDesc(boolean deleted, Pageable pageable);
 
     Optional<Question> findByIdAndDeletedFalse(Long id);
 
