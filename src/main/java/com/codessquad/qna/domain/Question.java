@@ -56,9 +56,19 @@ public class Question extends AbstractEntity {
     }
 
     public void deleteAnswer(Answer answer) {
-        if(answers.contains(answer)) {
+        if (answers.contains(answer)) {
             answer.deleted();
             answerCount--;
         }
     }
+
+    @Override
+    public String toString() {
+        return "Qna{" +
+                "writer='" + writer + '\'' +
+                ", title='" + title + '\'' +
+                ", contents='" + contents + '\'' +
+                '}';
+    }
+
 }

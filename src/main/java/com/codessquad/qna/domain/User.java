@@ -2,16 +2,10 @@ package com.codessquad.qna.domain;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import java.util.Objects;
 import javax.persistence.*;
 
 @Entity
-public class User {
-    @Id
-    @JsonProperty
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
+public class User extends AbstractEntity{
     @JsonProperty
     @Column(nullable = false, length = 20, unique = true)
     private String userId;
@@ -25,43 +19,39 @@ public class User {
     @JsonProperty
     private String email;
 
+    public User(String userId, String password, String name, String email) {
+        this.userId = userId;
+        this.email = email;
+        this.name = name;
+        this.password = password;
+    }
+
+    public User() {
+
+    }
+
     public boolean isMatchingPassword(String password) {
         return this.password.equals(password);
     }
 
-    public boolean isMatchingPassword(User user) {
-        return this.password.equals(user.password);
-    }
-
-    public boolean isMatchingId(long id) {
-        return this.id == id;
-    }
-
-    public void update(User updateUser, String newPassword) {
-        this.userId = updateUser.userId;
-        this.email = updateUser.email;
-        this.name = updateUser.name;
-        this.password = newPassword;
+    public void update(String userId, String password, String name, String email, String newPassword) {
+        this.userId = userId;
+        this.email = email;
+        this.name = name;
+        if(! newPassword.equals("")){
+            this.password = newPassword;
+        }
     }
 
     public boolean checkEmpty(User user) {
-        return user.userId == null
-                || user.password == null
-                || user.email == null
-                || user.name == null;
+        return user.userId.equals("")
+                || user.password.equals("")
+                || user.email.equals("")
+                || user.name.equals("");
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        User user = (User) o;
-        return Objects.equals(id, user.id) && Objects.equals(userId, user.userId);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id, userId);
+    public boolean isMatchingId(long id) {
+        return this.getId() == id;
     }
 
     @Override

@@ -19,11 +19,10 @@ public class UserController {
     }
 
     @PostMapping
-    public String create(User user) {
-        if (user.checkEmpty(user)) {
+    public String create(String userId, String password, String name, String email) {
+        if (!userService.save(userId, password, name, email)) {
             return "user/form";
         }
-        userService.save(user);
         return "redirect:/users";
     }
 
@@ -41,16 +40,12 @@ public class UserController {
 
     @GetMapping("/{id}/form")
     public String editUser(@PathVariable long id, Model model, HttpSession session) {
-        Result result = valid(session);
+        User sessionUser = HttpSessionUtils.getUserFromSession(session);
+        boolean isLoginUser = HttpSessionUtils.isLoginUser(session);
+
+        Result result = userService.valid(id, isLoginUser, sessionUser);
         if (!result.isValid()) {
             model.addAttribute("errorMessage", result.getErrorMessage());
-            return "user/login";
-        }
-
-        User sessionUser = HttpSessionUtils.getUserFromSession(session);
-
-        if (!sessionUser.isMatchingId(id)) {
-            model.addAttribute("errorMessage", "수정할 수 있는 권한이 없습니다.");
             return "user/login";
         }
 
@@ -60,8 +55,8 @@ public class UserController {
     }
 
     @PutMapping("/{id}")
-    public String updateUser(@PathVariable long id, User updateUser, String newPassword) {
-        userService.updateUser(id, updateUser, newPassword);
+    public String updateUser(@PathVariable long id, String userId, String password, String name, String email, String newPassword) {
+        userService.updateUser(id, userId, password, name ,email, newPassword);
         return "redirect:/users";
     }
 
@@ -74,10 +69,12 @@ public class UserController {
     public String login(String userId, String password, Model model, HttpSession session) {
         User user = userService.getUserByUserId(userId);
 
-        if (!user.isMatchingPassword(password)) {
-            model.addAttribute("errorMessage", "비밀번호를 확인하여 주세요");
+        Result result = userService.valid(user, password);
+        if (!result.isValid()) {
+            model.addAttribute("errorMessage", result.getErrorMessage());
             return "user/login";
         }
+
         session.setAttribute(HttpSessionUtils.USER_SESSION_KEY, user);
         return "redirect:/";
     }
@@ -86,13 +83,6 @@ public class UserController {
     public String logout(HttpSession session) {
         session.removeAttribute(HttpSessionUtils.USER_SESSION_KEY);
         return "redirect:/";
-    }
-
-    private Result valid(HttpSession session) {
-        if (!HttpSessionUtils.isLoginUser(session)) {
-            return Result.fail("로그인을 먼저 진행해주세요.");
-        }
-        return Result.ok();
     }
 
 }
