@@ -57,7 +57,7 @@ public class QuestionService {
         }
 
         if (!question.isDeletable()) {
-            throw new UnauthorizedException(FREE2ASK_BUT_DELETE);
+            throw new UnauthorizedException(ASK_FREE_BUT_NOT_DELETE);
         }
         question.deleteQuestion();
         questionRepostory.save(question);
