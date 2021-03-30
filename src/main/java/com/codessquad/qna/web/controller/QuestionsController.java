@@ -32,7 +32,7 @@ public class QuestionsController {
     }
 
     @GetMapping
-    public String questionList(@RequestParam(defaultValue = "0") int pageNumber, Model model) {
+    public String questionList(@RequestParam(defaultValue = "1") int pageNumber, Model model) {
         model.addAttribute("questions", questionService.questions(pageNumber));
         PageList pageList = questionService.pageListByCurrentPage(pageNumber);
         model.addAttribute("pageList", pageList.getPages());
