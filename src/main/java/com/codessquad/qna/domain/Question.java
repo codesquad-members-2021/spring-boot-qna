@@ -4,6 +4,8 @@ import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
+import java.util.List;
+
 @Entity
 public class Question {
     private static final DateTimeFormatter DATE_TIME_FORMAT = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
@@ -15,8 +17,16 @@ public class Question {
     @JoinColumn(foreignKey = @ForeignKey(name = "fk_question_writer"))
     private User writer;
     private String title;
+
+    @OneToMany(mappedBy = "question")
+    @OrderBy("id ASC")
+    private List<Answer> answers;
+
+    @Lob
     private String contents;
     private LocalDateTime createdDateTime = LocalDateTime.now();
+
+    private boolean deleted;
 
     public Long getId() {
         return id;
@@ -50,21 +60,29 @@ public class Question {
         return createdDateTime;
     }
 
-    public void setCreatedDateTime(LocalDateTime createdDateTime) {
-        this.createdDateTime = createdDateTime;
-    }
-
     public String getFormattedDateTime() {
         return createdDateTime.format(DATE_TIME_FORMAT);
     }
 
-    public boolean userConfirmation(User loginUser) {
+    public List<Answer> getAnswers() {
+        return answers;
+    }
+
+    public void delete() {
+        this.deleted = true;
+    }
+
+    public void addAnswer(Answer answer) {
+        answers.add(answer);
+    }
+
+    public boolean isMatchingWriter(User loginUser) {
         return this.writer.equals(loginUser);
     }
 
-    public void update(Question updateQna) {
-        this.title = updateQna.title;
-        this.contents = updateQna.contents;
+    public void update(Question updateQuestion) {
+        this.title = updateQuestion.title;
+        this.contents = updateQuestion.contents;
     }
 
     @Override

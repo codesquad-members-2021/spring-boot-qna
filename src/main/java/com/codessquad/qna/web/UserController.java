@@ -1,73 +1,57 @@
 package com.codessquad.qna.web;
 
+import com.codessquad.qna.domain.Result;
+import com.codessquad.qna.service.UserService;
 import com.codessquad.qna.domain.User;
-import com.codessquad.qna.domain.UserRepository;
-import com.codessquad.qna.exception.AccessDeniedException;
-import com.codessquad.qna.exception.NoUserException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
 
 @Controller
 @RequestMapping("/users")
 public class UserController {
-    private final Logger logger = LoggerFactory.getLogger(QuestionController.class);
-    private final UserRepository userRepository;
+    private final UserService userService;
 
-    public UserController(UserRepository userRepository) {
-        this.userRepository = userRepository;
+    public UserController(UserService userService) {
+        this.userService = userService;
     }
 
     @PostMapping
     public String create(User user) {
-        if (checkEmpty(user)) {
+        if (user.checkEmpty(user)) {
             return "user/form";
         }
-        userRepository.save(user);
+        userService.save(user);
         return "redirect:/users";
-
-    }
-
-    private boolean checkEmpty(User user) {
-        return user.getUserId().equals("")
-                || user.getPassword().equals("")
-                || user.getEmail().equals("")
-                || user.getName().equals("");
     }
 
     @GetMapping
-    public String getUserList(Model model) {
-        model.addAttribute("users", userRepository.findAll());
+    public String userList(Model model) {
+        model.addAttribute("users", userService.getUserList());
         return "user/list";
     }
 
     @GetMapping("/{id}")
     public String userProfile(@PathVariable long id, Model model, HttpSession session) {
-        if (!HttpSessionUtils.isLoginUser(session)) {
-            return "redirect:/users/login";
-        }
-
-        model.addAttribute("user", userRepository.findById(id).orElseThrow(NoUserException::new));
+        model.addAttribute("user", userService.getUserById(id));
         return "user/profile";
     }
 
     @GetMapping("/{id}/form")
-    public String editUserInfo(@PathVariable long id, Model model, HttpSession session) {
-        if (!HttpSessionUtils.isLoginUser(session)) {
-            return "redirect:/users/login";
+    public String editUser(@PathVariable long id, Model model, HttpSession session) {
+        Result result = valid(session);
+        if (!result.isValid()) {
+            model.addAttribute("errorMessage", result.getErrorMessage());
+            return "user/login";
         }
 
         User sessionUser = HttpSessionUtils.getUserFromSession(session);
 
-        if (!sessionUser.userIdConfirmation(id)) {
-            throw new AccessDeniedException();
+        if (!sessionUser.isMatchingId(id)) {
+            model.addAttribute("errorMessage", "수정할 수 있는 권한이 없습니다.");
+            return "user/login";
         }
 
         model.addAttribute("user", sessionUser);
@@ -75,15 +59,9 @@ public class UserController {
         return "user/updateForm";
     }
 
-    @PostMapping("/{id}")
-    public String update(@PathVariable long id, User updateUser, String newPassword) {
-        User user = userRepository.findById(id).orElseThrow(NoUserException::new);
-        if (!user.checkPassword(updateUser.getPassword())) {
-            throw new IllegalStateException("비밀번호가 올바르지 않습니다.");
-        }
-        user.update(updateUser, newPassword);
-
-        userRepository.save(user);
+    @PutMapping("/{id}")
+    public String updateUser(@PathVariable long id, User updateUser, String newPassword) {
+        userService.updateUser(id, updateUser, newPassword);
         return "redirect:/users";
     }
 
@@ -93,13 +71,12 @@ public class UserController {
     }
 
     @PostMapping("/login")
-    public String login(String userId, String password, HttpSession session) {
-        User user = userRepository.findByUserId(userId);
-        if (HttpSessionUtils.isLoginUser(session)) {
-            return "redirect:/users/login";
-        }
-        if (!user.checkPassword(password)) {
-            return "redirect:/users/login";
+    public String login(String userId, String password, Model model, HttpSession session) {
+        User user = userService.getUserByUserId(userId);
+
+        if (!user.isMatchingPassword(password)) {
+            model.addAttribute("errorMessage", "비밀번호를 확인하여 주세요");
+            return "user/login";
         }
         session.setAttribute(HttpSessionUtils.USER_SESSION_KEY, user);
         return "redirect:/";
@@ -109,6 +86,13 @@ public class UserController {
     public String logout(HttpSession session) {
         session.removeAttribute(HttpSessionUtils.USER_SESSION_KEY);
         return "redirect:/";
+    }
+
+    private Result valid(HttpSession session) {
+        if (!HttpSessionUtils.isLoginUser(session)) {
+            return Result.fail("로그인을 먼저 진행해주세요.");
+        }
+        return Result.ok();
     }
 
 }
