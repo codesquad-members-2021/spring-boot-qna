@@ -1,10 +1,14 @@
 package com.codessquad.qna.service;
 
 import com.codessquad.qna.domain.Answer;
+import com.codessquad.qna.domain.Question;
+import com.codessquad.qna.domain.Result;
 import com.codessquad.qna.domain.User;
 import com.codessquad.qna.exception.NotFoundException;
 import com.codessquad.qna.repository.AnswerRepository;
 import org.springframework.stereotype.Service;
+
+import java.util.Optional;
 
 @Service
 public class AnswerService {
@@ -15,24 +19,30 @@ public class AnswerService {
         this.answerRepository = answerRepository;
     }
 
-    public Answer findAnswer(Long id) {
-        return answerRepository.findById(id)
-                .orElseThrow(() -> new NotFoundException("해당 답변이 존재하지 않습니다."));
+    public Answer create(User user, Question question, String contents) {
+        return save(new Answer(user, question, contents));
     }
 
-    public void save(Answer answer) {
-        answerRepository.save(answer);
-    }
-
-    public void delete(User user, Answer answer) {
-        checkValid(user, answer);
-        answer.setDeletedTrue();
-        answerRepository.save(answer);
-    }
-
-    private void checkValid(User user, Answer answer) {
-        if (!answer.isAnswerWriter(user)) {
-            throw new IllegalStateException("자신의 댓글에만 접근 가능합니다.");
+    public Optional<Answer> findAnswerForDelete(Long id, User user) {
+        Optional<Answer> answer = answerRepository.findById(id);
+        if (!checkValid(user, answer)) {
+            return Optional.empty();
         }
+        return answer;
+    }
+
+    private boolean checkValid(User user, Optional<Answer> optionalAnswer) {
+        Answer answer = optionalAnswer.orElseThrow(() -> new NotFoundException("해당 답변이 존재하지 않습니다."));
+        return answer.isAnswerWriter(user);
+    }
+
+    public void delete(Question question, Answer answer) {
+        answer.delete();
+        question.decreaseAnswerCount();
+        save(answer);
+    }
+
+    private Answer save(Answer answer) {
+        return answerRepository.save(answer);
     }
 }

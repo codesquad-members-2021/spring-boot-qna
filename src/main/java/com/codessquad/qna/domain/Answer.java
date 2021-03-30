@@ -1,33 +1,29 @@
 package com.codessquad.qna.domain;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 
 @Entity
 @Where(clause = "deleted = false")
-public class Answer {
-
-    private static final DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+public class Answer extends AbstractEntity {
 
     @ManyToOne
     @JoinColumn(foreignKey = @ForeignKey(name = "fk_answer_writer"))
+    @JsonProperty
     private User writer;
 
     @ManyToOne
     @JoinColumn(foreignKey = @ForeignKey(name = "fk_answer_to_question"))
+    @JsonManagedReference
     private Question question;
 
     @Lob
+    @JsonProperty
     private String contents;
 
-    private LocalDateTime postTime;
     private boolean deleted;
 
     public Answer() {
@@ -37,11 +33,7 @@ public class Answer {
         this.writer = writer;
         this.question = question;
         this.contents = contents;
-        postTime = LocalDateTime.now();
-    }
-
-    public Long getId() {
-        return id;
+        question.increaseAnswerCount();
     }
 
     public String getWriterUserId() {
@@ -56,25 +48,20 @@ public class Answer {
         return contents;
     }
 
-    public String getFormattedPostTime() {
-        return postTime.format(DATE_TIME_FORMATTER);
-    }
-
     public boolean isAnswerWriter(User user) {
         return user.isUserMatching(writer);
     }
 
-    public void setDeletedTrue() {
+    public void delete() {
         deleted = true;
     }
 
     @Override
     public String toString() {
         return "Answer{" +
-                "id=" + id +
+                super.toString() +
                 ", writer=" + writer +
                 ", contents='" + contents + '\'' +
-                ", createdTime=" + postTime +
                 '}';
     }
 }
