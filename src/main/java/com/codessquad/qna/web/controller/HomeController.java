@@ -10,6 +10,6 @@ public class HomeController {
 
     @GetMapping
     public String home() {
-        return "redirect:/questions?pageNumber=0";
+        return "redirect:/questions?pageNumber=1";
     }
 }
