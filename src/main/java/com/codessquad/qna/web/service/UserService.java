@@ -2,8 +2,8 @@ package com.codessquad.qna.web.service;
 
 import com.codessquad.qna.web.domain.User;
 import com.codessquad.qna.web.domain.UserRepository;
+import com.codessquad.qna.web.exceptions.auth.AuthenticationFailedException;
 import com.codessquad.qna.web.exceptions.auth.LoginFailedException;
-import com.codessquad.qna.web.exceptions.auth.UnauthorizedAccessException;
 import com.codessquad.qna.web.exceptions.users.RequestToCreateDuplicatedUserException;
 import com.codessquad.qna.web.exceptions.users.UserNotFoundException;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -52,12 +52,8 @@ public class UserService {
             User foundUser = userRepository.findByUserId(userId).orElseThrow(UserNotFoundException::new);
             foundUser.verifyPassword(password);
             return foundUser;
-        } catch (UserNotFoundException exception) {
-            throw new LoginFailedException("존재하지 않는 계정입니다");
-        } catch (UnauthorizedAccessException exception) {
-            throw new LoginFailedException("패스워드가 일치하지 않습니다");
+        } catch (UserNotFoundException | AuthenticationFailedException exception) {
+            throw new LoginFailedException();
         }
     }
-
-
 }

@@ -2,8 +2,9 @@ package com.codessquad.qna.web.exceptions;
 
 import com.codessquad.qna.web.exceptions.Entity.InvalidEntityException;
 import com.codessquad.qna.web.exceptions.answers.AnswerNotFoundException;
+import com.codessquad.qna.web.exceptions.auth.AuthenticationFailedException;
+import com.codessquad.qna.web.exceptions.auth.ForbiddenAccessException;
 import com.codessquad.qna.web.exceptions.auth.LoginFailedException;
-import com.codessquad.qna.web.exceptions.auth.UnauthorizedAccessException;
 import com.codessquad.qna.web.exceptions.questions.QuestionNotFoundException;
 import com.codessquad.qna.web.exceptions.users.NoLoginUserException;
 import com.codessquad.qna.web.exceptions.users.RequestToCreateDuplicatedUserException;
@@ -20,9 +21,9 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 public class ControllerExceptionHandler {
     private static final Logger logger = LoggerFactory.getLogger(ControllerExceptionHandler.class);
 
-    @ExceptionHandler(UnauthorizedAccessException.class)
-    @ResponseStatus(HttpStatus.UNAUTHORIZED)
-    public String handleUnauthorizedAccessException(UnauthorizedAccessException exception, Model model) {
+    @ExceptionHandler(ForbiddenAccessException.class)
+    @ResponseStatus(HttpStatus.FORBIDDEN)
+    public String handleUnauthorizedAccessException(ForbiddenAccessException exception, Model model) {
         initializeModel(exception, model);
         return "/error/global-error";
     }
@@ -31,7 +32,14 @@ public class ControllerExceptionHandler {
     @ResponseStatus(HttpStatus.UNAUTHORIZED)
     public String handleNoLoginUserException(NoLoginUserException exception, Model model) {
         initializeModel(exception, model);
-        return "/error/global-error";
+        return "/error/login-failed";
+    }
+
+    @ExceptionHandler(LoginFailedException.class)
+    @ResponseStatus(HttpStatus.UNAUTHORIZED)
+    public String handleLoginFailedException(LoginFailedException exception, Model model) {
+        initializeModel(exception, model);
+        return "/error/login-failed";
     }
 
     @ExceptionHandler(UserNotFoundException.class)
@@ -55,12 +63,6 @@ public class ControllerExceptionHandler {
         return "/error/global-error";
     }
 
-    @ExceptionHandler(LoginFailedException.class)
-    public String handleLoginFailedException() {
-        logger.warn("로그인에 실패했습니다");
-        return "redirect:/users/login-form";
-    }
-
     @ExceptionHandler(InvalidEntityException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public String handleInvalidEntityException(InvalidEntityException exception, Model model) {
@@ -68,8 +70,15 @@ public class ControllerExceptionHandler {
         return "/error/global-error";
     }
 
+    @ExceptionHandler(AuthenticationFailedException.class)
+    @ResponseStatus(HttpStatus.FORBIDDEN)
+    public String handleAuthenticationFailedException(AuthenticationFailedException exception, Model model) {
+        initializeModel(exception, model);
+        return "/error/global-error";
+    }
+
     @ExceptionHandler(RequestToCreateDuplicatedUserException.class)
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ResponseStatus(HttpStatus.CONFLICT)
     public String handleRequestToCreateDuplicatedUserException(RequestToCreateDuplicatedUserException exception, Model model) {
         initializeModel(exception, model);
         return "/error/global-error";

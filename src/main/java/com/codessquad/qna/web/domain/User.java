@@ -1,13 +1,14 @@
 package com.codessquad.qna.web.domain;
 
 import com.codessquad.qna.web.exceptions.Entity.InvalidEntityException;
-import com.codessquad.qna.web.exceptions.auth.UnauthorizedAccessException;
+import com.codessquad.qna.web.exceptions.auth.AuthenticationFailedException;
+import com.codessquad.qna.web.exceptions.auth.ForbiddenAccessException;
 
 import javax.persistence.*;
 
 import static com.codessquad.qna.web.exceptions.Entity.InvalidEntityException.EMPTY_FIELD_IN_USER_ENTITY;
-import static com.codessquad.qna.web.exceptions.auth.UnauthorizedAccessException.CANNOT_MODIFY_ANOTHER_USER;
-import static com.codessquad.qna.web.exceptions.auth.UnauthorizedAccessException.PASSWORD_NOT_MATCHING;
+import static com.codessquad.qna.web.exceptions.auth.AuthenticationFailedException.PASSWORD_NOT_MATCHING;
+import static com.codessquad.qna.web.exceptions.auth.ForbiddenAccessException.CANNOT_MODIFY_ANOTHER_USER;
 import static com.codessquad.qna.web.utils.EntityCheckUtils.isNotEmpty;
 
 @Entity
@@ -60,7 +61,7 @@ public class User extends BaseTimeEntity {
 
     public void verifyPassword(String password) {
         if (!isMatchingPassword(password)) {
-            throw new UnauthorizedAccessException(PASSWORD_NOT_MATCHING);
+            throw new AuthenticationFailedException(PASSWORD_NOT_MATCHING);
         }
     }
 
@@ -70,7 +71,7 @@ public class User extends BaseTimeEntity {
 
     public void verifyIsSameUser(User anotherUser) {
         if (!isMatchingId(anotherUser)) {
-            throw new UnauthorizedAccessException(CANNOT_MODIFY_ANOTHER_USER);
+            throw new ForbiddenAccessException(CANNOT_MODIFY_ANOTHER_USER);
         }
     }
 

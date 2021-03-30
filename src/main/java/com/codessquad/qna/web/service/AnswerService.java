@@ -2,11 +2,11 @@ package com.codessquad.qna.web.service;
 
 import com.codessquad.qna.web.domain.*;
 import com.codessquad.qna.web.exceptions.answers.AnswerNotFoundException;
-import com.codessquad.qna.web.exceptions.auth.UnauthorizedAccessException;
+import com.codessquad.qna.web.exceptions.auth.ForbiddenAccessException;
 import com.codessquad.qna.web.exceptions.questions.QuestionNotFoundException;
 import org.springframework.stereotype.Service;
 
-import static com.codessquad.qna.web.exceptions.auth.UnauthorizedAccessException.CANNOT_MODIFY_ANOTHER_USERS_ANSWER;
+import static com.codessquad.qna.web.exceptions.auth.ForbiddenAccessException.CANNOT_MODIFY_ANOTHER_USERS_ANSWER;
 
 @Service
 public class AnswerService {
@@ -30,7 +30,7 @@ public class AnswerService {
         Answer answer = answersRepository.findByIdAndDeletedFalse(answerId)
                 .orElseThrow(AnswerNotFoundException::new);
         if (!answer.isMatchingWriter(loginUser)) {
-            throw new UnauthorizedAccessException(CANNOT_MODIFY_ANOTHER_USERS_ANSWER);
+            throw new ForbiddenAccessException(CANNOT_MODIFY_ANOTHER_USERS_ANSWER);
         }
         answer.delete();
         answersRepository.save(answer);
