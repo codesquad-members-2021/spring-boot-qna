@@ -49,6 +49,10 @@
                   </div>
               </article>
 
+              {{#errorMessage}}
+              <div class="alert alert-danger" role="alert">{{errorMessage}}</div>
+              {{/errorMessage}}
+
               <div class="qna-comment">
                   <div class="qna-comment-slipp">
                       <p class="qna-comment-count"><strong>{{answersCount}}</strong>개의 의견</p>
