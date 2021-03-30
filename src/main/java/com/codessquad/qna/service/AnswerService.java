@@ -33,6 +33,10 @@ public class AnswerService {
         answerRepository.save(answer);
     }
 
+    public void delete(Long answerId, User sessionedUser) {
+        answerRepository.delete(getAnswer(answerId, sessionedUser));
+    }
+
     public Answer getAnswer(Long answerId, User sessionedUser) {
         Answer answer = answerRepository.findById(answerId).orElseThrow(() -> new EntityNotFoundException(ErrorMessage.ANSWER_NOT_FOUND));
         if (!answer.matchWriter(sessionedUser)) {
