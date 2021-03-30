@@ -5,9 +5,7 @@
         <div class="panel panel-default content-main">
             {{#user}}
             <form name="question" method="post" action="/users/{{id}}">
-
-                <label for="id">아이디 : {{id}}</label>
-                <input type="hidden" id="id" name="id" value="{{id}}"/>
+                <input type="hidden" name="_method" value="put" />
 
                 <div class="form-group">
                     <label for="name">변경할 이름</label>

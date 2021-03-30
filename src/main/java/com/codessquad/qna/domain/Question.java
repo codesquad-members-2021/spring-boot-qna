@@ -1,9 +1,10 @@
 package com.codessquad.qna.domain;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import org.hibernate.annotations.CreationTimestamp;
+
+import javax.persistence.*;
 import java.time.LocalDate;
+
 @Entity
 public class Question {
 
@@ -11,18 +12,39 @@ public class Question {
     @GeneratedValue
     private Long id;
 
-    private String writer;
     private String title;
-    private String content;
-    private int index;
-    private LocalDate nowDate;
 
-    public LocalDate getNowDate() {
-        return nowDate;
+    @Lob
+    private String content;
+
+    private int index;
+
+    @CreationTimestamp
+    private LocalDate time;
+
+    @ManyToOne
+    @JoinColumn(foreignKey = @ForeignKey(name = "fk_question_writer"))
+    private User writer;
+
+    protected Question() {
     }
 
-    public void setNowDate(LocalDate nowDate) {
-        this.nowDate = nowDate;
+    public Question(String title, String content, User writer) {
+        this.title = title;
+        this.content = content;
+        this.writer = writer;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public LocalDate getTime() {
+        return time;
+    }
+
+    public void setTime(LocalDate nowDate) {
+        this.time = nowDate;
     }
 
     public int getIndex() {
@@ -33,11 +55,12 @@ public class Question {
         this.index = index;
     }
 
-    public String getWriter() {
+    public User getWriter() {
         return writer;
     }
 
-    public void setWriter(String writer) {
+
+    public void setWriter(User writer) {
         this.writer = writer;
     }
 
@@ -55,6 +78,16 @@ public class Question {
 
     public void setContent(String content) {
         this.content = content;
+    }
+
+    public void update(String title, String content) {
+        this.title = title;
+        this.content = content;
+    }
+
+    public boolean isSameWriter(User loginUser) {
+
+        return this.writer.equals(loginUser);
     }
 
     @Override

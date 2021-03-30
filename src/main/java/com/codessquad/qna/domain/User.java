@@ -1,14 +1,12 @@
 package com.codessquad.qna.domain;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
+import java.util.Objects;
 
 @Entity
 public class User {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(nullable = false)
@@ -17,6 +15,7 @@ public class User {
     private String password;
     private String name;
     private String email;
+
 
     public void setUserId(String userId) {
         this.userId = userId;
@@ -63,11 +62,15 @@ public class User {
         return this.password.equals(password);
     }
 
+    public boolean matchId(Long id) {
+
+        return this.id.equals(id);
+    }
+
     public void update(User newUser) {
         this.name = newUser.name;
         this.email = newUser.email;
         this.password = newUser.password;
-
     }
 
     @Override
@@ -78,5 +81,18 @@ public class User {
                 ", name='" + name + '\'' +
                 ", email='" + email + '\'' +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        User user = (User) o;
+        return id.equals(user.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
     }
 }

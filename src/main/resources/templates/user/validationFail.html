@@ -4,18 +4,10 @@
     <div class="col-md-6 col-md-offset-3">
         <div class="panel panel-default content-main">
 
-            <form name="question" method="post" action="/validation">
+            <form name="question" method="post" action="/users/confirmPassword">
 
-                <label>비밀번호 확인</label>
-
-                {{#id}}
                 <div class="form-group">
-                    <label for="id">{{id}}</label>
-                    <input type="hidden" class="form-control" id="id" name="id" placeholder="UserId" value="{{id}}">
-                </div>
-                {{/id}}
-                <div class="form-group">
-                    <label for="password">비밀번호</label>
+                    <label for="password">비밀번호가 틀렸습니다 다시 입력하세요</label>
                     <input type="password" class="form-control" id="password" name="password" placeholder="Password">
                 </div>
 

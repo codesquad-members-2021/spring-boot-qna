@@ -1,9 +1,13 @@
 package com.codessquad.qna.service;
 
+
 import com.codessquad.qna.domain.User;
+import com.codessquad.qna.exception.LoginFailedException;
+import com.codessquad.qna.exception.NotFoundException;
 import com.codessquad.qna.repository.UserRepository;
 import org.springframework.stereotype.Service;
 
+import javax.servlet.http.HttpSession;
 import java.util.List;
 import java.util.Optional;
 
@@ -20,21 +24,21 @@ public class UserService {
         repository.save(user);
     }
 
-    public List<User> findUsers(){
+    public List<User> findUsers() {
 
         return (List<User>)repository.findAll();
     }
 
-    public Optional<User> findUser(Long id) {
+    public User findUser(Long id) {
 
-        return repository.findById(id);
+        return repository.findById(id).orElseThrow(() -> new NotFoundException());
     }
 
-    public boolean validationUserInfo(Long id, String password) {
+    public User findById(String userId) {
 
-        User user = repository.findById(id).get();
+        User user = repository.findByUserId(userId).orElseThrow(() -> new LoginFailedException());
 
-        return user.matchPassword(password);
+        return user;
     }
 
 

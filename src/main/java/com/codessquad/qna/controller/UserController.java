@@ -1,13 +1,14 @@
 package com.codessquad.qna.controller;
 
+import com.codessquad.qna.exception.LoginFailedException;
+import com.codessquad.qna.utils.HttpSessionUtils;
 import com.codessquad.qna.domain.User;
 import com.codessquad.qna.service.UserService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
+
+import javax.servlet.http.HttpSession;
 
 @Controller
 @RequestMapping("/users")
@@ -21,7 +22,6 @@ public class UserController {
 
     @PostMapping ("/create")
     public String create(User user) {
-
         userService.create(user);
 
         return "redirect:/users/list";
@@ -29,7 +29,6 @@ public class UserController {
 
     @GetMapping("/list")
     public String list(Model model){
-
         model.addAttribute("users", userService.findUsers());
 
         return "/user/list";
@@ -37,38 +36,87 @@ public class UserController {
 
     @GetMapping("/{id}")
     public String profile(@PathVariable("userId") Long id, Model model) {
-
         model.addAttribute("user", userService.findUser(id));
 
         return "/user/profile";
     }
 
-    @GetMapping("/{id}/validation")
-    public String userValidation(@PathVariable Long id, Model model){
+    @GetMapping("/loginForm")
+    public String loginForm() {
 
-        model.addAttribute("id", id);
-
-        return "/user/validationUser";
+        return "/user/login";
     }
 
-    @PostMapping("/validation")
-    public String validationUser(User user, Model model) {
+    @PostMapping("/login")
+    public String login(String userId, String password, HttpSession session){
+        User user = userService.findById(userId);
 
+        if(!user.matchPassword(password)) {
 
-        if(userService.validationUserInfo(user.getId(), user.getPassword())){
+            throw new LoginFailedException();
+        }
 
-            model.addAttribute("user", user);
+        HttpSessionUtils.setUserSessionKey(session, user);
+
+        return "redirect:/";
+    }
+
+    @GetMapping("/logout")
+    public String logout(HttpSession session) {
+        HttpSessionUtils.removeSession(session);
+
+        return "redirect:/";
+    }
+
+    @GetMapping("/{id}/validation")
+    public String userValidation(@PathVariable Long id, HttpSession session){
+        User sessionedUser = HttpSessionUtils.getUserSessionKey(session);
+
+        if(!HttpSessionUtils.isLoginUser(session)) {
+
+            return "redirect:/users/form";
+        }
+
+        if(!sessionedUser.matchId(id)) {
+
+            return "redirect:/users/form";
+        }
+
+        return "/user/confirmPasswordForm";
+    }
+
+    @PostMapping("/confirmPassword")
+    public String confirmPassword(String password, Model model, HttpSession session) {
+        User sessionedUser = HttpSessionUtils.getUserFromSession(session);
+
+        if(!HttpSessionUtils.isLoginUser(session)) {
+
+            return "redirect:/users/form";
+        }
+
+        if(sessionedUser.matchPassword(password)) {
+
+            model.addAttribute("user", sessionedUser);
 
             return "/user/updateForm";
         }
 
-        return "/user/validationUser";
+        return "/user/validationFail";
     }
 
-    @PostMapping("/{id}")
-    public String userUpdate(@PathVariable Long id, User newUser){
+    @PutMapping("/{id}")
+    public String update(@PathVariable Long id, User newUser, HttpSession session) {
+        User sessionedUser = HttpSessionUtils.getUserSessionKey(session);
 
-        User user = userService.findUser(id).get();
+        if(!HttpSessionUtils.isLoginUser(session)) {
+            return "redirect:/users/form";
+        }
+
+        if(!sessionedUser.matchId(id)) {
+            return "redirect:/users/form";
+        }
+
+        User user = userService.findUser(id);
 
         user.update(newUser);
 
