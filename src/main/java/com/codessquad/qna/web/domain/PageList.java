@@ -1,5 +1,6 @@
 package com.codessquad.qna.web.domain;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class PageList {
@@ -8,17 +9,21 @@ public class PageList {
     private final long endPageOfPrevBlock;
     private final long startPageOfNextBlock;
 
-    public PageList(List<Long> pages, long endPageOfPrevBlock, long startPageOfNextBlock) {
-        this.pages = pages;
+    public PageList(long startPageOfCurrentBlock, long endPageOfCurrentBlock,
+                    long endPageOfPrevBlock, long startPageOfNextBlock) {
+        pages = new ArrayList<>();
+        for (long currentPage = startPageOfCurrentBlock; currentPage <= endPageOfCurrentBlock; currentPage++) {
+            pages.add(currentPage);
+        }
         this.endPageOfPrevBlock = endPageOfPrevBlock;
         this.startPageOfNextBlock = startPageOfNextBlock;
     }
 
-    public boolean hasPrevBlock(){
+    public boolean hasPrevBlock() {
         return endPageOfPrevBlock != NO_PAGE;
     }
 
-    public boolean hasNextBlock(){
+    public boolean hasNextBlock() {
         return startPageOfNextBlock != NO_PAGE;
     }
 

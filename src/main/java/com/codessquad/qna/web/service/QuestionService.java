@@ -33,30 +33,44 @@ public class QuestionService {
     }
 
     public PageList pageListByCurrentPage(long currentPage) {
-        List<Long> list = new ArrayList<>();
-        long startPageOfCurrentBlock = currentPage - (currentPage % BLOCK_SIZE);
-        long endPageOfCurrentBlock = startPageOfCurrentBlock + BLOCK_SIZE - 1;
         long numberOfQuestions = questionRepository.countAllByDeletedFalse();
         long lastPage = numberOfQuestions / PAGE_SIZE;
 
-        if (lastPage < endPageOfCurrentBlock) {
-            endPageOfCurrentBlock = numberOfQuestions / PAGE_SIZE;
-        }
-        for (long i = startPageOfCurrentBlock; i <= endPageOfCurrentBlock; i++) {
-            list.add(i);
-        }
-        long endPageOfPrevBlock = PageList.NO_PAGE;
-        long startPageOfNextBlock = PageList.NO_PAGE;
+        long startPageOfCurrentBlock = calculateStartPageOfCurrentBlock(currentPage);
+        long endPageOfCurrentBlock = calculateEndPageOfCurrentBlock(startPageOfCurrentBlock, lastPage);
 
+        long endPageOfPrevBlock = calculateEndPageOfPrevBlock(startPageOfCurrentBlock);
+        long startPageOfNextBlock = calculateStartPageOfNextBlock(endPageOfCurrentBlock, lastPage);
+
+        return new PageList(startPageOfCurrentBlock, endPageOfCurrentBlock, endPageOfPrevBlock, startPageOfNextBlock);
+    }
+
+    private long calculateStartPageOfCurrentBlock(long currentPage) {
+        return currentPage - (currentPage % BLOCK_SIZE);
+    }
+
+    private long calculateEndPageOfCurrentBlock(long startPageOfCurrentBlock, long lastPage) {
+        long endPageOfCurrentBlock = startPageOfCurrentBlock + BLOCK_SIZE - 1;
+        if (lastPage < endPageOfCurrentBlock) {
+            endPageOfCurrentBlock = lastPage;
+        }
+        return endPageOfCurrentBlock;
+    }
+
+    private long calculateEndPageOfPrevBlock(long startPageOfCurrentBlock) {
+        long endPageOfPrevBlock = PageList.NO_PAGE;
         if (startPageOfCurrentBlock != 0) {
             endPageOfPrevBlock = startPageOfCurrentBlock - 1;
         }
+        return endPageOfPrevBlock;
+    }
 
-        if (endPageOfCurrentBlock < lastPage){
+    private long calculateStartPageOfNextBlock(long endPageOfCurrentBlock, long lastPage) {
+        long startPageOfNextBlock = PageList.NO_PAGE;
+        if (endPageOfCurrentBlock < lastPage) {
             startPageOfNextBlock = endPageOfCurrentBlock + 1;
         }
-
-        return new PageList(list, endPageOfPrevBlock, startPageOfNextBlock);
+        return startPageOfNextBlock;
     }
 
     public Question questionDetail(long id) {
