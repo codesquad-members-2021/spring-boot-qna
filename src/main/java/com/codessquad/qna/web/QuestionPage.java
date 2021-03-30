@@ -16,12 +16,12 @@ public class QuestionPage {
     private List<Integer> pageNumbers;
 
 
-    public QuestionPage(Pageable pageable, Page<Question> questionPage) {
+        public QuestionPage(Pageable pageable, Page<Question> questionsByPage) {
         this.pageable = pageable;
-        this.questions = questionPage;
-        this.previous = questionPage.previousOrFirstPageable().getPageNumber();
-        if (questionPage.hasNext()) {
-            this.next = questionPage.nextPageable().getPageNumber();
+        this.questions = questionsByPage;
+        this.previous = questionsByPage.previousOrFirstPageable().getPageNumber();
+        if (questionsByPage.hasNext()) {
+            this.next = questionsByPage.nextPageable().getPageNumber();
         } else {
             this.next = pageable.getPageNumber();
         }
