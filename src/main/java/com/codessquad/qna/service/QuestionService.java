@@ -35,7 +35,7 @@ public class QuestionService {
         if (!result.isValid()) {
             return result;
         }
-        question.delete();
+        question.deleted();
         return result;
     }
 
