@@ -12,27 +12,27 @@ public class ControllerExceptionHandler {
 
     @ExceptionHandler(LoginFailedException.class)
     public String loginFailed(LoginFailedException exception, Model model) {
-        return errorPageSender(exception,model);
+        return errorPageSender(exception, model);
     }
 
     @ExceptionHandler(NotFoundException.class)
     public String notFoundException(NotFoundException exception, Model model) {
-        return errorPageSender(exception,model);
+        return errorPageSender(exception, model);
     }
 
     @ExceptionHandler(UnauthorizedException.class)
     public String unauthorizedException(UnauthorizedException exception, Model model) {
-        return errorPageSender(exception,model);
+        return errorPageSender(exception, model);
     }
 
     @ExceptionHandler(UnacceptableDuplicationException.class)
     public String unacceptableDuplicationException(UnacceptableDuplicationException exception, Model model) {
-        return errorPageSender(exception,model);
+        return errorPageSender(exception, model);
     }
 
     private void initializeModel(Exception exception, Model model) {
         String exceptionMessage = exception.getMessage();
-        logger.warn(exceptionMessage);
+        logger.warn("설명 :", exceptionMessage);
         model.addAttribute("errorMessage", exceptionMessage);
     }
 
