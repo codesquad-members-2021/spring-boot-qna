@@ -18,11 +18,9 @@ public class CommonEntity {
     @JsonProperty
     private Long id;
 
-    @Column(nullable = true)
     @CreatedDate
     private LocalDateTime createdDateTime;
 
-    @Column(nullable = true)
     @LastModifiedDate
     private LocalDateTime modifiedDateTime;
 
