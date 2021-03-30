@@ -7,6 +7,7 @@ import com.codessquad.qna.web.service.UserService;
 import com.codessquad.qna.web.utils.SessionUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindException;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
@@ -65,5 +66,10 @@ public class UserController {
         User loginUser = SessionUtils.getLoginUser(session);
         userService.updateProfile(id, oldPassword, updatedUser, loginUser);
         return "redirect:/users";
+    }
+
+    @ExceptionHandler(BindException.class)
+    public String handleDataBindingException(HttpSession session) {
+        return "redirect:/users/missing-info";
     }
 }
