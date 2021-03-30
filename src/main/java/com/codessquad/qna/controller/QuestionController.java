@@ -1,25 +1,21 @@
 package com.codessquad.qna.controller;
 
-import com.codessquad.qna.domain.*;
-import com.codessquad.qna.exception.NotFoundException;
+import com.codessquad.qna.domain.Question;
+import com.codessquad.qna.exception.UnauthorizedException;
 import com.codessquad.qna.service.QuestionService;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
-import java.util.List;
 
-import static com.codessquad.qna.utils.SessionUtil.*;
+import static com.codessquad.qna.exception.ExceptionMessages.NEED_LOGIN;
+import static com.codessquad.qna.utils.SessionUtil.getLoginUser;
+import static com.codessquad.qna.utils.SessionUtil.isLoginUser;
 
 @Controller
-
-@RequestMapping("/qna")
+@RequestMapping("/questions")
 public class QuestionController {
-
-    private static final Logger logger = LoggerFactory.getLogger(QuestionController.class);
 
     private final QuestionService questionService;
 
@@ -27,51 +23,48 @@ public class QuestionController {
         this.questionService = questionService;
     }
 
-    @GetMapping("/")
-    public String qnaPage() {
-        return "redirect:/qna/list";
-    }
-
-    @GetMapping("/form")
-    public String questionForm(HttpSession session, Model model) {
-        questionService.isLogin(session);
-        return "qna/form";
-    }
-
-    @PostMapping("/questions")
-    public String createQuestion(Question question, HttpSession session) {
-        questionService.createQuestion(question,getLoginUser(session));
-        return "redirect:/qna/list";
-    }
-
-    @GetMapping("/list")
-    public String showQuestionList(Model model) {
+    @GetMapping
+    public String showList(Model model) {
         model.addAttribute("questionList", questionService.findAll());
         return "/qna/list";
     }
 
+    @PostMapping
+    public String create(Question question, HttpSession session) {
+        questionService.createQuestion(question, getLoginUser(session));
+        return "redirect:/qna/list";
+    }
+
+    @GetMapping("/form")
+    public String questionForm(HttpSession session) {
+        if (!isLoginUser(session)) {
+            throw new UnauthorizedException(NEED_LOGIN);
+        }
+        return "/qna/form";
+    }
+
+
     @GetMapping("/{id}")
-    public String showDetailQuestion(@PathVariable Long id, Model model) {
-        questionService.showDetailQuestion(id,model);
-        //@Todo 모델에다가 데이터를 집어넣어주는건 컨트롤러 역할 같다. 개선할 수 있는 방법을 찾
+    public String showDetail(@PathVariable Long id, Model model) {
+        model.addAttribute("question", questionService.showDetailQuestion(id));
         return "/qna/show";
     }
 
     @PutMapping("/{id}")
-    public String updateQuestion(@PathVariable Long id, String title, String contents) {
-        questionService.updateQuestion(id,title,contents);
-        return String.format("redirect:/qna/%d", id);
+    public String update(@PathVariable Long id, String title, String contents) {
+        questionService.updateQuestion(id, title, contents);
+        return ("redirect:/questions/" + id);
     }
 
     @DeleteMapping("/{id}")
-    public String deleteQuestion(@PathVariable Long id, User ownerUser, HttpSession session) {
-        questionService.deleteQuestion(id,ownerUser,session);
+    public String delete(@PathVariable Long id, HttpSession session) {
+        questionService.deleteQuestion(id, session);
         return "redirect:/";
     }
 
     @GetMapping("/{id}/form")
     public String updateForm(@PathVariable Long id, Model model, HttpSession session) {
-        questionService.updateForm(id,model,session);
+        questionService.updateForm(id, model, session);
         return "/qna/updateForm";
     }
 }

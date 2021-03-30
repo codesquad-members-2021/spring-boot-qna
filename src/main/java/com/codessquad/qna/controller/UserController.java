@@ -1,8 +1,6 @@
 package com.codessquad.qna.controller;
 
 import com.codessquad.qna.domain.User;
-import com.codessquad.qna.domain.UserRepository;
-import com.codessquad.qna.exception.NotFoundException;
 import com.codessquad.qna.service.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -12,10 +10,11 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
 
-import static com.codessquad.qna.utils.SessionUtil.*;
+import static com.codessquad.qna.utils.SessionUtil.getLoginUser;
+import static com.codessquad.qna.utils.SessionUtil.removeLoginUser;
 
 @Controller
-@RequestMapping("/user")
+@RequestMapping("/users")
 public class UserController {
 
     private static final Logger logger = LoggerFactory.getLogger(UserController.class);
@@ -27,20 +26,20 @@ public class UserController {
     }
 
     @GetMapping
-    public String userListShow() {
-        return "redirect:/user/list";
+    public String showUserList() {
+        return "redirect:/users/list";
     }
 
-    @GetMapping("/form")
-    public String signUpForm() {
-        logger.info("signUpForm >> users/form.html: in");
+    @GetMapping("/signup")
+    public String signup() {
+        logger.debug("signup >> users/form.html: in");
         return "user/form";
     }
 
-    @PostMapping("/create")
-    public String userCreate(User user) {
+    @PostMapping("/signup")
+    public String signup(User user) {
         userService.createUser(user);
-        return "redirect:/user/list";
+        return "redirect:/users/list";
     }
 
     @GetMapping("/list")
@@ -57,14 +56,14 @@ public class UserController {
     }
 
     @PutMapping("/{id}")
-    public String updateUser(@PathVariable Long id, String pastPassword, User updatedUser, HttpSession session) {
-        userService.updateUser(id,pastPassword,updatedUser,session);
-        return "redirect:/user";
+    public String update(@PathVariable Long id, String pastPassword, User updatedUser, HttpSession session) {
+        userService.updateUser(id, pastPassword, updatedUser, session);
+        return "redirect:/users";
     }
 
     @GetMapping("/{id}/form")
-    public String getUserUpdateForm(@PathVariable Long id, Model model, HttpSession session) {
-        userService.validationCheck(id,model,session);
+    public String updateForm(@PathVariable Long id, Model model, HttpSession session) {
+        userService.validationCheck(id, session);
         User loginUser = getLoginUser(session);
         model.addAttribute("user", loginUser);
         return "user/updateForm";
@@ -77,13 +76,13 @@ public class UserController {
 
     @PostMapping("/login")
     public String loginProcess(String userId, String password, HttpSession session) {
-        userService.login(userId,password,session);
+        userService.login(userId, password, session);
         return "redirect:/";
     }
 
     @GetMapping("/logout")
     public String logout(HttpSession session) {
-        logger.info("Logout Out Success");
+        logger.debug("Logout Out Success");
         removeLoginUser(session);
         return "redirect:/";
     }

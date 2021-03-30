@@ -1,13 +1,14 @@
 package com.codessquad.qna.domain;
 
+import org.hibernate.annotations.Where;
+
 import javax.persistence.*;
 import javax.servlet.http.HttpSession;
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
 
+import static com.codessquad.qna.utils.DateUtilConstans.DATE_AND_TIME_PATTERN;
 import static com.codessquad.qna.utils.SessionUtil.getLoginUser;
-import static com.codessquad.qna.utils.StringUtil.PATTERN_FORMAT;
 
 @Entity
 public class Question {
@@ -31,8 +32,9 @@ public class Question {
 
     private LocalDateTime createdDateTime;
 
-    @OneToMany(mappedBy = "question" , cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy = "question", cascade = CascadeType.REMOVE)
     @OrderBy("id ASC")
+    @Where(clause = "deleted=false")
     private List<Answer> answerList;
 
     public Question() {
@@ -52,7 +54,6 @@ public class Question {
         this.createdDateTime = question.createdDateTime;
     }
 
-
     public Question(String writer, String title, String contents) {
         this.title = title;
         this.contents = contents;
@@ -63,7 +64,7 @@ public class Question {
         if (createdDateTime == null) {
             return "";
         }
-        return createdDateTime.format(DateTimeFormatter.ofPattern(PATTERN_FORMAT));
+        return createdDateTime.format(DATE_AND_TIME_PATTERN);
     }
 
     public Long getId() {
@@ -94,6 +95,14 @@ public class Question {
         this.contents = contents;
     }
 
+    public List<Answer> getAnswerList() {
+        return answerList;
+    }
+
+    public LocalDateTime getCreatedDateTime() {
+        return createdDateTime;
+    }
+
     @Override
     public String toString() {
         return "Question{" +
@@ -104,7 +113,6 @@ public class Question {
                 '}';
     }
 
-
     public void update(String title, String contents) {
         this.title = title;
         this.contents = contents;
@@ -113,6 +121,15 @@ public class Question {
     public void deleteQuestion() {
         this.deleted = true;
         this.answerList.forEach(Answer::deleteAnswer);
+    }
+
+    public boolean isDeletable() {
+        for (Answer answer : this.answerList) {
+            if (!answer.isSameWriter(this.writer)) {
+                return false;
+            }
+        }
+        return true;
     }
 
 }

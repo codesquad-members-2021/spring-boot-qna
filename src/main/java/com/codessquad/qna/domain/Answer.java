@@ -62,10 +62,6 @@ public class Answer {
         return id;
     }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
-
     public User getWriter() {
         return writer;
     }
@@ -90,7 +86,15 @@ public class Answer {
         this.contents = contents;
     }
 
+    public LocalDateTime getCreatedDateTime() {
+        return createdDateTime;
+    }
+
     public void deleteAnswer() {
         this.deleted = true;
+    }
+
+    public boolean isSameWriter(User questionWriter) {
+        return this.writer.equals(questionWriter);
     }
 }

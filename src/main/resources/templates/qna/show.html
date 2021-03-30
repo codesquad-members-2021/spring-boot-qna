@@ -20,9 +20,9 @@
                           <img src="https://graph.facebook.com/v2.3/100000059371774/picture" class="article-author-thumb" alt="">
                       </div>
                       <div class="article-header-text">
-                          <a href="/user/{{question.writer.id}}" class="article-author-name">{{question.writer.name}}</a>
-                          <a href="/question/여기를고쳐야함" class="article-header-time" title="퍼머링크">
-                              {{formattedCrteatedDate}}
+                          <a href="/users/{{question.writer.id}}" class="article-author-name">{{question.writer.name}}</a>
+                          <a href="/questions/여기를고쳐야함" class="article-header-time" title="퍼머링크">
+                              {{date createdDateTime}}
                               <i class="icon-link"></i>
                           </a>
                       </div>
@@ -33,10 +33,10 @@
                   <div class="article-util">
                       <ul class="article-util-list">
                           <li>
-                              <a class="link-modify-article" href="/qna/{{id}}/form">수정</a>
+                              <a class="link-modify-article" href="/questions/{{id}}/form">수정</a>
                           </li>
                           <li>
-                              <form class="form-delete" action="/qna/{{id}}" method="POST">
+                              <form class="form-delete" action="/questions/{{id}}" method="POST">
                                   <input type="hidden" name="_method" value="DELETE">
                                   <button class="link-delete-article" type="submit">삭제</button>
                               </form>
@@ -50,19 +50,19 @@
 
               <div class="qna-comment">
                   <div class="qna-comment-slipp">
-                      <p class="qna-comment-count"><strong>{{answerList.length}}</strong>개의 의견</p>
+                      <p class="qna-comment-count"><strong>{{question.answerList.length}}</strong>개의 의견</p>
                       <div class="qna-comment-slipp-articles">
 
-                          {{#answerList}}
+                          {{#question.answerList}}
                           <article class="article" id="answer-1406">
                               <div class="article-header">
                                   <div class="article-header-thumb">
                                       <img src="https://graph.facebook.com/v2.3/1324855987/picture" class="article-author-thumb" alt="">
                                   </div>
                                   <div class="article-header-text">
-                                      <a href="/user/{{writer.id}}/{{writer.name}}" class="article-author-name">{{writer.name}}</a>
+                                      <a href="/users/{{writer.id}}/{{writer.name}}" class="article-author-name">{{writer.name}}</a>
                                       <a href="#answer-1434" class="article-header-time" title="퍼머링크">
-                                          {{createdDateTime}}
+                                          {{date createdDateTime}}
                                       </a>
                                   </div>
                               </div>
@@ -75,7 +75,7 @@
                                           <a class="link-modify-article" href="#">수정</a>
                                       </li>
                                       <li>
-                                          <form class="form-delete" action="/qna/{{question.id}}/answers/{{id}}" method="POST">
+                                          <form class="form-delete" action="/questions/{{question.id}}/answers/{{id}}" method="POST">
                                               <input type="hidden" name="_method" value="DELETE">
                                               <button type="submit" class="delete-answer-button">삭제</button>
                                           </form>
@@ -83,8 +83,8 @@
                                   </ul>
                               </div>
                           </article>
-                          {{/answerList}}
-                          <form class="submit-write" method="post" action="/qna/{{id}}/answers">
+                          {{/question.answerList}}
+                          <form class="submit-write" method="post" action="/questions/{{id}}/answers">
                               <div class="form-group" style="padding:14px;">
                                   <textarea class="form-control" placeholder="Update your status" name="contents"></textarea>
                               </div>

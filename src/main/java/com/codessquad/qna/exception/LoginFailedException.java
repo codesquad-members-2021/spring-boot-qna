@@ -1,11 +1,9 @@
 package com.codessquad.qna.exception;
 
-public class LoginFailedException extends RuntimeException{
+import static com.codessquad.qna.exception.ExceptionMessages.FAILED_LOGIN;
 
+public class LoginFailedException extends RuntimeException {
     public LoginFailedException() {
-    }
-
-    public LoginFailedException(String message) {
-        super(message);
+        super(FAILED_LOGIN);
     }
 }

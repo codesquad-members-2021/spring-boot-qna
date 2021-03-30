@@ -6,15 +6,16 @@
 <body>
 {{> include/navigation}}
 <div class="container" id="main">
-    <div class="col-md-12 col-sm-12 col-lg-10 col-lg-offset-1">
+    <div class="col-md-6 col-md-offset-3">
         <div class="panel panel-default content-main">
-
-            <h1 class="error-text">404 Page Not Found </h1>
-            <h4>잘못된 경로로 접근하셨습니다</h4>
+            <h2 class="error-text">수행할 수 없는 명령입니다!</h2>
+            <h4>{{errorMessage}}</h4>
             <div style="display: flex;">
                 <span style="flex: 1;"></span>
                 <a href="/">홈페이지로 이동하기</a>
+            </div>
         </div>
+
     </div>
 </div>
 
