@@ -2,6 +2,7 @@ package com.codessquad.qna.controller;
 
 import com.codessquad.qna.model.Question;
 import com.codessquad.qna.service.QuestionService;
+import com.codessquad.qna.utils.ErrorMessage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -50,8 +51,13 @@ public class QuestionController {
     }
 
     @DeleteMapping("/{questionId}")
-    public String deleteQuestion(@PathVariable Long questionId, HttpSession session) {
-        questionService.delete(questionId, getUserFromSession(session));
+    public String deleteQuestion(@PathVariable Long questionId, Model model, HttpSession session) {
+        boolean result = questionService.delete(questionId, getUserFromSession(session));
+        if (!result) {
+            model.addAttribute("question", questionService.findById(questionId));
+            model.addAttribute("errorMessage", ErrorMessage.DELETE_FAILED);
+            return "qna/questionDetail";
+        }
         return "redirect:/";
     }
 }
