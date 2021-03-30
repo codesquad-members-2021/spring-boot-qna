@@ -9,7 +9,6 @@ import com.codessquad.qna.utils.ErrorMessage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -39,9 +38,7 @@ public class QuestionService {
     }
 
     public List<Question> findAll() {
-        List<Question> questionList = new ArrayList<>();
-        questionRepository.findAll().forEach(questionList::add);
-        return questionList;
+        return questionRepository.findAll();
     }
 
     public Question verifyQuestion(Long id, User sessionedUser) {
