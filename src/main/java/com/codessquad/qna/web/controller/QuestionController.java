@@ -7,6 +7,7 @@ import com.codessquad.qna.web.domain.User;
 import com.codessquad.qna.web.exception.NotLoginException;
 import com.codessquad.qna.web.service.QuestionService;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -39,7 +40,7 @@ public class QuestionController {
     }
 
     @GetMapping
-    public String getQuestions(@PageableDefault(size = 15) Pageable pageable, Model model) {
+    public String getQuestions(@PageableDefault(size = 15, sort = "createdDateTime", direction = Sort.Direction.DESC) Pageable pageable, Model model) {
         QuestionPage questionPages = questionService.getQuestionPage(pageable);
         model.addAttribute("pages",  questionPages);
         return "/index";
