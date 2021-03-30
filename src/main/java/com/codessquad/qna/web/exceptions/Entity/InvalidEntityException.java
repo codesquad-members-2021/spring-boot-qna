@@ -1,4 +1,4 @@
-package com.codessquad.qna.web.exceptions;
+package com.codessquad.qna.web.exceptions.Entity;
 
 public class InvalidEntityException extends RuntimeException {
     public static final String EMPTY_FIELD_IN_USER_ENTITY = "비어있는 항목이 있어서 회원가입에 실패했습니다";

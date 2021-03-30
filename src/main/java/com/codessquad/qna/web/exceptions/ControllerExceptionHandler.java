@@ -1,5 +1,6 @@
 package com.codessquad.qna.web.exceptions;
 
+import com.codessquad.qna.web.exceptions.Entity.InvalidEntityException;
 import com.codessquad.qna.web.exceptions.answers.AnswerNotFoundException;
 import com.codessquad.qna.web.exceptions.auth.LoginFailedException;
 import com.codessquad.qna.web.exceptions.auth.UnauthorizedAccessException;
