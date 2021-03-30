@@ -27,18 +27,6 @@ public class Question extends AbstractEntity {
     @OrderBy("id DESC")
     private List<Answer> answers;
 
-    public boolean matchWriter(User writer) {
-        return this.writer.matchId(writer.getId());
-    }
-
-    public boolean matchWriterOfAnswerList() {
-        Long writerId = this.writer.getId();
-        long answerCount = getAnswers().stream()
-                .filter(answer -> !answer.getWriter().matchId(writerId))
-                .count();
-        return answerCount == 0;
-    }
-
     public void save(User writer) {
         this.writer = writer;
     }
@@ -48,9 +36,24 @@ public class Question extends AbstractEntity {
         this.contents = question.contents;
     }
 
-    public void delete() {
+    public boolean delete() {
+        if (matchWriterOfAnswerList()) {
+            return false;
+        }
         this.deleted = true;
         this.answers.forEach(Answer::delete);
+        return true;
+    }
+
+    public boolean matchWriter(User writer) {
+        return this.writer.matchId(writer.getId());
+    }
+
+    public boolean matchWriterOfAnswerList() {
+        long answerCount = getAnswers().stream()
+                .filter(answer -> !answer.matchWriter(this.writer))
+                .count();
+        return answerCount == 0;
     }
 
     public User getWriter() {

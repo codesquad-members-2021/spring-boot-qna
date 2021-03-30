@@ -23,14 +23,6 @@ public class Answer extends AbstractEntity {
     @JoinColumn(foreignKey = @ForeignKey(name = "fk_answer_to_question"), nullable = false)
     private Question question;
 
-    public boolean matchWriter(User loginUser) {
-        return this.writer.matchId(loginUser.getId());
-    }
-
-    public Long getQuestionId() {
-        return this.question.getId();
-    }
-
     public void save(User writer, Question question) {
         this.writer = writer;
         this.question = question;
@@ -42,6 +34,14 @@ public class Answer extends AbstractEntity {
 
     public void delete() {
         this.deleted = true;
+    }
+
+    public boolean matchWriter(User loginUser) {
+        return this.writer.matchId(loginUser.getId());
+    }
+
+    public Long getQuestionId() {
+        return this.question.getId();
     }
 
     public User getWriter() {

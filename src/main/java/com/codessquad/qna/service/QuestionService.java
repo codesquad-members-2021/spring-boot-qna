@@ -32,8 +32,8 @@ public class QuestionService {
 
     public boolean delete(Long id, User sessionUser) {
         Question targetQuestion = verifyQuestion(id, sessionUser);
-        if (targetQuestion.matchWriterOfAnswerList()) {
-            targetQuestion.delete();
+        boolean result = targetQuestion.delete();
+        if (result) {
             this.questionRepository.save(targetQuestion);
             return true;
         }
@@ -54,8 +54,7 @@ public class QuestionService {
 
     public Question findById(Long id) {
         return this.questionRepository.findByIdAndDeletedFalse(id).orElseThrow(() ->
-                new EntityNotFoundException(ErrorMessage.QUESTION_NOT_FOUND)
-        );
+                new EntityNotFoundException(ErrorMessage.QUESTION_NOT_FOUND));
     }
 
 }

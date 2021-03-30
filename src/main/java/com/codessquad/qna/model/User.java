@@ -21,18 +21,18 @@ public class User extends AbstractEntity {
     @Column(nullable = false)
     private String email;
 
+    public void update(User user) {
+        this.password = user.password;
+        this.name = user.name;
+        this.email = user.email;
+    }
+
     public boolean matchId(Long id) {
         return this.getId().equals(id);
     }
 
     public boolean matchPassword(String password) {
         return this.password.equals(password);
-    }
-
-    public void update(User user) {
-        this.password = user.password;
-        this.name = user.name;
-        this.email = user.email;
     }
 
     public String getUserId() {
