@@ -12,4 +12,6 @@ public interface QuestionRepository extends PagingAndSortingRepository<Question,
     List<Question> findAllByDeleted(boolean deleted, Pageable pageable);
 
     Optional<Question> findByIdAndDeletedFalse(Long id);
+
+    Long countAllByDeletedFalse();
 }
