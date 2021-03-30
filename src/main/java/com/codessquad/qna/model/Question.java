@@ -37,7 +37,7 @@ public class Question extends AbstractEntity {
     }
 
     public boolean delete() {
-        if (matchWriterOfAnswerList()) {
+        if (countMismatchAnswers() != 0) {
             return false;
         }
         this.deleted = true;
@@ -49,11 +49,10 @@ public class Question extends AbstractEntity {
         return this.writer.matchId(writer.getId());
     }
 
-    public boolean matchWriterOfAnswerList() {
-        long answerCount = getAnswers().stream()
+    public int countMismatchAnswers() {
+        return (int )getAnswers().stream()
                 .filter(answer -> !answer.matchWriter(this.writer))
                 .count();
-        return answerCount == 0;
     }
 
     public User getWriter() {
