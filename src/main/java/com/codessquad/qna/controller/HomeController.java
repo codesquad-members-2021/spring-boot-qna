@@ -1,7 +1,6 @@
 package com.codessquad.qna.controller;
 
 import com.codessquad.qna.service.QuestionService;
-import com.codessquad.qna.util.HttpSessionUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;

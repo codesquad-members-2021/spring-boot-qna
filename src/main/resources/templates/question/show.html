@@ -52,7 +52,7 @@
 
                 <div class="qna-comment">
                     <div class="qna-comment-slipp">
-                        <p class="qna-comment-count"><strong>0</strong>개의 의견</p>
+                        <p class="qna-comment-count"><strong>{{countOfAnswers}}</strong>개의 의견</p>
                         <div class="qna-comment-slipp-articles">
                             {{#answers}}
                             <article class="article" id="answer-1405">
@@ -75,20 +75,17 @@
                                     <ul class="article-util-list">
                                         <li>
                                             <a class="link-modify-article"
-                                               href="/questions/413/answers/1405/form">수정</a>
+                                               href="/api/questions/{{questionId}}/answers/{{answerId}}">수정</a>
                                         </li>
                                         <li>
-                                            <form class="delete-answer-form" action="/questions/{{questionId}}/answers/{{answerId}}"
-                                                  method="POST">
-                                                <input type="hidden" name="_method" value="DELETE">
-                                                <button type="submit" class="delete-answer-button">삭제</button>
-                                            </form>
+                                            <a class="link-delete-answer"
+                                               href="/api/questions/{{questionId}}/answers/{{answerId}}">삭제</a>
                                         </li>
                                     </ul>
                                 </div>
                             </article>
                             {{/answers}}
-                            <form class="submit-write" method="post" action="/questions/{{questionId}}/answers">
+                            <form class="answer-write" method="post" action="/api/questions/{{questionId}}/answers">
                                 <div class="form-group" style="padding:14px;">
                                     <textarea class="form-control" placeholder="Update your status"
                                               name="contents"></textarea>
@@ -105,35 +102,32 @@
     </div>
 </div>
 
-<!--<script type="text/template" id="answerTemplate">-->
-<!--    <article class="article">-->
-<!--        <div class="article-header">-->
-<!--            <div class="article-header-thumb">-->
-<!--                <img src="https://graph.facebook.com/v2.3/1324855987/picture" class="article-author-thumb" alt="">-->
-<!--            </div>-->
-<!--            <div class="article-header-text">-->
-<!--                <a href="#" class="article-author-name">{0}</a>-->
-<!--                <div class="article-header-time">{1}</div>-->
-<!--            </div>-->
-<!--        </div>-->
-<!--        <div class="article-doc comment-doc">-->
-<!--            {2}-->
-<!--        </div>-->
-<!--        <div class="article-util">-->
-<!--            <ul class="article-util-list">-->
-<!--                <li>-->
-<!--                    <a class="link-modify-article" href="/api/qna/updateAnswer/{3}">수정</a>-->
-<!--                </li>-->
-<!--                <li>-->
-<!--                    <form class="delete-answer-form" action="/api/questions/{3}/answers/{4}" method="POST">-->
-<!--                        <input type="hidden" name="_method" value="DELETE">-->
-<!--                        <button type="submit" class="delete-answer-button">삭제</button>-->
-<!--                    </form>-->
-<!--                </li>-->
-<!--            </ul>-->
-<!--        </div>-->
-<!--    </article>-->
-<!--</script>-->
+<script type="text/template" id="answerTemplate">
+    <article class="article">
+        <div class="article-header">
+            <div class="article-header-thumb">
+                <img src="https://graph.facebook.com/v2.3/1324855987/picture" class="article-author-thumb" alt="">
+            </div>
+            <div class="article-header-text">
+                <a href="#" class="article-author-name">{0}</a>
+                <div class="article-header-time">{1}</div>
+            </div>
+        </div>
+        <div class="article-doc comment-doc">
+            {2}
+        </div>
+        <div class="article-util">
+            <ul class="article-util-list">
+                <li>
+                    <a class="link-modify-article" href="/api/questions/{3}/answers/{4}">수정</a>
+                </li>
+                <li>
+                    <a class="link-delete-answer" href="/api/questions/{3}/answers/{4}">삭제</a>
+                </li>
+            </ul>
+        </div>
+    </article>
+</script>
 
 {{> common/script-references}}
 </body>

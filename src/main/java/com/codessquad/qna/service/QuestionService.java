@@ -5,8 +5,6 @@ import com.codessquad.qna.domain.User;
 import com.codessquad.qna.exception.NotFoundException;
 import com.codessquad.qna.repository.AnswerRepository;
 import com.codessquad.qna.repository.QuestionRepository;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -16,7 +14,6 @@ import static com.codessquad.qna.util.HttpSessionUtils.checkAccessibleSessionUse
 
 @Service
 public class QuestionService {
-    private final Logger logger = LoggerFactory.getLogger(QuestionService.class);
     private final QuestionRepository questionRepository;
 
     @Autowired
@@ -24,9 +21,9 @@ public class QuestionService {
         this.questionRepository = questionRepository;
     }
 
-    public void addQuestion(Question newQuestion, User user) {
+    public Question addQuestion(Question newQuestion, User user) {
         newQuestion.setWriter(user);
-        questionRepository.save(newQuestion);
+        return questionRepository.save(newQuestion);
     }
 
     public List<Question> getAllQuestions() {
@@ -34,23 +31,21 @@ public class QuestionService {
     }
 
     public Question getOneById(Long id) {
-        return questionRepository.findByQuestionIdAndDeletedFalse(id)
+        return questionRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("존재하지 않는 질문입니다."));
     }
 
-    public void updateInfo(Question targetQuestion, Question newQuestionInfo, User sessionUser) {
-
+    public Question update(Question targetQuestion, Question newQuestionInfo, User sessionUser) {
         checkAccessibleSessionUser(sessionUser, targetQuestion);
 
         targetQuestion.updateQuestionInfo(newQuestionInfo);
-        questionRepository.save(targetQuestion);
+        return questionRepository.save(targetQuestion);
     }
 
-    public void remove(User sessionUser, Question question) {
-
+    public Question remove(User sessionUser, Question question) {
         checkAccessibleSessionUser(sessionUser, question);
 
         question.deleted();
-        questionRepository.save(question);
+        return questionRepository.save(question);
     }
 }

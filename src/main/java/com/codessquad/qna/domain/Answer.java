@@ -1,12 +1,12 @@
 package com.codessquad.qna.domain;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import javax.persistence.*;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.Objects;
 
 @Entity
-public class Answer {
+public class Answer extends AbstractEntity{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -18,12 +18,11 @@ public class Answer {
 
     @ManyToOne
     @JoinColumn(foreignKey = @ForeignKey(name = "fk_answer_to_question"))
+    @JsonManagedReference
     private Question question;
 
     @Lob
     private String contents;
-
-    private LocalDateTime createdDate;
 
     @Column(columnDefinition = "boolean default false")
     private boolean deleted;
@@ -35,7 +34,6 @@ public class Answer {
         this.question = question;
         this.writer = loginUser;
         this.contents = contents;
-        createdDate = LocalDateTime.now();
         deleted = false;
     }
 
@@ -55,13 +53,6 @@ public class Answer {
         return contents;
     }
 
-    public String getFormattedCreatedDate(){
-        if (createdDate == null){
-            return "";
-        }
-        return createdDate.format(DateTimeFormatter.ofPattern("yyyy.MM.dd HH:mm"));
-    }
-
     public boolean isDeleted() {
         return deleted;
     }
@@ -73,6 +64,10 @@ public class Answer {
 
     public boolean isEqualWriter(User sessionUser) {
         return writer.equals(sessionUser);
+    }
+
+    public void updateQuestionInfo(Answer newAnswerInfo) {
+        this.contents = newAnswerInfo.getContents();
     }
 
     @Override
@@ -95,7 +90,6 @@ public class Answer {
                 ", writer=" + writer +
                 ", question=" + question +
                 ", contents='" + contents + '\'' +
-                ", createdDate=" + createdDate +
                 ", deleted=" + deleted +
                 '}';
     }

@@ -1,10 +1,12 @@
 package com.codessquad.qna.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import java.util.Objects;
 
 @Entity
-public class User {
+public class User extends AbstractEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -13,6 +15,7 @@ public class User {
     @Column(nullable = false, length = 20)
     private String userId;
 
+    @JsonIgnore
     private String password;
 
     private String name;

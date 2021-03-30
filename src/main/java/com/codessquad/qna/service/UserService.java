@@ -6,17 +6,13 @@ import com.codessquad.qna.exception.LoginFailedException;
 import com.codessquad.qna.exception.NotFoundException;
 import com.codessquad.qna.exception.UnauthorizedAccessException;
 import com.codessquad.qna.repository.UserRepository;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class UserService {
-    private final Logger logger = LoggerFactory.getLogger(UserService.class);
     private final UserRepository userRepository;
 
     @Autowired
@@ -24,15 +20,18 @@ public class UserService {
         this.userRepository = userRepository;
     }
 
-    public void join(User newUser) {
+    public User join(User newUser) {
         if (isRedundantUser(newUser)) {
             throw new JoinFailedException("이미 존재하는 회원입니다.");
         }
 
         User savedUser = userRepository.save(newUser);
+
         if (!savedUser.equals(newUser)) {
             throw new JoinFailedException();
         }
+
+        return savedUser;
     }
 
     public User authenticateUser(String userId, String password) {
@@ -46,17 +45,13 @@ public class UserService {
         return user;
     }
 
-    public void updateInfo(User presentUser, User referenceUser, String newPassword) {
+    public User updateInfo(User presentUser, User referenceUser, String newPassword) {
         if (!referenceUser.isEqualPassword(referenceUser.getPassword())) {
             throw new UnauthorizedAccessException("비밀번호가 일치하지 않습니다.");
         }
 
         presentUser.updateUserInfo(referenceUser, newPassword);
-        userRepository.save(presentUser);
-    }
-
-    public Optional<User> getOneByUserId(String userId) {
-        return userRepository.findByUserId(userId);
+        return userRepository.save(presentUser);
     }
 
     public List<User> getAllUsers() {

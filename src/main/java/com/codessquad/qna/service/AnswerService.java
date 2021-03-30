@@ -11,7 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpSession;
-import java.util.List;
 
 import static com.codessquad.qna.util.HttpSessionUtils.checkAccessibleSessionUser;
 
@@ -27,28 +26,33 @@ public class AnswerService {
     }
 
     public Answer getOneById(long answerId) {
-        return answerRepository.findByAnswerIdAndDeletedFalse(answerId)
+        return answerRepository.findById(answerId)
                 .orElseThrow(() -> new NotFoundException("존재하지 않는 답변입니다."));
     }
 
-    public void create(Long id, String contents, HttpSession session) {
+    public Answer create(Long id, String contents, HttpSession session) {
         User loginUser = HttpSessionUtils.getUserFromSession(session);
 
-        Question question = questionRepository.findByQuestionIdAndDeletedFalse(id)
+        Question question = questionRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("존재하지 않는 질문입니다."));
 
-        answerRepository.save(new Answer(question, contents, loginUser));
+        question.increaseCountOfAnswers();
+
+        return answerRepository.save(new Answer(question, contents, loginUser));
     }
 
-    public void remove(User sessionUser, Answer answer) {
+    public Answer update(Answer targetAnswer, Answer newAnswerInfo, User sessionUser) {
+        checkAccessibleSessionUser(sessionUser, targetAnswer);
 
+        targetAnswer.updateQuestionInfo(newAnswerInfo);
+        return answerRepository.save(newAnswerInfo);
+    }
+
+    public Answer remove(User sessionUser, Answer answer) {
         checkAccessibleSessionUser(sessionUser, answer);
 
-        answer.deleted();
-        answerRepository.save(answer);
-    }
+        answer.getQuestion().deleteAnswer(answer);
 
-    public List<Answer> findAll() {
-        return answerRepository.findAllByAndDeletedFalse();
+        return answerRepository.save(answer);
     }
 }

@@ -12,15 +12,9 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 @ControllerAdvice
 public class GlobalControllerExceptionHandler {
 
-    @ExceptionHandler(LoginFailedException.class)
-    public String handleLoginFailed(LoginFailedException loginFailedException, Model model){
-        model.addAttribute("errorMessage", loginFailedException.getMessage());
-        return "user/login";
-    }
-
-    @ExceptionHandler(NotLoggedInException.class)
-    public String handleNotLoggedIn(NotLoggedInException notLoggedInException, Model model) {
-        model.addAttribute("errorMessage", notLoggedInException.getMessage());
+    @ExceptionHandler({LoginFailedException.class, NotLoggedInException.class})
+    public String handleLogin(RuntimeException runtimeException, Model model) {
+        model.addAttribute("errorMessage", runtimeException.getMessage());
         return "user/login";
     }
 

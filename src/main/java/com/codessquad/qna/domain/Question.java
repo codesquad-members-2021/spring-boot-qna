@@ -1,14 +1,13 @@
 package com.codessquad.qna.domain;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 @Entity
-public class Question {
+public class Question extends AbstractEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -23,18 +22,18 @@ public class Question {
     @Lob
     private String contents;
 
-    private LocalDateTime createdDate;
-
     @Column(columnDefinition = "boolean default false")
     private boolean deleted;
 
     @OneToMany(mappedBy = "question")
-    @OrderBy("id ASC")
     @Where(clause = "deleted=false")
+    @OrderBy("answerId DESC")
+    @JsonBackReference
     private List<Answer> answers;
 
+    private Integer countOfAnswers = 0;
+
     public Question() {
-        this.createdDate = LocalDateTime.now();
     }
 
     public Long getQuestionId() {
@@ -77,13 +76,6 @@ public class Question {
         this.answers = answers;
     }
 
-    public String getFormattedCreatedDate() {
-        if (createdDate == null) {
-            return "";
-        }
-        return createdDate.format(DateTimeFormatter.ofPattern("yyyy.MM.dd HH:mm"));
-    }
-
     public boolean isEmpty() {
         if ("".equals(this.title) || this.title == null) {
             return true;
@@ -116,6 +108,19 @@ public class Question {
 
     public boolean isEqualWriter(User sessionUser) {
         return writer.equals(sessionUser);
+    }
+
+    public void increaseCountOfAnswers() {
+        countOfAnswers += 1;
+    }
+
+    public void deleteAnswer(Answer answer) {
+        countOfAnswers -= 1;
+        answer.deleted();
+    }
+
+    public Integer getCountOfAnswers() {
+        return countOfAnswers;
     }
 
     @Override
