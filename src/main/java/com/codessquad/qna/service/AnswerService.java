@@ -38,7 +38,7 @@ public class AnswerService {
         answerRepository.save(answer);
     }
 
-    public void removeAnswer(Long questionId, Long answerId, HttpSession session) {
+    public void removeAnswer(Long answerId, HttpSession session) {
         Answer answer = answerRepository.findById(answerId).orElseThrow(() -> new NotFoundException(NOT_FOUNDED_ANSWER));
 
         if (!isValidUser(session, answer.getWriter())) {
