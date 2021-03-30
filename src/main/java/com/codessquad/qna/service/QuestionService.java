@@ -1,7 +1,7 @@
 package com.codessquad.qna.service;
 
 import com.codessquad.qna.exception.EntityNotFoundException;
-import com.codessquad.qna.exception.InvalidSessionException;
+import com.codessquad.qna.exception.IllegalUserAccessException;
 import com.codessquad.qna.model.Question;
 import com.codessquad.qna.model.User;
 import com.codessquad.qna.repository.QuestionRepository;
@@ -44,7 +44,7 @@ public class QuestionService {
     public Question verifyQuestion(Long id, User sessionedUser) {
         Question question = findById(id);
         if (!question.matchWriter(sessionedUser)) {
-            throw new InvalidSessionException();
+            throw new IllegalUserAccessException();
         }
         return question;
     }
