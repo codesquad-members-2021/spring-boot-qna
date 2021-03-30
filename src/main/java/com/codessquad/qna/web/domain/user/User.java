@@ -27,7 +27,7 @@ public class User {
     @Column(nullable = false)
     private String email;
 
-    @OneToMany(mappedBy = "writer", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Answer> answers = new ArrayList<>();
 
     public User(String userId, String password, String name, String email) {
@@ -67,9 +67,6 @@ public class User {
 
     public void addAnswer(Answer answer) {
         answers.add(answer);
-        if (answer.getWriter() != this) {
-            answer.setWriter(this);
-        }
     }
 
     public boolean isMatchingPassword(String password) {
@@ -110,31 +107,27 @@ public class User {
                 '}';
     }
 
+    public static Builder build() {
+        return new Builder();
+    }
+
+    public static Builder build(String userId, String password) {
+        return new Builder(userId, password);
+    }
+
+
     static public class Builder {
         private String userId;
         private String password;
-        private String name;
-        private String email;
+        private String name = "unknown";
+        private String email = "unknown";
 
-        public Builder() {
-
+        private Builder(){
         }
 
-        public Builder(User user) {
-            this.userId = user.userId;
-            this.password = user.password;
-            this.name = user.name;
-            this.email = user.email;
-        }
-
-        public Builder userId(String userId) {
+        private Builder(String userId, String password) {
             this.userId = userId;
-            return this;
-        }
-
-        public Builder password(String password) {
             this.password = password;
-            return this;
         }
 
         public Builder name(String name) {

@@ -2,6 +2,8 @@ package com.codessquad.qna.web.domain.question;
 
 import com.codessquad.qna.web.domain.answer.Answer;
 import com.codessquad.qna.web.domain.user.User;
+import com.codessquad.qna.web.dto.question.QuestionRequest;
+import com.codessquad.qna.web.utils.DateTimeUtils;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -11,7 +13,6 @@ import java.util.List;
 
 @Entity
 public class Question {
-    private static final DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -27,9 +28,11 @@ public class Question {
     @Column(nullable = false)
     private String contents;
 
+    private boolean isActive = true;
+
     private LocalDateTime createdAt;
 
-    @OneToMany(mappedBy = "question", cascade = CascadeType.ALL)
+    @OneToMany(cascade = CascadeType.ALL)
     private List<Answer> answers = new ArrayList<>();
 
     public Question(User writer, String title, String contents) {
@@ -60,7 +63,7 @@ public class Question {
     }
 
     public String getCreatedAt() {
-        return createdAt.format(DATE_TIME_FORMATTER);
+        return DateTimeUtils.stringOf(createdAt);
     }
 
     public List<Answer> getAnswers() {
@@ -69,14 +72,11 @@ public class Question {
 
     public void addAnswer(Answer answer) {
         answers.add(answer);
-        if (answer.getQuestion() != this) {
-            answer.setQuestion(this);
-        }
     }
 
-    public void update(String title, String contents) {
-        this.title = title;
-        this.contents = contents;
+    public void update(QuestionRequest request) {
+        this.title = request.getTitle();
+        this.contents = request.getContents();
     }
 
     public boolean isMatchingWriter(User user) {
@@ -94,26 +94,33 @@ public class Question {
                 '}';
     }
 
+    public static Builder build() {
+        return new Builder();
+    }
+
+    public static Builder build(User writer) {
+        return new Builder(writer);
+    }
+
 
     static public class Builder {
         private User writer;
-        private String title;
-        private String contents;
+        private String title = "";
+        private String contents = "";
 
-        public Builder() {
-
+        private Builder() {
         }
 
-        public Builder(Question question) {
+        private Builder(User writer) {
+            this.writer = writer;
+        }
+
+        private Builder(Question question) {
             this.writer = question.writer;
             this.title = question.title;
             this.contents = question.contents;
         }
 
-        public Builder writer(User writer){
-            this.writer = writer;
-            return this;
-        }
         public Builder title(String title){
             this.title = title;
             return this;

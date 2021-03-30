@@ -19,7 +19,7 @@ public class GlobalControllerExceptionHandler {
         return mav;
     }
 
-    @ExceptionHandler(CRUDAuthenticationException.class)
+    @ExceptionHandler(CrudNotAllowedException.class)
     public ModelAndView handleCRUDAuthenticationException(Exception e) {
         ModelAndView mav = new ModelAndView("error/authenticationError");
         mav.addObject("errorMessage", e.getMessage());

@@ -3,16 +3,18 @@ package com.codessquad.qna.web.service;
 import com.codessquad.qna.web.domain.user.User;
 import com.codessquad.qna.web.domain.user.UserRepository;
 import com.codessquad.qna.web.dto.user.CreateUserRequest;
-import com.codessquad.qna.web.exception.CRUDAuthenticationException;
+import com.codessquad.qna.web.exception.CrudNotAllowedException;
 import com.codessquad.qna.web.exception.EntityNotFoundException;
 import com.codessquad.qna.web.exception.FailedLoginException;
 import com.codessquad.qna.web.utils.SessionUtils;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.http.HttpSession;
 import java.util.List;
 
 @Service
+@Transactional(readOnly = true)
 public class UserService {
 
     private final UserRepository userRepository;
@@ -22,7 +24,6 @@ public class UserService {
     }
 
     public User login(String userId, String password, HttpSession session) {
-
         if(SessionUtils.isLoginUser(session)){
             return SessionUtils.getLoginUser(session);
         }
@@ -36,26 +37,27 @@ public class UserService {
         return user;
     }
 
+    @Transactional
     public void create(CreateUserRequest request){
         userRepository.save(request.toEntity());
     }
 
-    public List<User> list(){
+    public List<User> findAllUser(){
         return userRepository.findAll();
     }
 
-    public User verifiedUser(long id, HttpSession session){
+    public User verifiedUser(long id, User loginUser){
         User user = findUserById(id);
-        User loginUser = SessionUtils.getLoginUser(session);
 
         if (!loginUser.isMatchingWriter(user)) {
-            throw new CRUDAuthenticationException("You don't have auth");
+            throw new CrudNotAllowedException("You don't have auth");
         }
         return user;
     }
 
-    public User updateProfile(long id, User updatedUser, String oldPassword, HttpSession session){
-        User user = verifiedUser(id, session);
+    @Transactional
+    public User updateProfile(long id, String oldPassword, User updatedUser, User loginUser){
+        User user = verifiedUser(id, loginUser);
         if (user.isMatchingPassword(oldPassword)) {
             user.update(updatedUser);
             userRepository.save(user);
@@ -63,10 +65,9 @@ public class UserService {
         return user;
     }
 
-    public User findUserById(Long id) {
+    public User findUserById(long id) {
         return userRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("No user with id number " + id));
     }
-
 }
 
 

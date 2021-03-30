@@ -5,11 +5,8 @@ import com.codessquad.qna.web.domain.user.User;
 public class CreateUserRequest {
 
     private String userId;
-
     private String password;
-
     private String name;
-
     private String email;
 
     protected CreateUserRequest() {
@@ -23,9 +20,7 @@ public class CreateUserRequest {
     }
 
     public User toEntity(){
-        return new User.Builder()
-                .userId(userId)
-                .password(password)
+        return User.build(userId, password)
                 .name(name)
                 .email(email)
                 .build();

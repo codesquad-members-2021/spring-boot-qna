@@ -1,7 +1,9 @@
 package com.codessquad.qna.web.controller;
 
 import com.codessquad.qna.web.domain.question.Question;
+import com.codessquad.qna.web.domain.user.User;
 import com.codessquad.qna.web.dto.question.QuestionRequest;
+import com.codessquad.qna.web.exception.CrudNotAllowedException;
 import com.codessquad.qna.web.service.QuestionService;
 import com.codessquad.qna.web.utils.SessionUtils;
 import org.springframework.stereotype.Controller;
@@ -20,43 +22,48 @@ public class QuestionController {
         this.questionService = questionService;
     }
 
-    @PostMapping()
+    @PostMapping
     public String create(HttpSession session, QuestionRequest request) {
-        questionService.create(session, request);
+        User loginUser = SessionUtils.getLoginUser(session);
+        questionService.create(loginUser, request);
         return "redirect:/";
     }
 
-    @PutMapping("/{id}")
-    public String update(@PathVariable long id, HttpSession session, QuestionRequest request) {
-        questionService.update(id, session, request);
-        return "redirect:/questions/" + id;
+    @PutMapping("/{questionId}")
+    public String update(@PathVariable long questionId, HttpSession session, QuestionRequest request) {
+        User loginUser = SessionUtils.getLoginUser(session);
+        questionService.update(questionId, loginUser, request);
+        return "redirect:/questions/" + questionId;
     }
 
     @GetMapping("/form")
-    public String questionForm(HttpSession session) {
+    public String getForm(HttpSession session) {
         if (!SessionUtils.isLoginUser(session)) {
             return "/users/login-form";
         }
         return "qna/form";
     }
 
-    @GetMapping("/{id}/form")
-    public String updateForm(@PathVariable long id, HttpSession session, Model model) {
-        Question question = questionService.authenticate(id, session);
+    @GetMapping("/{questionId}/form")
+    public String getUpdateForm(@PathVariable long questionId, HttpSession session, Model model) {
+        User loginUser = SessionUtils.getLoginUser(session);
+
+        Question question = questionService.verifiedQuestion(questionId, loginUser);
         model.addAttribute("question", question);
         return "qna/updateForm";
     }
 
-    @DeleteMapping("/{id}")
-    public String delete(@PathVariable long id, HttpSession session) {
-        questionService.delete(id, session);
+    @DeleteMapping("/{questionId}")
+    public String delete(@PathVariable long questionId, HttpSession session) {
+        User loginUser = SessionUtils.getLoginUser(session);
+        questionService.delete(questionId, loginUser);
         return "redirect:/";
     }
 
-    @GetMapping("/{id}")
-    public String show(@PathVariable long id, Model model) {
-        model.addAttribute("question", questionService.getQuestionById(id));
-        model.addAttribute("answers", questionService.list(id));
+    @GetMapping("/{questionId}")
+    public String show(@PathVariable long questionId, Model model) {
+        model.addAttribute("question", questionService.getQuestionById(questionId));
+        model.addAttribute("answers", questionService.findAllAnswer(questionId));
         return "/qna/show";
     }
 }
