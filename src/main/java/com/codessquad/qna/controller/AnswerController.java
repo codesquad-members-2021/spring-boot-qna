@@ -27,15 +27,12 @@ public class AnswerController {
     @GetMapping("/{answerId}/updateForm")
     public String answerUpdatePage(@PathVariable Long answerId, Model model, HttpSession session) {
         model.addAttribute("answers", answerService.getAnswer(answerId, getUserFromSession(session)));
-        model.addAttribute("question", answerService.getQuestionFromAnswer(answerId));
         return "qna/answerUpdateForm";
     }
 
     @PutMapping("/{answerId}/updateForm")
-    public String updateAnswer(@PathVariable Long answerId, Answer updatedAnswer, Model model, HttpSession session) {
-        answerService.update(answerId, updatedAnswer);
-        model.addAttribute("answers", updatedAnswer);
-        model.addAttribute("question", answerService.getQuestionFromAnswer(answerId));
-        return "qna/questionDetail";
+    public String updateAnswer(@PathVariable Long questionId, @PathVariable Long answerId, Answer updatedAnswer, HttpSession session) {
+        answerService.update(answerId, updatedAnswer, getUserFromSession(session));
+        return "redirect:/questions/" + questionId;
     }
 }
