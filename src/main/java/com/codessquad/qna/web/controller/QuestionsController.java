@@ -31,8 +31,9 @@ public class QuestionsController {
     }
 
     @GetMapping
-    public String questionList(Model model) {
-        model.addAttribute("questions", questionService.questions());
+    public String questionList(@RequestParam(defaultValue = "0") int pageNumber, Model model) {
+        model.addAttribute("questions", questionService.questions(pageNumber));
+        model.addAttribute("pageList", questionService.pageList(pageNumber));
         return "index";
     }
 

@@ -26,11 +26,9 @@
         <div class="col-md-6 text-center">
             <ul class="pagination center-block" style="display:inline-block;">
                 <li><a href="javascript:;">«</a></li>
-                <li><a href="javascript:;">1</a></li>
-                <li><a href="javascript:;">2</a></li>
-                <li><a href="javascript:;">3</a></li>
-                <li><a href="javascript:;">4</a></li>
-                <li><a href="javascript:;">5</a></li>
+                {{#each pageList}}
+                <li><a href="/questions?pageNumber={{this}}">{{this}}</a></li>
+                {{/each}}
                 <li><a href="javascript:;">»</a></li>
             </ul>
         </div>
