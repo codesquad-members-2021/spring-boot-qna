@@ -1,6 +1,9 @@
 package com.codessquad.qna.domain;
 
+import com.codessquad.qna.utils.SessionUtil;
+
 import javax.persistence.*;
+import javax.servlet.http.HttpSession;
 import java.util.Objects;
 
 @Entity
@@ -90,4 +93,7 @@ public class User {
         return this.password.equals(password);
     }
 
+    public boolean isSessionSameAsUser(HttpSession session) {
+        return this.equals(SessionUtil.getLoginUser(session));
+    }
 }

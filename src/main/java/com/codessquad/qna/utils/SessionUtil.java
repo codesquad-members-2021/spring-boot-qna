@@ -13,9 +13,9 @@ public class SessionUtil {
     private SessionUtil() {
     }
 
-    public static boolean isValidUser(HttpSession session, User ownerUser) {
-        return ownerUser.equals(session.getAttribute(SESSION_KEY_LOGIN_USER));
-    }
+    //public static boolean isValidUser(HttpSession session, User ownerUser) {
+    //    return ownerUser.equals(session.getAttribute(SESSION_KEY_LOGIN_USER));
+    //}
 
     public static boolean isLoginUser(HttpSession session) {
         return session.getAttribute(SESSION_KEY_LOGIN_USER) != null;

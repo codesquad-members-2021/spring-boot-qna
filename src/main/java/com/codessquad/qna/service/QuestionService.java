@@ -14,7 +14,6 @@ import javax.servlet.http.HttpSession;
 import java.util.List;
 
 import static com.codessquad.qna.exception.ExceptionMessages.*;
-import static com.codessquad.qna.utils.SessionUtil.isValidUser;
 
 @Service
 public class QuestionService {
@@ -53,7 +52,7 @@ public class QuestionService {
     public void deleteQuestion(Long questionId, HttpSession session) {
         Question question = questionRepostory.findById(questionId).orElseThrow(() -> new NotFoundException(NOT_FOUNDED_QUESTION));
 
-        if (!isValidUser(session, question.getWriter())) {
+        if (!question.getWriter().isSessionSameAsUser(session)) {
             logger.info(UNAUTHORIZED_FAILED_QUESTION);
             throw new UnauthorizedException(UNAUTHORIZED_FAILED_QUESTION);
         }
@@ -69,7 +68,7 @@ public class QuestionService {
 
     public void updateForm(Long id, Model model, HttpSession session) {
         Question question = questionRepostory.findById(id).orElseThrow(() -> new NotFoundException(NOT_FOUNDED_QUESTION));
-        if (!isValidUser(session, question.getWriter())) {
+        if (!question.getWriter().isSessionSameAsUser(session)) {
             logger.info(UNAUTHORIZED_FAILED_QUESTION);
             throw new UnauthorizedException(UNAUTHORIZED_FAILED_QUESTION);
         }

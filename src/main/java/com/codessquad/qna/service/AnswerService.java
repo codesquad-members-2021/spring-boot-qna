@@ -14,7 +14,8 @@ import org.springframework.stereotype.Service;
 import javax.servlet.http.HttpSession;
 
 import static com.codessquad.qna.exception.ExceptionMessages.*;
-import static com.codessquad.qna.utils.SessionUtil.*;
+import static com.codessquad.qna.utils.SessionUtil.getLoginUser;
+import static com.codessquad.qna.utils.SessionUtil.isLoginUser;
 
 @Service
 public class AnswerService {
@@ -41,7 +42,7 @@ public class AnswerService {
     public void removeAnswer(Long answerId, HttpSession session) {
         Answer answer = answerRepository.findById(answerId).orElseThrow(() -> new NotFoundException(NOT_FOUNDED_ANSWER));
 
-        if (!isValidUser(session, answer.getWriter())) {
+        if (!answer.getWriter().isSessionSameAsUser(session)) {
             logger.info(UNAUTHORIZED_FAILED_QUESTION);
             throw new UnauthorizedException(UNAUTHORIZED_FAILED_QUESTION);
         }

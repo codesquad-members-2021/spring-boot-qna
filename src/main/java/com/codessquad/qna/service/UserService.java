@@ -14,7 +14,8 @@ import javax.servlet.http.HttpSession;
 import java.util.List;
 
 import static com.codessquad.qna.exception.ExceptionMessages.*;
-import static com.codessquad.qna.utils.SessionUtil.*;
+import static com.codessquad.qna.utils.SessionUtil.getLoginUser;
+import static com.codessquad.qna.utils.SessionUtil.setLoginUser;
 
 @Service
 public class UserService {
@@ -63,7 +64,7 @@ public class UserService {
 
     public void validationCheck(Long id, HttpSession session) {
         User foundUser = userRepository.findById(id).orElseThrow(() -> new NotFoundException(NOT_FOUNDED_USER));
-        if (!isValidUser(session, foundUser)) {
+        if (!foundUser.isSessionSameAsUser(session)) {
             logger.info(PROFILE_MODIFICATION_FAIL);
             throw new UnauthorizedException(PROFILE_MODIFICATION_FAIL);
         }
