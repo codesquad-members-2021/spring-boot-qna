@@ -13,20 +13,16 @@ public class PageList {
 
     public PageList(long currentPage, long numberOfQuestions) {
         pages = new ArrayList<>();
-
         long lastPage = calculateLastPage(numberOfQuestions);
-
         long startPageOfCurrentBlock = calculateStartPageOfCurrentBlock(currentPage);
         long endPageOfCurrentBlock = calculateEndPageOfCurrentBlock(startPageOfCurrentBlock, lastPage);
-
-        long endPageOfPrevBlock = calculateEndPageOfPrevBlock(startPageOfCurrentBlock);
-        long startPageOfNextBlock = calculateStartPageOfNextBlock(endPageOfCurrentBlock, lastPage);
 
         for (long i = startPageOfCurrentBlock; i <= endPageOfCurrentBlock; i++) {
             pages.add(i);
         }
-        this.endPageOfPrevBlock = endPageOfPrevBlock;
-        this.startPageOfNextBlock = startPageOfNextBlock;
+
+        this.endPageOfPrevBlock = calculateEndPageOfPrevBlock(startPageOfCurrentBlock);
+        this.startPageOfNextBlock = calculateStartPageOfNextBlock(endPageOfCurrentBlock, lastPage);
     }
 
     public boolean hasPrevBlock() {
