@@ -5,8 +5,7 @@ import com.codessquad.qna.domain.answer.Answer;
 import com.codessquad.qna.domain.answer.AnswerRepository;
 import com.codessquad.qna.domain.question.Question;
 import com.codessquad.qna.domain.question.QuestionRepository;
-import com.codessquad.qna.exception.AnotherAnswerException;
-import com.codessquad.qna.exception.NotFoundException;
+import com.codessquad.qna.exception.QuestionNotFoundException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -34,16 +33,15 @@ public class QuestionService {
     @Transactional
     public Long update(Long id, Question questionWithUpdatedInfo) {
         Question question = questionRepository.findById(id)
-                .orElseThrow(() -> new NotFoundException("해당 질문이 없습니다. id = " + id));
+                .orElseThrow(() -> new QuestionNotFoundException(id));
         question.update(questionWithUpdatedInfo);
-
         return id;
     }
 
     @Transactional
     public Question findById(Long id) {
         return questionRepository.findById(id)
-                .orElseThrow(() -> new NotFoundException("해당 질문이 없습니다. id = " + id));
+                .orElseThrow(() -> new QuestionNotFoundException(id));
     }
 
     @Transactional
@@ -54,24 +52,18 @@ public class QuestionService {
     @Transactional
     public void deleteById(Long id) {
         Question question = questionRepository.findById(id)
-                .orElseThrow(() -> new NotFoundException("해당 질문이 없습니다. id = " + id));
+                .orElseThrow(() -> new QuestionNotFoundException(id));
         List<Answer> answers = answerRepository.findAllByQuestionIdAndDeletedIsFalse(id);
-
-        boolean isQuestionAnsweredByOnlyItself = answers.stream()
-                .allMatch(question::isAnsweredYourself);
-        if (!isQuestionAnsweredByOnlyItself) {
-            throw new AnotherAnswerException();
-        }
+        answers.stream().allMatch(question::isAnsweredYourself);
         question.delete();
     }
 
-    public Page<Question> pagingList(Criteria cri) {
-        PageRequest pageRequest = PageRequest.of(cri.getPageNum() - 1, cri.getSize(), Sort.by("id").descending());
-        Page<Question> questions = questionRepository.findAllByDeletedIsFalse(pageRequest);
-        return questions;
+    public Page<Question> pagingList(Criteria criteria) {
+        PageRequest pageRequest = PageRequest.of(criteria.getPageNum() - 1, criteria.getSize(), Sort.by("id").descending());
+        return questionRepository.findAllByDeletedIsFalse(pageRequest);
     }
 
     public int notDeletedSize() {
-        return questionRepository.findAllByDeletedIsFalse().size();
+        return questionRepository.countQuestionByDeletedFalse();
     }
 }

@@ -1,28 +1,27 @@
 package com.codessquad.qna.domain.answer;
 
-import com.codessquad.qna.domain.IdAndBaseTimeEntity;
+import com.codessquad.qna.domain.BaseTimeEntity;
 import com.codessquad.qna.domain.question.Question;
 import com.codessquad.qna.domain.user.User;
-import com.fasterxml.jackson.annotation.JsonProperty;
+import com.codessquad.qna.exception.NotAuthorizationException;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
 
 @Entity
-public class Answer extends IdAndBaseTimeEntity {
+public class Answer extends BaseTimeEntity {
 
     @ManyToOne
     @JoinColumn(foreignKey = @ForeignKey(name = "fk_answer_to_question"))
-    @JsonProperty
     private Question question;
 
     @ManyToOne
     @JoinColumn(foreignKey = @ForeignKey(name = "fk_answer_writer"))
-    @JsonProperty
     private User writer;
 
-    @JsonProperty
     private String contents;
 
+    @JsonIgnore
     private boolean deleted;
 
     public Question getQuestion() {
@@ -58,7 +57,10 @@ public class Answer extends IdAndBaseTimeEntity {
     }
 
     public boolean isWrittenBy(User user) {
-        return writer.equals(user);
+        if (!writer.equals(user)) {
+            throw new NotAuthorizationException();
+        }
+        return true;
     }
 
     public void update(Answer answer) {

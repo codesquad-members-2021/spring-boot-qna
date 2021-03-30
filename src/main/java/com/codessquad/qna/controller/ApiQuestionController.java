@@ -19,7 +19,7 @@ public class ApiQuestionController {
     }
 
     @GetMapping("/")
-    public Page<Question> pagingList(Criteria cri) {
-        return questionService.pagingList(cri);
+    public Page<Question> pagingList(Criteria criteria) {
+        return questionService.pagingList(criteria);
     }
 }

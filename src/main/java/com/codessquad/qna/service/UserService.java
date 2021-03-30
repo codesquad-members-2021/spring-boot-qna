@@ -2,8 +2,7 @@ package com.codessquad.qna.service;
 
 import com.codessquad.qna.domain.user.User;
 import com.codessquad.qna.domain.user.UserRepository;
-import com.codessquad.qna.exception.NotFoundException;
-import com.codessquad.qna.exception.WrongPasswordException;
+import com.codessquad.qna.exception.UserNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -31,7 +30,7 @@ public class UserService {
     @Transactional
     public User findById(Long id) {
         return userRepository.findById(id)
-                .orElseThrow(() -> new NotFoundException("해당 사용자를 찾을 수 없습니다. id = " + id));
+                .orElseThrow(() -> new UserNotFoundException(id));
     }
 
     @Transactional
@@ -42,12 +41,9 @@ public class UserService {
     @Transactional
     public Long update(Long id, User userWithUpdatedInfo) {
         User user = userRepository.findById(id)
-                .orElseThrow(() -> new NotFoundException("해당 사용자를 찾을 수 없습니다. id = " + id));
-        if (!user.isCorrectPassword(userWithUpdatedInfo.getPassword())) {
-            throw new WrongPasswordException();
-        }
+                .orElseThrow(() -> new UserNotFoundException(id));
+        user.isCorrectPassword(userWithUpdatedInfo.getPassword());
         user.update(userWithUpdatedInfo);
-
         return id;
     }
 }

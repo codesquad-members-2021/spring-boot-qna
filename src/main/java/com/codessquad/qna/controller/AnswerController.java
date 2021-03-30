@@ -27,27 +27,17 @@ public class AnswerController {
 
     @PostMapping("/")
     public String createAnswer(@PathVariable Long questionId, Answer answer, HttpSession session) {
-        if (!HttpSessionUtils.isLoginUser(session)) {
-            return "redirect:/users/login";
-        }
         User sessionedUser = HttpSessionUtils.getUserFromSession(session);
-        answer.setWriter(sessionedUser);
-        answerService.create(questionId, answer);
+        answerService.create(questionId, answer, sessionedUser);
         return "redirect:/questions/" + questionId;
     }
 
     @GetMapping("/{id}/form")
     public String getUpdateForm(@PathVariable Long questionId, @PathVariable Long id, Model model, HttpSession session) {
-        if (!HttpSessionUtils.isLoginUser(session)) {
-            return "redirect:/users/login";
-        }
         Question question = questionService.findById(questionId);
         Answer answer = answerService.findById(id);
         User sessionedUser = HttpSessionUtils.getUserFromSession(session);
-        if (!answer.isWrittenBy(sessionedUser)) {
-            throw new NotAuthorizationException("자신이 작성한 답변만 수정할 수 있습니다.");
-        }
-
+        answer.isWrittenBy(sessionedUser);
         model.addAttribute("question", question);
         model.addAttribute("answer", answer);
 
@@ -63,15 +53,8 @@ public class AnswerController {
 
     @DeleteMapping("/{id}")
     public String deleteAnswer(@PathVariable Long questionId, @PathVariable Long id, HttpSession session) {
-        if (!HttpSessionUtils.isLoginUser(session)) {
-            return "redirect:/users/login";
-        }
-        Answer answer = answerService.findById(id);
         User sessionedUser = HttpSessionUtils.getUserFromSession(session);
-        if (!answer.isWrittenBy(sessionedUser)) {
-            throw new NotAuthorizationException("자신이 작성한 답변만 삭제할 수 있습니다.");
-        }
-        answerService.deleteById(id);
+        answerService.deleteById(id, sessionedUser);
 
         return "redirect:/questions/" + questionId;
     }
