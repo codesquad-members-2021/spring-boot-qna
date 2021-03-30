@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpSession;
 
 import static com.codessquad.qna.utils.HttpSessionUtils.getUserFromSession;
+import static com.codessquad.qna.utils.HttpSessionUtils.isLoginUser;
 
 @Controller
 @RequestMapping("/questions")
@@ -20,7 +21,7 @@ public class QuestionController {
 
     @GetMapping("/form")
     public String qnaInputPage(HttpSession session) {
-        getUserFromSession(session);
+        isLoginUser(session);
         return "qna/questionInputForm";
     }
 
