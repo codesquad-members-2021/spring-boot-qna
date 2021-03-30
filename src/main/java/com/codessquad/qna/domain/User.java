@@ -78,6 +78,7 @@ public class User {
         User user = (User) object;
         return Objects.equals(getUserId(), user.getUserId());
     }// 해당 equals 오버라이딩은 id가 동일한지만을 검사함
+    // @Todo 삭제예정
 
     @Override
     public String toString() {
