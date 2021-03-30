@@ -1,6 +1,6 @@
 package com.codessquad.qna.controller;
 
-import com.codessquad.qna.entity.User;
+import com.codessquad.qna.domain.User;
 import com.codessquad.qna.exception.NotAuthorizedException;
 import com.codessquad.qna.exception.NotFoundException;
 import com.codessquad.qna.service.UserService;

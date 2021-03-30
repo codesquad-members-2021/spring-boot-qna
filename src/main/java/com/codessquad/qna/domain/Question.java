@@ -1,19 +1,14 @@
-package com.codessquad.qna.entity;
+package com.codessquad.qna.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 @Entity
-@Table(name = "QUESTION")
-public class Question {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
+public class Question extends BaseEntity {
     @ManyToOne
     @JoinColumn(foreignKey = @ForeignKey(name = "fk_question_writer"))
     private User writer;
@@ -24,12 +19,14 @@ public class Question {
     @Column(nullable = false, length = 3000)
     private String contents;
 
-    @Column(nullable = false)
-    private LocalDateTime writeDateTime;
-
     @OneToMany(mappedBy = "question")
     @Where(clause = "deleted = false")
+    @JsonIgnore
     private List<Answer> answers;
+
+    @JsonProperty
+    @Column(nullable = false, columnDefinition = "int default 0")
+    private Integer countOfAnswer = 0;
 
     @Column(nullable = false, columnDefinition = "boolean default false")
     private boolean deleted;
@@ -41,11 +38,6 @@ public class Question {
         this.writer = writer;
         this.title = title;
         this.contents = contents;
-        this.writeDateTime = LocalDateTime.now();
-    }
-
-    public long getId() {
-        return id;
     }
 
     public User getWriter() {
@@ -60,16 +52,12 @@ public class Question {
         return contents;
     }
 
-    public LocalDateTime getWriteDateTime() {
-        return writeDateTime;
-    }
-
-    public String getFormattedWriteDateTime() {
-        return writeDateTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"));
-    }
-
     public List<Answer> getAnswers() {
         return answers;
+    }
+
+    public Integer getCountOfAnswer() {
+        return countOfAnswer;
     }
 
     public boolean isDeleted() {
@@ -92,5 +80,13 @@ public class Question {
 
     public boolean canDeleted() {
         return answers.stream().filter(answer -> !answer.isWriter(this.writer)).count() == 0;
+    }
+
+    public void increaseAnswerCount() {
+        this.countOfAnswer++;
+    }
+
+    public void decreaseAnswerCount() {
+        this.countOfAnswer--;
     }
 }

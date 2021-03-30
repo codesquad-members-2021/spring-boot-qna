@@ -1,6 +1,6 @@
 package com.codessquad.qna.util;
 
-import com.codessquad.qna.entity.User;
+import com.codessquad.qna.domain.User;
 import com.codessquad.qna.exception.UserNotFoundInSessionException;
 
 import javax.servlet.http.HttpSession;

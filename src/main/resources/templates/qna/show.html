@@ -15,7 +15,7 @@
                         <div class="article-header-text">
                             <a href="/users/{{question.writer.id}}/profile" class="article-author-name">{{question.writer.name}}</a>
                             <a href="/questions/413" class="article-header-time" title="퍼머링크">
-                                {{question.formattedWriteDateTime}}
+                                {{question.formattedCreatedDateTime}}
                                 <i class="icon-link"></i>
                             </a>
                         </div>
@@ -47,7 +47,7 @@
                         <p class="qna-comment-count"><strong>{{question.answers.length}}</strong>개의 의견</p>
                         <div class="qna-comment-slipp-articles">
                             {{#question.answers}}
-                            <article class="article" id="answer-1405">
+                            <article class="article">
                                 <div class="article-header">
                                     <div class="article-header-thumb">
                                         <img src="https://graph.facebook.com/v2.3/1324855987/picture"
@@ -55,8 +55,8 @@
                                     </div>
                                     <div class="article-header-text">
                                         <a href="/users/{{writer.id}}/profile" class="article-author-name">{{writer.name}}</a>
-                                        <a href="#answer-1434" class="article-header-time" title="퍼머링크">
-                                            {{formattedWriteDateTime}}
+                                        <a href="#" class="article-header-time" title="퍼머링크">
+                                            {{formattedCreatedDateTime}}
                                         </a>
                                     </div>
                                 </div>
@@ -71,7 +71,7 @@
                                         </li>
                                         <li>
                                             <form class="delete-answer-form"
-                                                  action="/questions/{{question.id}}/answers/{{id}}"
+                                                  action="/api/questions/{{question.id}}/answers/{{id}}"
                                                   method="POST">
                                                 <input type="hidden" name="_method" value="DELETE">
                                                 <button type="submit" class="delete-answer-button">삭제</button>
@@ -81,14 +81,14 @@
                                 </div>
                             </article>
                             {{/question.answers}}
-                            <form action="/questions/{{question.id}}/answers/" method="POST">
-                                <div class="form-group" style="padding:14px;">
-                                    <textarea name="contents" class="form-control" placeholder="답변 입력"></textarea>
-                                </div>
-                                <button class="btn btn-success pull-right" type="submit">답변하기</button>
-                                <div class="clearfix"/>
-                            </form>
                         </div>
+                        <form class="answer-write" action="/api/questions/{{question.id}}/answers/" method="POST">
+                            <div class="form-group" style="padding:14px;">
+                                <textarea name="contents" class="form-control" placeholder="답변 입력"></textarea>
+                            </div>
+                            <button class="btn btn-success pull-right" type="submit">답변하기</button>
+                            <div class="clearfix"/>
+                        </form>
                     </div>
                 </div>
             </div>
@@ -103,8 +103,10 @@
                 <img src="https://graph.facebook.com/v2.3/1324855987/picture" class="article-author-thumb" alt="">
             </div>
             <div class="article-header-text">
-                <a href="#" class="article-author-name">{0}</a>
-                <div class="article-header-time">{1}</div>
+                <a href="/users/{0}/profile" class="article-author-name">{0}</a>
+                <a href="#" class="article-header-time" title="퍼머링크">
+                    {1}
+                </a>
             </div>
         </div>
         <div class="article-doc comment-doc">

@@ -1,16 +1,9 @@
-package com.codessquad.qna.entity;
+package com.codessquad.qna.domain;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 
 @Entity
-@Table(name = "ANSWER")
-public class Answer {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
+public class Answer extends BaseEntity {
     @ManyToOne
     @JoinColumn(foreignKey = @ForeignKey(name = "fk_answer_question"))
     private Question question;
@@ -22,9 +15,6 @@ public class Answer {
     @Column(nullable = false, length = 3000)
     private String contents;
 
-    @Column(nullable = false)
-    private LocalDateTime writeDateTime;
-
     @Column(nullable = false, columnDefinition = "boolean default false")
     private boolean deleted;
 
@@ -35,11 +25,8 @@ public class Answer {
         this.question = question;
         this.writer = writer;
         this.contents = contents;
-        this.writeDateTime = LocalDateTime.now();
-    }
 
-    public long getId() {
-        return id;
+        this.question.increaseAnswerCount();
     }
 
     public Question getQuestion() {
@@ -54,20 +41,14 @@ public class Answer {
         return contents;
     }
 
-    public LocalDateTime getWriteDateTime() {
-        return writeDateTime;
-    }
-
-    public String getFormattedWriteDateTime() {
-        return writeDateTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"));
-    }
-
     public boolean isDeleted() {
         return this.deleted;
     }
 
     public void delete() {
         this.deleted = true;
+
+        this.question.decreaseAnswerCount();
     }
 
     public boolean isWriter(User user) {

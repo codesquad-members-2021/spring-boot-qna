@@ -1,6 +1,6 @@
 package com.codessquad.qna.repository;
 
-import com.codessquad.qna.entity.Question;
+import com.codessquad.qna.domain.Question;
 
 import java.util.List;
 

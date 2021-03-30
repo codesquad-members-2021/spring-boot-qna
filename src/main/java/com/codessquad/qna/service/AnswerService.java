@@ -1,13 +1,15 @@
 package com.codessquad.qna.service;
 
-import com.codessquad.qna.entity.Answer;
-import com.codessquad.qna.entity.Question;
-import com.codessquad.qna.entity.User;
+import com.codessquad.qna.domain.Answer;
+import com.codessquad.qna.domain.Question;
+import com.codessquad.qna.domain.User;
 import com.codessquad.qna.exception.NotAuthorizedException;
 import com.codessquad.qna.exception.NotFoundException;
 import com.codessquad.qna.repository.AnswerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import javax.transaction.Transactional;
 
 @Service
 public class AnswerService {
@@ -20,19 +22,22 @@ public class AnswerService {
         this.questionService = questionService;
     }
 
-    public void addAnswer(long questionId, User writer, String contents) {
+    @Transactional
+    public Answer addAnswer(long questionId, User writer, String contents) {
         Question question = questionService.getQuestion(questionId);
-        answerRepository.save(new Answer(question, writer, contents));
+        return answerRepository.save(new Answer(question, writer, contents));
     }
 
+    @Transactional
     public void deleteAnswer(long answerId, User tryToDelete) {
         Answer answer = getAnswer(answerId);
-        if (answer.isWriter(tryToDelete)) {
-            answer.delete();
-            answerRepository.save(answer);
-            return;
+        if (!answer.isWriter(tryToDelete)) {
+            throw new NotAuthorizedException();
         }
-        throw new NotAuthorizedException();
+        if (answer.isDeleted()) {
+            throw new NotFoundException(answerId + "번 Answer는 이미 삭제되었습니다.");
+        }
+        answer.delete();
     }
 
     public Answer getAnswer(long id) {

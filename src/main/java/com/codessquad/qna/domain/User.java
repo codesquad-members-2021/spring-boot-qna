@@ -1,18 +1,17 @@
-package com.codessquad.qna.entity;
+package com.codessquad.qna.domain;
 
-import javax.persistence.*;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
 
 @Entity
-@Table(name = "USER")
-public class User {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
+public class User extends BaseEntity {
     @Column(nullable = false, length = 20, unique = true)
     private String userId;
 
     @Column(nullable = false, length = 20)
+    @JsonIgnore
     private String password;
 
     @Column(nullable = false, length = 20)
@@ -32,16 +31,8 @@ public class User {
         this.email = email;
     }
 
-    public Long getId() {
-        return id;
-    }
-
     public String getUserId() {
         return userId;
-    }
-
-    public String getPassword() {
-        return password;
     }
 
     public String getName() {
@@ -63,6 +54,6 @@ public class User {
     }
 
     public boolean isSameId(User user) {
-        return this.id.equals(user.id);
+        return this.getId().equals(user.getId());
     }
 }

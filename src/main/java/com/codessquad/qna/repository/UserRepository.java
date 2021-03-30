@@ -1,6 +1,6 @@
 package com.codessquad.qna.repository;
 
-import com.codessquad.qna.entity.User;
+import com.codessquad.qna.domain.User;
 
 import java.util.Optional;
 
