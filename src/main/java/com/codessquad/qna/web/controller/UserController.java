@@ -10,6 +10,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
+import javax.validation.Valid;
 
 @Controller
 @RequestMapping("/users")
@@ -35,7 +36,7 @@ public class UserController {
     }
 
     @PostMapping
-    public String create(CreateUserRequest request) {
+    public String create(@Valid CreateUserRequest request) {
         userService.create(request);
         return "redirect:/users";
     }
@@ -60,7 +61,7 @@ public class UserController {
     }
 
     @PutMapping("/{id}")
-    public String updateProfile(@PathVariable long id, User updatedUser, String oldPassword, HttpSession session) {
+    public String updateProfile(@PathVariable long id, @Valid User updatedUser, String oldPassword, HttpSession session) {
         User loginUser = SessionUtils.getLoginUser(session);
         userService.updateProfile(id, oldPassword, updatedUser, loginUser);
         return "redirect:/users";
