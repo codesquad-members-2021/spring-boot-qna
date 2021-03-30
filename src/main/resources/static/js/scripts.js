@@ -8,18 +8,39 @@ String.prototype.format = function () {
     });
 };
 
-$(document).ready(() => { // Powered By Pyro
-    let currHref = location.pathname
-    $(".sub-nav-li").each((index, item) => {
-        let hrefOfItem = $(item).children().first().attr('href');
-        if (currHref === hrefOfItem) {
-            $(item).addClass('active');
-        }
-    });
+let regExToFindCurrentPage = /(?<=\bpageNumber=\b)\d{1,10}/;
 
+$(document).ready(() => {
+    focusCurrentNaviTab();
+    focusCurrentPage();
     $('#id-button-submit-answer').on('click', createAnswer);
     $(".delete-answer-form button[type='submit']").on('click', deleteAnswer);
 })
+
+function focusCurrentNaviTab(){
+    let currentHref = location.pathname;
+    $(".sub-nav-li").each((index, item) => {
+        let hrefOfItem = $(item).children().first().attr('href');
+        if (currentHref === hrefOfItem) {
+            $(item).addClass('active');
+        }
+    });
+}
+
+function focusCurrentPage(){
+    let currentPageNumber = location.href.match(regExToFindCurrentPage).toString();
+    if (currentPageNumber) {
+        let wrapper = $('#id-question-pagination-wrapper');
+        for (let el of wrapper.children()) {
+            let currentElement = $(el);
+            let pageNumberOfElement = currentElement.children().first().attr('href')
+                .match(regExToFindCurrentPage).toString();
+            if (currentPageNumber === pageNumberOfElement) {
+                currentElement.addClass('active');
+            }
+        }
+    }
+}
 
 function deleteAnswer(event) {
     event.preventDefault();
