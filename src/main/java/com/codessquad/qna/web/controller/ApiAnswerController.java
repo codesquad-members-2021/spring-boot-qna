@@ -23,7 +23,7 @@ public class ApiAnswerController {
 
     @PostMapping
     public Answer createAnswer(@PathVariable long questionId, String contents, HttpSession session) {
-        User user = HttpSessionUtils.getSessionedUser(session).orElseThrow(NotLoginException::new);
+         User user = HttpSessionUtils.getSessionedUser(session).orElseThrow(NotLoginException::new);
         return answerService.postAnswer(user, questionId, contents);
     }
 
@@ -35,17 +35,17 @@ public class ApiAnswerController {
     }
 
     @ExceptionHandler(IllegalEntityIdException.class)
-    public String handleIllegalEntityIdException(IllegalEntityIdException e) {
-        return e.getMessage();
+    public String handleIllegalEntityIdException() {
+        return "유효하지 않은 접근입니다";
     }
 
     @ExceptionHandler(NotLoginException.class)
-    public String handleNotLoginException(NotLoginException e) {
-        return e.getMessage();
+    public String handleNotLoginException() {
+        return "로그인이 필요합니다";
     }
 
     @ExceptionHandler(IllegalAccessException.class)
-    public String handleIllegalAccessException(IllegalAccessException e) {
-        return e.getMessage();
+    public String handleIllegalAccessException() {
+        return "자신의 답변만 삭제할 수 있습니다";
     }
 }

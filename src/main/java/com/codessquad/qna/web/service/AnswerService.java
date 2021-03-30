@@ -25,11 +25,12 @@ public class AnswerService {
         return answerRepository.save(answer);
     }
 
-    public void deleteAnswer(long id, User user) {
+    public boolean deleteAnswer(long id, User user) {
         Answer answer = findAnswer(id);
         checkWriter(answer, user);
         answer.getQuestion().downCountOfAnswer();
         answerRepository.delete(answer);
+        return true;
     }
 
     public Answer findAnswer(long id) {
