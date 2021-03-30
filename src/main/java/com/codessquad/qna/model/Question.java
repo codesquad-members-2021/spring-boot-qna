@@ -44,23 +44,18 @@ public class Question {
     }
 
     public boolean delete() {
-        if (!verifyAnswers()) {
+        if (verifyAnswers() != 0) {
             return false;
         }
         this.deleted = true;
-        for (Answer answer : answers) {
-            answer.delete();
-        }
+        answers.forEach(Answer::delete);
         return true;
     }
 
-    public boolean verifyAnswers() {
-        for (Answer answer : answers) {
-            if (!answer.isDeleted() && !answer.matchWriter(writer)) {
-                return false;
-            }
-        }
-        return true;
+    public int verifyAnswers() {
+        return (int) answers.stream()
+                .filter(answer -> !answer.isDeleted() && !answer.matchWriter(writer))
+                .count();
     }
 
     public boolean matchWriter(User user) {
