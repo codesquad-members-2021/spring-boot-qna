@@ -9,6 +9,7 @@ import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,12 +23,14 @@ public class Question extends AbstractEntity {
     private User writer;
 
     @Column(nullable = false)
+    @NotBlank(message = "Title is mandatory")
     private String title;
 
     @Column(nullable = false)
+    @NotBlank(message = "Please write the contents")
     private String contents;
 
-    private Boolean isActive = true;
+    private boolean isActive = true;
 
     @OneToMany(mappedBy = "question", cascade = CascadeType.ALL)
     @OrderBy("id DESC")

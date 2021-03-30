@@ -8,6 +8,7 @@ import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
 
 @Entity
 @SQLDelete(sql = "UPDATE ANSWER SET is_active = 0 WHERE id = ?")
@@ -15,20 +16,21 @@ import javax.persistence.*;
 public class Answer extends AbstractEntity {
 
     @ManyToOne
-    @JoinColumn(foreignKey = @ForeignKey(name = "fk_answer_to_writer"))
     @JsonProperty
+    @JoinColumn(foreignKey = @ForeignKey(name = "fk_answer_to_writer"))
     private User writer;
 
     @ManyToOne
-    @JoinColumn(foreignKey = @ForeignKey(name = "fk_answer_to_question"))
     @JsonProperty
+    @JoinColumn(foreignKey = @ForeignKey(name = "fk_answer_to_question"))
     private Question question;
 
     @Column(nullable = false)
     @JsonProperty
+    @NotBlank(message = "Please write the contents")
     private String contents;
 
-    private Boolean isActive = true;
+    private boolean isActive = true;
 
     protected Answer() {
 

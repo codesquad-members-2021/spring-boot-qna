@@ -6,6 +6,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -23,9 +24,11 @@ public class User extends AbstractEntity {
 
     @Column(nullable = false)
     @JsonProperty
+    @NotBlank(message = "Name is mandatory")
     private String name;
 
     @Column(nullable = false)
+    @NotBlank(message = "Email is mandatory")
     @JsonProperty
     private String email;
 
