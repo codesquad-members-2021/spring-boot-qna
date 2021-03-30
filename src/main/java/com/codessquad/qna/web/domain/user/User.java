@@ -1,33 +1,39 @@
 package com.codessquad.qna.web.domain.user;
 
+import com.codessquad.qna.web.domain.AbstractEntity;
 import com.codessquad.qna.web.domain.answer.Answer;
-import com.codessquad.qna.web.domain.question.Question;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
 @Entity
-public class User {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+public class User extends AbstractEntity {
 
     @Column(nullable = false, unique = true, length = 20)
+    @JsonProperty
     private String userId;
 
     @Column(nullable = false)
+    @JsonIgnore
     private String password;
 
     @Column(nullable = false)
+    @JsonProperty
+    @NotBlank(message = "Name is mandatory")
     private String name;
 
     @Column(nullable = false)
+    @NotBlank(message = "Email is mandatory")
+    @JsonProperty
     private String email;
 
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "writer", cascade = CascadeType.ALL)
+    @JsonIgnore
     private List<Answer> answers = new ArrayList<>();
 
     public User(String userId, String password, String name, String email) {
@@ -39,10 +45,6 @@ public class User {
 
     protected User() {
 
-    }
-
-    public Long getId() {
-        return id;
     }
 
     public String getUserId() {
@@ -67,6 +69,9 @@ public class User {
 
     public void addAnswer(Answer answer) {
         answers.add(answer);
+        if (answer.getWriter() != this) {
+            answer.setWriter(this);
+        }
     }
 
     public boolean isMatchingPassword(String password) {
@@ -88,18 +93,18 @@ public class User {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         User user = (User) o;
-        return Objects.equals(id, user.id) && Objects.equals(userId, user.userId);
+        return Objects.equals(getId(), user.getId()) && Objects.equals(userId, user.userId);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, userId);
+        return Objects.hash(getId(), userId);
     }
 
     @Override
     public String toString() {
         return "User{" +
-                "id=" + id +
+                "id=" + getId() +
                 ", userId='" + userId + '\'' +
                 ", password='" + password + '\'' +
                 ", name='" + name + '\'' +
@@ -122,7 +127,7 @@ public class User {
         private String name = "unknown";
         private String email = "unknown";
 
-        private Builder(){
+        private Builder() {
         }
 
         private Builder(String userId, String password) {

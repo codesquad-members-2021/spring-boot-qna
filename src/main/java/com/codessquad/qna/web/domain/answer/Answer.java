@@ -1,34 +1,36 @@
 package com.codessquad.qna.web.domain.answer;
 
+import com.codessquad.qna.web.domain.AbstractEntity;
 import com.codessquad.qna.web.domain.question.Question;
 import com.codessquad.qna.web.domain.user.User;
-import com.codessquad.qna.web.utils.DateTimeUtils;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
+import javax.validation.constraints.NotBlank;
 
 @Entity
-public class Answer {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+@SQLDelete(sql = "UPDATE ANSWER SET is_active = 0 WHERE id = ?")
+@Where(clause = "is_active=1")
+public class Answer extends AbstractEntity {
 
     @ManyToOne
+    @JsonProperty
     @JoinColumn(foreignKey = @ForeignKey(name = "fk_answer_to_writer"))
     private User writer;
 
     @ManyToOne
+    @JsonProperty
     @JoinColumn(foreignKey = @ForeignKey(name = "fk_answer_to_question"))
     private Question question;
 
     @Column(nullable = false)
+    @JsonProperty
+    @NotBlank(message = "Please write the contents")
     private String contents;
 
     private boolean isActive = true;
-
-    private LocalDateTime createdAt;
-
 
     protected Answer() {
 
@@ -38,11 +40,6 @@ public class Answer {
         this.writer = writer;
         this.question = question;
         this.contents = contents;
-        this.createdAt = LocalDateTime.now();
-    }
-
-    public Long getId() {
-        return id;
     }
 
     public User getWriter() {
@@ -57,16 +54,19 @@ public class Answer {
         return contents;
     }
 
-    public String getCreatedAt() {
-        return DateTimeUtils.stringOf(createdAt);
-    }
 
     public void setQuestion(Question question) {
         this.question = question;
+        if (!question.getAnswers().contains(this)) {
+            question.getAnswers().add(this);
+        }
     }
 
     public void setWriter(User writer) {
         this.writer = writer;
+        if (!writer.getAnswers().contains(this)) {
+            writer.getAnswers().add(this);
+        }
     }
 
     public boolean isMatchingWriter(User user) {

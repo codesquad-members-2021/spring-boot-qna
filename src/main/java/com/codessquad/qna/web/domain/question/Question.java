@@ -1,53 +1,50 @@
 package com.codessquad.qna.web.domain.question;
 
+import com.codessquad.qna.web.domain.AbstractEntity;
 import com.codessquad.qna.web.domain.answer.Answer;
 import com.codessquad.qna.web.domain.user.User;
 import com.codessquad.qna.web.dto.question.QuestionRequest;
-import com.codessquad.qna.web.utils.DateTimeUtils;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
+import javax.validation.constraints.NotBlank;
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-public class Question {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+@SQLDelete(sql = "UPDATE QUESTION SET is_active = 0 WHERE id = ?")
+@Where(clause = "is_active=1")
+public class Question extends AbstractEntity {
 
     @ManyToOne
     @JoinColumn(foreignKey = @ForeignKey(name = "fk_question_writer"))
     private User writer;
 
     @Column(nullable = false)
+    @NotBlank(message = "Title is mandatory")
     private String title;
 
     @Column(nullable = false)
+    @NotBlank(message = "Please write the contents")
     private String contents;
 
     private boolean isActive = true;
 
-    private LocalDateTime createdAt;
-
-    @OneToMany(cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "question", cascade = CascadeType.ALL)
+    @OrderBy("id DESC")
+    @JsonIgnore
     private List<Answer> answers = new ArrayList<>();
 
     public Question(User writer, String title, String contents) {
         this.writer = writer;
         this.title = title;
         this.contents = contents;
-        this.createdAt = LocalDateTime.now();
     }
 
     protected Question() {
 
-    }
-
-    public Long getId() {
-        return id;
     }
 
     public User getWriter() {
@@ -62,16 +59,15 @@ public class Question {
         return contents;
     }
 
-    public String getCreatedAt() {
-        return DateTimeUtils.stringOf(createdAt);
-    }
-
     public List<Answer> getAnswers() {
         return answers;
     }
 
     public void addAnswer(Answer answer) {
         answers.add(answer);
+        if (answer.getQuestion() != this) {
+            answer.setQuestion(this);
+        }
     }
 
     public void update(QuestionRequest request) {
@@ -86,11 +82,11 @@ public class Question {
     @Override
     public String toString() {
         return "Question{" +
-                "id=" + id +
+                "id=" + getId() +
                 ", writer='" + writer + '\'' +
                 ", title='" + title + '\'' +
                 ", contents='" + contents + '\'' +
-                ", createdAt=" + createdAt +
+                ", createdAt=" + getCreatedAt() +
                 '}';
     }
 
@@ -121,16 +117,19 @@ public class Question {
             this.contents = question.contents;
         }
 
-        public Builder title(String title){
+        public Builder title(String title) {
             this.title = title;
             return this;
         }
-        public Builder contents(String contents){
+
+        public Builder contents(String contents) {
             this.contents = contents;
             return this;
         }
 
-        public Question build() {return new Question(writer, title, contents);}
+        public Question build() {
+            return new Question(writer, title, contents);
+        }
 
     }
 }

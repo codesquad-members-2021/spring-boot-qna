@@ -1,15 +1,14 @@
 package com.codessquad.qna.web.service;
 
+import com.codessquad.qna.web.domain.ResponseResult;
 import com.codessquad.qna.web.domain.answer.Answer;
 import com.codessquad.qna.web.domain.answer.AnswerRepository;
 import com.codessquad.qna.web.domain.question.Question;
 import com.codessquad.qna.web.domain.question.QuestionRepository;
 import com.codessquad.qna.web.domain.user.User;
-import com.codessquad.qna.web.exception.CrudNotAllowedException;
 import com.codessquad.qna.web.exception.EntityNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.ui.Model;
 
 
 @Service
@@ -25,25 +24,26 @@ public class AnswerService {
     }
 
     @Transactional
-    public void create(long questionId, String contents, User loginUser) {
+    public Answer create(long questionId, String contents, User loginUser) {
         Question question = getQuestionById(questionId);
 
         Answer answer = Answer.build(loginUser, question)
                 .contents(contents)
                 .build();
 
-        answerRepository.save(answer);
+        return answerRepository.save(answer);
     }
 
     @Transactional
-    public void delete(long questionId, long answerId, User loginUser) {
+    public ResponseResult delete(long questionId, long answerId, User loginUser) {
         Answer answer = answerRepository.findById(answerId)
                 .orElseThrow(() -> new EntityNotFoundException("Cannot found answer number " + answerId));
 
         if (!answer.isMatchingWriter(loginUser)) {
-            throw new CrudNotAllowedException("Only writer can delete this answer post!");
+            return ResponseResult.fail("Only writer can delete this answer post!");
         }
         answerRepository.delete(answer);
+        return ResponseResult.ok();
     }
 
     private Question getQuestionById(long questionId) {

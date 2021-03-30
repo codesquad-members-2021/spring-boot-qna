@@ -3,7 +3,6 @@ package com.codessquad.qna.web.controller;
 import com.codessquad.qna.web.domain.question.Question;
 import com.codessquad.qna.web.domain.user.User;
 import com.codessquad.qna.web.dto.question.QuestionRequest;
-import com.codessquad.qna.web.exception.CrudNotAllowedException;
 import com.codessquad.qna.web.service.QuestionService;
 import com.codessquad.qna.web.utils.SessionUtils;
 import org.springframework.stereotype.Controller;
@@ -25,15 +24,13 @@ public class QuestionController {
     @PostMapping
     public String create(HttpSession session, QuestionRequest request) {
         User loginUser = SessionUtils.getLoginUser(session);
-        questionService.create(loginUser, request);
-        return "redirect:/";
+        return "redirect:/questions/" + questionService.create(loginUser, request).getId();
     }
 
     @PutMapping("/{questionId}")
     public String update(@PathVariable long questionId, HttpSession session, QuestionRequest request) {
         User loginUser = SessionUtils.getLoginUser(session);
-        questionService.update(questionId, loginUser, request);
-        return "redirect:/questions/" + questionId;
+        return "redirect:/questions/" + questionService.update(questionId, loginUser, request).getId();
     }
 
     @GetMapping("/form")
