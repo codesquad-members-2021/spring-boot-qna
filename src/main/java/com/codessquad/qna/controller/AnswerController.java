@@ -35,4 +35,10 @@ public class AnswerController {
         answerService.update(answerId, updatedAnswer, getUserFromSession(session));
         return "redirect:/questions/" + questionId;
     }
+
+    @DeleteMapping("/{answerId}")
+    public String deleteAnswer(@PathVariable Long questionId, @PathVariable Long answerId, HttpSession session) {
+        answerService.delete(answerId, getUserFromSession(session));
+        return "redirect:/questions/" + questionId;
+    }
 }
