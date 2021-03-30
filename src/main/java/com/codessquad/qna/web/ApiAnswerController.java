@@ -28,18 +28,14 @@ public class ApiAnswerController {
     public Answer create(@PathVariable Long questionId, String contents, HttpSession session) {
         User loggedinUser = getUserFromSession(session);
         Question question = questionService.findQuestion(questionId);
-        Answer answer = new Answer(loggedinUser, question, contents);
-        return answerService.save(answer);
+        return answerService.create(loggedinUser, question, contents);
     }
 
     @DeleteMapping("/{id}")
-    public Result delete(@PathVariable Long questionId, @PathVariable Long id, HttpSession session) {
+    public Result delete(@PathVariable Long questionId, @PathVariable Long id, HttpSession session) throws IllegalAccessException {
         User loggedinUser = getUserFromSession(session);
-        Answer answer = answerService.findAnswer(id);
-        if (!answerService.checkValid(loggedinUser, answer)) {
-            return Result.fail("자신의 댓글만 삭제할 수 있습니다.");
-        }
-
+        Answer answer = answerService.findAnswerForDelete(id, loggedinUser)
+                .orElseThrow(IllegalAccessException::new);
         Question question = questionService.findQuestion(questionId);
         answerService.delete(question, answer);
         questionService.save(question);
