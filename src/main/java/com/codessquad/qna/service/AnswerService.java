@@ -20,7 +20,7 @@ public class AnswerService {
     }
 
     public Answer create(User user, Question question, String contents) {
-        return answerRepository.save(new Answer(user, question, contents));
+        return save(new Answer(user, question, contents));
     }
 
     public Optional<Answer> findAnswerForDelete(Long id, User user) {
@@ -39,7 +39,7 @@ public class AnswerService {
     public void delete(Question question, Answer answer) {
         answer.delete();
         question.decreaseAnswerCount();
-        answerRepository.save(answer);
+        save(answer);
     }
 
     private Answer save(Answer answer) {
