@@ -56,7 +56,7 @@ public class QuestionController {
     public String updateForm(@PathVariable Long id, HttpSession session, Model model) {
         if (!isLoginUser(session)) { return "redirect:/users/login"; }
 
-        Question question = validateQuestionWriter(id, session);
+        Question question = validateWriter(id, session);
         model.addAttribute("question", question);
         return "qna/updateForm";
     }
@@ -65,7 +65,7 @@ public class QuestionController {
     public String modifyQuestion(@PathVariable Long id, HttpSession session, Question modifiedQuestion) {
         if (!isLoginUser(session)) { return "redirect:/users/login"; }
 
-        Question originalQuestion = validateQuestionWriter(id, session);
+        Question originalQuestion = validateWriter(id, session);
         questionService.modifyQuestion(originalQuestion, modifiedQuestion);
         return String.format("redirect:/questions/%d", id);
     }
@@ -74,12 +74,12 @@ public class QuestionController {
     public String deleteQuestion(@PathVariable Long id, HttpSession session) {
         if (!isLoginUser(session)) { return "redirect:/users/login"; }
 
-        Question question = validateQuestionWriter(id, session);
+        Question question = validateWriter(id, session);
         questionService.deleteQuestion(question);
         return "redirect:/";
     }
 
-    private Question validateQuestionWriter(Long id, HttpSession session) {
+    private Question validateWriter(Long id, HttpSession session) {
         Question question = questionService.findById(id);
         User user = getUserFromSession(session);
         if (!question.isSameUser(user)) {
