@@ -34,7 +34,9 @@ public class AnswerService {
     }
 
     public void delete(Long answerId, User sessionedUser) {
-        answerRepository.delete(getAnswer(answerId, sessionedUser));
+        Answer answer = getAnswer(answerId, sessionedUser);
+        answer.setDeleted(true);
+        answerRepository.save(answer);
     }
 
     public Answer getAnswer(Long answerId, User sessionedUser) {
