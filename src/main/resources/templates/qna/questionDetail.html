@@ -51,10 +51,11 @@
 
               <div class="qna-comment">
                   <div class="qna-comment-slipp">
-                      <p class="qna-comment-count"><strong>{{answers.length}}</strong>개의 의견</p>
+                      <p class="qna-comment-count"><strong>{{answersCount}}</strong>개의 의견</p>
                       <div class="qna-comment-slipp-articles">
 
                           {{#answers}}
+                          {{^this.deleted}}
                           <article class="article" id="answer-1405">
                               <div class="article-header">
                                   <div class="article-header-thumb">
@@ -84,6 +85,7 @@
                                   </ul>
                               </div>
                           </article>
+                          {{/this.deleted}}
                           {{/answers}}
 
                           <form class="submit-write" method="post" action="/questions/{{question.id}}/answers">
