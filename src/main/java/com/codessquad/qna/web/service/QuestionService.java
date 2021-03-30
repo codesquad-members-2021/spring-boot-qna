@@ -9,14 +9,10 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.List;
-
 @Service
 public class QuestionService {
     private final QuestionRepository questionRepository;
-    private static final int PAGE_SIZE = 5;
-    private static final int BLOCK_SIZE = 5;
+
 
     public QuestionService(QuestionRepository questionRepository) {
         this.questionRepository = questionRepository;
@@ -29,48 +25,12 @@ public class QuestionService {
     }
 
     public Iterable<Question> questions(int pageNumber) {
-        return questionRepository.findAllByDeleted(false, PageRequest.of(pageNumber, PAGE_SIZE));
+        return questionRepository.findAllByDeleted(false, PageRequest.of(pageNumber, PageList.PAGE_SIZE));
     }
 
     public PageList pageListByCurrentPage(long currentPage) {
         long numberOfQuestions = questionRepository.countAllByDeletedFalse();
-        long lastPage = numberOfQuestions / PAGE_SIZE;
-
-        long startPageOfCurrentBlock = calculateStartPageOfCurrentBlock(currentPage);
-        long endPageOfCurrentBlock = calculateEndPageOfCurrentBlock(startPageOfCurrentBlock, lastPage);
-
-        long endPageOfPrevBlock = calculateEndPageOfPrevBlock(startPageOfCurrentBlock);
-        long startPageOfNextBlock = calculateStartPageOfNextBlock(endPageOfCurrentBlock, lastPage);
-
-        return new PageList(startPageOfCurrentBlock, endPageOfCurrentBlock, endPageOfPrevBlock, startPageOfNextBlock);
-    }
-
-    private long calculateStartPageOfCurrentBlock(long currentPage) {
-        return currentPage - (currentPage % BLOCK_SIZE);
-    }
-
-    private long calculateEndPageOfCurrentBlock(long startPageOfCurrentBlock, long lastPage) {
-        long endPageOfCurrentBlock = startPageOfCurrentBlock + BLOCK_SIZE - 1;
-        if (lastPage < endPageOfCurrentBlock) {
-            endPageOfCurrentBlock = lastPage;
-        }
-        return endPageOfCurrentBlock;
-    }
-
-    private long calculateEndPageOfPrevBlock(long startPageOfCurrentBlock) {
-        long endPageOfPrevBlock = PageList.NO_PAGE;
-        if (startPageOfCurrentBlock != 0) {
-            endPageOfPrevBlock = startPageOfCurrentBlock - 1;
-        }
-        return endPageOfPrevBlock;
-    }
-
-    private long calculateStartPageOfNextBlock(long endPageOfCurrentBlock, long lastPage) {
-        long startPageOfNextBlock = PageList.NO_PAGE;
-        if (endPageOfCurrentBlock < lastPage) {
-            startPageOfNextBlock = endPageOfCurrentBlock + 1;
-        }
-        return startPageOfNextBlock;
+        return new PageList(currentPage, numberOfQuestions);
     }
 
     public Question questionDetail(long id) {
