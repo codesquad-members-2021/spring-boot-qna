@@ -5,8 +5,11 @@ import com.codessquad.qna.domain.answer.Answer;
 import com.codessquad.qna.domain.answer.AnswerRepository;
 import com.codessquad.qna.domain.question.Question;
 import com.codessquad.qna.domain.question.QuestionRepository;
+import com.codessquad.qna.exception.AnotherAnswerException;
+import com.codessquad.qna.exception.NotFoundException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
