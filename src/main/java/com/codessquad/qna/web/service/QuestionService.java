@@ -4,6 +4,7 @@ import com.codessquad.qna.web.domain.Question;
 import com.codessquad.qna.web.domain.QuestionRepository;
 import com.codessquad.qna.web.domain.User;
 import com.codessquad.qna.web.exceptions.questions.QuestionNotFoundException;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -22,7 +23,7 @@ public class QuestionService {
     }
 
     public Iterable<Question> questions() {
-        return questionRepository.findAllByDeletedFalse();
+        return questionRepository.findAllByDeleted(false, PageRequest.of(0,5));
     }
 
     public Question questionDetail(long id) {

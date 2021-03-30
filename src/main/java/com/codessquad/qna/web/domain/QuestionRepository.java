@@ -1,12 +1,15 @@
 package com.codessquad.qna.web.domain;
 
-import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.repository.PagingAndSortingRepository;
 
 import java.util.List;
 import java.util.Optional;
 
-public interface QuestionRepository extends CrudRepository<Question, Long> {
+public interface QuestionRepository extends PagingAndSortingRepository<Question, Integer> {
     List<Question> findAllByDeletedFalse();
+
+    List<Question> findAllByDeleted(boolean deleted, Pageable pageable);
 
     Optional<Question> findByIdAndDeletedFalse(Long id);
 }
