@@ -34,7 +34,6 @@ public class QuestionService {
     }
 
     public Question showDetailQuestion(Long id) {
-        //return questionRepostory.findById(id).orElseThrow(() -> new NotFoundException(NOT_FOUNDED_QUESTION));
         return questionRepostory.findByIdAndDeletedFalse(id).orElseThrow(() -> new NotFoundException(NOT_FOUNDED_QUESTION));
     }
 
