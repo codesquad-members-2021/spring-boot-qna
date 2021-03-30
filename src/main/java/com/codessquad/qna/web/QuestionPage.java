@@ -8,13 +8,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class QuestionPage {
-
+    private final int COUNT_NUMBERS_TO_SHOW = 5;
     private final Pageable pageable;
     private int previous;
     private int next;
     private Page<Question> questions;
-    private List<Integer> pageNumbers;
-
+    private List<Integer> pageNumbers = new ArrayList<>(COUNT_NUMBERS_TO_SHOW);
 
     public QuestionPage(Pageable pageable, Page<Question> questionsByPage) {
         this.pageable = pageable;
@@ -30,12 +29,11 @@ public class QuestionPage {
     }
 
     private List<Integer> createPageNumbers() {
-        final int COUNT_NUMBERS_TO_SHOW = 5;
-        List<Integer> pageNumbers = new ArrayList<>(COUNT_NUMBERS_TO_SHOW);
         int currentPage = questions.getNumber();
         int totalPages = questions.getTotalPages();
         int startNumber = (currentPage / COUNT_NUMBERS_TO_SHOW) * COUNT_NUMBERS_TO_SHOW;
         int endNumber = startNumber + COUNT_NUMBERS_TO_SHOW - 1;
+
         for (int i = startNumber; i <= endNumber; i++) {
             pageNumbers.add(i);
             if (i == totalPages - 1) {
