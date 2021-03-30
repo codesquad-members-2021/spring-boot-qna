@@ -51,7 +51,7 @@
 
               <div class="qna-comment">
                   <div class="qna-comment-slipp">
-                      <p class="qna-comment-count"><strong>2</strong>개의 의견</p>
+                      <p class="qna-comment-count"><strong>{{answers.length}}</strong>개의 의견</p>
                       <div class="qna-comment-slipp-articles">
 
                           {{#answers}}
@@ -61,7 +61,7 @@
                                       <img src="https://graph.facebook.com/v2.3/1324855987/picture" class="article-author-thumb" alt="">
                                   </div>
                                   <div class="article-header-text">
-                                      <a href="/users/1/자바지기" class="article-author-name">{{writer.userId}}</a>
+                                      <a href="/users/{{writer.id}}" class="article-author-name">{{writer.userId}}</a>
                                       <a href="#answer-1434" class="article-header-time" title="퍼머링크">
                                           {{dateTime}}
                                       </a>
@@ -76,7 +76,7 @@
                                           <a class="link-modify-article" href="/questions/{{question.id}}/answers/{{id}}/updateForm">수정</a>
                                       </li>
                                       <li>
-                                          <form class="delete-answer-form" action="/questions/413/answers/1405" method="POST">
+                                          <form class="delete-answer-form" action="/questions/{{question.id}}/answers/{{id}}" method="POST">
                                               <input type="hidden" name="_method" value="DELETE">
                                               <button type="submit" class="delete-answer-button">삭제</button>
                                           </form>
