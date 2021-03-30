@@ -43,6 +43,26 @@ public class Question {
         this.contents = question.contents;
     }
 
+    public boolean delete() {
+        if (!verifyAnswers()) {
+            return false;
+        }
+        this.deleted = true;
+        for (Answer answer : answers) {
+            answer.delete();
+        }
+        return true;
+    }
+
+    public boolean verifyAnswers() {
+        for (Answer answer : answers) {
+            if (!answer.isDeleted() && !answer.matchWriter(writer)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
     public boolean matchWriter(User user) {
         return this.writer.matchUserId(user);
     }

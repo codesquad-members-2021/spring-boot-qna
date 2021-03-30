@@ -2,6 +2,7 @@ package com.codessquad.qna.service;
 
 import com.codessquad.qna.exception.EntityNotFoundException;
 import com.codessquad.qna.exception.IllegalUserAccessException;
+import com.codessquad.qna.model.Answer;
 import com.codessquad.qna.model.Question;
 import com.codessquad.qna.model.User;
 import com.codessquad.qna.repository.QuestionRepository;
@@ -28,13 +29,18 @@ public class QuestionService {
         questionRepository.save(oldQuestion);
     }
 
-    public void delete(Long questionId, User sessionedUser) {
+    public boolean delete(Long questionId, User sessionedUser) {
         Question question = verifyQuestion(questionId, sessionedUser);
-        questionRepository.delete(question);
+        boolean result = question.delete();
+        if (result) {
+            questionRepository.save(question);
+        }
+        return result;
     }
 
     public Question findById(Long id) {
-        return questionRepository.findById(id).orElseThrow(() -> new EntityNotFoundException(ErrorMessage.QUESTION_NOT_FOUND));
+        return questionRepository.findById(id).orElseThrow(() ->
+                new EntityNotFoundException(ErrorMessage.QUESTION_NOT_FOUND));
     }
 
     public List<Question> findAll() {
