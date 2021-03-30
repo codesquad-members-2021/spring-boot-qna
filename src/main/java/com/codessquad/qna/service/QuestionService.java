@@ -2,7 +2,6 @@ package com.codessquad.qna.service;
 
 import com.codessquad.qna.exception.EntityNotFoundException;
 import com.codessquad.qna.exception.IllegalUserAccessException;
-import com.codessquad.qna.model.Answer;
 import com.codessquad.qna.model.Question;
 import com.codessquad.qna.model.User;
 import com.codessquad.qna.repository.QuestionRepository;
