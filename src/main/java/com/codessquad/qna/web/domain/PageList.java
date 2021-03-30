@@ -5,7 +5,7 @@ import java.util.List;
 
 public class PageList {
     public static final long NO_PAGE = -1;
-    public static final int PAGE_SIZE = 5;
+    public static final int PAGE_SIZE = 15;
     public static final int BLOCK_SIZE = 5;
     private final List<Long> pages;
     private final long endPageOfPrevBlock;
