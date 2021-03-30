@@ -24,15 +24,13 @@ public class QuestionController {
     @PostMapping
     public String create(HttpSession session, QuestionRequest request) {
         User loginUser = SessionUtils.getLoginUser(session);
-        questionService.create(loginUser, request);
-        return "redirect:/";
+        return "redirect:/questions/" + questionService.create(loginUser, request).getId();
     }
 
     @PutMapping("/{questionId}")
     public String update(@PathVariable long questionId, HttpSession session, QuestionRequest request) {
         User loginUser = SessionUtils.getLoginUser(session);
-        questionService.update(questionId, loginUser, request);
-        return "redirect:/questions/" + questionId;
+        return "redirect:/questions/" + questionService.update(questionId, loginUser, request).getId();
     }
 
     @GetMapping("/form")

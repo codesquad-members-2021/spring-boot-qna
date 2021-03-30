@@ -25,16 +25,16 @@ public class QuestionService {
     }
 
     @Transactional
-    public void create(User loginUser, QuestionRequest request) {
+    public Question create(User loginUser, QuestionRequest request) {
         Question question = request.toEntity(loginUser);
-        questionRepository.save(question);
+        return questionRepository.save(question);
     }
 
     @Transactional
-    public void update(long questionId, User loginUser, QuestionRequest request) {
+    public Question update(long questionId, User loginUser, QuestionRequest request) {
         Question question = verifiedQuestion(questionId, loginUser);
         question.update(request);
-        questionRepository.save(question);
+        return questionRepository.save(question);
     }
 
     @Transactional
