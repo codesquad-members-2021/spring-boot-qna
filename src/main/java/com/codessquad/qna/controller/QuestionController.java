@@ -22,6 +22,12 @@ public class QuestionController {
         this.questionService = questionService;
     }
 
+    @GetMapping
+    public String viewMain(Model model) {
+        model.addAttribute("questions", questionService.findAll());
+        return "index";
+    }
+
     @GetMapping("/form")
     public String qnaInputPage(HttpSession session) {
         isLoginUser(session);
