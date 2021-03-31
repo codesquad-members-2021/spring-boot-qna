@@ -41,8 +41,7 @@ public class QuestionController {
 
     @GetMapping
     public String questionList(Model model) {
-        model.addAttribute("question", questionService.getQuestionList());
-        return "index";
+        return viewPage(model, 1);
     }
 
     @GetMapping("/{id}")
