@@ -23,30 +23,30 @@ public class AnswerController {
     }
 
     @PostMapping("/answer/{questionId}")
-    public String createAnswer(@PathVariable("questionId") Long questionId, Answer answer, HttpSession session) {
+    public String createAnswer(@PathVariable Long questionId, Answer answer, HttpSession session) {
         this.answerService.save(questionId, answer, getUserFromSession(session));
         logger.info("댓글 등록 요청");
         return "redirect:/question/" + questionId;
     }
 
     @GetMapping("/answer/{id}")
-    public String viewUpdateAnswer(@PathVariable("id") Long id, Model model, HttpSession session) {
+    public String viewUpdateAnswer(@PathVariable Long id, Model model, HttpSession session) {
         model.addAttribute("answer", this.answerService.verifyAnswer(id, getUserFromSession(session)));
         logger.info("댓글 수정 페이지 요청");
         return "qna/updateAnswer";
     }
 
     @PutMapping("/answer/{id}")
-    public String updateAnswer(@PathVariable("id") Long id, Answer answer, HttpSession session) {
+    public String updateAnswer(@PathVariable Long id, Answer answer, HttpSession session) {
         this.answerService.update(id, answer, getUserFromSession(session));
         logger.info("댓글 수정 요청");
         return "redirect:/question/" + this.answerService.findQuestionId(id);
     }
 
     @DeleteMapping("/answer/{id}")
-    public String deleteAnswer(@PathVariable("id") Long id, HttpSession session) {
+    public String deleteAnswer(@PathVariable Long id, HttpSession session) {
         this.answerService.delete(id, getUserFromSession(session));
-        logger.info("질문 삭제 요청");
+        logger.info("댓글 삭제 요청");
         return "redirect:/question/" + this.answerService.findQuestionId(id);
     }
 

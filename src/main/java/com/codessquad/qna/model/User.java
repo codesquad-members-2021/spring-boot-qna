@@ -1,20 +1,17 @@
 package com.codessquad.qna.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
 
 @Entity
-public class User {
-
-    @Id
-    @GeneratedValue
-    private Long id;
+public class User extends AbstractEntity {
 
     @Column(nullable = false, unique = true)
     private String userId;
 
+    @JsonIgnore
     @Column(nullable = false)
     private String password;
 
@@ -24,26 +21,18 @@ public class User {
     @Column(nullable = false)
     private String email;
 
+    public void update(User user) {
+        this.password = user.password;
+        this.name = user.name;
+        this.email = user.email;
+    }
+
     public boolean matchId(Long id) {
-        return this.id.equals(id);
+        return this.getId().equals(id);
     }
 
     public boolean matchPassword(String password) {
         return this.password.equals(password);
-    }
-
-    public void update(User user) {
-        this.password = user.getPassword();
-        this.name = user.getName();
-        this.email = user.getEmail();
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
     }
 
     public String getUserId() {
@@ -80,7 +69,8 @@ public class User {
 
     @Override
     public String toString() {
-        return "userId: " + this.userId + ", " +
+        return super.toString() + ", " +
+                "userId: " + this.userId + ", " +
                 "password: " + this.password + ", " +
                 "name: " + this.name + ", " +
                 "email: " + this.email;

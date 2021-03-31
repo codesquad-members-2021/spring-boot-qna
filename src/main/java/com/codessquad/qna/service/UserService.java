@@ -19,20 +19,20 @@ public class UserService {
 
     public void save(User user) {
         if (this.userRepository.findByUserId(user.getUserId()).isPresent()) {
-            throw new UserAccountException("이미 사용 중인 아이디입니다.");
+            throw new UserAccountException(ErrorMessage.DUPLICATED_ID);
         }
         this.userRepository.save(user);
     }
 
     public User login(String userId, String password) {
         return this.userRepository.findByUserIdAndPassword(userId, password).orElseThrow(() ->
-                new UserAccountException("아이디 또는 비밀번호가 일치하지 않습니다."));
+                new UserAccountException(ErrorMessage.LOGIN_FAILED));
     }
 
     public void update(Long id, User user, String oldPassword, User sessionUser) {
         User loginUser = verifyUser(id, sessionUser);
         if (!loginUser.matchPassword(oldPassword)) {
-            throw new UserAccountException("기존 비밀번호가 일치하지 않습니다.");
+            throw new UserAccountException(ErrorMessage.WRONG_PASSWORD);
         }
         loginUser.update(user);
         this.userRepository.save(loginUser);
@@ -40,7 +40,7 @@ public class UserService {
 
     public User verifyUser(Long id, User sessionUser) {
         if (!sessionUser.matchId(id)) {
-            throw new UserSessionException();
+            throw new UserSessionException(ErrorMessage.ILLEGAL_USER);
         }
         return sessionUser;
     }
@@ -52,7 +52,8 @@ public class UserService {
     }
 
     public User findByUserId(String userId) {
-        return this.userRepository.findByUserId(userId).orElseThrow(NotFoundException::new);
+        return this.userRepository.findByUserId(userId).orElseThrow(() ->
+                new EntityNotFoundException(ErrorMessage.USER_NOT_FOUND));
     }
 
 }

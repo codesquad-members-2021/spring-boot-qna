@@ -1,6 +1,7 @@
 package com.codessquad.qna.service;
 
-import com.codessquad.qna.exception.NotFoundException;
+import com.codessquad.qna.exception.EntityNotFoundException;
+import com.codessquad.qna.exception.ErrorMessage;
 import com.codessquad.qna.exception.UserSessionException;
 import com.codessquad.qna.model.Question;
 import com.codessquad.qna.model.User;
@@ -31,8 +32,8 @@ public class QuestionService {
 
     public boolean delete(Long id, User sessionUser) {
         Question targetQuestion = verifyQuestion(id, sessionUser);
-        if (targetQuestion.matchWriterOfAnswerList()) {
-            targetQuestion.delete();
+        boolean result = targetQuestion.delete();
+        if (result) {
             this.questionRepository.save(targetQuestion);
             return true;
         }
@@ -42,7 +43,7 @@ public class QuestionService {
     public Question verifyQuestion(Long id, User sessionUser) {
         Question question = findById(id);
         if (!question.matchWriter(sessionUser)) {
-            throw new UserSessionException();
+            throw new UserSessionException(ErrorMessage.ILLEGAL_USER);
         }
         return question;
     }
@@ -52,7 +53,8 @@ public class QuestionService {
     }
 
     public Question findById(Long id) {
-        return this.questionRepository.findByIdAndDeletedFalse(id).orElseThrow(NotFoundException::new);
+        return this.questionRepository.findByIdAndDeletedFalse(id).orElseThrow(() ->
+                new EntityNotFoundException(ErrorMessage.QUESTION_NOT_FOUND));
     }
 
 }

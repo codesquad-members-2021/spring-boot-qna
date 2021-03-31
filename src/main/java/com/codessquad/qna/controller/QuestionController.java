@@ -45,28 +45,28 @@ public class QuestionController {
     }
 
     @GetMapping("/question/{id}")
-    public String viewQuestion(@PathVariable("id") Long id, Model model) {
+    public String viewQuestion(@PathVariable Long id, Model model) {
         model.addAttribute("question", this.questionService.findById(id));
         logger.info("상세 질문 페이지 요청");
         return "qna/show";
     }
 
     @GetMapping("/question/{id}/form")
-    public String viewUpdateQuestion(@PathVariable("id") Long id, Model model, HttpSession session) {
+    public String viewUpdateQuestion(@PathVariable Long id, Model model, HttpSession session) {
         model.addAttribute("question", this.questionService.verifyQuestion(id, getUserFromSession(session)));
         logger.info("질문 수정 페이지 요청");
         return "qna/updateForm";
     }
 
     @PutMapping("/question/{id}/form")
-    public String updateQuestion(@PathVariable("id") Long id, Question question, HttpSession session) {
+    public String updateQuestion(@PathVariable Long id, Question question, HttpSession session) {
         this.questionService.update(id, question, getUserFromSession(session));
         logger.info("질문 수정 요청");
         return "redirect:/question/" + id;
     }
 
     @DeleteMapping("/question/{id}")
-    public String deleteQuestion(@PathVariable("id") Long id, HttpSession session) {
+    public String deleteQuestion(@PathVariable Long id, HttpSession session) {
         boolean result = this.questionService.delete(id, getUserFromSession(session));
         logger.info("질문 삭제 요청");
         return result ? "redirect:/" : "redirect:/question/" + id;
