@@ -45,7 +45,7 @@ public class QuestionService {
     }
 
     public List<Question> findAll() {
-        return questionRepository.findAll();
+        return questionRepository.findAllByDeletedFalse();
     }
 
     public Question verifyQuestion(Long id, User sessionedUser) {

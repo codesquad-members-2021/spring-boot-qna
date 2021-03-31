@@ -11,7 +11,6 @@
         <div class="panel panel-default qna-list">
             <ul class="list">
                 {{#questions}}
-                {{^this.deleted}}
                 <li>
                     <div class="wrap">
                         <div class="main">
@@ -30,7 +29,6 @@
                         </div>
                     </div>
                 </li>
-                {{/this.deleted}}
                 {{/questions}}
             </ul>
             <div class="row">
