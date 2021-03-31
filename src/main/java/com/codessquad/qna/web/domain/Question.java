@@ -30,11 +30,12 @@ public class Question {
     @Column(nullable = false, length = 20)
     private LocalDateTime writtenDateTime = LocalDateTime.now();
 
-    @OneToMany(mappedBy="question")
+    @OneToMany(mappedBy = "question")
     @OrderBy("id ASC")
     private List<Answer> answers;
 
-    protected Question() {}
+    protected Question() {
+    }
 
     public Question(User writer, String title, String contents) {
         this.writer = writer;
@@ -71,10 +72,12 @@ public class Question {
         return this.writer.equals(inputUser);
     }
 
-    public Long getAnswersSize() {
-        return (long) answers.size();
+    public int getAnswersSize() {
+        return answers.size();
     }
 
-    public List<Answer> getAnswers() { return answers; }
+    public List<Answer> getAnswers() {
+        return answers;
+    }
 
 }

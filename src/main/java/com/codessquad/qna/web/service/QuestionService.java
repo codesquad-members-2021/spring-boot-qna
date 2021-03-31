@@ -15,7 +15,7 @@ public class QuestionService {
 
     private final QuestionRepository questionRepository;
 
-    private QuestionService(QuestionRepository questionRepository, AnswerService answerService) {
+    private QuestionService(QuestionRepository questionRepository) {
         this.questionRepository = questionRepository;
     }
 

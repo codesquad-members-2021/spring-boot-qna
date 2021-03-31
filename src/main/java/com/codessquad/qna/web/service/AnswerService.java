@@ -15,12 +15,15 @@ import java.util.List;
 public class AnswerService {
 
     private final AnswerRepository answerRepository;
+    private final QuestionService questionService;
 
-    private AnswerService(AnswerRepository answerRepository) {
+    private AnswerService(AnswerRepository answerRepository, QuestionService questionService) {
         this.answerRepository = answerRepository;
+        this.questionService = questionService;
     }
 
-    public void save(Question question, User sessionedUser, String contents) {
+    public void save(Long questionId, User sessionedUser, String contents) {
+        Question question = questionService.findById(questionId);
         Answer answer = new Answer(question, sessionedUser, contents);
         answerRepository.save(answer);
     }
