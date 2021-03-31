@@ -63,7 +63,7 @@ public class QuestionController {
         User sessionedUser = HttpSessionUtils.getUserFromSession(session);
         Question updateQuestion = updateQuestionDto.toEntity(sessionedUser);
         questionService.update(updateQuestion, questionId, sessionedUser);
-        return "redirect:/";
+        return "redirect:/questions/" + questionId;
     }
 
     @DeleteMapping("/questions/{questionId}")
