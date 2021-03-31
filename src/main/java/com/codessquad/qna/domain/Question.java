@@ -26,7 +26,7 @@ public class Question extends BaseEntity {
 
     @JsonProperty
     @Column(nullable = false, columnDefinition = "int default 0")
-    private Integer countOfAnswer = 0;
+    private int countOfAnswer;
 
     @Column(nullable = false, columnDefinition = "boolean default false")
     private boolean deleted;
