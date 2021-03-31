@@ -19,11 +19,9 @@ import javax.servlet.http.HttpSession;
 public class AnswerController {
 
     private final AnswerService answerService;
-    private final QuestionService questionService;
 
-    private AnswerController(AnswerService answerService, QuestionService questionService) {
+    private AnswerController(AnswerService answerService) {
         this.answerService = answerService;
-        this.questionService = questionService;
     }
 
     @PostMapping
