@@ -69,6 +69,10 @@ public class Question {
         return contents;
     }
 
+    public boolean isMatchingWriter(User user){
+        return writer.equals(user);
+    }
+
     public void update(Question question) {
         this.writer = question.getWriter();
         this.contents = question.getContents();
