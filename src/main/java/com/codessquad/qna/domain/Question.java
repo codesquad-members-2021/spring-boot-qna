@@ -30,8 +30,7 @@ public class Question {
     @Column(nullable = false)
     private String contents;
 
-    @Column
-    private Boolean isActive = true;
+    private boolean isActive = true;
 
     private LocalDateTime createdAt = LocalDateTime.now();
 

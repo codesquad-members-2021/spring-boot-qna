@@ -28,8 +28,7 @@ public class Answer {
 
     private LocalDateTime createdAt = LocalDateTime.now();
 
-    @Column
-    private Boolean isActive = true;
+    private boolean isActive = true;
 
     protected Answer() {
     }
