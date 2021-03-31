@@ -17,7 +17,6 @@ public class User {
     private String email;
 
     protected User() {
-
     }
 
     public User(String userId, String password, String name, String email) {
@@ -57,6 +56,10 @@ public class User {
 
     public boolean isMatchingUserId(User user) {
         return this.userId.equals(user.userId);
+    }
+
+    public boolean isEmpty() {
+        return userId.equals("") || password.equals("") || name.equals("") || email.equals("");
     }
 
     public void update(User updateUser) {

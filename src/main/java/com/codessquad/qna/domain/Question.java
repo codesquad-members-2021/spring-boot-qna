@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@SQLDelete(sql = "UPDATE QUESTION SET is_active = '0' WHERE id = ?")
+@SQLDelete(sql = "UPDATE QUESTION SET is_active = 0 WHERE id = ?")
 @Where(clause = "is_active=1")
 public class Question {
 
@@ -30,13 +30,11 @@ public class Question {
     @Column(nullable = false)
     private String contents;
 
-    @Column
-    private Boolean isActive = true;
+    private boolean isActive = true;
 
-    private LocalDateTime time = LocalDateTime.now();
+    private LocalDateTime createdAt = LocalDateTime.now();
 
     protected Question() {
-
     }
 
     public Question(User writer, String title, String contents) {
@@ -45,8 +43,8 @@ public class Question {
         this.contents = contents;
     }
 
-    public LocalDateTime getTime() {
-        return this.time;
+    public LocalDateTime getCreatedAt() {
+        return this.createdAt;
     }
 
     public long getId() {
@@ -69,10 +67,14 @@ public class Question {
         return contents;
     }
 
+    public boolean isMatchingWriter(User user){
+        return writer.equals(user);
+    }
+
     public void update(Question question) {
         this.writer = question.getWriter();
         this.contents = question.getContents();
-        this.time = question.getTime();
+        this.createdAt = question.getCreatedAt();
         this.title = question.getTitle();
     }
 

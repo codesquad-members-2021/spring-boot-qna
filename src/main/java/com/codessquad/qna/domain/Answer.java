@@ -7,7 +7,7 @@ import javax.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
-@SQLDelete(sql = "UPDATE ANSWER SET is_active = '0' WHERE id = ?")
+@SQLDelete(sql = "UPDATE ANSWER SET is_active = 0 WHERE id = ?")
 @Where(clause = "is_active=1")
 public class Answer {
 
@@ -26,13 +26,11 @@ public class Answer {
     @Column(nullable = false)
     private String contents;
 
-    private LocalDateTime time = LocalDateTime.now();
+    private LocalDateTime createdAt = LocalDateTime.now();
 
-    @Column
-    private Boolean isActive = true;
+    private boolean isActive = true;
 
     protected Answer() {
-
     }
 
     public Answer(User writer, Question question, String contents) {
@@ -57,8 +55,12 @@ public class Answer {
         return contents;
     }
 
-    public LocalDateTime getTime() {
-        return time;
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
+
+    public boolean isMatchingWriter(User user){
+        return writer.equals(user);
     }
 
     @Override
@@ -68,7 +70,7 @@ public class Answer {
                 ", writer=" + writer +
                 ", question=" + question +
                 ", contents='" + contents + '\'' +
-                ", time='" + time + '\'' +
+                ", createdAt='" + createdAt + '\'' +
                 '}';
     }
 }

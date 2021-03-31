@@ -7,12 +7,13 @@ import java.time.format.DateTimeFormatter;
 
 @HandlebarsHelper
 public class HandlebarHelper {
+
     private static final String ISO8601 = "yyyy-MM-dd HH:mm";
 
     private HandlebarHelper() {
     }
 
-    public static CharSequence formatDateTime(LocalDateTime time) {
-        return time.format(DateTimeFormatter.ofPattern(ISO8601));
+    public static CharSequence formatDateTime(LocalDateTime createdAt) {
+        return createdAt.format(DateTimeFormatter.ofPattern(ISO8601));
     }
 }
