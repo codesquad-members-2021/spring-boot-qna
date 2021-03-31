@@ -31,8 +31,6 @@ public class Answer {
     @Column(columnDefinition = "boolean default false")
     private boolean deleted;
 
-    private static final DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
-
     public void save(User writer, Question question) {
         this.writer = writer;
         this.question = question;
