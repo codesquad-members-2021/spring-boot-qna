@@ -4,10 +4,10 @@
 
 ## 기능별 URL convention
 ### HomeController
-웰컴 페이지
+웰컴 페이지(=질문 목록 조회)
 
 - GET `/`
-    - redirect:/questions
+    - index
   
 ### UserController
 
@@ -23,30 +23,30 @@
 - POST `/users/signup`
     - redirect:/users
   
+로그인
+
+- GET `/users/login`
+    - user/loginForm
+- POST `/users/login`
+    - redirect:/
+  
+로그아웃
+
+- GET `/users/logout`
+  - redirect:/
+
 회원 프로필 조회
 
 - GET `/users/{id}`
-    - user/userProfile
-
-비밀번호 확인
-
-- GET `/users/{id}/password`
-    - passwordCheckForm
-- POST `/users/{id}/password`
-    - if 비밀번호 일치) user/userUpdateForm
-    - if 비밀번호 불일치) redirect:/
+  - user/userProfile
 
 회원정보 수정
-
-- PUT `/users/{id}`
+- GET `/users/{id}/updateForm`
+    - user/userUpdateForm
+- PUT `/users/{id}/updateForm`
     - redirect:/users
   
 ### QuestionController
-
-질문 목록 조회
-
-- GET `/questions`
-  - index
   
 질문하기
 
@@ -57,5 +57,16 @@
 
 질문 조회 (상세보기)
 
-- GET `/questions/{id}`
-    - questionDetail
+- GET `/questions/{questionId}`
+    - qna/questionDetail
+
+질문 수정
+
+- GET `/questions/{questionId}/updateForm`
+    - qna/questionUpdateForm
+- POST `/questions/{questionId}/updateForm`
+    - redirect:/questions/" + questionId
+
+질문 삭제
+
+- DELETE

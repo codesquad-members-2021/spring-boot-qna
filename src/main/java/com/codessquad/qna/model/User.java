@@ -1,4 +1,4 @@
-package com.codessquad.qna.repository;
+package com.codessquad.qna.model;
 
 import javax.persistence.*;
 
@@ -18,9 +18,17 @@ public class User {
     private String email;
 
     public void update(User user) {
-        this.password = user.getPassword();
-        this.name = user.getName();
-        this.email = user.getEmail();
+        this.password = user.password;
+        this.name = user.name;
+        this.email = user.email;
+    }
+
+    public boolean matchId(Long id) {
+        return this.id.equals(id);
+    }
+
+    public boolean matchPassword(String password) {
+        return this.password.equals(password);
     }
 
     public Long getId() {
@@ -61,10 +69,6 @@ public class User {
 
     public void setEmail(String email) {
         this.email = email;
-    }
-
-    public boolean isSameId(String userId) {
-        return this.getUserId().equals(userId);
     }
 
     @Override

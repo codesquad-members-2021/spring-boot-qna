@@ -1,6 +1,8 @@
-package com.codessquad.qna.repository;
+package com.codessquad.qna.model;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 @Entity
 public class Question {
@@ -16,6 +18,22 @@ public class Question {
     private String title;
     @Column(nullable = false)
     private String contents;
+
+    private static final DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+
+    public void save(User user) {
+        this.writer = user.getUserId();
+        this.dateTime = LocalDateTime.now().format(dateTimeFormatter);
+    }
+
+    public void update(Question question) {
+        this.title = question.title;
+        this.contents = question.contents;
+    }
+
+    public boolean matchWriter(User user) {
+        return this.writer.equals(user.getUserId());
+    }
 
     public Long getId() {
         return id;

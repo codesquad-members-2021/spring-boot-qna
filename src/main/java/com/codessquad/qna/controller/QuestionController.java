@@ -1,51 +1,56 @@
 package com.codessquad.qna.controller;
 
-import com.codessquad.qna.exception.QuestionNotFoundException;
-import com.codessquad.qna.repository.Question;
-import com.codessquad.qna.repository.QuestionRepository;
+import com.codessquad.qna.model.Question;
+import com.codessquad.qna.service.QuestionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
+import javax.servlet.http.HttpSession;
+
+import static com.codessquad.qna.utils.HttpSessionUtils.getUserFromSession;
 
 @Controller
 @RequestMapping("/questions")
 public class QuestionController {
 
     @Autowired
-    private QuestionRepository questionRepository;
-
-    DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
-
-    @GetMapping
-    public String questionList(Model model) {
-        model.addAttribute("questions", questionRepository.findAll());
-        return "index";
-    }
+    private QuestionService questionService;
 
     @GetMapping("/form")
-    public String qnaInputPage() {
+    public String qnaInputPage(HttpSession session) {
+        getUserFromSession(session);
         return "qna/questionInputForm";
     }
 
     @PostMapping("/form")
-    public String newQuestion(Question question) {
-        LocalDateTime dateTime = LocalDateTime.now();
-        String dateTimeString = dateTime.format(dateTimeFormatter);
-        question.setDateTime(dateTimeString);
-        questionRepository.save(question);
+    public String newQuestion(Question question, HttpSession session) {
+        questionService.save(question, getUserFromSession(session));
         return "redirect:/";
     }
 
-    @GetMapping("/{id}")
-    public String question(@PathVariable("id") Long id, Model model) {
-        model.addAttribute("question", questionRepository.findById(id).orElseThrow(QuestionNotFoundException::new));
+    @GetMapping("/{questionId}")
+    public String viewQuestion(@PathVariable Long questionId, Model model) {
+        model.addAttribute("question", questionService.findById(questionId));
         return "qna/questionDetail";
+    }
+
+    @GetMapping("/{questionId}/updateForm")
+    public String qnaUpdatePage(@PathVariable Long questionId, Model model, HttpSession session) {
+        model.addAttribute("question", questionService.verifyQuestion(questionId, getUserFromSession(session)));
+        return "qna/questionUpdateForm";
+    }
+
+    @PutMapping("/{questionId}/updateForm")
+    public String updateQuestion(@PathVariable Long questionId, Question updatedQuestion, HttpSession session) {
+        questionService.update(questionId, updatedQuestion, getUserFromSession(session));
+        return "redirect:/questions/" + questionId;
+    }
+
+    @DeleteMapping("/{questionId}")
+    public String deleteQuestion(@PathVariable Long questionId, HttpSession session) {
+        questionService.delete(questionId, getUserFromSession(session));
+        return "redirect:/";
     }
 }
