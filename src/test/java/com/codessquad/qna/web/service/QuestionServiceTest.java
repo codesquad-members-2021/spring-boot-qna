@@ -17,12 +17,11 @@ class QuestionServiceTest {
     private QuestionService questionService;
 
     @Test
-    @DisplayName("현재 페이지가 1번이면 1부터 5까지 나와야 합니다")
+    @DisplayName("페이지번호를 이용해서 페이지리스트를 요청하면, 올바른 범위의 페이지리스트가 반환되어야 합니다")
     void testPageListIsOk() {
         testPageList(1, 1, 5);
         testPageList(3, 1, 5);
         testPageList(5, 1, 5);
-
         testPageList(6, 6, 8);
         testPageList(8, 6, 8);
     }
