@@ -2,6 +2,7 @@ package com.codessquad.qna.controller;
 
 import com.codessquad.qna.HttpSessionUtils;
 import com.codessquad.qna.domain.User;
+import com.codessquad.qna.exception.NotLoginException;
 import com.codessquad.qna.service.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,9 +26,12 @@ public class UserController {
 
     @PostMapping
     public String signUp(User user) {
-        userService.create(user);
-        logger.info(user.toString());
-        return "redirect:/users";
+        if (!user.isEmpty() && userService.isNewUser(user)) {
+            userService.create(user);
+            logger.info(user.toString());
+            return "redirect:/users";
+        }
+        return "user/create_failed";
     }
 
     @PostMapping("/login")

@@ -59,6 +59,10 @@ public class User {
         return this.userId.equals(user.userId);
     }
 
+    public boolean isEmpty(){
+        return userId.equals("")||password.equals("")||name.equals("")||email.equals("");
+    }
+
     public void update(User updateUser) {
         this.password = updateUser.password;
         this.name = updateUser.name;
