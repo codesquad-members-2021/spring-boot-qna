@@ -35,7 +35,7 @@ public class QuestionController {
     public String createQuestion(QuestionDto questionDto, HttpSession session) {
         User sessionedUser = HttpSessionUtils.getUserFromSession(session);
         questionService.create(questionDto, sessionedUser);
-        return "redirect:/";
+        return "redirect:/questions";
     }
 
     @GetMapping
