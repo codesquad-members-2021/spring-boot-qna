@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpSession;
 
 @RestController
-@RequestMapping("/api/questions")
+@RequestMapping("/api/questions/{questionId}/answers")
 public class ApiAnswerController {
     private final AnswerService answerService;
 
@@ -17,14 +17,14 @@ public class ApiAnswerController {
         this.answerService = answerService;
     }
 
-    @PostMapping("/{questionId}/answers")
+    @PostMapping
     public Answer createAnswer(@PathVariable("questionId") long questionId, String answerContents,
                                HttpSession session) {
         User loginUser = SessionUtil.getLoginUser(session);
         return answerService.createAnswer(loginUser, questionId, answerContents);
     }
 
-    @DeleteMapping("/{questionId}/answers/{answerId}")
+    @DeleteMapping("/{answerId}")
     public void deleteAnswer(@PathVariable("questionId") long questionId,
                              @PathVariable("answerId") long answerId, HttpSession session) {
         User loginUser = SessionUtil.getLoginUser(session);
