@@ -16,8 +16,11 @@ import javax.servlet.http.HttpSession;
 public class AnswerController {
 
     private final AnswerService answerService;
+    private final QuestionService questionService;
 
-    public AnswerController(AnswerService answerService) {
+    public AnswerController(AnswerService answerService, QuestionService questionService) {
+
+        this.questionService = questionService;
         this.answerService = answerService;
     }
 
@@ -29,9 +32,15 @@ public class AnswerController {
     }
 
     @DeleteMapping("/{answerId}")
-    public String deleteAnswer(@PathVariable long answerId, HttpSession session) {
+    public String deleteAnswer(@PathVariable long questionId, @PathVariable long answerId, HttpSession session, Model model) {
         User sessionedUser = HttpSessionUtils.getUserFromSession(session);
-        long questionId = answerService.delete(answerId, sessionedUser);
+        Answer answer = answerService.findAnswerByAnswerId(answerId);
+        if (!answerService.delete(answer, sessionedUser)) {
+            model.addAttribute("error", "자신의 답변만 삭제할 수 있습니다.");
+            model.addAttribute("question", questionService.findQuestionById(questionId));
+            model.addAttribute("answers", answerService.findAnswersByQuestionId(questionId));
+            return "qna/show";
+        }
         return "redirect:/questions/" + questionId;
     }
 }
