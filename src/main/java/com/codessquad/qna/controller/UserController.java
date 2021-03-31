@@ -66,20 +66,23 @@ public class UserController {
     public String viewUpdateUserForm(@PathVariable Long id, Model model, HttpSession session) {
         User sessionedUser = HttpSessionUtils.getUserFromSession(session);
         if (!sessionedUser.isMatchingId(id)) {
-            throw new IllegalStateException("자신의 정보만 수정할 수 있습니다.");
+            model.addAttribute("users", userService.findUsers());
+            model.addAttribute("error", "자신의 정보만 수정할 수 있습니다.");
+            return "user/list";
         }
         model.addAttribute("user", sessionedUser);
         return "user/updateForm";
     }
 
-    @PutMapping("{id}/update")
-    public String updateUser(@PathVariable Long id, String oldPassword, User updateUser) {
+    @PutMapping("{id}")
+    public String updateUser(@PathVariable Long id, Model model, String oldPassword, User updateUser) {
         User targetUser = userService.findUserById(id);
         if (targetUser.isMatchingPassword(oldPassword)) {
             targetUser.update(updateUser);
             userService.create(targetUser);
             return "redirect:/users";
         }
-        return "redirect:/users/{id}/form";
+        model.addAttribute("user", targetUser);
+        return "user/update_failed";
     }
 }
