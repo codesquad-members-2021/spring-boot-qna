@@ -7,6 +7,9 @@ import com.codessquad.qna.exception.NoQuestionException;
 import com.codessquad.qna.exception.NoUserException;
 import com.codessquad.qna.repository.QuestionRepository;
 import com.codessquad.qna.web.HttpSessionUtils;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpSession;
@@ -39,8 +42,12 @@ public class QuestionService {
         return result;
     }
 
-    public List<Question> getQuestionList() {
-        return questionRepository.findAllByDeletedIsFalse();
+    public Page<Question> getQuestionList(int pageNum) {
+        int pageSize = 5;
+
+        Pageable pageable = PageRequest.of(pageNum - 1, pageSize);
+
+        return questionRepository.findAll(pageable);
     }
 
     public Question getQuestionById(Long id) {
