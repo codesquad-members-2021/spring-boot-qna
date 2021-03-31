@@ -7,6 +7,9 @@ import java.util.List;
 
 @Entity
 public class Question {
+
+    private static final DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -17,6 +20,7 @@ public class Question {
 
     @Column(nullable = false)
     private String dateTime;
+
     @Column(nullable = false)
     private String title;
 
@@ -30,8 +34,6 @@ public class Question {
 
     @Column(columnDefinition = "boolean default false")
     private boolean deleted;
-
-    private static final DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
 
     public void save(User user) {
         this.writer = user;
@@ -132,7 +134,6 @@ public class Question {
                 ", dateTime='" + dateTime + '\'' +
                 ", title='" + title + '\'' +
                 ", contents='" + contents + '\'' +
-                ", answers=" + answers +
                 ", deleted=" + deleted +
                 '}';
     }

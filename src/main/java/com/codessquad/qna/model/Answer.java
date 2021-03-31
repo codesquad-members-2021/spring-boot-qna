@@ -7,6 +7,8 @@ import java.time.format.DateTimeFormatter;
 @Entity
 public class Answer {
 
+    private static final DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -101,7 +103,6 @@ public class Answer {
     public String toString() {
         return "Answer{" +
                 "id=" + id +
-                ", question=" + question +
                 ", writer=" + writer +
                 ", contents='" + contents + '\'' +
                 ", dateTime='" + dateTime + '\'' +
