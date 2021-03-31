@@ -61,6 +61,10 @@ public class Answer {
         return time;
     }
 
+    public boolean isMatchingWriter(User user){
+        return writer.equals(user);
+    }
+
     @Override
     public String toString() {
         return "Answer{" +
