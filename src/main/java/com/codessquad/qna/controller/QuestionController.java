@@ -54,8 +54,14 @@ public class QuestionController {
     @GetMapping("/{questionId}/form")
     public String viewUpdateQuestionForm(@PathVariable long questionId, Model model, HttpSession session) {
         User sessionedUser = HttpSessionUtils.getUserFromSession(session);
-        Question question = questionService.verifyQuestion(questionId, sessionedUser);
+        Question question = questionService.findQuestionById(questionId);
         model.addAttribute("question", question);
+        if (!question.isMatchingWriter(sessionedUser)) {
+            model.addAttribute("error", "자신의 질문만 수정할 수 있습니다.");
+            model.addAttribute("answers", answerService.findAnswersByQuestionId(questionId));
+            return "qna/show";
+        }
+
         return "qna/updateForm";
     }
 
@@ -70,7 +76,13 @@ public class QuestionController {
     @DeleteMapping("/{questionId}")
     public String delete(@PathVariable long questionId, HttpSession session, Model model) {
         User sessionedUser = HttpSessionUtils.getUserFromSession(session);
-        questionService.delete(questionId, sessionedUser);
-        return "redirect:/";
+        Question question = questionService.findQuestionById(questionId);
+        if (!questionService.delete(question, sessionedUser)) {
+            model.addAttribute("error", "자신의 질문만 삭제할 수 있습니다.");
+            model.addAttribute("question", question);
+            model.addAttribute("answers", answerService.findAnswersByQuestionId(questionId));
+            return "qna/show";
+        }
+        return "redirect:/questions";
     }
 }
