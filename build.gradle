@@ -15,9 +15,8 @@ repositories {
 dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
     implementation 'org.springframework.boot:spring-boot-starter-web'
-    implementation 'pl.allegro.tech.boot:handlebars-spring-boot-starter:0.3.2'
-    implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
-    implementation 'org.springframework.boot:spring-boot-starter-mustache'
+    implementation group: 'com.github.jknack', name: 'handlebars', version: '4.2.0'
+
     developmentOnly 'org.springframework.boot:spring-boot-devtools'
     implementation 'org.springframework.boot:spring-boot-starter-test'
     implementation group: 'com.h2database', name: 'h2', version: '1.4.200'
