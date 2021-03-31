@@ -1,7 +1,6 @@
 package com.codessquad.qna.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
@@ -23,8 +22,7 @@ public class Question extends BaseEntity {
     @Where(clause = "deleted = false")
     @JsonIgnore
     private List<Answer> answers;
-
-    @JsonProperty
+    
     @Column(nullable = false, columnDefinition = "int default 0")
     private int countOfAnswer;
 
