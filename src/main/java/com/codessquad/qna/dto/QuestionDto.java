@@ -45,11 +45,11 @@ public class QuestionDto {
         this.contents = contents;
     }
 
-    public String getTime() {
+    public String getCreatedAt() {
         return createdAt;
     }
 
-    public void setTime(String createdAt) {
+    public void setCreatedAt(String createdAt) {
         this.createdAt = createdAt;
     }
 

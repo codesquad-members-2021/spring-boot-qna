@@ -43,7 +43,7 @@ public class Question {
         this.contents = contents;
     }
 
-    public LocalDateTime getTime() {
+    public LocalDateTime getCreatedAt() {
         return this.createdAt;
     }
 
@@ -74,7 +74,7 @@ public class Question {
     public void update(Question question) {
         this.writer = question.getWriter();
         this.contents = question.getContents();
-        this.createdAt = question.getTime();
+        this.createdAt = question.getCreatedAt();
         this.title = question.getTitle();
     }
 

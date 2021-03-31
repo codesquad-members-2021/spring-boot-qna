@@ -55,7 +55,7 @@ public class Answer {
         return contents;
     }
 
-    public LocalDateTime getTime() {
+    public LocalDateTime getCreatedAt() {
         return createdAt;
     }
 
