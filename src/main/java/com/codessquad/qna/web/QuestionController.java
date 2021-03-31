@@ -4,11 +4,13 @@ import com.codessquad.qna.domain.Question;
 import com.codessquad.qna.domain.Result;
 import com.codessquad.qna.domain.User;
 import com.codessquad.qna.service.QuestionService;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
+import java.util.List;
 
 @Controller
 @RequestMapping("/question")
@@ -84,4 +86,19 @@ public class QuestionController {
         return "redirect:/";
     }
 
+    @GetMapping("/page/{pageNum}")
+    public String viewPage(Model model,
+                           @PathVariable(name = "pageNum") int pageNum) {
+
+        Page<Question> page = questionService.getQuestionList(pageNum);
+
+        List<Question> listProducts = page.getContent();
+
+        model.addAttribute("currentPage", pageNum);
+        model.addAttribute("totalPages", page.getTotalPages());
+        model.addAttribute("totalItems", page.getTotalElements());
+        model.addAttribute("listProducts", listProducts);
+
+        return "index";
+    }
 }
