@@ -7,7 +7,7 @@ import javax.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
-@SQLDelete(sql = "UPDATE ANSWER SET is_active = '0' WHERE id = ?")
+@SQLDelete(sql = "UPDATE ANSWER SET is_active = 0 WHERE id = ?")
 @Where(clause = "is_active=1")
 public class Answer {
 
@@ -32,7 +32,6 @@ public class Answer {
     private Boolean isActive = true;
 
     protected Answer() {
-
     }
 
     public Answer(User writer, Question question, String contents) {

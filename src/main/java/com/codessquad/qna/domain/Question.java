@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@SQLDelete(sql = "UPDATE QUESTION SET is_active = '0' WHERE id = ?")
+@SQLDelete(sql = "UPDATE QUESTION SET is_active = 0 WHERE id = ?")
 @Where(clause = "is_active=1")
 public class Question {
 
@@ -36,7 +36,6 @@ public class Question {
     private LocalDateTime time = LocalDateTime.now();
 
     protected Question() {
-
     }
 
     public Question(User writer, String title, String contents) {
