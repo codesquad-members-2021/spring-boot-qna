@@ -22,7 +22,6 @@ public class AnswerController {
     private final QuestionService questionService;
 
     public AnswerController(AnswerService answerService, QuestionService questionService) {
-
         this.questionService = questionService;
         this.answerService = answerService;
     }

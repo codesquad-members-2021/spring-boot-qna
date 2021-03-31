@@ -8,7 +8,7 @@ import java.util.List;
 
 @Service
 @Transactional(readOnly = true)
-public class AnswerService {
+public class AnswerService{
 
     private final AnswerRepository answerRepository;
     private final QuestionRepository questionRepository;
@@ -29,7 +29,7 @@ public class AnswerService {
         return answerRepository.findAnswersByQuestionId(questionId);
     }
 
-    public Answer findAnswerByAnswerId(long answerId){
+    public Answer findAnswerByAnswerId(long answerId) {
         return answerRepository.findById(answerId).orElseThrow(IllegalArgumentException::new);
     }
 

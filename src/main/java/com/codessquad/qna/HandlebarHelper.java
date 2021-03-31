@@ -7,6 +7,7 @@ import java.time.format.DateTimeFormatter;
 
 @HandlebarsHelper
 public class HandlebarHelper {
+
     private static final String ISO8601 = "yyyy-MM-dd HH:mm";
 
     private HandlebarHelper() {

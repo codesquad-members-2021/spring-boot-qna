@@ -35,7 +35,7 @@ public class UserService {
         return userRepository.findUserByUserId(userId).orElseThrow(() -> new NotLoginException("로그인하실 수 없습니다."));
     }
 
-    public boolean isNewUser(User user){
+    public boolean isNewUser(User user) {
         return !userRepository.findUserByUserId(user.getUserId()).isPresent();
     }
 }

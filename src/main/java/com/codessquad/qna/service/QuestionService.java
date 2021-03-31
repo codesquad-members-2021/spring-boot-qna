@@ -12,6 +12,7 @@ import java.util.List;
 @Service
 @Transactional(readOnly = true)
 public class QuestionService {
+
     private final QuestionRepository questionRepository;
 
     public QuestionService(QuestionRepository questionRepository) {
