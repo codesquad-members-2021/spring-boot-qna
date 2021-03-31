@@ -8,6 +8,6 @@ public class ControllerExceptionHandler {
 
     @ExceptionHandler(NotLoginException.class)
     public String handleNotLoginException() {
-        return "redirect:/users/loginForm";
+        return "user/login_failed";
     }
 }
