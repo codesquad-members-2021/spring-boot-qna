@@ -37,11 +37,11 @@ public class UserController {
     @PostMapping("/login")
     public String login(String userId, String password, HttpSession session) {
         User user = userService.findUserByUserId(userId);
-        if (user.isMatchingPassword(password)) {
-            session.setAttribute(HttpSessionUtils.USER_SESSION_KEY, user);
-            return "redirect:/";
+        if (!user.isMatchingPassword(password)) {
+            throw new NotLoginException("로그인하실 수 없습니다.");
         }
-        return "redirect:/users/loginForm";
+        session.setAttribute(HttpSessionUtils.USER_SESSION_KEY, user);
+        return "redirect:/";
     }
 
     @GetMapping("/logout")
