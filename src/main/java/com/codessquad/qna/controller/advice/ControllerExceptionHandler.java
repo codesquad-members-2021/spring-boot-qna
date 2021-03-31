@@ -1,9 +1,6 @@
 package com.codessquad.qna.controller.advice;
 
-import com.codessquad.qna.exception.AnotherAnswerException;
-import com.codessquad.qna.exception.NotAuthorizationException;
-import com.codessquad.qna.exception.NotFoundException;
-import com.codessquad.qna.exception.WrongPasswordException;
+import com.codessquad.qna.exception.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -28,17 +25,32 @@ public class ControllerExceptionHandler {
         return "/error/400";
     }
 
-    @ResponseStatus(HttpStatus.NOT_FOUND)
-    @ExceptionHandler(NotFoundException.class)
-    public String handleNotFound(NotFoundException notFoundException, Model model) {
-        model.addAttribute("errorMessage", notFoundException.getMessage());
-        return "/error/404";
-    }
-
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(WrongPasswordException.class)
     public String handleWrongPassword(WrongPasswordException wrongPasswordException, Model model) {
         model.addAttribute("errorMessage", wrongPasswordException.getMessage());
         return "/error/400";
     }
+
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    @ExceptionHandler(UserNotFoundException.class)
+    public String handleUserNotFound(UserNotFoundException userNotFoundException, Model model) {
+        model.addAttribute("errorMessage", userNotFoundException.getMessage());
+        return "/error/404";
+    }
+
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    @ExceptionHandler(AnswerNotFoundException.class)
+    public String handleAnswerNotFound(AnswerNotFoundException answerNotFoundException, Model model) {
+        model.addAttribute("errorMessage", answerNotFoundException.getMessage());
+        return "/error/404";
+    }
+
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    @ExceptionHandler(QuestionNotFoundException.class)
+    public String handleNotFound(QuestionNotFoundException QuestionNotFoundException, Model model) {
+        model.addAttribute("errorMessage", QuestionNotFoundException.getMessage());
+        return "/error/404";
+    }
+
 }

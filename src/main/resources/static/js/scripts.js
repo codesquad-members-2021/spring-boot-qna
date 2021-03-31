@@ -18,9 +18,11 @@ function addAnswer(e) {
         success: onSuccess
     });
 
-    function onError() {
-        alert("로그인이 필요합니다.");
+    function onError(xhr, status) {
         $(".answer-write textarea").val("");
+        if (xhr.status === 401) {
+            window.location.replace('/users/login');
+        }
     }
 
     function onSuccess(data, status) {
@@ -52,9 +54,11 @@ function deleteAnswer(e) {
         success: onSuccess
     });
 
-    function onError() {
+    function onError(xhr, status) {
         console.log("error");
-        alert("로그인이 필요합니다.");
+        if (xhr.status === 401) {
+            window.location.replace('/users/login');
+        }
     }
 
     function onSuccess(data, status) {
@@ -65,6 +69,17 @@ function deleteAnswer(e) {
         document.getElementById("qna-comment-count").innerHTML = count;
     }
 }
+
+var actionForm = $("#actionForm");
+
+$(".pagination_button a").on("click", function(e) {
+    e.preventDefault();
+
+    console.log("click");
+
+    actionForm.find("input[name=pageNum]").val($(this).attr("href"));
+    actionForm.submit();
+});
 
 String.prototype.format = function () {
     const args = arguments;

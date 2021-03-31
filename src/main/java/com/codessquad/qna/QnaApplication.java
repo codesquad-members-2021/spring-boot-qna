@@ -29,7 +29,7 @@ public class QnaApplication {
 	}
 
 	@Bean
-	public Docket commonApi() {
+	public Docket api() {
 		return new Docket(DocumentationType.SWAGGER_2)
 				.groupName("spring-boot-qna")
 				.apiInfo(this.apiInfo())

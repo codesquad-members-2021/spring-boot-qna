@@ -29,10 +29,23 @@
                 <div class="col-md-3"></div>
                 <div class="col-md-6 text-center">
                     <ul class="pagination center-block" style="display:inline-block;">
-                        <li><a href="#">«</a></li>
-                        <li><a href="#">1</a></li>
-                        <li><a href="#">»</a></li>
+                        {{#pageMaker.prev}}
+                        <li class="pagination_button"><a href="{{pageMaker.prevEndPage}}">«</a></li>
+                        {{/pageMaker.prev}}
+
+                        {{#pageMaker.pages}}
+                        <li class="pagination_button {{#active}} active {{/active}}">
+                            <a href="{{page}}">{{page}}</a>
+                        </li>
+                        {{/pageMaker.pages}}
+
+                        {{#pageMaker.next}}
+                        <li class="pagination_button"><a href="{{pageMaker.nextStartPage}}">»</a></li>
+                        {{/pageMaker.next}}
                     </ul>
+                    <form id="actionForm" action="" method="get">
+                        <input type="hidden" name="pageNum" value="{{pageMaker.cri.pageNum}}">
+                    </form>
                 </div>
                 <div class="col-md-3 qna-write">
                     <a href="questions/form" class="btn btn-primary pull-right" role="button">질문하기</a>
