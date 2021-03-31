@@ -48,6 +48,9 @@ public class QuestionController {
         model.addAttribute("question", questionService.getQuestionList(pageable));
         model.addAttribute("previous", pageable.previousOrFirst().getPageNumber());
         model.addAttribute("next", pageable.next().getPageNumber());
+        model.addAttribute("checkNext", questionService.hasQuestionInNextPage(pageable));
+        model.addAttribute("checkPrevious", questionService.hasQuestionInPreviousPage(pageable));
+        System.out.println(pageable.getPageNumber());
         return "index";
     }
 

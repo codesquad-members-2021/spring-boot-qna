@@ -76,4 +76,17 @@ public class QuestionService {
         return Result.ok();
     }
 
+    @Transactional
+    public boolean hasQuestionInNextPage(Pageable pageable) {
+        Page<Question> saved = getQuestionList(pageable);
+        boolean check = saved.hasNext();
+        return check;
+    }
+
+    @Transactional
+    public boolean hasQuestionInPreviousPage(Pageable pageable) {
+        Page<Question> saved = getQuestionList(pageable);
+        boolean check = saved.hasPrevious();
+        return check;
+    }
 }
