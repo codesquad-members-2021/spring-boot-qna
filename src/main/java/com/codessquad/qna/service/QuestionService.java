@@ -4,7 +4,7 @@ import com.codessquad.qna.domain.Question;
 import com.codessquad.qna.domain.QuestionRepostory;
 import com.codessquad.qna.domain.User;
 import com.codessquad.qna.exception.NotFoundException;
-import com.codessquad.qna.exception.UnauthorizedException;
+import com.codessquad.qna.exception.UnauthorizedQuestionException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -51,12 +51,11 @@ public class QuestionService {
     public void deleteQuestion(Long questionId, HttpSession session) {
         Question question = questionRepostory.findById(questionId).orElseThrow(() -> new NotFoundException(NOT_FOUNDED_QUESTION));
         if (!question.getWriter().isSessionSameAsUser(session)) {
-            logger.debug(UNAUTHORIZED_FAILED_QUESTION);
-            throw new UnauthorizedException(UNAUTHORIZED_FAILED_QUESTION);
+            throw new UnauthorizedQuestionException();
         }
 
         if (!question.isDeletable()) {
-            throw new UnauthorizedException(ASK_FREE_BUT_NOT_DELETE);
+            throw new UnauthorizedQuestionException();
         }
         question.deleteQuestion();
         questionRepostory.save(question);
@@ -66,8 +65,7 @@ public class QuestionService {
     public void updateForm(Long id, Model model, HttpSession session) {
         Question question = questionRepostory.findById(id).orElseThrow(() -> new NotFoundException(NOT_FOUNDED_QUESTION));
         if (!question.getWriter().isSessionSameAsUser(session)) {
-            logger.debug(UNAUTHORIZED_FAILED_QUESTION);
-            throw new UnauthorizedException(UNAUTHORIZED_FAILED_QUESTION);
+            throw new UnauthorizedQuestionException();
         }
         logger.debug("글을 수정하는 사람 : {}", question.getTitle());
         model.addAttribute("question", question);

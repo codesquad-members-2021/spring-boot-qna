@@ -6,7 +6,8 @@ import com.codessquad.qna.domain.QuestionRepostory;
 import com.codessquad.qna.domain.User;
 import com.codessquad.qna.exception.LoginFailedException;
 import com.codessquad.qna.exception.NotFoundException;
-import com.codessquad.qna.exception.UnauthorizedException;
+import com.codessquad.qna.exception.UnauthorizedAnswerException;
+import com.codessquad.qna.exception.UnauthorizedQuestionException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -43,8 +44,7 @@ public class AnswerService {
         Answer answer = answerRepository.findById(answerId).orElseThrow(() -> new NotFoundException(NOT_FOUNDED_ANSWER));
 
         if (!answer.getWriter().isSessionSameAsUser(session)) {
-            logger.debug(UNAUTHORIZED_FAILED_QUESTION);
-            throw new UnauthorizedException(UNAUTHORIZED_FAILED_QUESTION);
+            throw new UnauthorizedAnswerException();
         }
 
         answer.deleteAnswer();

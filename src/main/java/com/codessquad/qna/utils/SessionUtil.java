@@ -22,7 +22,7 @@ public class SessionUtil {
     public static User getLoginUser(HttpSession session) {
         User loginUser = (User) session.getAttribute(SESSION_KEY_LOGIN_USER);
         if (loginUser == null) {
-            throw new NotLoggedInException(ANYONE_NOT_LOGGED_IN);
+            throw new NotLoggedInException();
         }
         return loginUser;
     }

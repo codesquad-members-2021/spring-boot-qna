@@ -1,7 +1,7 @@
 package com.codessquad.qna.controller;
 
 import com.codessquad.qna.domain.Question;
-import com.codessquad.qna.exception.UnauthorizedException;
+import com.codessquad.qna.exception.UnauthorizedQuestionException;
 import com.codessquad.qna.service.QuestionService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
 
-import static com.codessquad.qna.exception.ExceptionMessages.NEED_LOGIN;
 import static com.codessquad.qna.utils.SessionUtil.getLoginUser;
 import static com.codessquad.qna.utils.SessionUtil.isLoginUser;
 
@@ -38,7 +37,7 @@ public class QuestionController {
     @GetMapping("/form")
     public String questionForm(HttpSession session) {
         if (!isLoginUser(session)) {
-            throw new UnauthorizedException(NEED_LOGIN);
+            throw new UnauthorizedQuestionException();
         }
         return "/qna/form";
     }

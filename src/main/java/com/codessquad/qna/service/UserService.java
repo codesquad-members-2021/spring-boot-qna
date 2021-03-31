@@ -2,10 +2,7 @@ package com.codessquad.qna.service;
 
 import com.codessquad.qna.domain.User;
 import com.codessquad.qna.domain.UserRepository;
-import com.codessquad.qna.exception.LoginFailedException;
-import com.codessquad.qna.exception.NotFoundException;
-import com.codessquad.qna.exception.UnacceptableDuplicationException;
-import com.codessquad.qna.exception.UnauthorizedException;
+import com.codessquad.qna.exception.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -49,8 +46,7 @@ public class UserService {
         User currentUser = userRepository.findById(id).orElseThrow(() -> new NotFoundException(NOT_FOUNDED_USER));
 
         if (!currentUser.isMatchingPassword(pastPassword)) {
-            logger.debug(PROFILE_MODIFICATION_FAIL);
-            throw new UnauthorizedException(PROFILE_MODIFICATION_FAIL);
+            throw new UnauthorizedProfileModificationException();
         }
 
         if (sessionUser.equals(updatedUser)) {
@@ -65,7 +61,7 @@ public class UserService {
         User foundUser = userRepository.findById(id).orElseThrow(() -> new NotFoundException(NOT_FOUNDED_USER));
         if (!foundUser.isSessionSameAsUser(session)) {
             logger.debug(PROFILE_MODIFICATION_FAIL);
-            throw new UnauthorizedException(PROFILE_MODIFICATION_FAIL);
+            throw new UnauthorizedProfileModificationException();
         }
     }
 

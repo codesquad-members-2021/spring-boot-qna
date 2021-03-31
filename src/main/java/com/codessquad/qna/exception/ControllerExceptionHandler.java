@@ -20,8 +20,8 @@ public class ControllerExceptionHandler {
         return errorPageSender(exception, model);
     }
 
-    @ExceptionHandler(UnauthorizedException.class)
-    public String unauthorizedException(UnauthorizedException exception, Model model) {
+    @ExceptionHandler(UnauthorizedQuestionException.class)
+    public String unauthorizedException(UnauthorizedQuestionException exception, Model model) {
         return errorPageSender(exception, model);
     }
 
