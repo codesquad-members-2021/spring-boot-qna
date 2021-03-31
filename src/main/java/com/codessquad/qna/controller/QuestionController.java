@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpSession;
 
 @Controller
+@RequestMapping("/questions")
 public class QuestionController {
 
     private final QuestionService questionService;
@@ -23,34 +24,34 @@ public class QuestionController {
         this.answerService = answerService;
     }
 
-    @GetMapping("/questions/form")
+    @GetMapping("/form")
     public String viewQuestionForm(HttpSession session) {
         if (!HttpSessionUtils.isLoginUser(session))
             return "redirect:/users/loginForm";
         return "qna/form";
     }
 
-    @PostMapping("/questions")
+    @PostMapping
     public String createQuestion(QuestionDto questionDto, HttpSession session) {
         User sessionedUser = HttpSessionUtils.getUserFromSession(session);
         questionService.create(questionDto, sessionedUser);
         return "redirect:/";
     }
 
-    @GetMapping("/")
+    @GetMapping
     public String list(Model model) {
         model.addAttribute("questions", questionService.findQuestions());
         return "index";
     }
 
-    @GetMapping("/questions/{questionId}")
+    @GetMapping("/{questionId}")
     public String viewQuestion(@PathVariable long questionId, Model model) {
         model.addAttribute("question", questionService.findQuestionById(questionId));
         model.addAttribute("answers", answerService.findAnswersByQuestionId(questionId));
         return "qna/show";
     }
 
-    @GetMapping("/questions/{questionId}/form")
+    @GetMapping("/{questionId}/form")
     public String viewUpdateQuestionForm(@PathVariable long questionId, Model model, HttpSession session) {
         User sessionedUser = HttpSessionUtils.getUserFromSession(session);
         Question question = questionService.verifyQuestion(questionId, sessionedUser);
@@ -58,7 +59,7 @@ public class QuestionController {
         return "qna/updateForm";
     }
 
-    @PutMapping("/questions/{questionId}")
+    @PutMapping("/{questionId}")
     public String updateQuestion(@PathVariable long questionId, QuestionDto updateQuestionDto, HttpSession session) {
         User sessionedUser = HttpSessionUtils.getUserFromSession(session);
         Question updateQuestion = updateQuestionDto.toEntity(sessionedUser);
@@ -66,8 +67,8 @@ public class QuestionController {
         return "redirect:/questions/" + questionId;
     }
 
-    @DeleteMapping("/questions/{questionId}")
-    public String delete(@PathVariable long questionId, HttpSession session) {
+    @DeleteMapping("/{questionId}")
+    public String delete(@PathVariable long questionId, HttpSession session, Model model) {
         User sessionedUser = HttpSessionUtils.getUserFromSession(session);
         questionService.delete(questionId, sessionedUser);
         return "redirect:/";
