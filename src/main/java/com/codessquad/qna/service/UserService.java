@@ -5,8 +5,7 @@ import com.codessquad.qna.exception.IllegalUserAccessException;
 import com.codessquad.qna.exception.UserAccountException;
 import com.codessquad.qna.model.User;
 import com.codessquad.qna.repository.UserRepository;
-import com.codessquad.qna.utils.ErrorMessage;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.codessquad.qna.exception.ErrorMessage;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -14,8 +13,11 @@ import java.util.List;
 @Service
 public class UserService {
 
-    @Autowired
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
+
+    public UserService(UserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
 
     public void save(User user) {
         if (userRepository.findByUserId(user.getUserId()).isPresent()) {

@@ -2,7 +2,6 @@ package com.codessquad.qna.controller;
 
 import com.codessquad.qna.model.Answer;
 import com.codessquad.qna.service.AnswerService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -15,8 +14,11 @@ import static com.codessquad.qna.utils.HttpSessionUtils.getUserFromSession;
 @RequestMapping("/questions/{questionId}/answers")
 public class AnswerController {
 
-    @Autowired
-    private AnswerService answerService;
+    private final AnswerService answerService;
+
+    public AnswerController(AnswerService answerService) {
+        this.answerService = answerService;
+    }
 
     @PostMapping
     public String createAnswer(@PathVariable Long questionId, Answer answer, HttpSession session) {

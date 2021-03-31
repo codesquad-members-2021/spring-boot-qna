@@ -7,18 +7,20 @@ import com.codessquad.qna.model.Question;
 import com.codessquad.qna.model.User;
 import com.codessquad.qna.repository.AnswerRepository;
 import com.codessquad.qna.repository.QuestionRepository;
-import com.codessquad.qna.utils.ErrorMessage;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.codessquad.qna.exception.ErrorMessage;
 import org.springframework.stereotype.Service;
 
 
 @Service
 public class AnswerService {
 
-    @Autowired
-    private AnswerRepository answerRepository;
-    @Autowired
-    private QuestionRepository questionRepository;
+    private final AnswerRepository answerRepository;
+    private final QuestionRepository questionRepository;
+
+    public AnswerService(AnswerRepository answerRepository, QuestionRepository questionRepository) {
+        this.answerRepository = answerRepository;
+        this.questionRepository = questionRepository;
+    }
 
     public void save(Long questionId, Answer answer, User sessionedUser) {
         Question question = questionRepository.findById(questionId).orElseThrow(() ->

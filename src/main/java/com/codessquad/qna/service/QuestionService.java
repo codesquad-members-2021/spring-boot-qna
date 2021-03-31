@@ -5,8 +5,7 @@ import com.codessquad.qna.exception.IllegalUserAccessException;
 import com.codessquad.qna.model.Question;
 import com.codessquad.qna.model.User;
 import com.codessquad.qna.repository.QuestionRepository;
-import com.codessquad.qna.utils.ErrorMessage;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.codessquad.qna.exception.ErrorMessage;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -14,8 +13,11 @@ import java.util.List;
 @Service
 public class QuestionService {
 
-    @Autowired
-    private QuestionRepository questionRepository;
+    private final QuestionRepository questionRepository;
+
+    public QuestionService(QuestionRepository questionRepository) {
+        this.questionRepository = questionRepository;
+    }
 
     public void save(Question question, User sessionedUser) {
         question.save(sessionedUser);

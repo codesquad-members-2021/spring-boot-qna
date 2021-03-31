@@ -2,8 +2,7 @@ package com.codessquad.qna.controller;
 
 import com.codessquad.qna.model.Question;
 import com.codessquad.qna.service.QuestionService;
-import com.codessquad.qna.utils.ErrorMessage;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.codessquad.qna.exception.ErrorMessage;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -17,8 +16,11 @@ import static com.codessquad.qna.utils.HttpSessionUtils.isLoginUser;
 @RequestMapping("/questions")
 public class QuestionController {
 
-    @Autowired
-    private QuestionService questionService;
+    private final QuestionService questionService;
+
+    public QuestionController(QuestionService questionService) {
+        this.questionService = questionService;
+    }
 
     @GetMapping("/form")
     public String qnaInputPage(HttpSession session) {
