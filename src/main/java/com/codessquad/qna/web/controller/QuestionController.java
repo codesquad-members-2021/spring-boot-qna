@@ -1,10 +1,14 @@
 package com.codessquad.qna.web.controller;
 
 import com.codessquad.qna.web.HttpSessionUtils;
+import com.codessquad.qna.web.QuestionPage;
 import com.codessquad.qna.web.domain.Question;
 import com.codessquad.qna.web.domain.User;
 import com.codessquad.qna.web.exception.NotLoginException;
 import com.codessquad.qna.web.service.QuestionService;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -36,8 +40,9 @@ public class QuestionController {
     }
 
     @GetMapping
-    public String getQuestions(Model model) {
-        model.addAttribute("questions", questionService.findQuestions());
+    public String getQuestions(@PageableDefault(size = 15, sort = "createdDateTime", direction = Sort.Direction.DESC) Pageable pageable, Model model) {
+        QuestionPage questionPages = questionService.getQuestionPage(pageable);
+        model.addAttribute("pages",  questionPages);
         return "/index";
     }
 
