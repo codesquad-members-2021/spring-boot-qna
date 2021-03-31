@@ -5,6 +5,9 @@ import com.codessquad.qna.domain.Result;
 import com.codessquad.qna.domain.User;
 import com.codessquad.qna.service.QuestionService;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -40,8 +43,12 @@ public class QuestionController {
     }
 
     @GetMapping
-    public String questionList(Model model) {
-        return viewPage(model, 1);
+    public String questionList(Model model, @PageableDefault(size = 5, sort = "id", direction = Sort.Direction.DESC) Pageable pageable) {
+
+        model.addAttribute("question", questionService.getQuestionList(pageable));
+        model.addAttribute("previous", pageable.previousOrFirst().getPageNumber());
+        model.addAttribute("next", pageable.next().getPageNumber());
+        return "index";
     }
 
     @GetMapping("/{id}")
@@ -85,19 +92,4 @@ public class QuestionController {
         return "redirect:/";
     }
 
-    @GetMapping("/page/{pageNum}")
-    public String viewPage(Model model,
-                           @PathVariable(name = "pageNum") int pageNum) {
-
-        Page<Question> page = questionService.getQuestionList(pageNum);
-
-        List<Question> listProducts = page.getContent();
-
-        model.addAttribute("currentPage", pageNum);
-        model.addAttribute("totalPages", page.getTotalPages());
-        model.addAttribute("totalItems", page.getTotalElements());
-        model.addAttribute("listProducts", listProducts);
-
-        return "index";
-    }
 }

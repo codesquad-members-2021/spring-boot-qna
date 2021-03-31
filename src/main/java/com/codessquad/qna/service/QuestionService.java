@@ -42,11 +42,8 @@ public class QuestionService {
         return result;
     }
 
-    public Page<Question> getQuestionList(int pageNum) {
-        int pageSize = 5;
-
-        Pageable pageable = PageRequest.of(pageNum - 1, pageSize);
-
+    @Transactional
+    public Page<Question> getQuestionList(Pageable pageable) {
         return questionRepository.findAll(pageable);
     }
 
