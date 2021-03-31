@@ -1,28 +1,38 @@
 package com.codessquad.qna.web.domain;
 
+import com.codessquad.qna.web.exceptions.questions.PageOutOfBoundaryException;
+
 import java.util.ArrayList;
 import java.util.List;
 
 public class PageList {
-    public static final long NO_PAGE = -1;
+    public static final int NO_PAGE = -1;
     public static final int PAGE_SIZE = 15;
     public static final int BLOCK_SIZE = 5;
-    private final List<Long> pages;
-    private final long endPageOfPrevBlock;
-    private final long startPageOfNextBlock;
+    private final List<Integer> pages;
+    private final int endPageOfPrevBlock;
+    private final int startPageOfNextBlock;
 
-    public PageList(long currentPage, long numberOfQuestions) {
+    public PageList(int currentPage, int numberOfQuestions) {
         pages = new ArrayList<>();
-        long lastPage = calculateLastPage(numberOfQuestions);
-        long startPageOfCurrentBlock = calculateStartPageOfCurrentBlock(currentPage);
-        long endPageOfCurrentBlock = calculateEndPageOfCurrentBlock(startPageOfCurrentBlock, lastPage);
+        currentPage -= 1;
+        int lastPage = calculateLastPage(numberOfQuestions);
+        int startPageOfCurrentBlock = calculateStartPageOfCurrentBlock(currentPage);
+        int endPageOfCurrentBlock = calculateEndPageOfCurrentBlock(startPageOfCurrentBlock, lastPage);
 
-        for (long i = startPageOfCurrentBlock; i <= endPageOfCurrentBlock; i++) {
-            pages.add(i + 1);
+        for (int i = startPageOfCurrentBlock; i <= endPageOfCurrentBlock; i++) {
+            pages.add(i);
         }
 
-        this.endPageOfPrevBlock = calculateEndPageOfPrevBlock(startPageOfCurrentBlock) + 1;
-        this.startPageOfNextBlock = calculateStartPageOfNextBlock(endPageOfCurrentBlock, lastPage) + 1;
+        this.endPageOfPrevBlock = calculateEndPageOfPrevBlock(startPageOfCurrentBlock);
+        this.startPageOfNextBlock = calculateStartPageOfNextBlock(endPageOfCurrentBlock, lastPage);
+    }
+
+    public static void verifyPageNumberIsInBoundary(int pageNumber, int numberOfQuestions) {
+        int lastPage = PageList.calculateLastPage(numberOfQuestions);
+        if (pageNumber <= 0 || pageNumber > lastPage) {
+            throw new PageOutOfBoundaryException();
+        }
     }
 
     public boolean hasPrevBlock() {
@@ -33,47 +43,47 @@ public class PageList {
         return startPageOfNextBlock != NO_PAGE;
     }
 
-    public long calculateLastPage(long numberOfQuestions) {
-        return numberOfQuestions / PAGE_SIZE;
+    public static int calculateLastPage(int numberOfQuestions) {
+        return numberOfQuestions / PAGE_SIZE + 1;
     }
 
-    public long calculateStartPageOfCurrentBlock(long currentPage) {
-        return currentPage - (currentPage % BLOCK_SIZE);
+    private int calculateStartPageOfCurrentBlock(int currentPage) {
+        return currentPage - (currentPage % BLOCK_SIZE) + 1;
     }
 
-    public long calculateEndPageOfCurrentBlock(long startPageOfCurrentBlock, long lastPage) {
-        long endPageOfCurrentBlock = startPageOfCurrentBlock + BLOCK_SIZE - 1;
+    private int calculateEndPageOfCurrentBlock(int startPageOfCurrentBlock, int lastPage) {
+        int endPageOfCurrentBlock = startPageOfCurrentBlock + BLOCK_SIZE - 1;
         if (lastPage < endPageOfCurrentBlock) {
             endPageOfCurrentBlock = lastPage;
         }
         return endPageOfCurrentBlock;
     }
 
-    public long calculateEndPageOfPrevBlock(long startPageOfCurrentBlock) {
-        long endPageOfPrevBlock = PageList.NO_PAGE;
-        if (startPageOfCurrentBlock != 0) {
+    private int calculateEndPageOfPrevBlock(int startPageOfCurrentBlock) {
+        int endPageOfPrevBlock = PageList.NO_PAGE;
+        if (startPageOfCurrentBlock > 1) {
             endPageOfPrevBlock = startPageOfCurrentBlock - 1;
         }
         return endPageOfPrevBlock;
     }
 
-    public long calculateStartPageOfNextBlock(long endPageOfCurrentBlock, long lastPage) {
-        long startPageOfNextBlock = PageList.NO_PAGE;
+    private int calculateStartPageOfNextBlock(int endPageOfCurrentBlock, int lastPage) {
+        int startPageOfNextBlock = PageList.NO_PAGE;
         if (endPageOfCurrentBlock < lastPage) {
             startPageOfNextBlock = endPageOfCurrentBlock + 1;
         }
         return startPageOfNextBlock;
     }
 
-    public List<Long> getPages() {
+    public List<Integer> getPages() {
         return pages;
     }
 
-    public long getEndPageOfPrevBlock() {
+    public int getEndPageOfPrevBlock() {
         return endPageOfPrevBlock;
     }
 
-    public long getStartPageOfNextBlock() {
+    public int getStartPageOfNextBlock() {
         return startPageOfNextBlock;
     }
 }

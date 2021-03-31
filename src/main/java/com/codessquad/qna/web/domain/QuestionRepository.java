@@ -12,5 +12,5 @@ public interface QuestionRepository extends PagingAndSortingRepository<Question,
 
     Optional<Question> findByIdAndDeletedFalse(Long id);
 
-    Long countAllByDeletedFalse();
+    int countAllByDeletedFalse();
 }

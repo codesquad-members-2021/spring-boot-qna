@@ -19,22 +19,26 @@ class QuestionServiceTest {
     @Test
     @DisplayName("페이지번호를 이용해서 페이지리스트를 요청하면, 올바른 범위의 페이지리스트가 반환되어야 합니다")
     void testPageListIsOk() {
-        testPageList(1, 1, 5);
-        testPageList(3, 1, 5);
-        testPageList(5, 1, 5);
-        testPageList(6, 6, 8);
-        testPageList(8, 6, 8);
+        testPageList(1, 1, 5, PageList.NO_PAGE, 6);
+        testPageList(3, 1, 5, PageList.NO_PAGE, 6);
+        testPageList(5, 1, 5, PageList.NO_PAGE, 6);
+        testPageList(6, 6, 8, 5, PageList.NO_PAGE);
+        testPageList(8, 6, 8, 5, PageList.NO_PAGE);
     }
 
-    private void testPageList(long currentPage, long expectedStart, long expectedEnd) {
-        List<Long> expectedPageList = getExpectedValue(expectedStart, expectedEnd);
+    private void testPageList(int currentPage, int expectedStart, int expectedEnd,
+                              int expectedEndPageOfPrevBlock, int expectedStartPageOfNextBlock) {
+        List<Integer> expectedPageList = getExpectedValue(expectedStart, expectedEnd);
         PageList pageList = questionService.pageListByCurrentPage(currentPage);
+
         assertThat(pageList.getPages()).isEqualTo(expectedPageList);
+        assertThat(pageList.getEndPageOfPrevBlock()).isEqualTo(expectedEndPageOfPrevBlock);
+        assertThat(pageList.getStartPageOfNextBlock()).isEqualTo(expectedStartPageOfNextBlock);
     }
 
-    private List<Long> getExpectedValue(long start, long end) {
-        List<Long> expectedPageList = new ArrayList<>();
-        for (long i = start; i <= end; i++) {
+    private List<Integer> getExpectedValue(int start, int end) {
+        List<Integer> expectedPageList = new ArrayList<>();
+        for (int i = start; i <= end; i++) {
             expectedPageList.add(i);
         }
         return expectedPageList;

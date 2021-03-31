@@ -5,6 +5,7 @@ import com.codessquad.qna.web.exceptions.answers.AnswerNotFoundException;
 import com.codessquad.qna.web.exceptions.auth.AuthenticationFailedException;
 import com.codessquad.qna.web.exceptions.auth.ForbiddenAccessException;
 import com.codessquad.qna.web.exceptions.auth.LoginFailedException;
+import com.codessquad.qna.web.exceptions.questions.PageOutOfBoundaryException;
 import com.codessquad.qna.web.exceptions.questions.QuestionNotFoundException;
 import com.codessquad.qna.web.exceptions.users.NoLoginUserException;
 import com.codessquad.qna.web.exceptions.users.RequestToCreateDuplicatedUserException;
@@ -42,9 +43,9 @@ public class ControllerExceptionHandler {
         return "/error/global-error";
     }
 
-    @ExceptionHandler(InvalidEntityException.class)
+    @ExceptionHandler({InvalidEntityException.class, PageOutOfBoundaryException.class})
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public String handleInvalidEntityException(InvalidEntityException exception, Model model) {
+    public String handleInvalidEntityException(RuntimeException exception, Model model) {
         initializeModel(exception, model);
         return "/error/global-error";
     }
