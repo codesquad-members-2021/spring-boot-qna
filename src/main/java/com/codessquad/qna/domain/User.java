@@ -4,20 +4,25 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.validation.constraints.NotBlank;
 
 @Entity
 public class User extends BaseEntity {
     @Column(nullable = false, length = 20, unique = true)
+    @NotBlank
     private String userId;
 
     @Column(nullable = false, length = 20)
     @JsonIgnore
+    @NotBlank
     private String password;
 
     @Column(nullable = false, length = 20)
+    @NotBlank
     private String name;
 
     @Column(nullable = false, length = 50)
+    @NotBlank
     private String email;
 
     protected User() {

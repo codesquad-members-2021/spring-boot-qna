@@ -4,29 +4,36 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.util.List;
 
 @Entity
 public class Question extends BaseEntity {
     @ManyToOne
     @JoinColumn(foreignKey = @ForeignKey(name = "fk_question_writer"))
+    @NotNull
     private User writer;
 
     @Column(nullable = false, length = 100)
+    @NotBlank
     private String title;
 
     @Column(nullable = false, length = 3000)
+    @NotBlank
     private String contents;
 
     @OneToMany(mappedBy = "question")
     @Where(clause = "deleted = false")
     @JsonIgnore
     private List<Answer> answers;
-    
-    @Column(nullable = false, columnDefinition = "int default 0")
+
+    @Column(columnDefinition = "int default 0")
+    @NotNull
     private int countOfAnswer;
 
-    @Column(nullable = false, columnDefinition = "boolean default false")
+    @Column(columnDefinition = "boolean default false")
+    @NotNull
     private boolean deleted;
 
     protected Question() {

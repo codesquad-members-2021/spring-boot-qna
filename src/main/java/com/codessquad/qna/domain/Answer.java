@@ -1,21 +1,27 @@
 package com.codessquad.qna.domain;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
 @Entity
 public class Answer extends BaseEntity {
     @ManyToOne
     @JoinColumn(foreignKey = @ForeignKey(name = "fk_answer_question"))
+    @NotNull
     private Question question;
 
     @ManyToOne
     @JoinColumn(foreignKey = @ForeignKey(name = "fk_answer_writer"))
+    @NotNull
     private User writer;
 
     @Column(nullable = false, length = 3000)
+    @NotBlank
     private String contents;
 
-    @Column(nullable = false, columnDefinition = "boolean default false")
+    @Column(columnDefinition = "boolean default false")
+    @NotNull
     private boolean deleted;
 
     protected Answer() {
