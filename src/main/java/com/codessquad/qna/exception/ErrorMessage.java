@@ -1,4 +1,4 @@
-package com.codessquad.qna.utils;
+package com.codessquad.qna.exception;
 
 public enum ErrorMessage {
 
