@@ -50,7 +50,6 @@ public class QuestionService {
 
     public void deleteQuestion(Long questionId, HttpSession session) {
         Question question = questionRepostory.findById(questionId).orElseThrow(() -> new NotFoundException(NOT_FOUNDED_QUESTION));
-
         if (!question.getWriter().isSessionSameAsUser(session)) {
             logger.debug(UNAUTHORIZED_FAILED_QUESTION);
             throw new UnauthorizedException(UNAUTHORIZED_FAILED_QUESTION);
@@ -62,7 +61,6 @@ public class QuestionService {
         question.deleteQuestion();
         questionRepostory.save(question);
         logger.debug("질문글 삭제 - 성공");
-
     }
 
     public void updateForm(Long id, Model model, HttpSession session) {
