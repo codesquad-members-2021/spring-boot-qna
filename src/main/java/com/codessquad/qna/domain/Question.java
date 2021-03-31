@@ -3,6 +3,8 @@ package com.codessquad.qna.domain;
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
+import java.util.Objects;
 
 @Entity
 public class Question {
@@ -11,18 +13,34 @@ public class Question {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String writer;
+    @ManyToOne
+    @JoinColumn(foreignKey = @ForeignKey(name = "fk_question_writer"))
+    private User writer;
     private String title;
     @Column(length = 20000)
     private String contents;
-    private LocalDateTime writeTime;
+    private LocalDateTime createTime;
 
-    public Question() {  }
-    public Question(String writer, String title, String contents) {
+    @OneToMany(mappedBy = "question")
+    @OrderBy("id ASC")
+    private List<Answer> answers;
+
+    @Column
+    private boolean status;
+
+    public Question() {
+    }
+
+    public Question(User writer, String title, String contents) {
         this.writer = writer;
         this.title = title;
         this.contents = contents;
-        this.writeTime = LocalDateTime.now();
+        this.createTime = LocalDateTime.now();
+        this.status = true;
+    }
+
+    public void delete() {
+        this.status = false;
     }
 
     public Long getId() {
@@ -38,11 +56,11 @@ public class Question {
         this.contents = question.contents;
     }
 
-    public String getWriter() {
+    public User getWriter() {
         return writer;
     }
 
-    public void setWriter(String writer) {
+    public void setWriter(User writer) {
         this.writer = writer;
     }
 
@@ -62,15 +80,43 @@ public class Question {
         this.contents = contents;
     }
 
-    public String getWriteTime() {
-        if (writeTime == null) {
+    public List<Answer> getAnswers() {
+        return answers;
+    }
+
+    public boolean isStatus() {
+        return status;
+    }
+
+    public void setStatus(boolean state) {
+        this.status = state;
+    }
+
+    public String getCreateTime() {
+        if (createTime == null) {
             return "";
         }
-        return writeTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"));
+        return createTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"));
     }
 
-    public void setWriteTime(LocalDateTime writeTime) {
-        this.writeTime = writeTime;
+    public void setCreateTime(LocalDateTime writeTime) {
+        this.createTime = writeTime;
     }
 
+    public boolean isSameWriter(User loginUser) {
+        return this.writer.equals(loginUser);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Question question = (Question) o;
+        return id.equals(question.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
+    }
 }
