@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpSession;
 import javax.transaction.Transactional;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -44,7 +45,7 @@ public class QuestionService {
 
     @Transactional
     public Page<Question> getQuestionList(Pageable pageable) {
-        return questionRepository.findAll(pageable);
+        return questionRepository.findAllByDeletedIsFalse(pageable);
     }
 
     public Question getQuestionById(Long id) {
@@ -88,5 +89,15 @@ public class QuestionService {
         Page<Question> saved = getQuestionList(pageable);
         boolean check = saved.hasPrevious();
         return check;
+    }
+
+    @Transactional
+    public List<Integer> test() {
+
+        List<Integer> pages = new ArrayList<>();
+        for (int i = 0; i < questionRepository.countAllByDeletedFalse() / 5; i++) { // 5 is the size of a page
+            pages.add(i);
+        }
+        return pages;
     }
 }

@@ -43,7 +43,9 @@
                         {{^checkPrevious}}
                         <li class="page-item disabled"><a class="page-link" href="?page={{previous}}">«</a></li>
                         {{/checkPrevious}}
-                        <li><a href="#">1</a></li>
+                        {{#each test}}
+                        <li><a href="?page={{this}}">{{this}}</a></li>
+                        {{/each}}
                         {{#checkNext}}
                         <li class="page-item"><a class="page-link" href="?page={{next}}">»</a></li>
                         {{/checkNext}}

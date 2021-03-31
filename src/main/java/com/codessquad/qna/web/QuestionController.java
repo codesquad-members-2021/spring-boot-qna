@@ -13,6 +13,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
+import java.util.ArrayList;
 import java.util.List;
 
 @Controller
@@ -50,7 +51,7 @@ public class QuestionController {
         model.addAttribute("next", pageable.next().getPageNumber());
         model.addAttribute("checkNext", questionService.hasQuestionInNextPage(pageable));
         model.addAttribute("checkPrevious", questionService.hasQuestionInPreviousPage(pageable));
-        System.out.println(pageable.getPageNumber());
+        model.addAttribute("test", questionService.test());
         return "index";
     }
 
