@@ -33,11 +33,11 @@
                         <li class="pagination_button"><a href="{{pageMaker.prevEndPage}}">«</a></li>
                         {{/pageMaker.prev}}
 
-                        {{#pageMaker.numbers}}
+                        {{#pageMaker.pages}}
                         <li class="pagination_button {{#active}} active {{/active}}">
-                            <a href="{{number}}">{{number}}</a>
+                            <a href="{{page}}">{{page}}</a>
                         </li>
-                        {{/pageMaker.numbers}}
+                        {{/pageMaker.pages}}
 
                         {{#pageMaker.next}}
                         <li class="pagination_button"><a href="{{pageMaker.nextStartPage}}">»</a></li>
