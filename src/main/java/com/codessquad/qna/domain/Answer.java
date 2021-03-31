@@ -26,7 +26,7 @@ public class Answer {
     @Column(nullable = false)
     private String contents;
 
-    private LocalDateTime time = LocalDateTime.now();
+    private LocalDateTime createdAt = LocalDateTime.now();
 
     @Column
     private Boolean isActive = true;
@@ -57,7 +57,7 @@ public class Answer {
     }
 
     public LocalDateTime getTime() {
-        return time;
+        return createdAt;
     }
 
     public boolean isMatchingWriter(User user){
@@ -71,7 +71,7 @@ public class Answer {
                 ", writer=" + writer +
                 ", question=" + question +
                 ", contents='" + contents + '\'' +
-                ", time='" + time + '\'' +
+                ", createdAt='" + createdAt + '\'' +
                 '}';
     }
 }

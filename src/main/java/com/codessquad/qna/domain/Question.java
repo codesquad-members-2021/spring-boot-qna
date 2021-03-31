@@ -33,7 +33,7 @@ public class Question {
     @Column
     private Boolean isActive = true;
 
-    private LocalDateTime time = LocalDateTime.now();
+    private LocalDateTime createdAt = LocalDateTime.now();
 
     protected Question() {
     }
@@ -45,7 +45,7 @@ public class Question {
     }
 
     public LocalDateTime getTime() {
-        return this.time;
+        return this.createdAt;
     }
 
     public long getId() {
@@ -75,7 +75,7 @@ public class Question {
     public void update(Question question) {
         this.writer = question.getWriter();
         this.contents = question.getContents();
-        this.time = question.getTime();
+        this.createdAt = question.getTime();
         this.title = question.getTitle();
     }
 
