@@ -1,15 +1,19 @@
 package com.codessquad.qna.web.service;
 
+import com.codessquad.qna.web.domain.PageList;
 import com.codessquad.qna.web.domain.Question;
 import com.codessquad.qna.web.domain.QuestionRepository;
 import com.codessquad.qna.web.domain.User;
+import com.codessquad.qna.web.exceptions.questions.PageOutOfBoundaryException;
 import com.codessquad.qna.web.exceptions.questions.QuestionNotFoundException;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class QuestionService {
     private final QuestionRepository questionRepository;
+
 
     public QuestionService(QuestionRepository questionRepository) {
         this.questionRepository = questionRepository;
@@ -21,8 +25,15 @@ public class QuestionService {
         questionRepository.save(question);
     }
 
-    public Iterable<Question> questions() {
-        return questionRepository.findAllByDeletedFalse();
+    public Iterable<Question> questions(int pageNumber) {
+        int numberOfQuestions = questionRepository.countAllByDeletedFalse();
+        PageList.verifyPageNumberIsInBoundary(pageNumber, numberOfQuestions);
+        return questionRepository.findAllByDeletedOrderByCreatedDateTimeDesc(false, PageRequest.of(pageNumber - 1, PageList.PAGE_SIZE));
+    }
+
+    public PageList pageListByCurrentPage(int currentPage) {
+        int numberOfQuestions = questionRepository.countAllByDeletedFalse();
+        return new PageList(currentPage, numberOfQuestions);
     }
 
     public Question questionDetail(long id) {

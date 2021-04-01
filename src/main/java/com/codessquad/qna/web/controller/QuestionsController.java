@@ -1,5 +1,6 @@
 package com.codessquad.qna.web.controller;
 
+import com.codessquad.qna.web.domain.PageList;
 import com.codessquad.qna.web.domain.Question;
 import com.codessquad.qna.web.domain.User;
 import com.codessquad.qna.web.service.QuestionService;
@@ -31,8 +32,16 @@ public class QuestionsController {
     }
 
     @GetMapping
-    public String questionList(Model model) {
-        model.addAttribute("questions", questionService.questions());
+    public String questionList(@RequestParam(defaultValue = "1") int pageNumber, Model model) {
+        model.addAttribute("questions", questionService.questions(pageNumber));
+        PageList pageList = questionService.pageListByCurrentPage(pageNumber);
+        model.addAttribute("pageList", pageList.getPages());
+        if (pageList.hasPrevBlock()) {
+            model.addAttribute("prevPage", pageList.getEndPageOfPrevBlock());
+        }
+        if (pageList.hasNextBlock()) {
+            model.addAttribute("nextPage", pageList.getStartPageOfNextBlock());
+        }
         return "index";
     }
 

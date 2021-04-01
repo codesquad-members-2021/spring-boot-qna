@@ -1,16 +1,16 @@
 package com.codessquad.qna.web.domain;
 
-import com.codessquad.qna.web.exceptions.InvalidEntityException;
-import com.codessquad.qna.web.exceptions.auth.UnauthorizedAccessException;
+import com.codessquad.qna.web.exceptions.Entity.InvalidEntityException;
+import com.codessquad.qna.web.exceptions.auth.ForbiddenAccessException;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
 import java.util.List;
 
-import static com.codessquad.qna.web.exceptions.InvalidEntityException.EMPTY_FIELD_IN_QUESTION_ENTITY;
-import static com.codessquad.qna.web.exceptions.auth.UnauthorizedAccessException.CANNOT_MODIFY_OR_DELETE_ANOTHER_USERS_QUESTION;
-import static com.codessquad.qna.web.exceptions.auth.UnauthorizedAccessException.CAN_NOT_DELETE_BECAUSE_ANOTHER_USERS_ANSWER_IS_EXISTS;
+import static com.codessquad.qna.web.exceptions.Entity.InvalidEntityException.EMPTY_FIELD_IN_QUESTION_ENTITY;
+import static com.codessquad.qna.web.exceptions.auth.ForbiddenAccessException.CANNOT_MODIFY_OR_DELETE_ANOTHER_USERS_QUESTION;
+import static com.codessquad.qna.web.exceptions.auth.ForbiddenAccessException.CAN_NOT_DELETE_BECAUSE_ANOTHER_USERS_ANSWER_IS_EXISTS;
 import static com.codessquad.qna.web.utils.EntityCheckUtils.isNotEmpty;
 
 @Entity
@@ -59,7 +59,7 @@ public class Question extends BaseTimeEntity {
     private void verifyIsDeletable() {
         answers.forEach((answer) -> {
             if (!writer.isMatchingId(answer.getWriter())) {
-                throw new UnauthorizedAccessException(CAN_NOT_DELETE_BECAUSE_ANOTHER_USERS_ANSWER_IS_EXISTS);
+                throw new ForbiddenAccessException(CAN_NOT_DELETE_BECAUSE_ANOTHER_USERS_ANSWER_IS_EXISTS);
             }
         });
     }
@@ -84,7 +84,7 @@ public class Question extends BaseTimeEntity {
 
     public void verifyIsQuestionOwner(User writer) {
         if (!isMatchingWriter(writer)) {
-            throw new UnauthorizedAccessException(CANNOT_MODIFY_OR_DELETE_ANOTHER_USERS_QUESTION);
+            throw new ForbiddenAccessException(CANNOT_MODIFY_OR_DELETE_ANOTHER_USERS_QUESTION);
         }
     }
 

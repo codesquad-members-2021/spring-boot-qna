@@ -1,12 +1,12 @@
 package com.codessquad.qna.web.domain;
 
-import com.codessquad.qna.web.exceptions.InvalidEntityException;
+import com.codessquad.qna.web.exceptions.Entity.InvalidEntityException;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonGetter;
 
 import javax.persistence.*;
 
-import static com.codessquad.qna.web.exceptions.InvalidEntityException.EMPTY_FIELD_IN_ANSWER_ENTITY;
+import static com.codessquad.qna.web.exceptions.Entity.InvalidEntityException.EMPTY_FIELD_IN_ANSWER_ENTITY;
 import static com.codessquad.qna.web.utils.EntityCheckUtils.isNotEmpty;
 
 @Entity
@@ -98,7 +98,7 @@ public class Answer extends BaseTimeEntity {
     }
 
     @JsonGetter("questionId")
-    public Long getTheQuestionId() {
+    public Long getQuestionId() {
         return question.getId();
     }
 
