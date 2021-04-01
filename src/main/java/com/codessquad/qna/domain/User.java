@@ -1,20 +1,22 @@
 package com.codessquad.qna.domain;
 
+import com.codessquad.qna.domain.validationGroup.user.Login;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.validation.constraints.NotBlank;
+import javax.validation.groups.Default;
 
 @Entity
 public class User extends BaseEntity {
     @Column(nullable = false, length = 20, unique = true)
-    @NotBlank
+    @NotBlank(groups = {Login.class, Default.class})
     private String userId;
 
     @Column(nullable = false, length = 20)
     @JsonIgnore
-    @NotBlank
+    @NotBlank(groups = {Login.class, Default.class})
     private String password;
 
     @Column(nullable = false, length = 20)

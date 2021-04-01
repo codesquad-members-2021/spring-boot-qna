@@ -1,6 +1,7 @@
 package com.codessquad.qna.controller;
 
 import com.codessquad.qna.domain.User;
+import com.codessquad.qna.domain.validationGroup.user.Login;
 import com.codessquad.qna.exception.NotAuthorizedException;
 import com.codessquad.qna.exception.NotFoundException;
 import com.codessquad.qna.service.UserService;
@@ -10,9 +11,11 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
+import javax.validation.Valid;
 
 @Controller
 @RequestMapping("/users")
@@ -32,7 +35,7 @@ public class UserController {
     }
 
     @PostMapping
-    public String create(User user) {
+    public String create(@Valid User user) {
         userService.addUser(user);
         return "redirect:/users";
     }
@@ -55,7 +58,7 @@ public class UserController {
     }
 
     @PutMapping("/{id}/update")
-    public String update(@PathVariable long id, User user, HttpSession session) {
+    public String update(@PathVariable long id, @Valid User user, HttpSession session) {
         if (HttpSessionUtils.isAuthorized(id, session)) {
             userService.updateUser(user);
             return "redirect:/users";
@@ -75,7 +78,7 @@ public class UserController {
     }
 
     @PostMapping("/login")
-    public String login(User user, HttpSession session) {
+    public String login(@Validated(Login.class) User user, HttpSession session) {
         logger.debug("login 요청: id={}", user.getUserId());
         try {
             User toLogin = userService.getUser(user.getUserId());
