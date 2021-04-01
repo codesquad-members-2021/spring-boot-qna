@@ -26,7 +26,6 @@ public class User {
 
     public User() {   }
 
-<<<<<<< HEAD
     public User(Long id, String userId, String password, String name, String email) {
         this.id = id;
         this.userId = userId;
@@ -39,8 +38,10 @@ public class User {
         return id;
     }
 
-=======
->>>>>>> 39bed9dca6a56efb222728320bf2450402e68b2d
+    public void setId(Long id) {
+        this.id = id;
+    }
+
     public String getUserId() {
         return userId;
     }
