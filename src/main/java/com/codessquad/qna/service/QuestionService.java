@@ -1,54 +1,63 @@
 package com.codessquad.qna.service;
 
 import com.codessquad.qna.exception.EntityNotFoundException;
-import com.codessquad.qna.exception.InvalidSessionException;
+import com.codessquad.qna.exception.IllegalUserAccessException;
 import com.codessquad.qna.model.Question;
-import com.codessquad.qna.model.User;
+import com.codessquad.qna.model.dto.QuestionDto;
+import com.codessquad.qna.model.dto.UserDto;
 import com.codessquad.qna.repository.QuestionRepository;
-import com.codessquad.qna.utils.ErrorMessage;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.codessquad.qna.exception.ErrorMessage;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class QuestionService {
 
-    @Autowired
-    private QuestionRepository questionRepository;
+    private final QuestionRepository questionRepository;
 
-    public void save(Question question, User sessionedUser) {
-        question.save(sessionedUser);
-        questionRepository.save(question);
+    public QuestionService(QuestionRepository questionRepository) {
+        this.questionRepository = questionRepository;
     }
 
-    public void update(Long questionId, Question newQuestion, User sessionedUser) {
-        Question oldQuestion = verifyQuestion(questionId, sessionedUser);
-        oldQuestion.update(newQuestion);
-        questionRepository.save(oldQuestion);
+    public void save(QuestionDto questionDto, UserDto sessionedUserDto) {
+        questionDto.save(sessionedUserDto);
+        questionRepository.save(questionDto.toEntity());
     }
 
-    public void delete(Long questionId, User sessionedUser) {
-        Question question = verifyQuestion(questionId, sessionedUser);
-        questionRepository.delete(question);
+    public void update(Long questionId, QuestionDto newQuestionDto, UserDto sessionedUserDto) {
+        QuestionDto oldQuestionDto = verifyQuestion(questionId, sessionedUserDto);
+        oldQuestionDto.update(newQuestionDto);
+        questionRepository.save(oldQuestionDto.toEntity());
     }
 
-    public Question findById(Long id) {
-        return questionRepository.findById(id).orElseThrow(() -> new EntityNotFoundException(ErrorMessage.QUESTION_NOT_FOUND));
-    }
-
-    public List<Question> findAll() {
-        List<Question> questionList = new ArrayList<>();
-        questionRepository.findAll().forEach(questionList::add);
-        return questionList;
-    }
-
-    public Question verifyQuestion(Long id, User sessionedUser) {
-        Question question = findById(id);
-        if (!question.matchWriter(sessionedUser)) {
-            throw new InvalidSessionException();
+    public boolean delete(Long questionId, UserDto sessionedUserDto) {
+        QuestionDto questionDto = verifyQuestion(questionId, sessionedUserDto);
+        boolean result = questionDto.delete();
+        if (result) {
+            questionRepository.save(questionDto.toEntity());
         }
-        return question;
+        return result;
+    }
+
+    public QuestionDto findById(Long id) {
+        Question question = questionRepository.findById(id).orElseThrow(() ->
+                new EntityNotFoundException(ErrorMessage.QUESTION_NOT_FOUND));
+        return new QuestionDto(question);
+    }
+
+    public List<QuestionDto> findAll() {
+        return questionRepository.findAllByDeletedFalse().stream()
+                .map(QuestionDto::new)
+                .collect(Collectors.toList());
+    }
+
+    public QuestionDto verifyQuestion(Long id, UserDto sessionedUserDto) {
+        QuestionDto questionDto = findById(id);
+        if (!questionDto.matchWriter(sessionedUserDto)) {
+            throw new IllegalUserAccessException();
+        }
+        return questionDto;
     }
 }

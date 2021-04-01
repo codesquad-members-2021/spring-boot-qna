@@ -1,59 +1,63 @@
 package com.codessquad.qna.service;
 
 import com.codessquad.qna.exception.EntityNotFoundException;
-import com.codessquad.qna.exception.InvalidSessionException;
+import com.codessquad.qna.exception.IllegalUserAccessException;
 import com.codessquad.qna.exception.UserAccountException;
 import com.codessquad.qna.model.User;
+import com.codessquad.qna.model.dto.UserDto;
 import com.codessquad.qna.repository.UserRepository;
-import com.codessquad.qna.utils.ErrorMessage;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.codessquad.qna.exception.ErrorMessage;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class UserService {
 
-    @Autowired
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
 
-    public void save(User user) {
-        if (userRepository.findByUserId(user.getUserId()).isPresent()) {
+    public UserService(UserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
+
+    public void save(UserDto userDto) {
+        if (userRepository.findByUserId(userDto.getUserId()).isPresent()) {
             throw new UserAccountException(ErrorMessage.DUPLICATED_ID);
         }
-        userRepository.save(user);
+        userRepository.save(userDto.toEntity());
     }
 
-    public User login(String userId, String password) {
-        return userRepository.findByUserIdAndPassword(userId, password).orElseThrow(
+    public UserDto login(String userId, String password) {
+        User user = userRepository.findByUserIdAndPassword(userId, password).orElseThrow(
                 () -> new UserAccountException(ErrorMessage.LOGIN_FAILED));
+        return new UserDto(user);
     }
 
-    public boolean update(Long id, User targetUser, String currentPassword, User sessionedUser) {
-        User user = verifyUser(id, sessionedUser);
-        if (!user.matchPassword(currentPassword)) {
-            return false;
+    public void update(Long id, UserDto targetUserDto, String currentPassword, UserDto sessionedUserDto) {
+        UserDto userDto = verifyUser(id, sessionedUserDto);
+        if (!userDto.matchPassword(currentPassword)) {
+            throw new UserAccountException(ErrorMessage.WRONG_PASSWORD);
         }
-        user.update(targetUser);
-        userRepository.save(user);
-        return true;
+        userDto.update(targetUserDto);
+        userRepository.save(userDto.toEntity());
     }
 
-    public User verifyUser(Long id, User sessionedUser) {
-        if (!sessionedUser.matchId(id)) {
-            throw new InvalidSessionException();
+    public UserDto verifyUser(Long id, UserDto sessionedUserDto) {
+        if (!sessionedUserDto.matchId(id)) {
+            throw new IllegalUserAccessException();
         }
-        return sessionedUser;
+        return sessionedUserDto;
     }
 
-    public User findById(Long id) {
-        return userRepository.findById(id).orElseThrow(() -> new EntityNotFoundException(ErrorMessage.USER_NOT_FOUND));
+    public UserDto findById(Long id) {
+        User user = userRepository.findById(id).orElseThrow(() -> new EntityNotFoundException(ErrorMessage.USER_NOT_FOUND));
+        return new UserDto(user);
     }
 
-    public List<User> findAll() {
-        List<User> userList = new ArrayList<>();
-        userRepository.findAll().forEach(userList::add);
-        return userList;
+    public List<UserDto> findAll() {
+        return userRepository.findAll().stream()
+                .map(UserDto::new)
+                .collect(Collectors.toList());
     }
 }

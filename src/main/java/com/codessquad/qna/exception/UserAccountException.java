@@ -1,7 +1,5 @@
 package com.codessquad.qna.exception;
 
-import com.codessquad.qna.utils.ErrorMessage;
-
 public class UserAccountException extends RuntimeException {
 
     private ErrorMessage errorMessage;

@@ -1,88 +1,84 @@
 package com.codessquad.qna.model;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
+import java.util.List;
 
 @Entity
 public class Question {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
-    private String writer;
+    @ManyToOne
+    @JoinColumn(foreignKey = @ForeignKey(name = "fk_question_writer"))
+    private User writer;
+
     @Column(nullable = false)
     private String dateTime;
+
     @Column(nullable = false)
     private String title;
+
+    @Lob
     @Column(nullable = false)
     private String contents;
 
-    private static final DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+    @OneToMany(mappedBy = "question", cascade = CascadeType.REMOVE)
+    @OrderBy("id ASC")
+    private List<Answer> answers;
 
-    public void save(User user) {
-        this.writer = user.getUserId();
-        this.dateTime = LocalDateTime.now().format(dateTimeFormatter);
-    }
+    @Column(columnDefinition = "boolean default false")
+    private boolean deleted;
 
-    public void update(Question question) {
-        this.title = question.title;
-        this.contents = question.contents;
-    }
+    public Question() {}
 
-    public boolean matchWriter(User user) {
-        return this.writer.equals(user.getUserId());
+    public Question(Long id, User writer, String dateTime, String title, String contents, boolean deleted) {
+        this.id = id;
+        this.writer = writer;
+        this.dateTime = dateTime;
+        this.title = title;
+        this.contents = contents;
+        this.deleted = deleted;
     }
 
     public Long getId() {
         return id;
     }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getWriter() {
+    public User getWriter() {
         return writer;
-    }
-
-    public void setWriter(String writer) {
-        this.writer = writer;
     }
 
     public String getDateTime() {
         return dateTime;
     }
 
-    public void setDateTime(String dateTime) {
-        this.dateTime = dateTime;
-    }
-
     public String getTitle() {
         return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
     }
 
     public String getContents() {
         return contents;
     }
 
-    public void setContents(String contents) {
-        this.contents = contents;
+    public List<Answer> getAnswers() {
+        return answers;
+    }
+
+    public boolean isDeleted() {
+        return deleted;
     }
 
     @Override
     public String toString() {
         return "Question{" +
                 "id=" + id +
-                ", writer='" + writer + '\'' +
+                ", writer=" + writer +
                 ", dateTime='" + dateTime + '\'' +
                 ", title='" + title + '\'' +
                 ", contents='" + contents + '\'' +
+                ", deleted=" + deleted +
                 '}';
     }
 }
