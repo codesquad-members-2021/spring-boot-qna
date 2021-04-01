@@ -15,22 +15,22 @@ public class ControllerExceptionHandler {
     @ExceptionHandler(LoginFailedException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public String loginFailed(LoginFailedException exception, Model model) {
-        return errorPageSender(exception, model);
+        initializeModel(exception, model);
+        return "/error/login_failed";
     }
 
-    @ExceptionHandler(NotFoundException.class)
-    public String notFoundException(NotFoundException exception, Model model) {
-        return errorPageSender(exception, model);
+    @ExceptionHandler(NotLoggedInException.class)
+    @ResponseStatus(HttpStatus.UNAUTHORIZED)
+    public String notLoggedInException(NotFoundException exception, Model model) {
+        initializeModel(exception, model);
+        return "redirect:/signup";
     }
 
-    @ExceptionHandler(UnauthorizedQuestionException.class)
-    public String unauthorizedException(UnauthorizedQuestionException exception, Model model) {
-        return errorPageSender(exception, model);
-    }
-
-    @ExceptionHandler(UnacceptableDuplicationException.class)
+    @ExceptionHandler({UnacceptableDuplicationException.class, UnauthorizedQuestionException.class, NotFoundException.class})
+    @ResponseStatus(HttpStatus.NOT_FOUND)
     public String unacceptableDuplicationException(UnacceptableDuplicationException exception, Model model) {
-        return errorPageSender(exception, model);
+        initializeModel(exception, model);
+        return "/error/error_page";
     }
 
     private void initializeModel(Exception exception, Model model) {
@@ -39,9 +39,5 @@ public class ControllerExceptionHandler {
         model.addAttribute("errorMessage", exceptionMessage);
     }
 
-    private String errorPageSender(Exception exception, Model model) {
-        initializeModel(exception, model);
-        return "/error/error_page";
-    }
 
 }

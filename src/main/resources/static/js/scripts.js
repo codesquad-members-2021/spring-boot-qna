@@ -45,7 +45,7 @@ function createAnswer(event) {
 function onCreateAnswerSuccess(data, status) {
     console.log(status + " : " + data);
     let answerTemplate = $("#answerTemplate").html();
-    let template = answerTemplate.format(data.writer.userId, data.formattedCreateDate, data.contents, data.question.id, data.id);
+    let template = answerTemplate.format(data.writer.userId, data.createdDateTime, data.contents, data.question.id, data.id);
     console.log("answerTemplate : " + answerTemplate);
     console.log("template : " + template);
     $(".qna-comment-slipp-articles").prepend(template);
