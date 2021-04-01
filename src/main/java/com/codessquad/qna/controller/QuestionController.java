@@ -1,6 +1,6 @@
 package com.codessquad.qna.controller;
 
-import com.codessquad.qna.model.Question;
+import com.codessquad.qna.model.dto.QuestionDto;
 import com.codessquad.qna.service.QuestionService;
 import com.codessquad.qna.exception.ErrorMessage;
 import org.springframework.stereotype.Controller;
@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
 
-import static com.codessquad.qna.utils.HttpSessionUtils.getUserFromSession;
+import static com.codessquad.qna.utils.HttpSessionUtils.getUserDtoFromSession;
 import static com.codessquad.qna.utils.HttpSessionUtils.isLoginUser;
 
 @Controller
@@ -35,8 +35,8 @@ public class QuestionController {
     }
 
     @PostMapping("/form")
-    public String newQuestion(Question question, HttpSession session) {
-        questionService.save(question, getUserFromSession(session));
+    public String newQuestion(QuestionDto questionDto, HttpSession session) {
+        questionService.save(questionDto, getUserDtoFromSession(session));
         return "redirect:/";
     }
 
@@ -48,19 +48,19 @@ public class QuestionController {
 
     @GetMapping("/{questionId}/updateForm")
     public String qnaUpdatePage(@PathVariable Long questionId, Model model, HttpSession session) {
-        model.addAttribute("question", questionService.verifyQuestion(questionId, getUserFromSession(session)));
+        model.addAttribute("question", questionService.verifyQuestion(questionId, getUserDtoFromSession(session)));
         return "qna/questionUpdateForm";
     }
 
     @PutMapping("/{questionId}/updateForm")
-    public String updateQuestion(@PathVariable Long questionId, Question updatedQuestion, HttpSession session) {
-        questionService.update(questionId, updatedQuestion, getUserFromSession(session));
+    public String updateQuestion(@PathVariable Long questionId, QuestionDto updatedQuestionDto, HttpSession session) {
+        questionService.update(questionId, updatedQuestionDto, getUserDtoFromSession(session));
         return "redirect:/questions/" + questionId;
     }
 
     @DeleteMapping("/{questionId}")
     public String deleteQuestion(@PathVariable Long questionId, Model model, HttpSession session) {
-        boolean result = questionService.delete(questionId, getUserFromSession(session));
+        boolean result = questionService.delete(questionId, getUserDtoFromSession(session));
         if (!result) {
             model.addAttribute("question", questionService.findById(questionId));
             model.addAttribute("errorMessage", ErrorMessage.DELETE_FAILED);
