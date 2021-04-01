@@ -2,6 +2,7 @@ package com.codessquad.qna.controller;
 
 import com.codessquad.qna.domain.Question;
 import com.codessquad.qna.domain.User;
+import com.codessquad.qna.domain.validationGroup.question.Submit;
 import com.codessquad.qna.exception.NotAuthorizedException;
 import com.codessquad.qna.exception.UserNotFoundInSessionException;
 import com.codessquad.qna.service.QuestionService;
@@ -11,6 +12,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
@@ -33,16 +35,16 @@ public class QuestionController {
     }
 
     @PostMapping
-    public String create(String title, String contents, HttpSession session) {
+    public String create(@Validated(Submit.class) Question question, HttpSession session) {
         User user = HttpSessionUtils.getUser(session);
-        questionService.addQuestion(user, title, contents);
+        questionService.addQuestion(user, question.getTitle(), question.getContents());
         return "redirect:/";
     }
 
     @PutMapping("/{id}")
-    public String update(@PathVariable long id, String contents, String title, HttpSession session) {
+    public String update(@PathVariable long id, @Validated(Submit.class) Question question, HttpSession session) {
         User tryToUpdate = HttpSessionUtils.getUser(session);
-        questionService.updateQuestion(id, title, contents, tryToUpdate);
+        questionService.updateQuestion(id, question.getTitle(), question.getContents(), tryToUpdate);
         return "redirect:/questions/" + id;
     }
 

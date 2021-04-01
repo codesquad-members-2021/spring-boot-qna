@@ -1,11 +1,13 @@
 package com.codessquad.qna.domain;
 
+import com.codessquad.qna.domain.validationGroup.question.Submit;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import javax.validation.groups.Default;
 import java.util.List;
 
 @Entity
@@ -16,11 +18,11 @@ public class Question extends BaseEntity {
     private User writer;
 
     @Column(nullable = false, length = 100)
-    @NotBlank
+    @NotBlank(groups = {Submit.class, Default.class})
     private String title;
 
     @Column(nullable = false, length = 3000)
-    @NotBlank
+    @NotBlank(groups = {Submit.class, Default.class})
     private String contents;
 
     @OneToMany(mappedBy = "question")
