@@ -1,9 +1,6 @@
 package com.codessquad.qna.service;
 
-import com.codessquad.qna.domain.Answer;
-import com.codessquad.qna.domain.AnswerRepository;
-import com.codessquad.qna.domain.Question;
-import com.codessquad.qna.domain.User;
+import com.codessquad.qna.domain.*;
 import com.codessquad.qna.exception.AnswerNotFoundException;
 import com.codessquad.qna.exception.IllegalUserAccessException;
 import org.springframework.stereotype.Service;
@@ -32,16 +29,22 @@ public class AnswerService {
         answerRepository.delete(answer);
     }
 
-    public void deleteById(Long id, User user) {
+    public Result deleteById(Long id, User user) {
         Answer answer = findAnswerById(id);
-        verifyWriter(answer, user);
+        if (!verifyWriter(answer, user)) {
+            return Result.fail("You Can Only Delete Your Answers");
+        }
         answer.delete();
         answerRepository.save(answer);
+
+        return Result.ok();
     }
 
-    public void verifyWriter(Answer answer, User user) {
+    public boolean verifyWriter(Answer answer, User user) {
         if (!answer.isAnswerWriter(user)) {
-            throw new IllegalUserAccessException();
+            //throw new IllegalUserAccessException();
+            return false;
         }
+        return true;
     }
 }

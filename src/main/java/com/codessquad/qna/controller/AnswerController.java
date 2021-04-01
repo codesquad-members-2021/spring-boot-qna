@@ -1,6 +1,7 @@
 package com.codessquad.qna.controller;
 
 import com.codessquad.qna.domain.Answer;
+import com.codessquad.qna.domain.Result;
 import com.codessquad.qna.domain.User;
 import com.codessquad.qna.service.AnswerService;
 import org.springframework.web.bind.annotation.*;
@@ -30,14 +31,13 @@ public class AnswerController {
     }
 
     @DeleteMapping("/{id}")
-    public String delete(@PathVariable Long questionId, @PathVariable Long id, HttpSession session) {
+    public Result delete(@PathVariable Long questionId, @PathVariable Long id, HttpSession session) {
         if (!isLoginUser(session)) {
-            return "redirect:/users/login";
+            return Result.fail("You must login");
         }
-
         User loginUser = getUserFromSession(session);
-        answerService.deleteById(id, loginUser);
 
-        return "redirect:/questions/{questionId}";
+        // Returns either Result.ok() or Result.fail();
+        return answerService.deleteById(id, loginUser);
     }
 }
