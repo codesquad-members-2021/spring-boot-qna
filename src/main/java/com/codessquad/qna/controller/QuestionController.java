@@ -15,7 +15,6 @@ import java.util.List;
 @RequestMapping("/questions")
 public class QuestionController {
 
-    public static final Logger logger = LoggerFactory.getLogger(QuestionController.class);
 
     private final QuestionRepository questionRepository;
     private final AnswerRepository answerRepository;
@@ -94,7 +93,6 @@ public class QuestionController {
         if (! HttpSessionUtils.isLoginUser(session)) {
             return "redirect:/users/loginForm";
         }
-        List<Answer> answers = answerRepository.findByQuestionId(id);
         User sessionedUser = HttpSessionUtils.getUserFromSession(session);
         Question question = questionRepository.findById(id).orElseThrow(
                 () -> new IllegalArgumentException("해당하는 질문이 존재하지 않습니다."));
@@ -102,14 +100,11 @@ public class QuestionController {
         if(! question.isSameWriter(sessionedUser)) {
             throw new IllegalArgumentException("질문자와 로그인한 사용자가 다른 경우 삭제할 수 없습니다.");
         }
-
-        for(int i = 0 ; i < answers.size() ; i++) {
-            if(! answers.get(i).getWriter().equals(sessionedUser) ) {
-                throw new IllegalArgumentException("로그인한 사용자가 아닌 답변자가 존재하는 경우 삭제할 수 없습니다.");
-            }
-            if(! answers.get(i).getWriter().equals(question.getWriter())) {
-                throw new IllegalArgumentException("질문자와 답변자가 다른 경우 삭제할 수 없습니다.");
-            }
+        if(! question.isSameQuestionWriterAndAnswersWriter(sessionedUser)) {
+            throw new IllegalArgumentException("로그인한 사용자가 아닌 답변자가 존재하는 경우 삭제할 수 없습니다.");
+        }
+        if(! question.isSameQuestionWriterAndAnswersWriter(question.getWriter())) {
+            throw new IllegalArgumentException("질문자와 답변자가 다른 경우 삭제할 수 없습니다.");
         }
 
         question.delete();

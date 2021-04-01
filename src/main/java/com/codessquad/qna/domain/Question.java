@@ -107,6 +107,15 @@ public class Question {
         return this.writer.equals(loginUser);
     }
 
+    public boolean isSameQuestionWriterAndAnswersWriter(User user) {
+        for(int i = 0 ; i < answers.size() ; i++) {
+            if(! answers.get(i).getWriter().equals(user)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
