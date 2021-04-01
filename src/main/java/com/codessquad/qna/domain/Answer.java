@@ -1,8 +1,11 @@
 package com.codessquad.qna.domain;
 
+import com.codessquad.qna.domain.validationGroup.Submit;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import javax.validation.groups.Default;
 
 @Entity
 public class Answer extends BaseEntity {
@@ -17,7 +20,7 @@ public class Answer extends BaseEntity {
     private User writer;
 
     @Column(nullable = false, length = 3000)
-    @NotBlank
+    @NotBlank(groups = {Submit.class, Default.class})
     private String contents;
 
     @Column(columnDefinition = "boolean default false")

@@ -1,6 +1,6 @@
 package com.codessquad.qna.domain;
 
-import com.codessquad.qna.domain.validationGroup.question.Submit;
+import com.codessquad.qna.domain.validationGroup.Submit;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.Where;
 
