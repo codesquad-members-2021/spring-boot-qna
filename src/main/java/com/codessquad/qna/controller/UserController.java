@@ -18,9 +18,13 @@ import javax.servlet.http.HttpSession;
 @RequestMapping("/users")
 public class UserController {
 
+<<<<<<< HEAD
     private static final Logger logger = LoggerFactory.getLogger(UserController.class);
 
     private UserRepository userRepository;
+=======
+   private final UserRepository userRepository;
+>>>>>>> 39bed9dca6a56efb222728320bf2450402e68b2d
 
     public UserController(UserRepository userRepository) {
         this.userRepository = userRepository;
@@ -29,6 +33,15 @@ public class UserController {
 
     @PostMapping
     public String createUserAccount(User user) {
+<<<<<<< HEAD
+=======
+        if (user.getUserId().equals("") || user.getUserId() == null ||
+            user.getName().equals("") || user.getName() == null ||
+            user.getEmail().equals("") || user.getEmail() == null ||
+            user.getPassword().equals("") || user.getPassword() == null) {
+            return "redirect:/user/form";
+        }
+>>>>>>> 39bed9dca6a56efb222728320bf2450402e68b2d
         userRepository.save(user);
         return "redirect:/users";
     }
@@ -45,6 +58,7 @@ public class UserController {
         return "/user/profile";
     }
 
+<<<<<<< HEAD
 
     @GetMapping("/{id}/updateForm")
     public String showUpdateForm(@PathVariable Long id, Model model, HttpSession session) {
@@ -74,6 +88,17 @@ public class UserController {
         if(! sessionedUser.matchPassword(updateUser.getPassword())) {
             throw new IllegalStateException("비밀번호가 틀렸습니다.");
         }
+=======
+    @GetMapping("/{id}")
+    public String showUpdateForm(@PathVariable Long id, Model model) {
+        model.addAttribute("user", userRepository.findById(id).orElse(null));
+        return "/user/update";
+    }
+
+   @PutMapping("/{id}/update")
+    public String updateUserInfo(@PathVariable Long id, User updateUser) {
+        User user = userRepository.findById(id).orElse(null);
+>>>>>>> 39bed9dca6a56efb222728320bf2450402e68b2d
         user.update(updateUser);
         userRepository.save(user);
         return "redirect:/users";
