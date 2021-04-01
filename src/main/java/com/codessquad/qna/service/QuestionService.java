@@ -95,7 +95,7 @@ public class QuestionService {
     public List<Integer> test() {
 
         List<Integer> pages = new ArrayList<>();
-        for (int i = 0; i < questionRepository.countAllByDeletedFalse() / 5; i++) { // 5 is the size of a page
+        for (int i = 1; i < (questionRepository.countAllByDeletedFalse() / 5) + 1; i++) { // 5 is the size of a page
             pages.add(i);
         }
         return pages;
