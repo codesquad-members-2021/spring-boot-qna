@@ -2,6 +2,7 @@ package com.codessquad.qna.exception;
 
 public enum ErrorMessage {
 
+    ENTITY_NOT_CREATE("해당 엔티티가 만들어지지 않았습니다."),
     USER_NOT_FOUND("해당 유저를 찾을 수 없습니다."),
     QUESTION_NOT_FOUND("해당 질문을 찾을 수 없습니다."),
     ANSWER_NOT_FOUND("해당 답변을 찾을 수 없습니다."),

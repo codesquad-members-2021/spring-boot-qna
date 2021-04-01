@@ -6,12 +6,12 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 
 import javax.servlet.http.HttpSession;
 
-import static com.codessquad.qna.utils.HttpSessionUtils.getUserFromSession;
+import static com.codessquad.qna.utils.HttpSessionUtils.getUserDtoFromSession;
 
 @ControllerAdvice
 public class GlobalExceptionHandler{
 
-    @ExceptionHandler(EntityNotFoundException.class)
+    @ExceptionHandler({EntityNotCreateException.class, EntityNotFoundException.class})
     private String handleEntityNotFoundException() {
         return "redirect:/";
     }
@@ -31,7 +31,7 @@ public class GlobalExceptionHandler{
             case DUPLICATED_ID:
                 return "user/userSignup";
             case WRONG_PASSWORD:
-                model.addAttribute("user", getUserFromSession(session));
+                model.addAttribute("user", getUserDtoFromSession(session));
                 return "user/userUpdateForm";
             default:
                 return "redirect:/";
