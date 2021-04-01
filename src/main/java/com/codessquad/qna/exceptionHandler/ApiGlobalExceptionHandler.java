@@ -30,7 +30,7 @@ public class ApiGlobalExceptionHandler {
             ConstraintViolationException.class
     })
     @ResponseStatus(value = HttpStatus.BAD_REQUEST)
-    public String constraintViolation(RuntimeException ex) {
+    public String constraintViolation(Exception ex) {
         return ex.getMessage();
     }
 }

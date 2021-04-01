@@ -19,7 +19,7 @@ public class GlobalExceptionHandler {
             BindException.class,
             ConstraintViolationException.class
     })
-    public String exceptionPage(RuntimeException ex, Model model) {
+    public String exceptionPage(Exception ex, Model model) {
         model.addAttribute("errorMessage", ex.getMessage());
         return "/error/handledError";
     }
