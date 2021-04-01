@@ -1,7 +1,7 @@
 package com.codessquad.qna.utils;
 
 import com.codessquad.qna.exception.IllegalUserAccessException;
-import com.codessquad.qna.model.User;
+import com.codessquad.qna.model.dto.UserDto;
 
 import javax.servlet.http.HttpSession;
 
@@ -14,8 +14,8 @@ public class HttpSessionUtils {
         }
     }
 
-    public static User getUserFromSession(HttpSession session) {
+    public static UserDto getUserDtoFromSession(HttpSession session) {
         isLoginUser(session);
-        return (User)session.getAttribute(USER_SESSION_KEY);
+        return (UserDto)session.getAttribute(USER_SESSION_KEY);
     }
 }

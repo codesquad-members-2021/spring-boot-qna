@@ -1,6 +1,6 @@
 package com.codessquad.qna.controller;
 
-import com.codessquad.qna.model.User;
+import com.codessquad.qna.model.dto.UserDto;
 import com.codessquad.qna.service.UserService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -32,8 +32,8 @@ public class UserController {
     }
 
     @PostMapping("/signup")
-    public String signup(User user) {
-        userService.save(user);
+    public String signup(UserDto userDto) {
+        userService.save(userDto);
         return "redirect:/users";
     }
 
@@ -62,13 +62,13 @@ public class UserController {
 
     @GetMapping("/{id}/updateForm")
     public String updateFormPage(@PathVariable Long id, Model model, HttpSession session) {
-        model.addAttribute("user", userService.verifyUser(id, getUserFromSession(session)));
+        model.addAttribute("user", userService.verifyUser(id, getUserDtoFromSession(session)));
         return "user/userUpdateForm";
     }
 
     @PutMapping("/{id}/updateForm")
-    public String updateUser(@PathVariable Long id, User targetUser, String currentPassword, HttpSession session) {
-        userService.update(id, targetUser, currentPassword, getUserFromSession(session));
+    public String updateUser(@PathVariable Long id, UserDto targetUserDto, String currentPassword, HttpSession session) {
+        userService.update(id, targetUserDto, currentPassword, getUserDtoFromSession(session));
         return "redirect:/users";
     }
 }
