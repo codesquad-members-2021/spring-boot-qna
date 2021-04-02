@@ -40,7 +40,7 @@
                         <li class="page-item"><a class="page-link" href="?page={{previous}}">«</a></li>
                         {{/checkPrevious}}
                         {{^checkPrevious}}
-                        <li class="page-item disabled"><a class="page-link" href="?page={{previous}}">«</a></li>
+                        <li class="page-item disabled"><a class="page-link">«</a></li>
                         {{/checkPrevious}}
                         {{#makePages}}
                         <li><a href="?page={{this}}">{{this}}</a></li>
@@ -49,7 +49,7 @@
                         <li class="page-item"><a class="page-link" href="?page={{next}}">»</a></li>
                         {{/checkNext}}
                         {{^checkNext}}
-                        <li class="page-item disabled"><a class="page-link" href="?page={{next}}">»</a></li>
+                        <li class="page-item disabled"><a class="page-link">»</a></li>
                         {{/checkNext}}
                     </ul>
                 </div>
