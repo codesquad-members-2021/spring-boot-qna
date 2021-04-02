@@ -7,12 +7,14 @@ import com.codessquad.qna.exception.NotAuthorizedException;
 import com.codessquad.qna.exception.NotFoundException;
 import com.codessquad.qna.repository.QuestionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 @Service
 public class QuestionService {
+    private static final int PAGE_SIZE = 5;
     private final QuestionRepository questionRepository;
 
     @Autowired
@@ -47,8 +49,9 @@ public class QuestionService {
         questionRepository.save(question);
     }
 
-    public List<Question> getQuestions() {
-        return questionRepository.findAll();
+    public Page<Question> getQuestions(int pageNum) {
+        Sort sort = Sort.by("createdDateTime").descending().and(Sort.by("id").descending());
+        return questionRepository.findAll(PageRequest.of(pageNum, PAGE_SIZE, sort));
     }
 
     public Question getQuestion(long id) {
