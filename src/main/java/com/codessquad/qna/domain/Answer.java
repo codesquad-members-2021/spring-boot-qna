@@ -7,8 +7,8 @@ import javax.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
-@SQLDelete(sql = "UPDATE ANSWER SET is_active = 0 WHERE id = ?")
-@Where(clause = "is_active=1")
+@SQLDelete(sql = "UPDATE ANSWER SET is_deleted = 1 WHERE id = ?")
+@Where(clause = "is_deleted = 0")
 public class Answer {
 
     @Id
@@ -28,7 +28,7 @@ public class Answer {
 
     private LocalDateTime createdAt = LocalDateTime.now();
 
-    private boolean isActive = true;
+    private boolean isDeleted;
 
     protected Answer() {
     }
@@ -59,7 +59,7 @@ public class Answer {
         return createdAt;
     }
 
-    public boolean isMatchingWriter(User user){
+    public boolean isMatchingWriter(User user) {
         return writer.equals(user);
     }
 
