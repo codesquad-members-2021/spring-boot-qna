@@ -49,10 +49,6 @@ public class QuestionDto {
         return createdAt;
     }
 
-    public void setCreatedAt(String createdAt) {
-        this.createdAt = createdAt;
-    }
-
     public Question toEntity(User user) {
         return new Question(user, this.title, this.contents);
     }

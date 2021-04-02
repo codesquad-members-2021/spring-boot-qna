@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 @ControllerAdvice
 public class ControllerExceptionHandler {
 
-    @ExceptionHandler(NotLoginException.class)
+    @ExceptionHandler(UnauthenticatedException.class)
     public String handleNotLoginException() {
         return "user/login_failed";
     }

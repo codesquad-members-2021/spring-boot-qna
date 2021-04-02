@@ -13,7 +13,7 @@ public class HandlebarHelper {
     private HandlebarHelper() {
     }
 
-    public static CharSequence formatDateTime(LocalDateTime createdAt) {
+    public static CharSequence formattedDateTime(LocalDateTime createdAt) {
         return createdAt.format(DateTimeFormatter.ofPattern(ISO8601));
     }
 }

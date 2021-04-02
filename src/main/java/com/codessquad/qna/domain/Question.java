@@ -9,8 +9,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@SQLDelete(sql = "UPDATE QUESTION SET is_active = 0 WHERE id = ?")
-@Where(clause = "is_active=1")
+@SQLDelete(sql = "UPDATE QUESTION SET is_deleted = 1 WHERE id = ?")
+@Where(clause = "is_deleted = 0")
 public class Question {
 
     @Id
@@ -30,7 +30,7 @@ public class Question {
     @Column(nullable = false)
     private String contents;
 
-    private boolean isActive = true;
+    private boolean isDeleted;
 
     private LocalDateTime createdAt = LocalDateTime.now();
 
@@ -67,7 +67,7 @@ public class Question {
         return contents;
     }
 
-    public boolean isMatchingWriter(User user){
+    public boolean isMatchingWriter(User user) {
         return writer.equals(user);
     }
 

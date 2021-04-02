@@ -1,5 +1,7 @@
 package com.codessquad.qna.domain;
 
+import com.codessquad.qna.StringUtils;
+
 import javax.persistence.*;
 import java.util.Objects;
 
@@ -60,7 +62,7 @@ public class User {
     }
 
     public boolean isEmpty() {
-        return userId.equals("") || password.equals("") || name.equals("") || email.equals("");
+        return StringUtils.isEmpty(userId) || StringUtils.isEmpty(name) || StringUtils.isEmpty(email) || StringUtils.isEmpty(password);
     }
 
     public void update(User updateUser) {

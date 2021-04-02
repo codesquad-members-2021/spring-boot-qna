@@ -17,7 +17,7 @@
                         </div>
                         <div class="article-header-text">
                             <a href="/users/{{question.writer.id}}" class="article-author-name">{{question.writer.userId}}</a>
-                            <a href="/questions/413" class="article-header-time" title="퍼머링크">{{formatDateTime question.createdAt}}
+                            <a href="/questions/413" class="article-header-time" title="퍼머링크">{{formattedDateTime question.createdAt}}
                                 <i class="icon-link"></i>
                             </a>
                         </div>
@@ -53,7 +53,7 @@
                                     </div>
                                     <div class="article-header-text">
                                         <a href="/users/1/자바지기" class="article-author-name">{{writer.userId}}</a>
-                                        {{formatDateTime createdAt}}
+                                        {{formattedDateTime createdAt}}
                                         </a>
                                     </div>
                                 </div>

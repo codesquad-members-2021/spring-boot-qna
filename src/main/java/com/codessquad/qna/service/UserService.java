@@ -2,7 +2,7 @@ package com.codessquad.qna.service;
 
 import com.codessquad.qna.domain.User;
 import com.codessquad.qna.domain.UserRepository;
-import com.codessquad.qna.exception.NotLoginException;
+import com.codessquad.qna.exception.UnauthenticatedException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -32,7 +32,7 @@ public class UserService {
     }
 
     public User findUserByUserId(String userId) {
-        return userRepository.findUserByUserId(userId).orElseThrow(() -> new NotLoginException("로그인하실 수 없습니다."));
+        return userRepository.findUserByUserId(userId).orElseThrow(() -> new UnauthenticatedException("로그인하실 수 없습니다."));
     }
 
     public boolean isNewUser(User user) {
