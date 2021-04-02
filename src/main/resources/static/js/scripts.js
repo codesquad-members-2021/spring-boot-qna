@@ -35,19 +35,21 @@ function deleteAnswer(event) {
         url : url,
         dataType : 'json',
         error : function (xhr, status) {
-            console.log("error");
+            console.log("error!!!");
+            console.log("xhr",xhr);
+            console.log("status",status);
         },
         success : function (data, status) {
-            console.log(data);
-            if (data.valid) {
-                deleteBtn.closest("article").remove();
-            } else {
-                alert(data.errorMessage);
-            }
+            console.log("Delete success!! ",data);
+            let deletId = data.message;
+            $(this).closest("article").remove();
+            //if (data.valid) {
+            //    deleteBtn.closest("article").remove();
+            //} else {
+            //    alert(data.errorMessage);
+            //}
         }
     });
-
-    console.log()
 
 }
 
@@ -89,7 +91,7 @@ function onCreateAnswerSuccess(data, status) {
 }
 
 function onCreateAnswerFailed() {
-    console.log("Failed T.T");
+    console.log("create Answer Failed");
 }
 
 
