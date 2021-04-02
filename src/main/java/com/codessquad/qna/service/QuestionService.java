@@ -48,9 +48,9 @@ public class QuestionService {
     }
 
     @Transactional
-    public void updateQuestion(Long id, Question updateQuestion) {
+    public void updateQuestion(Long id, String updateTitle, String updateContents) {
         Question question = getQuestionById(id);
-        question.update(updateQuestion);
+        question.update(updateTitle, updateContents);
     }
 
     public Result valid(boolean isLoginUser, User sessionUser, Question question) {
