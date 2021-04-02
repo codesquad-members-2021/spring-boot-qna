@@ -43,13 +43,23 @@ function createAnswer(event) {
 }
 //questionId << 변환은 안될듯? >> question_id
 function onCreateAnswerSuccess(data, status) {
-    console.log(status , " : " , data);
+    //console.log(status , " : " , data);
     let answerTemplate = $("#answerTemplate").html();
     let template = answerTemplate.format(data.writer.userId, data.createdDateTime, data.contents, data.questionId, data.id);
-    console.log("answerTemplate : " , answerTemplate);
-    console.log("template : " , template);
+    //console.log("answerTemplate : " , answerTemplate);
+    //console.log("template : " , template);
     $(".qna-comment-slipp-articles").append(template);
     $("textarea[name=contents]").val("");
+
+    //qna-comment-count 이런속성을 가진 아이를 가져온다
+    // 아이를 가져온거에서 >> 값을 추출해서 +1 한다음에 다시 ㅇ적용한디
+    let commentCountElement = $(".qna-comment-count").children(':last');
+    //console.log("commentCountElement : ",commentCountElement);
+    let commentCount = commentCountElement.html();
+    console.log("commentCount" , commentCount);
+    commentCountElement.text(parseInt(commentCount)+1);
+    //@Todo 제이쿼리는 >> 클래스 셀렉터는 .쩜! 을
+    // 태그의 id속성은 # 샵 으로구분한다
 }
 
 function onCreateAnswerFailed() {
