@@ -4,6 +4,9 @@
         <div class="panel panel-default">
             <header class="qna-header">
                 <h2 class="qna-title">{{question.title}}</h2>
+                {{#error}}
+                <div class="alert alert-danger" role="alert">{{error}}</div>
+                {{/error}}
             </header>
             <div class="content-main">
                 <article class="article">
@@ -14,8 +17,7 @@
                         </div>
                         <div class="article-header-text">
                             <a href="/users/{{question.writer.id}}" class="article-author-name">{{question.writer.userId}}</a>
-                            <a href="/questions/413" class="article-header-time" title="퍼머링크">
-                                {{question.time}}
+                            <a href="/questions/413" class="article-header-time" title="퍼머링크">{{formattedDateTime question.createdAt}}
                                 <i class="icon-link"></i>
                             </a>
                         </div>
@@ -34,9 +36,6 @@
                                     <button class="link-delete-article" type="submit">삭제</button>
                                 </form>
                             </li>
-                            <li>
-                                <a class="link-modify-article" href="/index.html">목록</a>
-                            </li>
                         </ul>
                     </div>
                 </article>
@@ -54,7 +53,7 @@
                                     </div>
                                     <div class="article-header-text">
                                         <a href="/users/1/자바지기" class="article-author-name">{{writer.userId}}</a>
-                                        {{formatDateTime time}}
+                                        {{formattedDateTime createdAt}}
                                         </a>
                                     </div>
                                 </div>
@@ -63,10 +62,6 @@
                                 </div>
                                 <div class="article-util">
                                     <ul class="article-util-list">
-                                        <li>
-                                            <a class="link-modify-article"
-                                               href="/questions/413/answers/1405/form">수정</a>
-                                        </li>
                                         <li>
                                             <form class="delete-answer-form"
                                                   action="/questions/{{question.id}}/answers/{{id}}"
@@ -111,9 +106,6 @@
         </div>
         <div class="article-util">
             <ul class="article-util-list">
-                <li>
-                    <a class="link-modify-article" href="/api/qna/updateAnswer/{3}">수정</a>
-                </li>
                 <li>
                     <form class="delete-answer-form" action="/api/questions/{3}/answers/{4}" method="POST">
                         <input type="hidden" name="_method" value="DELETE">

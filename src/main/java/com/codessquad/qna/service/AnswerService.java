@@ -1,6 +1,7 @@
 package com.codessquad.qna.service;
 
 import com.codessquad.qna.domain.*;
+import com.codessquad.qna.exception.CrudNotAllowedException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -11,35 +12,34 @@ import java.util.List;
 public class AnswerService {
 
     private final AnswerRepository answerRepository;
-    private final QuestionRepository questionRepository;
+    private final QuestionService questionService;
 
-    public AnswerService(AnswerRepository answerRepository, QuestionRepository questionRepository) {
+    public AnswerService(AnswerRepository answerRepository, QuestionService questionService) {
         this.answerRepository = answerRepository;
-        this.questionRepository = questionRepository;
+        this.questionService = questionService;
     }
 
     @Transactional
-    public long create(User user, long questionId, String contents) {
-        Question question = questionRepository.findById(questionId).orElseThrow(IllegalArgumentException::new);
+    public void create(User user, long questionId, String contents) {
+        Question question = questionService.findQuestionById(questionId);
         Answer answer = new Answer(user, question, contents);
         answerRepository.save(answer);
-        return question.getId();
     }
 
     public List<Answer> findAnswersByQuestionId(long questionId) {
         return answerRepository.findAnswersByQuestionId(questionId);
     }
 
-    @Transactional
-    public long delete(long answerId, User user) {
-        Answer answer = answerRepository.findById(answerId).orElseThrow(IllegalArgumentException::new);
-        if (verifyAnswer(answer, user)) {
-            answerRepository.delete(answer);
-        }
-        return answer.getQuestion().getId();
+    public Answer findAnswerByAnswerId(long answerId) {
+        return answerRepository.findById(answerId).orElseThrow(IllegalArgumentException::new);
     }
 
-    public boolean verifyAnswer(Answer answer, User sessionedUser) {
-        return sessionedUser.isMatchingUserId(answer.getWriter());
+    @Transactional
+    public void delete(Answer answer, User user) {
+        if (answer.isMatchingWriter(user)) {
+            answerRepository.delete(answer);
+        } else {
+            throw new CrudNotAllowedException("자신의 답변만 삭제할 수 있습니다.");
+        }
     }
 }

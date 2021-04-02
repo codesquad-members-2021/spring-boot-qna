@@ -1,9 +1,13 @@
 package com.codessquad.qna.controller;
 
 import com.codessquad.qna.HttpSessionUtils;
+import com.codessquad.qna.domain.Answer;
 import com.codessquad.qna.domain.User;
+import com.codessquad.qna.exception.CrudNotAllowedException;
 import com.codessquad.qna.service.AnswerService;
+import com.codessquad.qna.service.QuestionService;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -16,8 +20,10 @@ import javax.servlet.http.HttpSession;
 public class AnswerController {
 
     private final AnswerService answerService;
+    private final QuestionService questionService;
 
-    public AnswerController(AnswerService answerService) {
+    public AnswerController(AnswerService answerService, QuestionService questionService) {
+        this.questionService = questionService;
         this.answerService = answerService;
     }
 
@@ -29,9 +35,17 @@ public class AnswerController {
     }
 
     @DeleteMapping("/{answerId}")
-    public String deleteAnswer(@PathVariable long answerId, HttpSession session) {
+    public String deleteAnswer(@PathVariable long questionId, @PathVariable long answerId, HttpSession session, Model model) {
         User sessionedUser = HttpSessionUtils.getUserFromSession(session);
-        long questionId = answerService.delete(answerId, sessionedUser);
-        return "redirect:/questions/" + questionId;
+        Answer answer = answerService.findAnswerByAnswerId(answerId);
+        try {
+            answerService.delete(answer, sessionedUser);
+            return "redirect:/questions/" + questionId;
+        } catch (CrudNotAllowedException exception) {
+            model.addAttribute("error", exception.getMessage());
+            model.addAttribute("question", questionService.findQuestionById(questionId));
+            model.addAttribute("answers", answerService.findAnswersByQuestionId(questionId));
+            return "qna/show";
+        }
     }
 }

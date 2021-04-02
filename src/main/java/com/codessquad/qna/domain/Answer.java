@@ -1,9 +1,14 @@
 package com.codessquad.qna.domain;
 
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
+
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
+@SQLDelete(sql = "UPDATE ANSWER SET is_deleted = 1 WHERE id = ?")
+@Where(clause = "is_deleted = 0")
 public class Answer {
 
     @Id
@@ -21,10 +26,11 @@ public class Answer {
     @Column(nullable = false)
     private String contents;
 
-    private LocalDateTime time= LocalDateTime.now();
+    private LocalDateTime createdAt = LocalDateTime.now();
+
+    private boolean isDeleted;
 
     protected Answer() {
-
     }
 
     public Answer(User writer, Question question, String contents) {
@@ -49,8 +55,12 @@ public class Answer {
         return contents;
     }
 
-    public LocalDateTime getTime() {
-        return time;
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
+
+    public boolean isMatchingWriter(User user) {
+        return writer.equals(user);
     }
 
     @Override
@@ -60,7 +70,7 @@ public class Answer {
                 ", writer=" + writer +
                 ", question=" + question +
                 ", contents='" + contents + '\'' +
-                ", time='" + time + '\'' +
+                ", createdAt='" + createdAt + '\'' +
                 '}';
     }
 }

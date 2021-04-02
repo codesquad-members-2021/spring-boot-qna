@@ -1,11 +1,16 @@
 package com.codessquad.qna.domain;
 
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
+
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity
+@SQLDelete(sql = "UPDATE QUESTION SET is_deleted = 1 WHERE id = ?")
+@Where(clause = "is_deleted = 0")
 public class Question {
 
     @Id
@@ -25,10 +30,11 @@ public class Question {
     @Column(nullable = false)
     private String contents;
 
-    private LocalDateTime time = LocalDateTime.now();
+    private boolean isDeleted;
+
+    private LocalDateTime createdAt = LocalDateTime.now();
 
     protected Question() {
-
     }
 
     public Question(User writer, String title, String contents) {
@@ -37,8 +43,8 @@ public class Question {
         this.contents = contents;
     }
 
-    public LocalDateTime getTime() {
-        return this.time;
+    public LocalDateTime getCreatedAt() {
+        return this.createdAt;
     }
 
     public long getId() {
@@ -49,7 +55,7 @@ public class Question {
         return writer;
     }
 
-    public List<Answer> getAnswers(){
+    public List<Answer> getAnswers() {
         return answers;
     }
 
@@ -61,10 +67,14 @@ public class Question {
         return contents;
     }
 
+    public boolean isMatchingWriter(User user) {
+        return writer.equals(user);
+    }
+
     public void update(Question question) {
         this.writer = question.getWriter();
         this.contents = question.getContents();
-        this.time = question.getTime();
+        this.createdAt = question.getCreatedAt();
         this.title = question.getTitle();
     }
 

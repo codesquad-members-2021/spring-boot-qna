@@ -1,6 +1,9 @@
 package com.codessquad.qna.domain;
 
+import com.codessquad.qna.StringUtils;
+
 import javax.persistence.*;
+import java.util.Objects;
 
 @Entity
 public class User {
@@ -17,7 +20,6 @@ public class User {
     private String email;
 
     protected User() {
-
     }
 
     public User(String userId, String password, String name, String email) {
@@ -59,6 +61,10 @@ public class User {
         return this.userId.equals(user.userId);
     }
 
+    public boolean isEmpty() {
+        return StringUtils.isEmpty(userId) || StringUtils.isEmpty(name) || StringUtils.isEmpty(email) || StringUtils.isEmpty(password);
+    }
+
     public void update(User updateUser) {
         this.password = updateUser.password;
         this.name = updateUser.name;
@@ -73,5 +79,19 @@ public class User {
                 ", name='" + name + '\'' +
                 ", email='" + email + '\'' +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        User user = (User) o;
+        return Objects.equals(id, user.id) &&
+                Objects.equals(userId, user.userId);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, userId);
     }
 }

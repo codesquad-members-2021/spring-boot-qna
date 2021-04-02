@@ -10,16 +10,15 @@ public class QuestionDto {
     private User writer;
     private String title;
     private String contents;
-    private String time;
+    private String createdAt;
 
     protected QuestionDto() {
-
     }
 
     public QuestionDto(String title, String contents) {
         this.title = title;
         this.contents = contents;
-        this.time = DateTimeUtils.stringOf(LocalDateTime.now());
+        this.createdAt = DateTimeUtils.stringOf(LocalDateTime.now());
     }
 
     public User getWriter() {
@@ -46,12 +45,8 @@ public class QuestionDto {
         this.contents = contents;
     }
 
-    public String getTime() {
-        return time;
-    }
-
-    public void setTime(String time) {
-        this.time = time;
+    public String getCreatedAt() {
+        return createdAt;
     }
 
     public Question toEntity(User user) {
