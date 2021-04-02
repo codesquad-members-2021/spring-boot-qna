@@ -2,7 +2,7 @@ package com.codessquad.qna.controller;
 
 import com.codessquad.qna.HttpSessionUtils;
 import com.codessquad.qna.domain.User;
-import com.codessquad.qna.exception.NotLoginException;
+import com.codessquad.qna.exception.UnauthenticatedException;
 import com.codessquad.qna.service.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -38,7 +38,7 @@ public class UserController {
     public String login(String userId, String password, HttpSession session) {
         User user = userService.findUserByUserId(userId);
         if (!user.isMatchingPassword(password)) {
-            throw new NotLoginException("로그인하실 수 없습니다.");
+            throw new UnauthenticatedException("로그인하실 수 없습니다.");
         }
         session.setAttribute(HttpSessionUtils.USER_SESSION_KEY, user);
         return "redirect:/";
