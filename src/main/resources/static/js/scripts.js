@@ -41,14 +41,14 @@ function createAnswer(event) {
         error: onCreateAnswerFailed
     });
 }
-
+//questionId << 변환은 안될듯? >> question_id
 function onCreateAnswerSuccess(data, status) {
-    console.log(status + " : " + data);
+    console.log(status , " : " , data);
     let answerTemplate = $("#answerTemplate").html();
-    let template = answerTemplate.format(data.writer.userId, data.createdDateTime, data.contents, data.question.id, data.id);
-    console.log("answerTemplate : " + answerTemplate);
-    console.log("template : " + template);
-    $(".qna-comment-slipp-articles").prepend(template);
+    let template = answerTemplate.format(data.writer.userId, data.createdDateTime, data.contents, data.questionId, data.id);
+    console.log("answerTemplate : " , answerTemplate);
+    console.log("template : " , template);
+    $(".qna-comment-slipp-articles").append(template);
     $("textarea[name=contents]").val("");
 }
 

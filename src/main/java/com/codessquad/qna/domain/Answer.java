@@ -1,6 +1,7 @@
 package com.codessquad.qna.domain;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonGetter;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -99,4 +100,11 @@ public class Answer {
     public boolean isSameWriter(User questionWriter) {
         return this.writer.equals(questionWriter);
     }
+
+
+    @JsonGetter("questionId")
+    public Long getTheQuestionId() {
+        return this.question.getId();
+    }
+
 }

@@ -84,17 +84,19 @@
                               </div>
                           </article>
                           {{/question.answerList}}
-                          <form class="submit-write" method="post" action="/api/questions/{{id}}/answers">
-                              <div class="form-group" style="padding:14px;">
-                                  <textarea class="form-control" placeholder="Update your status" name="contents"></textarea>
-                              </div>
-                              <input id="id-button-submit-answer" type="button" class="btn btn-success pull-right" value="답변하기"/>
 
-                              <div class="clearfix" />
-
-                          </form>
                       </div>
+                      <form class="submit-write" method="post" action="/api/questions/{{id}}/answers">
+                          <div class="form-group" style="padding:14px;">
+                              <textarea class="form-control" placeholder="Update your status" name="contents"></textarea>
+                          </div>
+                          <input id="id-button-submit-answer" type="button" class="btn btn-success pull-right" value="답변하기"/>
+
+                          <div class="clearfix" />
+
+                      </form>
                   </div>
+
               </div>
           </div>
         </div>
