@@ -22,8 +22,34 @@ $(document).ready(() => {//powered by pyro
     //@Todo 뭐하는건지 공부해보기
 
     $('#id-button-submit-answer').on('click', createAnswer);
-    //$(".delete-answer-form button[type='submit']").on('click', deleteAnswer);
+    $(".delete-answer-form button[type='submit']").on('click', deleteAnswer);
 })
+
+function deleteAnswer(event) {
+    event.preventDefault();
+    // 클릭한 버튼의 상위 form 태그의 url(action 속성)을 구하면
+    let deleteBtn = $(this); //내가 삭제하려는 댓글의 정보를 획득
+
+    $.ajax({
+        type : 'delete',
+        url : url,
+        dataType : 'json',
+        error : function (xhr, status) {
+            console.log("error");
+        },
+        success : function (data, status) {
+            console.log(data);
+            if (data.valid) {
+                deleteBtn.closest("article").remove();
+            } else {
+                alert(data.errorMessage);
+            }
+        }
+    });
+
+    console.log()
+
+}
 
 
 function createAnswer(event) {
@@ -65,4 +91,5 @@ function onCreateAnswerSuccess(data, status) {
 function onCreateAnswerFailed() {
     console.log("Failed T.T");
 }
+
 
