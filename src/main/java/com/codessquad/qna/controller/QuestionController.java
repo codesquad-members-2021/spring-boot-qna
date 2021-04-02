@@ -17,6 +17,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
+import java.util.List;
 
 @Controller
 @RequestMapping("/questions")
@@ -32,8 +33,16 @@ public class QuestionController {
     @GetMapping
     public String list(int page, Model model) {
         Page<Question> questionPage = questionService.getQuestions(page);
+        int totalPageNum = questionPage.getTotalPages();
+
+        List<Integer> pageNumbers = questionService.pageNumbers(page, totalPageNum);
+        int prevPageNum = questionService.prevPageNumber(pageNumbers);
+        int nextPageNum = questionService.nextPageNumber(pageNumbers, totalPageNum);
 
         model.addAttribute("questions", questionPage.toList());
+        model.addAttribute("pageNumbers", pageNumbers);
+        model.addAttribute("prevPageNum", prevPageNum);
+        model.addAttribute("nextPageNum", nextPageNum);
         return "qna/list";
     }
 
