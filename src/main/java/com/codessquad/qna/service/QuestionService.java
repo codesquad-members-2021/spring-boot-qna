@@ -93,9 +93,11 @@ public class QuestionService {
 
     @Transactional
     public List<Integer> makePages() {
+        int pageSize = 5;
+        int startPage = 1;
 
         List<Integer> pages = new ArrayList<>();
-        for (int i = 1; i < ((questionRepository.countAllByDeletedFalse() / 5) + 1) + 1; i++) { // 5 is the size of a page
+        for (int i = startPage; i < ((questionRepository.countAllByDeletedFalse() / pageSize) + 1) + startPage; i++) { // 5 is the size of a page
             pages.add(i);
         }
         return pages;
