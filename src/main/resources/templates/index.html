@@ -7,7 +7,6 @@
 <body>
 
 {{> base/nav}}
-{{questionString}}
 <div class="container" id="main">
     <div class="col-md-12 col-sm-12 col-lg-10 col-lg-offset-1">
         <div class="panel panel-default qna-list">
@@ -43,9 +42,9 @@
                         {{^checkPrevious}}
                         <li class="page-item disabled"><a class="page-link" href="?page={{previous}}">«</a></li>
                         {{/checkPrevious}}
-                        {{#test}}
+                        {{#makePages}}
                         <li><a href="?page={{this}}">{{this}}</a></li>
-                        {{/test}}
+                        {{/makePages}}
                         {{#checkNext}}
                         <li class="page-item"><a class="page-link" href="?page={{next}}">»</a></li>
                         {{/checkNext}}
