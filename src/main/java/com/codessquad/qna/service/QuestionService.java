@@ -45,6 +45,8 @@ public class QuestionService {
 
     @Transactional
     public Page<Question> getQuestionList(Pageable pageable) {
+        pageable = PageRequest.of(pageable.getPageNumber() <= 0 ? 0 : pageable.getPageNumber() -1
+                , pageable.getPageSize());
         return questionRepository.findAllByDeletedIsFalse(pageable);
     }
 
