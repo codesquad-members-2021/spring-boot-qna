@@ -30,7 +30,7 @@ public class ApiAnswerController {
         }
 
         User loginUser = getLoginUser(session);
-        Question question = questionRepostory.findById(questionId).orElseThrow(() -> new NotFoundException(" 메시지 유틸 수정해야 함"));
+        Question question = questionRepostory.findById(questionId).orElseThrow(() -> new NotFoundException());
         Answer answer = new Answer(loginUser, question, contents);
         return answerRepository.save(answer);
 
@@ -41,7 +41,7 @@ public class ApiAnswerController {
         if (!isLoginUser(session)) {
             throw new NotLoggedInException();
         }
-        Answer answer = answerRepository.findById(answerId).orElseThrow(() -> new NotFoundException(" 메시지 유틸 수정해야 함"));
+        Answer answer = answerRepository.findById(answerId).orElseThrow(() -> new NotFoundException());
         if(!answer.getWriter().isSessionSameAsUser(session)) {
             throw new UnauthorizedAnswerException();
         }

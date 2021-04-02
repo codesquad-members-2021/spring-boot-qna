@@ -27,7 +27,7 @@ public class UserService {
 
     public void createUser(User user) {
         if (userRepository.findByUserId(user.getUserId()).isPresent()) {
-            throw new UnacceptableDuplicationException(REDUNDANT_USERID);
+            throw new WrongInputException();
         }
         userRepository.save(user);
     }
@@ -37,13 +37,13 @@ public class UserService {
     }
 
     public User showProfile(Long id) {
-        return userRepository.findById(id).orElseThrow(() -> new NotFoundException(NOT_FOUNDED_USER));
+        return userRepository.findById(id).orElseThrow(() -> new NotFoundException());
     }
 
 
     public void updateUser(Long id, String pastPassword, User updatedUser, HttpSession session) {
         User sessionUser = getLoginUser(session);
-        User currentUser = userRepository.findById(id).orElseThrow(() -> new NotFoundException(NOT_FOUNDED_USER));
+        User currentUser = userRepository.findById(id).orElseThrow(() -> new NotFoundException());
 
         if (!currentUser.isMatchingPassword(pastPassword)) {
             throw new UnauthorizedProfileModificationException();
@@ -58,9 +58,9 @@ public class UserService {
     }
 
     public void validationCheck(Long id, HttpSession session) {
-        User foundUser = userRepository.findById(id).orElseThrow(() -> new NotFoundException(NOT_FOUNDED_USER));
+        User foundUser = userRepository.findById(id).orElseThrow(() -> new NotFoundException());
         if (!foundUser.isSessionSameAsUser(session)) {
-            logger.debug(PROFILE_MODIFICATION_FAIL);
+
             throw new UnauthorizedProfileModificationException();
         }
     }

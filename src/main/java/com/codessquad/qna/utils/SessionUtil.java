@@ -5,9 +5,6 @@ import com.codessquad.qna.exception.NotLoggedInException;
 
 import javax.servlet.http.HttpSession;
 
-import static com.codessquad.qna.exception.ExceptionMessages.ANYONE_NOT_LOGGED_IN;
-
-
 public class SessionUtil {
 
     private static final String SESSION_KEY_LOGIN_USER = "loginUser";

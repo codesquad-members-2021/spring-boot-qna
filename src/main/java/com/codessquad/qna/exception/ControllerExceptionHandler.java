@@ -27,7 +27,7 @@ public class ControllerExceptionHandler {
     }
 
     // @Todo  : UnacceptableDuplicationException>> 컨플릭트, UnauthorizedQuestionException>> 401
-    @ExceptionHandler({UnacceptableDuplicationException.class, UnauthorizedQuestionException.class, NotFoundException.class})
+    @ExceptionHandler({WrongInputException.class, UnauthorizedQuestionException.class, NotFoundException.class})
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public String unacceptableDuplicationException(RuntimeException exception, Model model) {
         initializeModel(exception, model);

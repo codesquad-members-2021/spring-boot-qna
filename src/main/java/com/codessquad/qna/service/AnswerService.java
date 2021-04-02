@@ -41,7 +41,7 @@ public class AnswerService {
     }
 
     public void removeAnswer(Long answerId, HttpSession session) {
-        Answer answer = answerRepository.findById(answerId).orElseThrow(() -> new NotFoundException(NOT_FOUNDED_ANSWER));
+        Answer answer = answerRepository.findById(answerId).orElseThrow(() -> new NotFoundException());
 
         if (!answer.getWriter().isSessionSameAsUser(session)) {
             throw new UnauthorizedAnswerException();

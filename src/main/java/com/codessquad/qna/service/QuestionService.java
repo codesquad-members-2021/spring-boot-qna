@@ -34,7 +34,7 @@ public class QuestionService {
     }
 
     public Question showDetailQuestion(Long id) {
-        return questionRepostory.findByIdAndDeletedFalse(id).orElseThrow(() -> new NotFoundException(NOT_FOUNDED_QUESTION));
+        return questionRepostory.findByIdAndDeletedFalse(id).orElseThrow(() -> new NotFoundException());
     }
 
     public List<Question> findAll() {
@@ -42,14 +42,14 @@ public class QuestionService {
     }
 
     public void updateQuestion(Long id, String title, String contents) {
-        Question question = questionRepostory.findById(id).orElseThrow(() -> new NotFoundException(NOT_FOUNDED_QUESTION));
+        Question question = questionRepostory.findById(id).orElseThrow(() -> new NotFoundException());
         question.update(title, contents);
         questionRepostory.save(question);
         logger.debug("질문글 업데이트됨, questionId : {}", id);
     }
 
     public void deleteQuestion(Long questionId, HttpSession session) {
-        Question question = questionRepostory.findById(questionId).orElseThrow(() -> new NotFoundException(NOT_FOUNDED_QUESTION));
+        Question question = questionRepostory.findById(questionId).orElseThrow(() -> new NotFoundException());
         if (!question.getWriter().isSessionSameAsUser(session)) {
             throw new UnauthorizedQuestionException();
         }
@@ -63,7 +63,7 @@ public class QuestionService {
     }
 
     public void updateForm(Long id, Model model, HttpSession session) {
-        Question question = questionRepostory.findById(id).orElseThrow(() -> new NotFoundException(NOT_FOUNDED_QUESTION));
+        Question question = questionRepostory.findById(id).orElseThrow(() -> new NotFoundException());
         if (!question.getWriter().isSessionSameAsUser(session)) {
             throw new UnauthorizedQuestionException();
         }
