@@ -9,7 +9,7 @@ String.prototype.format = function () {
 };
 
 $(document).ready(() => {//powered by pyro
-    /*
+
     let currHerf = location.pathname
     $(".sub-nav-li").each((index, item) => {
 
@@ -18,37 +18,34 @@ $(document).ready(() => {//powered by pyro
         $(item).addClass('active');
       }
     });
-    */
+
     //@Todo 뭐하는건지 공부해보기
 
     $('#id-button-submit-answer').on('click', createAnswer);
-    $(".delete-answer-form button[type='submit']").on('click', deleteAnswer);
+    //$(".delete-answer-form button[type='submit']").on('click', deleteAnswer);
+    //$(".delete-answer-form button[type='submit']").on('click', ".delete-answer-form button[type='submit']", deleteAnswer);
+    $(".link-delete-article").click(deleteAnswer);
 })
 
 function deleteAnswer(event) {
     event.preventDefault();
     // 클릭한 버튼의 상위 form 태그의 url(action 속성)을 구하면
-    let deleteBtn = $(this); //내가 삭제하려는 댓글의 정보를 획득
-
+    let deleteForm = $(this).parents('form');
+    let url = deleteForm.attr('action');
+    console.log("deleteForm : ",deleteForm);
+    console.log("url : ",url);
     $.ajax({
         type : 'delete',
         url : url,
         dataType : 'json',
-        error : function (xhr, status) {
-            console.log("error!!!");
-            console.log("xhr",xhr);
-            console.log("status",status);
-        },
         success : function (data, status) {
-            console.log("Delete success!! ",data);
-            let deletId = data.message;
-            $(this).closest("article").remove();
-            //if (data.valid) {
-            //    deleteBtn.closest("article").remove();
-            //} else {
-            //    alert(data.errorMessage);
-            //}
+            $(this).closest('article').remove();
+            decreaseAnswerCount();
+        },
+        error : function () {
+            console.log("답변 삭제 실패");
         }
+
     });
 
 }
@@ -94,4 +91,15 @@ function onCreateAnswerFailed() {
     console.log("create Answer Failed");
 }
 
+function increaseAnswerCount() {
+    let countElement = $('#id-qna-comment-count');
+    let value = parseInt(countElement.text()) + 1;
+    countElement.html(value);
+}
+
+function decreaseAnswerCount() {
+    let countElement = $('#id-qna-comment-count');
+    let value = parseInt(countElement.text()) - 1;
+    countElement.html(value);
+}
 

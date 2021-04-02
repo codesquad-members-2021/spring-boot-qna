@@ -3,6 +3,7 @@ package com.codessquad.qna.controller;
 import com.codessquad.qna.domain.*;
 import com.codessquad.qna.exception.NotFoundException;
 import com.codessquad.qna.exception.NotLoggedInException;
+import com.codessquad.qna.exception.UnauthorizedAnswerException;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
@@ -38,14 +39,18 @@ public class ApiAnswerController {
     }
 
     @DeleteMapping("/{answerId}")
-    public void remove(@PathVariable Long questionId, @PathVariable Long answerId, HttpSession session) {
+    public void remove(@PathVariable("questionId") Long questionId, @PathVariable("answerId") Long answerId, HttpSession session) {
         //델리트 요청이 들어오면 ->> 댓글을 삭제
         if (!isLoginUser(session)) {
             throw new NotLoggedInException();
         }
         //댓글 삭제
-        User loginUser = getLoginUser(session);
+
         Answer answer = answerRepository.findById(answerId).orElseThrow(() -> new NotFoundException(" 메시지 유틸 수정해야 함"));
+        if(!answer.getWriter().isSessionSameAsUser(session)) {
+            throw new UnauthorizedAnswerException();
+        }
+        answerRepository.delete(answer);
         return;// ("redirect:/questions/"+ Long.toString(questionId));
     }
 
