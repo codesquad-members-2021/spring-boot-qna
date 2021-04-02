@@ -24,7 +24,7 @@ $(document).ready(() => {//powered by pyro
     $('#id-button-submit-answer').on('click', createAnswer);
     //$(".delete-answer-form button[type='submit']").on('click', deleteAnswer);
     //$(".delete-answer-form button[type='submit']").on('click', ".delete-answer-form button[type='submit']", deleteAnswer);
-    $(".link-delete-article").click(deleteAnswer);
+    $('#id-button-delete-answer').click(deleteAnswer);
 })
 
 function deleteAnswer(event) {
