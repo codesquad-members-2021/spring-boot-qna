@@ -56,7 +56,7 @@ public class UserController {
 
     @PutMapping("/{id}")
     public String updateUser(@PathVariable long id, String userId, String password, String name, String email, String newPassword) {
-        userService.updateUser(id, userId, password, name ,email, newPassword);
+        userService.updateUser(id, userId, password, name, email, newPassword);
         return "redirect:/users";
     }
 

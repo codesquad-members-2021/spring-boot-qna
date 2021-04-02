@@ -1,7 +1,6 @@
 package com.codessquad.qna.web;
 
 import com.codessquad.qna.domain.Answer;
-import com.codessquad.qna.domain.Question;
 import com.codessquad.qna.domain.Result;
 import com.codessquad.qna.domain.User;
 import com.codessquad.qna.exception.IllegalUserInfoException;
