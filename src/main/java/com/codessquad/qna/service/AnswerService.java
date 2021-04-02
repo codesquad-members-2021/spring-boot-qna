@@ -1,8 +1,8 @@
 package com.codessquad.qna.service;
 
 import com.codessquad.qna.domain.*;
+import com.codessquad.qna.domain.repository.AnswerRepository;
 import com.codessquad.qna.exception.AnswerNotFoundException;
-import com.codessquad.qna.exception.IllegalUserAccessException;
 import org.springframework.stereotype.Service;
 
 @Service

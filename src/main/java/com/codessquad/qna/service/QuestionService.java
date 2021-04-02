@@ -1,7 +1,7 @@
 package com.codessquad.qna.service;
 
 import com.codessquad.qna.domain.Question;
-import com.codessquad.qna.domain.QuestionRepository;
+import com.codessquad.qna.domain.repository.QuestionRepository;
 import com.codessquad.qna.domain.User;
 import com.codessquad.qna.exception.QuestionNotFoundException;
 import org.springframework.stereotype.Service;

@@ -1,5 +1,6 @@
-package com.codessquad.qna.domain;
+package com.codessquad.qna.domain.repository;
 
+import com.codessquad.qna.domain.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;
