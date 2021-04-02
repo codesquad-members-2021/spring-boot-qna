@@ -1,6 +1,7 @@
 package com.codessquad.qna.service;
 
 import com.codessquad.qna.domain.*;
+import com.codessquad.qna.exception.CrudNotAllowedException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -34,11 +35,12 @@ public class AnswerService{
     }
 
     @Transactional
-    public boolean delete(Answer answer, User user) {
+    public void delete(Answer answer, User user) {
         if (answer.isMatchingWriter(user)) {
             answerRepository.delete(answer);
-            return true;
         }
-        return false;
+        else{
+            throw new CrudNotAllowedException("자신의 답변만 삭제할 수 있습니다.");
+        }
     }
 }

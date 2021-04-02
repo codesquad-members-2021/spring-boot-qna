@@ -3,6 +3,7 @@ package com.codessquad.qna.controller;
 import com.codessquad.qna.HttpSessionUtils;
 import com.codessquad.qna.domain.Answer;
 import com.codessquad.qna.domain.User;
+import com.codessquad.qna.exception.CrudNotAllowedException;
 import com.codessquad.qna.service.AnswerService;
 import com.codessquad.qna.service.QuestionService;
 import org.springframework.stereotype.Controller;
@@ -37,12 +38,14 @@ public class AnswerController {
     public String deleteAnswer(@PathVariable long questionId, @PathVariable long answerId, HttpSession session, Model model) {
         User sessionedUser = HttpSessionUtils.getUserFromSession(session);
         Answer answer = answerService.findAnswerByAnswerId(answerId);
-        if (!answerService.delete(answer, sessionedUser)) {
-            model.addAttribute("error", "자신의 답변만 삭제할 수 있습니다.");
+        try {
+            answerService.delete(answer, sessionedUser);
+            return "redirect:/questions/" + questionId;
+        } catch (CrudNotAllowedException exception) {
+            model.addAttribute("error", exception.getMessage());
             model.addAttribute("question", questionService.findQuestionById(questionId));
             model.addAttribute("answers", answerService.findAnswersByQuestionId(questionId));
             return "qna/show";
         }
-        return "redirect:/questions/" + questionId;
     }
 }
