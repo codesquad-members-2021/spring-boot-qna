@@ -32,8 +32,8 @@ public class QuestionController {
     }
 
     @PostMapping
-    public String createNewQuestion(Question question, HttpSession session) {
-        questionService.save(HttpSessionUtils.getUserFromSession(session), question);
+    public String createNewQuestion(String title, String contents, HttpSession session) {
+        questionService.save(HttpSessionUtils.getUserFromSession(session), title, contents);
         return "redirect:/";
     }
 
@@ -66,8 +66,8 @@ public class QuestionController {
     }
 
     @PutMapping("{id}")
-    public String updateQuestion(@PathVariable long id, Question updateQuestion) {
-        questionService.updateQuestion(id, updateQuestion);
+    public String updateQuestion(@PathVariable long id, String title, String contents) {
+        questionService.updateQuestion(id, title, contents);
         return "redirect:/";
     }
 

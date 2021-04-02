@@ -5,7 +5,6 @@ import com.codessquad.qna.domain.Question;
 import com.codessquad.qna.domain.User;
 import com.codessquad.qna.exception.NoQuestionException;
 import com.codessquad.qna.repository.AnswerRepository;
-import com.codessquad.qna.repository.QuestionRepository;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -21,11 +20,22 @@ public class AnswerService {
     }
 
     @Transactional
-    public void save(User user, Long questionId, String contents) {
+    public Answer save(User user, Long questionId, String contents) {
         Question question = questionService.getQuestionById(questionId);
         Answer answer = new Answer(user, question, contents);
 
         question.addAnswer(answer);
-        answerRepository.save(answer);
+        return answerRepository.save(answer);
+    }
+
+    public Answer getAnswerById(Long answerId) {
+        return answerRepository.findById(answerId).orElseThrow(NoQuestionException::new);
+    }
+
+    @Transactional
+    public void delete(Answer answer, Long questionId) {
+        Question question = questionService.getQuestionById(questionId);
+        question.deleteAnswer(answer);
+        answer.deleted();
     }
 }

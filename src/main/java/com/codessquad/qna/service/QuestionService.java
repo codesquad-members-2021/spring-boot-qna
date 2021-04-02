@@ -23,8 +23,8 @@ public class QuestionService {
     }
 
     @Transactional
-    public void save(User sessionUser, Question question) {
-        question.setWriter(sessionUser);
+    public void save(User sessionUser, String title, String contents) {
+        Question question = new Question(sessionUser, title, contents);
         questionRepository.save(question);
     }
 
@@ -35,7 +35,7 @@ public class QuestionService {
         if (!result.isValid()) {
             return result;
         }
-        question.delete();
+        question.deleted();
         return result;
     }
 
@@ -46,11 +46,11 @@ public class QuestionService {
     public Question getQuestionById(Long id) {
         return questionRepository.findById(id).orElseThrow(NoQuestionException::new);
     }
-    
+
     @Transactional
-    public void updateQuestion(Long id, Question updateQuestion) {
+    public void updateQuestion(Long id, String updateTitle, String updateContents) {
         Question question = getQuestionById(id);
-        question.update(updateQuestion);
+        question.update(updateTitle, updateContents);
     }
 
     public Result valid(boolean isLoginUser, User sessionUser, Question question) {
