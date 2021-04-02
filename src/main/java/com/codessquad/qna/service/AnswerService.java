@@ -11,16 +11,16 @@ import java.util.List;
 public class AnswerService{
 
     private final AnswerRepository answerRepository;
-    private final QuestionRepository questionRepository;
+    private final QuestionService questionService;
 
-    public AnswerService(AnswerRepository answerRepository, QuestionRepository questionRepository) {
+    public AnswerService(AnswerRepository answerRepository, QuestionService questionService) {
         this.answerRepository = answerRepository;
-        this.questionRepository = questionRepository;
+        this.questionService = questionService;
     }
 
     @Transactional
     public void create(User user, long questionId, String contents) {
-        Question question = questionRepository.findById(questionId).orElseThrow(IllegalArgumentException::new);
+        Question question = questionService.findQuestionById(questionId);
         Answer answer = new Answer(user, question, contents);
         answerRepository.save(answer);
     }
