@@ -11,6 +11,7 @@ sourceCompatibility = '1.8'
 
 repositories {
 	mavenCentral()
+	jcenter()
 }
 
 dependencies {
@@ -24,8 +25,10 @@ dependencies {
 
 	runtime 'mysql:mysql-connector-java'
 	runtime 'com.h2database:h2'
-
 	//디비 접속주소   : 	localhost:8080/h2-console
+
+	implementation group: 'io.springfox', name: 'springfox-swagger2', version: '2.9.2'
+	implementation group: 'io.springfox', name: 'springfox-swagger-ui', version: '2.9.2'
 }
 
 test {
