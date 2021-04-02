@@ -26,7 +26,7 @@
                   <div class="article-util">
                       <ul class="article-util-list">
                           <li>
-                              <a class="link-modify-article" href="/questions/{{id}}/update">수정</a>
+                              <a class="link-modify-article" href="/questions/{{id}}/form">수정</a>
                           </li>
                           <li>
                               <form class="form-delete" action="/questions/{{id}}" method="POST">
@@ -44,19 +44,19 @@
 
               <div class="qna-comment">
                   <div class="qna-comment-slipp">
-                      <p class="qna-comment-count"><strong>0</strong>개의 의견</p>
+                      <p class="qna-comment-count"><strong>{{question.answersSize}}</strong>개의 의견</p>
                       <div class="qna-comment-slipp-articles">
 
-                          {{#answers}}
+                          {{#question.answers}}
                           <article class="article" id="answer-1405">
                               <div class="article-header">
                                   <div class="article-header-thumb">
                                       <img src="https://graph.facebook.com/v2.3/1324855987/picture" class="article-author-thumb" alt="">
                                   </div>
                                   <div class="article-header-text">
-                                      <a href="/users/1/자바지기" class="article-author-name">{{writer}}</a>
+                                      <a href="/users/1/자바지기" class="article-author-name">{{writer.userId}}</a>
                                       <a href="#answer-1434" class="article-header-time" title="퍼머링크">
-                                          {{writtenDateTime}}
+                                          {{formattedWrittenDateTime}}
                                       </a>
                                   </div>
                               </div>
@@ -77,17 +77,15 @@
                                   </ul>
                               </div>
                           </article>
-                          {{/answers}}
-
+                          {{/question.answers}}
 
                           <form class="submit-write" method="post" action="/questions/{{question.id}}/answers">
                               <div class="form-group" style="padding:14px;">
                                   <textarea class="form-control" name= "contents" id="contents" placeholder="답변 내용"></textarea>
                               </div>
-                              <button class="btn btn-success pull-right" type="button">답변하기</button>
+                              <button class="btn btn-success pull-right" type="submit">답변하기</button>
                               <div class="clearfix" />
                           </form>
-
 
                       </div>
                   </div>

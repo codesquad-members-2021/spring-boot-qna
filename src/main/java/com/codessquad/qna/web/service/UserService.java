@@ -2,6 +2,7 @@ package com.codessquad.qna.web.service;
 
 import com.codessquad.qna.web.domain.User;
 import com.codessquad.qna.web.domain.repository.UserRepository;
+import com.codessquad.qna.web.exception.QnaException;
 import com.codessquad.qna.web.exception.UnAuthenticatedLoginException;
 import com.codessquad.qna.web.exception.UnauthorizedUserException;
 import com.codessquad.qna.web.exception.UserNotFoundException;
@@ -12,7 +13,7 @@ import java.util.List;
 @Service
 public class UserService {
 
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
 
     private UserService(UserRepository userRepository) {
         this.userRepository = userRepository;
@@ -20,7 +21,7 @@ public class UserService {
 
     public User findById(Long id) {
         User user = userRepository.findById(id)
-                .orElseThrow(() -> new UserNotFoundException());
+                .orElseThrow(UserNotFoundException::new);
         return user;
     }
 
@@ -32,12 +33,8 @@ public class UserService {
         return userRepository.findAll();
     }
 
-    public boolean isCorrectPassword(User user, User newInfoUser) {
-        return user.hasSamePassword(newInfoUser);
-    }
-
     public User findByUserId(String userId) {
-        return userRepository.findByUserId(userId).orElseThrow(() -> new UserNotFoundException());
+        return userRepository.findByUserId(userId).orElseThrow(UserNotFoundException::new);
     }
 
     public void verifyPassword(User user, String password) {

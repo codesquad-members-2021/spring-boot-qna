@@ -3,6 +3,7 @@ package com.codessquad.qna.web.domain;
 import com.codessquad.qna.web.exception.UnauthorizedUserException;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
 import java.util.Objects;
 
 @Entity
@@ -12,16 +13,20 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column
+    @Column(nullable = false)
+    @NotBlank(message = "아이디는 필수 입력값입니다.")
     private String userId;
 
-    @Column
+    @Column(nullable = false)
+    @NotBlank(message = "비밀번호는 필수 입력값입니다.")
     private String password;
 
-    @Column
+    @Column(nullable = false)
+    @NotBlank(message = "이름은 필수 입력값입니다.")
     private String name;
 
-    @Column
+    @Column(nullable = false)
+    @NotBlank(message = "이메일은 필수 입력값입니다.")
     private String email;
 
     protected User() {}
@@ -32,7 +37,6 @@ public class User {
         this.name = name;
         this.email = email;
     }
-
 
     public Long getId() {
         return id;

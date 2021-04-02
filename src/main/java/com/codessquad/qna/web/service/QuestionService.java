@@ -1,5 +1,6 @@
 package com.codessquad.qna.web.service;
 
+import com.codessquad.qna.web.domain.Answer;
 import com.codessquad.qna.web.domain.Question;
 import com.codessquad.qna.web.domain.User;
 import com.codessquad.qna.web.domain.repository.QuestionRepository;
@@ -42,7 +43,7 @@ public class QuestionService {
 
     public Question findById(Long id) {
         Question question = questionRepository.findById(id)
-                .orElseThrow(() -> new QuestionNotFoundException());
+                .orElseThrow(QuestionNotFoundException::new);
         return question;
     }
 
