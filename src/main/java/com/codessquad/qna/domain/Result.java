@@ -1,13 +1,13 @@
 package com.codessquad.qna.domain;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class Result {
 
-    @JsonManagedReference
+    @JsonProperty
     private boolean valid;
 
-    @JsonManagedReference
+    @JsonProperty
     private String errorMessage;
 
     private Result(boolean valid, String errorMessage) {

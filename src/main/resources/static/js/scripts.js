@@ -17,13 +17,14 @@ function addAnswer(e) {
     });
 }
 
-function onError() {
+function onError(request, error) {
+    alert("Login First");
 }
 
 function onSuccess(data) {
     console.log(data);
     var answerTemplate = $("#answerTemplate").html();
-    var template = answerTemplate.format(data.writer.name, data.formattedTimeCreated, data.contents, data.question.id, data.id);
+    var template = answerTemplate.format(data.writer.name, data.formattedCreatedDate, data.contents, data.question.id, data.id);
     $(".qna-comment-slipp-articles").prepend(template);
     $("textarea[name=contents]").val("");
 }

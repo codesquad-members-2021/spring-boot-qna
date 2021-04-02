@@ -26,6 +26,7 @@ public class AnswerService {
     }
 
     public void delete(Answer answer) {
+        answer.changeDeleteStatus();
         answerRepository.delete(answer);
     }
 
@@ -34,7 +35,7 @@ public class AnswerService {
         if (!verifyWriter(answer, user)) {
             return Result.fail("You Can Only Delete Your Answers");
         }
-        answer.delete();
+        answer.changeDeleteStatus();
         answerRepository.save(answer);
 
         return Result.ok();
