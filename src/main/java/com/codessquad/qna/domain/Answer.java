@@ -1,6 +1,7 @@
 package com.codessquad.qna.domain;
 
 import com.codessquad.qna.domain.validationGroup.Submit;
+import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
@@ -8,6 +9,7 @@ import javax.validation.constraints.NotNull;
 import javax.validation.groups.Default;
 
 @Entity
+@Where(clause = "deleted = false")
 public class Answer extends BaseEntity {
     @ManyToOne
     @JoinColumn(foreignKey = @ForeignKey(name = "fk_answer_question"))

@@ -48,7 +48,7 @@ public class QuestionService {
     }
 
     public List<Question> getQuestions() {
-        return questionRepository.findAllByAndDeletedFalse();
+        return questionRepository.findAll();
     }
 
     public Question getQuestion(long id) {

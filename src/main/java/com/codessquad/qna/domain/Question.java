@@ -11,6 +11,7 @@ import javax.validation.groups.Default;
 import java.util.List;
 
 @Entity
+@Where(clause = "deleted = false")
 public class Question extends BaseEntity {
     @ManyToOne
     @JoinColumn(foreignKey = @ForeignKey(name = "fk_question_writer"))
@@ -26,7 +27,6 @@ public class Question extends BaseEntity {
     private String contents;
 
     @OneToMany(mappedBy = "question")
-    @Where(clause = "deleted = false")
     @JsonIgnore
     private List<Answer> answers;
 
