@@ -42,7 +42,7 @@ public class ApiAnswerController {
             throw new NotLoggedInException();
         }
         Answer answer = answerRepository.findById(answerId).orElseThrow(() -> new NotFoundException());
-        if(!answer.getWriter().isSessionSameAsUser(session)) {
+        if (!answer.getWriter().isSessionSameAsUser(session)) {
             throw new UnauthorizedAnswerException();
         }
         answerRepository.delete(answer);

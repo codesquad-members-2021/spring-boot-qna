@@ -13,8 +13,6 @@ import org.springframework.ui.Model;
 import javax.servlet.http.HttpSession;
 import java.util.List;
 
-import static com.codessquad.qna.exception.ExceptionMessages.*;
-
 @Service
 public class QuestionService {
 
@@ -53,7 +51,6 @@ public class QuestionService {
         if (!question.getWriter().isSessionSameAsUser(session)) {
             throw new UnauthorizedQuestionException();
         }
-
         if (!question.isDeletable()) {
             throw new UnauthorizedQuestionException();
         }
@@ -70,6 +67,5 @@ public class QuestionService {
         logger.debug("글을 수정하는 사람 : {}", question.getTitle());
         model.addAttribute("question", question);
     }
-
 
 }
