@@ -17,7 +17,8 @@ public class GlobalExceptionHandler {
             UserAlreadyExistException.class,
             CannotDeleteQuestionException.class,
             BindException.class,
-            ConstraintViolationException.class
+            ConstraintViolationException.class,
+            IllegalArgumentException.class
     })
     public String exceptionPage(Exception ex, Model model) {
         model.addAttribute("errorMessage", ex.getMessage());
