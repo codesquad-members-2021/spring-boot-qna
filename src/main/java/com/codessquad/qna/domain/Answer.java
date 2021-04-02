@@ -35,7 +35,9 @@ public class Answer extends BaseEntity {
         this.writer = writer;
         this.contents = contents;
 
-        this.question.increaseAnswerCount();
+        if(this.question != null){
+            this.question.increaseAnswerCount();
+        }
     }
 
     public Question getQuestion() {
@@ -57,7 +59,9 @@ public class Answer extends BaseEntity {
     public void delete() {
         this.deleted = true;
 
-        this.question.decreaseAnswerCount();
+        if(this.question != null){
+            this.question.decreaseAnswerCount();
+        }
     }
 
     public boolean isWriter(User user) {
