@@ -26,12 +26,14 @@ public class ControllerExceptionHandler {
         return "redirect:/signup";
     }
 
+    // @Todo  : UnacceptableDuplicationException>> 컨플릭트, UnauthorizedQuestionException>> 401
     @ExceptionHandler({UnacceptableDuplicationException.class, UnauthorizedQuestionException.class, NotFoundException.class})
     @ResponseStatus(HttpStatus.NOT_FOUND)
-    public String unacceptableDuplicationException(UnacceptableDuplicationException exception, Model model) {
+    public String unacceptableDuplicationException(RuntimeException exception, Model model) {
         initializeModel(exception, model);
-        return "/error/error_page";
-    }
+        return "/error/error_page";//글로벌 에러 페이지를 쓰는경우?
+    }//MECE >>
+    //@Todo  : 인터페이스나 커스텀 익셉션끼리의 상속관계를 구현하기
 
     private void initializeModel(Exception exception, Model model) {
         String exceptionMessage = exception.getMessage();
