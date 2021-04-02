@@ -6,6 +6,7 @@ import javax.persistence.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Entity
 public class Question extends AbstractEntity {
@@ -58,6 +59,12 @@ public class Question extends AbstractEntity {
             answer.deleted();
             answerCount--;
         }
+    }
+
+    public List<Answer> getAnswers() {
+        return answers.stream()
+                .filter(answer -> !answer.isDeleted())
+                .collect(Collectors.toList());
     }
 
     @Override

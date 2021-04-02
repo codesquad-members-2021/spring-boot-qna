@@ -36,5 +36,6 @@ public class AnswerService {
     public void delete(Answer answer, Long questionId) {
         Question question = questionService.getQuestionById(questionId);
         question.deleteAnswer(answer);
+        answer.deleted();
     }
 }
