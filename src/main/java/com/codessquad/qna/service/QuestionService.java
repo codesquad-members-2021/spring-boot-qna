@@ -3,6 +3,7 @@ package com.codessquad.qna.service;
 import com.codessquad.qna.domain.Question;
 import com.codessquad.qna.domain.User;
 import com.codessquad.qna.exception.CannotDeleteQuestionException;
+import com.codessquad.qna.exception.IndexOutOfPageException;
 import com.codessquad.qna.exception.NotAuthorizedException;
 import com.codessquad.qna.exception.NotFoundException;
 import com.codessquad.qna.repository.QuestionRepository;
@@ -50,8 +51,12 @@ public class QuestionService {
     }
 
     public Page<Question> getQuestions(int pageNum) {
+        if (pageNum <= 0) {
+            throw new IndexOutOfPageException("페이지 번호가 1보다 작을 수 없습니다.");
+        }
+
         Sort sort = Sort.by("createdDateTime").descending().and(Sort.by("id").descending());
-        return questionRepository.findAll(PageRequest.of(pageNum, PAGE_SIZE, sort));
+        return questionRepository.findAll(PageRequest.of(pageNum - 1, PAGE_SIZE, sort));
     }
 
     public Question getQuestion(long id) {

@@ -18,7 +18,8 @@ public class GlobalExceptionHandler {
             CannotDeleteQuestionException.class,
             BindException.class,
             ConstraintViolationException.class,
-            IllegalArgumentException.class
+            IllegalArgumentException.class,
+            IndexOutOfPageException.class
     })
     public String exceptionPage(Exception ex, Model model) {
         model.addAttribute("errorMessage", ex.getMessage());
