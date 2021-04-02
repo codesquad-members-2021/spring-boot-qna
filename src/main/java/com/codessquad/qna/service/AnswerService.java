@@ -9,7 +9,7 @@ import java.util.List;
 
 @Service
 @Transactional(readOnly = true)
-public class AnswerService{
+public class AnswerService {
 
     private final AnswerRepository answerRepository;
     private final QuestionService questionService;
@@ -38,8 +38,7 @@ public class AnswerService{
     public void delete(Answer answer, User user) {
         if (answer.isMatchingWriter(user)) {
             answerRepository.delete(answer);
-        }
-        else{
+        } else {
             throw new CrudNotAllowedException("자신의 답변만 삭제할 수 있습니다.");
         }
     }
