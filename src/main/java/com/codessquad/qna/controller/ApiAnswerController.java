@@ -37,7 +37,7 @@ public class ApiAnswerController {
     }
 
     @DeleteMapping("/{answerId}")
-    public void remove(@PathVariable("questionId") Long questionId, @PathVariable("answerId") Long answerId, HttpSession session) {
+    public boolean remove(@PathVariable("questionId") Long questionId, @PathVariable("answerId") Long answerId, HttpSession session) {
         if (!isLoginUser(session)) {
             throw new NotLoggedInException();
         }
@@ -46,7 +46,7 @@ public class ApiAnswerController {
             throw new UnauthorizedAnswerException();
         }
         answerRepository.delete(answer);
-        return;
+        return true;
     }
 
 }

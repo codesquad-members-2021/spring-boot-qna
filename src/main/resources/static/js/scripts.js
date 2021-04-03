@@ -18,22 +18,34 @@ $(document).ready(() => {//powered by pyro
     });
 
     $('#id-button-submit-answer').on('click', createAnswer);
-    $('#id-button-delete-answer').click(deleteAnswer);
+    //$('#id-button-delete-answer').click(deleteAnswer);
+    //$(".answer-write button[type='submit']").on("click", deleteAnswer);
+    $(document).on("click", "a.link-delete-article", deleteAnswer);
 })
 
 function deleteAnswer(event) {
     event.preventDefault();
-    let deleteForm = $(this).parents('form');
-    let url = deleteForm.attr('action');
+    let deleteForm = $(this);
+    let url = deleteForm.attr('href');
     console.log("deleteForm : ",deleteForm);
     console.log("url : ",url);
     $.ajax({
         type : 'delete',
         url : url,
         dataType : 'json',
-        success : function (data, status) {
-            $(this).closest('article').remove();
-            decreaseAnswerCount();
+        success : function (data,status) {
+            //$(this).closest('article').remove();
+            //deleteForm.closest('article').remove();
+
+            //decreaseAnswerCount();
+        //데이터가 안넘어오니까 작동을 안한다.. >> 적어도 불리언을 리턴해줘서 해결했다!!
+            //물리적으로 가장 가까운 아티클을 리무브하는데
+            // 디비는 사라지는데, 동작안하는거는 에이작스 동작안해서
+
+            if (data) {
+                deleteForm.closest(".article").remove();
+            }
+
         },
         error : function () {
             console.log("답변 삭제 실패");
