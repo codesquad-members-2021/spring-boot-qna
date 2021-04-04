@@ -1,7 +1,7 @@
 package com.codessquad.qna.service;
 
 import com.codessquad.qna.domain.User;
-import com.codessquad.qna.domain.UserRepository;
+import com.codessquad.qna.domain.repository.UserRepository;
 import com.codessquad.qna.exception.UserNotFoundException;
 import org.springframework.stereotype.Service;
 

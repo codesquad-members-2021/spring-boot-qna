@@ -1,11 +1,8 @@
 package com.codessquad.qna.service;
 
-import com.codessquad.qna.domain.Answer;
-import com.codessquad.qna.domain.AnswerRepository;
-import com.codessquad.qna.domain.Question;
-import com.codessquad.qna.domain.User;
+import com.codessquad.qna.domain.*;
+import com.codessquad.qna.domain.repository.AnswerRepository;
 import com.codessquad.qna.exception.AnswerNotFoundException;
-import com.codessquad.qna.exception.IllegalUserAccessException;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -18,10 +15,10 @@ public class AnswerService {
         this.questionService = questionService;
     }
 
-    public void save(User writer, String contents, Long questionId) {
+    public Answer save(User writer, String contents, Long questionId) {
         Question question = questionService.findById(questionId);
         Answer answer = new Answer(writer, question, contents);
-        answerRepository.save(answer);
+        return answerRepository.save(answer);
     }
 
     public Answer findAnswerById(Long id) {
@@ -29,19 +26,25 @@ public class AnswerService {
     }
 
     public void delete(Answer answer) {
+        answer.changeDeleteStatus();
         answerRepository.delete(answer);
     }
 
-    public void deleteById(Long id, User user) {
+    public Result deleteById(Long id, User user) {
         Answer answer = findAnswerById(id);
-        verifyWriter(answer, user);
-        answer.delete();
+        if (!verifyWriter(answer, user)) {
+            return Result.fail("You Can Only Delete Your Answers");
+        }
+        answer.changeDeleteStatus();
         answerRepository.save(answer);
+
+        return Result.ok();
     }
 
-    public void verifyWriter(Answer answer, User user) {
+    public boolean verifyWriter(Answer answer, User user) {
         if (!answer.isAnswerWriter(user)) {
-            throw new IllegalUserAccessException();
+            return false;
         }
+        return true;
     }
 }

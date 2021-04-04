@@ -1,13 +1,9 @@
 package com.codessquad.qna.domain;
 
 import javax.persistence.*;
-import java.util.Objects;
 
 @Entity
-public class User {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+public class User extends AbstractEntity {
 
     @Column(nullable = false, length = 20, unique = true)
     private String userId;
@@ -32,10 +28,6 @@ public class User {
         this.email = email;
     }
 
-    public Long getId() {
-        return id;
-    }
-
     public String getUserId() {
         return userId;
     }
@@ -56,8 +48,8 @@ public class User {
         return this.password.equals(passwordToMatch);
     }
 
-    public boolean matchId(long idToMatch) {
-        return this.id == idToMatch;
+    public boolean matchId(Long idToMatch) {
+        return super.getId().equals(idToMatch);
     }
 
     public User updateProfile(User updatedUser) {
@@ -72,23 +64,11 @@ public class User {
     @Override
     public String toString() {
         return "User{" +
+                super.toString() +
                 "userId='" + userId + '\'' +
                 ", name='" + name + '\'' +
                 ", password='" + password + '\'' +
                 ", email='" + email + '\'' +
                 '}';
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        User user = (User) o;
-        return id == user.id;
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id);
     }
 }

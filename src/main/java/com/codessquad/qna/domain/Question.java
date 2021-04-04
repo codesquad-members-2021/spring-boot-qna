@@ -1,5 +1,8 @@
 package com.codessquad.qna.domain;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -7,15 +10,11 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Entity
-public class Question {
-    private static final DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd kk:mm");
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+public class Question extends AbstractEntity {
 
     @ManyToOne
     @JoinColumn(foreignKey = @ForeignKey(name = "fk_question_writer"))
+    @JsonManagedReference
     private User writer;
 
     private String title;
@@ -23,10 +22,9 @@ public class Question {
     @Column(nullable = false, length = 2000)
     private String contents;
 
-    private LocalDateTime timeCreated = LocalDateTime.now();
-
     @OneToMany(mappedBy = "question")
-    @OrderBy("id ASC")
+    @OrderBy("id DESC")
+    @JsonBackReference
     private List<Answer> answers;
 
     private boolean deleted = false;
@@ -51,18 +49,6 @@ public class Question {
         return contents;
     }
 
-    public Long getId() {
-        return id;
-    }
-
-    public LocalDateTime getTimeCreated() {
-        return timeCreated;
-    }
-
-    public String getFormattedTimeCreated() {
-        return timeCreated.format(DATE_TIME_FORMATTER);
-    }
-
     public List<Answer> getAnswers() {
         return answers.stream().filter(answer -> !answer.isDeleted()).collect(Collectors.toList());
     }
@@ -71,7 +57,7 @@ public class Question {
         if (this.answers.isEmpty()) {
             return 0;
         }
-        return this.answers.size();
+        return getAnswers().size();
     }
 
     public Question updateQuestion(Question modifiedQuestion) {
@@ -87,18 +73,17 @@ public class Question {
     public void delete() {
         this.deleted = true;
         for (Answer a : this.answers) {
-            a.delete();
+            a.changeDeleteStatus();
         }
     }
 
     @Override
     public String toString() {
         return "Question{" +
+                super.toString() +
                 "writer='" + writer + '\'' +
                 ", title='" + title + '\'' +
                 ", contents='" + contents + '\'' +
-                ", id=" + id +
-                ", timeCreated='" + timeCreated + '\'' +
                 '}';
     }
 }
