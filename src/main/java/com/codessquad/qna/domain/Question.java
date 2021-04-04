@@ -1,5 +1,6 @@
 package com.codessquad.qna.domain;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
@@ -35,6 +36,7 @@ public class Question {
     @OneToMany(mappedBy = "question", cascade = CascadeType.REMOVE)
     @OrderBy("id ASC")
     @Where(clause = "deleted=false")
+    @JsonManagedReference
     private List<Answer> answerList;
 
     public Question() {

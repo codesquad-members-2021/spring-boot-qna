@@ -6,14 +6,13 @@ import com.codessquad.qna.domain.QuestionRepostory;
 import com.codessquad.qna.domain.User;
 import com.codessquad.qna.exception.LoginFailedException;
 import com.codessquad.qna.exception.NotFoundException;
-import com.codessquad.qna.exception.UnauthorizedException;
+import com.codessquad.qna.exception.UnauthorizedAnswerException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpSession;
 
-import static com.codessquad.qna.exception.ExceptionMessages.*;
 import static com.codessquad.qna.utils.SessionUtil.getLoginUser;
 import static com.codessquad.qna.utils.SessionUtil.isLoginUser;
 
@@ -40,13 +39,10 @@ public class AnswerService {
     }
 
     public void removeAnswer(Long answerId, HttpSession session) {
-        Answer answer = answerRepository.findById(answerId).orElseThrow(() -> new NotFoundException(NOT_FOUNDED_ANSWER));
-
+        Answer answer = answerRepository.findById(answerId).orElseThrow(() -> new NotFoundException());
         if (!answer.getWriter().isSessionSameAsUser(session)) {
-            logger.debug(UNAUTHORIZED_FAILED_QUESTION);
-            throw new UnauthorizedException(UNAUTHORIZED_FAILED_QUESTION);
+            throw new UnauthorizedAnswerException();
         }
-
         answer.deleteAnswer();
         answerRepository.save(answer);
     }

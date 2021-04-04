@@ -38,7 +38,7 @@
                           <li>
                               <form class="form-delete" action="/questions/{{id}}" method="POST">
                                   <input type="hidden" name="_method" value="DELETE">
-                                  <button class="link-delete-article" type="submit">삭제</button>
+                                  <button class="linnnnnn-article" type="submit">삭제</button>
                               </form>
                           </li>
                           <li>
@@ -75,25 +75,31 @@
                                           <a class="link-modify-article" href="#">수정</a>
                                       </li>
                                       <li>
+                                          <a class="link-delete-article" href="/api/questions/{{question.id}}/answers/{{id}}">삭제</a>
+                                          <!---
                                           <form class="form-delete" action="/questions/{{question.id}}/answers/{{id}}" method="POST">
-                                              <input type="hidden" name="_method" value="DELETE">
+                                              <input id="id-button-delete-answer" type="hidden" name="_method" value="DELETE">
                                               <button type="submit" class="delete-answer-button">삭제</button>
                                           </form>
+                                          --->
                                       </li>
                                   </ul>
                               </div>
                           </article>
                           {{/question.answerList}}
-                          <form class="submit-write" method="post" action="/questions/{{id}}/answers">
-                              <div class="form-group" style="padding:14px;">
-                                  <textarea class="form-control" placeholder="Update your status" name="contents"></textarea>
-                              </div>
-                              <input type="submit" class="btn btn-success pull-right" value="답변하기"/>
 
-                              <div class="clearfix" />
-                          </form>
                       </div>
+                      <form class="submit-write" method="post" action="/api/questions/{{id}}/answers">
+                          <div class="form-group" style="padding:14px;">
+                              <textarea class="form-control" placeholder="Update your status" name="contents"></textarea>
+                          </div>
+                          <input id="id-button-submit-answer" type="button" class="btn btn-success pull-right" value="답변하기"/>
+
+                          <div class="clearfix" />
+
+                      </form>
                   </div>
+
               </div>
           </div>
         </div>

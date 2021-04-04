@@ -4,8 +4,8 @@ import com.codessquad.qna.domain.User;
 import com.codessquad.qna.domain.UserRepository;
 import com.codessquad.qna.exception.LoginFailedException;
 import com.codessquad.qna.exception.NotFoundException;
-import com.codessquad.qna.exception.UnacceptableDuplicationException;
-import com.codessquad.qna.exception.UnauthorizedException;
+import com.codessquad.qna.exception.UnauthorizedProfileModificationException;
+import com.codessquad.qna.exception.WrongInputException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -13,7 +13,6 @@ import org.springframework.stereotype.Service;
 import javax.servlet.http.HttpSession;
 import java.util.List;
 
-import static com.codessquad.qna.exception.ExceptionMessages.*;
 import static com.codessquad.qna.utils.SessionUtil.getLoginUser;
 import static com.codessquad.qna.utils.SessionUtil.setLoginUser;
 
@@ -30,7 +29,7 @@ public class UserService {
 
     public void createUser(User user) {
         if (userRepository.findByUserId(user.getUserId()).isPresent()) {
-            throw new UnacceptableDuplicationException(REDUNDANT_USERID);
+            throw new WrongInputException();
         }
         userRepository.save(user);
     }
@@ -40,42 +39,34 @@ public class UserService {
     }
 
     public User showProfile(Long id) {
-        return userRepository.findById(id).orElseThrow(() -> new NotFoundException(NOT_FOUNDED_USER));
+        return userRepository.findById(id).orElseThrow(() -> new NotFoundException());
     }
-
 
     public void updateUser(Long id, String pastPassword, User updatedUser, HttpSession session) {
         User sessionUser = getLoginUser(session);
-        User currentUser = userRepository.findById(id).orElseThrow(() -> new NotFoundException(NOT_FOUNDED_USER));
-
+        User currentUser = userRepository.findById(id).orElseThrow(() -> new NotFoundException());
         if (!currentUser.isMatchingPassword(pastPassword)) {
-            logger.debug(PROFILE_MODIFICATION_FAIL);
-            throw new UnauthorizedException(PROFILE_MODIFICATION_FAIL);
+            throw new UnauthorizedProfileModificationException();
         }
-
         if (sessionUser.equals(updatedUser)) {
             sessionUser.update(updatedUser);
         }
-
         userRepository.save(sessionUser);
         logger.debug("update User {}", sessionUser.getUserId());
     }
 
     public void validationCheck(Long id, HttpSession session) {
-        User foundUser = userRepository.findById(id).orElseThrow(() -> new NotFoundException(NOT_FOUNDED_USER));
+        User foundUser = userRepository.findById(id).orElseThrow(() -> new NotFoundException());
         if (!foundUser.isSessionSameAsUser(session)) {
-            logger.debug(PROFILE_MODIFICATION_FAIL);
-            throw new UnauthorizedException(PROFILE_MODIFICATION_FAIL);
+            throw new UnauthorizedProfileModificationException();
         }
     }
 
     public void login(String userId, String password, HttpSession session) {
         User foundUser = userRepository.findByUserId(userId).orElseThrow(() -> new LoginFailedException());
-
         if (!foundUser.isMatchingPassword(password)) {
             throw new LoginFailedException();
         }
-
         logger.debug("Login Success");
         setLoginUser(session, foundUser);
     }

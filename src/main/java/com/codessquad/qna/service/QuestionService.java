@@ -4,7 +4,7 @@ import com.codessquad.qna.domain.Question;
 import com.codessquad.qna.domain.QuestionRepostory;
 import com.codessquad.qna.domain.User;
 import com.codessquad.qna.exception.NotFoundException;
-import com.codessquad.qna.exception.UnauthorizedException;
+import com.codessquad.qna.exception.UnauthorizedQuestionException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -12,8 +12,6 @@ import org.springframework.ui.Model;
 
 import javax.servlet.http.HttpSession;
 import java.util.List;
-
-import static com.codessquad.qna.exception.ExceptionMessages.*;
 
 @Service
 public class QuestionService {
@@ -34,7 +32,7 @@ public class QuestionService {
     }
 
     public Question showDetailQuestion(Long id) {
-        return questionRepostory.findByIdAndDeletedFalse(id).orElseThrow(() -> new NotFoundException(NOT_FOUNDED_QUESTION));
+        return questionRepostory.findByIdAndDeletedFalse(id).orElseThrow(() -> new NotFoundException());
     }
 
     public List<Question> findAll() {
@@ -42,38 +40,32 @@ public class QuestionService {
     }
 
     public void updateQuestion(Long id, String title, String contents) {
-        Question question = questionRepostory.findById(id).orElseThrow(() -> new NotFoundException(NOT_FOUNDED_QUESTION));
+        Question question = questionRepostory.findById(id).orElseThrow(() -> new NotFoundException());
         question.update(title, contents);
         questionRepostory.save(question);
         logger.debug("질문글 업데이트됨, questionId : {}", id);
     }
 
     public void deleteQuestion(Long questionId, HttpSession session) {
-        Question question = questionRepostory.findById(questionId).orElseThrow(() -> new NotFoundException(NOT_FOUNDED_QUESTION));
-
+        Question question = questionRepostory.findById(questionId).orElseThrow(() -> new NotFoundException());
         if (!question.getWriter().isSessionSameAsUser(session)) {
-            logger.debug(UNAUTHORIZED_FAILED_QUESTION);
-            throw new UnauthorizedException(UNAUTHORIZED_FAILED_QUESTION);
+            throw new UnauthorizedQuestionException();
         }
-
         if (!question.isDeletable()) {
-            throw new UnauthorizedException(ASK_FREE_BUT_NOT_DELETE);
+            throw new UnauthorizedQuestionException();
         }
         question.deleteQuestion();
         questionRepostory.save(question);
         logger.debug("질문글 삭제 - 성공");
-
     }
 
     public void updateForm(Long id, Model model, HttpSession session) {
-        Question question = questionRepostory.findById(id).orElseThrow(() -> new NotFoundException(NOT_FOUNDED_QUESTION));
+        Question question = questionRepostory.findById(id).orElseThrow(() -> new NotFoundException());
         if (!question.getWriter().isSessionSameAsUser(session)) {
-            logger.debug(UNAUTHORIZED_FAILED_QUESTION);
-            throw new UnauthorizedException(UNAUTHORIZED_FAILED_QUESTION);
+            throw new UnauthorizedQuestionException();
         }
         logger.debug("글을 수정하는 사람 : {}", question.getTitle());
         model.addAttribute("question", question);
     }
-
 
 }

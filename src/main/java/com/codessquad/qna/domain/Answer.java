@@ -1,5 +1,8 @@
 package com.codessquad.qna.domain;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonGetter;
+
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.Objects;
@@ -22,7 +25,7 @@ public class Answer {
 
     @ManyToOne
     @JoinColumn(foreignKey = @ForeignKey(name = "fk_answer_to_question"))
-
+    @JsonBackReference
     private Question question;
 
     @Column(nullable = false)
@@ -97,4 +100,11 @@ public class Answer {
     public boolean isSameWriter(User questionWriter) {
         return this.writer.equals(questionWriter);
     }
+
+
+    @JsonGetter("questionId")
+    public Long getTheQuestionId() {
+        return this.question.getId();
+    }
+
 }

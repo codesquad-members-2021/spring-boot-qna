@@ -15,14 +15,21 @@
         <div class="article-util">
             <ul class="article-util-list">
                 <li>
-                    <a class="link-modify-article" href="/api/qna/updateAnswer/{3}">수정</a>
+                    <a class="link-modify-article" href="/api/questions//answers/modimodi-footer">수정</a>
                 </li>
-                <li>
-                    <form class="delete-answer-form" action="/api/questions/{3}/answers/{4}" method="POST">
-                        <input type="hidden" name="_method" value="DELETE">
-                        <button type="submit" class="delete-answer-button">삭제</button>
+                <!---<li>
+                    <a class="link-delete-article" href="/api/questions/{{id}}/answers/{answerId}">삭제</a>
                     </form>
-                </li>
+                </li>--->
+
+                <!---
+                <form class="link-delete-article" action="/api/questions/{{id}}/answers/{{answerId}}" method="POST">
+                    <input type="hidden" name="_method" value="DELETE">
+                    <button type="submit" class="delete-answer-button">삭제</button>
+                </form>
+                --->
+                <a class="link-delete-article" href="/api/questions/{3}/answers/{4}">삭제</a>
+
             </ul>
         </div>
     </article>
