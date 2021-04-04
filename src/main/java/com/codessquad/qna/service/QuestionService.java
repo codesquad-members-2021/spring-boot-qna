@@ -13,10 +13,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
-
 @Service
 public class QuestionService {
     private static final int PAGE_SIZE = 5;
@@ -66,36 +62,5 @@ public class QuestionService {
 
     public Question getQuestion(long id) {
         return questionRepository.findById(id).orElseThrow(() -> new NotFoundException(id + " 질문을 찾을 수 없습니다."));
-    }
-
-    public List<Integer> pageNumbers(int pageNum, int totalPageNum) {
-        int startPageNum = (pageNum - 1) / PAGE_LIST_SIZE * PAGE_LIST_SIZE + 1;
-
-        int lastPageNumCalculated = startPageNum + PAGE_LIST_SIZE - 1;
-        int lastPageNum = lastPageNumCalculated < totalPageNum ? lastPageNumCalculated : totalPageNum;
-
-        return IntStream.range(startPageNum, lastPageNum + 1).boxed().collect(Collectors.toList());
-    }
-
-    public int prevPageNumber(List<Integer> pageNumbers) {
-        if (pageNumbers != null && !pageNumbers.isEmpty()) {
-            int firstPageNum = pageNumbers.get(0);
-            if (firstPageNum <= 1) {
-                return 1;
-            }
-            return firstPageNum - 1;
-        }
-        return 1;
-    }
-
-    public int nextPageNumber(List<Integer> pageNumbers, int totalPageNum) {
-        if (pageNumbers != null && !pageNumbers.isEmpty()) {
-            int lastPageNum = pageNumbers.get(pageNumbers.size() - 1);
-            if (lastPageNum < totalPageNum) {
-                return lastPageNum + 1;
-            }
-            return lastPageNum;
-        }
-        return 1;
     }
 }

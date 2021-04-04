@@ -7,6 +7,7 @@ import com.codessquad.qna.exception.NotAuthorizedException;
 import com.codessquad.qna.exception.UserNotFoundInSessionException;
 import com.codessquad.qna.service.QuestionService;
 import com.codessquad.qna.util.HttpSessionUtils;
+import com.codessquad.qna.util.PageUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,9 +36,9 @@ public class QuestionController {
         Page<Question> questionPage = questionService.getQuestions(page);
         int totalPageNum = questionPage.getTotalPages();
 
-        List<Integer> pageNumbers = questionService.pageNumbers(page, totalPageNum);
-        int prevPageNum = questionService.prevPageNumber(pageNumbers);
-        int nextPageNum = questionService.nextPageNumber(pageNumbers, totalPageNum);
+        List<Integer> pageNumbers = PageUtils.pageNumbers(page, totalPageNum, 5);
+        int prevPageNum = PageUtils.prevPageNumber(pageNumbers);
+        int nextPageNum = PageUtils.nextPageNumber(pageNumbers, totalPageNum);
 
         model.addAttribute("questions", questionPage.toList());
         model.addAttribute("pageNumbers", pageNumbers);
