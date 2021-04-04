@@ -13,7 +13,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -75,11 +74,11 @@ public class QuestionService {
         int lastPageNumCalculated = startPageNum + PAGE_LIST_SIZE - 1;
         int lastPageNum = lastPageNumCalculated < totalPageNum ? lastPageNumCalculated : totalPageNum;
 
-        return IntStream.range(startPageNum, lastPageNum+1).boxed().collect(Collectors.toList());
+        return IntStream.range(startPageNum, lastPageNum + 1).boxed().collect(Collectors.toList());
     }
 
     public int prevPageNumber(List<Integer> pageNumbers) {
-        if (pageNumbers != null && pageNumbers.size() > 0) {
+        if (pageNumbers != null && !pageNumbers.isEmpty()) {
             int firstPageNum = pageNumbers.get(0);
             if (firstPageNum <= 1) {
                 return 1;
@@ -90,7 +89,7 @@ public class QuestionService {
     }
 
     public int nextPageNumber(List<Integer> pageNumbers, int totalPageNum) {
-        if (pageNumbers != null && pageNumbers.size() > 0) {
+        if (pageNumbers != null && !pageNumbers.isEmpty()) {
             int lastPageNum = pageNumbers.get(pageNumbers.size() - 1);
             if (lastPageNum < totalPageNum) {
                 return lastPageNum + 1;
