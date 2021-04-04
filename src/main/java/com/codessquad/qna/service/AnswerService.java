@@ -43,7 +43,6 @@ public class AnswerService {
 
     public boolean verifyWriter(Answer answer, User user) {
         if (!answer.isAnswerWriter(user)) {
-            //throw new IllegalUserAccessException();
             return false;
         }
         return true;

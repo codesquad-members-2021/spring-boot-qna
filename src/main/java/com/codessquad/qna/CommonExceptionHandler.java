@@ -1,6 +1,8 @@
 package com.codessquad.qna;
 
+import com.codessquad.qna.domain.Result;
 import com.codessquad.qna.exception.IllegalUserAccessException;
+import com.codessquad.qna.exception.NotLoggedInException;
 import com.codessquad.qna.exception.QuestionNotFoundException;
 import com.codessquad.qna.exception.UserNotFoundException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -22,5 +24,10 @@ public class CommonExceptionHandler {
     @ExceptionHandler(QuestionNotFoundException.class)
     public String handleQuestionNotFoundException() {
         return "redirect:/";
+    }
+
+    @ExceptionHandler(NotLoggedInException.class)
+    public Result handleNotLoggedInException() {
+        return Result.fail("Login Needed");
     }
 }

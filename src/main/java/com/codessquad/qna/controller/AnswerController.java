@@ -3,6 +3,7 @@ package com.codessquad.qna.controller;
 import com.codessquad.qna.domain.Answer;
 import com.codessquad.qna.domain.Result;
 import com.codessquad.qna.domain.User;
+import com.codessquad.qna.exception.NotLoggedInException;
 import com.codessquad.qna.service.AnswerService;
 import org.springframework.web.bind.annotation.*;
 
@@ -23,7 +24,7 @@ public class AnswerController {
     @PostMapping
     public Answer create(@PathVariable Long questionId, String contents, HttpSession session) {
         if (!isLoginUser(session)) {
-            return null;
+            throw new NotLoggedInException();
         }
 
         User writer = getUserFromSession(session);
@@ -33,7 +34,7 @@ public class AnswerController {
     @DeleteMapping("/{id}")
     public Result delete(@PathVariable Long questionId, @PathVariable Long id, HttpSession session) {
         if (!isLoginUser(session)) {
-            return Result.fail("You must login");
+            throw new NotLoggedInException();
         }
         User loginUser = getUserFromSession(session);
 
