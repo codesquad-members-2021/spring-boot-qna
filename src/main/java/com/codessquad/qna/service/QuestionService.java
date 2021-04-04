@@ -15,6 +15,8 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 @Service
 public class QuestionService {
@@ -72,12 +74,8 @@ public class QuestionService {
 
         int lastPageNumCalculated = startPageNum + PAGE_LIST_SIZE - 1;
         int lastPageNum = lastPageNumCalculated < totalPageNum ? lastPageNumCalculated : totalPageNum;
-        
-        List<Integer> pageNumbers = new ArrayList<>();
-        for (int num = startPageNum; num <= lastPageNum; num++) {
-            pageNumbers.add(num);
-        }
-        return pageNumbers;
+
+        return IntStream.range(startPageNum, lastPageNum+1).boxed().collect(Collectors.toList());
     }
 
     public int prevPageNumber(List<Integer> pageNumbers) {
