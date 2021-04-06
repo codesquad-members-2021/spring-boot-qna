@@ -36,9 +36,9 @@ public class QuestionController {
         Page<Question> questionPage = questionService.getQuestions(page);
         int totalPageNum = questionPage.getTotalPages();
 
-        List<Integer> pageNumbers = PageUtils.pageNumbers(page, totalPageNum, 5);
-        int prevPageNum = PageUtils.prevPageNumber(pageNumbers);
-        int nextPageNum = PageUtils.nextPageNumber(pageNumbers, totalPageNum);
+        List<Integer> pageNumbers = PageUtils.getPageNumbers(page, totalPageNum, 5);
+        int prevPageNum = PageUtils.getPrevPageNumber(pageNumbers);
+        int nextPageNum = PageUtils.getNextPageNumber(pageNumbers, totalPageNum);
 
         model.addAttribute("questions", questionPage.toList());
         model.addAttribute("pageNumbers", pageNumbers);
