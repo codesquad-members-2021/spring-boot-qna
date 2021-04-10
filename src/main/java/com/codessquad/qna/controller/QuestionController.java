@@ -2,18 +2,23 @@ package com.codessquad.qna.controller;
 
 import com.codessquad.qna.domain.Question;
 import com.codessquad.qna.domain.User;
+import com.codessquad.qna.domain.validationGroup.Submit;
 import com.codessquad.qna.exception.NotAuthorizedException;
 import com.codessquad.qna.exception.UserNotFoundInSessionException;
 import com.codessquad.qna.service.QuestionService;
 import com.codessquad.qna.util.HttpSessionUtils;
+import com.codessquad.qna.util.PageUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
+import java.util.List;
 
 @Controller
 @RequestMapping("/questions")
@@ -27,22 +32,32 @@ public class QuestionController {
     }
 
     @GetMapping
-    public String list(Model model) {
-        model.addAttribute("questions", questionService.getQuestions());
+    public String list(int page, Model model) {
+        Page<Question> questionPage = questionService.getQuestions(page);
+        int totalPageNum = questionPage.getTotalPages();
+
+        List<Integer> pageNumbers = PageUtils.getPageNumbers(page, totalPageNum, 5);
+        int prevPageNum = PageUtils.getPrevPageNumber(pageNumbers);
+        int nextPageNum = PageUtils.getNextPageNumber(pageNumbers, totalPageNum);
+
+        model.addAttribute("questions", questionPage.toList());
+        model.addAttribute("pageNumbers", pageNumbers);
+        model.addAttribute("prevPageNum", prevPageNum);
+        model.addAttribute("nextPageNum", nextPageNum);
         return "qna/list";
     }
 
     @PostMapping
-    public String create(String title, String contents, HttpSession session) {
+    public String create(@Validated(Submit.class) Question question, HttpSession session) {
         User user = HttpSessionUtils.getUser(session);
-        questionService.addQuestion(user, title, contents);
+        questionService.addQuestion(user, question.getTitle(), question.getContents());
         return "redirect:/";
     }
 
     @PutMapping("/{id}")
-    public String update(@PathVariable long id, String contents, String title, HttpSession session) {
+    public String update(@PathVariable long id, @Validated(Submit.class) Question question, HttpSession session) {
         User tryToUpdate = HttpSessionUtils.getUser(session);
-        questionService.updateQuestion(id, title, contents, tryToUpdate);
+        questionService.updateQuestion(id, question.getTitle(), question.getContents(), tryToUpdate);
         return "redirect:/questions/" + id;
     }
 

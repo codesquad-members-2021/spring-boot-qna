@@ -1,21 +1,32 @@
 package com.codessquad.qna.domain;
 
+import com.codessquad.qna.domain.validationGroup.Submit;
+import org.hibernate.annotations.Where;
+
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import javax.validation.groups.Default;
 
 @Entity
+@Where(clause = "deleted = false")
 public class Answer extends BaseEntity {
     @ManyToOne
     @JoinColumn(foreignKey = @ForeignKey(name = "fk_answer_question"))
+    @NotNull
     private Question question;
 
     @ManyToOne
     @JoinColumn(foreignKey = @ForeignKey(name = "fk_answer_writer"))
+    @NotNull
     private User writer;
 
     @Column(nullable = false, length = 3000)
+    @NotBlank(groups = {Submit.class, Default.class})
     private String contents;
 
-    @Column(nullable = false, columnDefinition = "boolean default false")
+    @Column(columnDefinition = "boolean default false")
+    @NotNull
     private boolean deleted;
 
     protected Answer() {
@@ -26,7 +37,9 @@ public class Answer extends BaseEntity {
         this.writer = writer;
         this.contents = contents;
 
-        this.question.increaseAnswerCount();
+        if(this.question != null){
+            this.question.increaseAnswerCount();
+        }
     }
 
     public Question getQuestion() {
@@ -48,7 +61,9 @@ public class Answer extends BaseEntity {
     public void delete() {
         this.deleted = true;
 
-        this.question.decreaseAnswerCount();
+        if(this.question != null){
+            this.question.decreaseAnswerCount();
+        }
     }
 
     public boolean isWriter(User user) {

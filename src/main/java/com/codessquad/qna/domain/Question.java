@@ -1,34 +1,41 @@
 package com.codessquad.qna.domain;
 
+import com.codessquad.qna.domain.validationGroup.Submit;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import javax.validation.groups.Default;
 import java.util.List;
 
 @Entity
+@Where(clause = "deleted = false")
 public class Question extends BaseEntity {
     @ManyToOne
     @JoinColumn(foreignKey = @ForeignKey(name = "fk_question_writer"))
+    @NotNull
     private User writer;
 
     @Column(nullable = false, length = 100)
+    @NotBlank(groups = {Submit.class, Default.class})
     private String title;
 
     @Column(nullable = false, length = 3000)
+    @NotBlank(groups = {Submit.class, Default.class})
     private String contents;
 
     @OneToMany(mappedBy = "question")
-    @Where(clause = "deleted = false")
     @JsonIgnore
     private List<Answer> answers;
 
-    @JsonProperty
-    @Column(nullable = false, columnDefinition = "int default 0")
-    private Integer countOfAnswer = 0;
+    @Column(columnDefinition = "int default 0")
+    @NotNull
+    private int countOfAnswer;
 
-    @Column(nullable = false, columnDefinition = "boolean default false")
+    @Column(columnDefinition = "boolean default false")
+    @NotNull
     private boolean deleted;
 
     protected Question() {
